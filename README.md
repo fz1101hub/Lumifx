@@ -32,3 +32,10 @@ The project is intentionally built around an original effects engine and origina
 4. Shared effect engine
 5. First set of animated scenes and narrative Stories
 6. Favorites and local settings
+
+
+## Project documentation
+
+- [Product vision & working specification](docs/PRODUCT_VISION.md) — structured source of truth for the product, architecture, effects, roadmap and decisions discussed so far.
+- [Chat history snapshot](docs/CHAT_HISTORY.md) — complete snapshot of the visible project conversation through the request to archive the discussion.
+- [Architecture](docs/ARCHITECTURE.md) — initial engineering architecture.
