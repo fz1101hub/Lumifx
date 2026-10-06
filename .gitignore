@@ -4,7 +4,7 @@
 .pub/
 build/
 coverage/
-pubspec.lock
+.flutter-plugins-dependencies
 
 # IDE
 .idea/

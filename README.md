@@ -26,12 +26,39 @@ The project is intentionally built around an original effects engine and origina
 
 ## First milestone
 
-1. Discover and pair with a Hue Bridge
-2. Read rooms, zones and lights
-3. Basic light controls
-4. Shared effect engine
-5. First set of animated scenes and narrative Stories
-6. Favorites and local settings
+1. ✅ Discover and pair with a Hue Bridge
+2. ✅ Read rooms, zones and lights
+3. ✅ Basic light controls (room/zone on/off and brightness)
+4. ✅ Shared effect engine (renderer, player, rate-limited Hue output)
+5. 🟡 First set of animated scenes and narrative Stories (4 scenes, 3 stories)
+6. ⬜ Favorites and local settings
+
+## Development
+
+Requires Flutter (stable, see `.github/workflows/ci.yml` for the pinned version).
+
+```sh
+flutter pub get
+flutter analyze
+flutter test
+flutter run            # on a device or simulator on the same Wi-Fi as the bridge
+```
+
+Effects can be previewed without a bridge: the player shows virtual lamps
+when no room or zone is selected.
+
+```text
+lib/src/
+├── core/
+│   ├── color/          LightColor and RGB → CIE xy conversion
+│   ├── effects/        effect model, renderer, player, outputs
+│   └── hue/            discovery, pairing, CLIP v2 client, TLS pinning
+└── features/
+    ├── bridge/         onboarding, credentials, connection state
+    ├── effects/        catalog, effect list, player screen
+    ├── home/
+    └── rooms/          room and zone controls
+```
 
 
 ## Project documentation
