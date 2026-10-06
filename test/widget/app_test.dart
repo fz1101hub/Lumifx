@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lumifx/src/app.dart';
+import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
@@ -64,5 +69,105 @@ void main() {
     expect(find.text('Hue Bridge 123456'), findsOneWidget);
     expect(find.text('10.0.0.9'), findsOneWidget);
     expect(find.byType(OutlinedButton), findsOneWidget);
+  });
+
+  streamingTests();
+}
+
+Future<BridgeController> _connectedBridge(WidgetTester tester) async {
+  http.Response json(Object body) => http.Response(jsonEncode(body), 200);
+  final bridge = BridgeController(
+    store: InMemoryCredentialStore(
+      const HueCredentials(
+        bridge: HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
+        applicationKey: 'key',
+      ),
+    ),
+    clientFactory: (pin, key) => HueBridgeClient(
+      host: pin.host,
+      applicationKey: key,
+      client: MockClient((request) async {
+        switch (request.url.path) {
+          case '/clip/v2/resource/light':
+            return json({
+              'data': [
+                {
+                  'id': 'l1',
+                  'owner': {'rid': 'd1', 'rtype': 'device'},
+                  'metadata': {'name': 'Sofa'},
+                  'on': {'on': true},
+                },
+              ],
+            });
+          case '/clip/v2/resource/room':
+            return json({
+              'data': [
+                {
+                  'id': 'r1',
+                  'metadata': {'name': 'Living room'},
+                  'children': [
+                    {'rid': 'd1', 'rtype': 'device'},
+                  ],
+                  'services': <Object>[],
+                },
+              ],
+            });
+          case '/clip/v2/resource/entertainment_configuration':
+            return json({
+              'data': [
+                {
+                  'id': '1a8d99cc-967b-44f2-9202-43f976c0fa6b',
+                  'metadata': {'name': 'TV area'},
+                  'status': 'inactive',
+                  'channels': [
+                    {
+                      'channel_id': 0,
+                      'position': {'x': 0, 'y': 0, 'z': 0},
+                      'members': <Object>[],
+                    },
+                  ],
+                },
+              ],
+            });
+        }
+        return json({'data': <Object>[]});
+      }),
+    ),
+  );
+  await tester.runAsync(bridge.initialize);
+  return bridge;
+}
+
+void streamingTests() {
+  testWidgets('player offers entertainment areas and reports start errors',
+      (tester) async {
+    final bridge = await _connectedBridge(tester);
+    expect(bridge.status, BridgeStatus.connected);
+    await tester.pumpWidget(
+      LumiFxApp(bridge: bridge, discovery: _FakeDiscovery()),
+    );
+
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Emerald Trickster'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Preview only'));
+    await tester.pumpAndSettle();
+    expect(find.text('TV area · streaming'), findsWidgets);
+    expect(find.text('Living room · 1 light'), findsWidgets);
+
+    await tester.tap(find.text('TV area · streaming').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Channel 0'), findsOneWidget);
+
+    // These credentials predate Entertainment support (no client key).
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Could not start streaming'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget);
   });
 }

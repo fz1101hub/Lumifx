@@ -71,8 +71,38 @@ The engine should eventually support:
   `LightOutput`. `RateLimitedLightOutput` keeps REST traffic within ~10
   commands per second, giving the budget to the lights whose state changed
   most, with transitions matching the time since their last update.
-- Hue Entertainment streaming will be another `LightOutput`, so effects do
+- Hue Entertainment streaming is just another `LightOutput`, so effects do
   not change when the transport does.
+
+### Entertainment streaming (`lib/src/core/hue/entertainment`)
+
+Fast effects (lightning, flashes, music) need more than the REST budget of
+~10 commands per second. With an entertainment area (created in the Hue
+app) LumiFX streams every channel at 50 messages per second:
+
+1. `GET /auth/v1` returns the `hue-application-id`, used as PSK identity
+   (falling back to the application key).
+2. `PUT entertainment_configuration/{id}` with `action: start` reserves the
+   area; only one app can stream to it at a time.
+3. A DTLS 1.2 handshake on UDP 2100 with the `clientkey` from pairing as
+   PSK and `TLS_PSK_WITH_AES_128_GCM_SHA256`.
+4. HueStream v2 messages (xy + brightness, ≤ 20 channels each) are sent on
+   every player tick (20 ms), and repeated twice a second while paused,
+   because the bridge closes an idle stream after ~10 s.
+5. Closing sends `close_notify` and `action: stop`.
+
+Channels are ordered left to right (then front to back) from their
+positions, so effects that move across slots move across the room.
+
+**DTLS** is a small client written in Dart (`dtls/`), because Flutter has no
+DTLS and OpenSSL is not available on iOS/Android. It deliberately supports
+only what Hue needs: one PSK cipher suite, cookie exchange, retransmission,
+fragment reassembly, AES-GCM records. The server is authenticated by its
+Finished message, which requires the PSK. It is tested against
+`openssl s_server` (`test/core/hue/dtls_interop_test.dart`,
+`entertainment_test.dart`); CI runs those tests. If it ever proves
+insufficient, the alternative is a native plugin (BouncyCastle on Android,
+Network.framework on iOS) behind the same `EntertainmentSession`.
 
 ## Content policy
 

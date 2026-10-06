@@ -210,6 +210,7 @@ class _Handshake {
   int _epoch0Sequence = 0;
   int _messageSeq = 0;
   int? _nextServerSeq;
+  Uint8List? _cookie;
   Uint8List? _serverRandom;
   _GcmCipher? _writeCipher;
   _GcmCipher? _readCipher;
@@ -314,9 +315,14 @@ class _Handshake {
 
   void _onHandshakeMessage(HandshakeMessage message) {
     if (message.type == HandshakeType.helloVerifyRequest) {
-      if (_state == _State.awaitingServerHello) {
-        final reader = ByteReader(message.body)..skip(2);
-        _sendClientHello(Uint8List.fromList(reader.vector8()));
+      final reader = ByteReader(message.body)..skip(2);
+      final cookie = Uint8List.fromList(reader.vector8());
+      // A duplicate (answering a retransmitted ClientHello) must not restart
+      // the transcript.
+      if (_state == _State.awaitingServerHello &&
+          !_sameBytes(cookie, _cookie)) {
+        _cookie = cookie;
+        _sendClientHello(cookie);
       }
       return;
     }
@@ -531,4 +537,16 @@ class _GcmCipher {
             ..bytes(dtls12)
             ..u16(length))
           .toBytes();
+}
+
+bool _sameBytes(List<int> a, List<int>? b) {
+  if (b == null || a.length != b.length) {
+    return false;
+  }
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) {
+      return false;
+    }
+  }
+  return true;
 }

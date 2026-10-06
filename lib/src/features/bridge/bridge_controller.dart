@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../core/hue/bridge_http_client.dart';
+import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_exceptions.dart';
 import '../../core/hue/hue_models.dart';
@@ -149,6 +150,24 @@ class BridgeController extends ChangeNotifier {
       _error = _describe(error, null);
       _setStatus(BridgeStatus.unreachable);
     }
+  }
+
+  /// Starts streaming to [area]. The returned output releases the area
+  /// when closed.
+  Future<EntertainmentLightOutput> openEntertainment(
+    HueEntertainmentArea area,
+  ) async {
+    final client = _client;
+    final credentials = _credentials;
+    if (client == null || credentials == null) {
+      throw const HueException('No bridge connected.');
+    }
+    final session = await EntertainmentSession.open(
+      client: client,
+      credentials: credentials,
+      area: area,
+    );
+    return EntertainmentLightOutput(session);
   }
 
   Future<void> forget() async {

@@ -33,6 +33,10 @@ The project is intentionally built around an original effects engine and origina
 5. 🟡 First set of animated scenes and narrative Stories (4 scenes, 3 stories)
 6. ⬜ Favorites and local settings
 
+Also done ahead of schedule: **Hue Entertainment streaming** (50 Hz over
+DTLS) for entertainment areas, used automatically when one is selected as
+the player target.
+
 ## Development
 
 Requires Flutter (stable, see `.github/workflows/ci.yml` for the pinned version).
@@ -52,7 +56,8 @@ lib/src/
 ├── core/
 │   ├── color/          LightColor and RGB → CIE xy conversion
 │   ├── effects/        effect model, renderer, player, outputs
-│   └── hue/            discovery, pairing, CLIP v2 client, TLS pinning
+│   └── hue/            discovery, pairing, CLIP v2 client, TLS pinning,
+│       └── entertainment/  DTLS client, HueStream encoding, streaming session
 └── features/
     ├── bridge/         onboarding, credentials, connection state
     ├── effects/        catalog, effect list, player screen
