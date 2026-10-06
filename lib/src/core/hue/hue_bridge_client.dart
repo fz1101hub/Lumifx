@@ -58,9 +58,8 @@ class HueBridgeClient {
   Future<({String applicationKey, String? clientKey})> pair({
     String deviceName = 'app',
   }) async {
-    final device = deviceName.length > 19
-        ? deviceName.substring(0, 19)
-        : deviceName;
+    final device =
+        deviceName.length > 19 ? deviceName.substring(0, 19) : deviceName;
     final response = await _client
         .post(
           Uri.https(host, '/api'),
@@ -146,7 +145,8 @@ class HueBridgeClient {
   Future<void> setLight(String lightId, HueLightCommand command) =>
       _put('light/$lightId', command.toJson());
 
-  Future<void> setGroupedLight(String groupedLightId, HueLightCommand command) =>
+  Future<void> setGroupedLight(
+          String groupedLightId, HueLightCommand command) =>
       _put('grouped_light/$groupedLightId', command.toJson());
 
   Future<List<Map<String, Object?>>> _resources(String type) async {
@@ -200,5 +200,8 @@ class HueBridgeClient {
 }
 
 List<Map<String, Object?>> _list(Object? value) => value is List
-    ? [for (final item in value) if (item is Map) item.cast<String, Object?>()]
+    ? [
+        for (final item in value)
+          if (item is Map) item.cast<String, Object?>()
+      ]
     : const [];

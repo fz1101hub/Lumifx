@@ -78,9 +78,8 @@ class RateLimitedLightOutput implements LightOutput {
         return;
       }
       final sentAt = _lastSentAt[id];
-      final age = sentAt == null
-          ? 10.0
-          : now.difference(sentAt).inMicroseconds / 1e6;
+      final age =
+          sentAt == null ? 10.0 : now.difference(sentAt).inMicroseconds / 1e6;
       candidates.add((id: id, score: difference * (0.5 + age)));
     });
     candidates.sort((a, b) => b.score.compareTo(a.score));

@@ -8,5 +8,7 @@ final List<LightingEffect> effectCatalog = [
   ...builtinStories,
 ];
 
-List<LightingEffect> effectsOfKind(EffectKind kind) =>
-    [for (final effect in effectCatalog) if (effect.kind == kind) effect];
+List<LightingEffect> effectsOfKind(EffectKind kind) => [
+      for (final effect in effectCatalog)
+        if (effect.kind == kind) effect
+    ];

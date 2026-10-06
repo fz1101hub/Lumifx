@@ -135,18 +135,18 @@ class CompositeBridgeDiscovery implements BridgeDiscovery {
     }
     for (final strategy in strategies) {
       strategy.discover(timeout: timeout).listen(
-        (bridge) {
-          if (seen.add(bridge.id)) {
-            controller.add(bridge);
-          }
-        },
-        onError: (Object _) {},
-        onDone: () {
-          if (--pending == 0) {
-            controller.close();
-          }
-        },
-      );
+            (bridge) {
+              if (seen.add(bridge.id)) {
+                controller.add(bridge);
+              }
+            },
+            onError: (Object _) {},
+            onDone: () {
+              if (--pending == 0) {
+                controller.close();
+              }
+            },
+          );
     }
     return controller.stream;
   }

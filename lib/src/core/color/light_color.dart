@@ -47,9 +47,8 @@ class LightColor {
   /// Converts to CIE 1931 xy using the wide-gamut D65 matrix recommended by
   /// Philips Hue. The bridge clamps out-of-gamut values to each lamp's gamut.
   ({double x, double y}) toXy() {
-    double gamma(double c) => c > 0.04045
-        ? math.pow((c + 0.055) / 1.055, 2.4).toDouble()
-        : c / 12.92;
+    double gamma(double c) =>
+        c > 0.04045 ? math.pow((c + 0.055) / 1.055, 2.4).toDouble() : c / 12.92;
 
     final red = gamma(r);
     final green = gamma(g);

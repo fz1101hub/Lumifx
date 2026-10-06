@@ -57,7 +57,8 @@ void main() {
           ]);
         }),
       );
-      final result = await client.pair(deviceName: 'a-very-long-phone-name-here');
+      final result =
+          await client.pair(deviceName: 'a-very-long-phone-name-here');
       expect(result.applicationKey, 'app-key');
       expect(result.clientKey, 'ABCDEF');
       expect(sent['generateclientkey'], true);
@@ -101,7 +102,10 @@ void main() {
               'data': [
                 {
                   'id': 'r1',
-                  'metadata': {'name': 'Living room', 'archetype': 'living_room'},
+                  'metadata': {
+                    'name': 'Living room',
+                    'archetype': 'living_room'
+                  },
                   'children': [
                     {'rid': 'd1', 'rtype': 'device'},
                     {'rid': 'd2', 'rtype': 'device'},

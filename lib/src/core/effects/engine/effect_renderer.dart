@@ -79,7 +79,8 @@ class EffectRenderer {
     final Duration local;
     if (effect.isLooping) {
       cycleIndex = total.inMicroseconds ~/ _cycle.inMicroseconds;
-      local = Duration(microseconds: total.inMicroseconds % _cycle.inMicroseconds);
+      local =
+          Duration(microseconds: total.inMicroseconds % _cycle.inMicroseconds);
     } else {
       // A finished one-shot effect holds its last instant.
       cycleIndex = 0;
@@ -170,7 +171,8 @@ class EffectRenderer {
         _smoothstep(position - position.floor()),
       );
 
-      final wave = math.sin(2 * math.pi * (seconds * speed * 1.7 + _unit(slot, 2)));
+      final wave =
+          math.sin(2 * math.pi * (seconds * speed * 1.7 + _unit(slot, 2)));
       var brightness = middle + amplitude * wave;
       if (flicker > 0) {
         brightness += flicker * amplitude * _noise(slot, seconds * 6);
@@ -202,10 +204,9 @@ class EffectRenderer {
 
     if (pattern == 'random_walk') {
       final step = _millis(p, 'stepDuration', 900);
-      final stepCount = (context.event.duration.inMicroseconds /
-                  step.inMicroseconds)
-              .ceil() +
-          1;
+      final stepCount =
+          (context.event.duration.inMicroseconds / step.inMicroseconds).ceil() +
+              1;
       final path = _randomWalk(context.random, stepCount);
       final position = context.local.inMicroseconds / step.inMicroseconds;
       final k = position.floor().clamp(0, stepCount - 2);
@@ -266,7 +267,8 @@ class EffectRenderer {
     final amount = _edgeFade(context.progress, 0.15);
     final factor = 1 + (level - 1) * amount;
     for (var slot = 0; slot < slotCount; slot++) {
-      frames[slot] = frames[slot].withBrightness(frames[slot].brightness * factor);
+      frames[slot] =
+          frames[slot].withBrightness(frames[slot].brightness * factor);
     }
   }
 
@@ -303,8 +305,7 @@ class EffectRenderer {
   }
 
   /// Deterministic pseudo-random value in 0..1 for a slot and channel.
-  double _unit(int slot, int channel) =>
-      _mix(seed, slot, channel) / 0x7FFFFFFF;
+  double _unit(int slot, int channel) => _mix(seed, slot, channel) / 0x7FFFFFFF;
 
   /// Smooth value noise in -1..1.
   double _noise(int slot, double t) {
