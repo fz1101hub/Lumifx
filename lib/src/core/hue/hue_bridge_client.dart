@@ -11,11 +11,13 @@ class HueHome {
     required this.lights,
     required this.rooms,
     required this.zones,
+    this.entertainmentAreas = const [],
   });
 
   final Map<String, HueLight> lights;
   final List<HueGroup> rooms;
   final List<HueGroup> zones;
+  final List<HueEntertainmentArea> entertainmentAreas;
 
   List<HueGroup> get groups => [...rooms, ...zones];
 }
@@ -96,6 +98,9 @@ class HueBridgeClient {
       _resources('light'),
       _resources('room'),
       _resources('zone'),
+      // Optional: streaming is a bonus, not a reason to fail loading.
+      _resources('entertainment_configuration').catchError(_noResources),
+      _resources('entertainment').catchError(_noResources),
     ]);
     final lights = {
       for (final json in results[0])
@@ -135,12 +140,64 @@ class HueBridgeClient {
       );
     }
 
+    // Entertainment services belong to devices, like room children.
+    final lightsByEntertainment = <String, List<String>>{
+      for (final json in results[4])
+        json['id']! as String:
+            lightsByDevice[_map(json['owner'])['rid']] ?? const [],
+    };
+
+    HueEntertainmentArea area(Map<String, Object?> json) {
+      final metadata = _map(json['metadata']);
+      return HueEntertainmentArea(
+        id: json['id']! as String,
+        name: metadata['name'] as String? ??
+            json['name'] as String? ??
+            'Entertainment area',
+        configurationType: json['configuration_type'] as String?,
+        isStreaming: json['status'] == 'active',
+        channels: [
+          for (final channel in _list(json['channels']))
+            HueEntertainmentChannel(
+              id: (channel['channel_id']! as num).toInt(),
+              x: _coordinate(channel, 'x'),
+              y: _coordinate(channel, 'y'),
+              z: _coordinate(channel, 'z'),
+              lightIds: [
+                for (final member in _list(channel['members']))
+                  ...?lightsByEntertainment[_map(member['service'])['rid']],
+              ],
+            ),
+        ],
+      );
+    }
+
     return HueHome(
       lights: lights,
       rooms: [for (final json in results[1]) group(json, HueGroupKind.room)],
       zones: [for (final json in results[2]) group(json, HueGroupKind.zone)],
+      entertainmentAreas: [for (final json in results[3]) area(json)],
     );
   }
+
+  /// The id the bridge assigned to this application key, used as the PSK
+  /// identity for Entertainment streaming.
+  Future<String?> fetchApplicationId() async {
+    final response = await _client
+        .get(Uri.https(host, '/auth/v1'), headers: _headers)
+        .timeout(_timeout);
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      throw const UnauthorizedException();
+    }
+    return response.headers['hue-application-id'];
+  }
+
+  /// Reserves [areaId] for streaming. Fails if another app is streaming.
+  Future<void> startEntertainment(String areaId) =>
+      _put('entertainment_configuration/$areaId', const {'action': 'start'});
+
+  Future<void> stopEntertainment(String areaId) =>
+      _put('entertainment_configuration/$areaId', const {'action': 'stop'});
 
   Future<void> setLight(String lightId, HueLightCommand command) =>
       _put('light/$lightId', command.toJson());
@@ -198,6 +255,14 @@ class HueBridgeClient {
     return body;
   }
 }
+
+List<Map<String, Object?>> _noResources(Object _) => const [];
+
+Map<String, Object?> _map(Object? value) =>
+    value is Map ? value.cast<String, Object?>() : const {};
+
+double _coordinate(Map<String, Object?> channel, String axis) =>
+    (_map(channel['position'])[axis] as num?)?.toDouble() ?? 0;
 
 List<Map<String, Object?>> _list(Object? value) => value is List
     ? [

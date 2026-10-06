@@ -209,3 +209,57 @@ double _round(double value, int digits) =>
 
 Map<String, Object?> _map(Object? value) =>
     value is Map ? value.cast<String, Object?>() : const {};
+
+/// One addressable segment of an entertainment area. A plain bulb is one
+/// channel; gradient lights expose several.
+class HueEntertainmentChannel {
+  const HueEntertainmentChannel({
+    required this.id,
+    required this.x,
+    required this.y,
+    required this.z,
+    required this.lightIds,
+  });
+
+  /// Channel id used in streaming messages (0..255).
+  final int id;
+
+  /// Position in the area, each axis -1..1: x left→right, y front→back,
+  /// z floor→ceiling.
+  final double x;
+  final double y;
+  final double z;
+
+  /// Lights rendering this channel.
+  final List<String> lightIds;
+}
+
+/// An entertainment area configured in the Hue app, which can be driven by
+/// high-frequency streaming.
+class HueEntertainmentArea {
+  const HueEntertainmentArea({
+    required this.id,
+    required this.name,
+    required this.channels,
+    this.configurationType,
+    this.isStreaming = false,
+  });
+
+  final String id;
+  final String name;
+  final List<HueEntertainmentChannel> channels;
+
+  /// `screen`, `music`, `3dspace`, ...
+  final String? configurationType;
+
+  /// True while some app (possibly not LumiFX) is streaming to it.
+  final bool isStreaming;
+
+  /// Channels ordered left to right, then front to back, so that effects
+  /// that move across slots move across the room.
+  List<HueEntertainmentChannel> get spatialChannels =>
+      [...channels]..sort((a, b) {
+          final byX = a.x.compareTo(b.x);
+          return byX != 0 ? byX : a.y.compareTo(b.y);
+        });
+}
