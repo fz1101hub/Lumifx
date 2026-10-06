@@ -30,8 +30,8 @@ The project is intentionally built around an original effects engine and origina
 2. ✅ Read rooms, zones and lights
 3. ✅ Basic light controls (room/zone on/off and brightness)
 4. ✅ Shared effect engine (renderer, player, rate-limited Hue output)
-5. 🟡 First set of animated scenes and narrative Stories (4 scenes, 3 stories)
-6. ⬜ Favorites and local settings
+5. ✅ First set of animated scenes and narrative Stories (6 scenes, 4 stories)
+6. ✅ Favorites, recently played and playback defaults
 
 Also done ahead of schedule: **Hue Entertainment streaming** (50 Hz over
 DTLS) for entertainment areas, used automatically when one is selected as
@@ -61,8 +61,10 @@ lib/src/
 └── features/
     ├── bridge/         onboarding, credentials, connection state
     ├── effects/        catalog, effect list, player screen
-    ├── home/
-    └── rooms/          room and zone controls
+    ├── home/           home with favorites and recently played
+    ├── library/        favorites, recents and defaults (shared_preferences)
+    ├── rooms/          room and zone controls
+    └── settings/
 ```
 
 

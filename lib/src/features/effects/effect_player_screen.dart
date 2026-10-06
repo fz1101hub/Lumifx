@@ -32,6 +32,18 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
   String? _targetKey;
   EffectControls _controls = const EffectControls();
   bool _starting = false;
+  bool _restored = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_restored) {
+      _restored = true;
+      final preferences = AppScope.of(context).preferences;
+      _controls = preferences.defaultControls;
+      _targetKey = preferences.lastTarget;
+    }
+  }
 
   @override
   void dispose() {
@@ -140,6 +152,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
       tick: tick,
     )..play();
     setState(() => _player = player);
+    AppScope.of(context).preferences.recordPlayed(widget.effect.id);
   }
 
   /// The bridge ended the stream while it was still in use.
@@ -160,6 +173,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
       _targetKey = targetKey;
       _player = null;
     });
+    AppScope.of(context).preferences.setLastTarget(targetKey);
     await previous?.stop();
     if (wasPlaying && mounted) {
       await _start();
@@ -196,7 +210,10 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
     final selectedKey = _group != null || _area != null ? _targetKey : null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.effect.name)),
+      appBar: AppBar(
+        title: Text(widget.effect.name),
+        actions: [_FavoriteButton(effectId: widget.effect.id)],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -287,6 +304,28 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FavoriteButton extends StatelessWidget {
+  const _FavoriteButton({required this.effectId});
+
+  final String effectId;
+
+  @override
+  Widget build(BuildContext context) {
+    final preferences = AppScope.of(context).preferences;
+    return ListenableBuilder(
+      listenable: preferences,
+      builder: (context, _) {
+        final favorite = preferences.isFavorite(effectId);
+        return IconButton(
+          tooltip: favorite ? 'Remove from favorites' : 'Add to favorites',
+          icon: Icon(favorite ? Icons.star : Icons.star_border),
+          onPressed: () => preferences.toggleFavorite(effectId),
+        );
+      },
     );
   }
 }

@@ -4,25 +4,45 @@ import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
+import '../effects/catalog/effect_catalog.dart';
 import '../effects/effect_list_screen.dart';
+import '../effects/effect_palette.dart';
+import '../effects/effect_player_screen.dart';
 import '../rooms/rooms_screen.dart';
+import '../settings/settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bridge = AppScope.of(context).bridge;
+    final scope = AppScope.of(context);
+    final bridge = scope.bridge;
+    final preferences = scope.preferences;
     return Scaffold(
       appBar: AppBar(
         title: const Text('LumiFX'),
+        actions: [
+          IconButton(
+            tooltip: 'Settings',
+            icon: const Icon(Icons.settings_outlined),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const SettingsScreen()),
+            ),
+          ),
+        ],
       ),
       body: ListenableBuilder(
-        listenable: bridge,
+        listenable: Listenable.merge([bridge, preferences]),
         builder: (context, _) => ListView(
           padding: const EdgeInsets.all(20),
           children: [
             _BridgeBanner(controller: bridge),
+            _EffectShelf(title: 'Favorites', effectIds: preferences.favorites),
+            _EffectShelf(
+              title: 'Recently played',
+              effectIds: preferences.recents,
+            ),
             const SizedBox(height: 12),
             const _SectionCard(
               title: 'Scenes',
@@ -64,6 +84,81 @@ class HomeScreen extends StatelessWidget {
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// A horizontal row of effects; hidden when empty.
+class _EffectShelf extends StatelessWidget {
+  const _EffectShelf({required this.title, required this.effectIds});
+
+  final String title;
+  final List<String> effectIds;
+
+  @override
+  Widget build(BuildContext context) {
+    final effects = [
+      for (final id in effectIds)
+        if (effectById(id) case final effect?) effect,
+    ];
+    if (effects.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: theme.textTheme.titleMedium),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 96,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: effects.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                final effect = effects[index];
+                final colors = effectPalette(effect);
+                return InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => EffectPlayerScreen(effect: effect),
+                    ),
+                  ),
+                  child: Ink(
+                    width: 140,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors:
+                            colors.length > 1 ? colors : [...colors, ...colors],
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                        effect.name,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: Colors.white,
+                          shadows: const [
+                            Shadow(blurRadius: 6, color: Colors.black),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

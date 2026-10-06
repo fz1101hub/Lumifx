@@ -64,7 +64,10 @@ The engine should eventually support:
   ordered positions; the player maps them to the selected room's lights.
 - `ambient_palette` events form a persistent background until the next
   ambient event starts. Other events (`magic_flash`, `travel`, `surprise`,
-  `dim`) are overlays that are active only within their window.
+  `dim`, `lightning`, `beat`) are overlays that are active only within their
+  window. Any overlay can carry `chance` (0..1) to fire on only some passes.
+- Effects flagged `prefersStreaming` change faster than the REST API can
+  follow; the UI recommends an entertainment area for them.
 - Randomness is reseeded on every pass of the timeline, so stories vary
   between loops while staying reproducible for a given seed.
 - `EffectPlayer` advances effect time by wall time × speed and feeds a

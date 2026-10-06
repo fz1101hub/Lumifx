@@ -8,6 +8,9 @@ final List<LightingEffect> effectCatalog = [
   ...builtinStories,
 ];
 
+LightingEffect? effectById(String id) =>
+    effectCatalog.where((effect) => effect.id == id).firstOrNull;
+
 List<LightingEffect> effectsOfKind(EffectKind kind) => [
       for (final effect in effectCatalog)
         if (effect.kind == kind) effect

@@ -10,6 +10,7 @@ import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
+import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 class _FakeDiscovery implements BridgeDiscovery {
   @override
@@ -23,7 +24,11 @@ Future<void> _pumpApp(WidgetTester tester) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
   await tester.pumpWidget(
-    LumiFxApp(bridge: bridge, discovery: _FakeDiscovery()),
+    LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+    ),
   );
 }
 
@@ -69,6 +74,52 @@ void main() {
     expect(find.text('Hue Bridge 123456'), findsOneWidget);
     expect(find.text('10.0.0.9'), findsOneWidget);
     expect(find.byType(OutlinedButton), findsOneWidget);
+  });
+
+  testWidgets('favorites and recently played appear on the home screen',
+      (tester) async {
+    await _pumpApp(tester);
+    expect(find.text('Favorites'), findsNothing);
+
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Add to favorites'));
+    await tester.pump();
+    expect(find.byTooltip('Remove from favorites'), findsOneWidget);
+
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Favorites'), findsOneWidget);
+    expect(find.text('Recently played'), findsOneWidget);
+    expect(find.text('Ocean'), findsNWidgets(2));
+  });
+
+  testWidgets('settings change the controls a new playback starts with',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    expect(find.text('Connect a Hue Bridge'), findsOneWidget);
+
+    final brightness = find.byType(Slider).first;
+    await tester.drag(brightness, const Offset(-1000, 0));
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    final slider = tester.widget<Slider>(find.byType(Slider).first);
+    expect(slider.value, 0);
   });
 
   streamingTests();
@@ -144,7 +195,11 @@ void streamingTests() {
     final bridge = await _connectedBridge(tester);
     expect(bridge.status, BridgeStatus.connected);
     await tester.pumpWidget(
-      LumiFxApp(bridge: bridge, discovery: _FakeDiscovery()),
+      LumiFxApp(
+        bridge: bridge,
+        discovery: _FakeDiscovery(),
+        preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      ),
     );
 
     await tester.tap(find.text('Stories'));
