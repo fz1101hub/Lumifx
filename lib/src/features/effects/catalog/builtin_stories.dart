@@ -185,8 +185,96 @@ const mischievousGhost = LightingEffect(
   ],
 );
 
+/// Candlelight in an old house on a stormy night. Something walks the
+/// corridor; the candles go out; lightning shows who is standing there.
+const hauntedManor = LightingEffect(
+  id: 'haunted_manor',
+  name: 'Haunted Manor',
+  kind: EffectKind.story,
+  collection: 'Haunted',
+  description: 'A storm outside, candles inside, and footsteps upstairs.',
+  prefersStreaming: true,
+  loopDuration: Duration(seconds: 48),
+  events: [
+    EffectEvent(
+      at: Duration.zero,
+      duration: Duration(seconds: 20),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#FF8A2A', '#E06A10', '#FFB060'],
+        'brightnessMin': 0.15,
+        'brightnessMax': 0.45,
+        'speed': 0.1,
+        'flicker': 1.0,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 5),
+      duration: Duration(milliseconds: 900),
+      type: EffectEventTypes.lightning,
+      parameters: {'strikes': 2, 'target': 'random_light', 'chance': 0.7},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 10),
+      duration: Duration(seconds: 8),
+      type: EffectEventTypes.travel,
+      parameters: {
+        'color': '#3A4A7A',
+        'pattern': 'sweep',
+        'width': 1.4,
+        'brightness': 0.05,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 20),
+      duration: Duration(seconds: 28),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#120A1E', '#1B1030'],
+        'brightnessMin': 0.02,
+        'brightnessMax': 0.08,
+        'speed': 0.02,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 24),
+      duration: Duration(milliseconds: 1500),
+      type: EffectEventTypes.lightning,
+      parameters: {'strikes': 5, 'target': 'all'},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 25),
+      duration: Duration(milliseconds: 600),
+      type: EffectEventTypes.magicFlash,
+      parameters: {
+        'color': '#B8FFE0',
+        'target': 'random_light',
+        'brightness': 0.7,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 32),
+      duration: Duration(seconds: 12),
+      type: EffectEventTypes.travel,
+      parameters: {
+        'color': '#9FFFD6',
+        'pattern': 'random_walk',
+        'stepDuration': 1600,
+        'brightness': 0.35,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 44),
+      duration: Duration(seconds: 4),
+      type: EffectEventTypes.magicFlash,
+      parameters: {'color': '#FF9A3A', 'target': 'all', 'brightness': 0.45},
+    ),
+  ],
+);
+
 const builtinStories = <LightingEffect>[
   emeraldTrickster,
   sleepingDragon,
   mischievousGhost,
+  hauntedManor,
 ];

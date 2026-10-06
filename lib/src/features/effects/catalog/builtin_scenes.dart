@@ -79,9 +79,120 @@ final sunset = _ambientScene(
   },
 );
 
+/// Rain-dark sky with lightning that never strikes the same way twice.
+const thunderstorm = LightingEffect(
+  id: 'thunderstorm',
+  name: 'Thunderstorm',
+  kind: EffectKind.scene,
+  collection: 'Nature',
+  description: 'Heavy clouds, restless rain and lightning across the room.',
+  prefersStreaming: true,
+  loopDuration: Duration(seconds: 45),
+  events: [
+    EffectEvent(
+      at: Duration.zero,
+      duration: Duration(seconds: 45),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#0B1426', '#1C2B45', '#2A3550', '#121A2E'],
+        'brightnessMin': 0.08,
+        'brightnessMax': 0.30,
+        'speed': 0.05,
+        'flicker': 0.5,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 6),
+      duration: Duration(milliseconds: 900),
+      type: EffectEventTypes.lightning,
+      parameters: {'strikes': 2, 'target': 'random_light'},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 15),
+      duration: Duration(milliseconds: 1400),
+      type: EffectEventTypes.lightning,
+      parameters: {'strikes': 4, 'target': 'all', 'chance': 0.8},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 26),
+      duration: Duration(milliseconds: 1000),
+      type: EffectEventTypes.lightning,
+      parameters: {
+        'strikes': 3,
+        'target': 'random_lights',
+        'count': 2,
+        'chance': 0.7,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 37),
+      duration: Duration(milliseconds: 800),
+      type: EffectEventTypes.lightning,
+      parameters: {'strikes': 2, 'target': 'random_light', 'chance': 0.6},
+    ),
+  ],
+);
+
+/// Saturated colors on the beat: everything, then a chase, then halves.
+const disco = LightingEffect(
+  id: 'disco',
+  name: 'Disco',
+  kind: EffectKind.scene,
+  collection: 'Party',
+  description: 'Four on the floor at 124 BPM.',
+  prefersStreaming: true,
+  loopDuration: Duration(seconds: 32),
+  events: [
+    EffectEvent(
+      at: Duration.zero,
+      duration: Duration(seconds: 32),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#2B0A3D', '#0A1A3D'],
+        'brightnessMin': 0.05,
+        'brightnessMax': 0.15,
+      },
+    ),
+    EffectEvent(
+      at: Duration.zero,
+      duration: Duration(seconds: 16),
+      type: EffectEventTypes.beat,
+      parameters: {
+        'bpm': 124,
+        'palette': <String>['#FF0080', '#00E5FF', '#FFE600', '#7CFF00'],
+        'pattern': 'all',
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 16),
+      duration: Duration(seconds: 8),
+      type: EffectEventTypes.beat,
+      parameters: {
+        'bpm': 248,
+        'palette': <String>['#FF0080', '#8A2BE2', '#00E5FF'],
+        'pattern': 'chase',
+        'decay': 0.9,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 24),
+      duration: Duration(seconds: 8),
+      type: EffectEventTypes.beat,
+      parameters: {
+        'bpm': 124,
+        'palette': <String>['#FF3D00', '#00E5FF', '#FF0080', '#FFE600'],
+        'pattern': 'alternate',
+        'decay': 0.7,
+      },
+    ),
+  ],
+);
+
 final builtinScenes = <LightingEffect>[
   fireplace,
   ocean,
   aurora,
   sunset,
+  thunderstorm,
+  disco,
 ];

@@ -16,6 +16,7 @@ class LightingEffect {
     this.collection,
     this.loopDuration,
     this.isLooping = true,
+    this.prefersStreaming = false,
   });
 
   final String id;
@@ -31,6 +32,10 @@ class LightingEffect {
   /// event.
   final Duration? loopDuration;
   final bool isLooping;
+
+  /// Uses changes too fast for the REST API (strikes, beats); best played on
+  /// an entertainment area.
+  final bool prefersStreaming;
 
   Duration get cycleLength {
     if (loopDuration != null) {

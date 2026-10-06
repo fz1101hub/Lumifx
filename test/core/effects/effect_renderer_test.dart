@@ -12,6 +12,8 @@ const _knownTypes = {
   EffectEventTypes.travel,
   EffectEventTypes.surprise,
   EffectEventTypes.dim,
+  EffectEventTypes.lightning,
+  EffectEventTypes.beat,
 };
 
 LightingEffect _effect(List<EffectEvent> events, {Duration? loop}) =>
@@ -183,6 +185,96 @@ void main() {
         expect(frames, hasLength(1));
         expect(frames.single.brightness, inInclusiveRange(0, 1));
       }
+    });
+  });
+
+  group('streaming events', () {
+    test('lightning strikes are short and bright', () {
+      final effect = _effect([
+        _greenAmbient,
+        const EffectEvent(
+          at: Duration(seconds: 1),
+          duration: Duration(seconds: 1),
+          type: EffectEventTypes.lightning,
+          parameters: {'strikes': 3, 'target': 'all'},
+        ),
+      ], loop: const Duration(seconds: 10));
+      final renderer = EffectRenderer(effect, slotCount: 2, seed: 9);
+      var litSamples = 0;
+      var peak = 0.0;
+      // Sample at 100 Hz, finer than the strikes.
+      for (var ms = 1000; ms < 2000; ms += 10) {
+        final frame = renderer.render(Duration(milliseconds: ms)).first;
+        if (frame.color.b > 0.5) {
+          litSamples++;
+          peak = frame.brightness > peak ? frame.brightness : peak;
+        }
+      }
+      expect(peak, greaterThan(0.55));
+      // Three strikes of at most 130 ms each.
+      expect(litSamples, inInclusiveRange(1, 39));
+    });
+
+    test('beat pulses once per beat', () {
+      final effect = _effect([
+        const EffectEvent(
+          at: Duration.zero,
+          duration: Duration(seconds: 10),
+          type: EffectEventTypes.beat,
+          parameters: {
+            'bpm': 120,
+            'palette': <String>['#FF0000'],
+            'decay': 0.5,
+            'brightnessMin': 0.0,
+          },
+        ),
+      ]);
+      final renderer = EffectRenderer(effect, slotCount: 1);
+      // 120 BPM: a beat every 500 ms, lit for the first 250 ms.
+      double at(int ms) =>
+          renderer.render(Duration(milliseconds: ms)).single.brightness;
+      expect(at(1000), greaterThan(0.9));
+      expect(at(1100), lessThan(at(1000)));
+      expect(at(1300), lessThan(0.01));
+      expect(at(1500), greaterThan(0.9));
+    });
+
+    test('chase lights one slot at a time', () {
+      final effect = _effect([
+        const EffectEvent(
+          at: Duration.zero,
+          duration: Duration(seconds: 10),
+          type: EffectEventTypes.beat,
+          parameters: {'bpm': 60, 'pattern': 'chase', 'brightnessMin': 0.0},
+        ),
+      ]);
+      final renderer = EffectRenderer(effect, slotCount: 4);
+      final frames = renderer.render(const Duration(milliseconds: 2050));
+      final lit = [for (final f in frames) f.brightness > 0.5];
+      expect(lit, [false, false, true, false]);
+    });
+
+    test('chance skips an event on some passes only', () {
+      final effect = _effect([
+        _greenAmbient,
+        const EffectEvent(
+          at: Duration(seconds: 1),
+          duration: Duration(seconds: 1),
+          type: EffectEventTypes.magicFlash,
+          parameters: {'color': '#FF0000', 'target': 'all', 'chance': 0.5},
+        ),
+      ], loop: const Duration(seconds: 10));
+      final renderer = EffectRenderer(effect, slotCount: 1, seed: 4);
+      var fired = 0;
+      for (var pass = 0; pass < 40; pass++) {
+        final frame = renderer
+            .render(Duration(seconds: pass * 10, milliseconds: 1150))
+            .single;
+        if (frame.color.r > 0.5) {
+          fired++;
+        }
+      }
+      expect(fired, inInclusiveRange(8, 32));
     });
   });
 

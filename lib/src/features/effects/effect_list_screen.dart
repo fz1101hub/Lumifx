@@ -73,7 +73,19 @@ class _EffectCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(effect.name, style: theme.textTheme.titleMedium),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(effect.name,
+                            style: theme.textTheme.titleMedium),
+                      ),
+                      if (effect.prefersStreaming)
+                        const Tooltip(
+                          message: 'Best on an entertainment area',
+                          child: Icon(Icons.bolt, size: 20),
+                        ),
+                    ],
+                  ),
                   if (effect.collection != null)
                     Text(effect.collection!,
                         style: theme.textTheme.labelMedium),

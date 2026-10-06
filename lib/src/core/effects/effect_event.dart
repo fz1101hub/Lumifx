@@ -9,6 +9,9 @@ class EffectEvent {
   final Duration at;
   final Duration duration;
   final String type;
+
+  /// Type-specific settings. Any overlay event also accepts `chance`
+  /// (0..1): the probability that it fires on a given pass of the timeline.
   final Map<String, Object> parameters;
 
   Duration get end => at + duration;
@@ -35,4 +38,10 @@ abstract final class EffectEventTypes {
 
   /// Temporary dimming of everything, e.g. "the room goes almost dark".
   static const dim = 'dim';
+
+  /// A cluster of very short strikes on random lights.
+  static const lightning = 'lightning';
+
+  /// Pulses in time with a tempo (`bpm`), for party effects.
+  static const beat = 'beat';
 }

@@ -231,6 +231,14 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
             ],
             onChanged: _starting ? null : _changeTarget,
           ),
+          if (widget.effect.prefersStreaming && _group != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              'This effect is very fast. Rooms update a few times per second, '
+              'so pick an entertainment area for the full effect.',
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
           if (home != null && areas.isEmpty) ...[
             const SizedBox(height: 8),
             Text(

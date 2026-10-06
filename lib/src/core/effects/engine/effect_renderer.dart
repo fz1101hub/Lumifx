@@ -101,6 +101,14 @@ class EffectRenderer {
           !event.isActiveAt(local)) {
         continue;
       }
+      // Optional events fire on some passes only, so loops feel less
+      // predictable. Drawn from its own stream to leave targets unchanged.
+      final chance = event.parameters['chance'];
+      if (chance is num &&
+          math.Random(_mix(seed ^ 0x2545F491, cycleIndex, i)).nextDouble() >=
+              chance) {
+        continue;
+      }
       final context = _EventContext(
         event: event,
         local: local - event.at,
@@ -115,6 +123,10 @@ class EffectRenderer {
           _renderSurprise(context, frames);
         case EffectEventTypes.dim:
           _renderDim(context, frames);
+        case EffectEventTypes.lightning:
+          _renderLightning(context, frames);
+        case EffectEventTypes.beat:
+          _renderBeat(context, frames);
         default:
           // Unknown events are skipped so that newer effect definitions
           // still play on older engines.
@@ -269,6 +281,73 @@ class EffectRenderer {
     for (var slot = 0; slot < slotCount; slot++) {
       frames[slot] =
           frames[slot].withBrightness(frames[slot].brightness * factor);
+    }
+  }
+
+  /// A few very short, uneven strikes. Built for streaming: on the REST
+  /// API the strikes blur into a single flash.
+  void _renderLightning(_EventContext context, List<LightFrame> frames) {
+    final p = context.event.parameters;
+    final color = _color(p, 'color', const LightColor(0.91, 0.94, 1));
+    final strikes = _number(p, 'strikes', 3).round().clamp(1, 12);
+    final duration = context.event.duration.inMicroseconds;
+    final now = context.local.inMicroseconds;
+
+    // All randomness up front, in a fixed order.
+    final plan = [
+      for (var k = 0; k < strikes; k++)
+        (
+          start: duration * 0.7 * context.random.nextDouble(),
+          length: (40 + context.random.nextInt(90)) * 1000.0,
+          peak: 0.6 + 0.4 * context.random.nextDouble(),
+          targets: _targets(p, context.random).toList(),
+        ),
+    ];
+    for (final strike in plan) {
+      final t = (now - strike.start) / strike.length;
+      if (t < 0 || t >= 1) {
+        continue;
+      }
+      // Near-instant attack, quick decay.
+      final envelope = t < 0.1 ? t / 0.1 : math.pow(1 - (t - 0.1) / 0.9, 3);
+      final overlay = LightFrame(color, strike.peak);
+      for (final slot in strike.targets) {
+        frames[slot] =
+            frames[slot].blend(overlay, envelope * controls.intensity);
+      }
+    }
+  }
+
+  /// Pulses on a tempo: every light, alternating halves, or a chase.
+  void _renderBeat(_EventContext context, List<LightFrame> frames) {
+    final p = context.event.parameters;
+    final palette = _palette(p);
+    final bpm = _number(p, 'bpm', 120).clamp(20, 300);
+    final decay = _number(p, 'decay', 0.5).clamp(0.05, 1.0);
+    final floor = _number(p, 'brightnessMin', 0.05);
+    final peak = _number(p, 'brightness', 1);
+    final pattern = p['pattern'] as String? ?? 'all';
+
+    final beats = context.local.inMicroseconds / 1e6 * bpm / 60;
+    final beat = beats.floor();
+    final phase = beats - beat;
+    final pulse = phase < decay ? math.pow(1 - phase / decay, 2).toDouble() : 0;
+    // A fixed 100 ms ramp, so consecutive beat sections join without a dip.
+    final ramp = context.event.duration == Duration.zero
+        ? 0.5
+        : (100000 / context.event.duration.inMicroseconds).clamp(0.0, 0.5);
+    final edge = _edgeFade(context.progress, ramp) * controls.intensity;
+
+    for (var slot = 0; slot < slotCount; slot++) {
+      final lit = switch (pattern) {
+        'alternate' => (slot + beat).isEven,
+        'chase' => slot == beat % slotCount,
+        _ => true,
+      };
+      final color =
+          palette[(beat + (pattern == 'all' ? 0 : slot)) % palette.length];
+      final brightness = floor + (peak - floor) * (lit ? pulse : 0);
+      frames[slot] = frames[slot].blend(LightFrame(color, brightness), edge);
     }
   }
 
