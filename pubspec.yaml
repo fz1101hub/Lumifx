@@ -12,8 +12,7 @@ dependencies:
     sdk: flutter
   flutter_secure_storage: ^11.2.0
   http: ^1.6.0
-  multicast_dns: ^0.3.3+1
-
+  nsd: ^5.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
