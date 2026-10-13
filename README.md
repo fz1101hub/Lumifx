@@ -81,4 +81,8 @@ lib/src/
 
 - [Product vision & working specification](docs/PRODUCT_VISION.md) — structured source of truth for the product, architecture, effects, roadmap and decisions discussed so far.
 - [Chat history snapshot](docs/CHAT_HISTORY.md) — complete snapshot of the visible project conversation through the request to archive the discussion.
-- [Architecture](docs/ARCHITECTURE.md) — initial engineering architecture.
+- [Architecture](docs/ARCHITECTURE.md) — engineering architecture.
+- [Release guide](docs/RELEASE.md) — signing, building and uploading to Google Play and the App Store.
+- [Store listing](docs/STORE_LISTING.md) — texts, data-safety and privacy answers, review notes.
+- [QA checklist](docs/QA_CHECKLIST.md) — what to verify on a real phone with a real bridge.
+- [Privacy policy](docs/PRIVACY_POLICY.md) — to host at a public URL for both stores.
