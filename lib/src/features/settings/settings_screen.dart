@@ -4,6 +4,7 @@ import '../../app_scope.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
+import '../bridge/forget_bridge_dialog.dart';
 import '../entertainment/entertainment_areas_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -122,7 +123,8 @@ class SettingsScreen extends StatelessWidget {
               : '${home?.entertainmentAreas.length ?? 0} entertainment areas',
         ),
         trailing: const Icon(Icons.chevron_right),
-        onTap: bridge.isConnected
+        enabled: bridge.isConnected && credentials.clientKey != null,
+        onTap: bridge.isConnected && credentials.clientKey != null
             ? () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (_) => const EntertainmentAreasScreen(),
@@ -133,30 +135,7 @@ class SettingsScreen extends StatelessWidget {
       ListTile(
         leading: const Icon(Icons.link_off),
         title: const Text('Forget this bridge'),
-        onTap: () async {
-          final confirmed = await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Forget this bridge?'),
-              content: const Text(
-                'You will need to press the link button again to reconnect.',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('Cancel'),
-                ),
-                FilledButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Forget'),
-                ),
-              ],
-            ),
-          );
-          if (confirmed == true) {
-            await bridge.forget();
-          }
-        },
+        onTap: () => confirmForgetBridge(context, bridge),
       ),
     ];
   }
@@ -203,7 +182,10 @@ class _SliderTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          SizedBox(width: 88, child: Text(label)),
+          SizedBox(
+            width: MediaQuery.textScalerOf(context).scale(88),
+            child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+          ),
           Expanded(
             child: Slider(
               value: value.clamp(min, max),

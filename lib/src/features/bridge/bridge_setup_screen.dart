@@ -219,7 +219,10 @@ class _PairingDialogState extends State<_PairingDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: widget.controller.cancelPairing,
+          onPressed: () {
+            widget.controller.cancelPairing();
+            Navigator.of(context).pop(false);
+          },
           child: const Text('Cancel'),
         ),
       ],

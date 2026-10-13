@@ -189,13 +189,17 @@ void main() {
   streamingTests();
 }
 
-Future<BridgeController> _connectedBridge(WidgetTester tester) async {
+Future<BridgeController> _connectedBridge(
+  WidgetTester tester, {
+  String? clientKey,
+}) async {
   http.Response json(Object body) => http.Response(jsonEncode(body), 200);
   final bridge = BridgeController(
     store: InMemoryCredentialStore(
-      const HueCredentials(
-        bridge: HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
+      HueCredentials(
+        bridge: const HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
         applicationKey: 'key',
+        clientKey: clientKey,
       ),
     ),
     clientFactory: (pin, key) => HueBridgeClient(
@@ -211,6 +215,7 @@ Future<BridgeController> _connectedBridge(WidgetTester tester) async {
                   'owner': {'rid': 'd1', 'rtype': 'device'},
                   'metadata': {'name': 'Sofa'},
                   'on': {'on': true},
+                  'dimming': {'brightness': 50.0},
                 },
               ],
             });
@@ -272,22 +277,39 @@ void streamingTests() {
     await tester.tap(find.text('Emerald Trickster'));
     await tester.pumpAndSettle();
 
+    // These credentials predate Entertainment support (no client key), so
+    // areas are not offered and the player says why.
+    expect(find.textContaining('pair again'), findsOneWidget);
+    await tester.tap(find.text('Preview only'));
+    await tester.pumpAndSettle();
+    expect(find.text('TV area · streaming'), findsNothing);
+    expect(find.text('Living room · 1 light'), findsWidgets);
+
+    await tester.tap(find.text('Living room · 1 light').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Sofa'), findsOneWidget);
+  });
+
+  testWidgets('player offers entertainment areas when streaming is possible',
+      (tester) async {
+    final bridge = await _connectedBridge(tester, clientKey: 'A' * 32);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Emerald Trickster'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('pair again'), findsNothing);
+
     await tester.tap(find.text('Preview only'));
     await tester.pumpAndSettle();
     expect(find.text('TV area · streaming'), findsWidgets);
-    expect(find.text('Living room · 1 light'), findsWidgets);
-
     await tester.tap(find.text('TV area · streaming').last);
     await tester.pumpAndSettle();
     expect(find.text('Channel 0'), findsOneWidget);
-
-    // These credentials predate Entertainment support (no client key).
-    await tester.runAsync(() async {
-      await tester.tap(find.text('Play'));
-      await Future<void>.delayed(const Duration(milliseconds: 300));
-    });
-    await tester.pumpAndSettle();
-    expect(find.textContaining('pair again'), findsOneWidget);
-    expect(find.text('Play'), findsOneWidget);
   });
 }

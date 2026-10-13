@@ -119,13 +119,20 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Lights (2/10)'), findsOneWidget);
 
-    // Drag the floor lamp to the far left of the map.
+    // Drag the floor lamp to the far left of the map, then to the back:
+    // vertical drags must move the light, not scroll the page.
     await tester.scrollUntilVisible(
         find.byKey(const ValueKey('placement-e1')), -200,
         scrollable: list);
     await tester.drag(
         find.byKey(const ValueKey('placement-e1')), const Offset(-2000, 0));
     await tester.pumpAndSettle();
+    final mapBefore = tester.getRect(find.byType(AspectRatio));
+    await tester.drag(
+        find.byKey(const ValueKey('placement-e1')), const Offset(0, 2000));
+    await tester.pumpAndSettle();
+    expect(tester.getRect(find.byType(AspectRatio)), mapBefore,
+        reason: 'the page must not scroll while dragging a light');
 
     await tester.runAsync(() async {
       await tester.tap(find.text('Save'));
@@ -145,6 +152,7 @@ void main() {
     expect(locations.map((l) => (l['service']! as Map)['rid']), ['e1', 'e2']);
     final lampPositions = (locations[0]['positions']! as List).cast<Map>();
     expect(lampPositions.single['x'], -1.0);
+    expect(lampPositions.single['y'], -1.0);
     // A gradient light gets one position per segment.
     expect(locations[1]['positions'], hasLength(3));
 

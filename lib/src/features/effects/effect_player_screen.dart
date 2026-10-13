@@ -143,6 +143,23 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                 ],
                 onChanged: busy ? null : c.changeTarget,
               ),
+              if (c.bridgeUnreachable) ...[
+                const SizedBox(height: 8),
+                Text(
+                  'The bridge is not reachable right now. Lights will not '
+                  'change until it is back.',
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: theme.colorScheme.error),
+                ),
+              ],
+              if (c.streamingUnavailable) ...[
+                const SizedBox(height: 8),
+                Text(
+                  'Entertainment areas need a newer pairing: forget the '
+                  'bridge in Settings and pair again.',
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
               if (widget.effect.prefersStreaming && c.group != null) ...[
                 const SizedBox(height: 8),
                 Text(
@@ -151,7 +168,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                   style: theme.textTheme.bodySmall,
                 ),
               ],
-              if (c.home != null && areas.isEmpty)
+              if (c.home != null && !c.streamingUnavailable && areas.isEmpty)
                 Row(
                   children: [
                     Expanded(
@@ -289,7 +306,11 @@ class _MusicMeter extends StatelessWidget {
                     children: [
                       Text(label, style: theme.textTheme.labelSmall),
                       const SizedBox(height: 4),
-                      LinearProgressIndicator(value: value),
+                      LinearProgressIndicator(
+                        value: value,
+                        semanticsLabel: label,
+                        semanticsValue: '${(value * 100).round()}%',
+                      ),
                     ],
                   ),
                 ),
@@ -453,7 +474,10 @@ class _ControlSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(width: 88, child: Text(label)),
+        SizedBox(
+          width: MediaQuery.textScalerOf(context).scale(88),
+          child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
         Expanded(
           child: Slider(
             value: value.clamp(min, max),

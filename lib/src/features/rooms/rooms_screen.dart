@@ -123,6 +123,8 @@ class _GroupTileState extends State<_GroupTile> {
     }
     try {
       await widget.client.setGroupedLight(id, command);
+      // Give the bridge a moment to apply the change before reading back.
+      await Future<void>.delayed(const Duration(milliseconds: 300));
       await widget.onChanged();
     } on Object {
       if (mounted) {
@@ -158,8 +160,9 @@ class _GroupTileState extends State<_GroupTile> {
                 value: _brightness.clamp(1, 100),
                 min: 1,
                 max: 100,
-                onChanged:
-                    _on ? (value) => setState(() => _brightness = value) : null,
+                onChanged: _on && widget.group.groupedLightId != null
+                    ? (value) => setState(() => _brightness = value)
+                    : null,
                 onChangeEnd: (value) =>
                     _send(HueLightCommand(brightness: value)),
               ),

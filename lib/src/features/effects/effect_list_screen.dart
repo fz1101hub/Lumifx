@@ -21,11 +21,11 @@ class EffectListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: effects.isEmpty
-          ? const Center(
+          ? Center(
               child: Padding(
-                padding: EdgeInsets.all(32),
+                padding: const EdgeInsets.all(32),
                 child: Text(
-                  'Interactive experiences are coming soon.',
+                  'No ${title.toLowerCase()} yet.',
                   textAlign: TextAlign.center,
                 ),
               ),

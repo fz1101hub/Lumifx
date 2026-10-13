@@ -75,16 +75,28 @@ class PlaybackController extends ChangeNotifier {
   EffectControls get controls => _controls;
   double get sensitivity => _sensitivity;
 
-  HueHome? get home => _bridge.isConnected ? _bridge.home : null;
+  /// The latest bridge snapshot, kept while the bridge is temporarily
+  /// unreachable so the chosen target does not vanish from the screen.
+  HueHome? get home => _bridge.credentials == null ? null : _bridge.home;
+
+  /// Paired, but the last contact with the bridge failed.
+  bool get bridgeUnreachable =>
+      _bridge.credentials != null && !_bridge.isConnected;
+
+  /// Paired before streaming support: no Entertainment client key.
+  bool get streamingUnavailable =>
+      _bridge.credentials != null && _bridge.credentials?.clientKey == null;
 
   /// Rooms and zones that have lights.
   List<HueGroup> get groups =>
       home?.groups.where((g) => g.lightIds.isNotEmpty).toList() ?? const [];
 
-  /// Entertainment areas that have channels.
-  List<HueEntertainmentArea> get areas =>
-      home?.entertainmentAreas.where((a) => a.channels.isNotEmpty).toList() ??
-      const [];
+  /// Entertainment areas that have channels; none without a client key,
+  /// since streaming to them could only fail.
+  List<HueEntertainmentArea> get areas => streamingUnavailable
+      ? const []
+      : home?.entertainmentAreas.where((a) => a.channels.isNotEmpty).toList() ??
+          const [];
 
   /// The selected room or zone, looked up fresh because the bridge
   /// snapshot is replaced on every refresh.
@@ -163,7 +175,7 @@ class PlaybackController extends ChangeNotifier {
         }
         final home = this.home;
         final client = _bridge.client;
-        if (home == null || client == null) {
+        if (!_bridge.isConnected || home == null || client == null) {
           return _abortStart(
               _bridge.error ?? 'The bridge could not be reached.');
         }

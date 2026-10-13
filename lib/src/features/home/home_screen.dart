@@ -4,6 +4,7 @@ import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
+import '../bridge/forget_bridge_dialog.dart';
 import '../effects/catalog/effect_catalog.dart';
 import '../effects/effect_list_screen.dart';
 import '../effects/effect_palette.dart';
@@ -114,7 +115,8 @@ class _EffectShelf extends StatelessWidget {
           Text(title, style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
           SizedBox(
-            height: 96,
+            // Grows with the user's font size so names still fit.
+            height: MediaQuery.textScalerOf(context).scale(96),
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: effects.length,
@@ -145,6 +147,8 @@ class _EffectShelf extends StatelessWidget {
                       alignment: Alignment.bottomLeft,
                       child: Text(
                         effect.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.titleSmall?.copyWith(
                           color: Colors.white,
                           shadows: const [
@@ -203,7 +207,8 @@ class _BridgeBanner extends StatelessWidget {
               icon: const Icon(Icons.refresh),
               onPressed: controller.refresh,
             ),
-            onLongPress: () => _openSetup(context),
+            // Tapping the card offers to set the bridge up again.
+            onTap: () => _openSetup(context),
           ),
         );
       case BridgeStatus.connected:
@@ -223,7 +228,7 @@ class _BridgeBanner extends StatelessWidget {
                 if (value == 'refresh') {
                   controller.refresh();
                 } else if (value == 'forget') {
-                  controller.forget();
+                  confirmForgetBridge(context, controller);
                 }
               },
               itemBuilder: (_) => const [

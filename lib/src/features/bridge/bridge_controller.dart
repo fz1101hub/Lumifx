@@ -108,6 +108,9 @@ class BridgeController extends ChangeNotifier {
     Duration timeout = const Duration(seconds: 30),
     Duration interval = const Duration(seconds: 1),
   }) async {
+    if (_status == BridgeStatus.pairing) {
+      return false; // already pairing (e.g. a double tap)
+    }
     final previousStatus = _status;
     _pairingCancelled = false;
     _error = null;

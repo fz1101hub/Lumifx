@@ -69,12 +69,17 @@ class PreferencesController extends ChangeNotifier {
 
   bool isFavorite(String effectId) => _favorites.contains(effectId);
 
+  /// Set once the user changes anything, so a slow [load] cannot overwrite
+  /// it with the stale snapshot from disk.
+  bool _dirty = false;
+  Future<void> _writes = Future.value();
+
   Future<void> load() async {
-    final raw = await _store.read(_key);
-    if (raw == null) {
-      return;
-    }
     try {
+      final raw = await _store.read(_key);
+      if (raw == null || _dirty) {
+        return;
+      }
       final json = (jsonDecode(raw) as Map).cast<String, Object?>();
       _favorites = _strings(json['favorites']);
       _recents = _strings(json['recents']);
@@ -131,22 +136,26 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  /// Writes are serialised so they land on disk in the order they were
+  /// made; a failed write is logged, not thrown at a fire-and-forget
+  /// caller (the in-memory state already shows the change).
   Future<void> _changed() {
+    _dirty = true;
     notifyListeners();
-    return _store.write(
-      _key,
-      jsonEncode({
-        'favorites': _favorites,
-        'recents': _recents,
-        'lastTarget': _lastTarget,
-        'restoreLights': _restoreLights,
-        'defaultControls': {
-          'brightness': _defaultControls.brightness,
-          'intensity': _defaultControls.intensity,
-          'speed': _defaultControls.speed,
-        },
-      }),
-    );
+    final snapshot = jsonEncode({
+      'favorites': _favorites,
+      'recents': _recents,
+      'lastTarget': _lastTarget,
+      'restoreLights': _restoreLights,
+      'defaultControls': {
+        'brightness': _defaultControls.brightness,
+        'intensity': _defaultControls.intensity,
+        'speed': _defaultControls.speed,
+      },
+    });
+    return _writes = _writes
+        .then((_) => _store.write(_key, snapshot))
+        .catchError((Object error) => debugPrint('Preferences: $error'));
   }
 
   static List<String> _strings(Object? value) =>

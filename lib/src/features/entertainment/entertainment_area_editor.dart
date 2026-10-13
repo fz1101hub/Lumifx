@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
@@ -13,6 +14,7 @@ const maxLightsPerArea = 10;
 const _types = {
   'music': 'Music',
   'screen': 'TV',
+  'monitor': 'Monitor',
   '3dspace': 'Room',
   'other': 'Other',
 };
@@ -35,19 +37,31 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
   /// Selected services and where they are, in selection order.
   final _placements = <String, HuePosition>{};
   bool _saving = false;
+  bool _pruned = false;
 
   @override
   void initState() {
     super.initState();
     final area = widget.area;
     _name = TextEditingController(text: area?.name ?? 'LumiFX');
-    _type = _types.containsKey(area?.configurationType)
-        ? area!.configurationType!
-        : 'music';
+    // Unknown types (newer firmware) are kept as they are.
+    _type = area?.configurationType ?? 'music';
     for (final location in area?.locations ?? const <HueServiceLocation>[]) {
       if (location.positions.isNotEmpty) {
         _placements[location.serviceId] = _centroid(location.positions);
       }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_pruned) {
+      _pruned = true;
+      // Lights that have left the bridge since the area was made would be
+      // counted and saved without being visible.
+      final known = {for (final s in _services) s.id};
+      _placements.removeWhere((id, _) => !known.contains(id));
     }
   }
 
@@ -84,7 +98,8 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
         return;
       }
       // New lights start around the edge of the room, evenly spaced.
-      final angle = _placements.length * 2 * math.pi / 8 - math.pi / 2;
+      final angle =
+          _placements.length * 2 * math.pi / maxLightsPerArea - math.pi / 2;
       _placements[service.id] =
           HuePosition(0.7 * math.cos(angle), -0.7 * math.sin(angle));
     });
@@ -206,9 +221,12 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
           ),
           const SizedBox(height: 16),
           SegmentedButton<String>(
+            showSelectedIcon: false,
             segments: [
               for (final MapEntry(key: value, value: label) in _types.entries)
                 ButtonSegment(value: value, label: Text(label)),
+              if (!_types.containsKey(_type))
+                ButtonSegment(value: _type, label: Text(_type)),
             ],
             selected: {_type},
             onSelectionChanged: (value) => setState(() => _type = value.single),
@@ -280,14 +298,17 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
   }
 
   /// Gradient lights get one position per segment, in a short horizontal
-  /// line centred on where the user placed them.
+  /// line centred on where the user placed them. Near a wall the whole line
+  /// is shifted inwards, so segments never collapse onto the same point.
   static List<HuePosition> _streamPositions(HuePosition center, int streams) {
     if (streams <= 1) {
       return [center];
     }
+    const spacing = 0.15;
+    final halfSpan = (streams - 1) / 2 * spacing;
+    final start = (center.x - halfSpan).clamp(-1.0, 1.0 - 2 * halfSpan);
     return [
-      for (var i = 0; i < streams; i++)
-        center.copyWith(x: center.x + (i - (streams - 1) / 2) * 0.15),
+      for (var i = 0; i < streams; i++) center.copyWith(x: start + i * spacing),
     ];
   }
 }
@@ -357,6 +378,11 @@ class _RoomMap extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: colors.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(20),
+                ),
+                // Drawn on top so the border does not inset the dots: the
+                // positions are measured from this box's own origin.
+                foregroundDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: colors.outlineVariant),
                 ),
                 child: Stack(
@@ -385,38 +411,49 @@ class _RoomMap extends StatelessWidget {
                       Positioned(
                         left: toOffset(item.position).dx,
                         top: toOffset(item.position).dy,
-                        child: GestureDetector(
+                        // A multi-drag recognizer wins over the page's
+                        // vertical scroll, so dots can be dragged in any
+                        // direction (a pan recognizer would lose to it).
+                        child: RawGestureDetector(
                           key: ValueKey('placement-$id'),
-                          onPanStart: (details) => onMoved(
-                              id,
-                              fromGlobal(
-                                  details.globalPosition, item.position)),
-                          onPanUpdate: (details) => onMoved(
-                              id,
-                              fromGlobal(
-                                  details.globalPosition, item.position)),
-                          child: Tooltip(
-                            message: item.label,
-                            child: Container(
-                              width: _dot,
-                              height: _dot,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: colors.primary,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:
-                                        colors.primary.withValues(alpha: 0.5),
-                                    blurRadius: 12,
+                          gestures: {
+                            ImmediateMultiDragGestureRecognizer:
+                                GestureRecognizerFactoryWithHandlers<
+                                    ImmediateMultiDragGestureRecognizer>(
+                              ImmediateMultiDragGestureRecognizer.new,
+                              (recognizer) => recognizer.onStart = (start) {
+                                void move(Offset global) => onMoved(
+                                    id, fromGlobal(global, item.position));
+                                move(start);
+                                return _DotDrag(move);
+                              },
+                            ),
+                          },
+                          child: Semantics(
+                            label: '${item.label}, draggable light',
+                            child: Tooltip(
+                              message: item.label,
+                              child: Container(
+                                width: _dot,
+                                height: _dot,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: colors.primary,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          colors.primary.withValues(alpha: 0.5),
+                                      blurRadius: 12,
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  item.label.characters.first.toUpperCase(),
+                                  style: TextStyle(
+                                    color: colors.onPrimary,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ],
-                              ),
-                              child: Text(
-                                item.label.characters.first.toUpperCase(),
-                                style: TextStyle(
-                                  color: colors.onPrimary,
-                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -432,4 +469,14 @@ class _RoomMap extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Moves one dot while a finger is down on it.
+class _DotDrag extends Drag {
+  _DotDrag(this._move);
+
+  final void Function(Offset global) _move;
+
+  @override
+  void update(DragUpdateDetails details) => _move(details.globalPosition);
 }
