@@ -224,8 +224,8 @@ class HueEntertainmentChannel {
   /// Channel id used in streaming messages (0..255).
   final int id;
 
-  /// Position in the area, each axis -1..1: x left→right, y front→back,
-  /// z floor→ceiling.
+  /// Position in the area, each axis -1..1: x left→right, y back→front
+  /// (front is where the screen or listener faces), z floor→ceiling.
   final double x;
   final double y;
   final double z;
@@ -243,11 +243,15 @@ class HueEntertainmentArea {
     required this.channels,
     this.configurationType,
     this.isStreaming = false,
+    this.locations = const [],
   });
 
   final String id;
   final String name;
   final List<HueEntertainmentChannel> channels;
+
+  /// Where each member light was placed; what the area editor edits.
+  final List<HueServiceLocation> locations;
 
   /// `screen`, `music`, `3dspace`, ...
   final String? configurationType;
@@ -255,11 +259,107 @@ class HueEntertainmentArea {
   /// True while some app (possibly not LumiFX) is streaming to it.
   final bool isStreaming;
 
-  /// Channels ordered left to right, then front to back, so that effects
+  /// Channels ordered left to right, then back to front, so that effects
   /// that move across slots move across the room.
   List<HueEntertainmentChannel> get spatialChannels =>
       [...channels]..sort((a, b) {
           final byX = a.x.compareTo(b.x);
           return byX != 0 ? byX : a.y.compareTo(b.y);
         });
+}
+
+/// A point in an entertainment area, each axis -1..1 (see
+/// [HueEntertainmentChannel] for the axes).
+class HuePosition {
+  const HuePosition(this.x, this.y, [this.z = 0]);
+
+  factory HuePosition.fromJson(Object? json) {
+    final map = json is Map ? json : const {};
+    double axis(String key) =>
+        ((map[key] as num?)?.toDouble() ?? 0).clamp(-1.0, 1.0);
+    return HuePosition(axis('x'), axis('y'), axis('z'));
+  }
+
+  final double x;
+  final double y;
+  final double z;
+
+  HuePosition copyWith({double? x, double? y, double? z}) => HuePosition(
+        (x ?? this.x).clamp(-1.0, 1.0),
+        (y ?? this.y).clamp(-1.0, 1.0),
+        (z ?? this.z).clamp(-1.0, 1.0),
+      );
+
+  Map<String, Object> toJson() => {
+        'x': double.parse(x.toStringAsFixed(3)),
+        'y': double.parse(y.toStringAsFixed(3)),
+        'z': double.parse(z.toStringAsFixed(3)),
+      };
+
+  @override
+  bool operator ==(Object other) =>
+      other is HuePosition && other.x == x && other.y == y && other.z == z;
+
+  @override
+  int get hashCode => Object.hash(x, y, z);
+}
+
+/// A light able to take part in entertainment areas (an `entertainment`
+/// service on the bridge).
+class HueEntertainmentService {
+  const HueEntertainmentService({
+    required this.id,
+    required this.lightIds,
+    this.isRenderer = true,
+    this.maxStreams = 1,
+  });
+
+  final String id;
+
+  /// Lights of the owning device; usually exactly one.
+  final List<String> lightIds;
+
+  /// False for devices that can only proxy the stream, not show it.
+  final bool isRenderer;
+
+  /// Independently addressable segments (gradient lights have several).
+  final int maxStreams;
+}
+
+/// One member light of an area and where it is placed.
+class HueServiceLocation {
+  const HueServiceLocation({required this.serviceId, required this.positions});
+
+  final String serviceId;
+
+  /// One position per stream; gradient lights may have several.
+  final List<HuePosition> positions;
+
+  Map<String, Object> toJson() => {
+        'service': {'rid': serviceId, 'rtype': 'entertainment'},
+        'positions': [for (final p in positions) p.toJson()],
+      };
+}
+
+/// What it takes to create or update an entertainment area.
+class HueEntertainmentAreaDraft {
+  const HueEntertainmentAreaDraft({
+    required this.name,
+    required this.locations,
+    this.configurationType = 'music',
+  });
+
+  final String name;
+
+  /// `music`, `screen`, `3dspace` or `other`.
+  final String configurationType;
+  final List<HueServiceLocation> locations;
+
+  Map<String, Object> toJson() => {
+        'metadata': {'name': name},
+        'configuration_type': configurationType,
+        'locations': {
+          'service_locations': [for (final l in locations) l.toJson()],
+        },
+      };
 }

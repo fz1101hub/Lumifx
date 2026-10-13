@@ -11,6 +11,7 @@ import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_exceptions.dart';
 import '../../core/hue/hue_models.dart';
+import '../entertainment/entertainment_area_editor.dart';
 import 'light_color_ui.dart';
 
 /// Lamps shown when playing without a bridge.
@@ -256,14 +257,32 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
               style: theme.textTheme.bodySmall,
             ),
           ],
-          if (home != null && areas.isEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              'For fast effects, create an entertainment area in the Hue app '
-              '(Settings › Entertainment areas).',
-              style: theme.textTheme.bodySmall,
+          if (home != null && areas.isEmpty)
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'For fast effects, stream to an entertainment area.',
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
+                TextButton(
+                  onPressed: _starting
+                      ? null
+                      : () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute<bool>(
+                              builder: (_) => const EntertainmentAreaEditor(),
+                            ),
+                          );
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        },
+                  child: const Text('Create area'),
+                ),
+              ],
             ),
-          ],
           const SizedBox(height: 24),
           _LampPreview(player: player, names: _lightNames()),
           const SizedBox(height: 24),

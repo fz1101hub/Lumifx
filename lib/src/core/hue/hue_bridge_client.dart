@@ -12,12 +12,16 @@ class HueHome {
     required this.rooms,
     required this.zones,
     this.entertainmentAreas = const [],
+    this.entertainmentServices = const [],
   });
 
   final Map<String, HueLight> lights;
   final List<HueGroup> rooms;
   final List<HueGroup> zones;
   final List<HueEntertainmentArea> entertainmentAreas;
+
+  /// Lights that can be added to an entertainment area.
+  final List<HueEntertainmentService> entertainmentServices;
 
   List<HueGroup> get groups => [...rooms, ...zones];
 }
@@ -140,11 +144,22 @@ class HueBridgeClient {
       );
     }
 
-    // Entertainment services belong to devices, like room children.
-    final lightsByEntertainment = <String, List<String>>{
+    // Entertainment services belong to devices, like room children; newer
+    // firmware also names the light directly.
+    final services = [
       for (final json in results[4])
-        json['id']! as String:
-            lightsByDevice[_map(json['owner'])['rid']] ?? const [],
+        HueEntertainmentService(
+          id: json['id']! as String,
+          lightIds: switch (_map(json['renderer_reference'])['rid']) {
+            final String light when lights.containsKey(light) => [light],
+            _ => lightsByDevice[_map(json['owner'])['rid']] ?? const [],
+          },
+          isRenderer: json['renderer'] as bool? ?? true,
+          maxStreams: (json['max_streams'] as num?)?.toInt() ?? 1,
+        ),
+    ];
+    final lightsByEntertainment = {
+      for (final service in services) service.id: service.lightIds,
     };
 
     HueEntertainmentArea area(Map<String, Object?> json) {
@@ -156,6 +171,19 @@ class HueBridgeClient {
             'Entertainment area',
         configurationType: json['configuration_type'] as String?,
         isStreaming: json['status'] == 'active',
+        locations: [
+          for (final location
+              in _list(_map(json['locations'])['service_locations']))
+            HueServiceLocation(
+              serviceId: _map(location['service'])['rid'] as String? ?? '',
+              positions: [
+                for (final position in location['positions'] is List
+                    ? location['positions']! as List
+                    : [location['position']])
+                  HuePosition.fromJson(position),
+              ],
+            ),
+        ],
         channels: [
           for (final channel in _list(json['channels']))
             HueEntertainmentChannel(
@@ -177,7 +205,47 @@ class HueBridgeClient {
       rooms: [for (final json in results[1]) group(json, HueGroupKind.room)],
       zones: [for (final json in results[2]) group(json, HueGroupKind.zone)],
       entertainmentAreas: [for (final json in results[3]) area(json)],
+      entertainmentServices: services,
     );
+  }
+
+  /// Creates an entertainment area and returns its id.
+  Future<String> createEntertainmentArea(
+      HueEntertainmentAreaDraft draft) async {
+    final response = await _client
+        .post(
+          Uri.https(host, '/clip/v2/resource/entertainment_configuration'),
+          headers: {..._headers, 'content-type': 'application/json'},
+          body: jsonEncode({
+            'type': 'entertainment_configuration',
+            ...draft.toJson(),
+          }),
+        )
+        .timeout(_timeout);
+    final body = _decode(response);
+    final created = body is Map ? _list(body['data']).firstOrNull : null;
+    final id = created?['rid'];
+    if (id is! String) {
+      throw const HueException('The bridge did not create the area');
+    }
+    return id;
+  }
+
+  Future<void> updateEntertainmentArea(
+    String areaId,
+    HueEntertainmentAreaDraft draft,
+  ) =>
+      _put('entertainment_configuration/$areaId', draft.toJson());
+
+  Future<void> deleteEntertainmentArea(String areaId) async {
+    final response = await _client
+        .delete(
+          Uri.https(
+              host, '/clip/v2/resource/entertainment_configuration/$areaId'),
+          headers: _headers,
+        )
+        .timeout(_timeout);
+    _decode(response);
   }
 
   /// The id the bridge assigned to this application key, used as the PSK

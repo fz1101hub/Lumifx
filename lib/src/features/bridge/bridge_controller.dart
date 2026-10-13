@@ -170,6 +170,34 @@ class BridgeController extends ChangeNotifier {
     return EntertainmentLightOutput(session);
   }
 
+  /// Creates an area (when [areaId] is null) or replaces an existing one,
+  /// then reloads. Returns the area id.
+  Future<String> saveEntertainmentArea(
+    HueEntertainmentAreaDraft draft, {
+    String? areaId,
+  }) async {
+    final client = _requireClient();
+    final id = areaId ?? await client.createEntertainmentArea(draft);
+    if (areaId != null) {
+      await client.updateEntertainmentArea(areaId, draft);
+    }
+    await refresh();
+    return id;
+  }
+
+  Future<void> deleteEntertainmentArea(String areaId) async {
+    await _requireClient().deleteEntertainmentArea(areaId);
+    await refresh();
+  }
+
+  HueBridgeClient _requireClient() {
+    final client = _client;
+    if (client == null) {
+      throw const HueException('No bridge connected.');
+    }
+    return client;
+  }
+
   Future<void> forget() async {
     await _store.clear();
     _credentials = null;

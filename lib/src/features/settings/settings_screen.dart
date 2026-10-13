@@ -4,6 +4,7 @@ import '../../app_scope.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
+import '../entertainment/entertainment_areas_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -111,6 +112,14 @@ class SettingsScreen extends StatelessWidget {
               ? 'Not available: forget the bridge and pair again.'
               : '${home?.entertainmentAreas.length ?? 0} entertainment areas',
         ),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: bridge.isConnected
+            ? () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const EntertainmentAreasScreen(),
+                  ),
+                )
+            : null,
       ),
       ListTile(
         leading: const Icon(Icons.link_off),

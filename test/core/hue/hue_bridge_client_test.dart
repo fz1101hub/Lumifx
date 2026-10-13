@@ -213,4 +213,114 @@ void main() {
     expect(copy.clientKey, 'psk');
     expect(copy.certificateFingerprint, 'ff00');
   });
+
+  group('entertainment areas', () {
+    test('create posts the area and returns its id', () async {
+      late http.Request captured;
+      final client = HueBridgeClient(
+        host: '10.0.0.5',
+        applicationKey: 'key',
+        client: MockClient((request) async {
+          captured = request;
+          return _json({
+            'errors': <Object>[],
+            'data': [
+              {'rid': 'area-1', 'rtype': 'entertainment_configuration'},
+            ],
+          });
+        }),
+      );
+      final id = await client.createEntertainmentArea(
+        const HueEntertainmentAreaDraft(
+          name: 'Den',
+          configurationType: 'screen',
+          locations: [
+            HueServiceLocation(
+              serviceId: 'e1',
+              positions: [HuePosition(-0.5, 0.25, 1)],
+            ),
+          ],
+        ),
+      );
+      expect(id, 'area-1');
+      expect(captured.method, 'POST');
+      expect(jsonDecode(captured.body), {
+        'type': 'entertainment_configuration',
+        'metadata': {'name': 'Den'},
+        'configuration_type': 'screen',
+        'locations': {
+          'service_locations': [
+            {
+              'service': {'rid': 'e1', 'rtype': 'entertainment'},
+              'positions': [
+                {'x': -0.5, 'y': 0.25, 'z': 1.0},
+              ],
+            },
+          ],
+        },
+      });
+    });
+
+    test('update and delete target the area', () async {
+      final calls = <String>[];
+      final client = HueBridgeClient(
+        host: '10.0.0.5',
+        applicationKey: 'key',
+        client: MockClient((request) async {
+          calls.add('${request.method} ${request.url.path}');
+          return _json({'errors': <Object>[], 'data': <Object>[]});
+        }),
+      );
+      await client.updateEntertainmentArea(
+        'a1',
+        const HueEntertainmentAreaDraft(name: 'X', locations: []),
+      );
+      await client.deleteEntertainmentArea('a1');
+      expect(calls, [
+        'PUT /clip/v2/resource/entertainment_configuration/a1',
+        'DELETE /clip/v2/resource/entertainment_configuration/a1',
+      ]);
+    });
+
+    test('existing placements are read back for editing', () async {
+      final client = HueBridgeClient(
+        host: '10.0.0.5',
+        applicationKey: 'key',
+        client: MockClient((request) async {
+          if (request.url.path ==
+              '/clip/v2/resource/entertainment_configuration') {
+            return _json({
+              'data': [
+                {
+                  'id': 'a1',
+                  'metadata': {'name': 'Den'},
+                  'channels': <Object>[],
+                  'locations': {
+                    'service_locations': [
+                      {
+                        'service': {'rid': 'e1', 'rtype': 'entertainment'},
+                        'positions': [
+                          {'x': 0.5, 'y': -0.5, 'z': 0},
+                        ],
+                      },
+                      {
+                        // Older firmware: a single `position`.
+                        'service': {'rid': 'e2', 'rtype': 'entertainment'},
+                        'position': {'x': -2, 'y': 0, 'z': 0},
+                      },
+                    ],
+                  },
+                },
+              ],
+            });
+          }
+          return _json({'data': <Object>[]});
+        }),
+      );
+      final area = (await client.fetchHome()).entertainmentAreas.single;
+      expect(area.locations[0].positions.single, const HuePosition(0.5, -0.5));
+      // Out-of-range values are clamped.
+      expect(area.locations[1].positions.single, const HuePosition(-1, 0));
+    });
+  });
 }
