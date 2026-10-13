@@ -14,13 +14,17 @@ here needs to be done more than once except the "Every release" sections.
      `privacy.html` or `privacy.md`.
    - Or paste it into any static host (Netlify, Cloudflare Pages, a blog).
    Note the URL; it goes into both store consoles.
-3. **Check the CI.** `.github/workflows/ci.yml` builds the Android bundle
-   and an unsigned iOS build. If a run fails in a few seconds with no steps
-   executed, GitHub Actions is not able to run on the repository: open
-   Settings › Actions › General and check that actions are enabled, then
-   Settings › Billing › Spending limits (private repositories consume paid
-   minutes; a spending limit of $0 blocks jobs once the free quota is used,
-   and macOS minutes count 10×).
+3. **Unblock the CI.** `.github/workflows/ci.yml` builds the Android bundle
+   and an unsigned iOS build, but every run so far failed within seconds
+   with GitHub's message "The job was not started because recent account
+   payments have failed or your spending limit needs to be increased". Fix
+   it in GitHub › Settings (account) › Billing and plans: check the payment
+   method and raise the Actions spending limit above $0 (private
+   repositories consume paid minutes once the free quota is used; macOS
+   minutes count 10×). Then re-run the latest workflow from the Actions
+   tab. Until a run is green, the Android and iOS builds have not been
+   verified by anyone: do the first `flutter build appbundle` and the iOS
+   archive on a machine and fix whatever they report before uploading.
 
 ## 1. Android: signing key (once)
 
@@ -35,7 +39,7 @@ keytool -genkey -v -keystore ~/lumifx-upload.jks -keyalg RSA -keysize 2048 \
 Create `android/key.properties` (ignored by git, never commit it):
 
 ```properties
-storeFile=/absolute/path/to/lumifx-upload.jks
+storeFile=/absolute/path/to/lumifx-upload.jks   # or relative to android/
 storePassword=********
 keyAlias=upload
 keyPassword=********

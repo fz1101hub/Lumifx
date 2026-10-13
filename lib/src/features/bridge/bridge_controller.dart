@@ -80,7 +80,13 @@ class BridgeController extends ChangeNotifier {
   bool get isConnected => _status == BridgeStatus.connected;
 
   Future<void> initialize() async {
-    final saved = await _store.load();
+    HueCredentials? saved;
+    try {
+      saved = await _store.load();
+    } on Object {
+      // Never leave the app on the loading state because storage failed.
+      saved = null;
+    }
     if (saved == null) {
       _setStatus(BridgeStatus.unpaired);
       return;

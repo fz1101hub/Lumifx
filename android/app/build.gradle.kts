@@ -44,10 +44,15 @@ android {
     signingConfigs {
         create("release") {
             if (hasReleaseKey) {
-                storeFile = file(keystoreProperties.getProperty("storeFile"))
-                storePassword = keystoreProperties.getProperty("storePassword")
-                keyAlias = keystoreProperties.getProperty("keyAlias")
-                keyPassword = keystoreProperties.getProperty("keyPassword")
+                fun required(name: String): String =
+                    requireNotNull(keystoreProperties.getProperty(name)) {
+                        "android/key.properties is missing '$name'"
+                    }
+                // Relative paths are resolved against android/, like the file.
+                storeFile = rootProject.file(required("storeFile"))
+                storePassword = required("storePassword")
+                keyAlias = required("keyAlias")
+                keyPassword = required("keyPassword")
             }
         }
     }

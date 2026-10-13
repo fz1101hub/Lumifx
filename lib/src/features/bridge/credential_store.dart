@@ -22,16 +22,21 @@ class SecureCredentialStore implements CredentialStore {
 
   @override
   Future<HueCredentials?> load() async {
-    final raw = await _storage.read(key: _key);
-    if (raw == null) {
-      return null;
-    }
     try {
+      final raw = await _storage.read(key: _key);
+      if (raw == null) {
+        return null;
+      }
       return HueCredentials.fromJson(
           (jsonDecode(raw) as Map).cast<String, Object?>());
     } on Object {
-      // Corrupt or from an incompatible version: pair again.
-      await clear();
+      // Unreadable (e.g. restored on another device, whose keystore cannot
+      // unwrap it), corrupt, or from an incompatible version: pair again.
+      try {
+        await clear();
+      } on Object {
+        // Nothing more to do; the next pairing overwrites it.
+      }
       return null;
     }
   }

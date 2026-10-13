@@ -5,7 +5,10 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <!-- Music Sync, only requested when the user starts it. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- No cloud backup: the bridge keys in secure storage are wrapped by
+         this device's keystore and would be unreadable after a restore. -->
     <application
+        android:allowBackup="false"
         android:label="LumiFX"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

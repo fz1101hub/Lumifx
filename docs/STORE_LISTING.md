@@ -171,12 +171,23 @@ children). Do not tick "designed for families".
 - Privacy manifest: `ios/Runner/PrivacyInfo.xcprivacy` (no tracking, no
   collected data, UserDefaults reason CA92.1).
 
-**Export compliance:** `ITSAppUsesNonExemptEncryption` is `false`. The app
-uses only standard encryption (TLS to the bridge, DTLS with AES-GCM for Hue
-streaming, OS secure storage), which qualifies for the exemption in
-category 5D992 / EAR 740.17(b)(1). If App Store Connect still asks, answer:
-uses encryption → yes; exempt → yes (standard algorithms, no proprietary
-encryption); not a French app.
+**Export compliance:** `ITSAppUsesNonExemptEncryption` is `false`, so
+TestFlight does not ask on every build. The app uses only standard
+algorithms: TLS to the bridge (OS), OS secure storage, and AES-128-GCM for
+the Hue DTLS stream, implemented with the open-source `pointycastle`
+library rather than taken from the OS. Standard, non-proprietary
+encryption falls under mass-market category 5D992.c: exempt from Apple's
+documentation requirements, but US law expects an annual self-
+classification report to BIS/NSA (a short e-mail; see Apple's "Complying
+with Encryption Export Regulations"). If you prefer to be asked every
+time, remove the key from `ios/Runner/Info.plist` and answer in App Store
+Connect: uses encryption → yes; proprietary algorithms → no; standard
+algorithms → yes; not a French app.
+
+**Mac availability:** the app is iPhone-only (`TARGETED_DEVICE_FAMILY = 1`)
+but App Store Connect offers it on Apple-silicon Macs by default. Untick
+"Make this app available on Mac" (Pricing and Availability) unless you have
+tested microphone and local-network access on a Mac.
 
 **Age rating:** answer "None" to every question → 4+.
 
