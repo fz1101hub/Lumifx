@@ -37,6 +37,10 @@ class LightingEffect {
   /// an entertainment area.
   final bool prefersStreaming;
 
+  /// Needs live audio: the player listens to the microphone while it plays.
+  bool get usesMicrophone =>
+      events.any((event) => event.type == EffectEventTypes.music);
+
   Duration get cycleLength {
     if (loopDuration != null) {
       return loopDuration!;

@@ -12,6 +12,8 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
+import '../support/fake_audio_input.dart';
+
 class _FakeDiscovery implements BridgeDiscovery {
   @override
   Stream<HueBridgeInfo> discover({Duration timeout = Duration.zero}) =>
@@ -28,6 +30,7 @@ Future<void> _pumpApp(WidgetTester tester) async {
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
     ),
   );
 }
@@ -122,6 +125,67 @@ void main() {
     expect(slider.value, 0);
   });
 
+  testWidgets('Music Sync listens while playing and stops on pause',
+      (tester) async {
+    final input = FakeAudioInput();
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: input,
+    ));
+
+    await tester.tap(find.text('Interactive'));
+    await tester.pumpAndSettle();
+    expect(find.text('Spectrum'), findsOneWidget);
+    await tester.tap(find.text('Beat Pulse'));
+    await tester.pumpAndSettle();
+    expect(find.text('Sensitivity'), findsOneWidget);
+    expect(find.text('Speed'), findsNothing);
+
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(input.started, isTrue);
+    expect(find.textContaining('BPM'), findsOneWidget);
+
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Pause'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pump();
+    expect(input.stopped, isTrue);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('Music Sync explains a refused microphone', (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(granted: false),
+    ));
+    await tester.tap(find.text('Interactive'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Party Chase'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pumpAndSettle();
+    expect(find.textContaining('microphone access'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget);
+  });
+
   streamingTests();
 }
 
@@ -199,6 +263,7 @@ void streamingTests() {
         bridge: bridge,
         discovery: _FakeDiscovery(),
         preferences: PreferencesController(store: InMemoryKeyValueStore()),
+        audioInput: FakeAudioInput(),
       ),
     );
 

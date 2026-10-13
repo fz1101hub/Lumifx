@@ -3,6 +3,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Bridge discovery over mDNS / NSD. -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <!-- Music Sync, only requested when the user starts it. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application
         android:label="LumiFX"
         android:name="${applicationName}"

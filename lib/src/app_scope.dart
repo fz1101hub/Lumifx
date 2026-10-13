@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import 'core/audio/audio_input.dart';
 import 'core/hue/hue_discovery.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/library/preferences_controller.dart';
@@ -10,6 +11,7 @@ class AppScope extends InheritedWidget {
     required this.bridge,
     required this.discovery,
     required this.preferences,
+    required this.audioInput,
     required super.child,
     super.key,
   });
@@ -17,6 +19,9 @@ class AppScope extends InheritedWidget {
   final BridgeController bridge;
   final BridgeDiscovery discovery;
   final PreferencesController preferences;
+
+  /// Microphone for Music Sync.
+  final AudioInput audioInput;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -28,5 +33,6 @@ class AppScope extends InheritedWidget {
   bool updateShouldNotify(AppScope oldWidget) =>
       bridge != oldWidget.bridge ||
       discovery != oldWidget.discovery ||
-      preferences != oldWidget.preferences;
+      preferences != oldWidget.preferences ||
+      audioInput != oldWidget.audioInput;
 }

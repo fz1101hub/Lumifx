@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_scope.dart';
+import 'core/audio/audio_input.dart';
 import 'core/hue/hue_discovery.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/home/home_screen.dart';
@@ -11,12 +12,14 @@ class LumiFxApp extends StatelessWidget {
     required this.bridge,
     required this.discovery,
     required this.preferences,
+    required this.audioInput,
     super.key,
   });
 
   final BridgeController bridge;
   final BridgeDiscovery discovery;
   final PreferencesController preferences;
+  final AudioInput audioInput;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,7 @@ class LumiFxApp extends StatelessWidget {
       bridge: bridge,
       discovery: discovery,
       preferences: preferences,
+      audioInput: audioInput,
       child: MaterialApp(
         title: 'LumiFX',
         debugShowCheckedModeBanner: false,

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../audio/audio_analyzer.dart';
 import '../effect.dart';
 import 'effect_renderer.dart';
 import 'light_frame.dart';
@@ -20,6 +21,7 @@ class EffectPlayer {
     int seed = 0,
     EffectControls controls = const EffectControls(),
     this.tick = const Duration(milliseconds: 100),
+    this.audio,
   })  : assert(lightIds.isNotEmpty),
         _renderer = EffectRenderer(
           effect,
@@ -31,6 +33,9 @@ class EffectPlayer {
   final List<String> lightIds;
   final LightOutput output;
   final Duration tick;
+
+  /// Latest live audio features, read on every tick; null without Music Sync.
+  final AudioFeatures? Function()? audio;
   final EffectRenderer _renderer;
 
   final _frames = StreamController<List<LightFrame>>.broadcast();
@@ -87,7 +92,7 @@ class EffectPlayer {
   void advance(Duration wallTime) {
     final speed = controls.speed.clamp(0.05, 5.0);
     _effectTime += wallTime * speed;
-    _current = _renderer.render(_effectTime);
+    _current = _renderer.render(_effectTime, audio: audio?.call());
     output.update(
       {for (var i = 0; i < lightIds.length; i++) lightIds[i]: _current[i]},
       wallTime == Duration.zero ? tick : wallTime,

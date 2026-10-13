@@ -12,6 +12,8 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
+import '../support/fake_audio_input.dart';
+
 class _NoDiscovery implements BridgeDiscovery {
   @override
   Stream<HueBridgeInfo> discover({Duration timeout = Duration.zero}) =>
@@ -93,6 +95,7 @@ void main() {
       bridge: bridge,
       discovery: _NoDiscovery(),
       preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
     ));
     await tester.tap(find.byTooltip('Settings'));
     await tester.pumpAndSettle();

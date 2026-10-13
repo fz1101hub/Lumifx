@@ -6,6 +6,8 @@
 	<true/>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>LumiFX finds and controls your Philips Hue Bridge on your local network.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Music Sync listens to the music in the room so your lights can move with it. Audio never leaves your phone.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_hue._tcp</string>

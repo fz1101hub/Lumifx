@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import '../../audio/audio_analyzer.dart';
 import '../../color/light_color.dart';
 import '../effect.dart';
 import '../effect_event.dart';
@@ -73,7 +74,9 @@ class EffectRenderer {
 
   Duration get cycleLength => _cycle;
 
-  List<LightFrame> render(Duration elapsed) {
+  /// Renders the instant [elapsed]. [audio] feeds `music` events; without
+  /// it they render nothing and only the background shows.
+  List<LightFrame> render(Duration elapsed, {AudioFeatures? audio}) {
     final total = elapsed.isNegative ? Duration.zero : elapsed;
     final int cycleIndex;
     final Duration local;
@@ -127,6 +130,10 @@ class EffectRenderer {
           _renderLightning(context, frames);
         case EffectEventTypes.beat:
           _renderBeat(context, frames);
+        case EffectEventTypes.music:
+          if (audio != null) {
+            _renderMusic(context, frames, audio, seconds);
+          }
         default:
           // Unknown events are skipped so that newer effect definitions
           // still play on older engines.
@@ -315,6 +322,77 @@ class EffectRenderer {
         frames[slot] =
             frames[slot].blend(overlay, envelope * controls.intensity);
       }
+    }
+  }
+
+  /// Reacts to live audio. Modes:
+  /// - `pulse`: every light flashes on each beat, next palette color each time
+  /// - `chase`: each beat moves the light one slot along, leaving a tail
+  /// - `spectrum`: bass on the left, treble on the right, brightness = energy
+  /// - `energy`: brightness follows loudness, color drifts with the mix
+  void _renderMusic(
+    _EventContext context,
+    List<LightFrame> frames,
+    AudioFeatures audio,
+    double seconds,
+  ) {
+    final p = context.event.parameters;
+    final palette = _palette(p);
+    final floor = _number(p, 'brightnessMin', 0.04);
+    final decay = _number(p, 'decay', 0.25).clamp(0.05, 2.0);
+    final intensity = controls.intensity.clamp(0.0, 1.0);
+    final beat = audio.beatCount;
+    final kick = audio.secondsSinceBeat.isFinite
+        ? math.exp(-audio.secondsSinceBeat / decay)
+        : 0.0;
+    LightColor colorAt(int index) => palette[index % palette.length];
+
+    for (var slot = 0; slot < slotCount; slot++) {
+      final position = slotCount == 1 ? 0.5 : slot / (slotCount - 1);
+      final LightFrame frame;
+      switch (p['mode']) {
+        case 'chase':
+          final head = beat % slotCount;
+          final distance = (slot - head) % slotCount;
+          final tail =
+              distance == 0 ? 1.0 : math.pow(0.35, distance).toDouble();
+          frame = LightFrame(
+            colorAt(beat - distance),
+            floor +
+                (1 - floor) *
+                    tail *
+                    math.max(kick, 0.35) *
+                    (0.4 + 0.6 * audio.level),
+          );
+        case 'spectrum':
+          final energy = position < 0.5
+              ? audio.bass + (audio.mid - audio.bass) * position * 2
+              : audio.mid + (audio.treble - audio.mid) * (position - 0.5) * 2;
+          final shade = position * (palette.length - 1);
+          final index = shade.floor();
+          frame = LightFrame(
+            LightColor.lerp(colorAt(index), colorAt(index + 1), shade - index),
+            floor + (1 - floor) * (0.75 * energy + 0.25 * kick),
+          );
+        case 'energy':
+          // Bright, airy mixes shift towards the end of the palette.
+          final balance = (audio.mid * 0.5 + audio.treble) /
+              (audio.bass + audio.mid + audio.treble + 1e-6);
+          final drift = balance + 0.08 * math.sin(seconds * 0.7 + slot * 1.3);
+          final shade = drift.clamp(0.0, 1.0) * (palette.length - 1);
+          final index = shade.floor();
+          frame = LightFrame(
+            LightColor.lerp(colorAt(index), colorAt(index + 1), shade - index),
+            floor + (1 - floor) * (0.8 * audio.level + 0.2 * kick),
+          );
+        case 'pulse':
+        default:
+          frame = LightFrame(
+            colorAt(beat + (slot.isEven ? 0 : 1) * (slotCount > 2 ? 1 : 0)),
+            floor + (1 - floor) * math.max(kick, 0.3 * audio.bass),
+          );
+      }
+      frames[slot] = frames[slot].blend(frame, intensity);
     }
   }
 

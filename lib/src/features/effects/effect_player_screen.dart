@@ -12,6 +12,7 @@ import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_exceptions.dart';
 import '../../core/hue/hue_models.dart';
 import '../entertainment/entertainment_area_editor.dart';
+import '../music/music_sync_controller.dart';
 import 'light_color_ui.dart';
 
 /// Lamps shown when playing without a bridge.
@@ -35,6 +36,10 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
   bool _starting = false;
   bool _restored = false;
 
+  /// Created on first play of an effect that listens to music.
+  MusicSyncController? _music;
+  double _sensitivity = 1;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -49,7 +54,32 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
   @override
   void dispose() {
     _player?.stop();
+    _music?.dispose();
     super.dispose();
+  }
+
+  /// Starts the microphone for Music Sync effects. Returns false (after
+  /// telling the user why) when it cannot listen.
+  Future<bool> _startListening() async {
+    if (!widget.effect.usesMicrophone) {
+      return true;
+    }
+    final music =
+        _music ??= MusicSyncController(AppScope.of(context).audioInput);
+    await music.start();
+    if (!mounted) {
+      return false;
+    }
+    switch (music.status) {
+      case MusicSyncStatus.listening:
+        return true;
+      case MusicSyncStatus.denied:
+        _showError('Music Sync needs microphone access. You can allow it in '
+            'your phone settings.');
+      default:
+        _showError('The microphone could not be started.');
+    }
+    return false;
   }
 
   HueHome? get _home {
@@ -90,10 +120,15 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
     final player = _player;
     if (player != null && player.state == PlaybackState.playing) {
       player.pause();
+      // Not listening while paused: no reason to keep the mic open.
+      await _music?.stop();
       setState(() {});
       return;
     }
     if (player != null && player.state == PlaybackState.paused) {
+      if (!await _startListening()) {
+        return;
+      }
       player.play();
       setState(() {});
       return;
@@ -102,6 +137,9 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
   }
 
   Future<void> _start() async {
+    if (!await _startListening() || !mounted) {
+      return;
+    }
     final bridge = AppScope.of(context).bridge;
     final client = bridge.client;
     final group = _group;
@@ -151,6 +189,9 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
       seed: DateTime.now().millisecondsSinceEpoch & 0x7FFFFFFF,
       controls: _controls,
       tick: tick,
+      audio: _music == null
+          ? null
+          : () => _music!.isListening ? _music!.features : null,
     )..play();
     setState(() => _player = player);
     AppScope.of(context).preferences.recordPlayed(widget.effect.id);
@@ -285,6 +326,10 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
             ),
           const SizedBox(height: 24),
           _LampPreview(player: player, names: _lightNames()),
+          if (widget.effect.usesMicrophone) ...[
+            const SizedBox(height: 16),
+            _MusicMeter(player: player, music: _music),
+          ],
           const SizedBox(height: 24),
           Center(
             child: FilledButton.icon(
@@ -314,15 +359,108 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
             value: _controls.intensity,
             onChanged: (v) => _updateControls(_controls.copyWith(intensity: v)),
           ),
-          _ControlSlider(
-            label: 'Speed',
-            value: _controls.speed,
-            min: 0.25,
-            max: 3,
-            onChanged: (v) => _updateControls(_controls.copyWith(speed: v)),
-          ),
+          if (widget.effect.usesMicrophone)
+            _ControlSlider(
+              label: 'Sensitivity',
+              value: _sensitivity,
+              min: 0.5,
+              max: 2.5,
+              onChanged: (v) {
+                setState(() => _sensitivity = v);
+                _music?.sensitivity = v;
+              },
+            )
+          else
+            _ControlSlider(
+              label: 'Speed',
+              value: _controls.speed,
+              min: 0.25,
+              max: 3,
+              onChanged: (v) => _updateControls(_controls.copyWith(speed: v)),
+            ),
         ],
       ),
+    );
+  }
+}
+
+/// Live bass / mid / treble levels, a beat light and the tempo.
+class _MusicMeter extends StatelessWidget {
+  const _MusicMeter({required this.player, required this.music});
+
+  final EffectPlayer? player;
+  final MusicSyncController? music;
+
+  @override
+  Widget build(BuildContext context) {
+    final player = this.player;
+    final music = this.music;
+    final theme = Theme.of(context);
+    if (player == null || music == null || !music.isListening) {
+      return Row(
+        children: [
+          const Icon(Icons.mic_none, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Press Play and LumiFX will listen to the music in the room. '
+              'Audio is analysed on your phone and never recorded.',
+              style: theme.textTheme.bodySmall,
+            ),
+          ),
+        ],
+      );
+    }
+    // Repaint with the player's frames, which already run at tick rate.
+    return StreamBuilder<List<LightFrame>>(
+      stream: player.frames,
+      builder: (context, _) {
+        final f = music.features;
+        final onBeat = f.secondsSinceBeat < 0.12;
+        return Row(
+          children: [
+            Icon(Icons.mic, size: 20, color: theme.colorScheme.primary),
+            const SizedBox(width: 12),
+            for (final (label, value) in [
+              ('Bass', f.bass),
+              ('Mid', f.mid),
+              ('Treble', f.treble),
+            ])
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(label, style: theme.textTheme.labelSmall),
+                      const SizedBox(height: 4),
+                      LinearProgressIndicator(value: value),
+                    ],
+                  ),
+                ),
+              ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 80),
+              width: 14,
+              height: 14,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: onBeat
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.surfaceContainerHighest,
+              ),
+            ),
+            const SizedBox(width: 8),
+            SizedBox(
+              width: 64,
+              child: Text(
+                f.bpm == null ? 'Listening' : '${f.bpm!.round()} BPM',
+                style: theme.textTheme.labelMedium,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
