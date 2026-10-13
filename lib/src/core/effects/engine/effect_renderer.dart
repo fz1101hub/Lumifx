@@ -130,6 +130,8 @@ class EffectRenderer {
           _renderLightning(context, frames);
         case EffectEventTypes.beat:
           _renderBeat(context, frames);
+        case EffectEventTypes.footsteps:
+          _renderFootsteps(context, frames);
         case EffectEventTypes.music:
           if (audio != null) {
             _renderMusic(context, frames, audio, seconds);
@@ -321,6 +323,65 @@ class EffectRenderer {
       for (final slot in strike.targets) {
         frames[slot] =
             frames[slot].blend(overlay, envelope * controls.intensity);
+      }
+    }
+  }
+
+  /// Steps every `interval` ms. `pattern: approach` crosses the room from a
+  /// random end; `random_walk` wanders. `crescendo` (-1..1) makes steps
+  /// louder (coming closer) or softer (going away); `shake` briefly dims
+  /// every other light on each step.
+  void _renderFootsteps(_EventContext context, List<LightFrame> frames) {
+    final p = context.event.parameters;
+    final color = _color(p, 'color', const LightColor(1, 0.85, 0.6));
+    final interval = _millis(p, 'interval', 700).inMicroseconds;
+    final thump = _millis(p, 'thump', 220).inMicroseconds;
+    final peak = _number(p, 'brightness', 0.8);
+    final crescendo = _number(p, 'crescendo', 0).clamp(-1.0, 1.0);
+    final shake = _number(p, 'shake', 0).clamp(0.0, 1.0);
+    final duration = context.event.duration.inMicroseconds;
+    final steps = math.max(
+      1,
+      math.min(_number(p, 'steps', 8).round(), (duration / interval).ceil()),
+    );
+
+    final List<int> path;
+    if (p['pattern'] == 'random_walk') {
+      path = _randomWalk(context.random, steps);
+    } else {
+      final forward = context.random.nextBool();
+      path = [
+        for (var k = 0; k < steps; k++)
+          () {
+            final along =
+                steps == 1 ? 0 : (k * (slotCount - 1) / (steps - 1)).round();
+            return forward ? along : slotCount - 1 - along;
+          }(),
+      ];
+    }
+
+    final now = context.local.inMicroseconds;
+    final k = now ~/ interval;
+    if (k >= steps) {
+      return;
+    }
+    final t = (now - k * interval) / thump;
+    if (t >= 1) {
+      return;
+    }
+    final envelope = t < 0.1 ? t / 0.1 : math.pow(1 - (t - 0.1) / 0.9, 2);
+    final progress = steps == 1 ? 1.0 : k / (steps - 1);
+    final loudness = crescendo >= 0
+        ? 1 - crescendo * (1 - progress) * 0.75
+        : 1 + crescendo * progress * 0.75;
+    final slot = path[k];
+    final alpha = envelope * controls.intensity;
+    for (var i = 0; i < slotCount; i++) {
+      if (i == slot) {
+        frames[i] = frames[i].blend(LightFrame(color, peak * loudness), alpha);
+      } else if (shake > 0) {
+        frames[i] = frames[i].withBrightness(
+            frames[i].brightness * (1 - shake * loudness * alpha));
       }
     }
   }

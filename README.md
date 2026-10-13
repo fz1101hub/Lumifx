@@ -30,12 +30,18 @@ The project is intentionally built around an original effects engine and origina
 2. ✅ Read rooms, zones and lights
 3. ✅ Basic light controls (room/zone on/off and brightness)
 4. ✅ Shared effect engine (renderer, player, rate-limited Hue output)
-5. ✅ First set of animated scenes and narrative Stories (6 scenes, 4 stories)
+5. ✅ First set of animated scenes and narrative Stories (6 scenes, 12 stories)
 6. ✅ Favorites, recently played and playback defaults
 
-Also done ahead of schedule: **Hue Entertainment streaming** (50 Hz over
-DTLS) for entertainment areas, used automatically when one is selected as
-the player target.
+Also done ahead of schedule:
+
+- **Hue Entertainment streaming** (50 Hz over DTLS) for entertainment areas,
+  used automatically when one is selected as the player target.
+- **Entertainment area editor**: create, edit and delete areas in LumiFX,
+  placing lights on a top-view map of the room.
+- **Music Sync**: on-device beat and spectrum analysis of the microphone,
+  driving four Interactive effects (Beat Pulse, Party Chase, Spectrum,
+  Mood Glow).
 
 ## Development
 
@@ -54,6 +60,7 @@ when no room or zone is selected.
 ```text
 lib/src/
 ├── core/
+│   ├── audio/          FFT, beat/spectrum analysis, microphone input
 │   ├── color/          LightColor and RGB → CIE xy conversion
 │   ├── effects/        effect model, renderer, player, outputs
 │   └── hue/            discovery, pairing, CLIP v2 client, TLS pinning,
@@ -61,8 +68,10 @@ lib/src/
 └── features/
     ├── bridge/         onboarding, credentials, connection state
     ├── effects/        catalog, effect list, player screen
+    ├── entertainment/  entertainment area list and editor
     ├── home/           home with favorites and recently played
     ├── library/        favorites, recents and defaults (shared_preferences)
+    ├── music/          Music Sync controller
     ├── rooms/          room and zone controls
     └── settings/
 ```

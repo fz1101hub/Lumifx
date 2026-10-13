@@ -45,6 +45,9 @@ abstract final class EffectEventTypes {
   /// Pulses in time with a tempo (`bpm`), for party effects.
   static const beat = 'beat';
 
+  /// Heavy steps from lamp to lamp: something walking through the room.
+  static const footsteps = 'footsteps';
+
   /// Reacts to live audio from the microphone (Music Sync).
   static const music = 'music';
 }

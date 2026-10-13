@@ -64,8 +64,11 @@ The engine should eventually support:
   ordered positions; the player maps them to the selected room's lights.
 - `ambient_palette` events form a persistent background until the next
   ambient event starts. Other events (`magic_flash`, `travel`, `surprise`,
-  `dim`, `lightning`, `beat`) are overlays that are active only within their
-  window. Any overlay can carry `chance` (0..1) to fire on only some passes.
+  `dim`, `lightning`, `beat`, `footsteps`, `music`) are overlays that are
+  active only within their window. Any overlay can carry `chance` (0..1) to
+  fire on only some passes.
+- `music` events read live `AudioFeatures` passed to `render`; everything
+  else stays a pure function of time.
 - Effects flagged `prefersStreaming` change faster than the REST API can
   follow; the UI recommends an entertainment area for them.
 - Randomness is reseeded on every pass of the timeline, so stories vary
@@ -106,6 +109,32 @@ Finished message, which requires the PSK. It is tested against
 `entertainment_test.dart`); CI runs those tests. If it ever proves
 insufficient, the alternative is a native plugin (BouncyCastle on Android,
 Network.framework on iOS) behind the same `EntertainmentSession`.
+
+### Entertainment area editor (`lib/src/features/entertainment`)
+
+Areas can be created without the Hue app: the editor lists lights whose
+`entertainment` service is a renderer (at most 10 per area), lets the user
+drag them on a top-view map (x left→right, y back→front, height
+low/mid/high) and saves through `POST`/`PUT entertainment_configuration`
+with `locations.service_locations`. Gradient lights get one position per
+stream (`max_streams`), spread around the chosen point.
+
+### Music Sync (`lib/src/core/audio`, `lib/src/features/music`)
+
+- The microphone delivers 44.1 kHz mono 16-bit PCM (`record` plugin), with
+  automatic gain and noise suppression off so dynamics survive.
+- `AudioAnalyzer` runs a 1024-sample Hann-windowed FFT every 512 samples
+  (~11.6 ms): RMS and bass (20-250 Hz), mid (250-2000 Hz), treble
+  (2-8 kHz) energies, normalised by slowly decaying peaks (automatic gain)
+  behind a noise gate.
+- Beats are spectral-flux onsets (30 Hz-4 kHz, log magnitudes) above an
+  adaptive threshold (`max(mean + 2.5σ, 1.5·mean)` over ~0.75 s), at least
+  280 ms apart; tempo is 60 / median of the last 8 intervals.
+- `MusicSyncController` keeps the latest features and ages the beat timing
+  to the moment the player reads them. The microphone runs only while a
+  Music Sync effect is playing; audio is never stored or sent.
+- Analysis is verified on synthetic kick tracks, noisy backgrounds, steady
+  noise and pure tones (`test/core/audio`).
 
 ## Content policy
 

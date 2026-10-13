@@ -1,4 +1,5 @@
 import '../../../core/effects/effect.dart';
+import 'builtin_adventures.dart';
 import 'builtin_interactive.dart';
 import 'builtin_scenes.dart';
 import 'builtin_stories.dart';
@@ -7,6 +8,7 @@ import 'builtin_stories.dart';
 final List<LightingEffect> effectCatalog = [
   ...builtinScenes,
   ...builtinStories,
+  ...builtinAdventures,
   ...builtinInteractive,
 ];
 

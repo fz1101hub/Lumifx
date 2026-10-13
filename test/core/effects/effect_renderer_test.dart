@@ -15,6 +15,7 @@ const _knownTypes = {
   EffectEventTypes.lightning,
   EffectEventTypes.beat,
   EffectEventTypes.music,
+  EffectEventTypes.footsteps,
 };
 
 LightingEffect _effect(List<EffectEvent> events, {Duration? loop}) =>
@@ -276,6 +277,64 @@ void main() {
         }
       }
       expect(fired, inInclusiveRange(8, 32));
+    });
+  });
+
+  group('footsteps', () {
+    LightingEffect steps(Map<String, Object> parameters) => _effect([
+          _greenAmbient,
+          EffectEvent(
+            at: Duration.zero,
+            duration: const Duration(seconds: 4),
+            type: EffectEventTypes.footsteps,
+            parameters: {'color': '#FF0000', ...parameters},
+          ),
+        ], loop: const Duration(seconds: 10));
+
+    int? stepAt(EffectRenderer renderer, int ms) {
+      final frames = renderer.render(Duration(milliseconds: ms));
+      final index = frames.indexWhere((f) => f.color.r > 0.3);
+      return index < 0 ? null : index;
+    }
+
+    test('approach crosses the room one lamp per step', () {
+      final renderer = EffectRenderer(
+        steps({'steps': 4, 'interval': 1000, 'pattern': 'approach'}),
+        slotCount: 4,
+        seed: 2,
+      );
+      // Sample just after each step lands.
+      final path = [
+        for (var k = 0; k < 4; k++) stepAt(renderer, k * 1000 + 40)
+      ];
+      expect(path, anyOf(equals([0, 1, 2, 3]), equals([3, 2, 1, 0])));
+      // Quiet between steps.
+      expect(stepAt(renderer, 600), isNull);
+    });
+
+    test('crescendo makes later steps brighter', () {
+      final renderer = EffectRenderer(
+        steps({'steps': 4, 'interval': 1000, 'crescendo': 1.0}),
+        slotCount: 4,
+      );
+      double peakOf(int k) => renderer
+          .render(Duration(milliseconds: k * 1000 + 22))
+          .map((f) => f.color.r > 0.3 ? f.brightness : 0.0)
+          .reduce((a, b) => a > b ? a : b);
+      expect(peakOf(3), greaterThan(peakOf(0) * 2));
+    });
+
+    test('shake dims the other lights on a step', () {
+      final renderer = EffectRenderer(
+        steps({'steps': 2, 'interval': 1000, 'shake': 0.8}),
+        slotCount: 3,
+      );
+      final frames = renderer.render(const Duration(milliseconds: 22));
+      final others = frames.where((f) => f.color.r < 0.3);
+      expect(others, isNotEmpty);
+      for (final frame in others) {
+        expect(frame.brightness, lessThan(0.3));
+      }
     });
   });
 

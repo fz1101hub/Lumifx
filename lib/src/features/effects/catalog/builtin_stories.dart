@@ -272,9 +272,235 @@ const hauntedManor = LightingEffect(
   ],
 );
 
+/// A fairy flits around the room leaving pastel sparkles, then casts a
+/// spell that turns every lamp pink.
+const enchantedFairy = LightingEffect(
+  id: 'enchanted_fairy',
+  name: 'Enchanted Fairy',
+  kind: EffectKind.story,
+  collection: 'Magic & Fantasy',
+  description: 'Tiny wings, a trail of sparkles and one big spell.',
+  loopDuration: Duration(seconds: 36),
+  events: [
+    EffectEvent(
+      at: Duration.zero,
+      duration: Duration(seconds: 24),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#3B2A5C', '#5A3D7A', '#2E4A5C'],
+        'brightnessMin': 0.15,
+        'brightnessMax': 0.40,
+        'speed': 0.05,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 3),
+      duration: Duration(seconds: 9),
+      type: EffectEventTypes.travel,
+      parameters: {
+        'color': '#FFD6F5',
+        'pattern': 'random_walk',
+        'stepDuration': 380,
+        'brightness': 0.85,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 12),
+      duration: Duration(seconds: 5),
+      type: EffectEventTypes.surprise,
+      parameters: {'color': '#D9FFF5', 'count': 7, 'brightness': 0.8},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 18),
+      duration: Duration(seconds: 5),
+      type: EffectEventTypes.travel,
+      parameters: {
+        'color': '#FFF2B3',
+        'pattern': 'ping_pong',
+        'passes': 4,
+        'brightness': 0.9,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 23),
+      duration: Duration(milliseconds: 1600),
+      type: EffectEventTypes.magicFlash,
+      parameters: {'color': '#FF9BE0', 'target': 'all'},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 24),
+      duration: Duration(seconds: 12),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#FF8AD8', '#C69BFF', '#FFC2E8', '#9BE7FF'],
+        'brightnessMin': 0.45,
+        'brightnessMax': 0.85,
+        'speed': 0.07,
+      },
+    ),
+  ],
+);
+
+/// Deep in a mine a goblin runs with its lantern, strikes sparks off the
+/// rock, finds gems, and blows the lantern out.
+const goblinMine = LightingEffect(
+  id: 'goblin_mine',
+  name: 'Goblin Mine',
+  kind: EffectKind.story,
+  collection: 'Magic & Fantasy',
+  description: 'Pickaxes, lantern light and something that glitters.',
+  prefersStreaming: true,
+  loopDuration: Duration(seconds: 40),
+  events: [
+    EffectEvent(
+      at: Duration.zero,
+      duration: Duration(seconds: 40),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#3A2410', '#5A3816', '#24180E'],
+        'brightnessMin': 0.08,
+        'brightnessMax': 0.30,
+        'speed': 0.08,
+        'flicker': 0.9,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 3),
+      duration: Duration(seconds: 7),
+      type: EffectEventTypes.footsteps,
+      parameters: {
+        'color': '#FFA040',
+        'pattern': 'random_walk',
+        'steps': 14,
+        'interval': 480,
+        'brightness': 0.6,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 12),
+      duration: Duration(milliseconds: 1500),
+      type: EffectEventTypes.lightning,
+      parameters: {'color': '#FFC46B', 'strikes': 4, 'target': 'random_light'},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 15),
+      duration: Duration(milliseconds: 1200),
+      type: EffectEventTypes.lightning,
+      parameters: {
+        'color': '#FFC46B',
+        'strikes': 3,
+        'target': 'random_light',
+        'chance': 0.7,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 19),
+      duration: Duration(seconds: 2),
+      type: EffectEventTypes.magicFlash,
+      parameters: {'color': '#5CFF8A', 'target': 'random_light'},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 21),
+      duration: Duration(seconds: 2),
+      type: EffectEventTypes.magicFlash,
+      parameters: {'color': '#B45CFF', 'target': 'random_light'},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 28),
+      duration: Duration(seconds: 5),
+      type: EffectEventTypes.dim,
+      parameters: {'level': 0.0},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 30),
+      duration: Duration(milliseconds: 1500),
+      type: EffectEventTypes.magicFlash,
+      parameters: {
+        'color': '#9CFF3A',
+        'target': 'random_lights',
+        'count': 2,
+        'brightness': 0.25,
+      },
+    ),
+  ],
+);
+
+/// The night before Christmas: elves dash about, the tree lights twinkle
+/// and a sleigh crosses the room.
+const christmasElves = LightingEffect(
+  id: 'christmas_elves',
+  name: 'Christmas Elves',
+  kind: EffectKind.story,
+  collection: 'Christmas Stories',
+  description: 'Busy little helpers, twinkling lights and a sleigh overhead.',
+  loopDuration: Duration(seconds: 42),
+  events: [
+    EffectEvent(
+      at: Duration.zero,
+      duration: Duration(seconds: 42),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#B3121F', '#0F6B2F', '#E0A030', '#7A0F18'],
+        'brightnessMin': 0.25,
+        'brightnessMax': 0.55,
+        'speed': 0.05,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 4),
+      duration: Duration(seconds: 8),
+      type: EffectEventTypes.travel,
+      parameters: {
+        'color': '#FFE7A0',
+        'pattern': 'random_walk',
+        'stepDuration': 420,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 13),
+      duration: Duration(seconds: 4),
+      type: EffectEventTypes.surprise,
+      parameters: {'color': '#FFD54A', 'count': 5},
+    ),
+    EffectEvent(
+      at: Duration(seconds: 18),
+      duration: Duration(seconds: 8),
+      type: EffectEventTypes.beat,
+      parameters: {
+        'bpm': 90,
+        'palette': <String>['#FF2A2A', '#2AFF6A', '#FFD54A'],
+        'pattern': 'alternate',
+        'decay': 0.9,
+        'brightnessMin': 0.25,
+        'brightness': 0.8,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 28),
+      duration: Duration(seconds: 3),
+      type: EffectEventTypes.travel,
+      parameters: {
+        'color': '#FFF6DE',
+        'pattern': 'sweep',
+        'width': 1.5,
+        'brightness': 1.0,
+      },
+    ),
+    EffectEvent(
+      at: Duration(seconds: 32),
+      duration: Duration(seconds: 3),
+      type: EffectEventTypes.magicFlash,
+      parameters: {'color': '#FFFFFF', 'target': 'all', 'brightness': 0.7},
+    ),
+  ],
+);
+
 const builtinStories = <LightingEffect>[
   emeraldTrickster,
+  enchantedFairy,
+  goblinMine,
   sleepingDragon,
   mischievousGhost,
   hauntedManor,
+  christmasElves,
 ];
