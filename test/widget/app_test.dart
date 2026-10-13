@@ -284,10 +284,10 @@ void streamingTests() {
     // These credentials predate Entertainment support (no client key).
     await tester.runAsync(() async {
       await tester.tap(find.text('Play'));
-      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
     });
     await tester.pumpAndSettle();
-    expect(find.textContaining('Could not start streaming'), findsOneWidget);
+    expect(find.textContaining('pair again'), findsOneWidget);
     expect(find.text('Play'), findsOneWidget);
   });
 }

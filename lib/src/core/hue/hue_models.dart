@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../color/light_color.dart';
 
 /// A Hue Bridge found on the local network, before or after pairing.
@@ -91,6 +93,9 @@ class HueLight {
     this.color,
     this.supportsColor = false,
     this.supportsColorTemperature = false,
+    this.mirek,
+    this.mirekMin = 153,
+    this.mirekMax = 500,
     this.archetype,
   });
 
@@ -100,6 +105,10 @@ class HueLight {
     final dimming = json['dimming'] == null ? null : _map(json['dimming']);
     final color = json['color'] == null ? null : _map(json['color']);
     final xy = color == null ? null : _map(color['xy']);
+    final temperature = json['color_temperature'] == null
+        ? null
+        : _map(json['color_temperature']);
+    final schema = _map(temperature?['mirek_schema']);
     return HueLight(
       id: json['id']! as String,
       name: metadata['name'] as String? ?? 'Light',
@@ -111,7 +120,13 @@ class HueLight {
           ? null
           : (x: (xy['x']! as num).toDouble(), y: (xy['y']! as num).toDouble()),
       supportsColor: color != null,
-      supportsColorTemperature: json['color_temperature'] != null,
+      supportsColorTemperature: temperature != null,
+      // Only meaningful while the light is in color-temperature mode.
+      mirek: temperature?['mirek_valid'] == true
+          ? (temperature?['mirek'] as num?)?.toInt()
+          : null,
+      mirekMin: (schema['mirek_minimum'] as num?)?.toInt() ?? 153,
+      mirekMax: (schema['mirek_maximum'] as num?)?.toInt() ?? 500,
     );
   }
 
@@ -127,9 +142,29 @@ class HueLight {
   final ({double x, double y})? color;
   final bool supportsColor;
   final bool supportsColorTemperature;
+
+  /// Current color temperature in mirek, when the light is showing white.
+  final int? mirek;
+  final int mirekMin;
+  final int mirekMax;
   final String? archetype;
 
   bool get isDimmable => brightness != null;
+
+  /// The command that puts this light back the way it is now.
+  HueLightCommand get restoreCommand {
+    const transition = Duration(milliseconds: 400);
+    if (!isOn) {
+      return const HueLightCommand(on: false, transition: transition);
+    }
+    return HueLightCommand(
+      on: true,
+      brightness: brightness,
+      mirek: mirek,
+      xy: mirek == null && supportsColor ? color : null,
+      transition: transition,
+    );
+  }
 }
 
 enum HueGroupKind { room, zone }
@@ -165,6 +200,31 @@ class HueLightCommand {
     this.transition,
   });
 
+  /// Shows [color] at [brightness] (0..1) as well as [light] can: in color,
+  /// as the nearest white for white-ambiance lights, or as brightness only.
+  /// Sending an unsupported property makes the bridge reject the whole
+  /// command, so properties a light lacks are left out.
+  factory HueLightCommand.forLight(
+    HueLight light,
+    LightColor color,
+    double brightness, {
+    Duration? transition,
+  }) {
+    if (brightness < 0.005) {
+      return HueLightCommand(on: false, transition: transition);
+    }
+    return HueLightCommand(
+      on: true,
+      brightness:
+          light.isDimmable ? (brightness * 100).clamp(1.0, 100.0) : null,
+      xy: light.supportsColor ? color.toXy() : null,
+      mirek: !light.supportsColor && light.supportsColorTemperature
+          ? mirekFor(color, light.mirekMin, light.mirekMax)
+          : null,
+      transition: transition,
+    );
+  }
+
   /// Builds a command that shows [color] at [brightness] (0..1).
   factory HueLightCommand.fromColor(
     LightColor color,
@@ -180,6 +240,16 @@ class HueLightCommand {
       xy: color.toXy(),
       transition: transition,
     );
+  }
+
+  /// The white closest to [color], via McCamy's correlated color
+  /// temperature approximation, clamped to 2000-6500 K and the light's range.
+  static int mirekFor(LightColor color, int minimum, int maximum) {
+    final xy = color.toXy();
+    final n = (xy.x - 0.3320) / (0.1858 - xy.y);
+    final kelvin = (449 * math.pow(n, 3) + 3525 * n * n + 6823.3 * n + 5520.33)
+        .clamp(2000.0, 6500.0);
+    return (1e6 / kelvin).round().clamp(minimum, maximum);
   }
 
   final bool? on;

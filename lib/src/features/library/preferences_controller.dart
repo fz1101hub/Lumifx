@@ -49,6 +49,7 @@ class PreferencesController extends ChangeNotifier {
   List<String> _recents = const [];
   EffectControls _defaultControls = const EffectControls();
   String? _lastTarget;
+  bool _restoreLights = true;
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -63,6 +64,9 @@ class PreferencesController extends ChangeNotifier {
   /// preview.
   String? get lastTarget => _lastTarget;
 
+  /// Put lights back the way they were when an effect stops.
+  bool get restoreLights => _restoreLights;
+
   bool isFavorite(String effectId) => _favorites.contains(effectId);
 
   Future<void> load() async {
@@ -75,6 +79,7 @@ class PreferencesController extends ChangeNotifier {
       _favorites = _strings(json['favorites']);
       _recents = _strings(json['recents']);
       _lastTarget = json['lastTarget'] as String?;
+      _restoreLights = json['restoreLights'] as bool? ?? true;
       final controls = json['defaultControls'];
       if (controls is Map) {
         _defaultControls = EffectControls(
@@ -113,6 +118,11 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  Future<void> setRestoreLights(bool value) {
+    _restoreLights = value;
+    return _changed();
+  }
+
   Future<void> setLastTarget(String? target) {
     if (target == _lastTarget) {
       return Future.value();
@@ -129,6 +139,7 @@ class PreferencesController extends ChangeNotifier {
         'favorites': _favorites,
         'recents': _recents,
         'lastTarget': _lastTarget,
+        'restoreLights': _restoreLights,
         'defaultControls': {
           'brightness': _defaultControls.brightness,
           'intensity': _defaultControls.intensity,

@@ -99,7 +99,10 @@ class HueBridgeClient {
 
   Future<HueHome> fetchHome() async {
     final results = await Future.wait([
-      _resources('light'),
+      _resources('light').catchError(
+        (Object _) => throw const UnsupportedBridgeException(),
+        test: (error) => error is HueException && error.statusCode == 404,
+      ),
       _resources('room'),
       _resources('zone'),
       // Optional: streaming is a bonus, not a reason to fail loading.
@@ -312,13 +315,16 @@ class HueBridgeClient {
     try {
       body = jsonDecode(utf8.decode(response.bodyBytes));
     } on FormatException {
-      throw HueException('Unexpected response (${response.statusCode})');
+      throw HueException('Unexpected response (${response.statusCode})',
+          statusCode: response.statusCode);
     }
     if (response.statusCode >= 400) {
       final errors = body is Map ? _list(body['errors']) : const [];
       final description = errors.firstOrNull?['description'];
       throw HueException(
-          '${description ?? 'Request failed'} (${response.statusCode})');
+        '${description ?? 'Request failed'} (${response.statusCode})',
+        statusCode: response.statusCode,
+      );
     }
     return body;
   }

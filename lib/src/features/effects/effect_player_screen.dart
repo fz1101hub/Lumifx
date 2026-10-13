@@ -1,384 +1,239 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
-import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/effects/engine/light_frame.dart';
-import '../../core/effects/engine/light_output.dart';
-import '../../core/hue/entertainment/dtls/dtls_client.dart';
-import '../../core/hue/entertainment/entertainment_session.dart';
-import '../../core/hue/hue_bridge_client.dart';
-import '../../core/hue/hue_exceptions.dart';
-import '../../core/hue/hue_models.dart';
+import '../../core/screen_wake.dart';
 import '../entertainment/entertainment_area_editor.dart';
 import '../music/music_sync_controller.dart';
 import 'light_color_ui.dart';
-
-/// Lamps shown when playing without a bridge.
-const _previewLightCount = 5;
+import 'playback_controller.dart';
 
 class EffectPlayerScreen extends StatefulWidget {
-  const EffectPlayerScreen({required this.effect, super.key});
+  const EffectPlayerScreen({
+    required this.effect,
+    this.screenWake = const WakelockScreenWake(),
+    super.key,
+  });
 
   final LightingEffect effect;
+  final ScreenWake screenWake;
 
   @override
   State<EffectPlayerScreen> createState() => _EffectPlayerScreenState();
 }
 
-class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
-  EffectPlayer? _player;
+class _EffectPlayerScreenState extends State<EffectPlayerScreen>
+    with WidgetsBindingObserver {
+  PlaybackController? _controller;
+  StreamSubscription<String>? _messages;
 
-  /// `group:<id>`, `area:<id>`, or null for the preview.
-  String? _targetKey;
-  EffectControls _controls = const EffectControls();
-  bool _starting = false;
-  bool _restored = false;
+  PlaybackController get controller => _controller!;
 
-  /// Created on first play of an effect that listens to music.
-  MusicSyncController? _music;
-  double _sensitivity = 1;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_restored) {
-      _restored = true;
-      final preferences = AppScope.of(context).preferences;
-      _controls = preferences.defaultControls;
-      _targetKey = preferences.lastTarget;
+    if (_controller == null) {
+      final scope = AppScope.of(context);
+      _controller = PlaybackController(
+        effect: widget.effect,
+        bridge: scope.bridge,
+        preferences: scope.preferences,
+        audioInput: scope.audioInput,
+        screenWake: widget.screenWake,
+      );
+      _messages = controller.messages.listen((message) {
+        if (mounted) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(message)));
+        }
+      });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      controller.handleAppPaused();
     }
   }
 
   @override
   void dispose() {
-    _player?.stop();
-    _music?.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _messages?.cancel();
+    _controller?.dispose();
     super.dispose();
   }
 
-  /// Starts the microphone for Music Sync effects. Returns false (after
-  /// telling the user why) when it cannot listen.
-  Future<bool> _startListening() async {
-    if (!widget.effect.usesMicrophone) {
-      return true;
-    }
-    final music =
-        _music ??= MusicSyncController(AppScope.of(context).audioInput);
-    await music.start();
-    if (!mounted) {
-      return false;
-    }
-    switch (music.status) {
-      case MusicSyncStatus.listening:
-        return true;
-      case MusicSyncStatus.denied:
-        _showError('Music Sync needs microphone access. You can allow it in '
-            'your phone settings.');
-      default:
-        _showError('The microphone could not be started.');
-    }
-    return false;
+  Future<void> _createArea() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<bool>(builder: (_) => const EntertainmentAreaEditor()),
+    );
   }
-
-  HueHome? get _home {
-    final bridge = AppScope.of(context).bridge;
-    return bridge.isConnected ? bridge.home : null;
-  }
-
-  /// The selected room or zone, looked up fresh because the bridge
-  /// snapshot is replaced on every refresh.
-  HueGroup? get _group =>
-      _home?.groups.where((g) => _targetKey == 'group:${g.id}').firstOrNull;
-
-  HueEntertainmentArea? get _area => _home?.entertainmentAreas
-      .where((a) => _targetKey == 'area:${a.id}')
-      .firstOrNull;
-
-  List<String> _lightNames() {
-    final home = _home;
-    final group = _group;
-    final area = _area;
-    if (home != null && group != null) {
-      return [for (final id in group.lightIds) home.lights[id]?.name ?? id];
-    }
-    if (home != null && area != null) {
-      return [
-        for (final channel in area.spatialChannels)
-          channel.lightIds.isEmpty
-              ? 'Channel ${channel.id}'
-              : channel.lightIds
-                  .map((id) => home.lights[id]?.name ?? id)
-                  .join(' / '),
-      ];
-    }
-    return [for (var i = 1; i <= _previewLightCount; i++) 'Lamp $i'];
-  }
-
-  Future<void> _togglePlayback() async {
-    final player = _player;
-    if (player != null && player.state == PlaybackState.playing) {
-      player.pause();
-      // Not listening while paused: no reason to keep the mic open.
-      await _music?.stop();
-      setState(() {});
-      return;
-    }
-    if (player != null && player.state == PlaybackState.paused) {
-      if (!await _startListening()) {
-        return;
-      }
-      player.play();
-      setState(() {});
-      return;
-    }
-    await _start();
-  }
-
-  Future<void> _start() async {
-    if (!await _startListening() || !mounted) {
-      return;
-    }
-    final bridge = AppScope.of(context).bridge;
-    final client = bridge.client;
-    final group = _group;
-    final area = _area;
-
-    var lightIds = [for (var i = 0; i < _previewLightCount; i++) 'preview-$i'];
-    LightOutput output = const NullLightOutput();
-    var tick = const Duration(milliseconds: 100);
-
-    if (area != null) {
-      setState(() => _starting = true);
-      try {
-        final streaming = await bridge.openEntertainment(area);
-        if (!mounted) {
-          await streaming.close();
-          return;
-        }
-        output = streaming;
-        lightIds = entertainmentSlotIds(area);
-        // Hue recommends 50-60 messages per second; the bridge forwards
-        // them to the lights at 25 Hz.
-        tick = const Duration(milliseconds: 20);
-        // Any end we did not ask for (alert, close_notify, another app
-        // taking over the area) stops playback.
-        streaming.session.done
-            .catchError((Object _) {})
-            .whenComplete(() => _onStreamEnded(streaming));
-      } on Object catch (error) {
-        if (mounted) {
-          _showError('Could not start streaming: ${_describe(error)}');
-        }
-        return;
-      } finally {
-        if (mounted) {
-          setState(() => _starting = false);
-        }
-      }
-    } else if (group != null && group.lightIds.isNotEmpty && client != null) {
-      lightIds = group.lightIds;
-      output = hueRestOutput(client);
-    }
-
-    final player = EffectPlayer(
-      effect: widget.effect,
-      lightIds: lightIds,
-      output: output,
-      seed: DateTime.now().millisecondsSinceEpoch & 0x7FFFFFFF,
-      controls: _controls,
-      tick: tick,
-      audio: _music == null
-          ? null
-          : () => _music!.isListening ? _music!.features : null,
-    )..play();
-    setState(() => _player = player);
-    AppScope.of(context).preferences.recordPlayed(widget.effect.id);
-  }
-
-  /// The bridge ended the stream while it was still in use.
-  void _onStreamEnded(LightOutput output) {
-    final player = _player;
-    if (!mounted || player == null || player.output != output) {
-      return;
-    }
-    setState(() => _player = null);
-    player.stop();
-    _showError('Streaming stopped by the bridge.');
-  }
-
-  Future<void> _changeTarget(String? targetKey) async {
-    final previous = _player;
-    final wasPlaying = previous?.state == PlaybackState.playing;
-    setState(() {
-      _targetKey = targetKey;
-      _player = null;
-    });
-    AppScope.of(context).preferences.setLastTarget(targetKey);
-    await previous?.stop();
-    if (wasPlaying && mounted) {
-      await _start();
-    }
-  }
-
-  void _updateControls(EffectControls controls) {
-    setState(() => _controls = controls);
-    _player?.controls = controls;
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  static String _describe(Object error) => switch (error) {
-        HueException(:final message) => message,
-        DtlsException(:final message) => message,
-        _ => 'the bridge did not respond.',
-      };
 
   @override
   Widget build(BuildContext context) {
-    final home = _home;
-    final groups = home?.groups.where((g) => g.lightIds.isNotEmpty).toList() ??
-        const <HueGroup>[];
-    final areas =
-        home?.entertainmentAreas.where((a) => a.channels.isNotEmpty).toList() ??
-            const <HueEntertainmentArea>[];
-    final player = _player;
-    final isPlaying = player?.state == PlaybackState.playing;
     final theme = Theme.of(context);
-    final selectedKey = _group != null || _area != null ? _targetKey : null;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.effect.name),
         actions: [_FavoriteButton(effectId: widget.effect.id)],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          if (widget.effect.description.isNotEmpty)
-            Text(widget.effect.description, style: theme.textTheme.bodyLarge),
-          const SizedBox(height: 20),
-          DropdownButtonFormField<String?>(
-            initialValue: selectedKey,
-            decoration: const InputDecoration(
-              labelText: 'Play on',
-              border: OutlineInputBorder(),
-            ),
-            items: [
-              const DropdownMenuItem(value: null, child: Text('Preview only')),
-              for (final area in areas)
-                DropdownMenuItem(
-                  value: 'area:${area.id}',
-                  child: _TargetLabel(
-                    icon: Icons.bolt,
-                    text: '${area.name} · streaming',
-                  ),
+      body: ListenableBuilder(
+        listenable: controller,
+        builder: (context, _) {
+          final c = controller;
+          final busy = c.isBusy;
+          final groups = c.groups;
+          final areas = c.areas;
+          final targetKeys = [
+            for (final area in areas) 'area:${area.id}',
+            for (final group in groups) 'group:${group.id}',
+          ];
+          final controls = c.controls;
+          return ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              if (widget.effect.description.isNotEmpty)
+                Text(widget.effect.description,
+                    style: theme.textTheme.bodyLarge),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String?>(
+                // Rebuilt when the available targets change, so the field
+                // never holds a value that is no longer in the list.
+                key: ValueKey(Object.hashAll(targetKeys)),
+                initialValue: c.selectedTarget,
+                isExpanded: true,
+                decoration: const InputDecoration(
+                  labelText: 'Play on',
+                  border: OutlineInputBorder(),
                 ),
-              for (final group in groups)
-                DropdownMenuItem(
-                  value: 'group:${group.id}',
-                  child: _TargetLabel(
-                    icon: Icons.meeting_room_outlined,
-                    text: '${group.name} · ${group.lightIds.length} '
-                        '${group.lightIds.length == 1 ? 'light' : 'lights'}',
-                  ),
-                ),
-            ],
-            onChanged: _starting ? null : _changeTarget,
-          ),
-          if (widget.effect.prefersStreaming && _group != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              'This effect is very fast. Rooms update a few times per second, '
-              'so pick an entertainment area for the full effect.',
-              style: theme.textTheme.bodySmall,
-            ),
-          ],
-          if (home != null && areas.isEmpty)
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'For fast effects, stream to an entertainment area.',
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ),
-                TextButton(
-                  onPressed: _starting
-                      ? null
-                      : () async {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute<bool>(
-                              builder: (_) => const EntertainmentAreaEditor(),
-                            ),
-                          );
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        },
-                  child: const Text('Create area'),
+                items: [
+                  const DropdownMenuItem(
+                      value: null, child: Text('Preview only')),
+                  for (final area in areas)
+                    DropdownMenuItem(
+                      value: 'area:${area.id}',
+                      child: _TargetLabel(
+                        icon: Icons.bolt,
+                        text: '${area.name} · streaming',
+                      ),
+                    ),
+                  for (final group in groups)
+                    DropdownMenuItem(
+                      value: 'group:${group.id}',
+                      child: _TargetLabel(
+                        icon: Icons.meeting_room_outlined,
+                        text: '${group.name} · ${group.lightIds.length} '
+                            '${group.lightIds.length == 1 ? 'light' : 'lights'}',
+                      ),
+                    ),
+                ],
+                onChanged: busy ? null : c.changeTarget,
+              ),
+              if (widget.effect.prefersStreaming && c.group != null) ...[
+                const SizedBox(height: 8),
+                Text(
+                  'This effect is very fast. Rooms update a few times per '
+                  'second, so pick an entertainment area for the full effect.',
+                  style: theme.textTheme.bodySmall,
                 ),
               ],
-            ),
-          const SizedBox(height: 24),
-          _LampPreview(player: player, names: _lightNames()),
-          if (widget.effect.usesMicrophone) ...[
-            const SizedBox(height: 16),
-            _MusicMeter(player: player, music: _music),
-          ],
-          const SizedBox(height: 24),
-          Center(
-            child: FilledButton.icon(
-              onPressed: _starting ? null : _togglePlayback,
-              icon: _starting
-                  ? const SizedBox.square(
-                      dimension: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-              label: Text(_starting
-                  ? 'Connecting…'
-                  : isPlaying
-                      ? 'Pause'
-                      : 'Play'),
-            ),
-          ),
-          const SizedBox(height: 24),
-          _ControlSlider(
-            label: 'Brightness',
-            value: _controls.brightness,
-            onChanged: (v) =>
-                _updateControls(_controls.copyWith(brightness: v)),
-          ),
-          _ControlSlider(
-            label: 'Intensity',
-            value: _controls.intensity,
-            onChanged: (v) => _updateControls(_controls.copyWith(intensity: v)),
-          ),
-          if (widget.effect.usesMicrophone)
-            _ControlSlider(
-              label: 'Sensitivity',
-              value: _sensitivity,
-              min: 0.5,
-              max: 2.5,
-              onChanged: (v) {
-                setState(() => _sensitivity = v);
-                _music?.sensitivity = v;
-              },
-            )
-          else
-            _ControlSlider(
-              label: 'Speed',
-              value: _controls.speed,
-              min: 0.25,
-              max: 3,
-              onChanged: (v) => _updateControls(_controls.copyWith(speed: v)),
-            ),
-        ],
+              if (c.home != null && areas.isEmpty)
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'For fast effects, stream to an entertainment area.',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: busy ? null : _createArea,
+                      child: const Text('Create area'),
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 24),
+              _LampPreview(player: c.player, names: c.lightNames),
+              if (widget.effect.usesMicrophone) ...[
+                const SizedBox(height: 16),
+                _MusicMeter(player: c.player, music: c.music),
+              ],
+              const SizedBox(height: 24),
+              Center(
+                child: Wrap(
+                  spacing: 12,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    FilledButton.icon(
+                      onPressed: busy ? null : c.toggle,
+                      icon: busy
+                          ? const SizedBox.square(
+                              dimension: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Icon(c.isPlaying ? Icons.pause : Icons.play_arrow),
+                      label: Text(busy
+                          ? 'Connecting…'
+                          : c.isPlaying
+                              ? 'Pause'
+                              : 'Play'),
+                    ),
+                    if (c.status == PlaybackStatus.playing ||
+                        c.status == PlaybackStatus.paused)
+                      OutlinedButton.icon(
+                        onPressed: c.stop,
+                        icon: const Icon(Icons.stop),
+                        label: const Text('Stop'),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              _ControlSlider(
+                label: 'Brightness',
+                value: controls.brightness,
+                onChanged: (v) =>
+                    c.setControls(controls.copyWith(brightness: v)),
+              ),
+              _ControlSlider(
+                label: 'Intensity',
+                value: controls.intensity,
+                onChanged: (v) =>
+                    c.setControls(controls.copyWith(intensity: v)),
+              ),
+              if (widget.effect.usesMicrophone)
+                _ControlSlider(
+                  label: 'Sensitivity',
+                  value: c.sensitivity,
+                  min: 0.5,
+                  max: 2.5,
+                  onChanged: c.setSensitivity,
+                )
+              else
+                _ControlSlider(
+                  label: 'Speed',
+                  value: controls.speed,
+                  min: 0.25,
+                  max: 3,
+                  onChanged: (v) => c.setControls(controls.copyWith(speed: v)),
+                ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -506,20 +361,6 @@ class _TargetLabel extends StatelessWidget {
   }
 }
 
-/// Sends frames to Hue lights through the REST API.
-LightOutput hueRestOutput(HueBridgeClient client) {
-  return RateLimitedLightOutput(
-    send: (lightId, frame, transition) => client.setLight(
-      lightId,
-      HueLightCommand.fromColor(
-        frame.color,
-        frame.brightness,
-        transition: transition,
-      ),
-    ),
-  );
-}
-
 class _LampPreview extends StatelessWidget {
   const _LampPreview({required this.player, required this.names});
 
@@ -614,7 +455,12 @@ class _ControlSlider extends StatelessWidget {
       children: [
         SizedBox(width: 88, child: Text(label)),
         Expanded(
-          child: Slider(value: value, min: min, max: max, onChanged: onChanged),
+          child: Slider(
+            value: value.clamp(min, max),
+            min: min,
+            max: max,
+            onChanged: onChanged,
+          ),
         ),
       ],
     );

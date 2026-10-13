@@ -57,6 +57,15 @@ class SettingsScreen extends StatelessWidget {
                 max: 3,
                 onChanged: (v) => update(controls.copyWith(speed: v)),
               ),
+              SwitchListTile(
+                title: const Text('Restore lights when an effect stops'),
+                subtitle: const Text(
+                  'Puts each light back to the colour and brightness it had '
+                  'before the effect started.',
+                ),
+                value: preferences.restoreLights,
+                onChanged: preferences.setRestoreLights,
+              ),
               const Divider(height: 32),
               const _Header('About'),
               const ListTile(
