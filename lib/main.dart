@@ -9,16 +9,20 @@ import 'src/features/library/preferences_controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final bridge = BridgeController(store: SecureCredentialStore())..initialize();
+  final discovery = CompositeBridgeDiscovery([
+    const MdnsBridgeDiscovery(),
+    CloudBridgeDiscovery(),
+  ]);
+  final bridge = BridgeController(
+    store: SecureCredentialStore(),
+    discovery: discovery,
+  )..initialize();
   final preferences = PreferencesController(store: SharedPreferencesStore())
     ..load();
   runApp(
     LumiFxApp(
       bridge: bridge,
-      discovery: CompositeBridgeDiscovery([
-        const MdnsBridgeDiscovery(),
-        CloudBridgeDiscovery(),
-      ]),
+      discovery: discovery,
       preferences: preferences,
       audioInput: MicrophoneAudioInput(),
     ),

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
+import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
@@ -126,4 +127,68 @@ void main() {
     expect(controller.status, BridgeStatus.unpaired);
     expect(await store.load(), isNull);
   });
+
+  test('finds the bridge at a new address when the old one stops answering',
+      () async {
+    const movedBridge = HueBridgeInfo(id: '001788fffe000001', host: '10.0.0.9');
+    final hostsSeen = <String>[];
+    final store = InMemoryCredentialStore(
+      const HueCredentials(bridge: _bridge, applicationKey: 'key-1'),
+    );
+    final fake = _FakeBridge();
+    final controller = BridgeController(
+      store: store,
+      discovery: _ListDiscovery([
+        const HueBridgeInfo(id: 'ffffffffffffffff', host: '10.0.0.3'),
+        movedBridge,
+      ]),
+      clientFactory: (pin, key) {
+        hostsSeen.add(pin.host);
+        // Only the new address answers.
+        fake.reachable = pin.host == movedBridge.host;
+        return HueBridgeClient(
+          host: pin.host,
+          client: fake.client,
+          applicationKey: key,
+        );
+      },
+    );
+    await controller.initialize();
+
+    expect(controller.status, BridgeStatus.connected);
+    expect(hostsSeen, [_bridge.host, movedBridge.host]);
+    expect((await store.load())?.bridge.host, movedBridge.host);
+    expect(controller.credentials?.applicationKey, 'key-1');
+  });
+
+  test('does not search again for a rejected key', () async {
+    var searches = 0;
+    final controller = BridgeController(
+      store: InMemoryCredentialStore(
+        const HueCredentials(bridge: _bridge, applicationKey: 'stale'),
+      ),
+      discovery: _ListDiscovery(const [], onSearch: () => searches++),
+      clientFactory: (pin, key) => HueBridgeClient(
+        host: pin.host,
+        client: _FakeBridge().client,
+        applicationKey: key,
+      ),
+    );
+    await controller.initialize();
+    expect(controller.status, BridgeStatus.unreachable);
+    expect(searches, 0);
+  });
+}
+
+class _ListDiscovery implements BridgeDiscovery {
+  _ListDiscovery(this.bridges, {this.onSearch});
+
+  final List<HueBridgeInfo> bridges;
+  final void Function()? onSearch;
+
+  @override
+  Stream<HueBridgeInfo> discover({Duration timeout = Duration.zero}) {
+    onSearch?.call();
+    return Stream.fromIterable(bridges);
+  }
 }

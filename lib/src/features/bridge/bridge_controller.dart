@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../../core/hue/bridge_http_client.dart';
 import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
+import '../../core/hue/hue_discovery.dart';
 import '../../core/hue/hue_exceptions.dart';
 import '../../core/hue/hue_models.dart';
 import 'credential_store.dart';
@@ -49,11 +50,17 @@ class BridgeController extends ChangeNotifier {
   BridgeController({
     required CredentialStore store,
     BridgeClientFactory clientFactory = _defaultClientFactory,
+    BridgeDiscovery? discovery,
   })  : _store = store,
-        _clientFactory = clientFactory;
+        _clientFactory = clientFactory,
+        _discovery = discovery;
 
   final CredentialStore _store;
   final BridgeClientFactory _clientFactory;
+
+  /// Used to find the bridge again when its IP address changes.
+  final BridgeDiscovery? _discovery;
+  bool _relocating = false;
 
   BridgeStatus _status = BridgeStatus.initializing;
   HueCredentials? _credentials;
@@ -136,7 +143,9 @@ class BridgeController extends ChangeNotifier {
 
   void cancelPairing() => _pairingCancelled = true;
 
-  /// Reloads lights, rooms and zones.
+  /// Reloads lights, rooms and zones. If the bridge cannot be reached at
+  /// its saved address (routers hand out new ones), looks for it on the
+  /// network by id and retries at the new address.
   Future<void> refresh() async {
     final client = _client;
     if (client == null) {
@@ -147,10 +156,59 @@ class BridgeController extends ChangeNotifier {
       _error = null;
       _setStatus(BridgeStatus.connected);
     } on Object catch (error) {
+      if (_isNetworkError(error) && await _relocate()) {
+        return refresh();
+      }
       _error = _describe(error, null);
       _setStatus(BridgeStatus.unreachable);
     }
   }
+
+  /// Finds the paired bridge at a new address. Returns true when the
+  /// address changed and the client now points at it.
+  Future<bool> _relocate() async {
+    final discovery = _discovery;
+    final credentials = _credentials;
+    if (discovery == null || credentials == null || _relocating) {
+      return false;
+    }
+    _relocating = true;
+    try {
+      final found = await discovery
+          .discover(timeout: const Duration(seconds: 4))
+          .cast<HueBridgeInfo?>()
+          .firstWhere(
+            (bridge) => bridge?.id == credentials.bridge.id,
+            orElse: () => null,
+          )
+          .timeout(const Duration(seconds: 6), onTimeout: () => null);
+      if (found == null || found.host == credentials.bridge.host) {
+        return false;
+      }
+      final moved = credentials.copyWith(
+        bridge: HueBridgeInfo(
+          id: credentials.bridge.id,
+          host: found.host,
+          name: found.name ?? credentials.bridge.name,
+        ),
+      );
+      await _store.save(moved);
+      if (_credentials != credentials) {
+        return false; // forgotten or re-paired meanwhile
+      }
+      _useCredentials(moved);
+      return true;
+    } on Object {
+      return false;
+    } finally {
+      _relocating = false;
+    }
+  }
+
+  static bool _isNetworkError(Object error) =>
+      error is TimeoutException ||
+      error is SocketException ||
+      error is http.ClientException;
 
   /// Starts streaming to [area]. The returned output releases the area
   /// when closed.
