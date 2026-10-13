@@ -2,8 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
+    tags: ['v*']
   pull_request:
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: 3.47.6
 
 jobs:
   check:
@@ -13,7 +18,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.47.6
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
       - run: flutter pub get
       - run: dart format --output=none --set-exit-if-changed lib test
@@ -32,6 +37,35 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.47.6
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
-      - run: flutter build apk --debug
+      # Without android/key.properties the release build is signed with the
+      # debug key: enough to prove it builds, not to upload.
+      - run: flutter build appbundle --release
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-release
+          path: |
+            build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 7
+
+  ios:
+    # macOS minutes are expensive: run on main, pull requests, tags, manual
+    # runs, or a push whose commit message contains [ios].
+    if: >-
+      github.event_name != 'push' ||
+      github.ref == 'refs/heads/main' ||
+      startsWith(github.ref, 'refs/tags/') ||
+      contains(github.event.head_commit.message, '[ios]')
+    runs-on: macos-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter build ios --release --no-codesign
