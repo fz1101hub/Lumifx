@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -139,6 +140,26 @@ void main() {
     expect(area.channels.single.lightIds, ['light-1']);
   });
 
+  test('refuses a client key that is not 16 hex bytes', () async {
+    final client = HueBridgeClient(
+      host: '127.0.0.1',
+      applicationKey: 'key',
+      client: MockClient((_) async => _json({})),
+    );
+    await expectLater(
+      EntertainmentSession.open(
+        client: client,
+        credentials: const HueCredentials(
+          bridge: HueBridgeInfo(id: 'b', host: '127.0.0.1'),
+          applicationKey: 'key',
+          clientKey: 'zz112233445566778899AABBCCDDEEFF',
+        ),
+        area: _area,
+      ),
+      throwsA(isA<HueException>()),
+    );
+  });
+
   test('refuses to stream without an Entertainment client key', () async {
     final client = HueBridgeClient(
       host: '127.0.0.1',
@@ -186,6 +207,7 @@ void main() {
     await Future<void>.delayed(const Duration(milliseconds: 400));
 
     final actions = <String>[];
+    var bridgeStatus = 'active';
     final client = HueBridgeClient(
       host: '127.0.0.1',
       applicationKey: 'app-key',
@@ -195,6 +217,13 @@ void main() {
         }
         expect(request.url.path,
             '/clip/v2/resource/entertainment_configuration/$_areaId');
+        if (request.method == 'GET') {
+          return _json({
+            'data': [
+              {'id': _areaId, 'status': bridgeStatus},
+            ],
+          });
+        }
         actions.add((jsonDecode(request.body) as Map)['action'] as String);
         return _json({'data': <Object>[]});
       }),
@@ -209,8 +238,17 @@ void main() {
       ),
       area: _area,
       transportFactory: (host, _) => UdpDatagramTransport.connect(host, port),
+      statusInterval: const Duration(milliseconds: 100),
     );
     expect(actions, ['start']);
+    var ended = false;
+    Object? endedWith;
+    unawaited(session.done.then<void>((_) {
+      ended = true;
+    }, onError: (Object e) {
+      ended = true;
+      endedWith = e;
+    }));
 
     final output = EntertainmentLightOutput(session);
     output.update({
@@ -227,6 +265,16 @@ void main() {
     }
     final text = latin1.decode(received);
     expect(text, contains(_areaId));
+
+    // Nothing wrong yet: the status poll sees the area active.
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    expect(ended, isFalse);
+
+    // The bridge drops the stream (another app took over): reported.
+    bridgeStatus = 'inactive';
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    expect(ended, isTrue);
+    expect(endedWith, isA<HueException>());
 
     await output.close();
     expect(actions, ['start', 'stop']);

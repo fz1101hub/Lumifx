@@ -108,6 +108,11 @@ class HandshakeMessage {
 class HandshakeReassembler {
   final _partial = <int, _Partial>{};
 
+  /// Handshake messages in this protocol are a few hundred bytes; a header
+  /// claiming more is garbage (and would otherwise make us allocate it).
+  static const maxMessageLength = 16 * 1024;
+  static const _maxPartials = 8;
+
   /// Feeds one handshake record; returns the messages it completed.
   List<HandshakeMessage> add(Uint8List fragment) {
     final completed = <HandshakeMessage>[];
@@ -123,8 +128,14 @@ class HandshakeReassembler {
         break;
       }
       final data = reader.bytes(fragmentLength);
+      if (length > maxMessageLength) {
+        continue;
+      }
       if (offset == 0 && fragmentLength == length) {
         completed.add(HandshakeMessage(type, seq, data));
+        continue;
+      }
+      if (!_partial.containsKey(seq) && _partial.length >= _maxPartials) {
         continue;
       }
       final partial = _partial[seq] ??= _Partial(type, length);
@@ -132,11 +143,12 @@ class HandshakeReassembler {
         continue;
       }
       partial.body.setRange(offset, offset + fragmentLength, data);
-      partial.received.fillRange(offset, offset + fragmentLength, true);
-      if (!partial.received.contains(false)) {
-        _partial.remove(seq);
-        completed.add(HandshakeMessage(type, seq, partial.body));
+      partial.received.fillRange(offset, offset + fragmentLength, 1);
+      if (partial.received.contains(0)) {
+        continue;
       }
+      _partial.remove(seq);
+      completed.add(HandshakeMessage(type, seq, partial.body));
     }
     return completed;
   }
@@ -145,11 +157,11 @@ class HandshakeReassembler {
 class _Partial {
   _Partial(this.type, int length)
       : body = Uint8List(length),
-        received = List<bool>.filled(length, false);
+        received = Uint8List(length);
 
   final int type;
   final Uint8List body;
-  final List<bool> received;
+  final Uint8List received;
 }
 
 class ByteWriter {

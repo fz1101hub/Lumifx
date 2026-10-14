@@ -67,4 +67,20 @@ void main() {
     expect(done, hasLength(1));
     expect(utf8.decode(done.single.body), '0123456789');
   });
+
+  test('a fragment header claiming a huge message is ignored', () {
+    final fragment = (ByteWriter()
+          ..u8(HandshakeType.serverHello)
+          ..u24(0xFFFFFF) // 16 MiB claimed
+          ..u16(1)
+          ..u24(0)
+          ..u24(1)
+          ..bytes(const [0]))
+        .toBytes();
+    final reassembler = HandshakeReassembler();
+    expect(reassembler.add(Uint8List.fromList(fragment)), isEmpty);
+    // Still usable afterwards.
+    final ok = HandshakeMessage(HandshakeType.serverHello, 2, utf8.encode('x'));
+    expect(reassembler.add(ok.encode()), hasLength(1));
+  });
 }

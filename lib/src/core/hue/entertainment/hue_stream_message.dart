@@ -41,8 +41,11 @@ Uint8List encodeHueStreamMessage({
   }
 
   channels.forEach((channel, frame) {
+    if (channel < 0 || channel > 0xFF) {
+      throw ArgumentError.value(channel, 'channel', 'must be 0..255');
+    }
     final xy = frame.color.toXy();
-    out.addByte(channel & 0xFF);
+    out.addByte(channel);
     u16(xy.x);
     u16(xy.y);
     u16(frame.brightness);

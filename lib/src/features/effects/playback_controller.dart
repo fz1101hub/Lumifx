@@ -210,9 +210,10 @@ class PlaybackController extends ChangeNotifier {
           // them to the lights at 25 Hz.
           tick = const Duration(milliseconds: 20);
           final opened = streaming;
-          unawaited(opened.session.done
-              .catchError((Object _) {})
-              .whenComplete(() => _onStreamEnded(opened)));
+          unawaited(opened.session.done.then(
+            (_) => _onStreamEnded(opened, null),
+            onError: (Object error) => _onStreamEnded(opened, error),
+          ));
         } else if (group != null) {
           final usable = _effectLights(home, group.lightIds);
           if (usable.isEmpty) {
@@ -425,13 +426,16 @@ class PlaybackController extends ChangeNotifier {
     }
   }
 
-  void _onStreamEnded(LightOutput output) {
+  void _onStreamEnded(LightOutput output, Object? error) {
     if (_disposed || _player?.output != output) {
       return;
     }
     unawaited(stop());
-    _message('Streaming stopped by the bridge (another app may have taken '
-        'over the area).');
+    _message(switch (error) {
+      HueException(:final message) => message,
+      DtlsException(:final message) => message,
+      _ => 'Streaming stopped by the bridge.',
+    });
   }
 
   void _onBridgeChanged() => _notify();

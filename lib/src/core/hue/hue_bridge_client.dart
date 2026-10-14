@@ -268,6 +268,22 @@ class HueBridgeClient {
     return response.headers['hue-application-id'];
   }
 
+  /// Whether the bridge still reports [areaId] as streaming: null when it
+  /// cannot tell (missing area, no status field).
+  Future<bool?> isEntertainmentActive(String areaId) async {
+    final response = await _client
+        .get(
+          Uri.https(
+              host, '/clip/v2/resource/entertainment_configuration/$areaId'),
+          headers: _headers,
+        )
+        .timeout(_timeout);
+    final body = _decode(response);
+    final configuration = body is Map ? _list(body['data']).firstOrNull : null;
+    final status = configuration?['status'];
+    return status is String ? status == 'active' : null;
+  }
+
   /// Reserves [areaId] for streaming. Fails if another app is streaming.
   Future<void> startEntertainment(String areaId) =>
       _put('entertainment_configuration/$areaId', const {'action': 'start'});

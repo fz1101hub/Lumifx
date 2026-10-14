@@ -25,16 +25,35 @@ typedef DatagramTransportFactory = Future<DatagramTransport> Function(
 /// ignores other control of those lights, and stops the stream on its own if
 /// it receives nothing for about 10 seconds.
 class EntertainmentSession {
-  EntertainmentSession._(this._client, this.area, this._dtls);
+  EntertainmentSession._(
+    this._client,
+    this.area,
+    this._dtls, {
+    required Duration statusInterval,
+  }) {
+    _done.future.ignore();
+    unawaited(_dtls.done.then(
+      (_) => _end(null),
+      onError: (Object error) => _end(error),
+    ));
+    // We never read application data, so a bridge that silently drops the
+    // stream (another app took the area, a reboot) would go unnoticed.
+    // Its REST status is the only liveness signal.
+    if (statusInterval > Duration.zero) {
+      _statusTimer = Timer.periodic(statusInterval, (_) => _checkStatus());
+    }
+  }
 
   static Future<EntertainmentSession> open({
     required HueBridgeClient client,
     required HueCredentials credentials,
     required HueEntertainmentArea area,
     DatagramTransportFactory transportFactory = UdpDatagramTransport.connect,
+    Duration statusInterval = const Duration(seconds: 5),
   }) async {
     final clientKey = credentials.clientKey;
-    if (clientKey == null || clientKey.length != 32) {
+    final psk = clientKey == null ? null : _hexDecode(clientKey);
+    if (psk == null || psk.length != 16) {
       throw const HueException(
           'Streaming needs a newer pairing. Forget the bridge and pair again.');
     }
@@ -50,9 +69,10 @@ class EntertainmentSession {
         transport: await transportFactory(
             credentials.bridge.host, hueEntertainmentPort),
         identity: utf8.encode(identity),
-        psk: _hexDecode(clientKey),
+        psk: psk,
       );
-      return EntertainmentSession._(client, area, dtls);
+      return EntertainmentSession._(client, area, dtls,
+          statusInterval: statusInterval);
     } on Object {
       await client.stopEntertainment(area.id).catchError((Object _) {});
       rethrow;
@@ -62,14 +82,49 @@ class EntertainmentSession {
   final HueBridgeClient _client;
   final HueEntertainmentArea area;
   final DtlsPskClient _dtls;
+  final _done = Completer<void>();
+  Timer? _statusTimer;
+  bool _checkingStatus = false;
   int _sequence = 0;
   bool _closed = false;
 
-  /// Completes when the bridge ends the stream, e.g. because another app
-  /// took over the area.
-  Future<void> get done => _dtls.done;
+  /// Completes when the stream ends: normally after [close] or a
+  /// close_notify, with an error when the bridge dropped it (another app
+  /// took the area, a reboot) or the connection was lost.
+  Future<void> get done => _done.future;
 
   bool get isClosed => _closed || _dtls.isClosed;
+
+  Future<void> _checkStatus() async {
+    if (_closed || _checkingStatus) {
+      return;
+    }
+    _checkingStatus = true;
+    try {
+      final active = await _client.isEntertainmentActive(area.id);
+      if (active == false && !_closed) {
+        _end(const HueException(
+            'The bridge stopped the stream (another app may have taken over '
+            'the area).'));
+      }
+    } on Object {
+      // A failed status read says nothing about the stream.
+    } finally {
+      _checkingStatus = false;
+    }
+  }
+
+  void _end(Object? error) {
+    _statusTimer?.cancel();
+    if (_done.isCompleted) {
+      return;
+    }
+    if (error == null || _closed) {
+      _done.complete();
+    } else {
+      _done.completeError(error);
+    }
+  }
 
   /// Sends one state for every given channel id.
   void send(Map<int, LightFrame> channels) {
@@ -93,7 +148,9 @@ class EntertainmentSession {
       return;
     }
     _closed = true;
+    _statusTimer?.cancel();
     await _dtls.close();
+    _end(null);
     try {
       await _client.stopEntertainment(area.id);
     } on Object {
@@ -101,10 +158,16 @@ class EntertainmentSession {
     }
   }
 
-  static Uint8List _hexDecode(String hex) => Uint8List.fromList([
-        for (var i = 0; i < hex.length; i += 2)
-          int.parse(hex.substring(i, i + 2), radix: 16),
-      ]);
+  /// Decodes a hex string, or returns null when it is not one.
+  static Uint8List? _hexDecode(String hex) {
+    if (hex.length.isOdd || !RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex)) {
+      return null;
+    }
+    return Uint8List.fromList([
+      for (var i = 0; i < hex.length; i += 2)
+        int.parse(hex.substring(i, i + 2), radix: 16),
+    ]);
+  }
 }
 
 /// Streams effect frames to an entertainment area.

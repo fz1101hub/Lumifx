@@ -97,6 +97,12 @@ app) LumiFX streams every channel at 50 messages per second:
    because the bridge closes an idle stream after ~10 s.
 5. Closing sends `close_notify` and `action: stop`.
 
+The stream is one-way, so a bridge that drops it silently (another app took
+the area, a reboot) would go unnoticed. `EntertainmentSession` therefore
+polls the area's REST `status` every 5 s and ends the session (reported in
+the player as "Streaming stopped by the bridge") when it is no longer
+`active`; a lost UDP socket or a DTLS alert ends it at once.
+
 Channels are ordered left to right (then front to back) from their
 positions, so effects that move across slots move across the room.
 

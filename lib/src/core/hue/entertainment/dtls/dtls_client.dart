@@ -31,17 +31,27 @@ abstract interface class DatagramTransport {
 
 class UdpDatagramTransport implements DatagramTransport {
   UdpDatagramTransport._(this._socket, this._peer, this._port) {
-    _socket.listen((event) {
-      if (event != RawSocketEvent.read) {
-        return;
-      }
-      final datagram = _socket.receive();
-      if (datagram != null &&
-          datagram.address == _peer &&
-          datagram.port == _port) {
-        _incoming.add(datagram.data);
-      }
-    }, onDone: _incoming.close);
+    _socket.listen(
+      (event) {
+        if (event != RawSocketEvent.read) {
+          return;
+        }
+        final datagram = _socket.receive();
+        if (datagram != null &&
+            datagram.address == _peer &&
+            datagram.port == _port) {
+          _incoming.add(datagram.data);
+        }
+      },
+      // A failed send (Wi-Fi gone) closes the socket after reporting here;
+      // without a handler it would be an uncaught error.
+      onError: (Object error) {
+        if (!_incoming.isClosed) {
+          _incoming.addError(error);
+        }
+      },
+      onDone: _incoming.close,
+    );
   }
 
   static Future<UdpDatagramTransport> connect(String host, int port) async {
@@ -84,11 +94,21 @@ class DtlsPskClient {
     this._subscription,
     this._writeCipher,
     this._readCipher,
+    this._writeSequence,
   ) {
+    // Nobody is obliged to listen to [done]; an unobserved error must not
+    // become an uncaught exception.
+    _done.future.ignore();
     _subscription.onData(_onDatagram);
+    _subscription.onError(
+        (Object _) => _finish(const DtlsException(connectionLostMessage)));
     _subscription
-        .onDone(() => _finish(const DtlsException('Transport closed')));
+        .onDone(() => _finish(const DtlsException(connectionLostMessage)));
   }
+
+  /// Message of the error [done] completes with when the network, not the
+  /// bridge, ended the stream.
+  static const connectionLostMessage = 'Connection to the bridge was lost';
 
   /// Performs the handshake over [transport]. On failure the transport is
   /// closed and a [DtlsException] (or [TimeoutException]) is thrown.
@@ -110,7 +130,13 @@ class DtlsPskClient {
       return await handshake.run(timeout, retransmitInterval);
     } on Object {
       await handshake.dispose();
-      await transport.close();
+      // The handshake may have completed in the same turn as the timeout.
+      final client = handshake.client;
+      if (client != null) {
+        await client.close();
+      } else {
+        await transport.close();
+      }
       rethrow;
     }
   }
@@ -120,7 +146,10 @@ class DtlsPskClient {
   final _GcmCipher _writeCipher;
   final _GcmCipher _readCipher;
   final _done = Completer<void>();
-  int _writeSequence = 1; // 0 was used by our Finished.
+
+  /// Next epoch-1 record sequence number; the handshake used the earlier
+  /// ones for its Finished (and its retransmissions).
+  int _writeSequence;
 
   bool get isClosed => _done.isCompleted;
 
@@ -162,11 +191,18 @@ class DtlsPskClient {
         continue;
       }
       final alert = _readCipher.open(record);
-      if (alert != null && alert.length == 2) {
-        _finish(alert[1] == 0
-            ? null
-            : DtlsException('Peer sent alert ${alert[1]}'));
+      if (alert == null || alert.length != 2) {
+        continue;
       }
+      final level = alert[0];
+      final description = alert[1];
+      if (description == 0) {
+        _finish(null); // close_notify
+      } else if (level == 2) {
+        _finish(DtlsException('The bridge ended the stream (alert '
+            '$description)'));
+      }
+      // Other warnings are ignored (RFC 5246 §7.2.2).
     }
   }
 
@@ -204,13 +240,28 @@ class _Handshake {
   final _pending = <int, HandshakeMessage>{};
   StreamSubscription<Uint8List>? _subscription;
   Timer? _retransmitTimer;
+  Duration _retransmitInterval = const Duration(milliseconds: 750);
+  Duration _nextRetransmit = const Duration(milliseconds: 750);
+
+  /// Set once the handshake succeeded, so a caller that gave up at the
+  /// same moment can still close it.
+  DtlsPskClient? client;
+
+  /// Out-of-order messages kept at most this many; more means garbage.
+  static const _maxPending = 16;
 
   _State _state = _State.awaitingServerHello;
   BytesBuilder _transcript = BytesBuilder();
   int _epoch0Sequence = 0;
+
+  /// Epoch-1 sequence numbers: each (re)transmission of our Finished takes
+  /// a fresh one, otherwise the server's anti-replay check drops it and a
+  /// lost server Finished could never be recovered.
+  int _epoch1Sequence = 0;
   int _messageSeq = 0;
   int? _nextServerSeq;
   Uint8List? _cookie;
+  DateTime? _cookieSentAt;
   Uint8List? _serverRandom;
   _GcmCipher? _writeCipher;
   _GcmCipher? _readCipher;
@@ -221,15 +272,20 @@ class _Handshake {
   Uint8List Function()? _flight;
 
   Future<DtlsPskClient> run(Duration timeout, Duration retransmitInterval) {
+    _retransmitInterval = retransmitInterval;
     _subscription = transport.incoming.listen(
       _onDatagram,
-      onDone: () => _fail('Transport closed during handshake'),
+      onError: (Object _) => _fail(DtlsPskClient.connectionLostMessage),
+      onDone: () => _fail(DtlsPskClient.connectionLostMessage),
     );
     _sendClientHello(Uint8List(0));
-    _retransmitTimer = Timer.periodic(retransmitInterval, (_) => _sendFlight());
     return _completer.future.timeout(
       timeout,
-      onTimeout: () => throw const DtlsException('Handshake timed out'),
+      onTimeout: () => throw DtlsException(_state == _State.awaitingFinished
+          // Servers drop a Finished they cannot decrypt without a word.
+          ? 'The bridge did not accept the streaming key. Try again; if it '
+              'keeps failing, forget the bridge and pair again.'
+          : 'The bridge did not answer the streaming handshake'),
     );
   }
 
@@ -238,10 +294,21 @@ class _Handshake {
     await _subscription?.cancel();
   }
 
-  void _sendFlight() {
-    if (!_completer.isCompleted && _flight != null) {
-      transport.send(_flight!());
+  /// Sends the current flight and arms its retransmission, doubling the
+  /// wait each time (RFC 6347 §4.2.4.1). A new flight resets the backoff.
+  void _sendFlight({bool newFlight = false}) {
+    if (_completer.isCompleted || _flight == null) {
+      return;
     }
+    if (newFlight) {
+      _nextRetransmit = _retransmitInterval;
+    }
+    transport.send(_flight!());
+    _retransmitTimer?.cancel();
+    _retransmitTimer = Timer(_nextRetransmit, () {
+      _nextRetransmit *= 2;
+      _sendFlight();
+    });
   }
 
   Uint8List _plainRecord(int type, List<int> fragment) => DtlsRecord(
@@ -270,18 +337,20 @@ class _Handshake {
     // ServerHello; earlier cookie-less attempts are excluded (RFC 6347 §4.2.6).
     _transcript = BytesBuilder()..add(message);
     _flight = () => _plainRecord(ContentType.handshake, message);
-    _sendFlight();
+    _sendFlight(newFlight: true);
   }
 
   void _onDatagram(Uint8List datagram) {
-    try {
-      for (final record in DtlsRecord.parseDatagram(datagram)) {
+    for (final record in DtlsRecord.parseDatagram(datagram)) {
+      try {
         _onRecord(record);
+      } on DtlsException catch (error) {
+        _fail(error.message);
+        return;
+      } on FormatException {
+        // A malformed record is dropped silently, per DTLS; the others in
+        // the datagram are still worth reading.
       }
-    } on DtlsException catch (error) {
-      _fail(error.message);
-    } on FormatException {
-      // Malformed records are dropped silently, per DTLS.
     }
   }
 
@@ -299,7 +368,8 @@ class _Handshake {
 
     switch (record.type) {
       case ContentType.alert:
-        if (fragment.length == 2) {
+        // Only fatal alerts (level 2) end the handshake.
+        if (fragment.length == 2 && fragment[0] == 2) {
           throw DtlsException(
               'Handshake rejected by the bridge (alert ${fragment[1]})');
         }
@@ -317,13 +387,21 @@ class _Handshake {
     if (message.type == HandshakeType.helloVerifyRequest) {
       final reader = ByteReader(message.body)..skip(2);
       final cookie = Uint8List.fromList(reader.vector8());
-      // A duplicate (answering a retransmitted ClientHello) must not restart
-      // the transcript.
-      if (_state == _State.awaitingServerHello &&
-          !_sameBytes(cookie, _cookie)) {
-        _cookie = cookie;
-        _sendClientHello(cookie);
+      if (_state != _State.awaitingServerHello || _sameBytes(cookie, _cookie)) {
+        return; // a duplicate must not restart the transcript
       }
+      // A second, different cookie right after we answered the first one
+      // is most likely a late reply to our retransmitted ClientHello; the
+      // server may already be processing the cookie we sent. Only switch
+      // cookies once the current one has had a full retransmit interval.
+      final sentAt = _cookieSentAt;
+      if (sentAt != null &&
+          DateTime.now().difference(sentAt) < _retransmitInterval) {
+        return;
+      }
+      _cookie = cookie;
+      _cookieSentAt = DateTime.now();
+      _sendClientHello(cookie);
       return;
     }
     if (message.type == HandshakeType.serverHello) {
@@ -334,7 +412,9 @@ class _Handshake {
     }
     final next = _nextServerSeq;
     if (next == null || message.messageSeq > next) {
-      _pending[message.messageSeq] = message;
+      if (_pending.length < _maxPending) {
+        _pending[message.messageSeq] = message;
+      }
       return;
     }
     if (message.messageSeq < next) {
@@ -427,13 +507,13 @@ class _Handshake {
 
     _state = _State.awaitingFinished;
     _flight = () {
-      // Our Finished is always epoch 1, sequence 0: a retransmission repeats
-      // the same record, so the server can drop it as a duplicate.
+      final sequence = _epoch1Sequence++;
       final encryptedFinished = DtlsRecord(
         type: ContentType.handshake,
         epoch: 1,
-        sequence: 0,
-        fragment: writeCipher.seal(1, 0, ContentType.handshake, finished),
+        sequence: sequence,
+        fragment:
+            writeCipher.seal(1, sequence, ContentType.handshake, finished),
       ).encode();
       return Uint8List.fromList([
         ..._plainRecord(ContentType.handshake, keyExchange),
@@ -441,7 +521,7 @@ class _Handshake {
         ...encryptedFinished,
       ]);
     };
-    _sendFlight();
+    _sendFlight(newFlight: true);
   }
 
   void _onServerFinished(HandshakeMessage message) {
@@ -452,17 +532,20 @@ class _Handshake {
     }
     if (difference != 0) {
       throw const DtlsException(
-          'Bridge could not prove it knows the key; pair LumiFX again');
+          "The bridge's reply could not be verified. Try again; if it keeps "
+          'failing, forget the bridge and pair again.');
     }
     _retransmitTimer?.cancel();
     final subscription = _subscription!;
     _subscription = null;
-    _completer.complete(DtlsPskClient._(
+    final client = this.client = DtlsPskClient._(
       transport,
       subscription,
       _writeCipher!,
       _readCipher!,
-    ));
+      _epoch1Sequence,
+    );
+    _completer.complete(client);
   }
 
   void _fail(String message) {
