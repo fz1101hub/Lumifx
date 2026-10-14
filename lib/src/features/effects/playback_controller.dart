@@ -64,6 +64,10 @@ class PlaybackController extends ChangeNotifier {
   /// has been cancelled.
   int _generation = 0;
 
+  /// The previous stop or cancellation still releasing its resources; a new
+  /// start waits for it, so its `action: stop` cannot kill the new stream.
+  Future<void>? _teardown;
+
   /// Things worth telling the user, e.g. why playback could not start.
   Stream<String> get messages => _messages.stream;
 
@@ -154,11 +158,21 @@ class PlaybackController extends ChangeNotifier {
 
     EntertainmentLightOutput? streaming;
     try {
+      final teardown = _teardown;
+      if (teardown != null) {
+        await teardown;
+        if (cancelled()) {
+          return;
+        }
+      }
       if (!await _startListening()) {
         if (!cancelled()) {
           _setStatus(PlaybackStatus.idle);
         }
         return;
+      }
+      if (cancelled()) {
+        return await _cleanUpCancelled(null);
       }
 
       var lightIds = [for (var i = 0; i < previewLightCount; i++) 'p$i'];
@@ -217,7 +231,9 @@ class PlaybackController extends ChangeNotifier {
       final music = _music;
       _restore = _preferences.restoreLights ? restore : const {};
       _slotNames = names;
-      _player = EffectPlayer(
+      // Assigned before play(): if the first tick throws, stop() can still
+      // find and stop the player (and its timer).
+      final player = _player = EffectPlayer(
         effect: effect,
         lightIds: lightIds,
         output: output,
@@ -227,7 +243,8 @@ class PlaybackController extends ChangeNotifier {
         audio: music == null
             ? null
             : () => music.isListening ? music.features : null,
-      )..play();
+      );
+      player.play();
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
       _setStatus(PlaybackStatus.playing);
@@ -235,6 +252,9 @@ class PlaybackController extends ChangeNotifier {
       if (cancelled()) {
         return _cleanUpCancelled(streaming);
       }
+      final player = _player;
+      _player = null;
+      await player?.stop();
       await streaming?.close();
       return _abortStart('Could not start: ${describeError(error)}');
     }
@@ -257,7 +277,12 @@ class PlaybackController extends ChangeNotifier {
     if (_status != PlaybackStatus.paused || player == null) {
       return;
     }
-    if (!await _startListening() || _player != player) {
+    if (!await _startListening()) {
+      return;
+    }
+    if (_player != player) {
+      // Stopped or retargeted while the microphone was starting.
+      await _music?.stop();
       return;
     }
     player.play();
@@ -266,7 +291,7 @@ class PlaybackController extends ChangeNotifier {
   }
 
   /// Stops playback and, unless [restore] is false, puts the lights back.
-  Future<void> stop({bool restore = true}) async {
+  Future<void> stop({bool restore = true}) {
     _generation++;
     final player = _player;
     final commands = _restore;
@@ -274,13 +299,32 @@ class PlaybackController extends ChangeNotifier {
     _slotNames = null;
     _restore = const {};
     _setStatus(PlaybackStatus.idle);
-    await player?.stop();
-    await _music?.stop();
-    unawaited(_screenWake.keepOn(false));
-    final client = _bridge.client;
-    if (restore && commands.isNotEmpty && client != null) {
-      unawaited(restoreLights(client, commands));
-    }
+    final previous = _teardown;
+    late final Future<void> current;
+    current = () async {
+      if (previous != null) {
+        await previous;
+      }
+      try {
+        await player?.stop();
+      } finally {
+        try {
+          await _music?.stop();
+        } finally {
+          unawaited(_screenWake.keepOn(false));
+          final client = _bridge.client;
+          if (restore && commands.isNotEmpty && client != null) {
+            unawaited(restoreLights(client, commands));
+          }
+        }
+      }
+    }()
+        .whenComplete(() {
+      if (identical(_teardown, current)) {
+        _teardown = null;
+      }
+    });
+    return _teardown = current;
   }
 
   /// The app went to the background: it cannot keep driving the lights, so
@@ -323,8 +367,12 @@ class PlaybackController extends ChangeNotifier {
     if (!effect.usesMicrophone) {
       return true;
     }
-    final music =
-        _music ??= MusicSyncController(_audioInput)..sensitivity = _sensitivity;
+    var music = _music;
+    if (music == null) {
+      music =
+          _music = MusicSyncController(_audioInput)..sensitivity = _sensitivity;
+      music.addListener(_onMusicChanged);
+    }
     await music.start();
     switch (music.status) {
       case MusicSyncStatus.listening:
@@ -345,10 +393,35 @@ class PlaybackController extends ChangeNotifier {
   }
 
   /// A stop or dispose happened while starting: undo what was set up.
-  Future<void> _cleanUpCancelled(EntertainmentLightOutput? streaming) async {
-    await streaming?.close();
-    if (_status == PlaybackStatus.idle || _disposed) {
-      await _music?.stop();
+  Future<void> _cleanUpCancelled(EntertainmentLightOutput? streaming) {
+    final previous = _teardown;
+    late final Future<void> current;
+    current = () async {
+      if (previous != null) {
+        await previous;
+      }
+      await streaming?.close();
+      if (_status == PlaybackStatus.idle || _disposed) {
+        await _music?.stop();
+      }
+    }()
+        .whenComplete(() {
+      if (identical(_teardown, current)) {
+        _teardown = null;
+      }
+    });
+    return _teardown = current;
+  }
+
+  /// The microphone stopped on its own while an effect plays: say so, since
+  /// the lights would otherwise just sit at the dim floor.
+  void _onMusicChanged() {
+    if (_disposed || _music?.status != MusicSyncStatus.failed) {
+      return;
+    }
+    if (_status == PlaybackStatus.playing) {
+      _message('The microphone stopped (another app may be using it). '
+          'Press Stop, then Play, to listen again.');
     }
   }
 
@@ -385,6 +458,7 @@ class PlaybackController extends ChangeNotifier {
     _disposed = true;
     _bridge.removeListener(_onBridgeChanged);
     final music = _music;
+    music?.removeListener(_onMusicChanged);
     unawaited(stop().whenComplete(() => music?.dispose()));
     unawaited(_messages.close());
     super.dispose();

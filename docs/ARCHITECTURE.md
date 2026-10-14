@@ -132,7 +132,13 @@ stream (`max_streams`), spread around the chosen point.
   280 ms apart; tempo is 60 / median of the last 8 intervals.
 - `MusicSyncController` keeps the latest features and ages the beat timing
   to the moment the player reads them. The microphone runs only while a
-  Music Sync effect is playing; audio is never stored or sent.
+  Music Sync effect is playing; audio is never stored or sent. The audio
+  session never silences other apps: no audio-focus request on Android
+  (interruptions do not pause the capture), a `mixWithOthers`
+  play-and-record session on iOS that resumes by itself after a call, and
+  no Bluetooth routing (a Bluetooth speaker would otherwise drop to the
+  hands-free profile). A stream that stalls decays to silence; one that
+  ends is reported.
 - Analysis is verified on synthetic kick tracks, noisy backgrounds, steady
   noise and pure tones (`test/core/audio`).
 

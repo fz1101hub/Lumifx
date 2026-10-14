@@ -51,6 +51,7 @@ class RateLimitedLightOutput implements LightOutput {
 
   final _lastSent = <String, LightFrame>{};
   final _lastSentAt = <String, DateTime>{};
+  final _pending = <Future<void>>{};
   double _tokens = 0;
   int _inFlight = 0;
   bool _closed = false;
@@ -97,7 +98,10 @@ class RateLimitedLightOutput implements LightOutput {
       _lastSent[candidate.id] = frame;
       _lastSentAt[candidate.id] = now;
       _inFlight++;
-      unawaited(_send(candidate.id, frame, transition));
+      late final Future<void> sending;
+      sending = _send(candidate.id, frame, transition)
+          .whenComplete(() => _pending.remove(sending));
+      _pending.add(sending);
     }
   }
 
@@ -112,9 +116,15 @@ class RateLimitedLightOutput implements LightOutput {
     }
   }
 
+  /// Stops sending and waits (briefly) for commands already on their way,
+  /// so that whatever is sent next, e.g. a restore, lands after them.
   @override
   Future<void> close() async {
     _closed = true;
+    if (_pending.isNotEmpty) {
+      await Future.wait(_pending.toList())
+          .timeout(const Duration(seconds: 3), onTimeout: () => const []);
+    }
   }
 
   static Duration _clampTransition(Duration value) {

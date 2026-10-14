@@ -245,6 +245,40 @@ void main() {
     controller.dispose();
   });
 
+  test('a stop while the microphone is starting wins, even in preview',
+      () async {
+    final (controller, _, wake) = await _setUp(
+      music: true,
+      audio: FakeAudioInput(startDelay: const Duration(milliseconds: 200)),
+    );
+    await controller.changeTarget(null); // preview: no bridge round trip
+    final starting = controller.start();
+    await _wait(40);
+    expect(controller.status, PlaybackStatus.starting);
+    await controller.stop();
+    await starting;
+    await _wait(50);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(controller.player, isNull);
+    expect(wake.calls.contains(true), isFalse);
+    controller.dispose();
+  });
+
+  test('a microphone that dies mid-effect is reported', () async {
+    final input = FakeAudioInput();
+    final (controller, _, _) = await _setUp(music: true, audio: input);
+    await controller.changeTarget(null);
+    final messages = <String>[];
+    controller.messages.listen(messages.add);
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    await input.endStream();
+    await _wait(20);
+    expect(messages.single, contains('microphone stopped'));
+    await controller.stop();
+    controller.dispose();
+  });
+
   test('a refused microphone keeps Music Sync idle and explains why', () async {
     final (controller, _, _) =
         await _setUp(music: true, audio: FakeAudioInput(granted: false));

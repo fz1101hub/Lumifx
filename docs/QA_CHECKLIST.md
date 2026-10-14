@@ -73,8 +73,15 @@ build before every store release.
 - [ ] Quiet room: the lights stay near the dim floor, no random flashes.
 - [ ] Sensitivity slider changes the response.
 - [ ] Pause releases the microphone (the system indicator disappears).
-- [ ] A phone call or another app taking the microphone does not crash
-      LumiFX; after the interruption, Stop and Play recover.
+- [ ] Music playing from Spotify/Apple Music on the same phone keeps
+      playing when Music Sync starts (no pause, no volume drop), on both
+      platforms, with the phone speaker and with a Bluetooth speaker (the
+      speaker must stay in high-quality A2DP, not switch to the call
+      profile).
+- [ ] A phone call during Music Sync: on iOS the lights follow the music
+      again by themselves after the call; on Android the capture continues.
+      If the microphone is lost for good (another app takes it), the app
+      says so and Stop then Play recovers.
 
 ## Network edge cases
 
