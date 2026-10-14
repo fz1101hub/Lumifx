@@ -100,4 +100,12 @@ void main() {
         .first;
     expect(loud.brightness, greaterThan(quiet.brightness + 0.4));
   });
+
+  test('NaN audio levels count as silence, not full brightness', () {
+    final renderer = EffectRenderer(_music('energy'), slotCount: 1);
+    final frame = renderer
+        .render(Duration.zero, audio: const AudioFeatures(level: double.nan))
+        .single;
+    expect(frame.brightness, lessThan(0.01));
+  });
 }

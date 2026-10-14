@@ -22,8 +22,7 @@ class EffectPlayer {
     EffectControls controls = const EffectControls(),
     this.tick = const Duration(milliseconds: 100),
     this.audio,
-  })  : assert(lightIds.isNotEmpty),
-        _renderer = EffectRenderer(
+  }) : _renderer = EffectRenderer(
           effect,
           slotCount: lightIds.length,
           seed: seed,
@@ -44,6 +43,7 @@ class EffectPlayer {
   Duration _lastWallTime = Duration.zero;
   Duration _effectTime = Duration.zero;
   PlaybackState _state = PlaybackState.stopped;
+  bool _disposed = false;
   List<LightFrame> _current = const [];
 
   LightingEffect get effect => _renderer.effect;
@@ -58,7 +58,7 @@ class EffectPlayer {
   set controls(EffectControls value) => _renderer.controls = value;
 
   void play() {
-    if (_state == PlaybackState.playing) {
+    if (_state == PlaybackState.playing || _disposed) {
       return;
     }
     _state = PlaybackState.playing;
@@ -80,8 +80,10 @@ class EffectPlayer {
     _stopTimer();
   }
 
+  /// Stops for good: the output is closed and play() becomes a no-op.
   Future<void> stop() async {
     _state = PlaybackState.stopped;
+    _disposed = true;
     _stopTimer();
     await output.close();
     await _frames.close();
@@ -90,6 +92,9 @@ class EffectPlayer {
   /// Moves the effect forward by [wallTime] of real time and renders.
   /// Called by the internal timer; public so tests can drive time.
   void advance(Duration wallTime) {
+    if (_disposed) {
+      return;
+    }
     final speed = controls.speed.clamp(0.05, 5.0);
     _effectTime += wallTime * speed;
     _current = _renderer.render(_effectTime, audio: audio?.call());

@@ -343,7 +343,7 @@ const deepSeaGlow = LightingEffect(
         'palette': <String>['#E8FF4A'],
         'pattern': 'chase',
         'decay': 0.4,
-        'brightnessMin': 0.0,
+        'brightnessMin': 0.1,
         'brightness': 0.7,
         'chance': 0.8,
       },

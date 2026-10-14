@@ -62,7 +62,42 @@ void main() {
     });
   });
 
+  test('play after stop is a no-op (no leaked timer)', () async {
+    final output = _RecordingOutput();
+    final player = EffectPlayer(
+      effect: _sweep,
+      lightIds: const ['a'],
+      output: output,
+      tick: const Duration(milliseconds: 10),
+    );
+    await player.stop();
+    player.play();
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    expect(output.updates, isEmpty);
+    expect(player.state, PlaybackState.stopped);
+  });
+
   group('RateLimitedLightOutput', () {
+    test('a failed command is retried on the next tick', () async {
+      var fail = true;
+      final sent = <String>[];
+      final output = RateLimitedLightOutput(
+        send: (id, frame, transition) async {
+          sent.add(id);
+          if (fail) {
+            throw StateError('429');
+          }
+        },
+      );
+      const frame = LightFrame(LightColor.white, 0.5);
+      output.update({'a': frame}, const Duration(milliseconds: 200));
+      await Future<void>.delayed(Duration.zero);
+      fail = false;
+      output.update({'a': frame}, const Duration(milliseconds: 200));
+      await Future<void>.delayed(Duration.zero);
+      expect(sent, ['a', 'a']);
+    });
+
     test('never exceeds the command budget', () async {
       final sent = <String>[];
       var now = DateTime(2026);

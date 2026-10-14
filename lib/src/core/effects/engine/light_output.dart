@@ -111,6 +111,9 @@ class RateLimitedLightOutput implements LightOutput {
       lastError = null;
     } on Object catch (error) {
       lastError = error;
+      // Forget what we thought the light showed, so the next tick retries
+      // even if the desired frame has not moved.
+      _lastSent.remove(id);
     } finally {
       _inFlight--;
     }

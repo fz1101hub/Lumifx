@@ -53,14 +53,17 @@ class EffectRenderer {
     required this.slotCount,
     this.seed = 0,
     this.controls = const EffectControls(),
-  })  : assert(slotCount > 0, 'An effect needs at least one light'),
-        _cycle = effect.cycleLength > _minimumCycle
+  })  : _cycle = effect.cycleLength > _minimumCycle
             ? effect.cycleLength
             : _minimumCycle,
         _ambientIndices = [
           for (var i = 0; i < effect.events.length; i++)
             if (effect.events[i].type == EffectEventTypes.ambientPalette) i,
-        ]..sort((a, b) => effect.events[a].at.compareTo(effect.events[b].at));
+        ]..sort((a, b) => effect.events[a].at.compareTo(effect.events[b].at)) {
+    if (slotCount < 1) {
+      throw ArgumentError.value(slotCount, 'slotCount', 'needs at least 1');
+    }
+  }
 
   static const _minimumCycle = Duration(seconds: 1);
 
@@ -163,7 +166,9 @@ class EffectRenderer {
         current = event;
       }
     }
-    return current ?? effect.events[_ambientIndices.last];
+    // When looping, the last ambient of the previous pass is still showing.
+    return current ??
+        (effect.isLooping ? effect.events[_ambientIndices.last] : null);
   }
 
   void _renderAmbient(
@@ -406,6 +411,11 @@ class EffectRenderer {
     final kick = audio.secondsSinceBeat.isFinite
         ? math.exp(-audio.secondsSinceBeat / decay)
         : 0.0;
+    // A NaN level would clamp to full brightness; treat it as silence.
+    final level = _finite(audio.level);
+    final bass = _finite(audio.bass);
+    final mid = _finite(audio.mid);
+    final treble = _finite(audio.treble);
     LightColor colorAt(int index) => palette[index % palette.length];
 
     for (var slot = 0; slot < slotCount; slot++) {
@@ -420,15 +430,12 @@ class EffectRenderer {
           frame = LightFrame(
             colorAt(beat - distance),
             floor +
-                (1 - floor) *
-                    tail *
-                    math.max(kick, 0.35) *
-                    (0.4 + 0.6 * audio.level),
+                (1 - floor) * tail * math.max(kick, 0.35) * (0.4 + 0.6 * level),
           );
         case 'spectrum':
           final energy = position < 0.5
-              ? audio.bass + (audio.mid - audio.bass) * position * 2
-              : audio.mid + (audio.treble - audio.mid) * (position - 0.5) * 2;
+              ? bass + (mid - bass) * position * 2
+              : mid + (treble - mid) * (position - 0.5) * 2;
           final shade = position * (palette.length - 1);
           final index = shade.floor();
           frame = LightFrame(
@@ -437,20 +444,19 @@ class EffectRenderer {
           );
         case 'energy':
           // Bright, airy mixes shift towards the end of the palette.
-          final balance = (audio.mid * 0.5 + audio.treble) /
-              (audio.bass + audio.mid + audio.treble + 1e-6);
+          final balance = (mid * 0.5 + treble) / (bass + mid + treble + 1e-6);
           final drift = balance + 0.08 * math.sin(seconds * 0.7 + slot * 1.3);
           final shade = drift.clamp(0.0, 1.0) * (palette.length - 1);
           final index = shade.floor();
           frame = LightFrame(
             LightColor.lerp(colorAt(index), colorAt(index + 1), shade - index),
-            floor + (1 - floor) * (0.8 * audio.level + 0.2 * kick),
+            floor + (1 - floor) * (0.8 * level + 0.2 * kick),
           );
         case 'pulse':
         default:
           frame = LightFrame(
             colorAt(beat + (slot.isEven ? 0 : 1) * (slotCount > 2 ? 1 : 0)),
-            floor + (1 - floor) * math.max(kick, 0.3 * audio.bass),
+            floor + (1 - floor) * math.max(kick, 0.3 * bass),
           );
       }
       frames[slot] = frames[slot].blend(frame, intensity);
@@ -461,7 +467,7 @@ class EffectRenderer {
   void _renderBeat(_EventContext context, List<LightFrame> frames) {
     final p = context.event.parameters;
     final palette = _palette(p);
-    final bpm = _number(p, 'bpm', 120).clamp(20, 300);
+    final bpm = _number(p, 'bpm', 120).clamp(20, 600);
     final decay = _number(p, 'decay', 0.5).clamp(0.05, 1.0);
     final floor = _number(p, 'brightnessMin', 0.05);
     final peak = _number(p, 'brightness', 1);
@@ -471,11 +477,19 @@ class EffectRenderer {
     final beat = beats.floor();
     final phase = beats - beat;
     final pulse = phase < decay ? math.pow(1 - phase / decay, 2).toDouble() : 0;
-    // A fixed 100 ms ramp, so consecutive beat sections join without a dip.
+    // A fixed 100 ms ramp in, and out only when nothing takes over at the
+    // end, so consecutive beat sections join without a dip.
     final ramp = context.event.duration == Duration.zero
         ? 0.5
         : (100000 / context.event.duration.inMicroseconds).clamp(0.0, 0.5);
-    final edge = _edgeFade(context.progress, ramp) * controls.intensity;
+    final continues = effect.events.any((other) =>
+        other != context.event &&
+        other.type == EffectEventTypes.beat &&
+        other.at == context.event.end);
+    final edge = (continues
+            ? _smoothstep(context.progress / ramp)
+            : _edgeFade(context.progress, ramp)) *
+        controls.intensity;
 
     for (var slot = 0; slot < slotCount; slot++) {
       final lit = switch (pattern) {
@@ -600,15 +614,34 @@ Duration _millis(Map<String, Object> p, String key, int fallback) {
   return Duration(milliseconds: millis < 50 ? 50 : millis);
 }
 
-LightColor _color(Map<String, Object> p, String key, LightColor fallback) {
-  final value = p[key];
-  return value is String ? LightColor.fromHex(value) : fallback;
+double _finite(double value) => value.isFinite ? value.clamp(0.0, 1.0) : 0.0;
+
+/// A colour from `#RRGGBB`, or null for anything else; effects may one day
+/// come from files, and a bad entry must not crash playback.
+LightColor? _parseColor(Object? value) {
+  if (value is! String) {
+    return null;
+  }
+  try {
+    return LightColor.fromHex(value);
+  } on FormatException {
+    return null;
+  }
 }
+
+LightColor _color(Map<String, Object> p, String key, LightColor fallback) =>
+    _parseColor(p[key]) ?? fallback;
 
 List<LightColor> _palette(Map<String, Object> p) {
   final value = p['palette'];
-  if (value is List && value.isNotEmpty) {
-    return [for (final hex in value) LightColor.fromHex(hex as String)];
+  if (value is List) {
+    final colors = [
+      for (final entry in value)
+        if (_parseColor(entry) case final color?) color,
+    ];
+    if (colors.isNotEmpty) {
+      return colors;
+    }
   }
   return const [LightColor.white];
 }

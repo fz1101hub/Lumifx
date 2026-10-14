@@ -355,15 +355,67 @@ void main() {
 
     test('every effect renders valid frames for its whole cycle', () {
       for (final effect in effectCatalog) {
-        final renderer = EffectRenderer(effect, slotCount: 4, seed: 3);
-        final step = renderer.cycleLength ~/ 200;
-        for (var t = Duration.zero; t < renderer.cycleLength; t += step) {
-          for (final frame in renderer.render(t)) {
-            expect(frame.brightness, inInclusiveRange(0, 1),
-                reason: '${effect.id} at $t');
+        for (final slots in [1, 2, 4, 9]) {
+          final renderer = EffectRenderer(effect, slotCount: slots, seed: 3);
+          final step = renderer.cycleLength ~/ 200;
+          for (var t = Duration.zero; t < renderer.cycleLength; t += step) {
+            for (final frame in renderer.render(t)) {
+              expect(frame.brightness, inInclusiveRange(0, 1),
+                  reason: '${effect.id} at $t with $slots lights');
+            }
           }
         }
       }
+    });
+
+    test('zero lights is rejected', () {
+      expect(() => EffectRenderer(emeraldTrickster, slotCount: 0),
+          throwsArgumentError);
+    });
+
+    test('malformed colours fall back instead of crashing', () {
+      final effect = _effect([
+        const EffectEvent(
+          at: Duration.zero,
+          duration: Duration(seconds: 5),
+          type: EffectEventTypes.ambientPalette,
+          parameters: {
+            'palette': <Object>['#FF0000', 'nope', 12, '#00FF00'],
+            'brightnessMin': 0.5,
+            'brightnessMax': 0.5,
+          },
+        ),
+        const EffectEvent(
+          at: Duration(seconds: 1),
+          duration: Duration(seconds: 1),
+          type: EffectEventTypes.magicFlash,
+          parameters: {'color': 'bad', 'target': 'all'},
+        ),
+      ]);
+      final frames = EffectRenderer(effect, slotCount: 2)
+          .render(const Duration(milliseconds: 1100));
+      expect(frames, hasLength(2));
+    });
+
+    test('consecutive beat sections do not dip at the boundary', () {
+      final effect = _effect([
+        const EffectEvent(
+          at: Duration.zero,
+          duration: Duration(seconds: 2),
+          type: EffectEventTypes.beat,
+          parameters: {'bpm': 600, 'brightnessMin': 0.5, 'decay': 1.0},
+        ),
+        const EffectEvent(
+          at: Duration(seconds: 2),
+          duration: Duration(seconds: 2),
+          type: EffectEventTypes.beat,
+          parameters: {'bpm': 600, 'brightnessMin': 0.5, 'decay': 1.0},
+        ),
+      ]);
+      final renderer = EffectRenderer(effect, slotCount: 1);
+      final atBoundary =
+          renderer.render(const Duration(milliseconds: 1995)).single;
+      expect(atBoundary.brightness, greaterThan(0.4));
     });
   });
 }
