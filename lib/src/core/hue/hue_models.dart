@@ -17,7 +17,11 @@ class HueBridgeInfo {
   final String host;
   final String? name;
 
-  String get displayName => name ?? 'Hue Bridge ${id.substring(id.length - 6)}';
+  String get displayName =>
+      name ?? 'Hue Bridge ${id.length > 6 ? id.substring(id.length - 6) : id}';
+
+  /// Bridge ids are 16 hex digits (the bridge's MAC with fffe inserted).
+  static bool isValidId(String id) => RegExp(r'^[0-9a-f]{16}$').hasMatch(id);
 
   @override
   bool operator ==(Object other) =>
@@ -105,6 +109,8 @@ class HueLight {
     final dimming = json['dimming'] == null ? null : _map(json['dimming']);
     final color = json['color'] == null ? null : _map(json['color']);
     final xy = color == null ? null : _map(color['xy']);
+    final x = xy?['x'];
+    final y = xy?['y'];
     final temperature = json['color_temperature'] == null
         ? null
         : _map(json['color_temperature']);
@@ -116,9 +122,7 @@ class HueLight {
       deviceId: _map(json['owner'])['rid'] as String?,
       isOn: on['on'] as bool? ?? false,
       brightness: (dimming?['brightness'] as num?)?.toDouble(),
-      color: xy == null
-          ? null
-          : (x: (xy['x']! as num).toDouble(), y: (xy['y']! as num).toDouble()),
+      color: x is num && y is num ? (x: x.toDouble(), y: y.toDouble()) : null,
       supportsColor: color != null,
       supportsColorTemperature: temperature != null,
       // Only meaningful while the light is in color-temperature mode.

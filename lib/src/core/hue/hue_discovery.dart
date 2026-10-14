@@ -34,13 +34,19 @@ class MdnsBridgeDiscovery implements BridgeDiscovery {
     }
 
     final found = StreamController<HueBridgeInfo>();
+    final seen = <String>{};
     void onService(nsd.Service service, nsd.ServiceStatus status) {
-      if (status != nsd.ServiceStatus.found) {
+      if (status != nsd.ServiceStatus.found || found.isClosed) {
         return;
       }
-      final bridge = _toBridge(service);
-      if (bridge != null) {
-        found.add(bridge);
+      // Never throw inside the plugin's callback.
+      try {
+        final bridge = _toBridge(service);
+        if (bridge != null && seen.add(bridge.id)) {
+          found.add(bridge);
+        }
+      } on Object {
+        // A malformed advertisement is not a bridge.
       }
     }
 
@@ -67,11 +73,11 @@ class MdnsBridgeDiscovery implements BridgeDiscovery {
     if (host == null || rawId == null) {
       return null;
     }
-    return HueBridgeInfo(
-      id: utf8.decode(rawId).toLowerCase(),
-      host: host,
-      name: service.name,
-    );
+    final id = utf8.decode(rawId, allowMalformed: true).trim().toLowerCase();
+    if (!HueBridgeInfo.isValidId(id)) {
+      return null;
+    }
+    return HueBridgeInfo(id: id, host: host, name: service.name);
   }
 }
 
@@ -101,7 +107,9 @@ class CloudBridgeDiscovery implements BridgeDiscovery {
       for (final entry in body.whereType<Map<String, Object?>>()) {
         final id = entry['id'];
         final host = entry['internalipaddress'];
-        if (id is String && host is String) {
+        if (id is String &&
+            host is String &&
+            HueBridgeInfo.isValidId(id.toLowerCase())) {
           yield HueBridgeInfo(id: id.toLowerCase(), host: host);
         }
       }
@@ -128,25 +136,44 @@ class CompositeBridgeDiscovery implements BridgeDiscovery {
     Duration timeout = const Duration(seconds: 5),
   }) {
     final seen = <String>{};
-    final controller = StreamController<HueBridgeInfo>();
+    final subscriptions = <StreamSubscription<HueBridgeInfo>>[];
+    late final StreamController<HueBridgeInfo> controller;
     var pending = strategies.length;
+    void done() {
+      if (--pending == 0 && !controller.isClosed) {
+        controller.close();
+      }
+    }
+
+    controller = StreamController<HueBridgeInfo>(
+      // Cancelling the composite stops the strategies too, so the mDNS
+      // browse does not keep running after the setup screen is left.
+      onCancel: () async {
+        for (final subscription in subscriptions) {
+          await subscription.cancel();
+        }
+      },
+    );
     if (pending == 0) {
       controller.close();
     }
     for (final strategy in strategies) {
-      strategy.discover(timeout: timeout).listen(
-            (bridge) {
-              if (seen.add(bridge.id)) {
-                controller.add(bridge);
-              }
-            },
-            onError: (Object _) {},
-            onDone: () {
-              if (--pending == 0) {
-                controller.close();
-              }
-            },
-          );
+      final Stream<HueBridgeInfo> stream;
+      try {
+        stream = strategy.discover(timeout: timeout);
+      } on Object {
+        done();
+        continue;
+      }
+      subscriptions.add(stream.listen(
+        (bridge) {
+          if (seen.add(bridge.id) && !controller.isClosed) {
+            controller.add(bridge);
+          }
+        },
+        onError: (Object _) {},
+        onDone: done,
+      ));
     }
     return controller.stream;
   }

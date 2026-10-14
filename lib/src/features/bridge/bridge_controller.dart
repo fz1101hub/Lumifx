@@ -65,6 +65,10 @@ class BridgeController extends ChangeNotifier {
   BridgeStatus _status = BridgeStatus.initializing;
   HueCredentials? _credentials;
   HueBridgeClient? _client;
+
+  /// Trust policy of [_client], consulted to tell a moved bridge from a
+  /// changed certificate.
+  BridgeCertificatePin? _pin;
   HueHome? _home;
   String? _error;
   bool _pairingCancelled = false;
@@ -83,6 +87,12 @@ class BridgeController extends ChangeNotifier {
     HueCredentials? saved;
     try {
       saved = await _store.load();
+    } on CredentialStoreException {
+      // Storage is unavailable right now; keep the pairing and let the user
+      // retry instead of showing the app as unpaired.
+      _error = 'Could not read the saved bridge connection. Try again.';
+      _setStatus(BridgeStatus.unreachable);
+      return;
     } on Object {
       // Never leave the app on the loading state because storage failed.
       saved = null;
@@ -96,9 +106,16 @@ class BridgeController extends ChangeNotifier {
   }
 
   /// Confirms that [host] is a Hue Bridge; used for manual entry.
-  Future<HueBridgeInfo> probe(String host) {
-    final client = _clientFactory(BridgeCertificatePin(host: host), null);
-    return client.fetchInfo();
+  Future<HueBridgeInfo> probe(String host) async {
+    final client = _clientFactory(
+      BridgeCertificatePin(host: host.trim().toLowerCase()),
+      null,
+    );
+    try {
+      return await client.fetchInfo();
+    } finally {
+      client.close();
+    }
   }
 
   /// Polls the bridge until the link button is pressed, [timeout] passes or
@@ -129,8 +146,18 @@ class BridgeController extends ChangeNotifier {
           clientKey: keys.clientKey,
           certificateFingerprint: pin.fingerprint,
         );
-        await _store.save(credentials);
+        try {
+          await _store.save(credentials);
+        } on Object {
+          _error = 'The bridge accepted LumiFX, but the connection could not '
+              'be saved on this phone. Try again.';
+          break;
+        }
+        client.close();
         _useCredentials(credentials);
+        // Leave the pairing state so refresh() (which ignores refreshes
+        // while pairing) can report connected/unreachable.
+        _status = BridgeStatus.initializing;
         await refresh();
         return true;
       } on LinkButtonNotPressedException {
@@ -140,6 +167,7 @@ class BridgeController extends ChangeNotifier {
         break;
       }
     }
+    client.close();
 
     if (_pairingCancelled) {
       _error = null;
@@ -157,18 +185,37 @@ class BridgeController extends ChangeNotifier {
   /// network by id and retries at the new address.
   Future<void> refresh() async {
     final client = _client;
+    final pin = _pin;
     if (client == null) {
+      if (_credentials == null && _status == BridgeStatus.unreachable) {
+        // Storage was unavailable at launch: try loading again.
+        return initialize();
+      }
       return;
     }
+    if (_status == BridgeStatus.pairing) {
+      return; // pair() reloads when it is done
+    }
+    pin?.reset();
     try {
-      _home = await client.fetchHome();
+      final home = await client.fetchHome();
+      if (_client != client) {
+        return; // forgotten or re-paired meanwhile
+      }
+      _home = home;
       _error = null;
       _setStatus(BridgeStatus.connected);
     } on Object catch (error) {
-      if (_isNetworkError(error) && await _relocate()) {
+      if (_client != client) {
+        return;
+      }
+      if (_isNetworkError(error, pin) && await _relocate()) {
         return refresh();
       }
-      _error = _describe(error, null);
+      if (_client != client) {
+        return;
+      }
+      _error = _describe(error, pin);
       _setStatus(BridgeStatus.unreachable);
     }
   }
@@ -201,9 +248,14 @@ class BridgeController extends ChangeNotifier {
           name: found.name ?? credentials.bridge.name,
         ),
       );
+      // Forgotten or re-paired while searching: never write the old key
+      // back.
+      if (!identical(_credentials, credentials)) {
+        return false;
+      }
       await _store.save(moved);
-      if (_credentials != credentials) {
-        return false; // forgotten or re-paired meanwhile
+      if (!identical(_credentials, credentials)) {
+        return false;
       }
       _useCredentials(moved);
       return true;
@@ -214,10 +266,18 @@ class BridgeController extends ChangeNotifier {
     }
   }
 
-  static bool _isNetworkError(Object error) =>
-      error is TimeoutException ||
-      error is SocketException ||
-      error is http.ClientException;
+  /// Failures that mean "nothing we trust answered at that address": worth
+  /// looking for the bridge elsewhere. A certificate that differs from the
+  /// pinned one for the same bridge id is not one of them.
+  static bool _isNetworkError(Object error, BridgeCertificatePin? pin) {
+    if (error is HandshakeException || error is TlsException) {
+      return pin?.mismatch != CertificateMismatch.differentCertificate;
+    }
+    return error is TimeoutException ||
+        error is SocketException ||
+        error is HttpException ||
+        error is http.ClientException;
+  }
 
   /// Starts streaming to [area]. The returned output releases the area
   /// when closed.
@@ -268,7 +328,9 @@ class BridgeController extends ChangeNotifier {
   Future<void> forget() async {
     await _store.clear();
     _credentials = null;
+    _client?.close();
     _client = null;
+    _pin = null;
     _home = null;
     _error = null;
     _setStatus(BridgeStatus.unpaired);
@@ -281,6 +343,8 @@ class BridgeController extends ChangeNotifier {
       bridgeId: credentials.bridge.id,
       fingerprint: credentials.certificateFingerprint,
     );
+    _client?.close();
+    _pin = pin;
     _client = _clientFactory(pin, credentials.applicationKey);
   }
 
@@ -299,7 +363,7 @@ class BridgeController extends ChangeNotifier {
 
   static String _describe(Object error, BridgeCertificatePin? pin) {
     if (error is CertificateMismatchException ||
-        (pin?.mismatchDetected ?? false)) {
+        pin?.mismatch == CertificateMismatch.differentCertificate) {
       return const CertificateMismatchException().message;
     }
     if (error is UnauthorizedException) {
@@ -310,11 +374,12 @@ class BridgeController extends ChangeNotifier {
     }
     if (error is TimeoutException ||
         error is SocketException ||
+        error is HttpException ||
+        error is TlsException ||
         error is http.ClientException) {
+      // A different device at the address, a reboot mid-handshake, a
+      // closed connection: all look like "not there" to the user.
       return 'The bridge could not be reached on this network.';
-    }
-    if (error is HandshakeException) {
-      return const CertificateMismatchException().message;
     }
     return 'Something went wrong talking to the bridge.';
   }

@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lumifx/src/core/hue/bridge_http_client.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
@@ -178,6 +181,80 @@ void main() {
     expect(controller.status, BridgeStatus.unreachable);
     expect(searches, 0);
   });
+  test(
+      'a different device at the old address triggers the search, '
+      'a changed certificate of the same bridge does not', () async {
+    Future<BridgeStatus> run(CertificateMismatch mismatch) async {
+      const moved = HueBridgeInfo(id: '001788fffe000001', host: '10.0.0.9');
+      final fake = _FakeBridge();
+      final controller = BridgeController(
+        store: InMemoryCredentialStore(
+          const HueCredentials(bridge: _bridge, applicationKey: 'key-1'),
+        ),
+        discovery: _ListDiscovery(const [moved]),
+        clientFactory: (pin, key) => HueBridgeClient(
+          host: pin.host,
+          applicationKey: key,
+          client: pin.host == moved.host
+              ? fake.client
+              : MockClient((_) async {
+                  pin.mismatch = mismatch;
+                  throw const HandshakeException('rejected');
+                }),
+        ),
+      );
+      await controller.initialize();
+      return controller.status;
+    }
+
+    expect(
+        await run(CertificateMismatch.differentDevice), BridgeStatus.connected);
+    expect(await run(CertificateMismatch.differentCertificate),
+        BridgeStatus.unreachable);
+  });
+
+  test('forgetting the bridge during the search wins', () async {
+    const moved = HueBridgeInfo(id: '001788fffe000001', host: '10.0.0.9');
+    final store = InMemoryCredentialStore(
+      const HueCredentials(bridge: _bridge, applicationKey: 'key-1'),
+    );
+    final fake = _FakeBridge();
+    late BridgeController controller;
+    controller = BridgeController(
+      store: store,
+      discovery: _ListDiscovery(const [moved], onSearch: () {
+        // The user taps "Forget" while discovery is running.
+        controller.forget();
+      }),
+      clientFactory: (pin, key) {
+        fake.reachable = pin.host == moved.host;
+        return HueBridgeClient(
+            host: pin.host, client: fake.client, applicationKey: key);
+      },
+    );
+    await controller.initialize();
+    expect(controller.status, BridgeStatus.unpaired);
+    expect(await store.load(), isNull);
+  });
+
+  test('unavailable storage keeps the pairing and lets the user retry',
+      () async {
+    final store = _FlakyStore(
+      const HueCredentials(bridge: _bridge, applicationKey: 'key-1'),
+      failures: 1,
+    );
+    final controller = BridgeController(
+      store: store,
+      clientFactory: (pin, key) => HueBridgeClient(
+          host: pin.host, client: _FakeBridge().client, applicationKey: key),
+    );
+    await controller.initialize();
+    expect(controller.status, BridgeStatus.unreachable);
+    expect(controller.error, contains('Try again'));
+
+    await controller.refresh();
+    expect(controller.status, BridgeStatus.connected);
+  });
 }
 
 class _ListDiscovery implements BridgeDiscovery {
@@ -191,4 +268,27 @@ class _ListDiscovery implements BridgeDiscovery {
     onSearch?.call();
     return Stream.fromIterable(bridges);
   }
+}
+
+/// Fails the first [failures] reads with a platform-style error.
+class _FlakyStore implements CredentialStore {
+  _FlakyStore(this._credentials, {required this.failures});
+
+  HueCredentials? _credentials;
+  int failures;
+
+  @override
+  Future<HueCredentials?> load() async {
+    if (failures-- > 0) {
+      throw const CredentialStoreException('keychain locked');
+    }
+    return _credentials;
+  }
+
+  @override
+  Future<void> save(HueCredentials credentials) async =>
+      _credentials = credentials;
+
+  @override
+  Future<void> clear() async => _credentials = null;
 }

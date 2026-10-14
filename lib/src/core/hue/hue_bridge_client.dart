@@ -43,19 +43,24 @@ class HueBridgeClient {
 
   static const _timeout = Duration(seconds: 6);
 
+  /// Releases the underlying connections.
+  void close() => _client.close();
+
   /// Reads the bridge's public configuration; works without pairing and is
   /// used to confirm that a manually entered address really is a bridge.
   Future<HueBridgeInfo> fetchInfo() async {
     final response =
         await _client.get(Uri.https(host, '/api/0/config')).timeout(_timeout);
     final body = _decode(response);
-    if (body is! Map || body['bridgeid'] is! String) {
+    final config = body is Map ? body : const {};
+    final id = config['bridgeid'];
+    if (id is! String || !HueBridgeInfo.isValidId(id.toLowerCase())) {
       throw const HueException('This device does not look like a Hue Bridge');
     }
     return HueBridgeInfo(
-      id: (body['bridgeid'] as String).toLowerCase(),
+      id: id.toLowerCase(),
       host: host,
-      name: body['name'] as String?,
+      name: config['name'] as String?,
     );
   }
 
@@ -309,7 +314,8 @@ class HueBridgeClient {
       throw const UnauthorizedException();
     }
     if (response.statusCode == 429) {
-      throw const HueException('Bridge is busy, slow down');
+      throw const HueException('The bridge is busy; try again in a moment.',
+          statusCode: 429);
     }
     final Object? body;
     try {

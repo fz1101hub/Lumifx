@@ -323,4 +323,58 @@ void main() {
       expect(area.locations[1].positions.single, const HuePosition(-1, 0));
     });
   });
+
+  group('robustness', () {
+    test('a light whose color has no xy still loads', () async {
+      final client = HueBridgeClient(
+        host: '10.0.0.5',
+        applicationKey: 'key',
+        client: MockClient((request) async {
+          if (request.url.path == '/clip/v2/resource/light') {
+            return _json({
+              'data': [
+                {
+                  'id': 'odd',
+                  'owner': {'rid': 'd', 'rtype': 'device'},
+                  'on': {'on': true},
+                  'color': {'gamut_type': 'C'},
+                },
+              ],
+            });
+          }
+          return _json({'data': <Object>[]});
+        }),
+      );
+      final light = (await client.fetchHome()).lights['odd']!;
+      expect(light.supportsColor, isTrue);
+      expect(light.color, isNull);
+      expect(light.name, 'Light');
+    });
+
+    test('fetchInfo rejects malformed bridge ids', () async {
+      final client = HueBridgeClient(
+        host: '10.0.0.5',
+        client: MockClient((_) async => _json({'bridgeid': 'abc'})),
+      );
+      expect(client.fetchInfo(), throwsA(isA<HueException>()));
+    });
+
+    test('short bridge ids do not break the display name', () {
+      expect(const HueBridgeInfo(id: 'abc', host: 'h').displayName,
+          'Hue Bridge abc');
+    });
+
+    test('429 carries its status code', () async {
+      final client = HueBridgeClient(
+        host: '10.0.0.5',
+        applicationKey: 'key',
+        client: MockClient((_) async => http.Response('{}', 429)),
+      );
+      await expectLater(
+        client.fetchHome(),
+        throwsA(
+            isA<HueException>().having((e) => e.statusCode, 'statusCode', 429)),
+      );
+    });
+  });
 }
