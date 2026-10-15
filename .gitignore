@@ -26,3 +26,7 @@ DerivedData/
 # Misc
 .DS_Store
 *.log
+
+# Generated site files (see .github/workflows/pages.yml)
+site/privacy.md
+_site/

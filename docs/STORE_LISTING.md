@@ -12,7 +12,8 @@ two stores in sync when you change anything here.
 | iOS bundle id | `com.lumifx.lumifx` |
 | Category | Lifestyle (Play) · Lifestyle (App Store), secondary Utilities |
 | Price | Free |
-| Privacy policy URL | host `docs/PRIVACY_POLICY.md` (see RELEASE.md) |
+| Privacy policy URL | <https://fz1101hub.github.io/Lumifx/privacy.html> (published from `docs/PRIVACY_POLICY.md`, see RELEASE.md § 0) |
+| Support URL | <https://fz1101hub.github.io/Lumifx/> |
 | Support e-mail | fz1101hub@gmail.com |
 | Content rating | Everyone / 4+ (no user content, no ads, no purchases) |
 

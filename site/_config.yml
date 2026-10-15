@@ -1,0 +1,11 @@
+# Support page and privacy policy, published by .github/workflows/pages.yml
+# at https://fz1101hub.github.io/Lumifx/ (the URL both stores ask for).
+title: LumiFX
+description: Stories and scenes for Philips Hue
+theme: jekyll-theme-primer
+lang: en
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

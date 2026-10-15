@@ -85,4 +85,4 @@ lib/src/
 - [Release guide](docs/RELEASE.md) — signing, building and uploading to Google Play and the App Store.
 - [Store listing](docs/STORE_LISTING.md) — texts, data-safety and privacy answers, review notes.
 - [QA checklist](docs/QA_CHECKLIST.md) — what to verify on a real phone with a real bridge.
-- [Privacy policy](docs/PRIVACY_POLICY.md) — to host at a public URL for both stores.
+- [Privacy policy](docs/PRIVACY_POLICY.md) — published at <https://fz1101hub.github.io/Lumifx/privacy.html> together with the [support page](https://fz1101hub.github.io/Lumifx/) (source in `site/`).
