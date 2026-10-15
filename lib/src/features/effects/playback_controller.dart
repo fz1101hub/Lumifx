@@ -1,18 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/effects/engine/light_output.dart';
-import '../../core/hue/entertainment/dtls/dtls_client.dart';
 import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
-import '../../core/hue/hue_exceptions.dart';
 import '../../core/hue/hue_models.dart';
 import '../../core/screen_wake.dart';
 import '../bridge/bridge_controller.dart';
@@ -23,6 +19,66 @@ import '../music/music_sync_controller.dart';
 const previewLightCount = 5;
 
 enum PlaybackStatus { idle, starting, playing, paused }
+
+enum PlaybackNoticeKind {
+  /// Playing on the bridge was requested while it cannot be reached.
+  bridgeUnreachable,
+
+  /// Every light in the chosen room is on/off only; [PlaybackNotice.name]
+  /// is the room.
+  onOffOnlyLights,
+
+  /// The chosen room or area no longer exists on the bridge.
+  targetGone,
+
+  /// Starting failed; [PlaybackNotice.error] says why.
+  startFailed,
+  microphoneDenied,
+  microphoneFailed,
+
+  /// The microphone died mid-effect.
+  microphoneStopped,
+
+  /// The stream ended on its own; [PlaybackNotice.error] says why, when
+  /// known.
+  streamEnded,
+}
+
+/// Something worth telling the user; the UI turns it into localised text.
+class PlaybackNotice {
+  const PlaybackNotice(this.kind, {this.name, this.error, this.problem});
+
+  final PlaybackNoticeKind kind;
+  final String? name;
+  final Object? error;
+  final BridgeProblem? problem;
+}
+
+/// One label of the lamp preview; the UI localises the generic ones.
+sealed class SlotLabel {
+  const SlotLabel();
+}
+
+/// A real light (or a gradient segment group) by name.
+class NamedSlot extends SlotLabel {
+  const NamedSlot(this.name);
+
+  final String name;
+}
+
+/// A virtual lamp of the preview, numbered from 1.
+class PreviewLamp extends SlotLabel {
+  const PreviewLamp(this.number);
+
+  final int number;
+}
+
+/// An entertainment channel whose lights are not known by name.
+class UnnamedChannel extends SlotLabel {
+  const UnnamedChannel(this.id);
+
+  final int id;
+}
 
 /// Everything about playing one effect: where it plays, starting and
 /// stopping the right output, the microphone for Music Sync, keeping the
@@ -49,14 +105,14 @@ class PlaybackController extends ChangeNotifier {
   final AudioInput _audioInput;
   final ScreenWake _screenWake;
 
-  final _messages = StreamController<String>.broadcast();
+  final _notices = StreamController<PlaybackNotice>.broadcast();
   PlaybackStatus _status = PlaybackStatus.idle;
   EffectPlayer? _player;
   MusicSyncController? _music;
   String? _targetKey;
   EffectControls _controls;
   double _sensitivity = 1;
-  List<String>? _slotNames;
+  List<SlotLabel>? _slotNames;
   Map<String, HueLightCommand> _restore = const {};
   bool _disposed = false;
 
@@ -69,7 +125,7 @@ class PlaybackController extends ChangeNotifier {
   Future<void>? _teardown;
 
   /// Things worth telling the user, e.g. why playback could not start.
-  Stream<String> get messages => _messages.stream;
+  Stream<PlaybackNotice> get notices => _notices.stream;
 
   PlaybackStatus get status => _status;
   bool get isPlaying => _status == PlaybackStatus.playing;
@@ -115,7 +171,7 @@ class PlaybackController extends ChangeNotifier {
       group != null || area != null ? _targetKey : null;
 
   /// One label per slot of the lamp preview.
-  List<String> get lightNames {
+  List<SlotLabel> get lightNames {
     final playing = _slotNames;
     if (playing != null && _player != null) {
       return playing;
@@ -126,13 +182,13 @@ class PlaybackController extends ChangeNotifier {
     if (home != null && group != null) {
       return [
         for (final id in _effectLights(home, group.lightIds))
-          home.lights[id]?.name ?? id,
+          NamedSlot(home.lights[id]?.name ?? id),
       ];
     }
     if (home != null && area != null) {
       return _channelNames(home, area);
     }
-    return [for (var i = 1; i <= previewLightCount; i++) 'Lamp $i'];
+    return [for (var i = 1; i <= previewLightCount; i++) PreviewLamp(i)];
   }
 
   Future<void> toggle() async {
@@ -176,7 +232,7 @@ class PlaybackController extends ChangeNotifier {
       }
 
       var lightIds = [for (var i = 0; i < previewLightCount; i++) 'p$i'];
-      List<String>? names;
+      List<SlotLabel>? names;
       LightOutput output = const NullLightOutput();
       var tick = const Duration(milliseconds: 100);
       var restore = <String, HueLightCommand>{};
@@ -190,8 +246,10 @@ class PlaybackController extends ChangeNotifier {
         final home = this.home;
         final client = _bridge.client;
         if (!_bridge.isConnected || home == null || client == null) {
-          return _abortStart(
-              _bridge.error ?? 'The bridge could not be reached.');
+          return _abortStart(PlaybackNotice(
+            PlaybackNoticeKind.bridgeUnreachable,
+            problem: _bridge.problem,
+          ));
         }
         final area = this.area;
         final group = this.group;
@@ -217,15 +275,20 @@ class PlaybackController extends ChangeNotifier {
         } else if (group != null) {
           final usable = _effectLights(home, group.lightIds);
           if (usable.isEmpty) {
-            return _abortStart('The lights in ${group.name} can only switch '
-                'on and off, so they cannot play effects.');
+            return _abortStart(PlaybackNotice(
+              PlaybackNoticeKind.onOffOnlyLights,
+              name: group.name,
+            ));
           }
           restore = _snapshot(home, usable);
           output = hueRestOutput(client, home.lights);
           lightIds = usable;
-          names = [for (final id in usable) home.lights[id]?.name ?? id];
+          names = [
+            for (final id in usable) NamedSlot(home.lights[id]?.name ?? id),
+          ];
         } else {
-          return _abortStart('That room or area is no longer on the bridge.');
+          return _abortStart(
+              const PlaybackNotice(PlaybackNoticeKind.targetGone));
         }
       }
 
@@ -257,7 +320,8 @@ class PlaybackController extends ChangeNotifier {
       _player = null;
       await player?.stop();
       await streaming?.close();
-      return _abortStart('Could not start: ${describeError(error)}');
+      return _abortStart(
+          PlaybackNotice(PlaybackNoticeKind.startFailed, error: error));
     }
   }
 
@@ -379,18 +443,17 @@ class PlaybackController extends ChangeNotifier {
       case MusicSyncStatus.listening:
         return true;
       case MusicSyncStatus.denied:
-        _message('Music Sync needs microphone access. You can allow it in '
-            'your phone settings.');
+        _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneDenied));
       default:
-        _message('The microphone could not be started.');
+        _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneFailed));
     }
     return false;
   }
 
-  void _abortStart(String message) {
+  void _abortStart(PlaybackNotice notice) {
     unawaited(_music?.stop());
     _setStatus(PlaybackStatus.idle);
-    _message(message);
+    _notice(notice);
   }
 
   /// A stop or dispose happened while starting: undo what was set up.
@@ -421,8 +484,7 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     if (_status == PlaybackStatus.playing) {
-      _message('The microphone stopped (another app may be using it). '
-          'Press Stop, then Play, to listen again.');
+      _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneStopped));
     }
   }
 
@@ -431,11 +493,7 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     unawaited(stop());
-    _message(switch (error) {
-      HueException(:final message) => message,
-      DtlsException(:final message) => message,
-      _ => 'Streaming stopped by the bridge.',
-    });
+    _notice(PlaybackNotice(PlaybackNoticeKind.streamEnded, error: error));
   }
 
   void _onBridgeChanged() => _notify();
@@ -451,9 +509,9 @@ class PlaybackController extends ChangeNotifier {
     }
   }
 
-  void _message(String message) {
+  void _notice(PlaybackNotice notice) {
     if (!_disposed) {
-      _messages.add(message);
+      _notices.add(notice);
     }
   }
 
@@ -464,7 +522,7 @@ class PlaybackController extends ChangeNotifier {
     final music = _music;
     music?.removeListener(_onMusicChanged);
     unawaited(stop().whenComplete(() => music?.dispose()));
-    unawaited(_messages.close());
+    unawaited(_notices.close());
     super.dispose();
   }
 
@@ -476,14 +534,17 @@ class PlaybackController extends ChangeNotifier {
           if (home.lights[id]?.isDimmable ?? false) id,
       ];
 
-  static List<String> _channelNames(HueHome home, HueEntertainmentArea area) =>
+  static List<SlotLabel> _channelNames(
+    HueHome home,
+    HueEntertainmentArea area,
+  ) =>
       [
         for (final channel in area.spatialChannels)
           channel.lightIds.isEmpty
-              ? 'Channel ${channel.id}'
-              : channel.lightIds
+              ? UnnamedChannel(channel.id)
+              : NamedSlot(channel.lightIds
                   .map((id) => home.lights[id]?.name ?? id)
-                  .join(' / '),
+                  .join(' / ')),
       ];
 
   static Map<String, HueLightCommand> _snapshot(
@@ -536,13 +597,3 @@ Future<void> restoreLights(
     await Future<void>.delayed(gap);
   }
 }
-
-String describeError(Object error) => switch (error) {
-      HueException(:final message) => message,
-      DtlsException(:final message) => message,
-      SocketException() ||
-      TimeoutException() ||
-      http.ClientException() =>
-        'the bridge did not respond.',
-      _ => 'something went wrong.',
-    };

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/effects/effect.dart';
+import '../common/app_text.dart';
 import 'catalog/effect_catalog.dart';
 import 'effect_palette.dart';
 import 'effect_player_screen.dart';
@@ -25,7 +26,7 @@ class EffectListScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(32),
                 child: Text(
-                  'No ${title.toLowerCase()} yet.',
+                  context.l10n.nothingHereYet,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -48,7 +49,10 @@ class _EffectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
     final colors = effectPalette(effect);
+    final collection = l10n.collectionName(effect);
+    final description = l10n.effectDescription(effect);
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -76,22 +80,21 @@ class _EffectCard extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(effect.name,
+                        child: Text(l10n.effectName(effect),
                             style: theme.textTheme.titleMedium),
                       ),
                       if (effect.prefersStreaming)
-                        const Tooltip(
-                          message: 'Best on an entertainment area',
-                          child: Icon(Icons.bolt, size: 20),
+                        Tooltip(
+                          message: l10n.bestOnEntertainmentArea,
+                          child: const Icon(Icons.bolt, size: 20),
                         ),
                     ],
                   ),
-                  if (effect.collection != null)
-                    Text(effect.collection!,
-                        style: theme.textTheme.labelMedium),
-                  if (effect.description.isNotEmpty) ...[
+                  if (collection != null)
+                    Text(collection, style: theme.textTheme.labelMedium),
+                  if (description.isNotEmpty) ...[
                     const SizedBox(height: 6),
-                    Text(effect.description, style: theme.textTheme.bodyMedium),
+                    Text(description, style: theme.textTheme.bodyMedium),
                   ],
                 ],
               ),

@@ -147,7 +147,10 @@ Future<void> _wait([int ms = 400]) =>
 void main() {
   test('plays on dimmable lights only and adapts commands to each', () async {
     final (controller, fake, wake) = await _setUp();
-    expect(controller.lightNames, ['Color bulb', 'White bulb']);
+    expect(
+      [for (final slot in controller.lightNames) (slot as NamedSlot).name],
+      ['Color bulb', 'White bulb'],
+    );
 
     await controller.start();
     expect(controller.status, PlaybackStatus.playing);
@@ -268,13 +271,13 @@ void main() {
     final input = FakeAudioInput();
     final (controller, _, _) = await _setUp(music: true, audio: input);
     await controller.changeTarget(null);
-    final messages = <String>[];
-    controller.messages.listen(messages.add);
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
     await controller.start();
     expect(controller.status, PlaybackStatus.playing);
     await input.endStream();
     await _wait(20);
-    expect(messages.single, contains('microphone stopped'));
+    expect(notices.single.kind, PlaybackNoticeKind.microphoneStopped);
     await controller.stop();
     controller.dispose();
   });
@@ -282,12 +285,12 @@ void main() {
   test('a refused microphone keeps Music Sync idle and explains why', () async {
     final (controller, _, _) =
         await _setUp(music: true, audio: FakeAudioInput(granted: false));
-    final messages = <String>[];
-    controller.messages.listen(messages.add);
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
     await controller.start();
     await _wait(10);
     expect(controller.status, PlaybackStatus.idle);
-    expect(messages.single, contains('microphone access'));
+    expect(notices.single.kind, PlaybackNoticeKind.microphoneDenied);
     controller.dispose();
   });
 

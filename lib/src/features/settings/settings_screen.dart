@@ -5,6 +5,7 @@ import '../../core/effects/engine/effect_renderer.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
+import '../common/app_text.dart';
 import '../entertainment/entertainment_areas_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -16,9 +17,10 @@ class SettingsScreen extends StatelessWidget {
     final bridge = scope.bridge;
     final preferences = scope.preferences;
     final theme = Theme.of(context);
+    final l10n = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(l10n.settings)),
       body: ListenableBuilder(
         listenable: Listenable.merge([bridge, preferences]),
         builder: (context, _) {
@@ -29,52 +31,45 @@ class SettingsScreen extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.symmetric(vertical: 12),
             children: [
-              const _Header('Hue Bridge'),
+              _Header(l10n.hueBridge),
               ..._bridgeTiles(context, bridge),
               const Divider(height: 32),
-              const _Header('Playback defaults'),
+              _Header(l10n.playbackDefaults),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'Every effect starts with these settings. You can still '
-                  'change them while it plays.',
+                  l10n.playbackDefaultsDescription,
                   style: theme.textTheme.bodySmall,
                 ),
               ),
               _SliderTile(
-                label: 'Brightness',
+                label: l10n.brightness,
                 value: controls.brightness,
                 onChanged: (v) => update(controls.copyWith(brightness: v)),
               ),
               _SliderTile(
-                label: 'Intensity',
+                label: l10n.intensity,
                 value: controls.intensity,
                 onChanged: (v) => update(controls.copyWith(intensity: v)),
               ),
               _SliderTile(
-                label: 'Speed',
+                label: l10n.speed,
                 value: controls.speed,
                 min: 0.25,
                 max: 3,
                 onChanged: (v) => update(controls.copyWith(speed: v)),
               ),
               SwitchListTile(
-                title: const Text('Restore lights when an effect stops'),
-                subtitle: const Text(
-                  'Puts each light back to the colour and brightness it had '
-                  'before the effect started.',
-                ),
+                title: Text(l10n.restoreLights),
+                subtitle: Text(l10n.restoreLightsDescription),
                 value: preferences.restoreLights,
                 onChanged: preferences.setRestoreLights,
               ),
               const Divider(height: 32),
-              const _Header('About'),
-              const ListTile(
-                title: Text('LumiFX'),
-                subtitle: Text(
-                  'Original scenes and stories for Philips Hue. '
-                  'Not affiliated with Signify or Philips.',
-                ),
+              _Header(l10n.about),
+              ListTile(
+                title: Text(l10n.appTitle),
+                subtitle: Text(l10n.aboutDescription),
               ),
             ],
           );
@@ -84,12 +79,13 @@ class SettingsScreen extends StatelessWidget {
   }
 
   List<Widget> _bridgeTiles(BuildContext context, BridgeController bridge) {
+    final l10n = context.l10n;
     final credentials = bridge.credentials;
     if (credentials == null) {
       return [
         ListTile(
           leading: const Icon(Icons.add_link),
-          title: const Text('Connect a Hue Bridge'),
+          title: Text(l10n.connectABridge),
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute<void>(builder: (_) => const BridgeSetupScreen()),
           ),
@@ -97,6 +93,8 @@ class SettingsScreen extends StatelessWidget {
       ];
     }
     final home = bridge.home;
+    final problem = bridge.problem;
+    final canStream = bridge.isConnected && credentials.clientKey != null;
     return [
       ListTile(
         leading: Icon(
@@ -105,26 +103,29 @@ class SettingsScreen extends StatelessWidget {
         title: Text(credentials.bridge.displayName),
         subtitle: Text(
           bridge.isConnected
-              ? '${credentials.bridge.host} · ${home?.lights.length ?? 0} lights'
-              : bridge.error ?? 'Not reachable',
+              ? '${credentials.bridge.host} · '
+                  '${l10n.lightCount(home?.lights.length ?? 0)}'
+              : problem == null
+                  ? l10n.notReachable
+                  : describeBridgeProblem(l10n, problem),
         ),
         trailing: IconButton(
-          tooltip: 'Refresh',
+          tooltip: l10n.refresh,
           icon: const Icon(Icons.refresh),
           onPressed: bridge.refresh,
         ),
       ),
       ListTile(
         leading: const Icon(Icons.bolt),
-        title: const Text('Entertainment streaming'),
+        title: Text(l10n.entertainmentStreaming),
         subtitle: Text(
           credentials.clientKey == null
-              ? 'Not available: forget the bridge and pair again.'
-              : '${home?.entertainmentAreas.length ?? 0} entertainment areas',
+              ? l10n.streamingNotAvailable
+              : l10n.areaCount(home?.entertainmentAreas.length ?? 0),
         ),
         trailing: const Icon(Icons.chevron_right),
-        enabled: bridge.isConnected && credentials.clientKey != null,
-        onTap: bridge.isConnected && credentials.clientKey != null
+        enabled: canStream,
+        onTap: canStream
             ? () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (_) => const EntertainmentAreasScreen(),
@@ -134,7 +135,7 @@ class SettingsScreen extends StatelessWidget {
       ),
       ListTile(
         leading: const Icon(Icons.link_off),
-        title: const Text('Forget this bridge'),
+        title: Text(l10n.forgetThisBridge),
         onTap: () => confirmForgetBridge(context, bridge),
       ),
     ];

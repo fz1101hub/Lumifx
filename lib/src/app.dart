@@ -6,6 +6,7 @@ import 'core/hue/hue_discovery.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/home/home_screen.dart';
 import 'features/library/preferences_controller.dart';
+import '../l10n/generated/app_localizations.dart';
 
 class LumiFxApp extends StatelessWidget {
   const LumiFxApp({
@@ -13,6 +14,7 @@ class LumiFxApp extends StatelessWidget {
     required this.discovery,
     required this.preferences,
     required this.audioInput,
+    this.locale,
     super.key,
   });
 
@@ -20,6 +22,9 @@ class LumiFxApp extends StatelessWidget {
   final BridgeDiscovery discovery;
   final PreferencesController preferences;
   final AudioInput audioInput;
+
+  /// Forces a language; null follows the device (tests pass one).
+  final Locale? locale;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +34,11 @@ class LumiFxApp extends StatelessWidget {
       preferences: preferences,
       audioInput: audioInput,
       child: MaterialApp(
-        title: 'LumiFX',
+        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
         debugShowCheckedModeBanner: false,
+        locale: locale,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           brightness: Brightness.dark,
           colorSchemeSeed: const Color(0xFF7CFF6B),

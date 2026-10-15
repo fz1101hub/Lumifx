@@ -11,10 +11,38 @@ import 'package:pointycastle/block/modes/gcm.dart';
 import 'dtls_messages.dart';
 import 'tls_prf.dart';
 
+/// What went wrong, for the UI to explain in the user's language.
+enum DtlsFailure {
+  /// The UDP socket reported an error or closed.
+  connectionLost,
+
+  /// A send after the session was closed.
+  closed,
+
+  /// Nothing answered the handshake.
+  noAnswer,
+
+  /// Our Finished was never acknowledged: the pre-shared key is wrong.
+  keyRejected,
+
+  /// The bridge's Finished did not verify.
+  verificationFailed,
+
+  /// A fatal alert during the handshake.
+  rejected,
+
+  /// A fatal alert after the handshake.
+  endedByBridge,
+
+  /// Anything else that breaks the protocol.
+  protocol,
+}
+
 class DtlsException implements Exception {
-  const DtlsException(this.message);
+  const DtlsException(this.message, {this.failure = DtlsFailure.protocol});
 
   final String message;
+  final DtlsFailure failure;
 
   @override
   String toString() => 'DtlsException: $message';
@@ -100,10 +128,12 @@ class DtlsPskClient {
     // become an uncaught exception.
     _done.future.ignore();
     _subscription.onData(_onDatagram);
-    _subscription.onError(
-        (Object _) => _finish(const DtlsException(connectionLostMessage)));
-    _subscription
-        .onDone(() => _finish(const DtlsException(connectionLostMessage)));
+    _subscription.onError((Object _) => _finish(const DtlsException(
+        connectionLostMessage,
+        failure: DtlsFailure.connectionLost)));
+    _subscription.onDone(() => _finish(const DtlsException(
+        connectionLostMessage,
+        failure: DtlsFailure.connectionLost)));
   }
 
   /// Message of the error [done] completes with when the network, not the
@@ -159,7 +189,8 @@ class DtlsPskClient {
 
   void send(List<int> data) {
     if (isClosed) {
-      throw const DtlsException('Connection closed');
+      throw const DtlsException('Connection closed',
+          failure: DtlsFailure.closed);
     }
     _transport.send(_record(ContentType.applicationData, data));
   }
@@ -199,8 +230,9 @@ class DtlsPskClient {
       if (description == 0) {
         _finish(null); // close_notify
       } else if (level == 2) {
-        _finish(DtlsException('The bridge ended the stream (alert '
-            '$description)'));
+        _finish(DtlsException(
+            'The bridge ended the stream (alert $description)',
+            failure: DtlsFailure.endedByBridge));
       }
       // Other warnings are ignored (RFC 5246 §7.2.2).
     }
@@ -275,17 +307,25 @@ class _Handshake {
     _retransmitInterval = retransmitInterval;
     _subscription = transport.incoming.listen(
       _onDatagram,
-      onError: (Object _) => _fail(DtlsPskClient.connectionLostMessage),
-      onDone: () => _fail(DtlsPskClient.connectionLostMessage),
+      onError: (Object _) => _fail(const DtlsException(
+          DtlsPskClient.connectionLostMessage,
+          failure: DtlsFailure.connectionLost)),
+      onDone: () => _fail(const DtlsException(
+          DtlsPskClient.connectionLostMessage,
+          failure: DtlsFailure.connectionLost)),
     );
     _sendClientHello(Uint8List(0));
     return _completer.future.timeout(
       timeout,
-      onTimeout: () => throw DtlsException(_state == _State.awaitingFinished
+      onTimeout: () => throw _state == _State.awaitingFinished
           // Servers drop a Finished they cannot decrypt without a word.
-          ? 'The bridge did not accept the streaming key. Try again; if it '
-              'keeps failing, forget the bridge and pair again.'
-          : 'The bridge did not answer the streaming handshake'),
+          ? const DtlsException(
+              'The bridge did not accept the streaming key. Try again; if it '
+              'keeps failing, forget the bridge and pair again.',
+              failure: DtlsFailure.keyRejected)
+          : const DtlsException(
+              'The bridge did not answer the streaming handshake',
+              failure: DtlsFailure.noAnswer),
     );
   }
 
@@ -345,7 +385,7 @@ class _Handshake {
       try {
         _onRecord(record);
       } on DtlsException catch (error) {
-        _fail(error.message);
+        _fail(error);
         return;
       } on FormatException {
         // A malformed record is dropped silently, per DTLS; the others in
@@ -371,7 +411,8 @@ class _Handshake {
         // Only fatal alerts (level 2) end the handshake.
         if (fragment.length == 2 && fragment[0] == 2) {
           throw DtlsException(
-              'Handshake rejected by the bridge (alert ${fragment[1]})');
+              'Handshake rejected by the bridge (alert ${fragment[1]})',
+              failure: DtlsFailure.rejected);
         }
       case ContentType.handshake:
         for (final message in _reassembler.add(fragment)) {
@@ -533,7 +574,8 @@ class _Handshake {
     if (difference != 0) {
       throw const DtlsException(
           "The bridge's reply could not be verified. Try again; if it keeps "
-          'failing, forget the bridge and pair again.');
+          'failing, forget the bridge and pair again.',
+          failure: DtlsFailure.verificationFailed);
     }
     _retransmitTimer?.cancel();
     final subscription = _subscription!;
@@ -548,9 +590,9 @@ class _Handshake {
     _completer.complete(client);
   }
 
-  void _fail(String message) {
+  void _fail(DtlsException error) {
     if (!_completer.isCompleted) {
-      _completer.completeError(DtlsException(message));
+      _completer.completeError(error);
     }
   }
 }

@@ -186,6 +186,32 @@ void main() {
     expect(find.text('Play'), findsOneWidget);
   });
 
+  testWidgets('the app speaks Italian', (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+      locale: const Locale('it'),
+    ));
+    expect(find.text('Collega il tuo Hue Bridge'), findsOneWidget);
+    expect(find.text('Scene'), findsOneWidget);
+    await tester.tap(find.text('Storie'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Il Burlone di Smeraldo'));
+    await tester.pumpAndSettle();
+    expect(find.text('Solo anteprima'), findsOneWidget);
+    expect(find.text('Lampada 1'), findsOneWidget);
+    expect(find.text('Riproduci'), findsOneWidget);
+    expect(find.text('Magia e fantasia'), findsNothing);
+    // pageBack() looks for the English "Back" tooltip.
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Magia e fantasia'), findsWidgets);
+  });
+
   streamingTests();
 }
 

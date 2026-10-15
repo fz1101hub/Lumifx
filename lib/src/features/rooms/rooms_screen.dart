@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app_scope.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
+import '../common/app_text.dart';
 
 /// Basic control of rooms and zones: on/off and brightness.
 class RoomsScreen extends StatelessWidget {
@@ -11,22 +12,23 @@ class RoomsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bridge = AppScope.of(context).bridge;
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text('Rooms & zones')),
+      appBar: AppBar(title: Text(l10n.roomsAndZones)),
       body: ListenableBuilder(
         listenable: bridge,
         builder: (context, _) {
           final home = bridge.home;
           final client = bridge.client;
           if (home == null || client == null) {
-            return const Center(child: Text('No bridge connected.'));
+            return Center(child: Text(l10n.noBridgeConnected));
           }
           return RefreshIndicator(
             onRefresh: bridge.refresh,
             child: ListView(
               padding: const EdgeInsets.all(20),
               children: [
-                if (home.rooms.isNotEmpty) const _Header('Rooms'),
+                if (home.rooms.isNotEmpty) _Header(l10n.rooms),
                 for (final room in home.rooms)
                   _GroupTile(
                     key: ValueKey(room.id),
@@ -35,7 +37,7 @@ class RoomsScreen extends StatelessWidget {
                     client: client,
                     onChanged: bridge.refresh,
                   ),
-                if (home.zones.isNotEmpty) const _Header('Zones'),
+                if (home.zones.isNotEmpty) _Header(l10n.zones),
                 for (final zone in home.zones)
                   _GroupTile(
                     key: ValueKey(zone.id),
@@ -129,7 +131,8 @@ class _GroupTileState extends State<_GroupTile> {
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not update ${widget.group.name}.')),
+          SnackBar(
+              content: Text(context.l10n.couldNotUpdate(widget.group.name))),
         );
       }
     }
@@ -137,7 +140,7 @@ class _GroupTileState extends State<_GroupTile> {
 
   @override
   Widget build(BuildContext context) {
-    final count = widget.group.lightIds.length;
+    final l10n = context.l10n;
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -145,7 +148,7 @@ class _GroupTileState extends State<_GroupTile> {
           children: [
             SwitchListTile(
               title: Text(widget.group.name),
-              subtitle: Text('$count ${count == 1 ? 'light' : 'lights'}'),
+              subtitle: Text(l10n.lightCount(widget.group.lightIds.length)),
               value: _on,
               onChanged: widget.group.groupedLightId == null
                   ? null

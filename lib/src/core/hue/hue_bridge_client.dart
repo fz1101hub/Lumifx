@@ -330,8 +330,7 @@ class HueBridgeClient {
       throw const UnauthorizedException();
     }
     if (response.statusCode == 429) {
-      throw const HueException('The bridge is busy; try again in a moment.',
-          statusCode: 429);
+      throw const BridgeBusyException();
     }
     final Object? body;
     try {

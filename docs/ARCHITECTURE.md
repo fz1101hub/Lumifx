@@ -151,3 +151,28 @@ stream (`max_streams`), spread around the chosen point.
 ## Content policy
 
 Effects and visual assets should be original. Inspiration can come from broad themes and genres, but proprietary names, artwork, audio and authored sequences from third-party apps should not be copied.
+
+### Localisation (`lib/l10n`)
+
+Strings are ARB files (`app_en.arb` is the template, `app_it.arb` the
+Italian translation) compiled by `flutter gen-l10n` on every `flutter pub
+get` into `lib/l10n/generated/` (git-ignored, excluded from analysis and
+formatting). Widgets read them through `context.l10n`
+(`features/common/app_text.dart`).
+
+Controllers never produce user-facing text, because they have no locale:
+
+- `BridgeController.problem` is a `BridgeProblem` enum; `PlaybackController`
+  emits typed `PlaybackNotice`s; `DtlsException` carries a `DtlsFailure`
+  and the Hue layer throws typed exceptions (`BridgeBusyException`,
+  `EntertainmentStoppedException`, ...). `app_text.dart` maps all of them
+  to sentences, falling back to the bridge's own English message for errors
+  the app does not know.
+- Effect names, descriptions and collections stay in English in the
+  catalog (they double as stable identifiers for tests) and are translated
+  by the `EffectText` extension, keyed by effect id.
+- Lamp labels in the preview are `SlotLabel`s (`PreviewLamp`,
+  `UnnamedChannel`, `NamedSlot`) rendered by the UI.
+
+Android 13+ per-app language settings read `res/xml/locales_config.xml`;
+iOS lists the languages in `CFBundleLocalizations`.

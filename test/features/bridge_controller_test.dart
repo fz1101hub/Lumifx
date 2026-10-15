@@ -102,7 +102,7 @@ void main() {
     );
     expect(paired, isFalse);
     expect(controller.status, BridgeStatus.unpaired);
-    expect(controller.error, isNotNull);
+    expect(controller.problem, BridgeProblem.linkButtonTimeout);
   });
 
   test('restores saved credentials and reports an unreachable bridge',
@@ -250,7 +250,7 @@ void main() {
     );
     await controller.initialize();
     expect(controller.status, BridgeStatus.unreachable);
-    expect(controller.error, contains('Try again'));
+    expect(controller.problem, BridgeProblem.storageUnavailable);
 
     await controller.refresh();
     expect(controller.status, BridgeStatus.connected);
