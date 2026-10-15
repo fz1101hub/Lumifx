@@ -221,16 +221,21 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
             onChanged: (_) => setState(() {}),
           ),
           const SizedBox(height: 16),
-          SegmentedButton<String>(
-            showSelectedIcon: false,
-            segments: [
-              for (final MapEntry(key: value, value: label) in types.entries)
-                ButtonSegment(value: value, label: Text(label)),
-              if (!types.containsKey(_type))
-                ButtonSegment(value: _type, label: Text(_type)),
+          // Chips wrap, so long labels (French, German) never break mid-word.
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              for (final MapEntry(key: value, value: label) in {
+                ...types,
+                if (!types.containsKey(_type)) _type: _type,
+              }.entries)
+                ChoiceChip(
+                  label: Text(label),
+                  selected: _type == value,
+                  onSelected: (_) => setState(() => _type = value),
+                ),
             ],
-            selected: {_type},
-            onSelectionChanged: (value) => setState(() => _type = value.single),
           ),
           const SizedBox(height: 24),
           Text(l10n.placement, style: theme.textTheme.titleMedium),

@@ -21,6 +21,9 @@ Not affiliated with Signify. "Philips Hue" is a trademark of Signify
 Holding; the listing must say so and must not use Hue logos or product
 photos.
 
+Screenshots in every language come from the CI (`store-screenshots`
+artifact, see RELEASE.md § 1b).
+
 ## English
 
 **Subtitle / short description (max 30 chars App Store, 80 Play)**

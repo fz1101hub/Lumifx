@@ -162,6 +162,7 @@ class _GroupTileState extends State<_GroupTile> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SwitchListTile(
               title: Text(widget.group.name),

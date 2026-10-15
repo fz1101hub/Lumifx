@@ -68,6 +68,25 @@ keyAlias=upload
 keyPassword=********
 ```
 
+## 1b. Screenshots (every release)
+
+The CI renders the store screenshots from the app itself, with the real
+fonts, in all six languages and two sizes: download the
+`store-screenshots` artifact of any green run (Actions › the run › Artifacts).
+Inside, `iphone-6.5/<lang>/` holds 1242×2688 PNGs for App Store Connect
+(the 6.5" slot, accepted for every iPhone) and `android-9x16/<lang>/`
+holds 1080×1920 PNGs for Play Console. Five screens each: home, stories,
+the player, rooms with Hue scenes, the area editor.
+
+To regenerate locally:
+
+```sh
+LUMIFX_SCREENSHOTS=1 flutter test test/screenshots
+```
+
+The screens, the demo bridge they show and the sizes live in
+`test/screenshots/store_screenshots_test.dart`.
+
 ## 2. Android: Play Console (once)
 
 1. Create the app in [Play Console](https://play.google.com/console):
@@ -78,7 +97,8 @@ keyPassword=********
    (<https://fz1101hub.github.io/Lumifx/privacy.html>), category, contact
    e-mail.
 3. Upload graphics: icon 512×512 (`assets/icon/icon.png` resized), feature
-   graphic `assets/icon/feature_graphic.png`, at least 2 phone screenshots.
+   graphic `assets/icon/feature_graphic.png`, and the phone screenshots
+   from § 1b (`android-9x16/<lang>/`), per language.
 4. Let Play manage the signing key (default, "Play App Signing").
 
 ## 3. Android: every release
@@ -108,7 +128,8 @@ then promote to Production.
    (<https://fz1101hub.github.io/Lumifx/>), privacy policy URL
    (<https://fz1101hub.github.io/Lumifx/privacy.html>), App Privacy
    ("Data Not Collected"), age rating, category, review notes.
-4. Upload screenshots for the required iPhone sizes.
+4. Upload the screenshots from § 1b (`iphone-6.5/<lang>/`) for each
+   language; the 6.5" set covers every iPhone size.
 
 ## 5. iOS: every release (needs a Mac with Xcode)
 
