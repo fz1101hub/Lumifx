@@ -1,0 +1,52 @@
+name: Pages
+
+# Publishes the support page (site/) and the privacy policy
+# (docs/PRIVACY_POLICY.md) at https://fz1101hub.github.io/Lumifx/, the URL
+# both stores ask for. See docs/RELEASE.md § 0.
+on:
+  push:
+    branches: [main]
+    paths:
+      - site/**
+      - docs/PRIVACY_POLICY.md
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add the privacy policy to the site
+        run: |
+          { printf -- '---\ntitle: Privacy Policy\n---\n\n'; cat docs/PRIVACY_POLICY.md; } > site/privacy.md
+      - uses: actions/configure-pages@v5
+        with:
+          # Turns Pages on (source: GitHub Actions) on the first run.
+          enablement: true
+          static_site_generator: jekyll
+          generator_config_file: site/_config.yml
+      - uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./site
+          destination: ./_site
+      - uses: actions/upload-pages-artifact@v3
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

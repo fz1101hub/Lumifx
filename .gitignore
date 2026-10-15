@@ -1,0 +1,32 @@
+# Dart / Flutter
+.dart_tool/
+.packages
+.pub/
+build/
+coverage/
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Android
+android/.gradle/
+android/local.properties
+android/key.properties
+*.jks
+
+# iOS / macOS
+ios/Pods/
+ios/.symlinks/
+macos/Pods/
+DerivedData/
+
+# Misc
+.DS_Store
+*.log
+
+# Generated site files (see .github/workflows/pages.yml)
+site/privacy.md
+_site/

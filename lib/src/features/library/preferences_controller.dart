@@ -1,0 +1,166 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../core/effects/engine/effect_renderer.dart';
+
+/// Where preferences are persisted. Nothing in here is sensitive; bridge
+/// credentials live in [CredentialStore] instead.
+abstract interface class KeyValueStore {
+  Future<String?> read(String key);
+  Future<void> write(String key, String value);
+}
+
+class SharedPreferencesStore implements KeyValueStore {
+  SharedPreferencesStore([SharedPreferencesAsync? preferences])
+      : _preferences = preferences ?? SharedPreferencesAsync();
+
+  final SharedPreferencesAsync _preferences;
+
+  @override
+  Future<String?> read(String key) => _preferences.getString(key);
+
+  @override
+  Future<void> write(String key, String value) =>
+      _preferences.setString(key, value);
+}
+
+class InMemoryKeyValueStore implements KeyValueStore {
+  final values = <String, String>{};
+
+  @override
+  Future<String?> read(String key) async => values[key];
+
+  @override
+  Future<void> write(String key, String value) async => values[key] = value;
+}
+
+/// Favorites, recently played effects and default playback settings.
+class PreferencesController extends ChangeNotifier {
+  PreferencesController({required KeyValueStore store}) : _store = store;
+
+  static const _key = 'lumifx.preferences.v1';
+  static const maxRecents = 8;
+
+  final KeyValueStore _store;
+
+  List<String> _favorites = const [];
+  List<String> _recents = const [];
+  EffectControls _defaultControls = const EffectControls();
+  String? _lastTarget;
+  bool _restoreLights = true;
+
+  /// Effect ids, most recently added first.
+  List<String> get favorites => _favorites;
+
+  /// Effect ids, most recently played first.
+  List<String> get recents => _recents;
+
+  /// Controls a new playback starts with.
+  EffectControls get defaultControls => _defaultControls;
+
+  /// The player's last target (`group:<id>`, `area:<id>`), or null for the
+  /// preview.
+  String? get lastTarget => _lastTarget;
+
+  /// Put lights back the way they were when an effect stops.
+  bool get restoreLights => _restoreLights;
+
+  bool isFavorite(String effectId) => _favorites.contains(effectId);
+
+  /// Set once the user changes anything, so a slow [load] cannot overwrite
+  /// it with the stale snapshot from disk.
+  bool _dirty = false;
+  Future<void> _writes = Future.value();
+
+  Future<void> load() async {
+    try {
+      final raw = await _store.read(_key);
+      if (raw == null || _dirty) {
+        return;
+      }
+      final json = (jsonDecode(raw) as Map).cast<String, Object?>();
+      _favorites = _strings(json['favorites']);
+      _recents = _strings(json['recents']);
+      _lastTarget = json['lastTarget'] as String?;
+      _restoreLights = json['restoreLights'] as bool? ?? true;
+      final controls = json['defaultControls'];
+      if (controls is Map) {
+        _defaultControls = EffectControls(
+          brightness: _unit(controls['brightness'], 1),
+          intensity: _unit(controls['intensity'], 1),
+          speed: ((controls['speed'] as num?)?.toDouble() ?? 1).clamp(0.25, 3),
+        );
+      }
+    } on Object {
+      // Unreadable preferences are not worth failing over; start fresh.
+    }
+    notifyListeners();
+  }
+
+  Future<void> toggleFavorite(String effectId) {
+    _favorites = isFavorite(effectId)
+        ? [
+            for (final id in _favorites)
+              if (id != effectId) id
+          ]
+        : [effectId, ..._favorites];
+    return _changed();
+  }
+
+  Future<void> recordPlayed(String effectId) {
+    _recents = [
+      effectId,
+      for (final id in _recents)
+        if (id != effectId) id,
+    ].take(maxRecents).toList();
+    return _changed();
+  }
+
+  Future<void> setDefaultControls(EffectControls controls) {
+    _defaultControls = controls;
+    return _changed();
+  }
+
+  Future<void> setRestoreLights(bool value) {
+    _restoreLights = value;
+    return _changed();
+  }
+
+  Future<void> setLastTarget(String? target) {
+    if (target == _lastTarget) {
+      return Future.value();
+    }
+    _lastTarget = target;
+    return _changed();
+  }
+
+  /// Writes are serialised so they land on disk in the order they were
+  /// made; a failed write is logged, not thrown at a fire-and-forget
+  /// caller (the in-memory state already shows the change).
+  Future<void> _changed() {
+    _dirty = true;
+    notifyListeners();
+    final snapshot = jsonEncode({
+      'favorites': _favorites,
+      'recents': _recents,
+      'lastTarget': _lastTarget,
+      'restoreLights': _restoreLights,
+      'defaultControls': {
+        'brightness': _defaultControls.brightness,
+        'intensity': _defaultControls.intensity,
+        'speed': _defaultControls.speed,
+      },
+    });
+    return _writes = _writes
+        .then((_) => _store.write(_key, snapshot))
+        .catchError((Object error) => debugPrint('Preferences: $error'));
+  }
+
+  static List<String> _strings(Object? value) =>
+      value is List ? value.whereType<String>().toList() : const [];
+
+  static double _unit(Object? value, double fallback) =>
+      ((value as num?)?.toDouble() ?? fallback).clamp(0.0, 1.0);
+}
