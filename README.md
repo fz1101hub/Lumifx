@@ -42,6 +42,10 @@ Also done ahead of schedule:
 - **Music Sync**: on-device beat and spectrum analysis of the microphone,
   driving four Interactive effects (Beat Pulse, Party Chase, Spectrum,
   Mood Glow).
+- **Everyday use**: the scenes saved in the Hue app can be recalled from
+  Rooms & zones; a sleep timer fades an effect out and switches the lights
+  off; a one-time warning and a "soften flashes" mode for photosensitive
+  users; English and Italian.
 
 ## Development
 

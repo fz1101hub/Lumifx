@@ -57,6 +57,9 @@ The engine should eventually support:
 - **CLIP API v2** is used for lights, rooms, zones and `grouped_light`. Rooms
   list devices, so they are resolved to lights through each light's owner.
 
+`fetchHome` also reads the `scene` resource, so Rooms & zones can recall
+the scenes made in the Hue app (`PUT scene/{id}` with `recall: active`).
+
 ### Effect engine (`lib/src/core/effects/engine`)
 
 - `EffectRenderer` turns a timeline into one `LightFrame` per slot as a pure

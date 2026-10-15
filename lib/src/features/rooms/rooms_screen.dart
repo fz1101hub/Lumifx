@@ -5,7 +5,8 @@ import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
 import '../common/app_text.dart';
 
-/// Basic control of rooms and zones: on/off and brightness.
+/// Basic control of rooms and zones: on/off, brightness and the scenes
+/// saved in the Hue app.
 class RoomsScreen extends StatelessWidget {
   const RoomsScreen({super.key});
 
@@ -118,21 +119,35 @@ class _GroupTileState extends State<_GroupTile> {
             dimmable.length;
   }
 
-  Future<void> _send(HueLightCommand command) async {
-    final id = widget.group.groupedLightId;
-    if (id == null) {
+  Future<void> _send(HueLightCommand command) => _apply(
+        () => widget.client
+            .setGroupedLight(widget.group.groupedLightId!, command),
+        enabled: widget.group.groupedLightId != null,
+        failure: (l10n) => l10n.couldNotUpdate(widget.group.name),
+      );
+
+  Future<void> _recall(HueScene scene) => _apply(
+        () => widget.client.recallScene(scene.id),
+        failure: (l10n) => l10n.couldNotActivateScene(scene.name),
+      );
+
+  Future<void> _apply(
+    Future<void> Function() command, {
+    bool enabled = true,
+    required String Function(AppLocalizations l10n) failure,
+  }) async {
+    if (!enabled) {
       return;
     }
     try {
-      await widget.client.setGroupedLight(id, command);
+      await command();
       // Give the bridge a moment to apply the change before reading back.
       await Future<void>.delayed(const Duration(milliseconds: 300));
       await widget.onChanged();
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(context.l10n.couldNotUpdate(widget.group.name))),
+          SnackBar(content: Text(failure(context.l10n))),
         );
       }
     }
@@ -141,6 +156,8 @@ class _GroupTileState extends State<_GroupTile> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final scenes = widget.home.scenesOf(widget.group.id);
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -170,6 +187,29 @@ class _GroupTileState extends State<_GroupTile> {
                     _send(HueLightCommand(brightness: value)),
               ),
             ),
+            if (scenes.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.hueScenes, style: theme.textTheme.labelMedium),
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      children: [
+                        for (final scene in scenes)
+                          ChoiceChip(
+                            label: Text(scene.name),
+                            selected: scene.isActive,
+                            onSelected: (_) => _recall(scene),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),

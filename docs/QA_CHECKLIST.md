@@ -24,6 +24,8 @@ build before every store release.
 - [ ] Every room and zone lists the right light count.
 - [ ] Switch and brightness slider change the real lights, and the state
       shown matches the Hue app after pull-to-refresh.
+- [ ] Every room shows its Hue scenes as chips; tapping one shows it on
+      the lights and the chip becomes selected after the refresh.
 
 ## Playing effects on a room (REST)
 

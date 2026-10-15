@@ -301,6 +301,7 @@ void main() {
 Future<BridgeController> _connectedBridge(
   WidgetTester tester, {
   String? clientKey,
+  List<String>? puts,
 }) async {
   http.Response json(Object body) => http.Response(jsonEncode(body), 200);
   final bridge = BridgeController(
@@ -315,7 +316,22 @@ Future<BridgeController> _connectedBridge(
       host: pin.host,
       applicationKey: key,
       client: MockClient((request) async {
+        if (request.method == 'PUT') {
+          puts?.add(request.url.path);
+          return json({'data': <Object>[]});
+        }
         switch (request.url.path) {
+          case '/clip/v2/resource/scene':
+            return json({
+              'data': [
+                {
+                  'id': 's1',
+                  'metadata': {'name': 'Movie night'},
+                  'group': {'rid': 'r1', 'rtype': 'room'},
+                  'status': {'active': 'inactive'},
+                },
+              ],
+            });
           case '/clip/v2/resource/light':
             return json({
               'data': [
@@ -368,6 +384,26 @@ Future<BridgeController> _connectedBridge(
 }
 
 void streamingTests() {
+  testWidgets('rooms list the Hue scenes of each group and recall them',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.tap(find.text('Rooms & zones'));
+    await tester.pumpAndSettle();
+    expect(find.text('Living room'), findsOneWidget);
+    expect(find.text('Hue scenes'), findsOneWidget);
+    await tester.tap(find.text('Movie night'));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(puts, contains('/clip/v2/resource/scene/s1'));
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('player offers entertainment areas and reports start errors',
       (tester) async {
     final bridge = await _connectedBridge(tester);

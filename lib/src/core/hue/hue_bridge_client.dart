@@ -13,6 +13,7 @@ class HueHome {
     required this.zones,
     this.entertainmentAreas = const [],
     this.entertainmentServices = const [],
+    this.scenes = const [],
   });
 
   final Map<String, HueLight> lights;
@@ -23,7 +24,15 @@ class HueHome {
   /// Lights that can be added to an entertainment area.
   final List<HueEntertainmentService> entertainmentServices;
 
+  /// Scenes made in the Hue app, for every room and zone.
+  final List<HueScene> scenes;
+
   List<HueGroup> get groups => [...rooms, ...zones];
+
+  List<HueScene> scenesOf(String groupId) => [
+        for (final scene in scenes)
+          if (scene.groupId == groupId) scene
+      ];
 }
 
 /// Talks to one Hue Bridge over its local HTTPS API.
@@ -113,6 +122,7 @@ class HueBridgeClient {
       // Optional: streaming is a bonus, not a reason to fail loading.
       _resources('entertainment_configuration').catchError(_noResources),
       _resources('entertainment').catchError(_noResources),
+      _resources('scene').catchError(_noResources),
     ]);
     final lights = {
       for (final json in results[0])
@@ -214,8 +224,14 @@ class HueBridgeClient {
       zones: [for (final json in results[2]) group(json, HueGroupKind.zone)],
       entertainmentAreas: [for (final json in results[3]) area(json)],
       entertainmentServices: services,
+      scenes: [for (final json in results[5]) HueScene.fromJson(json)],
     );
   }
+
+  /// Shows a scene on its room or zone, as the Hue app does.
+  Future<void> recallScene(String sceneId) => _put('scene/$sceneId', {
+        'recall': {'action': 'active'},
+      });
 
   /// Creates an entertainment area and returns its id.
   Future<String> createEntertainmentArea(
