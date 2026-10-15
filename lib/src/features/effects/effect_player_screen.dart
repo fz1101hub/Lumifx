@@ -86,6 +86,57 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
     );
   }
 
+  static const _sleepOptions = [15, 30, 45, 60, 90];
+
+  Future<void> _chooseSleepTimer() async {
+    final l10n = context.l10n;
+    final current = controller.sleepTimer?.inMinutes ?? 0;
+    final minutes = await showDialog<int>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(l10n.sleepTimer),
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+            child: Text(
+              l10n.sleepTimerDescription,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          for (final option in [0, ..._sleepOptions])
+            ListTile(
+              leading: Icon(option == current
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_off),
+              title: Text(option == 0
+                  ? l10n.sleepTimerOff
+                  : l10n.sleepTimerMinutes(option)),
+              onTap: () => Navigator.of(context).pop(option),
+            ),
+        ],
+      ),
+    );
+    if (minutes != null) {
+      controller
+          .setSleepTimer(minutes == 0 ? null : Duration(minutes: minutes));
+    }
+  }
+
+  String _sleepLabel(AppLocalizations l10n, PlaybackController c) {
+    if (c.isFadingOut) {
+      return l10n.sleepTimerFading;
+    }
+    final remaining = c.sleepRemaining;
+    if (remaining != null) {
+      // Round up, so "1 minute" is shown until the lights actually go out.
+      return l10n.sleepTimerRemaining((remaining.inSeconds / 60).ceil());
+    }
+    final timer = c.sleepTimer;
+    return timer == null
+        ? l10n.sleepTimer
+        : l10n.sleepTimerMinutes(timer.inMinutes);
+  }
+
   /// Play/pause, with a one-time warning before the first effect that
   /// flashes. Nothing plays until the user has chosen.
   Future<void> _toggle() async {
@@ -245,6 +296,14 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                         icon: const Icon(Icons.stop),
                         label: Text(l10n.stop),
                       ),
+                    OutlinedButton.icon(
+                      onPressed:
+                          busy || c.isFadingOut ? null : _chooseSleepTimer,
+                      icon: Icon(c.sleepTimer == null
+                          ? Icons.bedtime_outlined
+                          : Icons.bedtime),
+                      label: Text(_sleepLabel(l10n, c)),
+                    ),
                   ],
                 ),
               ),

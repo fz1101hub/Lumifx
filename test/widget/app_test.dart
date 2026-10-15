@@ -245,6 +245,30 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('a sleep timer can be set and shows the time left',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sleep timer'));
+    await tester.pumpAndSettle();
+    expect(find.text('Off'), findsOneWidget);
+    await tester.tap(find.text('30 min'));
+    await tester.pumpAndSettle();
+    expect(find.text('30 min'), findsOneWidget);
+
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Lights off in 30 minutes'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+    expect(find.text('30 min'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('the app speaks Italian', (tester) async {
     final bridge = BridgeController(store: InMemoryCredentialStore());
     await tester.runAsync(bridge.initialize);

@@ -45,6 +45,10 @@ build before every store release.
       stay as the effect left them.
 - [ ] Lock the phone while playing: the effect stops cleanly and lights
       are restored; unlocking shows the Play button.
+- [ ] Sleep timer: set 15 min on Fireplace; the button shows the minutes
+      left; at the end the effect fades over ~20 s and the lights switch
+      off (not back to their previous state), on a room and on an
+      entertainment area alike.
 - [ ] Screen stays on while an effect plays.
 
 ## Entertainment streaming

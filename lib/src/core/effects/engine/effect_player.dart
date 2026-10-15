@@ -46,6 +46,10 @@ class EffectPlayer {
   /// range takes 400 ms, far slower than any flash in the catalog.
   static const softFlashRate = 2.5;
 
+  /// Multiplies every frame's brightness, 0..1; the sleep timer fades it
+  /// to 0. Applied after [softFlashes], so a fade is never slowed down.
+  double masterLevel = 1;
+
   final _frames = StreamController<List<LightFrame>>.broadcast();
   List<LightFrame>? _shown;
   Timer? _timer;
@@ -109,10 +113,14 @@ class EffectPlayer {
     _effectTime += wallTime * speed;
     final rendered = _renderer.render(_effectTime, audio: audio?.call());
     final step = wallTime == Duration.zero ? tick : wallTime;
-    _current = softFlashes
+    final shown = softFlashes
         ? softenFrames(_shown, rendered, step.inMicroseconds / 1e6)
         : rendered;
-    _shown = _current;
+    _shown = shown;
+    final level = masterLevel.clamp(0.0, 1.0);
+    _current = level == 1
+        ? shown
+        : [for (final f in shown) LightFrame(f.color, f.brightness * level)];
     output.update(
       {for (var i = 0; i < lightIds.length; i++) lightIds[i]: _current[i]},
       wallTime == Duration.zero ? tick : wallTime,

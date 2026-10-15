@@ -78,6 +78,28 @@ void main() {
     expect(player.state, PlaybackState.stopped);
   });
 
+  test('masterLevel scales every frame (used by the sleep-timer fade)', () {
+    _RecordingOutput run(double level) {
+      final output = _RecordingOutput();
+      EffectPlayer(
+        effect: _sweep,
+        lightIds: const ['a', 'b', 'c'],
+        output: output,
+        seed: 3,
+      )
+        ..masterLevel = level
+        ..advance(const Duration(seconds: 1));
+      return output;
+    }
+
+    final full = run(1).updates.single;
+    final half = run(0.5).updates.single;
+    for (final id in ['a', 'b', 'c']) {
+      expect(half[id]!.brightness, closeTo(full[id]!.brightness / 2, 1e-9));
+      expect(half[id]!.color, full[id]!.color);
+    }
+  });
+
   group('soft flashes', () {
     test('softenFrames limits the brightness step and eases the colour', () {
       const dark = LightFrame(LightColor(0, 0, 0.2), 0.1);

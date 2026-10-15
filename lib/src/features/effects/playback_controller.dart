@@ -42,6 +42,9 @@ enum PlaybackNoticeKind {
   /// The stream ended on its own; [PlaybackNotice.error] says why, when
   /// known.
   streamEnded,
+
+  /// The sleep timer ran out: the effect faded and the lights are off.
+  sleepTimerDone,
 }
 
 /// Something worth telling the user; the UI turns it into localised text.
@@ -90,6 +93,7 @@ class PlaybackController extends ChangeNotifier {
     required PreferencesController preferences,
     required AudioInput audioInput,
     ScreenWake screenWake = const NoScreenWake(),
+    this.sleepFade = const Duration(seconds: 20),
   })  : _bridge = bridge,
         _preferences = preferences,
         _audioInput = audioInput,
@@ -106,6 +110,9 @@ class PlaybackController extends ChangeNotifier {
   final AudioInput _audioInput;
   final ScreenWake _screenWake;
 
+  /// How long the sleep timer takes to fade the lights to black.
+  final Duration sleepFade;
+
   final _notices = StreamController<PlaybackNotice>.broadcast();
   PlaybackStatus _status = PlaybackStatus.idle;
   EffectPlayer? _player;
@@ -115,6 +122,15 @@ class PlaybackController extends ChangeNotifier {
   double _sensitivity = 1;
   List<SlotLabel>? _slotNames;
   Map<String, HueLightCommand> _restore = const {};
+
+  /// Lights of the current target, for the sleep timer to switch off.
+  List<String> _activeLightIds = const [];
+  Duration? _sleepAfter;
+  DateTime? _sleepEndsAt;
+  Timer? _sleepTimer;
+  Timer? _sleepTicker;
+  Timer? _fadeTimer;
+  bool _fadingOut = false;
   bool _disposed = false;
 
   /// Bumped by every stop, so a start that completes afterwards knows it
@@ -135,6 +151,22 @@ class PlaybackController extends ChangeNotifier {
   MusicSyncController? get music => _music;
   EffectControls get controls => _controls;
   double get sensitivity => _sensitivity;
+
+  /// The sleep timer the user chose, or null for none.
+  Duration? get sleepTimer => _sleepAfter;
+
+  /// Time left before the lights go out; null when no timer is running.
+  Duration? get sleepRemaining {
+    final endsAt = _sleepEndsAt;
+    if (endsAt == null) {
+      return null;
+    }
+    final left = endsAt.difference(DateTime.now());
+    return left.isNegative ? Duration.zero : left;
+  }
+
+  /// The timer ran out and the effect is fading to black.
+  bool get isFadingOut => _fadingOut;
 
   /// The latest bridge snapshot, kept while the bridge is temporarily
   /// unreachable so the chosen target does not vanish from the screen.
@@ -295,6 +327,7 @@ class PlaybackController extends ChangeNotifier {
 
       final music = _music;
       _restore = _preferences.restoreLights ? restore : const {};
+      _activeLightIds = selectedTarget == null ? const [] : lightIds;
       _slotNames = names;
       // Assigned before play(): if the first tick throws, stop() can still
       // find and stop the player (and its timer).
@@ -312,6 +345,7 @@ class PlaybackController extends ChangeNotifier {
       player.play();
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
+      _armSleepTimer();
       _setStatus(PlaybackStatus.playing);
     } on Object catch (error) {
       if (cancelled()) {
@@ -359,11 +393,13 @@ class PlaybackController extends ChangeNotifier {
   /// Stops playback and, unless [restore] is false, puts the lights back.
   Future<void> stop({bool restore = true}) {
     _generation++;
+    _cancelSleepTimer();
     final player = _player;
     final commands = _restore;
     _player = null;
     _slotNames = null;
     _restore = const {};
+    _activeLightIds = const [];
     _setStatus(PlaybackStatus.idle);
     final previous = _teardown;
     late final Future<void> current;
@@ -425,6 +461,76 @@ class PlaybackController extends ChangeNotifier {
     _sensitivity = value;
     _music?.sensitivity = value;
     _notify();
+  }
+
+  /// Switches the lights off after [duration] (null: never). Counts wall
+  /// time from now, or from the next start when nothing is playing.
+  void setSleepTimer(Duration? duration) {
+    _sleepAfter = duration;
+    _cancelSleepTimer();
+    if (_status == PlaybackStatus.playing || _status == PlaybackStatus.paused) {
+      _armSleepTimer();
+    }
+    _notify();
+  }
+
+  void _armSleepTimer() {
+    final after = _sleepAfter;
+    _cancelSleepTimer();
+    if (after == null) {
+      return;
+    }
+    _sleepEndsAt = DateTime.now().add(after);
+    _sleepTimer = Timer(after, _onSleepElapsed);
+    // Repaint the remaining time now and then.
+    _sleepTicker =
+        Timer.periodic(const Duration(seconds: 15), (_) => _notify());
+  }
+
+  void _cancelSleepTimer() {
+    _sleepTimer?.cancel();
+    _sleepTimer = null;
+    _sleepTicker?.cancel();
+    _sleepTicker = null;
+    _fadeTimer?.cancel();
+    _fadeTimer = null;
+    _sleepEndsAt = null;
+    _fadingOut = false;
+  }
+
+  /// Fades the effect to black over [sleepFade], then switches the lights
+  /// off for good instead of restoring them.
+  void _onSleepElapsed() {
+    final player = _player;
+    if (_disposed || player == null) {
+      return;
+    }
+    if (_status != PlaybackStatus.playing) {
+      // Paused: nothing to fade, just finish.
+      unawaited(_finishSleep());
+      return;
+    }
+    _fadingOut = true;
+    _sleepEndsAt = null;
+    _notify();
+    const step = Duration(milliseconds: 100);
+    final steps = (sleepFade.inMilliseconds / step.inMilliseconds).ceil();
+    var elapsed = 0;
+    _fadeTimer = Timer.periodic(step, (timer) {
+      elapsed++;
+      player.masterLevel = (1 - elapsed / steps).clamp(0.0, 1.0);
+      if (elapsed >= steps) {
+        timer.cancel();
+        unawaited(_finishSleep());
+      }
+    });
+  }
+
+  Future<void> _finishSleep() async {
+    const off = HueLightCommand(on: false, transition: Duration(seconds: 2));
+    _restore = {for (final id in _activeLightIds) id: off};
+    await stop();
+    _notice(const PlaybackNotice(PlaybackNoticeKind.sleepTimerDone));
   }
 
   /// Starts the microphone for Music Sync effects. Returns false (after
@@ -525,6 +631,7 @@ class PlaybackController extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
+    _cancelSleepTimer();
     _bridge.removeListener(_onBridgeChanged);
     _preferences.removeListener(_onPreferencesChanged);
     final music = _music;
