@@ -47,6 +47,27 @@ void main() {
     expect(describeError(it, StateError('?')), it.errorGeneric);
   });
 
+  test('every supported locale is wired up', () {
+    final expected = {
+      'en': 'Play',
+      'it': 'Riproduci',
+      'de': 'Abspielen',
+      'fr': 'Lecture',
+      'es': 'Reproducir',
+      'nl': 'Afspelen',
+    };
+    expect(
+      AppLocalizations.supportedLocales.map((l) => l.languageCode).toSet(),
+      expected.keys.toSet(),
+    );
+    for (final MapEntry(key: code, value: play) in expected.entries) {
+      final l10n = lookupAppLocalizations(Locale(code));
+      expect(l10n.play, play, reason: code);
+      expect(l10n.lightCount(2), isNot(contains('{')), reason: code);
+      expect(l10n.effectName(effectCatalog.first), isNotEmpty, reason: code);
+    }
+  });
+
   test('playback notices and bridge problems have Italian text', () {
     expect(
       describePlaybackNotice(

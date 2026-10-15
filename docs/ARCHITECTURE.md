@@ -157,10 +157,12 @@ Effects and visual assets should be original. Inspiration can come from broad th
 
 ### Localisation (`lib/l10n`)
 
-Strings are ARB files (`app_en.arb` is the template, `app_it.arb` the
-Italian translation) compiled by `flutter gen-l10n` on every `flutter pub
-get` into `lib/l10n/generated/` (git-ignored, excluded from analysis and
-formatting). Widgets read them through `context.l10n`
+Strings are ARB files (`app_en.arb` is the template; Italian, German,
+French, Spanish and Dutch translations sit next to it) compiled by
+`flutter gen-l10n` on every `flutter pub get` into `lib/l10n/generated/`
+(git-ignored, excluded from analysis and formatting).
+`test/l10n_completeness_test.dart` fails when a file misses a key or a
+placeholder. Widgets read them through `context.l10n`
 (`features/common/app_text.dart`).
 
 Controllers never produce user-facing text, because they have no locale:

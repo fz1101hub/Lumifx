@@ -46,7 +46,7 @@ Also done ahead of schedule:
 - **Everyday use**: the scenes saved in the Hue app can be recalled from
   Rooms & zones; a sleep timer fades an effect out and switches the lights
   off; a one-time warning and a "soften flashes" mode for photosensitive
-  users; English and Italian.
+  users; six languages.
 
 ## Development
 
@@ -62,11 +62,14 @@ flutter run            # on a device or simulator on the same Wi-Fi as the bridg
 Effects can be previewed without a bridge: the player shows virtual lamps
 when no room or zone is selected.
 
-The app is in English and Italian. Every user-facing string lives in
-`lib/l10n/app_en.arb` (the template) and `lib/l10n/app_it.arb`; the Dart
-classes are generated into `lib/l10n/generated/` by `flutter pub get` and
-are not committed. To add a language, copy `app_en.arb` to `app_<code>.arb`
-and translate the values.
+The app is in English, Italian, German, French, Spanish and Dutch. Every
+user-facing string lives in `lib/l10n/app_en.arb` (the template) and one
+`app_<code>.arb` per language; the Dart classes are generated into
+`lib/l10n/generated/` by `flutter pub get` and are not committed. To add a
+language, copy `app_en.arb` to `app_<code>.arb`, translate the values and
+list the code in `ios/Runner/Info.plist` and
+`android/app/src/main/res/xml/locales_config.xml`; a test checks that every
+file carries every key.
 
 ```text
 lib/src/
