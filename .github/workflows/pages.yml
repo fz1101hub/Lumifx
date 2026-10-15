@@ -31,10 +31,9 @@ jobs:
           { printf -- '---\ntitle: Privacy Policy\n---\n\n'; cat docs/PRIVACY_POLICY.md; } > site/privacy.md
       - uses: actions/configure-pages@v5
         with:
-          # Turns Pages on (source: GitHub Actions) on the first run.
+          # Turns Pages on (source: GitHub Actions) when it is not yet.
           enablement: true
-          static_site_generator: jekyll
-          generator_config_file: site/_config.yml
+      # Sets the site's url and baseurl (/Lumifx) from the Pages settings.
       - uses: actions/jekyll-build-pages@v1
         with:
           source: ./site
