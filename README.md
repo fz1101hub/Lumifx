@@ -30,7 +30,8 @@ The project is intentionally built around an original effects engine and origina
 2. ✅ Read rooms, zones and lights
 3. ✅ Basic light controls (room/zone on/off and brightness)
 4. ✅ Shared effect engine (renderer, player, rate-limited Hue output)
-5. ✅ First set of animated scenes and narrative Stories (6 scenes, 12 stories)
+5. ✅ First set of animated scenes and narrative Stories (6 scenes, 19 stories
+   including Halloween and Christmas collections, colour variants for scenes)
 6. ✅ Favorites, recently played and playback defaults
 
 Also done ahead of schedule:
@@ -45,7 +46,7 @@ Also done ahead of schedule:
 - **Everyday use**: the scenes saved in the Hue app can be recalled from
   Rooms & zones; a sleep timer fades an effect out and switches the lights
   off; a one-time warning and a "soften flashes" mode for photosensitive
-  users; English and Italian.
+  users; six languages.
 
 ## Development
 
@@ -61,11 +62,14 @@ flutter run            # on a device or simulator on the same Wi-Fi as the bridg
 Effects can be previewed without a bridge: the player shows virtual lamps
 when no room or zone is selected.
 
-The app is in English and Italian. Every user-facing string lives in
-`lib/l10n/app_en.arb` (the template) and `lib/l10n/app_it.arb`; the Dart
-classes are generated into `lib/l10n/generated/` by `flutter pub get` and
-are not committed. To add a language, copy `app_en.arb` to `app_<code>.arb`
-and translate the values.
+The app is in English, Italian, German, French, Spanish and Dutch. Every
+user-facing string lives in `lib/l10n/app_en.arb` (the template) and one
+`app_<code>.arb` per language; the Dart classes are generated into
+`lib/l10n/generated/` by `flutter pub get` and are not committed. To add a
+language, copy `app_en.arb` to `app_<code>.arb`, translate the values and
+list the code in `ios/Runner/Info.plist` and
+`android/app/src/main/res/xml/locales_config.xml`; a test checks that every
+file carries every key.
 
 ```text
 lib/src/

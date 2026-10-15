@@ -49,17 +49,13 @@ class EffectControls {
 /// the room); a separate mapping decides which physical light each slot is.
 class EffectRenderer {
   EffectRenderer(
-    this.effect, {
+    LightingEffect effect, {
     required this.slotCount,
     this.seed = 0,
     this.controls = const EffectControls(),
-  })  : _cycle = effect.cycleLength > _minimumCycle
-            ? effect.cycleLength
-            : _minimumCycle,
-        _ambientIndices = [
-          for (var i = 0; i < effect.events.length; i++)
-            if (effect.events[i].type == EffectEventTypes.ambientPalette) i,
-        ]..sort((a, b) => effect.events[a].at.compareTo(effect.events[b].at)) {
+  })  : _effect = effect,
+        _cycle = _cycleOf(effect),
+        _ambientIndices = _ambientIndicesOf(effect) {
     if (slotCount < 1) {
       throw ArgumentError.value(slotCount, 'slotCount', 'needs at least 1');
     }
@@ -67,13 +63,31 @@ class EffectRenderer {
 
   static const _minimumCycle = Duration(seconds: 1);
 
-  final LightingEffect effect;
   final int slotCount;
   final int seed;
   EffectControls controls;
 
-  final Duration _cycle;
-  final List<int> _ambientIndices;
+  LightingEffect _effect;
+  Duration _cycle;
+  List<int> _ambientIndices;
+
+  LightingEffect get effect => _effect;
+
+  /// Swaps the effect mid-playback, e.g. for a colour variant: time keeps
+  /// running, so the swap is seamless when the timelines match.
+  set effect(LightingEffect value) {
+    _effect = value;
+    _cycle = _cycleOf(value);
+    _ambientIndices = _ambientIndicesOf(value);
+  }
+
+  static Duration _cycleOf(LightingEffect effect) =>
+      effect.cycleLength > _minimumCycle ? effect.cycleLength : _minimumCycle;
+
+  static List<int> _ambientIndicesOf(LightingEffect effect) => [
+        for (var i = 0; i < effect.events.length; i++)
+          if (effect.events[i].type == EffectEventTypes.ambientPalette) i,
+      ]..sort((a, b) => effect.events[a].at.compareTo(effect.events[b].at));
 
   Duration get cycleLength => _cycle;
 

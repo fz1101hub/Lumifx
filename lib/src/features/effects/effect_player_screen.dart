@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
+import '../../core/color/light_color.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
@@ -10,6 +11,7 @@ import '../../core/screen_wake.dart';
 import '../common/app_text.dart';
 import '../entertainment/entertainment_area_editor.dart';
 import '../music/music_sync_controller.dart';
+import 'effect_palette.dart';
 import 'light_color_ui.dart';
 import 'playback_controller.dart';
 
@@ -188,6 +190,31 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
             children: [
               if (description.isNotEmpty)
                 Text(description, style: theme.textTheme.bodyLarge),
+              if (widget.effect.variants.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: [
+                    _VariantChip(
+                      label: l10n.variantClassic,
+                      colors: effectPalette(widget.effect),
+                      selected: c.variantId == null,
+                      onSelected: () => c.setVariant(null),
+                    ),
+                    for (final variant in widget.effect.variants)
+                      _VariantChip(
+                        label: l10n.variantName(variant),
+                        colors: [
+                          for (final hex in variant.palette)
+                            LightColor.fromHex(hex).toColor(),
+                        ],
+                        selected: c.variantId == variant.id,
+                        onSelected: () => c.setVariant(variant.id),
+                      ),
+                  ],
+                ),
+              ],
               const SizedBox(height: 20),
               DropdownButtonFormField<String?>(
                 // Rebuilt when the available targets change, so the field
@@ -340,6 +367,42 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
           );
         },
       ),
+    );
+  }
+}
+
+/// A colour variant: a swatch of its palette and its name.
+class _VariantChip extends StatelessWidget {
+  const _VariantChip({
+    required this.label,
+    required this.colors,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final String label;
+  final List<Color> colors;
+  final bool selected;
+  final VoidCallback onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      avatar: Container(
+        width: 20,
+        height: 20,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: SweepGradient(
+            colors: colors.length > 1
+                ? [...colors, colors.first]
+                : [...colors, ...colors],
+          ),
+        ),
+      ),
+      label: Text(label),
+      selected: selected,
+      onSelected: (_) => onSelected(),
     );
   }
 }

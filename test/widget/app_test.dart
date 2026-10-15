@@ -245,6 +245,42 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('colour variants are offered for scenes and remembered',
+      (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Aurora'), 200);
+    await tester.ensureVisible(find.text('Aurora'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Aurora'));
+    await tester.pumpAndSettle();
+    expect(find.text('Classic'), findsOneWidget);
+    await tester.tap(find.text('Rose & gold'));
+    await tester.pumpAndSettle();
+    expect(preferences.variantOf('aurora'), 'rose_gold');
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    // Stories have no variants.
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Emerald Trickster'));
+    await tester.pumpAndSettle();
+    expect(find.text('Classic'), findsNothing);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('a sleep timer can be set and shows the time left',
       (tester) async {
     await _pumpApp(tester);

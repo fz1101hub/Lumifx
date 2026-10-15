@@ -3,6 +3,7 @@ import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/effects/effect.dart';
 import 'package:lumifx/src/core/effects/effect_event.dart';
 import 'package:lumifx/src/core/effects/engine/effect_renderer.dart';
+import 'package:lumifx/src/features/effects/catalog/builtin_scenes.dart';
 import 'package:lumifx/src/features/effects/catalog/builtin_stories.dart';
 import 'package:lumifx/src/features/effects/catalog/effect_catalog.dart';
 
@@ -39,6 +40,47 @@ const _greenAmbient = EffectEvent(
 );
 
 void main() {
+  group('colour variants', () {
+    test('withPalette swaps every palette and nothing else', () {
+      final rose = aurora.withVariant('rose_gold');
+      expect(rose.id, aurora.id);
+      expect(rose.events.length, aurora.events.length);
+      expect(rose.events.single.parameters['palette'],
+          aurora.variants.first.palette);
+      expect(rose.events.single.parameters['speed'],
+          aurora.events.single.parameters['speed']);
+      // Unknown ids keep the original colours.
+      expect(aurora.withVariant('nope'), same(aurora));
+      expect(aurora.withVariant(null), same(aurora));
+      // Disco: beats carry palettes too.
+      final neon = disco.withVariant('neon');
+      for (final event in neon.events) {
+        if (event.parameters.containsKey('palette')) {
+          expect(event.parameters['palette'], disco.variants.first.palette);
+        }
+      }
+    });
+
+    test('a variant renders different colours at the same instant', () {
+      final classic = EffectRenderer(aurora, slotCount: 3, seed: 1)
+          .render(const Duration(seconds: 5));
+      final rose =
+          EffectRenderer(aurora.withVariant('rose_gold'), slotCount: 3, seed: 1)
+              .render(const Duration(seconds: 5));
+      expect(rose.first.color, isNot(classic.first.color));
+      expect(rose.first.brightness, closeTo(classic.first.brightness, 1e-9));
+    });
+
+    test('the renderer can swap effects mid-playback', () {
+      final renderer = EffectRenderer(aurora, slotCount: 2, seed: 1);
+      final before = renderer.render(const Duration(seconds: 3));
+      renderer.effect = aurora.withVariant('ice');
+      final after = renderer.render(const Duration(seconds: 3));
+      expect(after.first.color, isNot(before.first.color));
+      expect(renderer.cycleLength, aurora.cycleLength);
+    });
+  });
+
   group('EffectRenderer', () {
     test('is deterministic for the same seed and instant', () {
       final a = EffectRenderer(emeraldTrickster, slotCount: 5, seed: 42);

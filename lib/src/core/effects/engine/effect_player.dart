@@ -61,6 +61,7 @@ class EffectPlayer {
   List<LightFrame> _current = const [];
 
   LightingEffect get effect => _renderer.effect;
+  set effect(LightingEffect value) => _renderer.effect = value;
   PlaybackState get state => _state;
   Duration get position => _effectTime;
   List<LightFrame> get currentFrames => _current;

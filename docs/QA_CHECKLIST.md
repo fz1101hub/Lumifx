@@ -38,6 +38,10 @@ build before every store release.
 - [ ] A room containing a smart plug: the plug is ignored and the other
       lights play.
 - [ ] Brightness / intensity / speed sliders take effect while playing.
+- [ ] Aurora › "Rose & gold" changes the colours at once while playing
+      and is still selected after reopening the effect.
+- [ ] Halloween: Vampire's Castle on an entertainment area (footsteps
+      coming closer, lightning, crimson flash); Trick or Treat on a room.
 - [ ] First Play on Thunderstorm shows the "Flashing lights" warning once;
       "Soften flashes" turns the strikes into soft pulses (also as a switch
       in Settings); Ocean never shows the warning.

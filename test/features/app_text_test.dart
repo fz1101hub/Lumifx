@@ -23,7 +23,13 @@ void main() {
       if (effect.collection != null) {
         expect(it.collectionName(effect), isNotEmpty);
       }
+      for (final variant in effect.variants) {
+        // "Neon" is the same word in Italian: only check it is mapped.
+        expect(it.variantName(variant), isNotEmpty, reason: variant.id);
+        expect(en.variantName(variant), variant.name);
+      }
     }
+    expect(it.variantClassic, isNotEmpty);
   });
 
   test('errors the app knows are translated, others keep their words', () {
@@ -39,6 +45,27 @@ void main() {
     expect(describeError(it, const HueException('Bridge says no')),
         'Bridge says no');
     expect(describeError(it, StateError('?')), it.errorGeneric);
+  });
+
+  test('every supported locale is wired up', () {
+    final expected = {
+      'en': 'Play',
+      'it': 'Riproduci',
+      'de': 'Abspielen',
+      'fr': 'Lecture',
+      'es': 'Reproducir',
+      'nl': 'Afspelen',
+    };
+    expect(
+      AppLocalizations.supportedLocales.map((l) => l.languageCode).toSet(),
+      expected.keys.toSet(),
+    );
+    for (final MapEntry(key: code, value: play) in expected.entries) {
+      final l10n = lookupAppLocalizations(Locale(code));
+      expect(l10n.play, play, reason: code);
+      expect(l10n.lightCount(2), isNot(contains('{')), reason: code);
+      expect(l10n.effectName(effectCatalog.first), isNotEmpty, reason: code);
+    }
   });
 
   test('playback notices and bridge problems have Italian text', () {

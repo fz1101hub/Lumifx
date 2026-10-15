@@ -52,6 +52,7 @@ class PreferencesController extends ChangeNotifier {
   bool _restoreLights = true;
   bool _softFlashes = false;
   bool _flashWarningShown = false;
+  Map<String, String> _variants = const {};
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -76,6 +77,9 @@ class PreferencesController extends ChangeNotifier {
   /// The one-time warning before a flashing effect has been shown.
   bool get flashWarningShown => _flashWarningShown;
 
+  /// The colour variant chosen for an effect, or null for its original.
+  String? variantOf(String effectId) => _variants[effectId];
+
   bool isFavorite(String effectId) => _favorites.contains(effectId);
 
   /// Set once the user changes anything, so a slow [load] cannot overwrite
@@ -96,6 +100,12 @@ class PreferencesController extends ChangeNotifier {
       _restoreLights = json['restoreLights'] as bool? ?? true;
       _softFlashes = json['softFlashes'] as bool? ?? false;
       _flashWarningShown = json['flashWarningShown'] as bool? ?? false;
+      final variants = json['variants'];
+      _variants = {
+        if (variants is Map)
+          for (final MapEntry(:key, :value) in variants.entries)
+            if (key is String && value is String) key: value,
+      };
       final controls = json['defaultControls'];
       if (controls is Map) {
         _defaultControls = EffectControls(
@@ -149,6 +159,15 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  Future<void> setVariant(String effectId, String? variantId) {
+    _variants = {
+      for (final MapEntry(:key, :value) in _variants.entries)
+        if (key != effectId) key: value,
+      if (variantId != null) effectId: variantId,
+    };
+    return _changed();
+  }
+
   Future<void> setLastTarget(String? target) {
     if (target == _lastTarget) {
       return Future.value();
@@ -170,6 +189,7 @@ class PreferencesController extends ChangeNotifier {
       'restoreLights': _restoreLights,
       'softFlashes': _softFlashes,
       'flashWarningShown': _flashWarningShown,
+      'variants': _variants,
       'defaultControls': {
         'brightness': _defaultControls.brightness,
         'intensity': _defaultControls.intensity,

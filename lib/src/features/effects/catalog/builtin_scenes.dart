@@ -7,6 +7,7 @@ LightingEffect _ambientScene({
   required String collection,
   required String description,
   required Map<String, Object> parameters,
+  List<EffectVariant> variants = const [],
 }) {
   return LightingEffect(
     id: id,
@@ -14,6 +15,7 @@ LightingEffect _ambientScene({
     kind: EffectKind.scene,
     collection: collection,
     description: description,
+    variants: variants,
     loopDuration: const Duration(minutes: 5),
     events: [
       EffectEvent(
@@ -38,6 +40,18 @@ final fireplace = _ambientScene(
     'speed': 0.12,
     'flicker': 0.9,
   },
+  variants: const [
+    EffectVariant(
+      id: 'blue_flame',
+      name: 'Blue flame',
+      palette: ['#1A4BFF', '#4FA3FF', '#0B2AA8', '#8FD3FF'],
+    ),
+    EffectVariant(
+      id: 'emerald_embers',
+      name: 'Emerald embers',
+      palette: ['#0FA857', '#5CFF8A', '#06663A', '#B0FFC8'],
+    ),
+  ],
 );
 
 final ocean = _ambientScene(
@@ -51,6 +65,18 @@ final ocean = _ambientScene(
     'brightnessMax': 0.80,
     'speed': 0.035,
   },
+  variants: const [
+    EffectVariant(
+      id: 'lagoon',
+      name: 'Tropical lagoon',
+      palette: ['#00A896', '#02C39A', '#F0F3BD', '#028090'],
+    ),
+    EffectVariant(
+      id: 'deep_purple',
+      name: 'Deep purple',
+      palette: ['#2B0A5C', '#5B2A9E', '#8A4FFF', '#3B1A7A'],
+    ),
+  ],
 );
 
 final aurora = _ambientScene(
@@ -64,6 +90,18 @@ final aurora = _ambientScene(
     'brightnessMax': 0.75,
     'speed': 0.025,
   },
+  variants: const [
+    EffectVariant(
+      id: 'rose_gold',
+      name: 'Rose & gold',
+      palette: ['#FF6FAE', '#FFC46B', '#FF9AD1', '#FFE4A8'],
+    ),
+    EffectVariant(
+      id: 'ice',
+      name: 'Ice',
+      palette: ['#BFE9FF', '#5AB8FF', '#E8F7FF', '#2E7BFF'],
+    ),
+  ],
 );
 
 final sunset = _ambientScene(
@@ -77,6 +115,18 @@ final sunset = _ambientScene(
     'brightnessMax': 0.75,
     'speed': 0.02,
   },
+  variants: const [
+    EffectVariant(
+      id: 'desert',
+      name: 'Desert',
+      palette: ['#E07A2E', '#C44A1A', '#F2B56B', '#8A3A12'],
+    ),
+    EffectVariant(
+      id: 'lavender',
+      name: 'Lavender dusk',
+      palette: ['#9B6BFF', '#FF8FB0', '#6A4CBF', '#FFC2D6'],
+    ),
+  ],
 );
 
 /// Rain-dark sky with lightning that never strikes the same way twice.
@@ -87,6 +137,18 @@ const thunderstorm = LightingEffect(
   collection: 'Nature',
   description: 'Heavy clouds, restless rain and lightning across the room.',
   prefersStreaming: true,
+  variants: [
+    EffectVariant(
+      id: 'sea_storm',
+      name: 'Sea storm',
+      palette: ['#063A3A', '#0B5A5A', '#104F6A', '#062A33'],
+    ),
+    EffectVariant(
+      id: 'sand_storm',
+      name: 'Sandstorm',
+      palette: ['#5A3A12', '#8A5A20', '#6A4418', '#3A2410'],
+    ),
+  ],
   loopDuration: Duration(seconds: 45),
   events: [
     EffectEvent(
@@ -141,6 +203,18 @@ const disco = LightingEffect(
   collection: 'Party',
   description: 'Four on the floor at 124 BPM.',
   prefersStreaming: true,
+  variants: [
+    EffectVariant(
+      id: 'neon',
+      name: 'Neon',
+      palette: ['#FF00FF', '#00FFFF', '#CCFF00', '#FF5E00'],
+    ),
+    EffectVariant(
+      id: 'pastel',
+      name: 'Pastel',
+      palette: ['#FFB3DE', '#B3F0FF', '#FFF5B3', '#C2FFC2'],
+    ),
+  ],
   loopDuration: Duration(seconds: 32),
   events: [
     EffectEvent(
