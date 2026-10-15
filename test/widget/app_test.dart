@@ -22,6 +22,11 @@ class _FakeDiscovery implements BridgeDiscovery {
       );
 }
 
+/// Preferences of a user who has already seen the flashing-lights warning.
+PreferencesController _warnedPreferences() =>
+    PreferencesController(store: InMemoryKeyValueStore())
+      ..setFlashWarningShown(true);
+
 Future<void> _pumpApp(WidgetTester tester) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -133,7 +138,8 @@ void main() {
     await tester.pumpWidget(LumiFxApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
-      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      // Beat effects flash: the one-time warning has been seen already.
+      preferences: _warnedPreferences(),
       audioInput: input,
     ));
 
@@ -170,7 +176,7 @@ void main() {
     await tester.pumpWidget(LumiFxApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
-      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      preferences: _warnedPreferences(),
       audioInput: FakeAudioInput(granted: false),
     ));
     await tester.tap(find.text('Interactive'));
@@ -186,12 +192,116 @@ void main() {
     expect(find.text('Play'), findsOneWidget);
   });
 
+  testWidgets('a flashing effect warns once, and softening can be chosen',
+      (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+
+    // Ocean has no flashes: no warning.
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Flashing lights'), findsNothing);
+    expect(find.text('Pause'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // The lazy list has not built the card yet: scroll until it exists,
+    // then bring it fully into view.
+    await tester.scrollUntilVisible(find.text('Thunderstorm'), 200);
+    await tester.ensureVisible(find.text('Thunderstorm'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Thunderstorm'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Play'));
+    await tester.pumpAndSettle();
+    expect(find.text('Flashing lights'), findsOneWidget);
+    // Nothing plays until the user has chosen.
+    expect(find.text('Pause'), findsNothing);
+    await tester.tap(find.text('Soften flashes'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Pause'), findsOneWidget);
+    expect(preferences.softFlashes, isTrue);
+    expect(preferences.flashWarningShown, isTrue);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+
+    // Shown once only.
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Flashing lights'), findsNothing);
+    expect(find.text('Pause'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a sleep timer can be set and shows the time left',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Sleep timer'));
+    await tester.pumpAndSettle();
+    expect(find.text('Off'), findsOneWidget);
+    await tester.tap(find.text('30 min'));
+    await tester.pumpAndSettle();
+    expect(find.text('30 min'), findsOneWidget);
+
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Lights off in 30 minutes'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+    expect(find.text('30 min'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the app speaks Italian', (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+      locale: const Locale('it'),
+    ));
+    expect(find.text('Collega il tuo Hue Bridge'), findsOneWidget);
+    expect(find.text('Scene'), findsOneWidget);
+    await tester.tap(find.text('Storie'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Il Burlone di Smeraldo'));
+    await tester.pumpAndSettle();
+    expect(find.text('Solo anteprima'), findsOneWidget);
+    expect(find.text('Lampada 1'), findsOneWidget);
+    expect(find.text('Riproduci'), findsOneWidget);
+    expect(find.text('Magia e fantasia'), findsNothing);
+    // pageBack() looks for the English "Back" tooltip.
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Magia e fantasia'), findsWidgets);
+  });
+
   streamingTests();
 }
 
 Future<BridgeController> _connectedBridge(
   WidgetTester tester, {
   String? clientKey,
+  List<String>? puts,
 }) async {
   http.Response json(Object body) => http.Response(jsonEncode(body), 200);
   final bridge = BridgeController(
@@ -206,7 +316,22 @@ Future<BridgeController> _connectedBridge(
       host: pin.host,
       applicationKey: key,
       client: MockClient((request) async {
+        if (request.method == 'PUT') {
+          puts?.add(request.url.path);
+          return json({'data': <Object>[]});
+        }
         switch (request.url.path) {
+          case '/clip/v2/resource/scene':
+            return json({
+              'data': [
+                {
+                  'id': 's1',
+                  'metadata': {'name': 'Movie night'},
+                  'group': {'rid': 'r1', 'rtype': 'room'},
+                  'status': {'active': 'inactive'},
+                },
+              ],
+            });
           case '/clip/v2/resource/light':
             return json({
               'data': [
@@ -259,6 +384,26 @@ Future<BridgeController> _connectedBridge(
 }
 
 void streamingTests() {
+  testWidgets('rooms list the Hue scenes of each group and recall them',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.tap(find.text('Rooms & zones'));
+    await tester.pumpAndSettle();
+    expect(find.text('Living room'), findsOneWidget);
+    expect(find.text('Hue scenes'), findsOneWidget);
+    await tester.tap(find.text('Movie night'));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(puts, contains('/clip/v2/resource/scene/s1'));
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('player offers entertainment areas and reports start errors',
       (tester) async {
     final bridge = await _connectedBridge(tester);

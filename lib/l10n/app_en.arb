@@ -1,0 +1,427 @@
+{
+  "@@locale": "en",
+  "appTitle": "LumiFX",
+  "settings": "Settings",
+  "cancel": "Cancel",
+  "close": "Close",
+  "save": "Save",
+  "delete": "Delete",
+  "retry": "Retry",
+  "refresh": "Refresh",
+  "connect": "Connect",
+  "continueAction": "Continue",
+  "favorites": "Favorites",
+  "recentlyPlayed": "Recently played",
+  "scenes": "Scenes",
+  "scenesSubtitle": "Continuous atmospheres for everyday lighting.",
+  "stories": "Stories",
+  "storiesSubtitle": "Narrative effects with movement, surprises and timed events.",
+  "interactive": "Interactive",
+  "interactiveSubtitle": "Lighting that can react to audio and user input.",
+  "roomsAndZones": "Rooms & zones",
+  "roomsAndZonesSubtitle": "Turn lights on and off, set brightness, recall Hue scenes.",
+  "connectYourBridge": "Connect your Hue Bridge",
+  "connectYourBridgeSubtitle": "Effects play as a preview until then.",
+  "bridgeNotReachable": "Bridge not reachable",
+  "hueBridge": "Hue Bridge",
+  "lightCount": "{count, plural, =1{1 light} other{{count} lights}}",
+  "@lightCount": {
+    "description": "How many lights",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roomCount": "{count, plural, =1{1 room} other{{count} rooms}}",
+  "@roomCount": {
+    "description": "How many rooms",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "zoneCount": "{count, plural, =1{1 zone} other{{count} zones}}",
+  "@zoneCount": {
+    "description": "How many zones",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "forgetBridge": "Forget bridge",
+  "playbackDefaults": "Playback defaults",
+  "playbackDefaultsDescription": "Every effect starts with these settings. You can still change them while it plays.",
+  "brightness": "Brightness",
+  "intensity": "Intensity",
+  "speed": "Speed",
+  "restoreLights": "Restore lights when an effect stops",
+  "restoreLightsDescription": "Puts each light back to the colour and brightness it had before the effect started.",
+  "softFlashes": "Soften flashes",
+  "softFlashesDescription": "Slows down sudden changes in brightness (lightning, beats, surprises). Recommended for people sensitive to flashing lights.",
+  "about": "About",
+  "aboutDescription": "Original scenes and stories for Philips Hue. Not affiliated with Signify or Philips.",
+  "connectABridge": "Connect a Hue Bridge",
+  "notReachable": "Not reachable",
+  "entertainmentStreaming": "Entertainment streaming",
+  "streamingNotAvailable": "Not available: forget the bridge and pair again.",
+  "areaCount": "{count, plural, =1{1 entertainment area} other{{count} entertainment areas}}",
+  "@areaCount": {
+    "description": "How many entertainment areas",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "forgetThisBridge": "Forget this bridge",
+  "forgetBridgeQuestion": "Forget this bridge?",
+  "forgetBridgeDescription": "You will need to press the link button again to reconnect.",
+  "forget": "Forget",
+  "sameWifiHint": "Make sure your phone is on the same Wi-Fi network as the bridge.",
+  "bridgesFound": "Bridges found",
+  "searchAgain": "Search again",
+  "noBridgeFoundYet": "No bridge found yet. Try again, or enter its IP address from the Hue app (Settings › Bridges).",
+  "enterIpAddress": "Enter IP address",
+  "noBridgeAt": "No Hue Bridge found at {host}.",
+  "@noBridgeAt": {
+    "description": "The address the user typed",
+    "placeholders": {
+      "host": {
+        "type": "String"
+      }
+    }
+  },
+  "notPaired": "Not paired",
+  "pairingCancelled": "Pairing was cancelled.",
+  "pressLinkButton": "Press the link button",
+  "pressLinkButtonDescription": "Press the round button on top of your Hue Bridge.",
+  "secondsShort": "{seconds}s",
+  "@secondsShort": {
+    "description": "Countdown in seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "bridgeIpAddress": "Bridge IP address",
+  "bridgeProblemStorageUnavailable": "Could not read the saved bridge connection. Try again.",
+  "bridgeProblemStorageWriteFailed": "The bridge accepted LumiFX, but the connection could not be saved on this phone. Try again.",
+  "bridgeProblemLinkButtonTimeout": "The bridge button was not pressed in time.",
+  "bridgeProblemUnauthorized": "The bridge no longer accepts LumiFX. Pair it again.",
+  "bridgeProblemUnreachable": "The bridge could not be reached on this network.",
+  "bridgeProblemCertificateMismatch": "The bridge's certificate is not the one it had when paired. If you replaced the bridge, forget it and pair again.",
+  "bridgeProblemUnsupportedBridge": "This bridge needs a software update (in the Hue app) before LumiFX can use it. The original round bridge is not supported.",
+  "bridgeProblemBusy": "The bridge is busy; try again in a moment.",
+  "bridgeProblemOther": "Something went wrong talking to the bridge.",
+  "playOn": "Play on",
+  "previewOnly": "Preview only",
+  "targetStreaming": "{name} · streaming",
+  "@targetStreaming": {
+    "description": "An entertainment area as a playback target",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "targetGroup": "{name} · {count, plural, =1{1 light} other{{count} lights}}",
+  "@targetGroup": {
+    "description": "A room or zone as a playback target",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playerBridgeUnreachable": "The bridge is not reachable right now. Lights will not change until it is back.",
+  "playerStreamingUnavailable": "Entertainment areas need a newer pairing: forget the bridge in Settings and pair again.",
+  "playerPrefersStreaming": "This effect is very fast. Rooms update a few times per second, so pick an entertainment area for the full effect.",
+  "playerCreateAreaHint": "For fast effects, stream to an entertainment area.",
+  "createArea": "Create area",
+  "connecting": "Connecting…",
+  "play": "Play",
+  "pause": "Pause",
+  "stop": "Stop",
+  "sensitivity": "Sensitivity",
+  "musicSyncHint": "Press Play and LumiFX will listen to the music in the room. Audio is analysed on your phone and never recorded.",
+  "bass": "Bass",
+  "mid": "Mid",
+  "treble": "Treble",
+  "listening": "Listening",
+  "bpm": "{bpm} BPM",
+  "@bpm": {
+    "description": "Detected tempo",
+    "placeholders": {
+      "bpm": {
+        "type": "int"
+      }
+    }
+  },
+  "addToFavorites": "Add to favorites",
+  "removeFromFavorites": "Remove from favorites",
+  "lamp": "Lamp {number}",
+  "@lamp": {
+    "description": "A virtual lamp in the preview",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "channel": "Channel {number}",
+  "@channel": {
+    "description": "An entertainment channel without a named light",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "bestOnEntertainmentArea": "Best on an entertainment area",
+  "nothingHereYet": "Nothing here yet.",
+  "noticeBridgeUnreachable": "The bridge could not be reached.",
+  "noticeOnOffOnlyLights": "The lights in {name} can only switch on and off, so they cannot play effects.",
+  "@noticeOnOffOnlyLights": {
+    "description": "The room or zone name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noticeTargetGone": "That room or area is no longer on the bridge.",
+  "noticeCouldNotStart": "Could not start: {reason}",
+  "@noticeCouldNotStart": {
+    "description": "A lower-case reason sentence",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "noticeMicrophoneDenied": "Music Sync needs microphone access. You can allow it in your phone settings.",
+  "noticeMicrophoneFailed": "The microphone could not be started.",
+  "noticeMicrophoneStopped": "The microphone stopped (another app may be using it). Press Stop, then Play, to listen again.",
+  "noticeStreamingStopped": "Streaming stopped by the bridge.",
+  "noticeSleepTimerDone": "Sleep timer: lights off. Good night.",
+  "errorNoResponse": "the bridge did not respond.",
+  "errorGeneric": "something went wrong.",
+  "errorStreamTakenOver": "The bridge stopped the stream (another app may have taken over the area).",
+  "errorStreamingKeyRejected": "The bridge did not accept the streaming key. Try again; if it keeps failing, forget the bridge and pair again.",
+  "errorStreamingNoAnswer": "The bridge did not answer the streaming handshake.",
+  "errorStreamingVerification": "The bridge's reply could not be verified. Try again; if it keeps failing, forget the bridge and pair again.",
+  "errorStreamingRejected": "The bridge rejected the streaming connection.",
+  "errorStreamingConnectionLost": "The connection to the bridge was lost.",
+  "errorStreamingEndedByBridge": "The bridge ended the stream.",
+  "errorStreamingProtocol": "The streaming connection failed.",
+  "errorStreamingNeedsPairing": "Streaming needs a newer pairing. Forget the bridge and pair again.",
+  "errorAreaNoLights": "This entertainment area has no lights.",
+  "rooms": "Rooms",
+  "zones": "Zones",
+  "noBridgeConnected": "No bridge connected.",
+  "couldNotUpdate": "Could not update {name}.",
+  "@couldNotUpdate": {
+    "description": "The room or zone name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hueScenes": "Hue scenes",
+  "couldNotActivateScene": "Could not activate {name}.",
+  "@couldNotActivateScene": {
+    "description": "The scene name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "entertainmentAreas": "Entertainment areas",
+  "newArea": "New area",
+  "editArea": "Edit area",
+  "deleteArea": "Delete area",
+  "entertainmentAreasDescription": "Entertainment areas let LumiFX stream fast effects, music sync included, to up to {max} lights at once.",
+  "@entertainmentAreasDescription": {
+    "description": "Maximum lights per area",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "noAreasYet": "No areas yet. Create one to get started.",
+  "channelCount": "{count, plural, =1{1 channel} other{{count} channels}}",
+  "@channelCount": {
+    "description": "How many channels",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inUse": "in use",
+  "areaTypeMusic": "Music",
+  "areaTypeTv": "TV",
+  "areaTypeMonitor": "Monitor",
+  "areaTypeRoom": "Room",
+  "areaTypeOther": "Other",
+  "light": "Light",
+  "areaLightLimit": "An area can hold up to {max} lights.",
+  "@areaLightLimit": {
+    "description": "Maximum lights per area",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "couldNotSaveArea": "Could not save the area: {reason}",
+  "@couldNotSaveArea": {
+    "description": "A lower-case reason sentence",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteAreaQuestion": "Delete {name}?",
+  "@deleteAreaQuestion": {
+    "description": "The area name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteAreaDescription": "Other apps using this area will lose it too.",
+  "couldNotDeleteArea": "Could not delete the area.",
+  "name": "Name",
+  "placement": "Placement",
+  "placementHint": "Drag each light to where it is in the room, seen from above.",
+  "lightsCounter": "Lights ({count}/{max})",
+  "@lightsCounter": {
+    "description": "Selected lights out of the maximum",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "noEntertainmentLights": "None of your lights support entertainment areas. Color lights from recent Hue generations do.",
+  "gradientSegments": "Gradient · {count} segments",
+  "@gradientSegments": {
+    "description": "Segments of a gradient light",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "heightLow": "Low",
+  "heightMid": "Mid",
+  "heightHigh": "High",
+  "front": "Front",
+  "back": "Back",
+  "draggableLight": "{label}, draggable light",
+  "@draggableLight": {
+    "description": "Accessibility label of a dot on the room map",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "photosensitivityTitle": "Flashing lights",
+  "photosensitivityBody": "Some effects contain rapid flashes that may affect people with photosensitive epilepsy. You can soften the flashes now, or later in Settings.",
+  "softenFlashes": "Soften flashes",
+  "sleepTimer": "Sleep timer",
+  "sleepTimerOff": "Off",
+  "sleepTimerMinutes": "{minutes} min",
+  "@sleepTimerMinutes": {
+    "description": "A sleep timer option",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepTimerDescription": "The effect fades out and the lights switch off when the time is up.",
+  "sleepTimerRemaining": "Lights off in {minutes, plural, =1{1 minute} other{{minutes} minutes}}",
+  "@sleepTimerRemaining": {
+    "description": "Time left on the sleep timer",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepTimerFading": "Fading out…",
+  "collectionRelax": "Relax",
+  "collectionNature": "Nature",
+  "collectionParty": "Party",
+  "collectionMagicFantasy": "Magic & Fantasy",
+  "collectionHaunted": "Haunted",
+  "collectionChristmas": "Christmas Stories",
+  "collectionAdventure": "Adventure",
+  "collectionPirates": "Pirates",
+  "collectionSpace": "Space Adventures",
+  "collectionDinosaurs": "Dinosaurs",
+  "collectionUnderwater": "Underwater",
+  "collectionMusicSync": "Music Sync",
+  "effectNameFireplace": "Fireplace",
+  "effectDescriptionFireplace": "Warm, restless flames.",
+  "effectNameOcean": "Ocean",
+  "effectDescriptionOcean": "Slow waves of deep blue and teal.",
+  "effectNameAurora": "Aurora",
+  "effectDescriptionAurora": "Green and violet curtains drifting across the sky.",
+  "effectNameSunset": "Sunset",
+  "effectDescriptionSunset": "Golden hour that never ends.",
+  "effectNameThunderstorm": "Thunderstorm",
+  "effectDescriptionThunderstorm": "Heavy clouds, restless rain and lightning across the room.",
+  "effectNameDisco": "Disco",
+  "effectDescriptionDisco": "Four on the floor at 124 BPM.",
+  "effectNameEmeraldTrickster": "Emerald Trickster",
+  "effectDescriptionEmeraldTrickster": "Something small and green is hiding in the room. Watch for golden sparks.",
+  "effectNameSleepingDragon": "Sleeping Dragon",
+  "effectDescriptionSleepingDragon": "Do not wake it. Embers rise and fall with every breath.",
+  "effectNameMischievousGhost": "Mischievous Ghost",
+  "effectDescriptionMischievousGhost": "It only wants to play. Mostly.",
+  "effectNameHauntedManor": "Haunted Manor",
+  "effectDescriptionHauntedManor": "A storm outside, candles inside, and footsteps upstairs.",
+  "effectNameEnchantedFairy": "Enchanted Fairy",
+  "effectDescriptionEnchantedFairy": "Tiny wings, a trail of sparkles and one big spell.",
+  "effectNameGoblinMine": "Goblin Mine",
+  "effectDescriptionGoblinMine": "Pickaxes, lantern light and something that glitters.",
+  "effectNameChristmasElves": "Christmas Elves",
+  "effectDescriptionChristmasElves": "Busy little helpers, twinkling lights and a sleigh overhead.",
+  "effectNameHiddenTreasure": "Hidden Treasure",
+  "effectDescriptionHiddenTreasure": "Follow the glint. The torch will not last forever.",
+  "effectNameKrakensCove": "Kraken's Cove",
+  "effectDescriptionKrakensCove": "Lanterns on deck, cannons in the dark, and something below.",
+  "effectNameMeteorShower": "Meteor Shower",
+  "effectDescriptionMeteorShower": "Make a wish on every streak, then hold on tight.",
+  "effectNameDinosaurValley": "Dinosaur Valley",
+  "effectDescriptionDinosaurValley": "Birdsong, ferns, and footsteps that keep getting closer.",
+  "effectNameDeepSeaGlow": "Deep Sea Glow",
+  "effectDescriptionDeepSeaGlow": "Bioluminescent life in the dark, and a whale passing by.",
+  "effectNameBeatPulse": "Beat Pulse",
+  "effectDescriptionBeatPulse": "Every light flashes on the beat, in a new color each time.",
+  "effectNamePartyChase": "Party Chase",
+  "effectDescriptionPartyChase": "Each beat throws the light to the next lamp.",
+  "effectNameSpectrum": "Spectrum",
+  "effectDescriptionSpectrum": "Bass on the left, treble on the right, like an equalizer.",
+  "effectNameMoodGlow": "Mood Glow",
+  "effectDescriptionMoodGlow": "A soft glow that breathes with the music. Gentle enough for any light."
+}

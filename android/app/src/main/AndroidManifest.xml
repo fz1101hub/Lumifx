@@ -10,6 +10,7 @@
     <application
         android:allowBackup="false"
         android:label="LumiFX"
+        android:localeConfig="@xml/locales_config"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -153,6 +153,53 @@ void main() {
     expect(home.zones.single.lightIds, ['l3', 'l1']);
   });
 
+  test('fetchHome reads the scenes of each group; recallScene shows one',
+      () async {
+    final puts = <(String, String)>[];
+    final client = HueBridgeClient(
+      host: '10.0.0.5',
+      applicationKey: 'key',
+      client: MockClient((request) async {
+        if (request.method == 'PUT') {
+          puts.add((request.url.path, request.body));
+          return _json({'data': <Object>[]});
+        }
+        switch (request.url.path) {
+          case '/clip/v2/resource/scene':
+            return _json({
+              'errors': <Object>[],
+              'data': [
+                {
+                  'id': 's1',
+                  'metadata': {'name': 'Movie night'},
+                  'group': {'rid': 'r1', 'rtype': 'room'},
+                  'status': {'active': 'static'},
+                },
+                {
+                  'id': 's2',
+                  'metadata': {'name': 'Bright'},
+                  'group': {'rid': 'z1', 'rtype': 'zone'},
+                  'status': {'active': 'inactive'},
+                },
+              ],
+            });
+        }
+        return _json({'errors': <Object>[], 'data': <Object>[]});
+      }),
+    );
+    final home = await client.fetchHome();
+    expect(home.scenes.map((s) => s.name), ['Movie night', 'Bright']);
+    expect(home.scenesOf('r1').single.isActive, isTrue);
+    expect(home.scenesOf('z1').single.isActive, isFalse);
+    expect(home.scenesOf('nope'), isEmpty);
+
+    await client.recallScene('s1');
+    expect(puts.single.$1, '/clip/v2/resource/scene/s1');
+    expect(jsonDecode(puts.single.$2), {
+      'recall': {'action': 'active'},
+    });
+  });
+
   test('setLight sends a v2 state update', () async {
     late http.Request captured;
     final client = HueBridgeClient(

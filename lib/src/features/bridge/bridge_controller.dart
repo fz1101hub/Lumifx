@@ -29,6 +29,36 @@ enum BridgeStatus {
   unreachable,
 }
 
+/// Why the bridge is unreachable, or why pairing failed. The UI turns it
+/// into a localised sentence.
+enum BridgeProblem {
+  /// Secure storage could not be read at launch; the pairing may be intact.
+  storageUnavailable,
+
+  /// The bridge accepted the app but the credentials could not be saved.
+  storageWriteFailed,
+
+  /// The link button was not pressed before the pairing timed out.
+  linkButtonTimeout,
+
+  /// The application key was rejected: pair again.
+  unauthorized,
+
+  /// Nothing we trust answered at the bridge's address.
+  unreachable,
+
+  /// Same bridge id, different TLS certificate from the pinned one.
+  certificateMismatch,
+
+  /// The bridge has no CLIP v2 API (old firmware or first-generation).
+  unsupportedBridge,
+
+  /// The bridge rate-limited us.
+  bridgeBusy,
+
+  other,
+}
+
 typedef BridgeClientFactory = HueBridgeClient Function(
   BridgeCertificatePin pin,
   String? applicationKey,
@@ -70,13 +100,13 @@ class BridgeController extends ChangeNotifier {
   /// changed certificate.
   BridgeCertificatePin? _pin;
   HueHome? _home;
-  String? _error;
+  BridgeProblem? _problem;
   bool _pairingCancelled = false;
 
   BridgeStatus get status => _status;
   HueCredentials? get credentials => _credentials;
   HueHome? get home => _home;
-  String? get error => _error;
+  BridgeProblem? get problem => _problem;
 
   /// Client for the paired bridge, or null when not paired.
   HueBridgeClient? get client => _client;
@@ -90,7 +120,7 @@ class BridgeController extends ChangeNotifier {
     } on CredentialStoreException {
       // Storage is unavailable right now; keep the pairing and let the user
       // retry instead of showing the app as unpaired.
-      _error = 'Could not read the saved bridge connection. Try again.';
+      _problem = BridgeProblem.storageUnavailable;
       _setStatus(BridgeStatus.unreachable);
       return;
     } on Object {
@@ -130,7 +160,7 @@ class BridgeController extends ChangeNotifier {
     }
     final previousStatus = _status;
     _pairingCancelled = false;
-    _error = null;
+    _problem = null;
     _setStatus(BridgeStatus.pairing);
 
     final pin = BridgeCertificatePin(host: bridge.host, bridgeId: bridge.id);
@@ -149,8 +179,7 @@ class BridgeController extends ChangeNotifier {
         try {
           await _store.save(credentials);
         } on Object {
-          _error = 'The bridge accepted LumiFX, but the connection could not '
-              'be saved on this phone. Try again.';
+          _problem = BridgeProblem.storageWriteFailed;
           break;
         }
         client.close();
@@ -163,16 +192,16 @@ class BridgeController extends ChangeNotifier {
       } on LinkButtonNotPressedException {
         await Future<void>.delayed(interval);
       } on Object catch (error) {
-        _error = _describe(error, pin);
+        _problem = _classify(error, pin);
         break;
       }
     }
     client.close();
 
     if (_pairingCancelled) {
-      _error = null;
+      _problem = null;
     } else {
-      _error ??= 'The bridge button was not pressed in time.';
+      _problem ??= BridgeProblem.linkButtonTimeout;
     }
     _setStatus(_credentials == null ? BridgeStatus.unpaired : previousStatus);
     return false;
@@ -203,7 +232,7 @@ class BridgeController extends ChangeNotifier {
         return; // forgotten or re-paired meanwhile
       }
       _home = home;
-      _error = null;
+      _problem = null;
       _setStatus(BridgeStatus.connected);
     } on Object catch (error) {
       if (_client != client) {
@@ -215,7 +244,7 @@ class BridgeController extends ChangeNotifier {
       if (_client != client) {
         return;
       }
-      _error = _describe(error, pin);
+      _problem = _classify(error, pin);
       _setStatus(BridgeStatus.unreachable);
     }
   }
@@ -332,7 +361,7 @@ class BridgeController extends ChangeNotifier {
     _client = null;
     _pin = null;
     _home = null;
-    _error = null;
+    _problem = null;
     _setStatus(BridgeStatus.unpaired);
   }
 
@@ -361,16 +390,21 @@ class BridgeController extends ChangeNotifier {
     }
   }
 
-  static String _describe(Object error, BridgeCertificatePin? pin) {
+  static BridgeProblem _classify(Object error, BridgeCertificatePin? pin) {
     if (error is CertificateMismatchException ||
         pin?.mismatch == CertificateMismatch.differentCertificate) {
-      return const CertificateMismatchException().message;
+      return BridgeProblem.certificateMismatch;
     }
     if (error is UnauthorizedException) {
-      return 'The bridge no longer accepts LumiFX. Pair it again.';
+      return BridgeProblem.unauthorized;
+    }
+    if (error is UnsupportedBridgeException) {
+      return BridgeProblem.unsupportedBridge;
     }
     if (error is HueException) {
-      return error.message;
+      return error.statusCode == 429
+          ? BridgeProblem.bridgeBusy
+          : BridgeProblem.other;
     }
     if (error is TimeoutException ||
         error is SocketException ||
@@ -379,8 +413,8 @@ class BridgeController extends ChangeNotifier {
         error is http.ClientException) {
       // A different device at the address, a reboot mid-handshake, a
       // closed connection: all look like "not there" to the user.
-      return 'The bridge could not be reached on this network.';
+      return BridgeProblem.unreachable;
     }
-    return 'Something went wrong talking to the bridge.';
+    return BridgeProblem.other;
   }
 }

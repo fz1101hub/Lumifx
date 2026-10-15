@@ -5,6 +5,7 @@ import '../../core/effects/effect.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
+import '../common/app_text.dart';
 import '../effects/catalog/effect_catalog.dart';
 import '../effects/effect_list_screen.dart';
 import '../effects/effect_palette.dart';
@@ -20,12 +21,13 @@ class HomeScreen extends StatelessWidget {
     final scope = AppScope.of(context);
     final bridge = scope.bridge;
     final preferences = scope.preferences;
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LumiFX'),
+        title: Text(l10n.appTitle),
         actions: [
           IconButton(
-            tooltip: 'Settings',
+            tooltip: l10n.settings,
             icon: const Icon(Icons.settings_outlined),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => const SettingsScreen()),
@@ -39,30 +41,32 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           children: [
             _BridgeBanner(controller: bridge),
-            _EffectShelf(title: 'Favorites', effectIds: preferences.favorites),
             _EffectShelf(
-              title: 'Recently played',
+              title: l10n.favorites,
+              effectIds: preferences.favorites,
+            ),
+            _EffectShelf(
+              title: l10n.recentlyPlayed,
               effectIds: preferences.recents,
             ),
             const SizedBox(height: 12),
-            const _SectionCard(
-              title: 'Scenes',
-              subtitle: 'Continuous atmospheres for everyday lighting.',
+            _SectionCard(
+              title: l10n.scenes,
+              subtitle: l10n.scenesSubtitle,
               icon: Icons.gradient,
               kind: EffectKind.scene,
             ),
             const SizedBox(height: 12),
-            const _SectionCard(
-              title: 'Stories',
-              subtitle:
-                  'Narrative effects with movement, surprises and timed events.',
+            _SectionCard(
+              title: l10n.stories,
+              subtitle: l10n.storiesSubtitle,
               icon: Icons.auto_awesome,
               kind: EffectKind.story,
             ),
             const SizedBox(height: 12),
-            const _SectionCard(
-              title: 'Interactive',
-              subtitle: 'Lighting that can react to audio and user input.',
+            _SectionCard(
+              title: l10n.interactive,
+              subtitle: l10n.interactiveSubtitle,
               icon: Icons.graphic_eq,
               kind: EffectKind.interactive,
             ),
@@ -72,9 +76,8 @@ class HomeScreen extends StatelessWidget {
                 child: ListTile(
                   minVerticalPadding: 20,
                   leading: const Icon(Icons.meeting_room_outlined),
-                  title: const Text('Rooms & zones'),
-                  subtitle:
-                      const Text('Turn lights on and off, set brightness.'),
+                  title: Text(l10n.roomsAndZones),
+                  subtitle: Text(l10n.roomsAndZonesSubtitle),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
@@ -107,6 +110,7 @@ class _EffectShelf extends StatelessWidget {
       return const SizedBox.shrink();
     }
     final theme = Theme.of(context);
+    final l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Column(
@@ -146,7 +150,7 @@ class _EffectShelf extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.bottomLeft,
                       child: Text(
-                        effect.name,
+                        l10n.effectName(effect),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.titleSmall?.copyWith(
@@ -180,6 +184,7 @@ class _BridgeBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
     switch (controller.status) {
       case BridgeStatus.initializing:
         return const LinearProgressIndicator();
@@ -189,21 +194,24 @@ class _BridgeBanner extends StatelessWidget {
           color: colors.primaryContainer,
           child: ListTile(
             leading: const Icon(Icons.lightbulb_outline),
-            title: const Text('Connect your Hue Bridge'),
-            subtitle: const Text('Effects play as a preview until then.'),
+            title: Text(l10n.connectYourBridge),
+            subtitle: Text(l10n.connectYourBridgeSubtitle),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _openSetup(context),
           ),
         );
       case BridgeStatus.unreachable:
+        final problem = controller.problem;
         return Card(
           color: colors.errorContainer,
           child: ListTile(
             leading: const Icon(Icons.wifi_off),
-            title: const Text('Bridge not reachable'),
-            subtitle: Text(controller.error ?? ''),
+            title: Text(l10n.bridgeNotReachable),
+            subtitle: Text(
+              problem == null ? '' : describeBridgeProblem(l10n, problem),
+            ),
             trailing: IconButton(
-              tooltip: 'Retry',
+              tooltip: l10n.retry,
               icon: const Icon(Icons.refresh),
               onPressed: controller.refresh,
             ),
@@ -217,12 +225,12 @@ class _BridgeBanner extends StatelessWidget {
           child: ListTile(
             leading: const Icon(Icons.check_circle_outline),
             title: Text(
-                controller.credentials?.bridge.displayName ?? 'Hue Bridge'),
-            subtitle: Text(
-              '${home?.lights.length ?? 0} lights · '
-              '${home?.rooms.length ?? 0} rooms · '
-              '${home?.zones.length ?? 0} zones',
-            ),
+                controller.credentials?.bridge.displayName ?? l10n.hueBridge),
+            subtitle: Text([
+              l10n.lightCount(home?.lights.length ?? 0),
+              l10n.roomCount(home?.rooms.length ?? 0),
+              l10n.zoneCount(home?.zones.length ?? 0),
+            ].join(' · ')),
             trailing: PopupMenuButton<String>(
               onSelected: (value) {
                 if (value == 'refresh') {
@@ -231,9 +239,9 @@ class _BridgeBanner extends StatelessWidget {
                   confirmForgetBridge(context, controller);
                 }
               },
-              itemBuilder: (_) => const [
-                PopupMenuItem(value: 'refresh', child: Text('Refresh')),
-                PopupMenuItem(value: 'forget', child: Text('Forget bridge')),
+              itemBuilder: (_) => [
+                PopupMenuItem(value: 'refresh', child: Text(l10n.refresh)),
+                PopupMenuItem(value: 'forget', child: Text(l10n.forgetBridge)),
               ],
             ),
           ),

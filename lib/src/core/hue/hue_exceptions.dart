@@ -33,3 +33,31 @@ class UnsupportedBridgeException extends HueException {
       : super('This bridge needs a software update (in the Hue app) before '
             'LumiFX can use it. The original round bridge is not supported.');
 }
+
+/// The bridge answered 429: too many commands in a short time.
+class BridgeBusyException extends HueException {
+  const BridgeBusyException()
+      : super('The bridge is busy; try again in a moment.', statusCode: 429);
+}
+
+/// Streaming needs the Entertainment client key, which these credentials
+/// lack (paired before streaming support) or hold in a corrupt form.
+class StreamingKeyMissingException extends HueException {
+  const StreamingKeyMissingException()
+      : super('Streaming needs a newer pairing. Forget the bridge and pair '
+            'again.');
+}
+
+/// An entertainment area without channels cannot be streamed to.
+class EmptyEntertainmentAreaException extends HueException {
+  const EmptyEntertainmentAreaException()
+      : super('This entertainment area has no lights.');
+}
+
+/// The bridge reported the area inactive while LumiFX was streaming to it:
+/// another app took it over, or the bridge restarted.
+class EntertainmentStoppedException extends HueException {
+  const EntertainmentStoppedException()
+      : super('The bridge stopped the stream (another app may have taken over '
+            'the area).');
+}

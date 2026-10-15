@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
 import '../../core/hue/hue_models.dart';
+import '../common/app_text.dart';
 import 'bridge_controller.dart';
 
 /// Finds a bridge on the network and pairs with it.
@@ -76,7 +77,7 @@ class _BridgeSetupScreenState extends State<BridgeSetupScreen> {
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No Hue Bridge found at $host.')),
+          SnackBar(content: Text(context.l10n.noBridgeAt(host))),
         );
       }
     }
@@ -85,19 +86,17 @@ class _BridgeSetupScreenState extends State<BridgeSetupScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text('Connect your Hue Bridge')),
+      appBar: AppBar(title: Text(l10n.connectYourBridge)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Text(
-            'Make sure your phone is on the same Wi-Fi network as the bridge.',
-            style: theme.textTheme.bodyLarge,
-          ),
+          Text(l10n.sameWifiHint, style: theme.textTheme.bodyLarge),
           const SizedBox(height: 24),
           Row(
             children: [
-              Text('Bridges found', style: theme.textTheme.titleMedium),
+              Text(l10n.bridgesFound, style: theme.textTheme.titleMedium),
               const Spacer(),
               if (_searching)
                 const SizedBox.square(
@@ -106,7 +105,7 @@ class _BridgeSetupScreenState extends State<BridgeSetupScreen> {
                 )
               else
                 IconButton(
-                  tooltip: 'Search again',
+                  tooltip: l10n.searchAgain,
                   onPressed: _startSearch,
                   icon: const Icon(Icons.refresh),
                 ),
@@ -114,10 +113,9 @@ class _BridgeSetupScreenState extends State<BridgeSetupScreen> {
           ),
           const SizedBox(height: 8),
           if (_bridges.isEmpty && !_searching)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Text('No bridge found yet. Try again, or enter its '
-                  'IP address from the Hue app (Settings › Bridges).'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Text(l10n.noBridgeFoundYet),
             ),
           for (final bridge in _bridges)
             Card(
@@ -133,7 +131,7 @@ class _BridgeSetupScreenState extends State<BridgeSetupScreen> {
           OutlinedButton.icon(
             onPressed: _enterAddress,
             icon: const Icon(Icons.edit_outlined),
-            label: const Text('Enter IP address'),
+            label: Text(l10n.enterIpAddress),
           ),
         ],
       ),
@@ -191,30 +189,34 @@ class _PairingDialogState extends State<_PairingDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     if (_failed) {
+      final problem = widget.controller.problem;
       return AlertDialog(
-        title: const Text('Not paired'),
-        content: Text(widget.controller.error ?? 'Pairing was cancelled.'),
+        title: Text(l10n.notPaired),
+        content: Text(problem == null
+            ? l10n.pairingCancelled
+            : describeBridgeProblem(l10n, problem)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Close'),
+            child: Text(l10n.close),
           ),
         ],
       );
     }
     return AlertDialog(
-      title: const Text('Press the link button'),
+      title: Text(l10n.pressLinkButton),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.touch_app_outlined, size: 56),
           const SizedBox(height: 16),
-          const Text('Press the round button on top of your Hue Bridge.'),
+          Text(l10n.pressLinkButtonDescription),
           const SizedBox(height: 16),
           LinearProgressIndicator(value: _secondsLeft / _timeout.inSeconds),
           const SizedBox(height: 8),
-          Text('${_secondsLeft}s'),
+          Text(l10n.secondsShort(_secondsLeft)),
         ],
       ),
       actions: [
@@ -223,7 +225,7 @@ class _PairingDialogState extends State<_PairingDialog> {
             widget.controller.cancelPairing();
             Navigator.of(context).pop(false);
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
       ],
     );
@@ -248,8 +250,9 @@ class _ManualAddressDialogState extends State<_ManualAddressDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AlertDialog(
-      title: const Text('Bridge IP address'),
+      title: Text(l10n.bridgeIpAddress),
       content: TextField(
         controller: _controller,
         autofocus: true,
@@ -260,11 +263,11 @@ class _ManualAddressDialogState extends State<_ManualAddressDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(_controller.text.trim()),
-          child: const Text('Connect'),
+          child: Text(l10n.connect),
         ),
       ],
     );

@@ -7,6 +7,7 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../../core/screen_wake.dart';
+import '../common/app_text.dart';
 import '../entertainment/entertainment_area_editor.dart';
 import '../music/music_sync_controller.dart';
 import 'light_color_ui.dart';
@@ -29,7 +30,7 @@ class EffectPlayerScreen extends StatefulWidget {
 class _EffectPlayerScreenState extends State<EffectPlayerScreen>
     with WidgetsBindingObserver {
   PlaybackController? _controller;
-  StreamSubscription<String>? _messages;
+  StreamSubscription<PlaybackNotice>? _notices;
 
   PlaybackController get controller => _controller!;
 
@@ -51,11 +52,13 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
         audioInput: scope.audioInput,
         screenWake: widget.screenWake,
       );
-      _messages = controller.messages.listen((message) {
+      _notices = controller.notices.listen((notice) {
         if (mounted) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(message)));
+            ..showSnackBar(SnackBar(
+              content: Text(describePlaybackNotice(context.l10n, notice)),
+            ));
         }
       });
     }
@@ -72,7 +75,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _messages?.cancel();
+    _notices?.cancel();
     _controller?.dispose();
     super.dispose();
   }
@@ -83,12 +86,89 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
     );
   }
 
+  static const _sleepOptions = [15, 30, 45, 60, 90];
+
+  Future<void> _chooseSleepTimer() async {
+    final l10n = context.l10n;
+    final current = controller.sleepTimer?.inMinutes ?? 0;
+    final minutes = await showDialog<int>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(l10n.sleepTimer),
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+            child: Text(
+              l10n.sleepTimerDescription,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          for (final option in [0, ..._sleepOptions])
+            ListTile(
+              leading: Icon(option == current
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_off),
+              title: Text(option == 0
+                  ? l10n.sleepTimerOff
+                  : l10n.sleepTimerMinutes(option)),
+              onTap: () => Navigator.of(context).pop(option),
+            ),
+        ],
+      ),
+    );
+    if (minutes != null) {
+      controller
+          .setSleepTimer(minutes == 0 ? null : Duration(minutes: minutes));
+    }
+  }
+
+  String _sleepLabel(AppLocalizations l10n, PlaybackController c) {
+    if (c.isFadingOut) {
+      return l10n.sleepTimerFading;
+    }
+    final remaining = c.sleepRemaining;
+    if (remaining != null) {
+      // Round up, so "1 minute" is shown until the lights actually go out.
+      return l10n.sleepTimerRemaining((remaining.inSeconds / 60).ceil());
+    }
+    final timer = c.sleepTimer;
+    return timer == null
+        ? l10n.sleepTimer
+        : l10n.sleepTimerMinutes(timer.inMinutes);
+  }
+
+  /// Play/pause, with a one-time warning before the first effect that
+  /// flashes. Nothing plays until the user has chosen.
+  Future<void> _toggle() async {
+    final c = controller;
+    final preferences = AppScope.of(context).preferences;
+    if (c.status == PlaybackStatus.idle &&
+        widget.effect.hasRapidFlashes &&
+        !preferences.flashWarningShown) {
+      final soften = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const _FlashWarningDialog(),
+      );
+      if (!mounted || soften == null) {
+        return;
+      }
+      unawaited(preferences.setFlashWarningShown(true));
+      if (soften) {
+        unawaited(preferences.setSoftFlashes(true));
+      }
+    }
+    await c.toggle();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
+    final description = l10n.effectDescription(widget.effect);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.effect.name),
+        title: Text(l10n.effectName(widget.effect)),
         actions: [_FavoriteButton(effectId: widget.effect.id)],
       ),
       body: ListenableBuilder(
@@ -106,9 +186,8 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              if (widget.effect.description.isNotEmpty)
-                Text(widget.effect.description,
-                    style: theme.textTheme.bodyLarge),
+              if (description.isNotEmpty)
+                Text(description, style: theme.textTheme.bodyLarge),
               const SizedBox(height: 20),
               DropdownButtonFormField<String?>(
                 // Rebuilt when the available targets change, so the field
@@ -116,19 +195,18 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                 key: ValueKey(Object.hashAll(targetKeys)),
                 initialValue: c.selectedTarget,
                 isExpanded: true,
-                decoration: const InputDecoration(
-                  labelText: 'Play on',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.playOn,
+                  border: const OutlineInputBorder(),
                 ),
                 items: [
-                  const DropdownMenuItem(
-                      value: null, child: Text('Preview only')),
+                  DropdownMenuItem(value: null, child: Text(l10n.previewOnly)),
                   for (final area in areas)
                     DropdownMenuItem(
                       value: 'area:${area.id}',
                       child: _TargetLabel(
                         icon: Icons.bolt,
-                        text: '${area.name} · streaming',
+                        text: l10n.targetStreaming(area.name),
                       ),
                     ),
                   for (final group in groups)
@@ -136,8 +214,8 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                       value: 'group:${group.id}',
                       child: _TargetLabel(
                         icon: Icons.meeting_room_outlined,
-                        text: '${group.name} · ${group.lightIds.length} '
-                            '${group.lightIds.length == 1 ? 'light' : 'lights'}',
+                        text:
+                            l10n.targetGroup(group.name, group.lightIds.length),
                       ),
                     ),
                 ],
@@ -146,8 +224,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
               if (c.bridgeUnreachable) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'The bridge is not reachable right now. Lights will not '
-                  'change until it is back.',
+                  l10n.playerBridgeUnreachable,
                   style: theme.textTheme.bodySmall
                       ?.copyWith(color: theme.colorScheme.error),
                 ),
@@ -155,16 +232,14 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
               if (c.streamingUnavailable) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'Entertainment areas need a newer pairing: forget the '
-                  'bridge in Settings and pair again.',
+                  l10n.playerStreamingUnavailable,
                   style: theme.textTheme.bodySmall,
                 ),
               ],
               if (widget.effect.prefersStreaming && c.group != null) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'This effect is very fast. Rooms update a few times per '
-                  'second, so pick an entertainment area for the full effect.',
+                  l10n.playerPrefersStreaming,
                   style: theme.textTheme.bodySmall,
                 ),
               ],
@@ -173,18 +248,23 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                   children: [
                     Expanded(
                       child: Text(
-                        'For fast effects, stream to an entertainment area.',
+                        l10n.playerCreateAreaHint,
                         style: theme.textTheme.bodySmall,
                       ),
                     ),
                     TextButton(
                       onPressed: busy ? null : _createArea,
-                      child: const Text('Create area'),
+                      child: Text(l10n.createArea),
                     ),
                   ],
                 ),
               const SizedBox(height: 24),
-              _LampPreview(player: c.player, names: c.lightNames),
+              _LampPreview(
+                player: c.player,
+                names: [
+                  for (final slot in c.lightNames) describeSlot(l10n, slot),
+                ],
+              ),
               if (widget.effect.usesMicrophone) ...[
                 const SizedBox(height: 16),
                 _MusicMeter(player: c.player, music: c.music),
@@ -196,7 +276,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     FilledButton.icon(
-                      onPressed: busy ? null : c.toggle,
+                      onPressed: busy ? null : _toggle,
                       icon: busy
                           ? const SizedBox.square(
                               dimension: 18,
@@ -204,37 +284,45 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                             )
                           : Icon(c.isPlaying ? Icons.pause : Icons.play_arrow),
                       label: Text(busy
-                          ? 'Connecting…'
+                          ? l10n.connecting
                           : c.isPlaying
-                              ? 'Pause'
-                              : 'Play'),
+                              ? l10n.pause
+                              : l10n.play),
                     ),
                     if (c.status == PlaybackStatus.playing ||
                         c.status == PlaybackStatus.paused)
                       OutlinedButton.icon(
                         onPressed: c.stop,
                         icon: const Icon(Icons.stop),
-                        label: const Text('Stop'),
+                        label: Text(l10n.stop),
                       ),
+                    OutlinedButton.icon(
+                      onPressed:
+                          busy || c.isFadingOut ? null : _chooseSleepTimer,
+                      icon: Icon(c.sleepTimer == null
+                          ? Icons.bedtime_outlined
+                          : Icons.bedtime),
+                      label: Text(_sleepLabel(l10n, c)),
+                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 24),
               _ControlSlider(
-                label: 'Brightness',
+                label: l10n.brightness,
                 value: controls.brightness,
                 onChanged: (v) =>
                     c.setControls(controls.copyWith(brightness: v)),
               ),
               _ControlSlider(
-                label: 'Intensity',
+                label: l10n.intensity,
                 value: controls.intensity,
                 onChanged: (v) =>
                     c.setControls(controls.copyWith(intensity: v)),
               ),
               if (widget.effect.usesMicrophone)
                 _ControlSlider(
-                  label: 'Sensitivity',
+                  label: l10n.sensitivity,
                   value: c.sensitivity,
                   min: 0.5,
                   max: 2.5,
@@ -242,7 +330,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                 )
               else
                 _ControlSlider(
-                  label: 'Speed',
+                  label: l10n.speed,
                   value: controls.speed,
                   min: 0.25,
                   max: 3,
@@ -252,6 +340,31 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
           );
         },
       ),
+    );
+  }
+}
+
+/// Shown once before the first effect with lightning or beats.
+class _FlashWarningDialog extends StatelessWidget {
+  const _FlashWarningDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      icon: const Icon(Icons.flash_on_outlined),
+      title: Text(l10n.photosensitivityTitle),
+      content: Text(l10n.photosensitivityBody),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(l10n.softenFlashes),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(l10n.continueAction),
+        ),
+      ],
     );
   }
 }
@@ -268,17 +381,14 @@ class _MusicMeter extends StatelessWidget {
     final player = this.player;
     final music = this.music;
     final theme = Theme.of(context);
+    final l10n = context.l10n;
     if (player == null || music == null || !music.isListening) {
       return Row(
         children: [
           const Icon(Icons.mic_none, size: 20),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              'Press Play and LumiFX will listen to the music in the room. '
-              'Audio is analysed on your phone and never recorded.',
-              style: theme.textTheme.bodySmall,
-            ),
+            child: Text(l10n.musicSyncHint, style: theme.textTheme.bodySmall),
           ),
         ],
       );
@@ -294,9 +404,9 @@ class _MusicMeter extends StatelessWidget {
             Icon(Icons.mic, size: 20, color: theme.colorScheme.primary),
             const SizedBox(width: 12),
             for (final (label, value) in [
-              ('Bass', f.bass),
-              ('Mid', f.mid),
-              ('Treble', f.treble),
+              (l10n.bass, f.bass),
+              (l10n.mid, f.mid),
+              (l10n.treble, f.treble),
             ])
               Expanded(
                 child: Padding(
@@ -330,7 +440,7 @@ class _MusicMeter extends StatelessWidget {
             SizedBox(
               width: 64,
               child: Text(
-                f.bpm == null ? 'Listening' : '${f.bpm!.round()} BPM',
+                f.bpm == null ? l10n.listening : l10n.bpm(f.bpm!.round()),
                 style: theme.textTheme.labelMedium,
               ),
             ),
@@ -353,8 +463,9 @@ class _FavoriteButton extends StatelessWidget {
       listenable: preferences,
       builder: (context, _) {
         final favorite = preferences.isFavorite(effectId);
+        final l10n = context.l10n;
         return IconButton(
-          tooltip: favorite ? 'Remove from favorites' : 'Add to favorites',
+          tooltip: favorite ? l10n.removeFromFavorites : l10n.addToFavorites,
           icon: Icon(favorite ? Icons.star : Icons.star_border),
           onPressed: () => preferences.toggleFavorite(effectId),
         );

@@ -42,6 +42,10 @@ Also done ahead of schedule:
 - **Music Sync**: on-device beat and spectrum analysis of the microphone,
   driving four Interactive effects (Beat Pulse, Party Chase, Spectrum,
   Mood Glow).
+- **Everyday use**: the scenes saved in the Hue app can be recalled from
+  Rooms & zones; a sleep timer fades an effect out and switches the lights
+  off; a one-time warning and a "soften flashes" mode for photosensitive
+  users; English and Italian.
 
 ## Development
 
@@ -56,6 +60,12 @@ flutter run            # on a device or simulator on the same Wi-Fi as the bridg
 
 Effects can be previewed without a bridge: the player shows virtual lamps
 when no room or zone is selected.
+
+The app is in English and Italian. Every user-facing string lives in
+`lib/l10n/app_en.arb` (the template) and `lib/l10n/app_it.arb`; the Dart
+classes are generated into `lib/l10n/generated/` by `flutter pub get` and
+are not committed. To add a language, copy `app_en.arb` to `app_<code>.arb`
+and translate the values.
 
 ```text
 lib/src/

@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
 import '../../core/hue/hue_bridge_client.dart';
-import '../../core/hue/hue_exceptions.dart';
 import '../../core/hue/hue_models.dart';
+import '../common/app_text.dart';
 
 /// The bridge accepts at most this many lights in one area.
 const maxLightsPerArea = 10;
 
-const _types = {
-  'music': 'Music',
-  'screen': 'TV',
-  'monitor': 'Monitor',
-  '3dspace': 'Room',
-  'other': 'Other',
-};
+Map<String, String> _typeLabels(AppLocalizations l10n) => {
+      'music': l10n.areaTypeMusic,
+      'screen': l10n.areaTypeTv,
+      'monitor': l10n.areaTypeMonitor,
+      '3dspace': l10n.areaTypeRoom,
+      'other': l10n.areaTypeOther,
+    };
 
 /// Creates a new entertainment area, or edits [area] when given.
 class EntertainmentAreaEditor extends StatefulWidget {
@@ -78,10 +78,10 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
           if (service.isRenderer && service.lightIds.isNotEmpty) service,
       ];
 
-  String _lightName(HueEntertainmentService service) {
+  String _lightName(AppLocalizations l10n, HueEntertainmentService service) {
     final home = _home;
     return [
-      for (final id in service.lightIds) home?.lights[id]?.name ?? 'Light',
+      for (final id in service.lightIds) home?.lights[id]?.name ?? l10n.light,
     ].join(' / ');
   }
 
@@ -92,8 +92,8 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
         return;
       }
       if (_placements.length >= maxLightsPerArea) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('An area can hold up to $maxLightsPerArea lights.'),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(context.l10n.areaLightLimit(maxLightsPerArea)),
         ));
         return;
       }
@@ -128,11 +128,9 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
       }
     } on Object catch (error) {
       if (mounted) {
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            'Could not save the area: '
-            '${error is HueException ? error.message : 'the bridge did not respond.'}',
-          ),
+          content: Text(l10n.couldNotSaveArea(describeError(l10n, error))),
         ));
       }
     } finally {
@@ -144,19 +142,20 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
 
   Future<void> _delete() async {
     final area = widget.area!;
+    final l10n = context.l10n;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete ${area.name}?'),
-        content: const Text('Other apps using this area will lose it too.'),
+        title: Text(l10n.deleteAreaQuestion(area.name)),
+        content: Text(l10n.deleteAreaDescription),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Delete'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -173,7 +172,7 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not delete the area.')),
+          SnackBar(content: Text(context.l10n.couldNotDeleteArea)),
         );
       }
     }
@@ -186,14 +185,16 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
     final canSave =
         !_saving && _placements.isNotEmpty && _name.text.trim().isNotEmpty;
     final theme = Theme.of(context);
+    final l10n = context.l10n;
+    final types = _typeLabels(l10n);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.area == null ? 'New area' : 'Edit area'),
+        title: Text(widget.area == null ? l10n.newArea : l10n.editArea),
         actions: [
           if (widget.area != null)
             IconButton(
-              tooltip: 'Delete area',
+              tooltip: l10n.deleteArea,
               icon: const Icon(Icons.delete_outline),
               onPressed: _saving ? null : _delete,
             ),
@@ -204,7 +205,7 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
                     dimension: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('Save'),
+                : Text(l10n.save),
           ),
         ],
       ),
@@ -213,9 +214,9 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
         children: [
           TextField(
             controller: _name,
-            decoration: const InputDecoration(
-              labelText: 'Name',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: l10n.name,
+              border: const OutlineInputBorder(),
             ),
             onChanged: (_) => setState(() {}),
           ),
@@ -223,28 +224,25 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
           SegmentedButton<String>(
             showSelectedIcon: false,
             segments: [
-              for (final MapEntry(key: value, value: label) in _types.entries)
+              for (final MapEntry(key: value, value: label) in types.entries)
                 ButtonSegment(value: value, label: Text(label)),
-              if (!_types.containsKey(_type))
+              if (!types.containsKey(_type))
                 ButtonSegment(value: _type, label: Text(_type)),
             ],
             selected: {_type},
             onSelectionChanged: (value) => setState(() => _type = value.single),
           ),
           const SizedBox(height: 24),
-          Text('Placement', style: theme.textTheme.titleMedium),
+          Text(l10n.placement, style: theme.textTheme.titleMedium),
           const SizedBox(height: 4),
-          Text(
-            'Drag each light to where it is in the room, seen from above.',
-            style: theme.textTheme.bodySmall,
-          ),
+          Text(l10n.placementHint, style: theme.textTheme.bodySmall),
           const SizedBox(height: 12),
           _RoomMap(
             placements: {
               for (final entry in _placements.entries)
                 if (byId[entry.key] case final service?)
                   entry.key: (
-                    label: _lightName(service),
+                    label: _lightName(l10n, service),
                     position: entry.value
                   ),
             },
@@ -253,24 +251,21 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
           ),
           const SizedBox(height: 24),
           Text(
-            'Lights (${_placements.length}/$maxLightsPerArea)',
+            l10n.lightsCounter(_placements.length, maxLightsPerArea),
             style: theme.textTheme.titleMedium,
           ),
           if (services.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Text(
-                'None of your lights support entertainment areas. Color '
-                'lights from recent Hue generations do.',
-              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Text(l10n.noEntertainmentLights),
             ),
           for (final service in services)
             CheckboxListTile(
               contentPadding: EdgeInsets.zero,
               value: _placements.containsKey(service.id),
-              title: Text(_lightName(service)),
+              title: Text(_lightName(l10n, service)),
               subtitle: service.maxStreams > 1
-                  ? Text('Gradient · ${service.maxStreams} segments')
+                  ? Text(l10n.gradientSegments(service.maxStreams))
                   : null,
               secondary: _placements.containsKey(service.id)
                   ? _HeightPicker(
@@ -321,7 +316,12 @@ class _HeightPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options = {-1.0: 'Low', 0.0: 'Mid', 1.0: 'High'};
+    final l10n = context.l10n;
+    final options = {
+      -1.0: l10n.heightLow,
+      0.0: l10n.heightMid,
+      1.0: l10n.heightHigh
+    };
     final current = options.keys.reduce(
       (a, b) => (a - value).abs() <= (b - value).abs() ? a : b,
     );
@@ -351,6 +351,7 @@ class _RoomMap extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final labelStyle = Theme.of(context).textTheme.labelSmall;
+    final l10n = context.l10n;
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 360),
@@ -392,14 +393,14 @@ class _RoomMap extends StatelessWidget {
                       top: 8,
                       left: 0,
                       right: 0,
-                      child: Text('Front',
+                      child: Text(l10n.front,
                           textAlign: TextAlign.center, style: labelStyle),
                     ),
                     Positioned(
                       bottom: 8,
                       left: 0,
                       right: 0,
-                      child: Text('Back',
+                      child: Text(l10n.back,
                           textAlign: TextAlign.center, style: labelStyle),
                     ),
                     Center(
@@ -430,7 +431,7 @@ class _RoomMap extends StatelessWidget {
                             ),
                           },
                           child: Semantics(
-                            label: '${item.label}, draggable light',
+                            label: l10n.draggableLight(item.label),
                             child: Tooltip(
                               message: item.label,
                               child: Container(

@@ -194,6 +194,38 @@ class HueGroup {
   final String? archetype;
 }
 
+/// A scene saved on the bridge (made in the Hue app), belonging to one
+/// room or zone.
+class HueScene {
+  const HueScene({
+    required this.id,
+    required this.name,
+    required this.groupId,
+    this.isActive = false,
+  });
+
+  factory HueScene.fromJson(Map<String, Object?> json) {
+    final metadata = _map(json['metadata']);
+    final status = _map(json['status'])['active'];
+    return HueScene(
+      id: json['id']! as String,
+      name: metadata['name'] as String? ?? 'Scene',
+      groupId: _map(json['group'])['rid'] as String? ?? '',
+      // `static` or `dynamic_palette` while the scene is showing.
+      isActive: status is String && status != 'inactive',
+    );
+  }
+
+  final String id;
+  final String name;
+
+  /// The room or zone the scene belongs to.
+  final String groupId;
+
+  /// The bridge believes the lights currently show this scene.
+  final bool isActive;
+}
+
 /// A partial state update for one light (Hue API v2 `PUT light`).
 class HueLightCommand {
   const HueLightCommand({

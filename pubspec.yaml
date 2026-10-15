@@ -10,8 +10,11 @@ dependencies:
   crypto: ^3.0.7
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_secure_storage: ^11.2.0
   http: ^1.6.0
+  intl: ^0.20.3
   nsd: ^5.0.1
   pointycastle: ^4.0.0
   record: ^7.1.2
@@ -26,6 +29,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
 
 flutter_launcher_icons:
   image_path: assets/icon/icon.png

@@ -24,6 +24,8 @@ build before every store release.
 - [ ] Every room and zone lists the right light count.
 - [ ] Switch and brightness slider change the real lights, and the state
       shown matches the Hue app after pull-to-refresh.
+- [ ] Every room shows its Hue scenes as chips; tapping one shows it on
+      the lights and the chip becomes selected after the refresh.
 
 ## Playing effects on a room (REST)
 
@@ -36,12 +38,19 @@ build before every store release.
 - [ ] A room containing a smart plug: the plug is ignored and the other
       lights play.
 - [ ] Brightness / intensity / speed sliders take effect while playing.
+- [ ] First Play on Thunderstorm shows the "Flashing lights" warning once;
+      "Soften flashes" turns the strikes into soft pulses (also as a switch
+      in Settings); Ocean never shows the warning.
 - [ ] Pause then Play resumes without a jump; Stop puts every light back
       to its previous colour and brightness within ~2 s (check against
       the Hue app). Turn "Restore lights" off in Settings and check they
       stay as the effect left them.
 - [ ] Lock the phone while playing: the effect stops cleanly and lights
       are restored; unlocking shows the Play button.
+- [ ] Sleep timer: set 15 min on Fireplace; the button shows the minutes
+      left; at the end the effect fades over ~20 s and the lights switch
+      off (not back to their previous state), on a room and on an
+      entertainment area alike.
 - [ ] Screen stays on while an effect plays.
 
 ## Entertainment streaming

@@ -114,6 +114,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
   bool restoreLights = true,
   FakeAudioInput? audio,
   bool music = false,
+  Duration sleepFade = const Duration(seconds: 20),
 }) async {
   final fake = _FakeBridge();
   final bridge = BridgeController(
@@ -137,6 +138,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
     preferences: preferences,
     audioInput: audio ?? FakeAudioInput(),
     screenWake: wake,
+    sleepFade: sleepFade,
   );
   return (controller, fake, wake);
 }
@@ -147,7 +149,10 @@ Future<void> _wait([int ms = 400]) =>
 void main() {
   test('plays on dimmable lights only and adapts commands to each', () async {
     final (controller, fake, wake) = await _setUp();
-    expect(controller.lightNames, ['Color bulb', 'White bulb']);
+    expect(
+      [for (final slot in controller.lightNames) (slot as NamedSlot).name],
+      ['Color bulb', 'White bulb'],
+    );
 
     await controller.start();
     expect(controller.status, PlaybackStatus.playing);
@@ -194,6 +199,54 @@ void main() {
       'dynamics': {'duration': 400},
     });
     expect(restored, isNot(contains('plug')));
+    controller.dispose();
+  });
+
+  test('the sleep timer fades out, then switches the lights off for good',
+      () async {
+    final (controller, fake, wake) =
+        await _setUp(sleepFade: const Duration(milliseconds: 200));
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
+    controller.setSleepTimer(const Duration(milliseconds: 300));
+    await controller.start();
+    expect(controller.sleepRemaining, isNotNull);
+    expect(controller.isFadingOut, isFalse);
+
+    await _wait(350);
+    expect(controller.isFadingOut, isTrue);
+    expect(controller.status, PlaybackStatus.playing);
+    await _wait(350);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(controller.isFadingOut, isFalse);
+    expect(notices.map((n) => n.kind),
+        contains(PlaybackNoticeKind.sleepTimerDone));
+    expect(wake.calls.last, isFalse);
+
+    // Instead of restoring the previous state, every light is switched off
+    // (with a gentle transition), the plug included untouched.
+    await _wait(900);
+    final last = {for (final (id, body) in fake.puts) id: body};
+    const off = {
+      'on': {'on': false},
+      'dynamics': {'duration': 2000},
+    };
+    expect(last['color'], off);
+    expect(last['white'], off);
+    expect(last, isNot(contains('plug')));
+    controller.dispose();
+  });
+
+  test('changing the sleep timer while playing restarts the countdown',
+      () async {
+    final (controller, _, _) = await _setUp();
+    await controller.start();
+    expect(controller.sleepRemaining, isNull);
+    controller.setSleepTimer(const Duration(minutes: 30));
+    expect(controller.sleepRemaining!.inMinutes, 29);
+    controller.setSleepTimer(null);
+    expect(controller.sleepRemaining, isNull);
+    await controller.stop();
     controller.dispose();
   });
 
@@ -268,13 +321,13 @@ void main() {
     final input = FakeAudioInput();
     final (controller, _, _) = await _setUp(music: true, audio: input);
     await controller.changeTarget(null);
-    final messages = <String>[];
-    controller.messages.listen(messages.add);
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
     await controller.start();
     expect(controller.status, PlaybackStatus.playing);
     await input.endStream();
     await _wait(20);
-    expect(messages.single, contains('microphone stopped'));
+    expect(notices.single.kind, PlaybackNoticeKind.microphoneStopped);
     await controller.stop();
     controller.dispose();
   });
@@ -282,12 +335,12 @@ void main() {
   test('a refused microphone keeps Music Sync idle and explains why', () async {
     final (controller, _, _) =
         await _setUp(music: true, audio: FakeAudioInput(granted: false));
-    final messages = <String>[];
-    controller.messages.listen(messages.add);
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
     await controller.start();
     await _wait(10);
     expect(controller.status, PlaybackStatus.idle);
-    expect(messages.single, contains('microphone access'));
+    expect(notices.single.kind, PlaybackNoticeKind.microphoneDenied);
     controller.dispose();
   });
 

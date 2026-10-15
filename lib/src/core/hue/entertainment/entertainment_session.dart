@@ -54,11 +54,10 @@ class EntertainmentSession {
     final clientKey = credentials.clientKey;
     final psk = clientKey == null ? null : _hexDecode(clientKey);
     if (psk == null || psk.length != 16) {
-      throw const HueException(
-          'Streaming needs a newer pairing. Forget the bridge and pair again.');
+      throw const StreamingKeyMissingException();
     }
     if (area.channels.isEmpty) {
-      throw const HueException('This entertainment area has no lights.');
+      throw const EmptyEntertainmentAreaException();
     }
 
     final identity =
@@ -103,9 +102,7 @@ class EntertainmentSession {
     try {
       final active = await _client.isEntertainmentActive(area.id);
       if (active == false && !_closed) {
-        _end(const HueException(
-            'The bridge stopped the stream (another app may have taken over '
-            'the area).'));
+        _end(const EntertainmentStoppedException());
       }
     } on Object {
       // A failed status read says nothing about the stream.

@@ -192,6 +192,11 @@ tested microphone and local-network access on a Mac.
 
 **Age rating:** answer "None" to every question → 4+.
 
+**Photosensitivity:** effects with lightning or beats show a one-time
+warning before they first play, with a "Soften flashes" choice that is also
+a switch in Settings (it limits how fast brightness may change). Mention it
+in the review notes if a reviewer asks about flashing content.
+
 ## Review notes (both stores)
 
 Paste this in "Notes for review":

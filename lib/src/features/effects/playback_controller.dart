@@ -1,18 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/effects/engine/light_output.dart';
-import '../../core/hue/entertainment/dtls/dtls_client.dart';
 import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
-import '../../core/hue/hue_exceptions.dart';
 import '../../core/hue/hue_models.dart';
 import '../../core/screen_wake.dart';
 import '../bridge/bridge_controller.dart';
@@ -24,6 +20,69 @@ const previewLightCount = 5;
 
 enum PlaybackStatus { idle, starting, playing, paused }
 
+enum PlaybackNoticeKind {
+  /// Playing on the bridge was requested while it cannot be reached.
+  bridgeUnreachable,
+
+  /// Every light in the chosen room is on/off only; [PlaybackNotice.name]
+  /// is the room.
+  onOffOnlyLights,
+
+  /// The chosen room or area no longer exists on the bridge.
+  targetGone,
+
+  /// Starting failed; [PlaybackNotice.error] says why.
+  startFailed,
+  microphoneDenied,
+  microphoneFailed,
+
+  /// The microphone died mid-effect.
+  microphoneStopped,
+
+  /// The stream ended on its own; [PlaybackNotice.error] says why, when
+  /// known.
+  streamEnded,
+
+  /// The sleep timer ran out: the effect faded and the lights are off.
+  sleepTimerDone,
+}
+
+/// Something worth telling the user; the UI turns it into localised text.
+class PlaybackNotice {
+  const PlaybackNotice(this.kind, {this.name, this.error, this.problem});
+
+  final PlaybackNoticeKind kind;
+  final String? name;
+  final Object? error;
+  final BridgeProblem? problem;
+}
+
+/// One label of the lamp preview; the UI localises the generic ones.
+sealed class SlotLabel {
+  const SlotLabel();
+}
+
+/// A real light (or a gradient segment group) by name.
+class NamedSlot extends SlotLabel {
+  const NamedSlot(this.name);
+
+  final String name;
+}
+
+/// A virtual lamp of the preview, numbered from 1.
+class PreviewLamp extends SlotLabel {
+  const PreviewLamp(this.number);
+
+  final int number;
+}
+
+/// An entertainment channel whose lights are not known by name.
+class UnnamedChannel extends SlotLabel {
+  const UnnamedChannel(this.id);
+
+  final int id;
+}
+
 /// Everything about playing one effect: where it plays, starting and
 /// stopping the right output, the microphone for Music Sync, keeping the
 /// screen on, and putting the lights back afterwards.
@@ -34,6 +93,7 @@ class PlaybackController extends ChangeNotifier {
     required PreferencesController preferences,
     required AudioInput audioInput,
     ScreenWake screenWake = const NoScreenWake(),
+    this.sleepFade = const Duration(seconds: 20),
   })  : _bridge = bridge,
         _preferences = preferences,
         _audioInput = audioInput,
@@ -41,6 +101,7 @@ class PlaybackController extends ChangeNotifier {
         _targetKey = preferences.lastTarget,
         _controls = preferences.defaultControls {
     _bridge.addListener(_onBridgeChanged);
+    _preferences.addListener(_onPreferencesChanged);
   }
 
   final LightingEffect effect;
@@ -49,15 +110,27 @@ class PlaybackController extends ChangeNotifier {
   final AudioInput _audioInput;
   final ScreenWake _screenWake;
 
-  final _messages = StreamController<String>.broadcast();
+  /// How long the sleep timer takes to fade the lights to black.
+  final Duration sleepFade;
+
+  final _notices = StreamController<PlaybackNotice>.broadcast();
   PlaybackStatus _status = PlaybackStatus.idle;
   EffectPlayer? _player;
   MusicSyncController? _music;
   String? _targetKey;
   EffectControls _controls;
   double _sensitivity = 1;
-  List<String>? _slotNames;
+  List<SlotLabel>? _slotNames;
   Map<String, HueLightCommand> _restore = const {};
+
+  /// Lights of the current target, for the sleep timer to switch off.
+  List<String> _activeLightIds = const [];
+  Duration? _sleepAfter;
+  DateTime? _sleepEndsAt;
+  Timer? _sleepTimer;
+  Timer? _sleepTicker;
+  Timer? _fadeTimer;
+  bool _fadingOut = false;
   bool _disposed = false;
 
   /// Bumped by every stop, so a start that completes afterwards knows it
@@ -69,7 +142,7 @@ class PlaybackController extends ChangeNotifier {
   Future<void>? _teardown;
 
   /// Things worth telling the user, e.g. why playback could not start.
-  Stream<String> get messages => _messages.stream;
+  Stream<PlaybackNotice> get notices => _notices.stream;
 
   PlaybackStatus get status => _status;
   bool get isPlaying => _status == PlaybackStatus.playing;
@@ -78,6 +151,22 @@ class PlaybackController extends ChangeNotifier {
   MusicSyncController? get music => _music;
   EffectControls get controls => _controls;
   double get sensitivity => _sensitivity;
+
+  /// The sleep timer the user chose, or null for none.
+  Duration? get sleepTimer => _sleepAfter;
+
+  /// Time left before the lights go out; null when no timer is running.
+  Duration? get sleepRemaining {
+    final endsAt = _sleepEndsAt;
+    if (endsAt == null) {
+      return null;
+    }
+    final left = endsAt.difference(DateTime.now());
+    return left.isNegative ? Duration.zero : left;
+  }
+
+  /// The timer ran out and the effect is fading to black.
+  bool get isFadingOut => _fadingOut;
 
   /// The latest bridge snapshot, kept while the bridge is temporarily
   /// unreachable so the chosen target does not vanish from the screen.
@@ -115,7 +204,7 @@ class PlaybackController extends ChangeNotifier {
       group != null || area != null ? _targetKey : null;
 
   /// One label per slot of the lamp preview.
-  List<String> get lightNames {
+  List<SlotLabel> get lightNames {
     final playing = _slotNames;
     if (playing != null && _player != null) {
       return playing;
@@ -126,13 +215,13 @@ class PlaybackController extends ChangeNotifier {
     if (home != null && group != null) {
       return [
         for (final id in _effectLights(home, group.lightIds))
-          home.lights[id]?.name ?? id,
+          NamedSlot(home.lights[id]?.name ?? id),
       ];
     }
     if (home != null && area != null) {
       return _channelNames(home, area);
     }
-    return [for (var i = 1; i <= previewLightCount; i++) 'Lamp $i'];
+    return [for (var i = 1; i <= previewLightCount; i++) PreviewLamp(i)];
   }
 
   Future<void> toggle() async {
@@ -176,7 +265,7 @@ class PlaybackController extends ChangeNotifier {
       }
 
       var lightIds = [for (var i = 0; i < previewLightCount; i++) 'p$i'];
-      List<String>? names;
+      List<SlotLabel>? names;
       LightOutput output = const NullLightOutput();
       var tick = const Duration(milliseconds: 100);
       var restore = <String, HueLightCommand>{};
@@ -190,8 +279,10 @@ class PlaybackController extends ChangeNotifier {
         final home = this.home;
         final client = _bridge.client;
         if (!_bridge.isConnected || home == null || client == null) {
-          return _abortStart(
-              _bridge.error ?? 'The bridge could not be reached.');
+          return _abortStart(PlaybackNotice(
+            PlaybackNoticeKind.bridgeUnreachable,
+            problem: _bridge.problem,
+          ));
         }
         final area = this.area;
         final group = this.group;
@@ -217,20 +308,26 @@ class PlaybackController extends ChangeNotifier {
         } else if (group != null) {
           final usable = _effectLights(home, group.lightIds);
           if (usable.isEmpty) {
-            return _abortStart('The lights in ${group.name} can only switch '
-                'on and off, so they cannot play effects.');
+            return _abortStart(PlaybackNotice(
+              PlaybackNoticeKind.onOffOnlyLights,
+              name: group.name,
+            ));
           }
           restore = _snapshot(home, usable);
           output = hueRestOutput(client, home.lights);
           lightIds = usable;
-          names = [for (final id in usable) home.lights[id]?.name ?? id];
+          names = [
+            for (final id in usable) NamedSlot(home.lights[id]?.name ?? id),
+          ];
         } else {
-          return _abortStart('That room or area is no longer on the bridge.');
+          return _abortStart(
+              const PlaybackNotice(PlaybackNoticeKind.targetGone));
         }
       }
 
       final music = _music;
       _restore = _preferences.restoreLights ? restore : const {};
+      _activeLightIds = selectedTarget == null ? const [] : lightIds;
       _slotNames = names;
       // Assigned before play(): if the first tick throws, stop() can still
       // find and stop the player (and its timer).
@@ -244,10 +341,11 @@ class PlaybackController extends ChangeNotifier {
         audio: music == null
             ? null
             : () => music.isListening ? music.features : null,
-      );
+      )..softFlashes = _preferences.softFlashes;
       player.play();
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
+      _armSleepTimer();
       _setStatus(PlaybackStatus.playing);
     } on Object catch (error) {
       if (cancelled()) {
@@ -257,7 +355,8 @@ class PlaybackController extends ChangeNotifier {
       _player = null;
       await player?.stop();
       await streaming?.close();
-      return _abortStart('Could not start: ${describeError(error)}');
+      return _abortStart(
+          PlaybackNotice(PlaybackNoticeKind.startFailed, error: error));
     }
   }
 
@@ -294,11 +393,13 @@ class PlaybackController extends ChangeNotifier {
   /// Stops playback and, unless [restore] is false, puts the lights back.
   Future<void> stop({bool restore = true}) {
     _generation++;
+    _cancelSleepTimer();
     final player = _player;
     final commands = _restore;
     _player = null;
     _slotNames = null;
     _restore = const {};
+    _activeLightIds = const [];
     _setStatus(PlaybackStatus.idle);
     final previous = _teardown;
     late final Future<void> current;
@@ -362,6 +463,76 @@ class PlaybackController extends ChangeNotifier {
     _notify();
   }
 
+  /// Switches the lights off after [duration] (null: never). Counts wall
+  /// time from now, or from the next start when nothing is playing.
+  void setSleepTimer(Duration? duration) {
+    _sleepAfter = duration;
+    _cancelSleepTimer();
+    if (_status == PlaybackStatus.playing || _status == PlaybackStatus.paused) {
+      _armSleepTimer();
+    }
+    _notify();
+  }
+
+  void _armSleepTimer() {
+    final after = _sleepAfter;
+    _cancelSleepTimer();
+    if (after == null) {
+      return;
+    }
+    _sleepEndsAt = DateTime.now().add(after);
+    _sleepTimer = Timer(after, _onSleepElapsed);
+    // Repaint the remaining time now and then.
+    _sleepTicker =
+        Timer.periodic(const Duration(seconds: 15), (_) => _notify());
+  }
+
+  void _cancelSleepTimer() {
+    _sleepTimer?.cancel();
+    _sleepTimer = null;
+    _sleepTicker?.cancel();
+    _sleepTicker = null;
+    _fadeTimer?.cancel();
+    _fadeTimer = null;
+    _sleepEndsAt = null;
+    _fadingOut = false;
+  }
+
+  /// Fades the effect to black over [sleepFade], then switches the lights
+  /// off for good instead of restoring them.
+  void _onSleepElapsed() {
+    final player = _player;
+    if (_disposed || player == null) {
+      return;
+    }
+    if (_status != PlaybackStatus.playing) {
+      // Paused: nothing to fade, just finish.
+      unawaited(_finishSleep());
+      return;
+    }
+    _fadingOut = true;
+    _sleepEndsAt = null;
+    _notify();
+    const step = Duration(milliseconds: 100);
+    final steps = (sleepFade.inMilliseconds / step.inMilliseconds).ceil();
+    var elapsed = 0;
+    _fadeTimer = Timer.periodic(step, (timer) {
+      elapsed++;
+      player.masterLevel = (1 - elapsed / steps).clamp(0.0, 1.0);
+      if (elapsed >= steps) {
+        timer.cancel();
+        unawaited(_finishSleep());
+      }
+    });
+  }
+
+  Future<void> _finishSleep() async {
+    const off = HueLightCommand(on: false, transition: Duration(seconds: 2));
+    _restore = {for (final id in _activeLightIds) id: off};
+    await stop();
+    _notice(const PlaybackNotice(PlaybackNoticeKind.sleepTimerDone));
+  }
+
   /// Starts the microphone for Music Sync effects. Returns false (after
   /// telling the user why) when it cannot listen.
   Future<bool> _startListening() async {
@@ -379,18 +550,17 @@ class PlaybackController extends ChangeNotifier {
       case MusicSyncStatus.listening:
         return true;
       case MusicSyncStatus.denied:
-        _message('Music Sync needs microphone access. You can allow it in '
-            'your phone settings.');
+        _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneDenied));
       default:
-        _message('The microphone could not be started.');
+        _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneFailed));
     }
     return false;
   }
 
-  void _abortStart(String message) {
+  void _abortStart(PlaybackNotice notice) {
     unawaited(_music?.stop());
     _setStatus(PlaybackStatus.idle);
-    _message(message);
+    _notice(notice);
   }
 
   /// A stop or dispose happened while starting: undo what was set up.
@@ -421,8 +591,7 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     if (_status == PlaybackStatus.playing) {
-      _message('The microphone stopped (another app may be using it). '
-          'Press Stop, then Play, to listen again.');
+      _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneStopped));
     }
   }
 
@@ -431,14 +600,16 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     unawaited(stop());
-    _message(switch (error) {
-      HueException(:final message) => message,
-      DtlsException(:final message) => message,
-      _ => 'Streaming stopped by the bridge.',
-    });
+    _notice(PlaybackNotice(PlaybackNoticeKind.streamEnded, error: error));
   }
 
   void _onBridgeChanged() => _notify();
+
+  /// Settings changed while playing (e.g. soften flashes from the warning
+  /// dialog): apply them to the running player.
+  void _onPreferencesChanged() {
+    _player?.softFlashes = _preferences.softFlashes;
+  }
 
   void _setStatus(PlaybackStatus status) {
     _status = status;
@@ -451,20 +622,22 @@ class PlaybackController extends ChangeNotifier {
     }
   }
 
-  void _message(String message) {
+  void _notice(PlaybackNotice notice) {
     if (!_disposed) {
-      _messages.add(message);
+      _notices.add(notice);
     }
   }
 
   @override
   void dispose() {
     _disposed = true;
+    _cancelSleepTimer();
     _bridge.removeListener(_onBridgeChanged);
+    _preferences.removeListener(_onPreferencesChanged);
     final music = _music;
     music?.removeListener(_onMusicChanged);
     unawaited(stop().whenComplete(() => music?.dispose()));
-    unawaited(_messages.close());
+    unawaited(_notices.close());
     super.dispose();
   }
 
@@ -476,14 +649,17 @@ class PlaybackController extends ChangeNotifier {
           if (home.lights[id]?.isDimmable ?? false) id,
       ];
 
-  static List<String> _channelNames(HueHome home, HueEntertainmentArea area) =>
+  static List<SlotLabel> _channelNames(
+    HueHome home,
+    HueEntertainmentArea area,
+  ) =>
       [
         for (final channel in area.spatialChannels)
           channel.lightIds.isEmpty
-              ? 'Channel ${channel.id}'
-              : channel.lightIds
+              ? UnnamedChannel(channel.id)
+              : NamedSlot(channel.lightIds
                   .map((id) => home.lights[id]?.name ?? id)
-                  .join(' / '),
+                  .join(' / ')),
       ];
 
   static Map<String, HueLightCommand> _snapshot(
@@ -536,13 +712,3 @@ Future<void> restoreLights(
     await Future<void>.delayed(gap);
   }
 }
-
-String describeError(Object error) => switch (error) {
-      HueException(:final message) => message,
-      DtlsException(:final message) => message,
-      SocketException() ||
-      TimeoutException() ||
-      http.ClientException() =>
-        'the bridge did not respond.',
-      _ => 'something went wrong.',
-    };
