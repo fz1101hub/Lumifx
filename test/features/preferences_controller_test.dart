@@ -34,11 +34,16 @@ void main() {
     );
     await first.setSoftFlashes(true);
     await first.setFlashWarningShown(true);
+    await first.setVariant('aurora', 'rose_gold');
+    await first.setVariant('ocean', 'lagoon');
+    await first.setVariant('ocean', null);
 
     final second = PreferencesController(store: store);
     await second.load();
     expect(second.softFlashes, isTrue);
     expect(second.flashWarningShown, isTrue);
+    expect(second.variantOf('aurora'), 'rose_gold');
+    expect(second.variantOf('ocean'), isNull);
     expect(second.favorites, ['ocean']);
     expect(second.recents, ['disco']);
     expect(second.lastTarget, 'area:123');

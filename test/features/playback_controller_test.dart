@@ -250,6 +250,24 @@ void main() {
     controller.dispose();
   });
 
+  test('choosing a colour variant switches a running player in place',
+      () async {
+    final (controller, _, _) = await _setUp();
+    await controller.start();
+    final player = controller.player!;
+    expect(controller.variantId, isNull);
+    await controller.setVariant('lagoon');
+    expect(controller.player, same(player));
+    expect(controller.status, PlaybackStatus.playing);
+    expect(player.effect.events.first.parameters['palette'],
+        ocean.variants.first.palette);
+    await controller.setVariant(null);
+    expect(player.effect.events.first.parameters['palette'],
+        ocean.events.first.parameters['palette']);
+    await controller.stop();
+    controller.dispose();
+  });
+
   test('restoring can be turned off', () async {
     final (controller, fake, _) = await _setUp(restoreLights: false);
     await controller.start();

@@ -23,7 +23,13 @@ void main() {
       if (effect.collection != null) {
         expect(it.collectionName(effect), isNotEmpty);
       }
+      for (final variant in effect.variants) {
+        // "Neon" is the same word in Italian: only check it is mapped.
+        expect(it.variantName(variant), isNotEmpty, reason: variant.id);
+        expect(en.variantName(variant), variant.name);
+      }
     }
+    expect(it.variantClassic, isNotEmpty);
   });
 
   test('errors the app knows are translated, others keep their words', () {

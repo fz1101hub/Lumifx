@@ -152,6 +152,19 @@ class PlaybackController extends ChangeNotifier {
   EffectControls get controls => _controls;
   double get sensitivity => _sensitivity;
 
+  /// The colour variant chosen for this effect, or null for the original.
+  String? get variantId => _preferences.variantOf(effect.id);
+
+  /// The effect with the chosen colour variant applied.
+  LightingEffect get effectToPlay => effect.withVariant(variantId);
+
+  /// Picks a colour variant; a running player switches colours in place.
+  Future<void> setVariant(String? variantId) async {
+    await _preferences.setVariant(effect.id, variantId);
+    _player?.effect = effectToPlay;
+    _notify();
+  }
+
   /// The sleep timer the user chose, or null for none.
   Duration? get sleepTimer => _sleepAfter;
 
@@ -332,7 +345,7 @@ class PlaybackController extends ChangeNotifier {
       // Assigned before play(): if the first tick throws, stop() can still
       // find and stop the player (and its timer).
       final player = _player = EffectPlayer(
-        effect: effect,
+        effect: effectToPlay,
         lightIds: lightIds,
         output: output,
         seed: DateTime.now().millisecondsSinceEpoch & 0x7FFFFFFF,

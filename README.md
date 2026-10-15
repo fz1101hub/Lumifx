@@ -30,7 +30,8 @@ The project is intentionally built around an original effects engine and origina
 2. ✅ Read rooms, zones and lights
 3. ✅ Basic light controls (room/zone on/off and brightness)
 4. ✅ Shared effect engine (renderer, player, rate-limited Hue output)
-5. ✅ First set of animated scenes and narrative Stories (6 scenes, 12 stories)
+5. ✅ First set of animated scenes and narrative Stories (6 scenes, 19 stories
+   including Halloween and Christmas collections, colour variants for scenes)
 6. ✅ Favorites, recently played and playback defaults
 
 Also done ahead of schedule:

@@ -115,6 +115,13 @@ extension EffectText on AppLocalizations {
         'party_chase' => effectNamePartyChase,
         'spectrum' => effectNameSpectrum,
         'mood_glow' => effectNameMoodGlow,
+        'pumpkin_patch' => effectNamePumpkinPatch,
+        'witches_cauldron' => effectNameWitchesCauldron,
+        'vampires_castle' => effectNameVampiresCastle,
+        'trick_or_treat' => effectNameTrickOrTreat,
+        'santas_workshop' => effectNameSantasWorkshop,
+        'silent_snowfall' => effectNameSilentSnowfall,
+        'candlelight_carol' => effectNameCandlelightCarol,
         _ => effect.name,
       };
 
@@ -141,7 +148,30 @@ extension EffectText on AppLocalizations {
         'party_chase' => effectDescriptionPartyChase,
         'spectrum' => effectDescriptionSpectrum,
         'mood_glow' => effectDescriptionMoodGlow,
+        'pumpkin_patch' => effectDescriptionPumpkinPatch,
+        'witches_cauldron' => effectDescriptionWitchesCauldron,
+        'vampires_castle' => effectDescriptionVampiresCastle,
+        'trick_or_treat' => effectDescriptionTrickOrTreat,
+        'santas_workshop' => effectDescriptionSantasWorkshop,
+        'silent_snowfall' => effectDescriptionSilentSnowfall,
+        'candlelight_carol' => effectDescriptionCandlelightCarol,
         _ => effect.description,
+      };
+
+  String variantName(EffectVariant variant) => switch (variant.id) {
+        'blue_flame' => variantBlueFlame,
+        'emerald_embers' => variantEmeraldEmbers,
+        'lagoon' => variantLagoon,
+        'deep_purple' => variantDeepPurple,
+        'rose_gold' => variantRoseGold,
+        'ice' => variantIce,
+        'desert' => variantDesert,
+        'lavender' => variantLavender,
+        'sea_storm' => variantSeaStorm,
+        'sand_storm' => variantSandStorm,
+        'neon' => variantNeon,
+        'pastel' => variantPastel,
+        _ => variant.name,
       };
 
   String? collectionName(LightingEffect effect) => switch (effect.collection) {
@@ -151,6 +181,7 @@ extension EffectText on AppLocalizations {
         'Party' => collectionParty,
         'Magic & Fantasy' => collectionMagicFantasy,
         'Haunted' => collectionHaunted,
+        'Halloween' => collectionHalloween,
         'Christmas Stories' => collectionChristmas,
         'Adventure' => collectionAdventure,
         'Pirates' => collectionPirates,
