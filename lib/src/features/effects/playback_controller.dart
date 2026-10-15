@@ -97,6 +97,7 @@ class PlaybackController extends ChangeNotifier {
         _targetKey = preferences.lastTarget,
         _controls = preferences.defaultControls {
     _bridge.addListener(_onBridgeChanged);
+    _preferences.addListener(_onPreferencesChanged);
   }
 
   final LightingEffect effect;
@@ -307,7 +308,7 @@ class PlaybackController extends ChangeNotifier {
         audio: music == null
             ? null
             : () => music.isListening ? music.features : null,
-      );
+      )..softFlashes = _preferences.softFlashes;
       player.play();
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
@@ -498,6 +499,12 @@ class PlaybackController extends ChangeNotifier {
 
   void _onBridgeChanged() => _notify();
 
+  /// Settings changed while playing (e.g. soften flashes from the warning
+  /// dialog): apply them to the running player.
+  void _onPreferencesChanged() {
+    _player?.softFlashes = _preferences.softFlashes;
+  }
+
   void _setStatus(PlaybackStatus status) {
     _status = status;
     _notify();
@@ -519,6 +526,7 @@ class PlaybackController extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     _bridge.removeListener(_onBridgeChanged);
+    _preferences.removeListener(_onPreferencesChanged);
     final music = _music;
     music?.removeListener(_onMusicChanged);
     unawaited(stop().whenComplete(() => music?.dispose()));

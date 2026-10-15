@@ -22,6 +22,11 @@ class _FakeDiscovery implements BridgeDiscovery {
       );
 }
 
+/// Preferences of a user who has already seen the flashing-lights warning.
+PreferencesController _warnedPreferences() =>
+    PreferencesController(store: InMemoryKeyValueStore())
+      ..setFlashWarningShown(true);
+
 Future<void> _pumpApp(WidgetTester tester) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -133,7 +138,8 @@ void main() {
     await tester.pumpWidget(LumiFxApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
-      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      // Beat effects flash: the one-time warning has been seen already.
+      preferences: _warnedPreferences(),
       audioInput: input,
     ));
 
@@ -170,7 +176,7 @@ void main() {
     await tester.pumpWidget(LumiFxApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
-      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      preferences: _warnedPreferences(),
       audioInput: FakeAudioInput(granted: false),
     ));
     await tester.tap(find.text('Interactive'));
@@ -184,6 +190,59 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.textContaining('microphone access'), findsOneWidget);
     expect(find.text('Play'), findsOneWidget);
+  });
+
+  testWidgets('a flashing effect warns once, and softening can be chosen',
+      (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+
+    // Ocean has no flashes: no warning.
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Flashing lights'), findsNothing);
+    expect(find.text('Pause'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // The lazy list has not built the card yet: scroll until it exists,
+    // then bring it fully into view.
+    await tester.scrollUntilVisible(find.text('Thunderstorm'), 200);
+    await tester.ensureVisible(find.text('Thunderstorm'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Thunderstorm'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Play'));
+    await tester.pumpAndSettle();
+    expect(find.text('Flashing lights'), findsOneWidget);
+    // Nothing plays until the user has chosen.
+    expect(find.text('Pause'), findsNothing);
+    await tester.tap(find.text('Soften flashes'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Pause'), findsOneWidget);
+    expect(preferences.softFlashes, isTrue);
+    expect(preferences.flashWarningShown, isTrue);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+
+    // Shown once only.
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Flashing lights'), findsNothing);
+    expect(find.text('Pause'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('the app speaks Italian', (tester) async {

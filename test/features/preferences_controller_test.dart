@@ -32,9 +32,13 @@ void main() {
     await first.setDefaultControls(
       const EffectControls(brightness: 0.4, intensity: 0.6, speed: 2),
     );
+    await first.setSoftFlashes(true);
+    await first.setFlashWarningShown(true);
 
     final second = PreferencesController(store: store);
     await second.load();
+    expect(second.softFlashes, isTrue);
+    expect(second.flashWarningShown, isTrue);
     expect(second.favorites, ['ocean']);
     expect(second.recents, ['disco']);
     expect(second.lastTarget, 'area:123');

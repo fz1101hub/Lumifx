@@ -86,6 +86,30 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
     );
   }
 
+  /// Play/pause, with a one-time warning before the first effect that
+  /// flashes. Nothing plays until the user has chosen.
+  Future<void> _toggle() async {
+    final c = controller;
+    final preferences = AppScope.of(context).preferences;
+    if (c.status == PlaybackStatus.idle &&
+        widget.effect.hasRapidFlashes &&
+        !preferences.flashWarningShown) {
+      final soften = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const _FlashWarningDialog(),
+      );
+      if (!mounted || soften == null) {
+        return;
+      }
+      unawaited(preferences.setFlashWarningShown(true));
+      if (soften) {
+        unawaited(preferences.setSoftFlashes(true));
+      }
+    }
+    await c.toggle();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -201,7 +225,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     FilledButton.icon(
-                      onPressed: busy ? null : c.toggle,
+                      onPressed: busy ? null : _toggle,
                       icon: busy
                           ? const SizedBox.square(
                               dimension: 18,
@@ -257,6 +281,31 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
           );
         },
       ),
+    );
+  }
+}
+
+/// Shown once before the first effect with lightning or beats.
+class _FlashWarningDialog extends StatelessWidget {
+  const _FlashWarningDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      icon: const Icon(Icons.flash_on_outlined),
+      title: Text(l10n.photosensitivityTitle),
+      content: Text(l10n.photosensitivityBody),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(l10n.softenFlashes),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(l10n.continueAction),
+        ),
+      ],
     );
   }
 }

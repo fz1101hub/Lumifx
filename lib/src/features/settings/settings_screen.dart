@@ -65,6 +65,12 @@ class SettingsScreen extends StatelessWidget {
                 value: preferences.restoreLights,
                 onChanged: preferences.setRestoreLights,
               ),
+              SwitchListTile(
+                title: Text(l10n.softFlashes),
+                subtitle: Text(l10n.softFlashesDescription),
+                value: preferences.softFlashes,
+                onChanged: preferences.setSoftFlashes,
+              ),
               const Divider(height: 32),
               _Header(l10n.about),
               ListTile(

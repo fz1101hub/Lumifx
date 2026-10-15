@@ -6,6 +6,7 @@ import 'package:lumifx/src/core/effects/engine/effect_renderer.dart';
 import 'package:lumifx/src/core/effects/engine/effect_player.dart';
 import 'package:lumifx/src/core/effects/engine/light_frame.dart';
 import 'package:lumifx/src/core/effects/engine/light_output.dart';
+import 'package:lumifx/src/features/effects/catalog/builtin_scenes.dart';
 
 class _RecordingOutput implements LightOutput {
   final updates = <Map<String, LightFrame>>[];
@@ -75,6 +76,57 @@ void main() {
     await Future<void>.delayed(const Duration(milliseconds: 50));
     expect(output.updates, isEmpty);
     expect(player.state, PlaybackState.stopped);
+  });
+
+  group('soft flashes', () {
+    test('softenFrames limits the brightness step and eases the colour', () {
+      const dark = LightFrame(LightColor(0, 0, 0.2), 0.1);
+      const strike = LightFrame(LightColor.white, 1);
+      final eased = softenFrames([dark], [strike], 0.02).single;
+      expect(eased.brightness, closeTo(0.15, 1e-9));
+      // 5.6% of the way from dark blue to white.
+      expect(eased.color.r, closeTo(0.0556, 1e-3));
+      expect(eased.color.b, closeTo(0.2 + 0.8 * 0.0556, 1e-3));
+      // Small changes pass through untouched.
+      const almost = LightFrame(LightColor.white, 0.12);
+      expect(softenFrames([dark], [almost], 0.02).single, almost);
+      // No previous frame: nothing to ease from.
+      expect(softenFrames(null, [strike], 0.02).single, strike);
+    });
+
+    test('a thunderstorm never jumps when flashes are softened', () {
+      double largestStep({required bool soft}) {
+        final output = _RecordingOutput();
+        final player = EffectPlayer(
+          effect: thunderstorm,
+          lightIds: const ['a', 'b', 'c', 'd'],
+          output: output,
+          seed: 7,
+          tick: const Duration(milliseconds: 20),
+        )..softFlashes = soft;
+        player.advance(Duration.zero);
+        for (var i = 0; i < 45 * 50; i++) {
+          player.advance(const Duration(milliseconds: 20));
+        }
+        var largest = 0.0;
+        for (var i = 1; i < output.updates.length; i++) {
+          for (final id in ['a', 'b', 'c', 'd']) {
+            final step = (output.updates[i][id]!.brightness -
+                    output.updates[i - 1][id]!.brightness)
+                .abs();
+            if (step > largest) {
+              largest = step;
+            }
+          }
+        }
+        return largest;
+      }
+
+      expect(largestStep(soft: false), greaterThan(0.3),
+          reason: 'lightning should strike within one 20 ms tick');
+      expect(largestStep(soft: true),
+          lessThanOrEqualTo(EffectPlayer.softFlashRate * 0.02 + 1e-9));
+    });
   });
 
   group('RateLimitedLightOutput', () {

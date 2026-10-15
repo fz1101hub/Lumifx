@@ -50,6 +50,8 @@ class PreferencesController extends ChangeNotifier {
   EffectControls _defaultControls = const EffectControls();
   String? _lastTarget;
   bool _restoreLights = true;
+  bool _softFlashes = false;
+  bool _flashWarningShown = false;
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -66,6 +68,13 @@ class PreferencesController extends ChangeNotifier {
 
   /// Put lights back the way they were when an effect stops.
   bool get restoreLights => _restoreLights;
+
+  /// Slow down sudden brightness changes (lightning, beats) for
+  /// photosensitive users.
+  bool get softFlashes => _softFlashes;
+
+  /// The one-time warning before a flashing effect has been shown.
+  bool get flashWarningShown => _flashWarningShown;
 
   bool isFavorite(String effectId) => _favorites.contains(effectId);
 
@@ -85,6 +94,8 @@ class PreferencesController extends ChangeNotifier {
       _recents = _strings(json['recents']);
       _lastTarget = json['lastTarget'] as String?;
       _restoreLights = json['restoreLights'] as bool? ?? true;
+      _softFlashes = json['softFlashes'] as bool? ?? false;
+      _flashWarningShown = json['flashWarningShown'] as bool? ?? false;
       final controls = json['defaultControls'];
       if (controls is Map) {
         _defaultControls = EffectControls(
@@ -128,6 +139,16 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  Future<void> setSoftFlashes(bool value) {
+    _softFlashes = value;
+    return _changed();
+  }
+
+  Future<void> setFlashWarningShown(bool value) {
+    _flashWarningShown = value;
+    return _changed();
+  }
+
   Future<void> setLastTarget(String? target) {
     if (target == _lastTarget) {
       return Future.value();
@@ -147,6 +168,8 @@ class PreferencesController extends ChangeNotifier {
       'recents': _recents,
       'lastTarget': _lastTarget,
       'restoreLights': _restoreLights,
+      'softFlashes': _softFlashes,
+      'flashWarningShown': _flashWarningShown,
       'defaultControls': {
         'brightness': _defaultControls.brightness,
         'intensity': _defaultControls.intensity,

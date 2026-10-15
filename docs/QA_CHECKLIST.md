@@ -36,6 +36,9 @@ build before every store release.
 - [ ] A room containing a smart plug: the plug is ignored and the other
       lights play.
 - [ ] Brightness / intensity / speed sliders take effect while playing.
+- [ ] First Play on Thunderstorm shows the "Flashing lights" warning once;
+      "Soften flashes" turns the strikes into soft pulses (also as a switch
+      in Settings); Ocean never shows the warning.
 - [ ] Pause then Play resumes without a jump; Stop puts every light back
       to its previous colour and brightness within ~2 s (check against
       the Hue app). Turn "Restore lights" off in Settings and check they

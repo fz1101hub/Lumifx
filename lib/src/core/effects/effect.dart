@@ -41,6 +41,14 @@ class LightingEffect {
   bool get usesMicrophone =>
       events.any((event) => event.type == EffectEventTypes.music);
 
+  /// Contains sudden, repeated changes in brightness (lightning strikes,
+  /// beats): the player warns photosensitive users before the first one.
+  bool get hasRapidFlashes => events.any((event) => const {
+        EffectEventTypes.lightning,
+        EffectEventTypes.beat,
+        EffectEventTypes.music,
+      }.contains(event.type));
+
   Duration get cycleLength {
     if (loopDuration != null) {
       return loopDuration!;
