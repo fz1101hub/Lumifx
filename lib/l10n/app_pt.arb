@@ -362,5 +362,7 @@
   "add": "Adicionar",
   "imported": "Adicionado: {scenes, plural, =0{} =1{1 cena} other{{scenes} cenas}}{playlists, plural, =0{} =1{ e 1 playlist} other{ e {playlists} playlists}}.",
   "shareAll": "Compartilhar ou guardar minhas cenas e playlists",
-  "shareAllSubtitle": "Um só link com tudo o que você criou, para outro celular ou para guardar."
+  "shareAllSubtitle": "Um só link com tudo o que você criou, para outro celular ou para guardar.",
+  "nightLight": "Luz noturna",
+  "nightLightHint": "Toque para ver isto de novo. Feche ou volte para sair."
 }

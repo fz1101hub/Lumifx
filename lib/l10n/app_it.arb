@@ -362,5 +362,7 @@
   "add": "Aggiungi",
   "imported": "Aggiunte {scenes, plural, =0{} =1{1 scena} other{{scenes} scene}}{playlists, plural, =0{} =1{ e 1 playlist} other{ e {playlists} playlist}}.",
   "shareAll": "Condividi o salva le mie scene e playlist",
-  "shareAllSubtitle": "Un solo link con tutto ciò che hai creato, per un altro telefono o da conservare."
+  "shareAllSubtitle": "Un solo link con tutto ciò che hai creato, per un altro telefono o da conservare.",
+  "nightLight": "Luce notturna",
+  "nightLightHint": "Tocca per rivedere questo messaggio. Chiudi o torna indietro per uscire."
 }

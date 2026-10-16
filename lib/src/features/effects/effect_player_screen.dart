@@ -17,6 +17,7 @@ import '../library/sharing.dart';
 import '../music/music_sync_controller.dart';
 import 'effect_palette.dart';
 import 'light_color_ui.dart';
+import 'night_light_screen.dart';
 import 'playback_controller.dart';
 
 class EffectPlayerScreen extends StatefulWidget {
@@ -208,6 +209,16 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
               ),
             ),
           ],
+          IconButton(
+            tooltip: l10n.nightLight,
+            icon: const Icon(Icons.nightlight_outlined),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                fullscreenDialog: true,
+                builder: (_) => NightLightScreen(effect: effect),
+              ),
+            ),
+          ),
           _FavoriteButton(effectId: effect.id),
         ],
       ),

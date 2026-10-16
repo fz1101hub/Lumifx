@@ -1042,5 +1042,13 @@
   "shareAllSubtitle": "One link with everything you made, for another phone or to keep.",
   "@shareAllSubtitle": {
     "description": "Explains sharing everything"
+  },
+  "nightLight": "Night light",
+  "@nightLight": {
+    "description": "Player action and screen: the phone as a night light"
+  },
+  "nightLightHint": "Tap to show this again. Close or go back to leave.",
+  "@nightLightHint": {
+    "description": "Night light hint, shown for a few seconds"
   }
 }

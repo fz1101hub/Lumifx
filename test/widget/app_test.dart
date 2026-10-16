@@ -403,6 +403,28 @@ void main() {
         reason: 'the playlist points at the imported scene');
   });
 
+  testWidgets('the night light shows the effect full screen', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Night light'));
+    // The glows move all the time: step instead of settling.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining('Tap to show this again'), findsOneWidget);
+    expect(find.byType(CustomPaint), findsWidgets);
+    await tester.pump(const Duration(seconds: 4));
+    // The hint fades away, and a tap brings it back.
+    await tester.tapAt(const Offset(200, 400));
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Play'), findsOneWidget, reason: 'back on the player');
+  });
+
   testWidgets('settings change the controls a new playback starts with',
       (tester) async {
     await _pumpApp(tester);

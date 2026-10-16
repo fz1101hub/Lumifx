@@ -362,5 +362,7 @@
   "add": "Toevoegen",
   "imported": "Toegevoegd: {scenes, plural, =0{} =1{1 scène} other{{scenes} scènes}}{playlists, plural, =0{} =1{ en 1 afspeellijst} other{ en {playlists} afspeellijsten}}.",
   "shareAll": "Mijn scènes en afspeellijsten delen of bewaren",
-  "shareAllSubtitle": "Eén link met alles wat je hebt gemaakt, voor een andere telefoon of om te bewaren."
+  "shareAllSubtitle": "Eén link met alles wat je hebt gemaakt, voor een andere telefoon of om te bewaren.",
+  "nightLight": "Nachtlampje",
+  "nightLightHint": "Tik om dit weer te tonen. Sluit of ga terug om te stoppen."
 }
