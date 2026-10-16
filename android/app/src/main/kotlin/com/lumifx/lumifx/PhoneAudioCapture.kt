@@ -113,8 +113,8 @@ class PhoneAudioCapture(
 
     // --- EventChannel.StreamHandler ---
 
-    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-        sink = events
+    override fun onListen(arguments: Any?, eventSink: EventChannel.EventSink?) {
+        sink = eventSink
     }
 
     override fun onCancel(arguments: Any?) {

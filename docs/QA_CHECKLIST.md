@@ -119,7 +119,9 @@ build before every store release.
       longer reuses it).
 - [ ] Switching the source in Settings while an effect plays moves to the
       new source without stopping the lights.
-- [ ] Notification is in the phone's language (six languages).
+- [ ] Notification is in the phone's language (six languages). On
+      Android 13+ it is only visible when LumiFX may post notifications
+      (the app never asks for that; the capture works either way).
 
 ## Network edge cases
 

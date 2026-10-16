@@ -34,7 +34,6 @@ import androidx.core.content.IntentCompat
  * that opt out of capture (some streaming services) are simply silent
  * here.
  */
-@RequiresApi(Build.VERSION_CODES.Q)
 class PhoneAudioCaptureService : Service() {
     interface Listener {
         fun onPcm(bytes: ByteArray)
@@ -66,6 +65,10 @@ class PhoneAudioCaptureService : Service() {
         if (record != null) {
             return START_NOT_STICKY
         }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            stopWith("unsupported")
+            return START_NOT_STICKY
+        }
         startInForeground()
         val code = intent.getIntExtra(EXTRA_RESULT_CODE, 0)
         val data = IntentCompat.getParcelableExtra(intent, EXTRA_RESULT_DATA, Intent::class.java)
@@ -81,6 +84,7 @@ class PhoneAudioCaptureService : Service() {
         return START_NOT_STICKY
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun startInForeground() {
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(
@@ -93,7 +97,8 @@ class PhoneAudioCaptureService : Service() {
         val open = PendingIntent.getActivity(
             this,
             0,
-            packageManager.getLaunchIntentForPackage(packageName),
+            packageManager.getLaunchIntentForPackage(packageName)
+                ?: Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -115,6 +120,7 @@ class PhoneAudioCaptureService : Service() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun startCapture(code: Int, data: Intent) {
         val manager = getSystemService(MediaProjectionManager::class.java)
         val projection = manager.getMediaProjection(code, data)
