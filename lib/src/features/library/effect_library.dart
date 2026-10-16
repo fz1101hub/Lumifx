@@ -2,6 +2,7 @@ import '../../core/effects/effect.dart';
 import '../effects/catalog/effect_catalog.dart';
 import 'preferences_controller.dart';
 import 'user_scene.dart';
+import 'user_story.dart';
 
 /// Every effect the app can play: the built-in catalog and the scenes the
 /// user made (stored with the preferences, so listen to those for
@@ -22,18 +23,37 @@ class EffectLibrary {
 
   bool isUserScene(String id) => id.startsWith(UserScene.idPrefix);
 
+  /// Stories the user made start with this prefix.
+  static const storyPrefix = UserStory.idPrefix;
+
+  bool isUserStory(String id) => id.startsWith(storyPrefix);
+
+  /// The user's stories as effects, newest first.
+  List<LightingEffect> get userStories => [
+        for (final story in _preferences.userStories.reversed)
+          _effectOfStory(story),
+      ];
+
+  UserStory? userStory(String id) =>
+      _preferences.userStories.where((s) => s.id == id).firstOrNull;
+
   LightingEffect? byId(String id) {
     if (isUserScene(id)) {
       final scene = userScene(id);
       return scene == null ? null : _effectOf(scene);
     }
+    if (isUserStory(id)) {
+      final story = userStory(id);
+      return story == null ? null : _effectOfStory(story);
+    }
     return effectById(id);
   }
 
-  /// Effects of [kind]; scenes include the user's own first unless
-  /// [builtInOnly].
+  /// Effects of [kind]; scenes and stories include the user's own first
+  /// unless [builtInOnly].
   List<LightingEffect> ofKind(EffectKind kind, {bool builtInOnly = false}) => [
         if (kind == EffectKind.scene && !builtInOnly) ...userScenes,
+        if (kind == EffectKind.story && !builtInOnly) ...userStories,
         ...effectsOfKind(kind),
       ];
 
@@ -41,4 +61,7 @@ class EffectLibrary {
   /// the same effect until it is edited.
   LightingEffect _effectOf(UserScene scene) =>
       _effects[scene] ??= scene.toEffect();
+
+  LightingEffect _effectOfStory(UserStory story) =>
+      _effects[story] ??= story.toEffect();
 }

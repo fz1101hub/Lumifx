@@ -21,6 +21,49 @@ class LightColor {
     );
   }
 
+  /// The colour of CIE 1931 chromaticity [x], [y] at full brightness: the
+  /// inverse of [toXy], scaled so the strongest channel is 1.
+  factory LightColor.fromXy(double x, double y) {
+    if (y <= 0) {
+      return white;
+    }
+    final bigX = x / y;
+    final bigZ = (1 - x - y) / y;
+    var red = bigX * 1.656492 - 0.354851 - bigZ * 0.255038;
+    var green = -bigX * 0.707196 + 1.655397 + bigZ * 0.036152;
+    var blue = bigX * 0.051713 - 0.121364 + bigZ * 1.011530;
+    double ungamma(double c) => c <= 0.0031308
+        ? 12.92 * c
+        : 1.055 * math.pow(c, 1 / 2.4).toDouble() - 0.055;
+    red = ungamma(math.max(red, 0));
+    green = ungamma(math.max(green, 0));
+    blue = ungamma(math.max(blue, 0));
+    final peak = math.max(red, math.max(green, blue));
+    if (peak <= 0) {
+      return white;
+    }
+    return LightColor(red / peak, green / peak, blue / peak);
+  }
+
+  /// The white of a colour temperature in mirek (Tanner Helland's
+  /// approximation of the black-body colours, 1000-40000 K).
+  factory LightColor.fromMirek(int mirek) {
+    final kelvin = (1e6 / mirek.clamp(25, 1000)) / 100;
+    double clamp(double v) => (v / 255).clamp(0.0, 1.0);
+    final red = kelvin <= 66
+        ? 1.0
+        : clamp(329.698727446 * math.pow(kelvin - 60, -0.1332047592));
+    final green = kelvin <= 66
+        ? clamp(99.4708025861 * math.log(kelvin) - 161.1195681661)
+        : clamp(288.1221695283 * math.pow(kelvin - 60, -0.0755148492));
+    final blue = kelvin >= 66
+        ? 1.0
+        : kelvin <= 19
+            ? 0.0
+            : clamp(138.5177312231 * math.log(kelvin - 10) - 305.0447927307);
+    return LightColor(red, green, blue);
+  }
+
   static const black = LightColor(0, 0, 0);
   static const white = LightColor(1, 1, 1);
 

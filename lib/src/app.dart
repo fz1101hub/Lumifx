@@ -7,6 +7,8 @@ import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
 import 'core/screen_wake.dart';
+import 'core/sound/sound_player.dart';
+import 'features/tv/camera_input.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
 import 'features/effects/catalog/effect_catalog.dart';
@@ -35,6 +37,8 @@ class LumiFxApp extends StatefulWidget {
     this.screenWake = const WakelockScreenWake(),
     this.background = const NoBackgroundPlayback(),
     this.clock = DateTime.now,
+    this.sound = const NoSoundPlayer(),
+    this.camera = const NoCameraInput(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -62,6 +66,12 @@ class LumiFxApp extends StatefulWidget {
 
   /// Today, for the seasonal stories on the home.
   final DateTime Function() clock;
+
+  /// Plays the ambient sounds of effects.
+  final SoundPlayer sound;
+
+  /// Watches the TV for TV Sync.
+  final CameraInput camera;
 
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
@@ -96,6 +106,8 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       phoneAudioInput: widget.phoneAudioInput,
       screenWake: widget.screenWake,
       resolveEffect: _library.byId,
+      sound: widget.sound,
+      camera: widget.camera,
     );
     _notices = _playback.notices.listen(_showNotice);
     didChangeAccessibilityFeatures();
@@ -144,11 +156,14 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       return;
     }
     final l10n = context.l10n;
-    final where = playback.group?.name ?? playback.area?.name ?? '';
+    final where = playback.targetName ?? '';
     final playlist = playback.playlist;
     final title = l10n.effectName(playback.effect);
     final text = playlist == null ? where : '${playlist.name} · $where';
-    final microphone = playback.effect.usesMicrophone &&
+    // Asked for up front when a playlist will reach a Music Sync effect:
+    // Android refuses to add the microphone later from the background.
+    final microphone = (playback.effect.usesMicrophone ||
+            playback.playlistEffects.any((e) => e.usesMicrophone)) &&
         playback.musicSource == MusicSource.microphone;
     final key = '$title|$text|$microphone|${l10n.stop}';
     if (key == _backgroundShown) {

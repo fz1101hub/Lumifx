@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
+import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_automations.dart';
 import '../../core/hue/hue_models.dart';
 import '../common/app_text.dart';
@@ -148,6 +149,7 @@ class _AutomationEditorState extends State<AutomationEditor> {
           const SizedBox(height: 16),
           TextField(
             controller: _name,
+            maxLength: HueBridgeClient.maxSceneNameLength,
             onChanged: (_) => _nameEdited = true,
             decoration: InputDecoration(
               labelText: l10n.name,

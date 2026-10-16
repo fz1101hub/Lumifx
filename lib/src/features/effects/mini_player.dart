@@ -25,7 +25,7 @@ class MiniPlayer extends StatelessWidget {
     final l10n = context.l10n;
     final effect = c.effect;
     final colors = effectPalette(c.effectToPlay);
-    final where = c.group?.name ?? c.area?.name ?? l10n.previewOnly;
+    final where = c.targetName ?? l10n.previewOnly;
     final playlist = c.playlist;
     final subtitle = [
       if (playlist != null) playlist.name,

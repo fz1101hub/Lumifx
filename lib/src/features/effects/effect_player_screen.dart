@@ -9,16 +9,21 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../../core/hue/hue_bridge_client.dart';
+import '../../core/sound/soundscape.dart';
+import '../../core/hue/hue_models.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
 import '../library/scene_editor.dart';
 import '../library/sharing.dart';
+import '../library/story_editor.dart';
 import '../music/music_sync_controller.dart';
+import '../tv/tv_sync_controller.dart';
 import 'effect_palette.dart';
 import 'light_color_ui.dart';
 import 'night_light_screen.dart';
 import 'playback_controller.dart';
+import 'read_along.dart';
 
 class EffectPlayerScreen extends StatefulWidget {
   const EffectPlayerScreen({required this.effect, super.key});
@@ -118,6 +123,31 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
         : l10n.sleepTimerMinutes(timer.inMinutes);
   }
 
+  /// The dropdown entry that opens the several-rooms picker.
+  static const _severalRooms = '__several__';
+
+  Future<void> _chooseSeveralRooms() async {
+    final c = controller;
+    final chosen = await showDialog<List<String>>(
+      context: context,
+      builder: (_) => _SeveralRoomsDialog(
+        groups: c.groups,
+        selected: {for (final g in c.roomGroups) g.id},
+      ),
+    );
+    if (!mounted) {
+      return;
+    }
+    if (chosen == null || chosen.isEmpty) {
+      // Rebuild so the dropdown shows the target again.
+      setState(() {});
+      return;
+    }
+    await c.changeTarget(chosen.length == 1
+        ? 'group:${chosen.single}'
+        : PlaybackController.severalRoomsKey(chosen));
+  }
+
   /// Asks for a name and saves the lights' current colours as a Hue
   /// scene in the room or zone.
   Future<void> _saveAsHueScene(LightingEffect effect) async {
@@ -209,6 +239,24 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
               ),
             ),
           ],
+          if (AppScope.of(context).library.userStory(effect.id)
+              case final story?) ...[
+            IconButton(
+              tooltip: l10n.share,
+              icon: const Icon(Icons.share_outlined),
+              onPressed: () =>
+                  showShareDialog(context, SharedBundle(stories: [story])),
+            ),
+            IconButton(
+              tooltip: l10n.editStory,
+              icon: const Icon(Icons.edit_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => StoryEditor(story: story),
+                ),
+              ),
+            ),
+          ],
           IconButton(
             tooltip: l10n.nightLight,
             icon: const Icon(Icons.nightlight_outlined),
@@ -228,6 +276,8 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           final busy = c.isBusy;
           final current = _isCurrent(c);
           final preferences = AppScope.of(context).preferences;
+          final narration =
+              narrationOf(effect, l10n, AppScope.of(context).library);
           final variantId = preferences.variantOf(effect.id);
           void setVariant(String? id) => current
               ? c.setVariant(id)
@@ -280,7 +330,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
             DropdownButtonFormField<String?>(
               // Rebuilt when the available targets change, so the field
               // never holds a value that is no longer in the list.
-              key: ValueKey(Object.hashAll(targetKeys)),
+              key: ValueKey(Object.hashAll([...targetKeys, c.selectedTarget])),
               initialValue: c.selectedTarget,
               isExpanded: true,
               decoration: InputDecoration(
@@ -305,9 +355,33 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                       text: l10n.targetGroup(group.name, group.lightIds.length),
                     ),
                   ),
+                if (c.playsSeveralRooms)
+                  DropdownMenuItem(
+                    value: c.selectedTarget,
+                    child: _TargetLabel(
+                      icon: Icons.house_outlined,
+                      text: c.targetName!,
+                    ),
+                  ),
+                if (groups.length > 1)
+                  DropdownMenuItem(
+                    value: _severalRooms,
+                    child: _TargetLabel(
+                      icon: Icons.add_home_outlined,
+                      text: l10n.severalRooms,
+                    ),
+                  ),
               ],
-              onChanged: busy ? null : c.changeTarget,
+              onChanged: busy
+                  ? null
+                  : (value) => value == _severalRooms
+                      ? _chooseSeveralRooms()
+                      : c.changeTarget(value),
             ),
+            if (c.playsSeveralRooms) ...[
+              const SizedBox(height: 8),
+              Text(l10n.severalRoomsHint, style: theme.textTheme.bodySmall),
+            ],
             if (c.bridgeUnreachable) ...[
               const SizedBox(height: 8),
               Text(
@@ -391,6 +465,21 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 for (final slot in c.lightNames) describeSlot(l10n, slot),
               ],
             ),
+            if (narration.isNotEmpty && preferences.readAlong) ...[
+              const SizedBox(height: 16),
+              ReadAlongCaption(
+                effect: effect,
+                lines: narration,
+                player: current ? c.player : null,
+              ),
+            ],
+            if (effect.usesCamera) ...[
+              const SizedBox(height: 16),
+              _TvSyncPanel(
+                tv: current ? c.tvSync : null,
+                player: current ? c.player : null,
+              ),
+            ],
             if (effect.usesMicrophone) ...[
               const SizedBox(height: 16),
               _MusicMeter(
@@ -468,6 +557,33 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 max: 3,
                 onChanged: (v) => c.setControls(controls.copyWith(speed: v)),
               ),
+            if (!soundscapeOf(effect).isSilent) ...[
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                secondary: Icon(preferences.soundOn
+                    ? Icons.volume_up_outlined
+                    : Icons.volume_off_outlined),
+                title: Text(l10n.sound),
+                subtitle: Text(l10n.soundDescription),
+                value: preferences.soundOn,
+                onChanged: preferences.setSoundOn,
+              ),
+              if (preferences.soundOn)
+                _ControlSlider(
+                  label: l10n.volume,
+                  value: preferences.soundVolume,
+                  onChanged: preferences.setSoundVolume,
+                ),
+            ],
+            if (narration.isNotEmpty)
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                secondary: const Icon(Icons.auto_stories_outlined),
+                title: Text(l10n.readAlong),
+                subtitle: Text(l10n.readAlongDescription),
+                value: preferences.readAlong,
+                onChanged: preferences.setReadAlong,
+              ),
           ];
           if (context.isWide) {
             return ListView(
@@ -500,6 +616,162 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+/// TV Sync: the camera picture with the part that is read, the colours
+/// it finds left to right, and how to aim; a hint before it plays.
+class _TvSyncPanel extends StatelessWidget {
+  const _TvSyncPanel({required this.tv, required this.player});
+
+  final TvSyncController? tv;
+  final EffectPlayer? player;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final tv = this.tv;
+    final player = this.player;
+    final preview = tv?.buildPreview();
+    if (tv == null || player == null || !tv.isWatching) {
+      return Row(
+        children: [
+          const Icon(Icons.videocam_outlined, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(l10n.tvSyncHint, style: theme.textTheme.bodySmall),
+          ),
+        ],
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (preview != null)
+          Semantics(
+            label: l10n.tvSyncPreview,
+            image: true,
+            excludeSemantics: true,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                height: 200,
+                child: Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      preview,
+                      // The middle of the picture is what counts.
+                      Positioned.fill(
+                        child: FractionallySizedBox(
+                          widthFactor: 0.7,
+                          heightFactor: 0.7,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.white70, width: 2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(height: 8),
+        // The colours found, left to right, at the player's pace.
+        ExcludeSemantics(
+          child: StreamBuilder<List<LightFrame>>(
+            stream: player.frames,
+            builder: (context, _) {
+              final colors = tv.colors;
+              if (colors == null) {
+                return const SizedBox(height: 16);
+              }
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  height: 16,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < colors.zones; i++)
+                        Expanded(
+                          child: ColoredBox(
+                            color: LightFrame(
+                              colors.colors[i],
+                              colors.levels[i],
+                            ).toDisplayColor(),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(l10n.tvSyncAim, style: theme.textTheme.bodySmall),
+      ],
+    );
+  }
+}
+
+/// Ticks for the rooms and zones that should play together.
+class _SeveralRoomsDialog extends StatefulWidget {
+  const _SeveralRoomsDialog({required this.groups, required this.selected});
+
+  final List<HueGroup> groups;
+  final Set<String> selected;
+
+  @override
+  State<_SeveralRoomsDialog> createState() => _SeveralRoomsDialogState();
+}
+
+class _SeveralRoomsDialogState extends State<_SeveralRoomsDialog> {
+  late final Set<String> _chosen = {...widget.selected};
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.severalRooms),
+      scrollable: true,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final group in widget.groups)
+            CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(group.name),
+              subtitle: Text(l10n.lightCount(group.lightIds.length)),
+              value: _chosen.contains(group.id),
+              onChanged: (on) => setState(() {
+                on ?? false ? _chosen.add(group.id) : _chosen.remove(group.id);
+              }),
+            ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: _chosen.isEmpty
+              ? null
+              : () => Navigator.of(context).pop([
+                    for (final g in widget.groups)
+                      if (_chosen.contains(g.id)) g.id,
+                  ]),
+          child: Text(l10n.done),
+        ),
+      ],
     );
   }
 }

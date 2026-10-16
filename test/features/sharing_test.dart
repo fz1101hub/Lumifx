@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
@@ -56,5 +60,66 @@ void main() {
     expect(SharedBundle.decode(''), isNull);
     expect(SharedBundle.decode('eJwDAAAAAAE'), isNull, reason: 'empty data');
     expect(AppLink.parse('lumifx://app/import'), isNull);
+  });
+
+  test('hostile links cannot exhaust memory or flood the library', () {
+    String linkData(Object json) => base64Url
+        .encode(ZLibCodec(level: 9).encode(utf8.encode(jsonEncode(json))))
+        .replaceAll('=', '');
+
+    // A few kilobytes that would inflate to megabytes.
+    final bomb = base64Url
+        .encode(ZLibCodec(level: 9).encode(Uint8List(8 * 1024 * 1024)))
+        .replaceAll('=', '');
+    expect(bomb.length, lessThan(SharedBundle.maxLinkData));
+    expect(SharedBundle.decode(bomb), isNull);
+
+    expect(SharedBundle.decode('A' * (SharedBundle.maxLinkData + 1)), isNull);
+
+    final many = SharedBundle.decode(linkData({
+      'v': 1,
+      'scenes': [
+        for (var i = 0; i < 1000; i++)
+          {
+            'id': 'user:x',
+            'name': 'N',
+            'colors': ['#000000', '#FFFFFF'],
+          },
+      ],
+      'playlists': [
+        for (var i = 0; i < 150; i++)
+          {
+            'id': 'p',
+            'name': 'P' * 500,
+            'effects': [for (var j = 0; j < 300; j++) 'ocean'],
+            'eachSeconds': 'soon',
+            'shuffle': 'yes',
+          },
+      ],
+    }))!;
+    expect(many.scenes, hasLength(SharedBundle.maxScenes));
+    expect(many.playlists, hasLength(SharedBundle.maxPlaylists));
+    final playlist = many.playlists.first;
+    expect(playlist.name.length, Playlist.maxName);
+    expect(playlist.effectIds, hasLength(Playlist.maxEffects));
+    expect(playlist.each, const Duration(minutes: 10));
+    expect(playlist.shuffle, isFalse);
+  });
+
+  test('scenes without a name are refused and long names are cut', () {
+    expect(
+      UserScene.fromJson({
+        'id': 'user:1',
+        'name': '   ',
+        'colors': ['#000000', '#FFFFFF'],
+      }),
+      isNull,
+    );
+    final long = UserScene.fromJson({
+      'id': 'user:1',
+      'name': '  ${'Ä' * 300}  ',
+      'colors': ['#000000', '#FFFFFF'],
+    })!;
+    expect(long.name, 'Ä' * UserScene.maxName);
   });
 }

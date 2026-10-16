@@ -37,6 +37,8 @@ class UserScene {
   static const idPrefix = 'user:';
   static const minColors = 2;
   static const maxColors = 5;
+  static const maxName = 60;
+  static const maxId = 80;
 
   static String newId() => '$idPrefix${DateTime.now().microsecondsSinceEpoch}';
 
@@ -88,7 +90,11 @@ class UserScene {
     final id = json['id'];
     final name = json['name'];
     final colors = json['colors'];
-    if (id is! String || !id.startsWith(idPrefix) || name is! String) {
+    if (id is! String ||
+        !id.startsWith(idPrefix) ||
+        id.length > maxId ||
+        name is! String ||
+        name.trim().isEmpty) {
       return null;
     }
     final palette = colors is List
@@ -97,9 +103,12 @@ class UserScene {
     if (palette.length < minColors) {
       return null;
     }
+    final trimmed = name.trim();
     return UserScene(
       id: id,
-      name: name,
+      name: trimmed.length > maxName
+          ? String.fromCharCodes(trimmed.runes.take(maxName)).trim()
+          : trimmed,
       colors: palette.take(maxColors).toList(),
       motion:
           SceneMotion.values.asNameMap()[json['motion']] ?? SceneMotion.drift,

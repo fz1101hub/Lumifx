@@ -88,9 +88,41 @@ final moodGlow = _musicEffect(
   },
 );
 
+/// TV Sync: the phone's camera watches the TV and the lights take its
+/// colours, left to right. A dim warm glow shows until the first frame.
+final tvSync = LightingEffect(
+  id: 'tv_sync',
+  name: 'TV Sync',
+  kind: EffectKind.interactive,
+  description: 'Point the camera at the TV: the lights take the colours on '
+      'screen, left to right.',
+  prefersStreaming: true,
+  loopDuration: const Duration(minutes: 10),
+  events: [
+    EffectEvent(
+      at: Duration.zero,
+      duration: const Duration(minutes: 10),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': const <String>['#2A1A10', '#1A1420'],
+        'brightnessMin': 0.04,
+        'brightnessMax': 0.1,
+        'speed': 0.02,
+      },
+    ),
+    EffectEvent(
+      at: Duration.zero,
+      duration: const Duration(minutes: 10),
+      type: EffectEventTypes.screen,
+      parameters: const {'minBrightness': 0.02},
+    ),
+  ],
+);
+
 final builtinInteractive = <LightingEffect>[
   beatPulse,
   partyChase,
   spectrum,
   moodGlow,
+  tvSync,
 ];

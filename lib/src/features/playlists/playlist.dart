@@ -19,6 +19,8 @@ class Playlist {
 
   /// The durations offered in the editor, in minutes.
   static const durations = [1, 5, 10, 15, 30, 60];
+  static const maxName = 60;
+  static const maxEffects = 200;
 
   Playlist copyWith({
     String? name,
@@ -50,16 +52,27 @@ class Playlist {
     final id = json['id'];
     final name = json['name'];
     final effects = json['effects'];
-    if (id is! String || name is! String || effects is! List) {
+    if (id is! String ||
+        id.length > 80 ||
+        name is! String ||
+        name.trim().isEmpty ||
+        effects is! List) {
       return null;
     }
-    final seconds = (json['eachSeconds'] as num?)?.toInt() ?? 600;
+    final each = json['eachSeconds'];
+    final seconds = each is num && each.isFinite ? each.toInt() : 600;
+    final trimmed = name.trim();
     return Playlist(
       id: id,
-      name: name,
-      effectIds: effects.whereType<String>().toList(),
+      name: trimmed.length > maxName
+          ? String.fromCharCodes(trimmed.runes.take(maxName)).trim()
+          : trimmed,
+      effectIds: [
+        for (final e in effects.whereType<String>().take(maxEffects))
+          if (e.length <= 80) e,
+      ],
       each: Duration(seconds: seconds.clamp(10, 24 * 3600)),
-      shuffle: json['shuffle'] as bool? ?? false,
+      shuffle: json['shuffle'] == true,
     );
   }
 }

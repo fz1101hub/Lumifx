@@ -186,6 +186,39 @@ build before every store release.
 - [ ] Between 1 Oct and 2 Nov the home starts with "Halloween is coming";
       between 20 Nov and 6 Jan with "Christmas time".
 
+## This round: sounds, rooms, stories, TV
+
+- [ ] Gentle start: with lights on in warm white, play Ocean: they glide
+      into the blues over a couple of seconds instead of jumping. Settings
+      can turn it off.
+- [ ] Sounds: Fireplace crackles, Ocean has waves, Thunderstorm answers
+      lightning with thunder; the volume slider and the switch work; sound
+      pauses, switches and stops with the effect; music in another app
+      keeps playing underneath (iOS ambient, Android without audio focus).
+- [ ] Several rooms: choose two rooms in "Play on › Several rooms": both
+      play, a light in both rooms plays once, stopping restores both.
+- [ ] Search: the search icon finds "drago" (Italian) and "Kraken"; the
+      kind and collection chips narrow the list.
+- [ ] Wall panel on a tablet: time, favourites and every room with its
+      switch, brightness and Hue scenes; after two minutes it dims; the
+      first touch only wakes it; the screen never locks while it is open.
+- [ ] Read-along: Emerald Trickster shows its words, the line changes with
+      the golden spark, the switch hides them; TalkBack / VoiceOver read
+      each new line.
+- [ ] Story editor: Stories › New story, three moments (words only at
+      0:00, a spark at 0:05 with words, footsteps at 0:20), save: it is
+      first under "My stories", plays on the lights with its words, can be
+      added to a playlist, shared by QR to another phone, edited while
+      playing (the lights change at once) and deleted.
+- [ ] TV Sync (real TV needed): Interactive › TV Sync › Play asks for the
+      camera once with the purpose text; with the phone on a table facing
+      the TV, the lights take the TV's colours left to right within a
+      fraction of a second, on a room and on an entertainment area. Try
+      the phone in portrait and in landscape: left stays left. Pause turns
+      the camera off (the system indicator disappears); leaving the app
+      stops TV Sync and puts the lights back. Refusing the camera shows the
+      explanation and nothing plays.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

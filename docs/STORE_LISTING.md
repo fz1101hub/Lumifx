@@ -192,11 +192,16 @@ artifact, see RELEASE.md § 1b).
   data types list, do **not** declare "Audio files" or "Voice or sound
   recordings"; audio is processed ephemerally on device and never stored
   or sent (Play's definition of "collected" excludes ephemeral processing).
+- Camera: the app uses CAMERA for TV Sync but does not collect images.
+  Do **not** declare "Photos" or "Videos"; frames are averaged ephemerally
+  on device and never stored or sent. A camera is not required to install
+  (`android.hardware.camera.any` is marked not required) and the camera
+  plugin's WRITE_EXTERNAL_STORAGE is removed from the manifest.
 - Advertising ID: not used.
 
 **Permissions declaration:** none of the sensitive permissions (SMS, call
-log, location, all files) are requested. RECORD_AUDIO needs no separate
-declaration form.
+log, location, all files) are requested. RECORD_AUDIO and CAMERA need no
+separate declaration form.
 
 **Foreground service declaration (App content › Foreground service
 permissions):** the app declares a `mediaProjection` foreground service,
@@ -228,8 +233,9 @@ children). Do not tick "designed for families".
 
 ## App Store Connect: App Privacy
 
-- Data collection: **Data Not Collected.** (Microphone audio is processed
-  on device and not stored; bridge credentials never leave the device.)
+- Data collection: **Data Not Collected.** (Microphone audio and camera
+  frames are processed on device and not stored; bridge credentials never
+  leave the device.)
 - Tracking: **No.**
 - Privacy manifest: `ios/Runner/PrivacyInfo.xcprivacy` (no tracking, no
   collected data, UserDefaults reason CA92.1).
@@ -275,7 +281,10 @@ Paste this in "Notes for review":
 > recorded or transmitted. On Android 10+, Settings offers "This phone's
 > audio" as the Music Sync source: it uses Android's playback capture
 > (media projection consent and a foreground-service notification) to
-> receive the sound of other apps, never the screen.
+> receive the sound of other apps, never the screen. Camera permission is
+> requested only when TV Sync (Interactive › TV Sync) is started: the
+> camera looks at the TV and a few pixels of each frame are averaged on the
+> device to colour the lights; nothing is recorded or transmitted.
 >
 > The app is not affiliated with Signify / Philips Hue.
 

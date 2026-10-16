@@ -7,6 +7,7 @@ import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../playlists/playlist.dart';
 import 'user_scene.dart';
+import 'user_story.dart';
 
 /// Where preferences are persisted. Nothing in here is sensitive; bridge
 /// credentials live in [CredentialStore] instead.
@@ -60,6 +61,7 @@ class PreferencesController extends ChangeNotifier {
   MusicSource _musicSource = MusicSource.microphone;
   List<Playlist> _playlists = const [];
   List<UserScene> _userScenes = const [];
+  List<UserStory> _userStories = const [];
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -95,6 +97,9 @@ class PreferencesController extends ChangeNotifier {
   /// The scenes the user made, in the order they were created.
   List<UserScene> get userScenes => _userScenes;
 
+  /// The user's own stories, oldest first.
+  List<UserStory> get userStories => _userStories;
+
   /// The colour variant chosen for an effect, or null for its original.
   String? variantOf(String effectId) => _variants[effectId];
 
@@ -113,6 +118,42 @@ class PreferencesController extends ChangeNotifier {
   bool _firstRun = false;
   bool _onboardingDone = false;
   bool _keepPlayingScreenOff = true;
+  bool _gentleStart = true;
+  bool _soundOn = true;
+  double _soundVolume = 0.6;
+  bool _readAlong = true;
+
+  /// The words of a story shown in time with its lights.
+  bool get readAlong => _readAlong;
+
+  Future<void> setReadAlong(bool value) {
+    _readAlong = value;
+    return _changed();
+  }
+
+  /// Ambient sounds under the effects that have them.
+  bool get soundOn => _soundOn;
+
+  /// 0..1.
+  double get soundVolume => _soundVolume;
+
+  Future<void> setSoundOn(bool value) {
+    _soundOn = value;
+    return _changed();
+  }
+
+  Future<void> setSoundVolume(double value) {
+    _soundVolume = value.clamp(0.0, 1.0);
+    return _changed();
+  }
+
+  /// Effects fade in from what the lights show instead of jumping.
+  bool get gentleStart => _gentleStart;
+
+  Future<void> setGentleStart(bool value) {
+    _gentleStart = value;
+    return _changed();
+  }
 
   /// Effects on the lights go on when the phone locks (Android only).
   bool get keepPlayingScreenOff => _keepPlayingScreenOff;
@@ -155,6 +196,10 @@ class PreferencesController extends ChangeNotifier {
       _flashWarningShown = json['flashWarningShown'] as bool? ?? false;
       _onboardingDone = json['onboardingDone'] as bool? ?? true;
       _keepPlayingScreenOff = json['keepPlayingScreenOff'] as bool? ?? true;
+      _gentleStart = json['gentleStart'] as bool? ?? true;
+      _soundOn = json['soundOn'] as bool? ?? true;
+      _soundVolume = _unit(json['soundVolume'], 0.6);
+      _readAlong = json['readAlong'] as bool? ?? true;
       _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
           MusicSource.microphone;
       final scenes = json['userScenes'];
@@ -162,6 +207,12 @@ class PreferencesController extends ChangeNotifier {
         if (scenes is List)
           for (final item in scenes)
             if (UserScene.fromJson(item) case final scene?) scene,
+      ];
+      final stories = json['userStories'];
+      _userStories = [
+        if (stories is List)
+          for (final item in stories)
+            if (UserStory.fromJson(item) case final story?) story,
       ];
       final playlists = json['playlists'];
       _playlists = [
@@ -256,6 +307,28 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  /// Adds scenes, stories and playlists in one go (an imported link).
+  Future<void> addAll({
+    List<UserScene> scenes = const [],
+    List<UserStory> stories = const [],
+    List<Playlist> playlists = const [],
+  }) {
+    _userScenes = [..._userScenes, ...scenes];
+    _userStories = [..._userStories, ...stories];
+    _playlists = [..._playlists, ...playlists];
+    return _changed();
+  }
+
+  /// Adds [story], or replaces the one with the same id.
+  Future<void> saveUserStory(UserStory story) {
+    final exists = _userStories.any((s) => s.id == story.id);
+    _userStories = [
+      for (final s in _userStories) s.id == story.id ? story : s,
+      if (!exists) story,
+    ];
+    return _changed();
+  }
+
   /// Removes the scene, and takes it out of favourites, recents and
   /// playlists.
   Future<void> deleteUserScene(String id) {
@@ -263,6 +336,20 @@ class PreferencesController extends ChangeNotifier {
       for (final s in _userScenes)
         if (s.id != id) s,
     ];
+    return _forget(id);
+  }
+
+  /// Removes the story, and takes it out of favourites, recents and
+  /// playlists.
+  Future<void> deleteUserStory(String id) {
+    _userStories = [
+      for (final s in _userStories)
+        if (s.id != id) s,
+    ];
+    return _forget(id);
+  }
+
+  Future<void> _forget(String id) {
     _favorites = [
       for (final f in _favorites)
         if (f != id) f,
@@ -345,9 +432,14 @@ class PreferencesController extends ChangeNotifier {
       'flashWarningShown': _flashWarningShown,
       'onboardingDone': _onboardingDone,
       'keepPlayingScreenOff': _keepPlayingScreenOff,
+      'gentleStart': _gentleStart,
+      'soundOn': _soundOn,
+      'soundVolume': _soundVolume,
+      'readAlong': _readAlong,
       'musicSource': _musicSource.name,
       'playlists': [for (final p in _playlists) p.toJson()],
       'userScenes': [for (final s in _userScenes) s.toJson()],
+      'userStories': [for (final s in _userStories) s.toJson()],
       'variants': _variants,
       'excludedLights': _excludedLights,
       'defaultControls': {

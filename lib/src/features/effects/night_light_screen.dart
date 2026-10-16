@@ -19,7 +19,7 @@ import 'playback_controller.dart';
 class NightLightScreen extends StatefulWidget {
   const NightLightScreen({
     required this.effect,
-    this.screenWake = const WakelockScreenWake(),
+    this.screenWake = const WakelockScreenWake(holder: 'night_light'),
     super.key,
   });
 
@@ -95,10 +95,8 @@ class _NightLightScreenState extends State<NightLightScreen>
     _hideControls?.cancel();
     _ticker.dispose();
     unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
-    // The player keeps the screen on by itself while an effect plays.
-    if (_playback?.player == null) {
-      unawaited(widget.screenWake.keepOn(false));
-    }
+    // Lets go of its own hold only: playback keeps its own.
+    unawaited(widget.screenWake.keepOn(false));
     super.dispose();
   }
 

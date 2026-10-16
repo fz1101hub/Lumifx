@@ -236,8 +236,18 @@ class HueBridgeClient {
         'recall': {'action': dynamic ? 'dynamic_palette' : 'active'},
       });
 
-  /// The longest scene name the bridge accepts.
+  /// The longest scene or routine name the bridge accepts.
   static const maxSceneNameLength = 32;
+
+  /// [name] trimmed to what the bridge accepts, without splitting a
+  /// character.
+  static String _clipName(String name) {
+    final trimmed = name.trim();
+    final runes = trimmed.runes;
+    return runes.length <= maxSceneNameLength
+        ? trimmed
+        : String.fromCharCodes(runes.take(maxSceneNameLength)).trim();
+  }
 
   /// Saves a scene on [group] with one action per light and returns its
   /// id. It then shows up in the Hue app, on switches and in voice
@@ -259,11 +269,7 @@ class HueBridgeClient {
           headers: {..._headers, 'content-type': 'application/json'},
           body: jsonEncode({
             'type': 'scene',
-            'metadata': {
-              'name': trimmed.length > maxSceneNameLength
-                  ? trimmed.substring(0, maxSceneNameLength)
-                  : trimmed,
-            },
+            'metadata': {'name': _clipName(trimmed)},
             'group': {'rid': group.id, 'rtype': group.kind.name},
             'actions': [
               for (final MapEntry(key: id, value: command) in actions.entries)
@@ -344,7 +350,8 @@ class HueBridgeClient {
             'type': 'behavior_instance',
             'script_id': scriptId,
             'enabled': true,
-            'metadata': {'name': draft.name.trim()},
+            // The bridge refuses longer names.
+            'metadata': {'name': _clipName(draft.name)},
             'configuration': draft.toConfiguration(),
           }),
         )

@@ -42,9 +42,10 @@ class LinkHandler {
       case PlaylistLink(:final nameOrId):
         return _playlist(nameOrId);
       case ImportLink(:final data):
+        await _ready();
         final bundle = SharedBundle.decode(data);
         final context = navigatorKey.currentContext;
-        if (bundle == null || context == null) {
+        if (bundle == null || context == null || !context.mounted) {
           return false;
         }
         return importBundle(context, bundle);
@@ -52,6 +53,7 @@ class LinkHandler {
   }
 
   Future<bool> _effect(EffectLink link) async {
+    await _ready();
     final effect = library.byId(link.effectId) ??
         // A name works too, e.g. "Ocean" (built-in names are English).
         [
@@ -61,7 +63,6 @@ class LinkHandler {
       return false;
     }
     if (link.room != null || link.area != null) {
-      await _waitForBridge();
       final key = _target(room: link.room, area: link.area);
       if (key != null) {
         await playback.changeTarget(key);
@@ -82,6 +83,7 @@ class LinkHandler {
   }
 
   Future<bool> _playlist(String nameOrId) async {
+    await _ready();
     final playlist = preferences.playlists
         .where((p) => p.id == nameOrId || _same(p.name, nameOrId))
         .firstOrNull;
@@ -140,26 +142,32 @@ class LinkHandler {
     return null;
   }
 
-  /// On a cold start the bridge is still connecting when the link arrives.
-  Future<void> _waitForBridge() async {
-    if (bridge.status != BridgeStatus.initializing &&
-        (bridge.credentials == null || bridge.home != null)) {
+  /// On a cold start (a widget tile, a shortcut) the link arrives while
+  /// the preferences are loading and the bridge is still connecting: wait
+  /// for both, or the effect would play on the preview instead of the
+  /// lights and the user's scenes and playlists would not be found yet.
+  Future<void> _ready() async {
+    bool ready() =>
+        preferences.isLoaded &&
+        bridge.status != BridgeStatus.initializing &&
+        (bridge.credentials == null || bridge.home != null);
+    if (ready()) {
       return;
     }
-    final ready = Completer<void>();
+    final done = Completer<void>();
     void check() {
-      if (bridge.status != BridgeStatus.initializing &&
-          (bridge.credentials == null || bridge.home != null) &&
-          !ready.isCompleted) {
-        ready.complete();
+      if (ready() && !done.isCompleted) {
+        done.complete();
       }
     }
 
     bridge.addListener(check);
+    preferences.addListener(check);
     try {
-      await ready.future.timeout(bridgeWait, onTimeout: () {});
+      await done.future.timeout(bridgeWait, onTimeout: () {});
     } finally {
       bridge.removeListener(check);
+      preferences.removeListener(check);
     }
   }
 

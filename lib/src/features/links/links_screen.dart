@@ -34,7 +34,8 @@ class LinksScreen extends StatelessWidget {
           AppLink.play(favorites.first.id, room: room),
         ),
       for (final playlist in preferences.playlists)
-        (l10n.linkPlaylist(playlist.name), AppLink.playlist(playlist.name)),
+        // By id: a name may hold a "/" or change later.
+        (l10n.linkPlaylist(playlist.name), AppLink.playlist(playlist.id)),
       (l10n.linkStop, AppLink.stop),
     ];
     return Scaffold(

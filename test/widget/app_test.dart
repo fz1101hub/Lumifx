@@ -17,6 +17,7 @@ import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
+import 'package:lumifx/src/features/library/story_editor.dart';
 
 import '../support/fake_audio_input.dart';
 import '../support/fake_background_playback.dart';
@@ -40,11 +41,17 @@ PreferencesController _warnedPreferences() =>
 Future<void> _pumpApp(WidgetTester tester) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
+  // Loaded as on a phone (links wait for that), past the welcome pages.
+  final preferences = PreferencesController(store: InMemoryKeyValueStore());
+  // In the test's own zone: the store answers at once, and later writes
+  // must chain onto futures of this zone to complete in fake time.
+  await preferences.setOnboardingDone();
+  await preferences.load();
   await tester.pumpWidget(
     LumiFxApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
-      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      preferences: preferences,
       audioInput: FakeAudioInput(),
     ),
   );
@@ -84,6 +91,57 @@ void main() {
     expect(find.text('Play'), findsOneWidget);
 
     // Leave the screen so the player stops its timer.
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a story shows its words to read along, and can hide them',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Emerald Trickster'));
+    await tester.pumpAndSettle();
+    const opening = 'Shh… something small and green is hiding in this room.';
+    expect(find.text(opening), findsOneWidget);
+
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text(opening), findsOneWidget, reason: 'the story begins');
+
+    await tester.scrollUntilVisible(find.text('Read-along'), 200);
+    await tester.tap(find.text('Read-along'));
+    await tester.pump();
+    expect(find.text(opening), findsNothing);
+
+    await tester.drag(find.text('Read-along'), const Offset(0, 600));
+    await tester.pump();
+    await tester.tap(find.text('Pause'));
+    await tester.pump();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('TV Sync explains itself and a missing camera', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Interactive'));
+    await tester.pumpAndSettle();
+    await tester.dragUntilVisible(
+      find.text('TV Sync'),
+      find.byType(ListView),
+      const Offset(0, -200),
+    );
+    await tester.ensureVisible(find.text('TV Sync'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('TV Sync'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('point the camera at the TV'), findsOneWidget);
+
+    await tester.tap(find.text('Play'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('The camera could not be started.'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget, reason: 'nothing plays');
     await tester.pageBack();
     await tester.pumpAndSettle();
   });
@@ -237,6 +295,44 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('a link on a cold start waits for the saved scenes to load',
+      (tester) async {
+    final store = InMemoryKeyValueStore();
+    final earlier = PreferencesController(store: store);
+    await earlier.setOnboardingDone();
+    await earlier.saveUserScene(const UserScene(
+      id: 'user:mine',
+      name: 'My glow',
+      colors: ['#FF0000', '#0000FF'],
+    ));
+    // The app starts with the preferences still loading.
+    final preferences = PreferencesController(store: store);
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    final message = const JSONMethodCodec().encodeMethodCall(
+      const MethodCall(
+          'pushRouteInformation', {'location': 'lumifx://app/play/user:mine'}),
+    );
+    await tester.binding.defaultBinaryMessenger
+        .handlePlatformMessage(SystemChannels.navigation.name, message, (_) {});
+    await tester.pump();
+    expect(find.text('My glow'), findsNothing, reason: 'not loaded yet');
+
+    await preferences.load();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('My glow'), findsOneWidget);
+    expect(find.text('Pause'), findsOneWidget);
+    await tester.tap(find.text('Pause'));
+    await tester.pump();
+  });
+
   testWidgets('the welcome pages show once, on the very first launch',
       (tester) async {
     final store = InMemoryKeyValueStore();
@@ -357,6 +453,82 @@ void main() {
     expect(find.byType(MiniPlayer), findsNothing);
   });
 
+  testWidgets('a story of your own is written, read along and deleted',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    // The editor's preview animates, so the screen never settles.
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New story'));
+    await step();
+    expect(find.text('No moments yet. Add the first one.'), findsOneWidget);
+    await tester.enterText(find.byType(TextField).first, 'The lost star');
+    await tester.pump();
+
+    // A first moment: words only, at the very start.
+    await tester.scrollUntilVisible(
+      find.text('Add a moment'),
+      300,
+      scrollable: find
+          .descendant(
+              of: find.byType(StoryEditor), matching: find.byType(Scrollable))
+          .first,
+    );
+    await tester.ensureVisible(find.text('Add a moment'));
+    await tester.pump();
+    await tester.tap(find.text('Add a moment'));
+    await step();
+    await tester.tap(find.text('Just words'));
+    await tester.pump();
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Words to read along (optional)'),
+        'Once upon a time, a star fell.');
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await step();
+    expect(find.text('0:00  Just words'), findsOneWidget);
+    expect(find.text('Once upon a time, a star fell.'), findsOneWidget);
+
+    // A second one: a spark, five seconds later.
+    await tester.ensureVisible(find.text('Add a moment'));
+    await tester.pump();
+    await tester.tap(find.text('Add a moment'));
+    await step();
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await step();
+    expect(find.text('0:05  Spark'), findsOneWidget);
+    await tester.ensureVisible(find.byTooltip('Preview from here').last);
+    await tester.pump();
+    await tester.tap(find.byTooltip('Preview from here').last);
+    await step();
+
+    await tester.tap(find.widgetWithText(TextButton, 'Save'));
+    await step();
+    await tester.pumpAndSettle();
+
+    // First in the list, labelled as the user's own.
+    expect(find.text('The lost star'), findsOneWidget);
+    expect(find.text('My stories'), findsOneWidget);
+    await tester.tap(find.text('The lost star'));
+    await step();
+    expect(find.text('Once upon a time, a star fell.'), findsOneWidget,
+        reason: 'its words to read along');
+
+    await tester.tap(find.byTooltip('Edit story'));
+    await step();
+    await tester.tap(find.byTooltip('Delete'));
+    await step();
+    await tester.tap(find.text('Delete'));
+    await step();
+    await tester.pumpAndSettle();
+    expect(find.text('The lost star'), findsNothing);
+    expect(find.text('New story'), findsOneWidget);
+  });
+
   testWidgets('a shared link adds the scenes and playlists after asking',
       (tester) async {
     await _pumpApp(tester);
@@ -386,7 +558,7 @@ void main() {
     expect(find.textContaining('Their scene'), findsOneWidget);
     await tester.tap(find.text('Add'));
     await tester.pumpAndSettle();
-    expect(find.text('Added 1 scene and 1 playlist.'), findsOneWidget);
+    expect(find.text('2 items added.'), findsOneWidget);
 
     // The scene is in Scenes, and the playlist plays it.
     await tester.tap(find.text('Scenes'));
@@ -451,6 +623,30 @@ void main() {
     await launch(DateTime(2026, 6, 15));
     expect(find.text('Halloween is coming'), findsNothing);
     expect(find.text('Christmas time'), findsNothing);
+  });
+
+  testWidgets('effects can be searched and filtered', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.byTooltip('Search effects'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'storm');
+    await tester.pump();
+    expect(find.text('Thunderstorm'), findsOneWidget);
+    expect(find.text('Ocean'), findsNothing);
+    await tester.enterText(find.byType(TextField), 'zzzz');
+    await tester.pump();
+    expect(find.text('No effects found.'), findsOneWidget);
+    await tester.tap(find.byTooltip('Clear'));
+    await tester.pump();
+    await tester.tap(find.widgetWithText(FilterChip, 'Scenes'));
+    await tester.pump();
+    await tester.tap(find.widgetWithText(FilterChip, 'Nature'));
+    await tester.pump();
+    expect(find.text('Ocean'), findsOneWidget);
+    expect(find.text('Fireplace'), findsNothing);
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    expect(find.text('Play'), findsOneWidget);
   });
 
   testWidgets('settings change the controls a new playback starts with',
@@ -1022,7 +1218,9 @@ void streamingTests() {
     await tester.pump();
     expect(find.text('Play'), findsOneWidget);
     expect(background.shown, isFalse);
-    await tester.pump(const Duration(seconds: 1));
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)));
+    await tester.pump(const Duration(seconds: 4));
   });
 
   testWidgets('with the setting off, locking the phone stops the effect',
@@ -1032,7 +1230,11 @@ void streamingTests() {
     lockAndUnlock(tester);
     await tester.pump();
     expect(find.text('Play'), findsOneWidget);
-    await tester.pump(const Duration(seconds: 1));
+    // Let the light commands started in real time finish, then the
+    // restore and the output's close timeout run out in test time.
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)));
+    await tester.pump(const Duration(seconds: 4));
   });
 
   testWidgets('wake-up and bedtime routines are listed and created',
@@ -1082,6 +1284,50 @@ void streamingTests() {
     expect(puts, contains('POST /clip/v2/resource/behavior_instance'));
     expect(find.text('New routine'), findsOneWidget,
         reason: 'back on the list');
+  });
+
+  testWidgets('the wall panel shows the time, rooms and favourites',
+      (tester) async {
+    tester.view.physicalSize = const Size(2048, 1536);
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    final bridge = await _connectedBridge(tester);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.toggleFavorite('ocean');
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      clock: () => DateTime(2026, 6, 15, 10, 30),
+    ));
+    await tester.tap(find.byTooltip('Wall panel'));
+    await tester.pumpAndSettle();
+    expect(find.text('10:30 AM'), findsOneWidget);
+    expect(find.textContaining('June 15'), findsOneWidget);
+    expect(find.text('Living room'), findsOneWidget);
+    expect(find.text('Movie night'), findsOneWidget, reason: 'Hue scenes');
+
+    // A favourite plays at once, on the last room used (here the preview).
+    await tester.tap(find.text('Ocean'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(MiniPlayer), findsOneWidget);
+
+    // After two minutes without a touch the panel dims; a tap wakes it.
+    await tester.pump(const Duration(minutes: 2, seconds: 2));
+    expect(
+      tester.widget<AnimatedOpacity>(find.byType(AnimatedOpacity).last).opacity,
+      greaterThan(0.5),
+    );
+    await tester.tapAt(const Offset(500, 300));
+    await tester.pump(const Duration(seconds: 2));
+    expect(
+      tester.widget<AnimatedOpacity>(find.byType(AnimatedOpacity).last).opacity,
+      0,
+    );
+    await tester.tap(find.bySemanticsLabel('Stop'));
+    await tester.pump(const Duration(seconds: 1));
   });
 
   testWidgets('player offers entertainment areas and reports start errors',

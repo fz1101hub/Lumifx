@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import '../../audio/audio_analyzer.dart';
+import '../../camera/screen_sampler.dart';
 import '../../color/light_color.dart';
 import '../effect.dart';
 import '../effect_event.dart';
@@ -91,9 +92,14 @@ class EffectRenderer {
 
   Duration get cycleLength => _cycle;
 
-  /// Renders the instant [elapsed]. [audio] feeds `music` events; without
-  /// it they render nothing and only the background shows.
-  List<LightFrame> render(Duration elapsed, {AudioFeatures? audio}) {
+  /// Renders the instant [elapsed]. [audio] feeds `music` events and
+  /// [screen] `screen` events; without them those render nothing and only
+  /// the background shows.
+  List<LightFrame> render(
+    Duration elapsed, {
+    AudioFeatures? audio,
+    ScreenColors? screen,
+  }) {
     final total = elapsed.isNegative ? Duration.zero : elapsed;
     final int cycleIndex;
     final Duration local;
@@ -152,6 +158,10 @@ class EffectRenderer {
         case EffectEventTypes.music:
           if (audio != null) {
             _renderMusic(context, frames, audio, seconds);
+          }
+        case EffectEventTypes.screen:
+          if (screen != null && screen.zones > 0) {
+            _renderScreen(context, frames, screen);
           }
         default:
           // Unknown events are skipped so that newer effect definitions
@@ -402,6 +412,30 @@ class EffectRenderer {
         frames[i] = frames[i].withBrightness(
             frames[i].brightness * (1 - shake * loudness * alpha));
       }
+    }
+  }
+
+  /// Follows the colours the camera sees on the TV: the lights share the
+  /// zones out left to right (each light the average of its share, or one
+  /// zone shared by several lights when there are more lights than
+  /// zones). `minBrightness` keeps the room from going fully dark.
+  void _renderScreen(
+    _EventContext context,
+    List<LightFrame> frames,
+    ScreenColors screen,
+  ) {
+    final floor =
+        _number(context.event.parameters, 'minBrightness', 0).clamp(0.0, 1.0);
+    final zones = screen.zones;
+    for (var slot = 0; slot < slotCount; slot++) {
+      final start = slot * zones ~/ slotCount;
+      final end = math.max(start + 1, (slot + 1) * zones ~/ slotCount);
+      final (color, level) = screen.average(start, math.min(end, zones));
+      final brightness = floor + (1 - floor) * _finite(level).clamp(0.0, 1.0);
+      frames[slot] = LightFrame(
+        level <= 0 ? frames[slot].color : color,
+        brightness,
+      );
     }
   }
 

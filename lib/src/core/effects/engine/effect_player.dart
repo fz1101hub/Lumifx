@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../audio/audio_analyzer.dart';
+import '../../camera/screen_sampler.dart';
 import '../../color/light_color.dart';
 import '../effect.dart';
 import 'effect_renderer.dart';
@@ -23,6 +24,7 @@ class EffectPlayer {
     EffectControls controls = const EffectControls(),
     this.tick = const Duration(milliseconds: 100),
     this.audio,
+    this.screen,
   })  : _seed = seed,
         _renderer = EffectRenderer(
           effect,
@@ -37,6 +39,9 @@ class EffectPlayer {
 
   /// Latest live audio features, read on every tick; null without Music Sync.
   final AudioFeatures? Function()? audio;
+
+  /// Latest colours of the TV, read on every tick; null without TV Sync.
+  final ScreenColors? Function()? screen;
   final int _seed;
   EffectRenderer _renderer;
 
@@ -73,6 +78,21 @@ class EffectPlayer {
   /// Swaps the effect in place, keeping its time: for a colour variant of
   /// the same effect.
   set effect(LightingEffect value) => _renderer.effect = value;
+
+  /// Fades in from [from] (what the lights show before the effect starts,
+  /// one frame per light) over [over], instead of jumping to the effect's
+  /// first colours. Call before [play].
+  void fadeInFrom(
+    List<LightFrame> from, {
+    Duration over = const Duration(milliseconds: 2500),
+  }) {
+    if (from.length != lightIds.length) {
+      return;
+    }
+    _fadeFrom = from;
+    _fadeLength = over;
+    _fadeElapsed = Duration.zero;
+  }
 
   /// Starts [next] from its beginning, blending from what the lights show
   /// now over [over], so changing effects never drops the room to black
@@ -147,7 +167,11 @@ class EffectPlayer {
     }
     final speed = controls.speed.clamp(0.05, 5.0);
     _effectTime += wallTime * speed;
-    var rendered = _renderer.render(_effectTime, audio: audio?.call());
+    var rendered = _renderer.render(
+      _effectTime,
+      audio: audio?.call(),
+      screen: screen?.call(),
+    );
     final from = _fadeFrom;
     if (from != null && from.length == rendered.length) {
       _fadeElapsed += wallTime;

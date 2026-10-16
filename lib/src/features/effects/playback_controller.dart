@@ -15,9 +15,13 @@ import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
 import '../../core/screen_wake.dart';
+import '../../core/sound/sound_player.dart';
+import '../../core/sound/soundscape.dart';
 import '../bridge/bridge_controller.dart';
 import '../library/preferences_controller.dart';
 import '../music/music_sync_controller.dart';
+import '../tv/camera_input.dart';
+import '../tv/tv_sync_controller.dart';
 import '../playlists/playlist.dart';
 
 /// Lamps shown when playing without a bridge.
@@ -40,6 +44,10 @@ enum PlaybackNoticeKind {
   startFailed,
   microphoneDenied,
   microphoneFailed,
+
+  /// TV Sync: the camera was refused, or could not be opened.
+  cameraDenied,
+  cameraFailed,
 
   /// The microphone died mid-effect.
   microphoneStopped,
@@ -107,7 +115,11 @@ class PlaybackController extends ChangeNotifier {
     this.sleepFade = const Duration(seconds: 20),
     LightingEffect? Function(String id)? resolveEffect,
     math.Random? random,
+    SoundPlayer sound = const NoSoundPlayer(),
+    CameraInput camera = const NoCameraInput(),
   })  : _effect = effect,
+        _camera = camera,
+        _sound = sound,
         _resolveEffect = resolveEffect ?? ((_) => null),
         _random = random ?? math.Random(),
         _bridge = bridge,
@@ -135,6 +147,14 @@ class PlaybackController extends ChangeNotifier {
   /// Finds a playlist's effects by id (built-in and the user's own).
   final LightingEffect? Function(String id) _resolveEffect;
   final math.Random _random;
+  final SoundPlayer _sound;
+  final CameraInput _camera;
+
+  /// Watches the frames for lightning, to answer with thunder.
+  StreamSubscription<List<LightFrame>>? _lightningWatch;
+  Timer? _thunderTimer;
+  DateTime? _lastThunder;
+  bool _soundPlaying = false;
 
   /// The default controls last applied, to notice when Settings change them.
   EffectControls _defaults;
@@ -153,6 +173,7 @@ class PlaybackController extends ChangeNotifier {
   PlaybackStatus _status = PlaybackStatus.idle;
   EffectPlayer? _player;
   MusicSyncController? _music;
+  TvSyncController? _tv;
   String? _targetKey;
   EffectControls _controls;
   double _sensitivity = 1;
@@ -185,6 +206,63 @@ class PlaybackController extends ChangeNotifier {
 
   /// The playlist being played, if any.
   Playlist? get playlist => _playlist;
+
+  /// What the current effect sounds like (silent for most).
+  Soundscape get soundscape => soundscapeOf(effectToPlay);
+
+  /// Starts (or replaces) the sounds of the current effect for [player].
+  void _startSound(EffectPlayer player) {
+    _stopSound();
+    final scape = soundscape;
+    if (!_preferences.soundOn || scape.isSilent) {
+      return;
+    }
+    _soundPlaying = true;
+    unawaited(_sound.play(scape, volume: _preferences.soundVolume));
+    if (scape.thunder) {
+      double? previous;
+      _lightningWatch = player.frames.listen((frames) {
+        if (frames.isEmpty) {
+          return;
+        }
+        final mean =
+            frames.fold<double>(0, (s, f) => s + f.brightness) / frames.length;
+        // A sudden jump in brightness is a strike: thunder follows, a
+        // moment later, as sound travels slower than light.
+        if (previous != null && mean - previous! > 0.3) {
+          _scheduleThunder();
+        }
+        previous = mean;
+      });
+    }
+  }
+
+  void _scheduleThunder() {
+    final last = _lastThunder;
+    if ((_thunderTimer?.isActive ?? false) ||
+        (last != null &&
+            DateTime.now().difference(last) < const Duration(seconds: 3))) {
+      return;
+    }
+    _thunderTimer =
+        Timer(Duration(milliseconds: 400 + _random.nextInt(1600)), () {
+      if (_status == PlaybackStatus.playing && _soundPlaying) {
+        _lastThunder = DateTime.now();
+        unawaited(_sound.thunder(volume: _preferences.soundVolume));
+      }
+    });
+  }
+
+  void _stopSound() {
+    unawaited(_lightningWatch?.cancel());
+    _lightningWatch = null;
+    _thunderTimer?.cancel();
+    _thunderTimer = null;
+    if (_soundPlaying) {
+      _soundPlaying = false;
+      unawaited(_sound.stop());
+    }
+  }
 
   bool _systemReducesMotion = false;
 
@@ -237,8 +315,14 @@ class PlaybackController extends ChangeNotifier {
     } else if (_status == PlaybackStatus.paused) {
       await resume();
     }
-    if (_playlist == playlist && _status == PlaybackStatus.playing) {
-      _armPlaylistTimer(playlist.each);
+    if (_playlist == playlist) {
+      if (_status == PlaybackStatus.playing) {
+        _armPlaylistTimer(playlist.each);
+      } else {
+        // It could not start (bridge away, microphone refused): no
+        // playlist left behind that would never move on.
+        _endPlaylist();
+      }
     }
     _notify();
   }
@@ -372,6 +456,9 @@ class PlaybackController extends ChangeNotifier {
   bool get isBusy => _status == PlaybackStatus.starting;
   EffectPlayer? get player => _player;
   MusicSyncController? get music => _music;
+
+  /// The camera watching the TV, while a TV Sync effect plays.
+  TvSyncController? get tvSync => _tv;
   EffectControls get controls => _controls;
   double get sensitivity => _sensitivity;
 
@@ -462,18 +549,26 @@ class PlaybackController extends ChangeNotifier {
       _notify();
       return;
     }
-    if (next.usesMicrophone) {
+    if (!next.usesMicrophone) {
+      await _music?.stop();
+    }
+    if (!next.usesCamera) {
+      await _tv?.stop();
+    }
+    if (next.usesMicrophone || next.usesCamera) {
       if (_status == PlaybackStatus.playing && !await _startListening()) {
         await stop();
         return;
       }
-    } else {
-      await _music?.stop();
     }
     if (!identical(_player, player)) {
       return;
     }
     player.crossfadeTo(effectToPlay, over: crossfade);
+    _startSound(player);
+    if (_status == PlaybackStatus.paused && _soundPlaying) {
+      unawaited(_sound.pause());
+    }
     unawaited(_preferences.recordPlayed(next.id));
     _notify();
   }
@@ -532,9 +627,41 @@ class PlaybackController extends ChangeNotifier {
   HueEntertainmentArea? get area =>
       areas.where((a) => _targetKey == 'area:${a.id}').firstOrNull;
 
+  static const _severalPrefix = 'groups:';
+
+  /// The target key that plays on all of [groupIds] at once.
+  static String severalRoomsKey(Iterable<String> groupIds) =>
+      '$_severalPrefix${groupIds.join(',')}';
+
+  /// The rooms and zones the effect plays on: the selected one, or the
+  /// several chosen together (those that still exist).
+  List<HueGroup> get roomGroups {
+    final key = _targetKey;
+    if (key != null && key.startsWith(_severalPrefix)) {
+      final ids = key.substring(_severalPrefix.length).split(',');
+      return [
+        for (final id in ids)
+          if (groups.where((g) => g.id == id).firstOrNull case final g?) g,
+      ];
+    }
+    final single = group;
+    return single == null ? const [] : [single];
+  }
+
+  /// Whether several rooms or zones play together.
+  bool get playsSeveralRooms =>
+      (_targetKey?.startsWith(_severalPrefix) ?? false) &&
+      roomGroups.isNotEmpty;
+
+  /// Where the effect plays, for labels: the area, or the rooms joined
+  /// with "+"; null for the preview.
+  String? get targetName =>
+      area?.name ??
+      (roomGroups.isEmpty ? null : roomGroups.map((g) => g.name).join(' + '));
+
   /// The selected target if it still exists; null means the preview.
   String? get selectedTarget =>
-      group != null || area != null ? _targetKey : null;
+      roomGroups.isNotEmpty || area != null ? _targetKey : null;
 
   /// One label per slot of the lamp preview.
   List<SlotLabel> get lightNames {
@@ -543,10 +670,10 @@ class PlaybackController extends ChangeNotifier {
       return playing;
     }
     final home = this.home;
-    final group = this.group;
+    final rooms = roomGroups;
     final area = this.area;
-    if (home != null && group != null) {
-      return _slotLabels(home, _effectLights(home, group));
+    if (home != null && rooms.isNotEmpty) {
+      return _slotLabels(home, _lightsOfGroups(home, rooms));
     }
     if (home != null && area != null) {
       return _channelNames(home, area);
@@ -584,6 +711,7 @@ class PlaybackController extends ChangeNotifier {
           return;
         }
       }
+      final listeningFor = _effect;
       if (!await _startListening()) {
         if (!cancelled()) {
           _setStatus(PlaybackStatus.idle);
@@ -599,6 +727,9 @@ class PlaybackController extends ChangeNotifier {
       LightOutput output = const NullLightOutput();
       var tick = const Duration(milliseconds: 100);
       var restore = <String, HueLightCommand>{};
+      // What each slot shows before the effect, to fade in from; the
+      // preview's lamps start dark.
+      List<LightFrame>? before;
 
       if (selectedTarget != null) {
         // Fresh state, both to find the lights and to restore them later.
@@ -615,7 +746,7 @@ class PlaybackController extends ChangeNotifier {
           ));
         }
         final area = this.area;
-        final group = this.group;
+        final rooms = roomGroups;
         if (area != null) {
           restore = _snapshot(home, {
             for (final channel in area.channels) ...channel.lightIds,
@@ -627,6 +758,14 @@ class PlaybackController extends ChangeNotifier {
           output = streaming;
           lightIds = entertainmentSlotIds(area);
           names = _channelNames(home, area);
+          before = [
+            for (final channel in area.spatialChannels)
+              switch (channel.lightIds) {
+                [final id, ...] when home.lights[id] != null =>
+                  home.lights[id]!.currentFrame,
+                _ => LightFrame.off,
+              },
+          ];
           // Hue recommends 50-60 messages per second; the bridge forwards
           // them to the lights at 25 Hz.
           tick = const Duration(milliseconds: 20);
@@ -635,18 +774,21 @@ class PlaybackController extends ChangeNotifier {
             (_) => _onStreamEnded(opened, null),
             onError: (Object error) => _onStreamEnded(opened, error),
           ));
-        } else if (group != null) {
-          final usable = _effectLights(home, group);
+        } else if (rooms.isNotEmpty) {
+          final usable = _lightsOfGroups(home, rooms);
           if (usable.isEmpty) {
             return _abortStart(PlaybackNotice(
               PlaybackNoticeKind.onOffOnlyLights,
-              name: group.name,
+              name: rooms.map((g) => g.name).join(' + '),
             ));
           }
           restore = _snapshot(home, {for (final id in usable) lightOfSlot(id)});
           output = hueRestOutput(client, home.lights);
           lightIds = usable;
           names = _slotLabels(home, usable);
+          before = [
+            for (final slot in usable) _currentFrameOfSlot(home, slot),
+          ];
         } else {
           return _abortStart(
               const PlaybackNotice(PlaybackNoticeKind.targetGone));
@@ -654,9 +796,10 @@ class PlaybackController extends ChangeNotifier {
       }
 
       _restore = _preferences.restoreLights ? restore : const {};
-      _activeLightIds = selectedTarget == null
-          ? const []
-          : {for (final id in lightIds) lightOfSlot(id)}.toList();
+      // The real lights (an area's slots are channels, not lights), for
+      // the sleep timer to switch off.
+      _activeLightIds =
+          selectedTarget == null ? const [] : restore.keys.toList();
       _slotNames = names;
       // Assigned before play(): if the first tick throws, stop() can still
       // find and stop the player (and its timer).
@@ -675,12 +818,23 @@ class PlaybackController extends ChangeNotifier {
               ? music.features
               : null;
         },
+        screen: () => _effect.usesCamera ? _tv?.colors : null,
       )..softFlashes = softFlashes;
+      if (_preferences.gentleStart) {
+        player
+            .fadeInFrom(before ?? List.filled(lightIds.length, LightFrame.off));
+      }
       player.play();
+      _startSound(player);
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
       _armSleepTimer();
       _setStatus(PlaybackStatus.playing);
+      if (!identical(_effect, listeningFor)) {
+        // Switched while starting: the microphone or camera opened for the
+        // effect chosen first.
+        unawaited(_matchInputs());
+      }
     } on Object catch (error) {
       if (cancelled()) {
         return _cleanUpCancelled(streaming);
@@ -701,10 +855,13 @@ class PlaybackController extends ChangeNotifier {
     }
     player.pause();
     _pausePlaylistTimer();
+    if (_soundPlaying) {
+      unawaited(_sound.pause());
+    }
     _setStatus(PlaybackStatus.paused);
     // No reason to keep the microphone open or the screen on while paused.
     unawaited(_screenWake.keepOn(false));
-    await _music?.stop();
+    await _stopInputs();
   }
 
   Future<void> resume() async {
@@ -717,7 +874,7 @@ class PlaybackController extends ChangeNotifier {
     }
     if (_player != player) {
       // Stopped or retargeted while the microphone was starting.
-      await _music?.stop();
+      await _stopInputs();
       return;
     }
     player.play();
@@ -725,6 +882,9 @@ class PlaybackController extends ChangeNotifier {
     final left = _playlistLeft;
     if (_playlist != null && left != null) {
       _armPlaylistTimer(left);
+    }
+    if (_soundPlaying) {
+      unawaited(_sound.resume());
     }
     _setStatus(PlaybackStatus.playing);
   }
@@ -734,6 +894,7 @@ class PlaybackController extends ChangeNotifier {
     _generation++;
     _cancelSleepTimer();
     _endPlaylist();
+    _stopSound();
     final player = _player;
     final commands = _restore;
     _player = null;
@@ -742,8 +903,8 @@ class PlaybackController extends ChangeNotifier {
     _activeLightIds = const [];
     _setStatus(PlaybackStatus.idle);
     final previous = _teardown;
-    late final Future<void> current;
-    current = () async {
+    Future<void>? restoring;
+    final stopped = () async {
       if (previous != null) {
         await previous;
       }
@@ -751,22 +912,30 @@ class PlaybackController extends ChangeNotifier {
         await player?.stop();
       } finally {
         try {
-          await _music?.stop();
+          await _stopInputs();
         } finally {
           unawaited(_screenWake.keepOn(false));
           final client = _bridge.client;
           if (restore && commands.isNotEmpty && client != null) {
-            unawaited(restoreLights(client, commands));
+            restoring = restoreLights(client, commands);
           }
         }
       }
-    }()
+    }();
+    // The next start waits for the lights to be put back as well, so it
+    // never takes the effect's colours for the lights' own (to restore
+    // later, or to fade in from); the caller only waits for the stop.
+    late final Future<void> current;
+    current = stopped
+        .then((_) => restoring)
+        .catchError((Object _) {})
         .whenComplete(() {
       if (identical(_teardown, current)) {
         _teardown = null;
       }
     });
-    return _teardown = current;
+    _teardown = current;
+    return stopped;
   }
 
   /// Set by the app where the platform can keep it running with the
@@ -781,9 +950,11 @@ class PlaybackController extends ChangeNotifier {
     if (_status == PlaybackStatus.idle) {
       return;
     }
+    // The camera closes in the background, so TV Sync cannot go on.
     if (keepPlayingInBackground &&
         selectedTarget != null &&
-        _status != PlaybackStatus.starting) {
+        _status != PlaybackStatus.starting &&
+        !_effect.usesCamera) {
       return;
     }
     await stop();
@@ -877,6 +1048,10 @@ class PlaybackController extends ChangeNotifier {
     _fadeTimer = Timer.periodic(step, (timer) {
       elapsed++;
       player.masterLevel = (1 - elapsed / steps).clamp(0.0, 1.0);
+      if (_soundPlaying) {
+        unawaited(
+            _sound.setVolume(_preferences.soundVolume * player.masterLevel));
+      }
       if (elapsed >= steps) {
         timer.cancel();
         unawaited(_finishSleep());
@@ -891,9 +1066,13 @@ class PlaybackController extends ChangeNotifier {
     _notice(const PlaybackNotice(PlaybackNoticeKind.sleepTimerDone));
   }
 
-  /// Starts the microphone (or the phone's audio) for Music Sync effects.
-  /// Returns false (after telling the user why) when it cannot listen.
+  /// Starts the microphone (or the phone's audio) for Music Sync effects,
+  /// or the camera for TV Sync. Returns false (after telling the user why)
+  /// when it cannot.
   Future<bool> _startListening() async {
+    if (effect.usesCamera) {
+      return _startWatching();
+    }
     if (!effect.usesMicrophone) {
       return true;
     }
@@ -928,6 +1107,43 @@ class PlaybackController extends ChangeNotifier {
     return false;
   }
 
+  /// Opens the camera for TV Sync.
+  Future<bool> _startWatching() async {
+    final tv = _tv ??= TvSyncController(_camera)..addListener(_notify);
+    await tv.start();
+    switch (tv.status) {
+      case TvSyncStatus.watching:
+        return true;
+      case TvSyncStatus.denied:
+        _notice(const PlaybackNotice(PlaybackNoticeKind.cameraDenied));
+      default:
+        _notice(const PlaybackNotice(PlaybackNoticeKind.cameraFailed));
+    }
+    return false;
+  }
+
+  /// Opens the microphone or camera the current effect needs and closes
+  /// the others; stops when the needed one cannot open.
+  Future<void> _matchInputs() async {
+    if (!_effect.usesMicrophone) {
+      await _music?.stop();
+    }
+    if (!_effect.usesCamera) {
+      await _tv?.stop();
+    }
+    if (_status == PlaybackStatus.playing && !await _startListening()) {
+      await stop();
+    }
+  }
+
+  /// Closes the microphone and the camera.
+  Future<void> _stopInputs() async {
+    await Future.wait([
+      if (_music case final music?) music.stop(),
+      if (_tv case final tv?) tv.stop(),
+    ]);
+  }
+
   Future<void> _dropMusic(MusicSyncController music) async {
     if (identical(_music, music)) {
       _music = null;
@@ -955,7 +1171,7 @@ class PlaybackController extends ChangeNotifier {
   }
 
   void _abortStart(PlaybackNotice notice) {
-    unawaited(_music?.stop());
+    unawaited(_stopInputs());
     _setStatus(PlaybackStatus.idle);
     _notice(notice);
   }
@@ -970,7 +1186,7 @@ class PlaybackController extends ChangeNotifier {
       }
       await streaming?.close();
       if (_status == PlaybackStatus.idle || _disposed) {
-        await _music?.stop();
+        await _stopInputs();
       }
     }()
         .whenComplete(() {
@@ -1008,6 +1224,7 @@ class PlaybackController extends ChangeNotifier {
   /// dialog): apply them to the running player.
   void _onPreferencesChanged() {
     _player?.softFlashes = softFlashes;
+    _applySoundPreferences();
     final defaults = _preferences.defaultControls;
     if (defaults != _defaults) {
       // New defaults from Settings apply from now on.
@@ -1024,6 +1241,25 @@ class PlaybackController extends ChangeNotifier {
       unawaited(_switchMusicSource());
     }
     _notify();
+  }
+
+  /// Sound switched on or off, or its volume changed, while playing.
+  void _applySoundPreferences() {
+    final player = _player;
+    if (player == null || _status == PlaybackStatus.starting) {
+      return;
+    }
+    final wanted = _preferences.soundOn && !soundscape.isSilent;
+    if (wanted && !_soundPlaying) {
+      _startSound(player);
+      if (_status == PlaybackStatus.paused) {
+        unawaited(_sound.pause());
+      }
+    } else if (!wanted && _soundPlaying) {
+      _stopSound();
+    } else if (_soundPlaying && !_fadingOut) {
+      unawaited(_sound.setVolume(_preferences.soundVolume));
+    }
   }
 
   void _setStatus(PlaybackStatus status) {
@@ -1048,11 +1284,17 @@ class PlaybackController extends ChangeNotifier {
     _disposed = true;
     _cancelSleepTimer();
     _endPlaylist();
+    _stopSound();
     _bridge.removeListener(_onBridgeChanged);
     _preferences.removeListener(_onPreferencesChanged);
     final music = _music;
     music?.removeListener(_onMusicChanged);
-    unawaited(stop().whenComplete(() => music?.dispose()));
+    final tv = _tv;
+    tv?.removeListener(_notify);
+    unawaited(stop().whenComplete(() {
+      music?.dispose();
+      tv?.dispose();
+    }));
     unawaited(_notices.close());
     super.dispose();
   }
@@ -1073,6 +1315,29 @@ class PlaybackController extends ChangeNotifier {
           else
             for (var s = 0; s < light.segments; s++) '$id#$s',
     ];
+  }
+
+  /// The slots of several rooms and zones, each light once (a light can
+  /// be in a room and a zone).
+  List<String> _lightsOfGroups(HueHome home, List<HueGroup> groups) {
+    final seen = <String>{};
+    return [
+      for (final group in groups)
+        for (final slot in _effectLights(home, group))
+          if (seen.add(slot)) slot,
+    ];
+  }
+
+  static LightFrame _currentFrameOfSlot(HueHome home, String slot) {
+    final light = home.lights[lightOfSlot(slot)];
+    if (light == null) {
+      return LightFrame.off;
+    }
+    final hash = slot.indexOf('#');
+    return hash < 0
+        ? light.currentFrame
+        : light.currentFrameOfSegment(
+            int.parse(slot.substring(hash + 1)), light.segments);
   }
 
   static List<SlotLabel> _slotLabels(HueHome home, List<String> slots) => [

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import '../color/light_color.dart';
+import '../effects/engine/light_frame.dart';
 
 /// A Hue Bridge found on the local network, before or after pairing.
 class HueBridgeInfo {
@@ -176,6 +177,32 @@ class HueLight {
 
   bool get isDimmable => brightness != null;
 
+  /// What the light shows now, as a frame: where a gentle start fades from.
+  LightFrame get currentFrame => currentFrameOfSegment(0, 1);
+
+  /// What segment [index] of [count] shows now (the nearest gradient point
+  /// for gradient lights, the whole light otherwise).
+  LightFrame currentFrameOfSegment(int index, int count) {
+    if (!isOn) {
+      return LightFrame.off;
+    }
+    final level = ((brightness ?? 100) / 100).clamp(0.0, 1.0);
+    final LightColor shown;
+    if (mirek case final mirek?) {
+      shown = LightColor.fromMirek(mirek);
+    } else if (gradient.length >= 2) {
+      final point = gradient[count <= 1
+          ? 0
+          : (index * (gradient.length - 1) / (count - 1)).round()];
+      shown = LightColor.fromXy(point.x, point.y);
+    } else if (color case final xy?) {
+      shown = LightColor.fromXy(xy.x, xy.y);
+    } else {
+      shown = LightColor.white;
+    }
+    return LightFrame(shown, level);
+  }
+
   /// How many slots of an effect this light shows when played on a room:
   /// gradient lights show up to [maxSegments] side by side, so effects
   /// move along the strip instead of colouring it all at once.
@@ -239,15 +266,15 @@ class HueScene {
   factory HueScene.fromJson(Map<String, Object?> json) {
     final metadata = _map(json['metadata']);
     final status = _map(json['status'])['active'];
-    final palette = _map(json['palette'])['color'];
     return HueScene(
       id: json['id']! as String,
       name: metadata['name'] as String? ?? 'Scene',
       groupId: _map(json['group'])['rid'] as String? ?? '',
       // `static` or `dynamic_palette` while the scene is showing.
       isActive: status is String && status != 'inactive',
-      isDynamic: json['auto_dynamic'] == true ||
-          (palette is List && palette.isNotEmpty),
+      // Most gallery scenes carry a palette too but play still, as in the
+      // Hue app; only those meant to move start moving.
+      isDynamic: json['auto_dynamic'] == true,
     );
   }
 
@@ -260,8 +287,8 @@ class HueScene {
   /// The bridge believes the lights currently show this scene.
   final bool isActive;
 
-  /// It has a colour palette to move through (made in the Hue app as a
-  /// dynamic scene, or saved from LumiFX to keep moving).
+  /// It starts moving through its palette when recalled (made in the Hue
+  /// app to start dynamic, or saved from LumiFX to keep moving).
   final bool isDynamic;
 }
 
@@ -316,29 +343,44 @@ class HueLightCommand {
     this.gradient,
   });
 
-  /// One colour per segment of a gradient light, at the brightest
-  /// segment's brightness (the bridge has one brightness per light).
+  /// One colour per segment of a gradient light. The bridge has one
+  /// brightness per light, between the segments' average and the
+  /// brightest one, so a single bright spot still shows without lifting
+  /// the dark segments all the way. A colour's chromaticity says nothing
+  /// about how bright it is, so a dark segment would show its colour at
+  /// the light's level (black as white): it takes the colour of the
+  /// nearest lit segment instead.
   factory HueLightCommand.gradient(
     List<LightColor> colors,
     List<double> brightness, {
     Duration? transition,
   }) {
     final peak = brightness.fold<double>(0, math.max);
-    if (peak < 0.005) {
+    if (peak < 0.005 || colors.isEmpty) {
       return HueLightCommand(on: false, transition: transition);
     }
+    final mean =
+        brightness.fold<double>(0, (a, b) => a + b) / brightness.length;
+    bool lit(int i) =>
+        brightness[i] >= peak * 0.2 &&
+        math.max(colors[i].r, math.max(colors[i].g, colors[i].b)) > 0.02;
+    LightColor shown(int i) {
+      for (var d = 0; d < colors.length; d++) {
+        if (i - d >= 0 && lit(i - d)) {
+          return colors[i - d];
+        }
+        if (i + d < colors.length && lit(i + d)) {
+          return colors[i + d];
+        }
+      }
+      return colors[i];
+    }
+
     return HueLightCommand(
       on: true,
-      brightness: (peak * 100).clamp(1.0, 100.0),
+      brightness: ((mean + peak) / 2 * 100).clamp(1.0, 100.0),
       gradient: [
-        for (final (i, color) in colors.indexed)
-          // A dark segment is shown as its colour dimmed towards black,
-          // since segments cannot have their own brightness.
-          LightColor(
-            color.r * (brightness[i] / peak).clamp(0.05, 1.0),
-            color.g * (brightness[i] / peak).clamp(0.05, 1.0),
-            color.b * (brightness[i] / peak).clamp(0.05, 1.0),
-          ).toXy(),
+        for (var i = 0; i < colors.length; i++) shown(i).toXy(),
       ],
       transition: transition,
     );

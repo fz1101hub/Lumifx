@@ -10,6 +10,7 @@ import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_areas_screen.dart';
 import '../library/sharing.dart';
+import '../home/wall_panel_screen.dart';
 import '../links/links_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -62,6 +63,12 @@ class SettingsScreen extends StatelessWidget {
                 min: 0.25,
                 max: 3,
                 onChanged: (v) => update(controls.copyWith(speed: v)),
+              ),
+              SwitchListTile(
+                title: Text(l10n.gentleStart),
+                subtitle: Text(l10n.gentleStartDescription),
+                value: preferences.gentleStart,
+                onChanged: preferences.setGentleStart,
               ),
               SwitchListTile(
                 title: Text(l10n.restoreLights),
@@ -122,6 +129,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
               ],
               if (preferences.userScenes.isNotEmpty ||
+                  preferences.userStories.isNotEmpty ||
                   preferences.playlists.isNotEmpty) ...[
                 const Divider(height: 32),
                 ListTile(
@@ -132,12 +140,25 @@ class SettingsScreen extends StatelessWidget {
                     context,
                     SharedBundle(
                       scenes: preferences.userScenes,
+                      stories: preferences.userStories,
                       playlists: preferences.playlists,
                     ),
                   ),
                 ),
               ],
               const Divider(height: 32),
+              ListTile(
+                leading: const Icon(Icons.tablet_outlined),
+                title: Text(l10n.wallPanel),
+                subtitle: Text(l10n.wallPanelDescription),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    fullscreenDialog: true,
+                    builder: (_) => const WallPanelScreen(),
+                  ),
+                ),
+              ),
               ListTile(
                 leading: const Icon(Icons.link),
                 title: Text(l10n.linksTitle),

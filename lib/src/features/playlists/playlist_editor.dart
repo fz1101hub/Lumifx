@@ -269,7 +269,8 @@ class _EffectPickerState extends State<_EffectPicker> {
     final sections = [
       (l10n.myScenes, library.userScenes),
       (l10n.scenes, library.ofKind(EffectKind.scene, builtInOnly: true)),
-      (l10n.stories, library.ofKind(EffectKind.story)),
+      (l10n.myStories, library.userStories),
+      (l10n.stories, library.ofKind(EffectKind.story, builtInOnly: true)),
       (l10n.interactive, library.ofKind(EffectKind.interactive)),
     ];
     return DraggableScrollableSheet(

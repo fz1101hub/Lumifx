@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
+import 'package:lumifx/src/core/camera/screen_sampler.dart';
 import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
@@ -20,8 +21,11 @@ import 'package:lumifx/src/features/effects/catalog/effect_catalog.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/tv/camera_input.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_camera_input.dart';
+import '../support/fake_sound_player.dart';
 
 http.Response _json(Object body) => http.Response(jsonEncode(body), 200);
 
@@ -37,6 +41,9 @@ class _RecordingWake implements ScreenWake {
 class _FakeBridge {
   final puts = <(String, Map<String, Object?>)>[];
   final posts = <(String, Map<String, Object?>)>[];
+
+  /// Light reads and writes in order: `GET` and `PUT <id>`.
+  final log = <String>[];
 
   /// When set, room loading waits for it: used to stop mid-start.
   Completer<void>? holdRefresh;
@@ -55,6 +62,7 @@ class _FakeBridge {
           });
         }
         if (request.method == 'PUT') {
+          log.add('PUT ${request.url.pathSegments.last}');
           puts.add((
             request.url.pathSegments.last,
             jsonDecode(request.body) as Map<String, Object?>,
@@ -63,6 +71,7 @@ class _FakeBridge {
         }
         switch (request.url.path) {
           case '/clip/v2/resource/light':
+            log.add('GET');
             refreshes++;
             await holdRefresh?.future;
             return _json({
@@ -123,6 +132,19 @@ class _FakeBridge {
                 },
               ],
             });
+          case '/clip/v2/resource/zone':
+            return _json({
+              'data': [
+                {
+                  'id': 'zone',
+                  'metadata': {'name': 'Corner'},
+                  'children': [
+                    {'rid': 'color', 'rtype': 'light'},
+                  ],
+                  'services': <Object>[],
+                },
+              ],
+            });
         }
         return _json({'data': <Object>[]});
       });
@@ -137,6 +159,8 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
   bool music = false,
   LightingEffect? effect,
   math.Random? random,
+  FakeSoundPlayer? sound,
+  FakeCameraInput? camera,
   Duration sleepFade = const Duration(seconds: 20),
 }) async {
   final fake = _FakeBridge();
@@ -165,6 +189,8 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
     screenWake: wake,
     resolveEffect: effectById,
     random: random,
+    sound: sound ?? FakeSoundPlayer(),
+    camera: camera ?? FakeCameraInput(),
     sleepFade: sleepFade,
   );
   return (controller, fake, wake);
@@ -519,6 +545,130 @@ void main() {
     controller.dispose();
   });
 
+  test('TV Sync watches the TV and the lights take its colours', () async {
+    final camera = FakeCameraInput();
+    final (controller, _, wake) = await _setUp(effect: tvSync, camera: camera);
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    expect(controller.tvSync?.isWatching, isTrue);
+    expect(camera.isRunning, isTrue);
+    expect(wake.calls.last, isTrue, reason: 'the screen stays on');
+
+    // Before the first frame: the dim background.
+    final player = controller.player!;
+    player.advance(const Duration(milliseconds: 10));
+    expect(player.currentFrames.every((f) => f.brightness < 0.2), isTrue);
+
+    camera.show(const ScreenColors(
+      [LightColor(1, 0, 0), LightColor(0, 0, 1)],
+      [1, 1],
+    ));
+    // Past the gentle start's fade-in.
+    player.advance(const Duration(seconds: 3));
+    final frames = player.currentFrames;
+    expect(frames.first.color.r, closeTo(1, 0.01));
+    expect(frames.first.color.b, lessThan(0.1));
+    expect(frames.last.color.b, closeTo(1, 0.01));
+    expect(frames.last.color.r, lessThan(0.1));
+    expect(frames.first.brightness, greaterThan(0.8));
+
+    await controller.pause();
+    expect(camera.isRunning, isFalse, reason: 'no camera while paused');
+    await controller.resume();
+    expect(camera.isRunning, isTrue);
+    expect(camera.starts, 2);
+
+    await controller.switchEffect(ocean);
+    expect(camera.isRunning, isFalse);
+    await controller.switchEffect(tvSync);
+    expect(camera.isRunning, isTrue);
+
+    await controller.stop();
+    expect(camera.isRunning, isFalse);
+    controller.dispose();
+  });
+
+  test('a refused camera keeps TV Sync idle and explains why', () async {
+    final camera = FakeCameraInput(result: CameraStartResult.denied);
+    final (controller, _, _) = await _setUp(effect: tvSync, camera: camera);
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
+    await controller.start();
+    await _wait(10);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(notices.single.kind, PlaybackNoticeKind.cameraDenied);
+
+    camera.result = CameraStartResult.unavailable;
+    await controller.start();
+    await _wait(10);
+    expect(notices.last.kind, PlaybackNoticeKind.cameraFailed);
+    controller.dispose();
+  });
+
+  test('TV Sync stops in the background, where the camera closes', () async {
+    final camera = FakeCameraInput();
+    final (controller, _, _) = await _setUp(effect: tvSync, camera: camera);
+    controller.keepPlayingInBackground = true;
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    await controller.handleAppPaused();
+    expect(controller.status, PlaybackStatus.idle);
+    expect(camera.isRunning, isFalse);
+    controller.dispose();
+  });
+
+  test('starting again waits for the lights to be put back first', () async {
+    final (controller, fake, _) = await _setUp();
+    await controller.start();
+    await _wait(250);
+    final stoppedAt = fake.log.length;
+    unawaited(controller.stop());
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    final after = fake.log.sublist(stoppedAt);
+    final read = after.indexOf('GET');
+    expect(read, greaterThan(0));
+    // Both lights got their own state back before the new start read
+    // them, so it does not keep the effect's colours as theirs.
+    expect(after.sublist(0, read), containsAll(['PUT color', 'PUT white']));
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('a playlist that cannot start leaves no playlist behind', () async {
+    final (controller, _, _) = await _setUp(
+      audio: FakeAudioInput(granted: false),
+    );
+    await controller.playPlaylist(const Playlist(
+      id: 'p',
+      name: 'Party',
+      effectIds: ['mood_glow', 'ocean'],
+    ));
+    expect(controller.status, PlaybackStatus.idle);
+    expect(controller.playlist, isNull);
+    controller.dispose();
+  });
+
+  test('switching effects while starting closes the camera it opened',
+      () async {
+    final camera = FakeCameraInput();
+    final (controller, fake, _) = await _setUp(effect: tvSync, camera: camera);
+    fake.holdRefresh = Completer<void>();
+    final starting = controller.start();
+    await _wait(20);
+    expect(controller.status, PlaybackStatus.starting);
+    expect(camera.isRunning, isTrue);
+    await controller.switchEffect(ocean);
+    fake.holdRefresh!.complete();
+    await starting;
+    await _wait(20);
+    expect(controller.status, PlaybackStatus.playing);
+    expect(camera.isRunning, isFalse);
+    await controller.stop();
+    controller.dispose();
+  });
+
   test('a playlist moves on by itself, pauses its clock and ends on stop',
       () async {
     final (controller, _, _) = await _setUp();
@@ -622,6 +772,74 @@ void main() {
     final (story, _, _) = await _setUp(effect: emeraldTrickster);
     expect(story.dynamicPalette, isNull);
     story.dispose();
+  });
+
+  test('several rooms play together, each light once', () async {
+    final (controller, fake, _) = await _setUp();
+    await controller
+        .changeTarget(PlaybackController.severalRoomsKey(['room', 'zone']));
+    expect(controller.playsSeveralRooms, isTrue);
+    expect(controller.targetName, 'Den + Corner');
+    expect(controller.roomGroups.map((g) => g.id), ['room', 'zone']);
+    // The colour bulb is in both: it shows up once.
+    expect(controller.lightNames.length, 2);
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    expect(controller.player!.lightIds, ['color', 'white']);
+    expect(controller.canSaveAsHueScene, isFalse,
+        reason: 'a Hue scene belongs to one room');
+    await controller.stop();
+    controller.dispose();
+
+    // A room that disappears from the bridge is left out; with none left
+    // it is the preview again.
+    final (gone, _, _) = await _setUp();
+    await gone.changeTarget(PlaybackController.severalRoomsKey(['nope']));
+    expect(gone.selectedTarget, isNull);
+    gone.dispose();
+  });
+
+  test('effects play their sounds, which follow pause, switch and stop',
+      () async {
+    final sound = FakeSoundPlayer();
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final (controller, _, _) = await _setUp(
+      effect: thunderstorm,
+      sound: sound,
+      preferences: preferences,
+    );
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(sound.calls.last, 'play rain');
+    expect(sound.playing!.thunder, isTrue);
+    await controller.pause();
+    expect(sound.calls.last, 'pause');
+    await controller.resume();
+    expect(sound.calls.last, 'resume');
+    await controller.switchEffect(ocean);
+    expect(sound.calls.last, 'play waves');
+
+    // Turned off, then back on, while playing.
+    await preferences.setSoundOn(false);
+    expect(sound.calls.last, 'stop');
+    await preferences.setSoundOn(true);
+    expect(sound.calls.last, 'play waves');
+    await preferences.setSoundVolume(0.2);
+    expect(sound.volume, 0.2);
+
+    await controller.stop();
+    expect(sound.calls.last, 'stop');
+    controller.dispose();
+  });
+
+  test('silent effects and Music Sync play no sound', () async {
+    final sound = FakeSoundPlayer();
+    final (controller, _, _) = await _setUp(music: true, sound: sound);
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(sound.calls, isEmpty);
+    await controller.stop();
+    controller.dispose();
   });
 
   test('changing the target while playing restarts on the new one', () async {

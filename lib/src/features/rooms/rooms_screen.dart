@@ -32,7 +32,7 @@ class RoomsScreen extends StatelessWidget {
               children: [
                 if (home.rooms.isNotEmpty) _Header(l10n.rooms),
                 for (final room in home.rooms)
-                  _GroupTile(
+                  GroupTile(
                     key: ValueKey(room.id),
                     group: room,
                     home: home,
@@ -41,7 +41,7 @@ class RoomsScreen extends StatelessWidget {
                   ),
                 if (home.zones.isNotEmpty) _Header(l10n.zones),
                 for (final zone in home.zones)
-                  _GroupTile(
+                  GroupTile(
                     key: ValueKey(zone.id),
                     group: zone,
                     home: home,
@@ -71,8 +71,9 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _GroupTile extends StatefulWidget {
-  const _GroupTile({
+/// A room or zone: switch, brightness and its Hue scenes.
+class GroupTile extends StatefulWidget {
+  const GroupTile({
     required this.group,
     required this.home,
     required this.client,
@@ -86,10 +87,10 @@ class _GroupTile extends StatefulWidget {
   final Future<void> Function() onChanged;
 
   @override
-  State<_GroupTile> createState() => _GroupTileState();
+  State<GroupTile> createState() => _GroupTileState();
 }
 
-class _GroupTileState extends State<_GroupTile> {
+class _GroupTileState extends State<GroupTile> {
   late bool _on;
   late double _brightness;
 
@@ -100,7 +101,7 @@ class _GroupTileState extends State<_GroupTile> {
   }
 
   @override
-  void didUpdateWidget(_GroupTile oldWidget) {
+  void didUpdateWidget(GroupTile oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.home != widget.home) {
       _syncFromHome();
