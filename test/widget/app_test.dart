@@ -453,6 +453,30 @@ void main() {
     expect(find.text('Christmas time'), findsNothing);
   });
 
+  testWidgets('effects can be searched and filtered', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.byTooltip('Search effects'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'storm');
+    await tester.pump();
+    expect(find.text('Thunderstorm'), findsOneWidget);
+    expect(find.text('Ocean'), findsNothing);
+    await tester.enterText(find.byType(TextField), 'zzzz');
+    await tester.pump();
+    expect(find.text('No effects found.'), findsOneWidget);
+    await tester.tap(find.byTooltip('Clear'));
+    await tester.pump();
+    await tester.tap(find.widgetWithText(FilterChip, 'Scenes'));
+    await tester.pump();
+    await tester.tap(find.widgetWithText(FilterChip, 'Nature'));
+    await tester.pump();
+    expect(find.text('Ocean'), findsOneWidget);
+    expect(find.text('Fireplace'), findsNothing);
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    expect(find.text('Play'), findsOneWidget);
+  });
+
   testWidgets('settings change the controls a new playback starts with',
       (tester) async {
     await _pumpApp(tester);
@@ -1022,7 +1046,9 @@ void streamingTests() {
     await tester.pump();
     expect(find.text('Play'), findsOneWidget);
     expect(background.shown, isFalse);
-    await tester.pump(const Duration(seconds: 1));
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)));
+    await tester.pump(const Duration(seconds: 4));
   });
 
   testWidgets('with the setting off, locking the phone stops the effect',
@@ -1032,7 +1058,11 @@ void streamingTests() {
     lockAndUnlock(tester);
     await tester.pump();
     expect(find.text('Play'), findsOneWidget);
-    await tester.pump(const Duration(seconds: 1));
+    // Let the light commands started in real time finish, then the
+    // restore and the output's close timeout run out in test time.
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)));
+    await tester.pump(const Duration(seconds: 4));
   });
 
   testWidgets('wake-up and bedtime routines are listed and created',

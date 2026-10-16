@@ -368,5 +368,9 @@
   "seasonHalloween": "Halloween komt eraan",
   "seasonChristmas": "Kersttijd",
   "gentleStart": "Zachte start",
-  "gentleStartDescription": "Effecten vloeien in een paar seconden over vanuit de huidige kleuren van de lampen, in plaats van ze in één keer te veranderen."
+  "gentleStartDescription": "Effecten vloeien in een paar seconden over vanuit de huidige kleuren van de lampen, in plaats van ze in één keer te veranderen.",
+  "searchEffects": "Effecten zoeken",
+  "clearSearch": "Wissen",
+  "noEffectsFound": "Geen effecten gevonden.",
+  "myStories": "Mijn verhalen"
 }

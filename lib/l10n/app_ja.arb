@@ -368,5 +368,9 @@
   "seasonHalloween": "もうすぐハロウィン",
   "seasonChristmas": "クリスマスの季節",
   "gentleStart": "やさしく開始",
-  "gentleStartDescription": "照明の色を一気に変えず、今の色から数秒かけて演出に切り替わります。"
+  "gentleStartDescription": "照明の色を一気に変えず、今の色から数秒かけて演出に切り替わります。",
+  "searchEffects": "演出を検索",
+  "clearSearch": "クリア",
+  "noEffectsFound": "演出が見つかりません。",
+  "myStories": "マイストーリー"
 }

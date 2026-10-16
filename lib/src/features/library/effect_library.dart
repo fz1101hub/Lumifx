@@ -22,6 +22,11 @@ class EffectLibrary {
 
   bool isUserScene(String id) => id.startsWith(UserScene.idPrefix);
 
+  /// Stories the user made start with this prefix.
+  static const storyPrefix = 'story:';
+
+  bool isUserStory(String id) => id.startsWith(storyPrefix);
+
   LightingEffect? byId(String id) {
     if (isUserScene(id)) {
       final scene = userScene(id);

@@ -13,6 +13,7 @@ import '../effects/effect_palette.dart';
 import '../effects/player_route.dart';
 import '../playlists/playlists_screen.dart';
 import '../rooms/rooms_screen.dart';
+import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
 import 'seasons.dart';
 
@@ -29,6 +30,14 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.appTitle),
         actions: [
+          IconButton(
+            tooltip: l10n.searchEffects,
+            icon: const Icon(Icons.search),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                  builder: (_) => const EffectSearchScreen()),
+            ),
+          ),
           IconButton(
             tooltip: l10n.settings,
             icon: const Icon(Icons.settings_outlined),

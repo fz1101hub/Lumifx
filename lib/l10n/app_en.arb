@@ -1066,5 +1066,21 @@
   "gentleStartDescription": "Effects fade in over a couple of seconds from the colours the lights show, instead of changing them at once.",
   "@gentleStartDescription": {
     "description": "Explains the gentle start setting"
+  },
+  "searchEffects": "Search effects",
+  "@searchEffects": {
+    "description": "Search field hint and tooltip"
+  },
+  "clearSearch": "Clear",
+  "@clearSearch": {
+    "description": "Tooltip: clear the search"
+  },
+  "noEffectsFound": "No effects found.",
+  "@noEffectsFound": {
+    "description": "Search with no results"
+  },
+  "myStories": "My stories",
+  "@myStories": {
+    "description": "Section of the user's own stories"
   }
 }

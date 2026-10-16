@@ -368,5 +368,9 @@
   "seasonHalloween": "Halloween steht vor der Tür",
   "seasonChristmas": "Weihnachtszeit",
   "gentleStart": "Sanfter Start",
-  "gentleStartDescription": "Effekte blenden in ein paar Sekunden aus den aktuellen Farben der Lampen ein, statt sie sofort zu ändern."
+  "gentleStartDescription": "Effekte blenden in ein paar Sekunden aus den aktuellen Farben der Lampen ein, statt sie sofort zu ändern.",
+  "searchEffects": "Effekte suchen",
+  "clearSearch": "Löschen",
+  "noEffectsFound": "Keine Effekte gefunden.",
+  "myStories": "Meine Geschichten"
 }

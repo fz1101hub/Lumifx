@@ -4,6 +4,7 @@ import '../../core/effects/effect.dart';
 import '../../app_scope.dart';
 import '../common/app_text.dart';
 import '../library/scene_editor.dart';
+import '../search/effect_search.dart';
 import '../common/layout.dart';
 import 'effect_palette.dart';
 import 'player_route.dart';
@@ -30,7 +31,20 @@ class EffectListScreen extends StatelessWidget {
   Widget _build(BuildContext context, List<LightingEffect> effects) {
     final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            tooltip: l10n.searchEffects,
+            icon: const Icon(Icons.search),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => EffectSearchScreen(kind: kind),
+              ),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: kind == EffectKind.scene
           ? FloatingActionButton.extended(
               onPressed: () => Navigator.of(context).push(

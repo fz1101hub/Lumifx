@@ -368,5 +368,9 @@
   "seasonHalloween": "Arriva Halloween",
   "seasonChristmas": "È tempo di Natale",
   "gentleStart": "Partenza dolce",
-  "gentleStartDescription": "Gli effetti partono sfumando in un paio di secondi dai colori attuali delle luci, invece di cambiarli di colpo."
+  "gentleStartDescription": "Gli effetti partono sfumando in un paio di secondi dai colori attuali delle luci, invece di cambiarli di colpo.",
+  "searchEffects": "Cerca effetti",
+  "clearSearch": "Cancella",
+  "noEffectsFound": "Nessun effetto trovato.",
+  "myStories": "Le mie storie"
 }
