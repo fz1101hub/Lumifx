@@ -326,5 +326,7 @@
   "scenePreview": "Vista previa de la escena",
   "deleteSceneQuestion": "¿Eliminar \"{name}\"?",
   "deleteSceneDescription": "También se quita de favoritos y listas.",
-  "widgetEmpty": "Marca efectos como favoritos en LumiFX para verlos aquí."
+  "widgetEmpty": "Marca efectos como favoritos en LumiFX para verlos aquí.",
+  "keepPlayingScreenOff": "Seguir con la pantalla apagada",
+  "keepPlayingScreenOffDescription": "Los efectos en tus luces siguen cuando el teléfono se bloquea, con una notificación para detenerlos. Gasta algo más de batería."
 }

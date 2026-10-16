@@ -78,6 +78,13 @@ class SettingsScreen extends StatelessWidget {
                     ? null
                     : preferences.setSoftFlashes,
               ),
+              if (scope.background.isSupported)
+                SwitchListTile(
+                  title: Text(l10n.keepPlayingScreenOff),
+                  subtitle: Text(l10n.keepPlayingScreenOffDescription),
+                  value: preferences.keepPlayingScreenOff,
+                  onChanged: preferences.setKeepPlayingScreenOff,
+                ),
               if (scope.phoneAudioInput != null) ...[
                 const Divider(height: 32),
                 _Header(l10n.musicSource),

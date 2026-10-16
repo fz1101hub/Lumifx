@@ -734,12 +734,24 @@ class PlaybackController extends ChangeNotifier {
     return _teardown = current;
   }
 
-  /// The app went to the background: it cannot keep driving the lights, so
-  /// stop cleanly instead of leaving them frozen mid-effect.
+  /// Set by the app where the platform can keep it running with the
+  /// screen off (Android) and the user wants that.
+  bool keepPlayingInBackground = false;
+
+  /// The app went to the background. Unless it can keep running there,
+  /// it cannot keep driving the lights, so it stops cleanly instead of
+  /// leaving them frozen mid-effect. The preview always stops: nobody
+  /// sees it.
   Future<void> handleAppPaused() async {
-    if (_status != PlaybackStatus.idle) {
-      await stop();
+    if (_status == PlaybackStatus.idle) {
+      return;
     }
+    if (keepPlayingInBackground &&
+        selectedTarget != null &&
+        _status != PlaybackStatus.starting) {
+      return;
+    }
+    await stop();
   }
 
   Future<void> changeTarget(String? targetKey) async {

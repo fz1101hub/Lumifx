@@ -326,5 +326,7 @@
   "scenePreview": "シーンのプレビュー",
   "deleteSceneQuestion": "「{name}」を削除しますか？",
   "deleteSceneDescription": "お気に入りとプレイリストからも削除されます。",
-  "widgetEmpty": "LumiFX で演出をお気に入りにすると、ここに表示されます。"
+  "widgetEmpty": "LumiFX で演出をお気に入りにすると、ここに表示されます。",
+  "keepPlayingScreenOff": "画面オフでも再生を続ける",
+  "keepPlayingScreenOffDescription": "スマートフォンがロックされても照明の演出を続け、停止用の通知を表示します。バッテリーを少し多く使います。"
 }

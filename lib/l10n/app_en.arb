@@ -870,5 +870,13 @@
   "widgetEmpty": "Star effects in LumiFX to see them here.",
   "@widgetEmpty": {
     "description": "Home-screen widget text when there are no favourites"
+  },
+  "keepPlayingScreenOff": "Keep playing with the screen off",
+  "@keepPlayingScreenOff": {
+    "description": "Setting: effects go on when the phone locks (Android)"
+  },
+  "keepPlayingScreenOffDescription": "Effects on your lights go on when the phone locks, with a notification to stop them. Uses a little more battery.",
+  "@keepPlayingScreenOffDescription": {
+    "description": "Explains the screen-off setting"
   }
 }

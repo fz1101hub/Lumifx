@@ -326,5 +326,7 @@
   "scenePreview": "Voorbeeld van de scène",
   "deleteSceneQuestion": "\"{name}\" verwijderen?",
   "deleteSceneDescription": "Hij wordt ook uit favorieten en afspeellijsten verwijderd.",
-  "widgetEmpty": "Markeer effecten met een ster in LumiFX om ze hier te zien."
+  "widgetEmpty": "Markeer effecten met een ster in LumiFX om ze hier te zien.",
+  "keepPlayingScreenOff": "Doorspelen met scherm uit",
+  "keepPlayingScreenOffDescription": "Effecten op je lampen gaan door als de telefoon vergrendelt, met een melding om ze te stoppen. Kost iets meer batterij."
 }

@@ -6,4 +6,5 @@
     <string name="widget_title">Favoritos</string>
     <string name="widget_empty">Marque efeitos como favoritos no LumiFX para vê-los aqui.</string>
     <string name="widget_description">Seus efeitos favoritos do LumiFX, a um toque.</string>
+    <string name="playback_channel">Reprodução</string>
 </resources>

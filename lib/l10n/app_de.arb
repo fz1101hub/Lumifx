@@ -326,5 +326,7 @@
   "scenePreview": "Vorschau der Szene",
   "deleteSceneQuestion": "\"{name}\" löschen?",
   "deleteSceneDescription": "Sie wird auch aus Favoriten und Playlists entfernt.",
-  "widgetEmpty": "Markiere Effekte in LumiFX mit einem Stern, um sie hier zu sehen."
+  "widgetEmpty": "Markiere Effekte in LumiFX mit einem Stern, um sie hier zu sehen.",
+  "keepPlayingScreenOff": "Bei ausgeschaltetem Bildschirm weiterspielen",
+  "keepPlayingScreenOffDescription": "Effekte auf deinen Lampen laufen weiter, wenn das Telefon sperrt, mit einer Benachrichtigung zum Stoppen. Braucht etwas mehr Akku."
 }

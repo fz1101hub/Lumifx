@@ -6,4 +6,5 @@
     <string name="widget_title">Favorieten</string>
     <string name="widget_empty">Markeer effecten met een ster in LumiFX om ze hier te zien.</string>
     <string name="widget_description">Je favoriete LumiFX-effecten, één tik verderop.</string>
+    <string name="playback_channel">Afspelen</string>
 </resources>

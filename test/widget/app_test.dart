@@ -16,6 +16,7 @@ import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_background_playback.dart';
 import '../support/fake_home_widgets.dart';
 import '../support/fake_shortcuts.dart';
 import '../support/phone_window.dart';
@@ -828,6 +829,69 @@ void streamingTests() {
     expect(puts, contains('POST /clip/v2/resource/scene'));
     expect(find.textContaining('in Living room'), findsOneWidget);
     await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  Future<FakeBackgroundPlayback> playOceanInLivingRoom(
+    WidgetTester tester, {
+    bool keepPlaying = true,
+  }) async {
+    final bridge = await _connectedBridge(tester);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setLastTarget('group:r1');
+    await preferences.setKeepPlayingScreenOff(keepPlaying);
+    final background = FakeBackgroundPlayback();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      background: background,
+    ));
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    return background;
+  }
+
+  // The phone locks and unlocks (no frames are drawn while paused).
+  void lockAndUnlock(WidgetTester tester) {
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+  }
+
+  testWidgets('on Android an effect plays on with the screen off',
+      (tester) async {
+    final background = await playOceanInLivingRoom(tester);
+    expect(background.shown, isTrue);
+    expect(background.title, 'Ocean');
+    expect(background.text, 'Living room');
+
+    lockAndUnlock(tester);
+    await tester.pump();
+    expect(find.text('Pause'), findsOneWidget, reason: 'the effect went on');
+
+    // Stop from the notification.
+    background.pressStop();
+    await tester.pump();
+    expect(find.text('Play'), findsOneWidget);
+    expect(background.shown, isFalse);
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('with the setting off, locking the phone stops the effect',
+      (tester) async {
+    final background = await playOceanInLivingRoom(tester, keepPlaying: false);
+    expect(background.shown, isFalse);
+    lockAndUnlock(tester);
+    await tester.pump();
+    expect(find.text('Play'), findsOneWidget);
     await tester.pump(const Duration(seconds: 1));
   });
 

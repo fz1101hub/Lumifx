@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'app_scope.dart';
 import 'core/audio/audio_input.dart';
+import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
 import 'core/screen_wake.dart';
 import 'features/bridge/bridge_controller.dart';
@@ -32,6 +33,7 @@ class LumiFxApp extends StatefulWidget {
     this.shortcuts = const NoShortcuts(),
     this.widgets = const NoHomeWidgets(),
     this.screenWake = const WakelockScreenWake(),
+    this.background = const NoBackgroundPlayback(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -53,6 +55,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// Keeps the screen on while an effect plays.
   final ScreenWake screenWake;
+
+  /// Keeps effects playing with the screen off (Android).
+  final BackgroundPlayback background;
 
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
@@ -90,6 +95,9 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     );
     _notices = _playback.notices.listen(_showNotice);
     didChangeAccessibilityFeatures();
+    widget.background.onStop = () => unawaited(_playback.stop());
+    _playback.addListener(_syncBackground);
+    widget.preferences.addListener(_syncBackground);
     widget.preferences.addListener(_maybeWelcome);
     widget.bridge.addListener(_maybeWelcome);
     WidgetsBinding.instance.addPostFrameCallback((_) => _maybeWelcome());
@@ -107,6 +115,48 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => unawaited(_links.handle(initial)));
     }
+  }
+
+  String? _backgroundShown;
+
+  /// Shows the "playing" notification (which keeps Android from
+  /// suspending the app) while an effect plays on real lights, and hides
+  /// it otherwise.
+  void _syncBackground() {
+    final background = widget.background;
+    final playback = _playback;
+    playback.keepPlayingInBackground =
+        background.isSupported && widget.preferences.keepPlayingScreenOff;
+    final context = _navigatorKey.currentContext;
+    final wanted = playback.keepPlayingInBackground &&
+        playback.status == PlaybackStatus.playing &&
+        playback.selectedTarget != null &&
+        context != null;
+    if (!wanted) {
+      if (_backgroundShown != null) {
+        _backgroundShown = null;
+        unawaited(background.hide());
+      }
+      return;
+    }
+    final l10n = context.l10n;
+    final where = playback.group?.name ?? playback.area?.name ?? '';
+    final playlist = playback.playlist;
+    final title = l10n.effectName(playback.effect);
+    final text = playlist == null ? where : '${playlist.name} · $where';
+    final microphone = playback.effect.usesMicrophone &&
+        playback.musicSource == MusicSource.microphone;
+    final key = '$title|$text|$microphone|${l10n.stop}';
+    if (key == _backgroundShown) {
+      return;
+    }
+    _backgroundShown = key;
+    unawaited(background.show(
+      title: title,
+      text: text,
+      stopLabel: l10n.stop,
+      microphone: microphone,
+    ));
   }
 
   bool _welcomed = false;
@@ -181,6 +231,12 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     widget.preferences.removeListener(_maybeWelcome);
+    widget.preferences.removeListener(_syncBackground);
+    _playback.removeListener(_syncBackground);
+    widget.background.onStop = null;
+    if (_backgroundShown != null) {
+      unawaited(widget.background.hide());
+    }
     widget.bridge.removeListener(_maybeWelcome);
     unawaited(_notices?.cancel());
     _playback.dispose();
@@ -210,6 +266,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       phoneAudioInput: widget.phoneAudioInput,
       playback: _playback,
       library: _library,
+      background: widget.background,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

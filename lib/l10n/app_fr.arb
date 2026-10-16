@@ -326,5 +326,7 @@
   "scenePreview": "Aperçu de la scène",
   "deleteSceneQuestion": "Supprimer « {name} » ?",
   "deleteSceneDescription": "Elle est aussi retirée des favoris et des playlists.",
-  "widgetEmpty": "Ajoutez des effets en favoris dans LumiFX pour les voir ici."
+  "widgetEmpty": "Ajoutez des effets en favoris dans LumiFX pour les voir ici.",
+  "keepPlayingScreenOff": "Continuer écran éteint",
+  "keepPlayingScreenOffDescription": "Les effets sur vos lampes continuent quand le téléphone se verrouille, avec une notification pour les arrêter. Consomme un peu plus de batterie."
 }

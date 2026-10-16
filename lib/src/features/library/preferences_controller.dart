@@ -112,6 +112,15 @@ class PreferencesController extends ChangeNotifier {
   bool _loaded = false;
   bool _firstRun = false;
   bool _onboardingDone = false;
+  bool _keepPlayingScreenOff = true;
+
+  /// Effects on the lights go on when the phone locks (Android only).
+  bool get keepPlayingScreenOff => _keepPlayingScreenOff;
+
+  Future<void> setKeepPlayingScreenOff(bool value) {
+    _keepPlayingScreenOff = value;
+    return _changed();
+  }
 
   /// [load] has finished.
   bool get isLoaded => _loaded;
@@ -145,6 +154,7 @@ class PreferencesController extends ChangeNotifier {
       _softFlashes = json['softFlashes'] as bool? ?? false;
       _flashWarningShown = json['flashWarningShown'] as bool? ?? false;
       _onboardingDone = json['onboardingDone'] as bool? ?? true;
+      _keepPlayingScreenOff = json['keepPlayingScreenOff'] as bool? ?? true;
       _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
           MusicSource.microphone;
       final scenes = json['userScenes'];
@@ -334,6 +344,7 @@ class PreferencesController extends ChangeNotifier {
       'softFlashes': _softFlashes,
       'flashWarningShown': _flashWarningShown,
       'onboardingDone': _onboardingDone,
+      'keepPlayingScreenOff': _keepPlayingScreenOff,
       'musicSource': _musicSource.name,
       'playlists': [for (final p in _playlists) p.toJson()],
       'userScenes': [for (final s in _userScenes) s.toJson()],
