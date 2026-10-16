@@ -13,6 +13,7 @@ import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/phone_window.dart';
 
 class _NoDiscovery implements BridgeDiscovery {
   @override
@@ -30,6 +31,7 @@ Map<String, Object> _light(String id, String device, String name) => {
     };
 
 void main() {
+  usePhoneWindow();
   testWidgets('creates an entertainment area from settings', (tester) async {
     final requests = <http.Request>[];
     final bridge = BridgeController(

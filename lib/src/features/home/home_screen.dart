@@ -6,6 +6,7 @@ import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
 import '../common/app_text.dart';
+import '../common/layout.dart';
 import '../effects/catalog/effect_catalog.dart';
 import '../effects/effect_list_screen.dart';
 import '../effects/effect_palette.dart';
@@ -38,7 +39,7 @@ class HomeScreen extends StatelessWidget {
       body: ListenableBuilder(
         listenable: Listenable.merge([bridge, preferences]),
         builder: (context, _) => ListView(
-          padding: const EdgeInsets.all(20),
+          padding: context.pageInsets(maxWidth: 1000),
           children: [
             _BridgeBanner(controller: bridge),
             _EffectShelf(
@@ -50,25 +51,28 @@ class HomeScreen extends StatelessWidget {
               effectIds: preferences.recents,
             ),
             const SizedBox(height: 12),
-            _SectionCard(
-              title: l10n.scenes,
-              subtitle: l10n.scenesSubtitle,
-              icon: Icons.gradient,
-              kind: EffectKind.scene,
-            ),
-            const SizedBox(height: 12),
-            _SectionCard(
-              title: l10n.stories,
-              subtitle: l10n.storiesSubtitle,
-              icon: Icons.auto_awesome,
-              kind: EffectKind.story,
-            ),
-            const SizedBox(height: 12),
-            _SectionCard(
-              title: l10n.interactive,
-              subtitle: l10n.interactiveSubtitle,
-              icon: Icons.graphic_eq,
-              kind: EffectKind.interactive,
+            _Sections(
+              wide: context.isWide,
+              children: [
+                _SectionCard(
+                  title: l10n.scenes,
+                  subtitle: l10n.scenesSubtitle,
+                  icon: Icons.gradient,
+                  kind: EffectKind.scene,
+                ),
+                _SectionCard(
+                  title: l10n.stories,
+                  subtitle: l10n.storiesSubtitle,
+                  icon: Icons.auto_awesome,
+                  kind: EffectKind.story,
+                ),
+                _SectionCard(
+                  title: l10n.interactive,
+                  subtitle: l10n.interactiveSubtitle,
+                  icon: Icons.graphic_eq,
+                  kind: EffectKind.interactive,
+                ),
+              ],
             ),
             if (bridge.isConnected) ...[
               const SizedBox(height: 12),
@@ -93,6 +97,41 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+/// The three experience cards: stacked on a phone, side by side on a
+/// tablet, where each card is as tall as the tallest.
+class _Sections extends StatelessWidget {
+  const _Sections({required this.wide, required this.children});
+
+  final bool wide;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!wide) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (i, child) in children.indexed) ...[
+            if (i > 0) const SizedBox(height: 12),
+            child,
+          ],
+        ],
+      );
+    }
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (i, child) in children.indexed) ...[
+            if (i > 0) const SizedBox(width: 12),
+            Expanded(child: child),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 /// A horizontal row of effects; hidden when empty.
 class _EffectShelf extends StatelessWidget {
   const _EffectShelf({required this.title, required this.effectIds});
@@ -111,6 +150,9 @@ class _EffectShelf extends StatelessWidget {
     }
     final theme = Theme.of(context);
     final l10n = context.l10n;
+    // Larger tiles on a tablet, where there is room for them.
+    final tileWidth = context.isWide ? 180.0 : 140.0;
+    final tileHeight = context.isWide ? 120.0 : 96.0;
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Column(
@@ -120,7 +162,7 @@ class _EffectShelf extends StatelessWidget {
           const SizedBox(height: 8),
           SizedBox(
             // Grows with the user's font size so names still fit.
-            height: MediaQuery.textScalerOf(context).scale(96),
+            height: MediaQuery.textScalerOf(context).scale(tileHeight),
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: effects.length,
@@ -136,7 +178,7 @@ class _EffectShelf extends StatelessWidget {
                     ),
                   ),
                   child: Ink(
-                    width: 140,
+                    width: tileWidth,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
@@ -265,6 +307,34 @@ class _SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void open() => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => EffectListScreen(kind: kind, title: title),
+          ),
+        );
+    if (context.isWide) {
+      // A tile: icon on top, text below, filling the card's height.
+      final theme = Theme.of(context);
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: open,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(icon, size: 32, color: theme.colorScheme.primary),
+                const SizedBox(height: 16),
+                Text(title, style: theme.textTheme.titleMedium),
+                const SizedBox(height: 4),
+                Text(subtitle, style: theme.textTheme.bodyMedium),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return Card(
       child: ListTile(
         minVerticalPadding: 20,
@@ -272,11 +342,7 @@ class _SectionCard extends StatelessWidget {
         title: Text(title),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => EffectListScreen(kind: kind, title: title),
-          ),
-        ),
+        onTap: open,
       ),
     );
   }

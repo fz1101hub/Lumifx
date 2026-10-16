@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: ['**']
-    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -73,8 +72,7 @@ jobs:
           path: |
             build/app/outputs/bundle/release/app-release.aab
             build/app/outputs/flutter-apk/app-release.apk
-          # Builds of a release tag are kept longer.
-          retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 90 || 7 }}
+          retention-days: 7
 
   screenshots:
     # Store screenshots in every language, rendered by the widget tests.
@@ -98,12 +96,12 @@ jobs:
           retention-days: 30
 
   ios:
-    # macOS minutes are expensive: run on main, pull requests, tags, manual
-    # runs, or a push whose commit message contains [ios].
+    # macOS minutes are expensive: run on main, pull requests, manual runs,
+    # or a push whose commit message contains [ios]. Tags are built by
+    # release.yml.
     if: >-
       github.event_name != 'push' ||
       github.ref == 'refs/heads/main' ||
-      startsWith(github.ref, 'refs/tags/') ||
       contains(github.event.head_commit.message, '[ios]')
     runs-on: macos-latest
     needs: check

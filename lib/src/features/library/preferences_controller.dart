@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 
 /// Where preferences are persisted. Nothing in here is sensitive; bridge
@@ -53,6 +54,8 @@ class PreferencesController extends ChangeNotifier {
   bool _softFlashes = false;
   bool _flashWarningShown = false;
   Map<String, String> _variants = const {};
+  Map<String, List<String>> _excludedLights = const {};
+  MusicSource _musicSource = MusicSource.microphone;
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -77,8 +80,17 @@ class PreferencesController extends ChangeNotifier {
   /// The one-time warning before a flashing effect has been shown.
   bool get flashWarningShown => _flashWarningShown;
 
+  /// Where Music Sync listens; the phone's own audio only counts where
+  /// the platform can capture it (the player falls back to the
+  /// microphone elsewhere).
+  MusicSource get musicSource => _musicSource;
+
   /// The colour variant chosen for an effect, or null for its original.
   String? variantOf(String effectId) => _variants[effectId];
+
+  /// Lights of a room or zone that sit out of effects played on it.
+  List<String> excludedLights(String groupId) =>
+      _excludedLights[groupId] ?? const [];
 
   bool isFavorite(String effectId) => _favorites.contains(effectId);
 
@@ -100,11 +112,19 @@ class PreferencesController extends ChangeNotifier {
       _restoreLights = json['restoreLights'] as bool? ?? true;
       _softFlashes = json['softFlashes'] as bool? ?? false;
       _flashWarningShown = json['flashWarningShown'] as bool? ?? false;
+      _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
+          MusicSource.microphone;
       final variants = json['variants'];
       _variants = {
         if (variants is Map)
           for (final MapEntry(:key, :value) in variants.entries)
             if (key is String && value is String) key: value,
+      };
+      final excluded = json['excludedLights'];
+      _excludedLights = {
+        if (excluded is Map)
+          for (final MapEntry(:key, :value) in excluded.entries)
+            if (key is String && value is List) key: _strings(value),
       };
       final controls = json['defaultControls'];
       if (controls is Map) {
@@ -159,6 +179,28 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  Future<void> setMusicSource(MusicSource value) {
+    _musicSource = value;
+    return _changed();
+  }
+
+  Future<void> setLightExcluded(
+    String groupId,
+    String lightId,
+    bool excluded,
+  ) {
+    final ids = {
+      ...excludedLights(groupId),
+      if (excluded) lightId,
+    }..removeWhere((id) => !excluded && id == lightId);
+    _excludedLights = {
+      for (final MapEntry(:key, :value) in _excludedLights.entries)
+        if (key != groupId) key: value,
+      if (ids.isNotEmpty) groupId: ids.toList(),
+    };
+    return _changed();
+  }
+
   Future<void> setVariant(String effectId, String? variantId) {
     _variants = {
       for (final MapEntry(:key, :value) in _variants.entries)
@@ -189,7 +231,9 @@ class PreferencesController extends ChangeNotifier {
       'restoreLights': _restoreLights,
       'softFlashes': _softFlashes,
       'flashWarningShown': _flashWarningShown,
+      'musicSource': _musicSource.name,
       'variants': _variants,
+      'excludedLights': _excludedLights,
       'defaultControls': {
         'brightness': _defaultControls.brightness,
         'intensity': _defaultControls.intensity,

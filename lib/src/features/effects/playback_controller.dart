@@ -39,6 +39,11 @@ enum PlaybackNoticeKind {
   /// The microphone died mid-effect.
   microphoneStopped,
 
+  /// The same three, for Music Sync from the phone's own audio.
+  phoneAudioDenied,
+  phoneAudioFailed,
+  phoneAudioStopped,
+
   /// The stream ended on its own; [PlaybackNotice.error] says why, when
   /// known.
   streamEnded,
@@ -92,11 +97,13 @@ class PlaybackController extends ChangeNotifier {
     required BridgeController bridge,
     required PreferencesController preferences,
     required AudioInput audioInput,
+    AudioInput? phoneAudioInput,
     ScreenWake screenWake = const NoScreenWake(),
     this.sleepFade = const Duration(seconds: 20),
   })  : _bridge = bridge,
         _preferences = preferences,
         _audioInput = audioInput,
+        _phoneAudioInput = phoneAudioInput,
         _screenWake = screenWake,
         _targetKey = preferences.lastTarget,
         _controls = preferences.defaultControls {
@@ -108,6 +115,7 @@ class PlaybackController extends ChangeNotifier {
   final BridgeController _bridge;
   final PreferencesController _preferences;
   final AudioInput _audioInput;
+  final AudioInput? _phoneAudioInput;
   final ScreenWake _screenWake;
 
   /// How long the sleep timer takes to fade the lights to black.
@@ -151,6 +159,57 @@ class PlaybackController extends ChangeNotifier {
   MusicSyncController? get music => _music;
   EffectControls get controls => _controls;
   double get sensitivity => _sensitivity;
+
+  /// Where Music Sync listens: the preference, unless it asks for the
+  /// phone's audio where that cannot be captured.
+  MusicSource get musicSource =>
+      _preferences.musicSource == MusicSource.phoneAudio &&
+              _phoneAudioInput != null
+          ? MusicSource.phoneAudio
+          : MusicSource.microphone;
+
+  /// The source the current Music Sync controller listens to, if any.
+  MusicSource? _musicSourceInUse;
+
+  /// The dimmable lights of the selected room or zone, each with whether
+  /// it takes part in the effect.
+  List<({HueLight light, bool enabled})> get groupLights {
+    final home = this.home;
+    final group = this.group;
+    if (home == null || group == null) {
+      return const [];
+    }
+    final excluded = _preferences.excludedLights(group.id);
+    return [
+      for (final id in group.lightIds)
+        if (home.lights[id] case final light? when light.isDimmable)
+          (light: light, enabled: !excluded.contains(id)),
+    ];
+  }
+
+  /// Leaves [lightId] out of effects on the selected room or zone, or
+  /// brings it back. The last light cannot be left out. A running effect
+  /// restarts on the new set of lights.
+  Future<void> toggleLight(String lightId) async {
+    final group = this.group;
+    final lights = groupLights;
+    final current = lights.where((l) => l.light.id == lightId).firstOrNull;
+    if (group == null || current == null) {
+      return;
+    }
+    if (current.enabled && lights.where((l) => l.enabled).length <= 1) {
+      return;
+    }
+    final wasPlaying = _status == PlaybackStatus.playing;
+    if (_status != PlaybackStatus.idle) {
+      await stop();
+    }
+    await _preferences.setLightExcluded(group.id, lightId, current.enabled);
+    _notify();
+    if (wasPlaying) {
+      await start();
+    }
+  }
 
   /// The colour variant chosen for this effect, or null for the original.
   String? get variantId => _preferences.variantOf(effect.id);
@@ -227,7 +286,7 @@ class PlaybackController extends ChangeNotifier {
     final area = this.area;
     if (home != null && group != null) {
       return [
-        for (final id in _effectLights(home, group.lightIds))
+        for (final id in _effectLights(home, group))
           NamedSlot(home.lights[id]?.name ?? id),
       ];
     }
@@ -319,7 +378,7 @@ class PlaybackController extends ChangeNotifier {
             onError: (Object error) => _onStreamEnded(opened, error),
           ));
         } else if (group != null) {
-          final usable = _effectLights(home, group.lightIds);
+          final usable = _effectLights(home, group);
           if (usable.isEmpty) {
             return _abortStart(PlaybackNotice(
               PlaybackNoticeKind.onOffOnlyLights,
@@ -338,7 +397,6 @@ class PlaybackController extends ChangeNotifier {
         }
       }
 
-      final music = _music;
       _restore = _preferences.restoreLights ? restore : const {};
       _activeLightIds = selectedTarget == null ? const [] : lightIds;
       _slotNames = names;
@@ -351,9 +409,14 @@ class PlaybackController extends ChangeNotifier {
         seed: DateTime.now().millisecondsSinceEpoch & 0x7FFFFFFF,
         controls: _controls,
         tick: tick,
-        audio: music == null
+        audio: !effect.usesMicrophone
             ? null
-            : () => music.isListening ? music.features : null,
+            : () {
+                final music = _music;
+                return music != null && music.isListening
+                    ? music.features
+                    : null;
+              },
       )..softFlashes = _preferences.softFlashes;
       player.play();
       unawaited(_screenWake.keepOn(true));
@@ -546,16 +609,25 @@ class PlaybackController extends ChangeNotifier {
     _notice(const PlaybackNotice(PlaybackNoticeKind.sleepTimerDone));
   }
 
-  /// Starts the microphone for Music Sync effects. Returns false (after
-  /// telling the user why) when it cannot listen.
+  /// Starts the microphone (or the phone's audio) for Music Sync effects.
+  /// Returns false (after telling the user why) when it cannot listen.
   Future<bool> _startListening() async {
     if (!effect.usesMicrophone) {
       return true;
     }
+    final source = musicSource;
     var music = _music;
+    if (music != null && _musicSourceInUse != source) {
+      // The preference changed since: listen to the new source.
+      await _dropMusic(music);
+      music = null;
+    }
     if (music == null) {
-      music =
-          _music = MusicSyncController(_audioInput)..sensitivity = _sensitivity;
+      final input = source == MusicSource.phoneAudio
+          ? _phoneAudioInput ?? _audioInput
+          : _audioInput;
+      music = _music = MusicSyncController(input)..sensitivity = _sensitivity;
+      _musicSourceInUse = source;
       music.addListener(_onMusicChanged);
     }
     await music.start();
@@ -563,11 +635,41 @@ class PlaybackController extends ChangeNotifier {
       case MusicSyncStatus.listening:
         return true;
       case MusicSyncStatus.denied:
-        _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneDenied));
+        _notice(PlaybackNotice(source == MusicSource.phoneAudio
+            ? PlaybackNoticeKind.phoneAudioDenied
+            : PlaybackNoticeKind.microphoneDenied));
       default:
-        _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneFailed));
+        _notice(PlaybackNotice(source == MusicSource.phoneAudio
+            ? PlaybackNoticeKind.phoneAudioFailed
+            : PlaybackNoticeKind.microphoneFailed));
     }
     return false;
+  }
+
+  Future<void> _dropMusic(MusicSyncController music) async {
+    if (identical(_music, music)) {
+      _music = null;
+      _musicSourceInUse = null;
+    }
+    music.removeListener(_onMusicChanged);
+    await music.stop();
+    music.dispose();
+  }
+
+  /// The Music Sync source preference changed: listen to the new one at
+  /// once when an effect plays, else just drop the old controller so the
+  /// next start uses the new source.
+  Future<void> _switchMusicSource() async {
+    final music = _music;
+    if (music == null || _musicSourceInUse == musicSource) {
+      return;
+    }
+    final wasListening = music.isListening;
+    await _dropMusic(music);
+    if (wasListening && _status == PlaybackStatus.playing && !_disposed) {
+      await _startListening();
+    }
+    _notify();
   }
 
   void _abortStart(PlaybackNotice notice) {
@@ -604,7 +706,9 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     if (_status == PlaybackStatus.playing) {
-      _notice(const PlaybackNotice(PlaybackNoticeKind.microphoneStopped));
+      _notice(PlaybackNotice(_musicSourceInUse == MusicSource.phoneAudio
+          ? PlaybackNoticeKind.phoneAudioStopped
+          : PlaybackNoticeKind.microphoneStopped));
     }
   }
 
@@ -622,6 +726,10 @@ class PlaybackController extends ChangeNotifier {
   /// dialog): apply them to the running player.
   void _onPreferencesChanged() {
     _player?.softFlashes = _preferences.softFlashes;
+    if (_music != null && _musicSourceInUse != musicSource) {
+      unawaited(_switchMusicSource());
+    }
+    _notify();
   }
 
   void _setStatus(PlaybackStatus status) {
@@ -654,13 +762,17 @@ class PlaybackController extends ChangeNotifier {
     super.dispose();
   }
 
-  /// Lights that can show an effect; on/off-only lights (plugs, relays)
+  /// Lights that can show an effect: on/off-only lights (plugs, relays)
   /// are skipped, since switching them several times a second is useless
-  /// and can wear them out.
-  static List<String> _effectLights(HueHome home, List<String> lightIds) => [
-        for (final id in lightIds)
-          if (home.lights[id]?.isDimmable ?? false) id,
-      ];
+  /// and can wear them out, and so are the lights the user left out.
+  List<String> _effectLights(HueHome home, HueGroup group) {
+    final excluded = _preferences.excludedLights(group.id);
+    return [
+      for (final id in group.lightIds)
+        if ((home.lights[id]?.isDimmable ?? false) && !excluded.contains(id))
+          id,
+    ];
+  }
 
   static List<SlotLabel> _channelNames(
     HueHome home,

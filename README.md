@@ -46,7 +46,16 @@ Also done ahead of schedule:
 - **Everyday use**: the scenes saved in the Hue app can be recalled from
   Rooms & zones; a sleep timer fades an effect out and switches the lights
   off; a one-time warning and a "soften flashes" mode for photosensitive
-  users; six languages.
+  users; lights can be left out of an effect per room; favourites as
+  home-screen shortcuts; six languages.
+- **iPad and tablets**: the home, the effect lists and the player use
+  wider layouts (tiles, grids, two panes) from 720 logical pixels up;
+  the other screens keep a reading width.
+- **Music Sync from the phone's own audio** (Android 10+): Settings ›
+  Music Sync source › This phone's audio follows what the phone plays
+  through Android's playback capture, with the system consent dialog and
+  a foreground-service notification; apps that protect their audio stay
+  silent to it. Not yet verified on a real device.
 
 ## Development
 

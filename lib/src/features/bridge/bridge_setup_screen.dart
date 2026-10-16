@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../app_scope.dart';
 import '../../core/hue/hue_models.dart';
 import '../common/app_text.dart';
+import '../common/layout.dart';
 import 'bridge_controller.dart';
 
 /// Finds a bridge on the network and pairs with it.
@@ -90,7 +91,7 @@ class _BridgeSetupScreenState extends State<BridgeSetupScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.connectYourBridge)),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: context.pageInsets(maxWidth: 600),
         children: [
           Text(l10n.sameWifiHint, style: theme.textTheme.bodyLarge),
           const SizedBox(height: 24),

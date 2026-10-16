@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/app.dart';
+import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
@@ -13,6 +14,8 @@ import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_shortcuts.dart';
+import '../support/phone_window.dart';
 
 class _FakeDiscovery implements BridgeDiscovery {
   @override
@@ -41,6 +44,9 @@ Future<void> _pumpApp(WidgetTester tester) async {
 }
 
 void main() {
+  usePhoneWindow();
+  _tabletTests();
+
   testWidgets('home offers bridge setup and the three experience types',
       (tester) async {
     await _pumpApp(tester);
@@ -168,6 +174,61 @@ void main() {
 
     await tester.pageBack();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('Music Sync can follow the phone audio on Android 10+',
+      (tester) async {
+    final microphone = FakeAudioInput();
+    final phone = FakeAudioInput();
+    final preferences = _warnedPreferences();
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: microphone,
+      phoneAudioInput: phone,
+    ));
+
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text("This phone's audio"), 200);
+    await tester.ensureVisible(find.text("This phone's audio"));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text("This phone's audio"));
+    await tester.pumpAndSettle();
+    expect(preferences.musicSource, MusicSource.phoneAudio);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Interactive'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Beat Pulse'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('what this phone is playing'), findsOneWidget);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(phone.started, isTrue);
+    expect(microphone.started, isFalse);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Pause'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pump();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the phone audio choice is hidden where it cannot work',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    expect(find.text('Music Sync source'), findsNothing);
   });
 
   testWidgets('Music Sync explains a refused microphone', (tester) async {
@@ -303,6 +364,45 @@ void main() {
     expect(find.text('30 min'), findsOneWidget);
     await tester.pageBack();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('home-screen shortcuts follow the favourites and open the player',
+      (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.recordPlayed('fireplace');
+    final shortcuts = FakeShortcuts();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      shortcuts: shortcuts,
+      locale: const Locale('it'),
+    ));
+    await tester.pumpAndSettle();
+    // Without favourites, the recently played effects are offered.
+    expect(shortcuts.items.map((s) => s.title), ['Camino']);
+
+    await preferences.toggleFavorite('aurora');
+    await preferences.toggleFavorite('haunted_manor');
+    await tester.pump();
+    expect(shortcuts.items.map((s) => s.id),
+        ['effect:haunted_manor', 'effect:aurora']);
+    expect(shortcuts.items.first.title, 'La Villa Infestata');
+
+    shortcuts.launch('effect:aurora');
+    await tester.pumpAndSettle();
+    expect(find.text('Riproduci'), findsOneWidget);
+    expect(find.text('Solo anteprima'), findsOneWidget);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+
+    // Unknown ids are ignored.
+    shortcuts.launch('effect:nope');
+    await tester.pumpAndSettle();
+    expect(find.text('Riproduci'), findsNothing);
   });
 
   testWidgets('the app speaks Italian', (tester) async {
@@ -492,5 +592,45 @@ void streamingTests() {
     await tester.tap(find.text('TV area · streaming').last);
     await tester.pumpAndSettle();
     expect(find.text('Channel 0'), findsOneWidget);
+  });
+}
+
+/// The tablet layouts: a wide window, as on an iPad or a 10" tablet.
+Future<void> _pumpWideApp(WidgetTester tester) async {
+  tester.view.physicalSize = const Size(2048, 2732);
+  tester.view.devicePixelRatio = 2;
+  addTearDown(tester.view.reset);
+  await _pumpApp(tester);
+}
+
+void _tabletTests() {
+  testWidgets('on a tablet the home sections sit side by side', (tester) async {
+    await _pumpWideApp(tester);
+    final scenes = tester.getTopLeft(find.text('Scenes'));
+    final stories = tester.getTopLeft(find.text('Stories'));
+    final interactive = tester.getTopLeft(find.text('Interactive'));
+    expect(stories.dy, scenes.dy);
+    expect(interactive.dy, scenes.dy);
+    expect(stories.dx, greaterThan(scenes.dx));
+    expect(interactive.dx, greaterThan(stories.dx));
+  });
+
+  testWidgets('on a tablet the effects form a grid and the player two panes',
+      (tester) async {
+    await _pumpWideApp(tester);
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    final first = tester.getTopLeft(find.text('Emerald Trickster'));
+    final second = tester.getTopLeft(find.text('Enchanted Fairy'));
+    expect(second.dy, first.dy, reason: 'two cards share the first row');
+    expect(second.dx, greaterThan(first.dx));
+
+    await tester.tap(find.text('Emerald Trickster'));
+    await tester.pumpAndSettle();
+    // The target picker (setup pane) is left of the Play button (stage).
+    final target = tester.getCenter(find.text('Play on'));
+    final play = tester.getCenter(find.text('Play'));
+    expect(play.dx, greaterThan(target.dx + 200));
+    expect(find.text('Brightness'), findsOneWidget);
   });
 }

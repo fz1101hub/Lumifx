@@ -26,6 +26,15 @@ loudness. Audio is processed in real time on your phone and is never
 recorded, stored or transmitted. The microphone is used only while a Music
 Sync effect is playing and is switched off when you pause or stop it.
 
+**Phone audio (Music Sync, Android 10 and later).** In Settings you can let
+Music Sync follow the sound your phone itself is playing instead of the
+room. Android then asks you to allow "screen capture" each time: LumiFX
+uses this permission only to receive the sound of other apps, shows an
+ongoing notification while it does, and never captures the screen. That
+sound is analysed in real time in the same way as the microphone and is
+never recorded, stored or transmitted. Capture ends when you pause or stop
+the effect or dismiss it from the notification.
+
 **Preferences.** Favourites, recently played effects and playback settings are
 stored on your phone only.
 
@@ -82,6 +91,15 @@ l'accesso al microfono e analizza il suono nella stanza per riconoscere beat
 e volume. L'audio è elaborato in tempo reale sul telefono e non viene mai
 registrato, salvato o trasmesso. Il microfono è attivo solo mentre un effetto
 Music Sync è in riproduzione e viene spento in pausa o allo stop.
+
+**Audio del telefono (Music Sync, Android 10 e successivi).** Nelle
+Impostazioni puoi far seguire a Music Sync il suono riprodotto dal telefono
+stesso invece della stanza. Android chiede allora ogni volta di consentire la
+"cattura dello schermo": LumiFX usa questo permesso solo per ricevere il suono
+delle altre app, mostra una notifica persistente mentre lo fa e non cattura
+mai lo schermo. Quel suono è analizzato in tempo reale come quello del
+microfono e non viene mai registrato, salvato o trasmesso. La cattura termina
+quando metti in pausa o fermi l'effetto o la chiudi dalla notifica.
 
 **Preferenze.** Preferiti, effetti recenti e impostazioni di riproduzione sono
 salvati solo sul telefono.

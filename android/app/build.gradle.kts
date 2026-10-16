@@ -79,3 +79,8 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Notification and service helpers for the phone-audio capture service.
+    implementation("androidx.core:core-ktx:1.13.1")
+}

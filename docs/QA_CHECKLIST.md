@@ -37,6 +37,9 @@ build before every store release.
       changes and never stops responding (no rejected commands).
 - [ ] A room containing a smart plug: the plug is ignored and the other
       lights play.
+- [ ] "Lights to play on": untick a lamp; it stays as it was while the
+      others play, also after Stop and Play; the last lamp cannot be
+      unticked; the choice survives a restart.
 - [ ] Brightness / intensity / speed sliders take effect while playing.
 - [ ] Aurora › "Rose & gold" changes the colours at once while playing
       and is still selected after reopening the effect.
@@ -96,6 +99,30 @@ build before every store release.
       If the microphone is lost for good (another app takes it), the app
       says so and Stop then Play recovers.
 
+### Music Sync, phone audio (Android 10+ only; not yet verified on a device)
+
+- [ ] Settings shows "Music Sync source" on Android 10+ and not on iOS or
+      Android 9.
+- [ ] Choose "This phone's audio", play Beat Pulse: Android's "Start
+      recording or casting?" dialog appears; Cancel shows the explanation
+      and nothing plays; Start now shows the "Music Sync is on"
+      notification and the lights follow YouTube / a local music file /
+      a game played on the phone, with the phone speaker, wired and
+      Bluetooth headphones.
+- [ ] Spotify and other apps that block capture: the lights stay at the
+      dim floor (expected: Android does not let LumiFX hear them); the
+      microphone source works for them.
+- [ ] Pause and Stop remove the notification; ending it from the system
+      (the cast/record chip in the status bar) shows the "capture stopped"
+      message, and Stop then Play asks for consent again.
+- [ ] On Android 14+, the consent is asked on every Play (Android no
+      longer reuses it).
+- [ ] Switching the source in Settings while an effect plays moves to the
+      new source without stopping the lights.
+- [ ] Notification is in the phone's language (six languages). On
+      Android 13+ it is only visible when LumiFX may post notifications
+      (the app never asks for that; the capture works either way).
+
 ## Network edge cases
 
 - [ ] Wi-Fi off: the home banner says the bridge is not reachable; Retry
@@ -104,6 +131,27 @@ build before every store release.
       the app finds it again by itself on the next refresh.
 - [ ] Bridge with an old firmware (no CLIP v2): the message asks for an
       update.
+
+## Home-screen shortcuts
+
+- [ ] Long-press the app icon (Android) / 3D-touch it (iOS): the
+      favourites appear as shortcuts (the recently played effects when
+      there are no favourites), in the phone's language; tapping one
+      opens the player for that effect, both with the app closed and
+      with it in the background.
+
+## iPad and tablets
+
+- [ ] On an iPad (or a 10" Android tablet) in portrait: the home shows
+      the three experience tiles side by side, Stories is a grid of two
+      or three columns, and the player has the setup on the left and the
+      lamps, buttons and sliders on the right.
+- [ ] Rotate to landscape and back: nothing overflows, the selected
+      target and lights are kept.
+- [ ] iPad Split View at a third of the screen: the phone layouts come
+      back and remain usable.
+- [ ] Largest accessibility font size: the home tiles and the effect
+      grid grow with the text and nothing is cut off.
 
 ## Store builds
 

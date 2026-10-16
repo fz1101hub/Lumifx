@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
@@ -113,6 +114,9 @@ class _FakeBridge {
 Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
   bool restoreLights = true,
   FakeAudioInput? audio,
+  FakeAudioInput? phoneAudio,
+  MusicSource musicSource = MusicSource.microphone,
+  PreferencesController? preferences,
   bool music = false,
   Duration sleepFade = const Duration(seconds: 20),
 }) async {
@@ -128,15 +132,17 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
         host: pin.host, client: fake.client, applicationKey: key),
   );
   await bridge.initialize();
-  final preferences = PreferencesController(store: InMemoryKeyValueStore());
+  preferences ??= PreferencesController(store: InMemoryKeyValueStore());
   await preferences.setLastTarget('group:room');
   await preferences.setRestoreLights(restoreLights);
+  await preferences.setMusicSource(musicSource);
   final wake = _RecordingWake();
   final controller = PlaybackController(
     effect: music ? moodGlow : ocean,
     bridge: bridge,
     preferences: preferences,
     audioInput: audio ?? FakeAudioInput(),
+    phoneAudioInput: phoneAudio,
     screenWake: wake,
     sleepFade: sleepFade,
   );
@@ -250,6 +256,30 @@ void main() {
     controller.dispose();
   });
 
+  test('a light can be left out of the effect, never the last one', () async {
+    final (controller, fake, _) = await _setUp();
+    expect(controller.groupLights.map((l) => l.light.id), ['color', 'white']);
+    await controller.toggleLight('white');
+    Iterable<String> enabled() =>
+        controller.groupLights.where((l) => l.enabled).map((l) => l.light.id);
+    expect(enabled(), ['color']);
+    await controller.toggleLight('color'); // the last one stays
+    expect(enabled(), ['color']);
+    expect(controller.lightNames, hasLength(1));
+
+    await controller.start();
+    await _wait(250);
+    expect(fake.puts.map((p) => p.$1).toSet(), {'color'});
+
+    // Bringing the light back while playing restarts on both.
+    await controller.toggleLight('white');
+    await _wait(250);
+    expect(controller.status, PlaybackStatus.playing);
+    expect(fake.puts.map((p) => p.$1).toSet(), {'color', 'white'});
+    await controller.stop();
+    controller.dispose();
+  });
+
   test('choosing a colour variant switches a running player in place',
       () async {
     final (controller, _, _) = await _setUp();
@@ -359,6 +389,81 @@ void main() {
     await _wait(10);
     expect(controller.status, PlaybackStatus.idle);
     expect(notices.single.kind, PlaybackNoticeKind.microphoneDenied);
+    controller.dispose();
+  });
+
+  test('Music Sync follows the phone audio preference where possible',
+      () async {
+    final microphone = FakeAudioInput();
+    final phone = FakeAudioInput();
+    final (controller, _, _) = await _setUp(
+      music: true,
+      audio: microphone,
+      phoneAudio: phone,
+      musicSource: MusicSource.phoneAudio,
+    );
+    expect(controller.musicSource, MusicSource.phoneAudio);
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    expect(phone.started, isTrue);
+    expect(microphone.started, isFalse);
+    await controller.stop();
+    controller.dispose();
+
+    // Without phone audio (iOS, old Android) the microphone is used.
+    final mic2 = FakeAudioInput();
+    final (fallback, _, _) = await _setUp(
+      music: true,
+      audio: mic2,
+      musicSource: MusicSource.phoneAudio,
+    );
+    expect(fallback.musicSource, MusicSource.microphone);
+    await fallback.changeTarget(null);
+    await fallback.start();
+    expect(mic2.started, isTrue);
+    await fallback.stop();
+    fallback.dispose();
+  });
+
+  test('switching the source while playing moves to the new one', () async {
+    final microphone = FakeAudioInput();
+    final phone = FakeAudioInput();
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final (controller, _, _) = await _setUp(
+      music: true,
+      audio: microphone,
+      phoneAudio: phone,
+      preferences: preferences,
+    );
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(microphone.started, isTrue);
+    expect(phone.started, isFalse);
+
+    await preferences.setMusicSource(MusicSource.phoneAudio);
+    await _wait(50);
+    expect(controller.status, PlaybackStatus.playing);
+    expect(microphone.stopped, isTrue);
+    expect(phone.started, isTrue);
+    expect(controller.music?.isListening, isTrue);
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('a refused phone audio capture explains itself', () async {
+    final (controller, _, _) = await _setUp(
+      music: true,
+      phoneAudio: FakeAudioInput(granted: false),
+      musicSource: MusicSource.phoneAudio,
+    );
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
+    await controller.changeTarget(null);
+    await controller.start();
+    await _wait(10);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(notices.single.kind, PlaybackNoticeKind.phoneAudioDenied);
     controller.dispose();
   });
 

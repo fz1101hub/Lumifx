@@ -7,6 +7,7 @@ import '../../app_scope.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
 import '../common/app_text.dart';
+import '../common/layout.dart';
 
 /// The bridge accepts at most this many lights in one area.
 const maxLightsPerArea = 10;
@@ -210,7 +211,7 @@ class _EntertainmentAreaEditorState extends State<EntertainmentAreaEditor> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: context.pageInsets(),
         children: [
           TextField(
             controller: _name,

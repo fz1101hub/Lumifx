@@ -74,6 +74,9 @@ String describePlaybackNotice(AppLocalizations l10n, PlaybackNotice notice) =>
       PlaybackNoticeKind.microphoneDenied => l10n.noticeMicrophoneDenied,
       PlaybackNoticeKind.microphoneFailed => l10n.noticeMicrophoneFailed,
       PlaybackNoticeKind.microphoneStopped => l10n.noticeMicrophoneStopped,
+      PlaybackNoticeKind.phoneAudioDenied => l10n.noticePhoneAudioDenied,
+      PlaybackNoticeKind.phoneAudioFailed => l10n.noticePhoneAudioFailed,
+      PlaybackNoticeKind.phoneAudioStopped => l10n.noticePhoneAudioStopped,
       PlaybackNoticeKind.streamEnded => switch (notice.error) {
           HueException() ||
           DtlsException() =>

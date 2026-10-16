@@ -71,12 +71,16 @@ keyPassword=********
 ## 1b. Screenshots (every release)
 
 The CI renders the store screenshots from the app itself, with the real
-fonts, in all six languages and two sizes: download the
+fonts, in all six languages and three sizes: download the
 `store-screenshots` artifact of any green run (Actions › the run › Artifacts).
 Inside, `iphone-6.5/<lang>/` holds 1242×2688 PNGs for App Store Connect
-(the 6.5" slot, accepted for every iPhone) and `android-9x16/<lang>/`
-holds 1080×1920 PNGs for Play Console. Five screens each: home, stories,
-the player, rooms with Hue scenes, the area editor.
+(the 6.5" slot, accepted for every iPhone), `ipad-12.9/<lang>/` holds
+2048×2732 PNGs (the 12.9" iPad slot, which App Store Connect requires
+because the app runs on iPad; Play takes them as 10" tablet screenshots)
+and `android-9x16/<lang>/` holds 1080×1920 PNGs for Play Console. Five
+screens each: home, stories, the player, rooms with Hue scenes, the area
+editor. The iPad set shows the tablet layouts (three experience tiles,
+a grid of effects, the player in two panes).
 
 To regenerate locally:
 
@@ -86,6 +90,55 @@ LUMIFX_SCREENSHOTS=1 flutter test test/screenshots
 
 The screens, the demo bridge they show and the sizes live in
 `test/screenshots/store_screenshots_test.dart`.
+
+## 1c. Releasing from a tag (every release)
+
+```sh
+tool/tag_release.sh 1.0.1
+```
+
+sets the version in `pubspec.yaml`, commits, tags `v1.0.1` and pushes.
+`.github/workflows/release.yml` then:
+
+1. checks that the tag matches `pubspec.yaml`;
+2. builds the Android bundle and APK signed with the upload key (§ 1),
+   with the workflow's run number as build number, so every release has
+   a higher build number than the last;
+3. attaches them to a GitHub Release named after the version;
+4. with `PLAY_SERVICE_ACCOUNT_JSON` set, uploads the bundle to Google
+   Play's **internal testing** track;
+5. with the iOS secrets set, archives the app on macOS, exports it for
+   App Store Connect and uploads it to **TestFlight**.
+
+Without the store secrets steps 4 and 5 are skipped and the packages are
+still on the Release page to upload by hand (§ 3 and § 5).
+
+**Google Play secret.** In Play Console › Setup › API access, create a
+service account with the *Release manager* role (or *Release to testing
+tracks* only), download its JSON key and paste the whole file into the
+repository secret `PLAY_SERVICE_ACCOUNT_JSON`. The very first bundle of
+the app must be uploaded by hand in the console once; after that the
+workflow can upload.
+
+**TestFlight secrets.** From Apple Developer › Certificates, IDs &
+Profiles: an *Apple Distribution* certificate exported as `.p12` with a
+password, and an *App Store* provisioning profile for `com.lumifx.lumifx`.
+From App Store Connect › Users and Access › Integrations: an API key with
+the *App Manager* role (`.p8` file, key id, issuer id). Then set:
+
+| Secret | Value |
+|---|---|
+| `IOS_CERTIFICATE_P12_BASE64` | `base64 < cert.p12 \| tr -d '\n'` |
+| `IOS_CERTIFICATE_PASSWORD` | the `.p12` password |
+| `IOS_PROVISIONING_PROFILE_BASE64` | `base64 < profile.mobileprovision \| tr -d '\n'` |
+| `IOS_TEAM_ID` | the 10-character team id |
+| `APP_STORE_CONNECT_KEY_ID` | the API key id |
+| `APP_STORE_CONNECT_ISSUER_ID` | the issuer id |
+| `APP_STORE_CONNECT_API_KEY_BASE64` | `base64 < AuthKey_XXXX.p8 \| tr -d '\n'` |
+
+The first tagged release is the test of this setup: if the `ios` job
+fails, its log says which of the three steps (signing, archive, upload)
+needs attention; the Android half is independent.
 
 ## 2. Android: Play Console (once)
 
@@ -97,9 +150,14 @@ The screens, the demo bridge they show and the sizes live in
    (<https://fz1101hub.github.io/Lumifx/privacy.html>), category, contact
    e-mail.
 3. Upload graphics: icon 512×512 (`assets/icon/icon.png` resized), feature
-   graphic `assets/icon/feature_graphic.png`, and the phone screenshots
-   from § 1b (`android-9x16/<lang>/`), per language.
+   graphic `assets/icon/feature_graphic.png`, the phone screenshots
+   from § 1b (`android-9x16/<lang>/`) and, optionally, the tablet ones
+   (`ipad-12.9/<lang>/` as 10" tablet screenshots), per language.
 4. Let Play manage the signing key (default, "Play App Signing").
+5. App content › Foreground service permissions: declare the
+   `mediaProjection` service with the answers and the demo video described
+   in `docs/STORE_LISTING.md` (Play blocks the release until this is done,
+   because the app targets Android 14+ and declares that service type).
 
 ## 3. Android: every release
 
@@ -128,8 +186,11 @@ then promote to Production.
    (<https://fz1101hub.github.io/Lumifx/>), privacy policy URL
    (<https://fz1101hub.github.io/Lumifx/privacy.html>), App Privacy
    ("Data Not Collected"), age rating, category, review notes.
-4. Upload the screenshots from § 1b (`iphone-6.5/<lang>/`) for each
-   language; the 6.5" set covers every iPhone size.
+4. Upload the screenshots from § 1b for each language: `iphone-6.5/<lang>/`
+   (the 6.5" set covers every iPhone size) and `ipad-12.9/<lang>/` (the
+   12.9" set covers every iPad; App Store Connect insists on it because
+   the app supports iPad). Leave "Mac" ticked under Availability only if
+   you have tried the app on an Apple-silicon Mac; it is untested there.
 
 ## 5. iOS: every release (needs a Mac with Xcode)
 
@@ -161,10 +222,11 @@ phone with a Hue Bridge, run through `docs/QA_CHECKLIST.md`, then
 ## 6. Version numbers
 
 `pubspec.yaml` holds `version: 1.0.0+1` → marketing version 1.0.0, build 1.
-For every upload to either store, increase the build number (`+2`, `+3`...),
-and bump the version (1.0.1, 1.1.0) when the app changes for users. Both
-platforms read these values from `pubspec.yaml`. Tag the commit
-(`git tag v1.0.0 && git push --tags`) so the CI keeps the artifacts.
+Bump the version (1.0.1, 1.1.0) when the app changes for users and release
+it with `tool/tag_release.sh` (§ 1c): the build number is set by the
+Release workflow from its run number, so it is always higher than the
+last upload. For a build made by hand, pass `--build-number` to
+`flutter build` with a number above the last one in the stores.
 
 ## 7. What the stores will ask that is not obvious
 

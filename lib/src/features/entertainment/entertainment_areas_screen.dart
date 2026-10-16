@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
 import '../common/app_text.dart';
+import '../common/layout.dart';
 import 'entertainment_area_editor.dart';
 
 /// Lists the bridge's entertainment areas and lets the user add or edit
@@ -37,7 +38,7 @@ class EntertainmentAreasScreen extends StatelessWidget {
               }
               final areas = home.entertainmentAreas;
               return ListView(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 96),
+                padding: context.pageInsets(bottom: 96),
                 children: [
                   Text(
                     l10n.entertainmentAreasDescription(maxLightsPerArea),

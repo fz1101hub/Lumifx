@@ -451,5 +451,46 @@
   "variantSeaStorm": "Sea storm",
   "variantSandStorm": "Sandstorm",
   "variantNeon": "Neon",
-  "variantPastel": "Pastel"
+  "variantPastel": "Pastel",
+  "lightsToPlay": "Lights to play on",
+  "musicSource": "Music Sync source",
+  "@musicSource": {
+    "description": "Settings header: where Music Sync listens"
+  },
+  "musicSourceDescription": "Where Music Sync takes the sound from.",
+  "@musicSourceDescription": {
+    "description": "Explains the Music Sync source choice"
+  },
+  "musicSourceMicrophone": "Microphone",
+  "@musicSourceMicrophone": {
+    "description": "Source option: the microphone"
+  },
+  "musicSourceMicrophoneDescription": "Listens to the music in the room. Works with any speaker.",
+  "@musicSourceMicrophoneDescription": {
+    "description": "Subtitle of the microphone option"
+  },
+  "musicSourcePhoneAudio": "This phone's audio",
+  "@musicSourcePhoneAudio": {
+    "description": "Source option: the audio the phone itself plays (Android 10+)"
+  },
+  "musicSourcePhoneAudioDescription": "Follows what the phone plays (Spotify, YouTube, games). Android asks to allow screen capture: only the sound is used, nothing is recorded or saved. Apps that protect their audio stay silent to LumiFX.",
+  "@musicSourcePhoneAudioDescription": {
+    "description": "Subtitle of the phone audio option, including Android's capture consent"
+  },
+  "musicSyncHintPhoneAudio": "Press Play and LumiFX will follow what this phone is playing. Audio is analysed on the phone and never recorded.",
+  "@musicSyncHintPhoneAudio": {
+    "description": "Player hint before Music Sync starts, phone audio source"
+  },
+  "noticePhoneAudioDenied": "Music Sync needs permission to capture this phone's audio. Press Play again and allow it, or choose the microphone in Settings.",
+  "@noticePhoneAudioDenied": {
+    "description": "Snackbar when the capture consent was refused"
+  },
+  "noticePhoneAudioFailed": "This phone's audio could not be captured. Check that LumiFX may use the microphone, or choose the microphone in Settings.",
+  "@noticePhoneAudioFailed": {
+    "description": "Snackbar when capturing the phone's audio failed to start"
+  },
+  "noticePhoneAudioStopped": "Capturing this phone's audio stopped. Press Stop, then Play, to follow it again.",
+  "@noticePhoneAudioStopped": {
+    "description": "Snackbar when the phone audio capture stopped mid-effect"
+  }
 }

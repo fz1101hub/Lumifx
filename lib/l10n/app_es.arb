@@ -245,5 +245,16 @@
   "variantSeaStorm": "Tormenta en el mar",
   "variantSandStorm": "Tormenta de arena",
   "variantNeon": "Neón",
-  "variantPastel": "Pastel"
+  "variantPastel": "Pastel",
+  "lightsToPlay": "Luces que participan",
+  "musicSource": "Fuente de Music Sync",
+  "musicSourceDescription": "De dónde toma el sonido Music Sync.",
+  "musicSourceMicrophone": "Micrófono",
+  "musicSourceMicrophoneDescription": "Escucha la música de la habitación. Funciona con cualquier altavoz.",
+  "musicSourcePhoneAudio": "Audio de este teléfono",
+  "musicSourcePhoneAudioDescription": "Sigue lo que reproduce el teléfono (Spotify, YouTube, juegos). Android pide permiso para capturar la pantalla: solo se usa el sonido, no se graba ni se guarda nada. Las apps que protegen su audio quedan en silencio para LumiFX.",
+  "musicSyncHintPhoneAudio": "Pulsa Reproducir y LumiFX seguirá lo que este teléfono reproduce. El audio se analiza en el teléfono y nunca se graba.",
+  "noticePhoneAudioDenied": "Music Sync necesita permiso para capturar el audio de este teléfono. Pulsa Reproducir de nuevo y permítelo, o elige el micrófono en Ajustes.",
+  "noticePhoneAudioFailed": "No se pudo capturar el audio de este teléfono. Comprueba que LumiFX puede usar el micrófono, o elige el micrófono en Ajustes.",
+  "noticePhoneAudioStopped": "La captura del audio del teléfono se detuvo. Pulsa Detener y luego Reproducir para seguirlo de nuevo."
 }

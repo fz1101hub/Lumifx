@@ -1,6 +1,6 @@
 // Store screenshots, rendered by the widget test framework with the real
-// Roboto and Material Icons fonts, in every language and at two phone
-// sizes. Off by default (it writes files): run with
+// Roboto and Material Icons fonts, in every language, at two phone sizes
+// and on a 12.9" iPad. Off by default (it writes files): run with
 //
 //   LUMIFX_SCREENSHOTS=1 flutter test test/screenshots
 //
@@ -30,11 +30,13 @@ import '../support/fake_audio_input.dart';
 
 final _enabled = Platform.environment['LUMIFX_SCREENSHOTS'] == '1';
 
-/// Store sizes: Apple's 6.5" slot (accepted for every iPhone) and an exact
-/// 9:16 frame for Google Play.
+/// Store sizes: Apple's 6.5" slot (accepted for every iPhone), an exact
+/// 9:16 frame for Google Play, and the 12.9" iPad slot (required by the
+/// App Store once the app runs on iPad; Play accepts it for tablets).
 const _devices = {
   'iphone-6.5': (size: Size(1242, 2688), ratio: 3.0),
   'android-9x16': (size: Size(1080, 1920), ratio: 2.5),
+  'ipad-12.9': (size: Size(2048, 2732), ratio: 2.0),
 };
 
 void main() {
