@@ -281,6 +281,41 @@ build before every store release.
       back online. Phone language Italian: city names in Italian. In the
       US region temperatures are in °F.
 
+## This round: games, calm, kids mode, voices, around the house
+
+- [ ] Choose your path: Stories › Choose your path › The Lost Star: the
+      buttons appear when the part's words end, the lights keep glowing
+      meanwhile; each of the four endings plays once and the lights go
+      back. With Read aloud on, the words are spoken.
+- [ ] Light memory: the lamps flash each colour clearly (on a room and
+      on an entertainment area); a tap lights the lamps at once. Note any
+      lag between tap and lamp on REST (rooms).
+- [ ] Calm breathing: 1 minute of square breathing; lamps rise for 4 s,
+      hold, fall, hold, in step with the circle; the voice guides if on.
+- [ ] Pomodoro with 2 rounds: focus colours, three soft flashes at the
+      break, greens, then the second round and the party at the end.
+- [ ] Advent calendar: set the date to 5 December: doors 1–5 open, 6 says
+      when; each surprise plays once. In January after the 6th all lock.
+- [ ] How many sleeps: add a countdown a week ahead; the lamps show seven
+      golden sparks; on the day, a party.
+- [ ] Kids mode: choose four effects, start; back gesture and the
+      Android back button do nothing; no mini-player; close and reopen
+      the app: still in kids mode; leave with the sum. Try a lumifx://
+      link while locked: the effect plays, the screen stays.
+- [ ] Your voice: record two lines of a story of your own (iOS asks for
+      the microphone), listen, re-record one; play the story with Read
+      aloud off: your voice, in time; delete the story: recordings gone.
+- [ ] Away mode on two rooms, 2 minutes from now, off 5 minutes later:
+      the rooms come on within the random 30 minutes, one 15 minutes
+      after the other, and go off; the Hue app shows nothing odd. Pause
+      and delete from LumiFX.
+- [ ] Night path with a Hue motion sensor (set to do nothing at night in
+      the Hue app): at night, walking past turns the room dim amber; it
+      goes off 2 minutes after the last movement. Daytime: nothing.
+- [ ] Natural light in a room: the Hue app shows the five scenes and the
+      smart scene; switched on, the room shows the white of the hour and
+      moves on at the next time slot. Delete removes all of them.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

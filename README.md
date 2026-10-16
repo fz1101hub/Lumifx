@@ -123,6 +123,22 @@ Also done ahead of schedule:
 - **Light games**: red light, green light; statues; colour hunt.
 - **Weather lights**: the weather now or tomorrow in a typed city, from
   Open-Meteo, as sunshine, clouds, rain, snow or a starry night.
+- **Choose-your-path stories**: at each turn two big buttons choose the
+  way; every path has its own ending.
+- **Light memory** (Simon): the lamps flash a growing sequence of colours
+  to repeat.
+- **Calm breathing**: lamps and a circle rise and fall with the breath
+  (flower and candle for children, square, 4-7-8).
+- **Pomodoro** among the light timers.
+- **Advent calendar** of light (24 doors) and **How many sleeps?**
+  countdowns to big days.
+- **Kids mode**: big buttons for chosen gentle effects, locked behind a
+  grown-up's sum, even after a restart.
+- **Your own voice**: record the lines of your stories; they play in time
+  with the lights.
+- **Around the house** (on the bridge, phone off): away mode with
+  randomised times, a night path on a Hue motion sensor, and natural
+  light that follows the day (a smart scene).
 
 ## Development
 
