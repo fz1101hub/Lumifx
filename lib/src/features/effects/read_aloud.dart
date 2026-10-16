@@ -6,6 +6,7 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../../core/speech/speaker.dart';
+import '../../core/speech/voice_recordings.dart';
 import '../common/app_text.dart';
 import '../library/effect_library.dart';
 import '../library/preferences_controller.dart';
@@ -14,6 +15,8 @@ import 'read_along.dart';
 
 /// Reads a story's words aloud as they appear, in the app's language,
 /// while it plays and the setting is on; quiet when paused or stopped.
+/// Lines the user recorded in their own voice play instead, whether the
+/// setting is on or not.
 class ReadAloud {
   ReadAloud({
     required this.playback,
@@ -21,12 +24,16 @@ class ReadAloud {
     required this.library,
     required this.speaker,
     required this.locale,
-  });
+    VoiceRecordings? voices,
+    this.voicePlayer = const NoVoicePlayer(),
+  }) : voices = voices ?? NoVoiceRecordings();
 
   final PlaybackController playback;
   final PreferencesController preferences;
   final EffectLibrary library;
   final Speaker speaker;
+  final VoiceRecordings voices;
+  final VoicePlayer voicePlayer;
 
   /// The app's language now.
   final Locale Function() locale;
@@ -57,7 +64,7 @@ class ReadAloud {
   void _update() {
     final player = playback.player;
     final effect = playback.effect;
-    final wanted = preferences.readAloud &&
+    final wanted = (preferences.readAloud || voices.hasAny(effect.id)) &&
         player != null &&
         playback.status == PlaybackStatus.playing;
     if (player == null) {
@@ -98,10 +105,16 @@ class ReadAloud {
       return;
     }
     _spoken = index;
-    unawaited(speaker.speak(
-      _lines[index].$2,
-      speechLanguage(_supported(locale()).languageCode),
-    ));
+    final (at, text) = _lines[index];
+    final recorded = voices.pathOf(effect.id, at);
+    if (recorded != null) {
+      unawaited(voicePlayer.play(recorded));
+    } else if (preferences.readAloud) {
+      unawaited(speaker.speak(
+        text,
+        speechLanguage(_supported(locale()).languageCode),
+      ));
+    }
   }
 
   /// Stops speaking; the place in the story is kept for a resume.
@@ -112,6 +125,7 @@ class ReadAloud {
     _player = null;
     if (wasListening) {
       unawaited(speaker.stop());
+      unawaited(voicePlayer.stop());
     }
   }
 

@@ -33,6 +33,14 @@ app only measures how loud the sound is, on your phone; nothing is
 recorded, stored or transmitted, and the microphone is switched off as soon
 as the candles are out or you leave the party.
 
+**Your voice (stories of your own).** In the story editor you can record
+yourself reading the lines of a story you made. The recordings are saved
+as sound files on your phone only, play when that story plays, are never
+uploaded or shared (not even when you share the story), and are deleted
+with the story or one by one. On iPhone they may be part of your own
+iCloud device backup, like other app data; Android backups are off for
+LumiFX.
+
 **Photos (scene from a photo).** In the scene editor, "From a photo" lets
 you choose a photo or take one. The app reads its main colours on your
 phone; the photo is not kept, copied or sent anywhere.
@@ -148,6 +156,15 @@ Music Sync è in riproduzione e viene spento in pausa o allo stop.
 sul microfono. L'app misura solo quanto è forte il suono, sul telefono;
 nulla viene registrato, salvato o trasmesso, e il microfono si spegne appena
 le candeline sono spente o lasci la festa.
+
+**La tua voce (storie create da te).** Nell'editor delle storie puoi
+registrarti mentre leggi le frasi di una storia che hai creato. Le
+registrazioni sono salvate come file audio solo sul telefono, si sentono
+quando quella storia è in riproduzione, non vengono mai caricate né
+condivise (neanche quando condividi la storia) e si eliminano con la storia
+o una per una. Su iPhone possono far parte del tuo backup iCloud del
+dispositivo, come gli altri dati delle app; per LumiFX i backup Android sono
+disattivati.
 
 **Foto (scena da una foto).** Nell'editor delle scene, "Da una foto" ti fa
 scegliere o scattare una foto. L'app ne legge i colori principali sul

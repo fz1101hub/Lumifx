@@ -10,6 +10,7 @@ import '../effects/player_route.dart';
 import 'scene_editor.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
+import 'voice_recording_screen.dart';
 
 /// Creates a story of the user's own, or edits [story]: a name, background
 /// colours, a length and moments on a timeline, each with words to read
@@ -102,6 +103,8 @@ class _StoryEditorState extends State<StoryEditor> {
       await scope.playback.stop();
     }
     await scope.preferences.deleteUserStory(story.id);
+    // The voice recorded for it goes too.
+    await scope.voices?.deleteStory(story.id);
   }
 
   Future<void> _pickColor(int? index) async {
@@ -178,6 +181,16 @@ class _StoryEditorState extends State<StoryEditor> {
       appBar: AppBar(
         title: Text(widget.story == null ? l10n.newStory : l10n.editStory),
         actions: [
+          if (widget.story case final story?)
+            IconButton(
+              tooltip: l10n.recordVoices,
+              icon: const Icon(Icons.mic_none),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => VoiceRecordingScreen(story: story),
+                ),
+              ),
+            ),
           if (widget.story != null)
             IconButton(
               tooltip: l10n.delete,

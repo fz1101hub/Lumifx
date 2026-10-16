@@ -13,6 +13,7 @@ import 'features/buttons/hue_button_listener.dart';
 import 'features/effects/read_aloud.dart';
 import 'core/photos/photo_picker.dart';
 import 'core/speech/speaker.dart';
+import 'core/speech/voice_recordings.dart';
 import 'core/weather/weather.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
@@ -48,6 +49,9 @@ class LumiFxApp extends StatefulWidget {
     this.speaker = const NoSpeaker(),
     this.photos = const NoPhotoPicker(),
     this.weather = const NoWeatherService(),
+    this.voices,
+    this.voiceRecorder = const NoVoiceRecorder(),
+    this.voicePlayer = const NoVoicePlayer(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -91,6 +95,11 @@ class LumiFxApp extends StatefulWidget {
   /// The weather for the weather lights.
   final WeatherService weather;
 
+  /// Story lines in the user's own voice; none by default.
+  final VoiceRecordings? voices;
+  final VoiceRecorder voiceRecorder;
+  final VoicePlayer voicePlayer;
+
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
 
@@ -109,6 +118,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   final _routes = RouteTracker();
   late final EffectLibrary _library = EffectLibrary(widget.preferences);
   late final PlaybackController _playback;
+  late final VoiceRecordings _voices = widget.voices ?? NoVoiceRecordings();
   late final LinkHandler _links;
   late final HueButtonListener _buttons;
   late final ReadAloud _readAloud;
@@ -130,6 +140,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       camera: widget.camera,
     );
     _notices = _playback.notices.listen(_showNotice);
+    unawaited(_voices.load());
     didChangeAccessibilityFeatures();
     widget.background.onStop = () => unawaited(_playback.stop());
     _playback.addListener(_syncBackground);
@@ -159,6 +170,8 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       preferences: widget.preferences,
       library: _library,
       speaker: widget.speaker,
+      voices: _voices,
+      voicePlayer: widget.voicePlayer,
       locale: () {
         final context = _navigatorKey.currentContext;
         return context == null
@@ -357,6 +370,9 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       clock: widget.clock,
       photos: widget.photos,
       weather: widget.weather,
+      voices: _voices,
+      voiceRecorder: widget.voiceRecorder,
+      voicePlayer: widget.voicePlayer,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

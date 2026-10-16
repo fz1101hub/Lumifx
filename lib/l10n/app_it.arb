@@ -794,5 +794,14 @@
   "kidsModeExit": "Adulti: esci",
   "kidsGateQuestion": "Per uscire dalla modalità bambini, scrivi il risultato di {a} + {b}.",
   "kidsGateWrong": "Non è giusto.",
-  "kidsGateOk": "Esci"
+  "kidsGateOk": "Esci",
+  "recordVoices": "Registra la tua voce",
+  "recordVoicesDescription": "Leggi ad alta voce ogni frase della tua storia: quando la storia parte, la tua voce la racconta a tempo con le luci, anche da lontano. Le registrazioni restano su questo telefono e non vengono condivise con la storia.",
+  "recordLine": "Registra",
+  "stopRecording": "Ferma",
+  "playRecording": "Ascolta",
+  "deleteRecording": "Elimina registrazione",
+  "recorded": "Registrata",
+  "recordingNoWords": "Aggiungi delle parole ai momenti della storia per poterle registrare.",
+  "recordingDenied": "LumiFX ha bisogno del microfono per registrare la tua voce. Puoi consentirlo nelle impostazioni del telefono."
 }

@@ -2973,5 +2973,41 @@
   "kidsGateOk": "Exit",
   "@kidsGateOk": {
     "description": "Button: check the answer"
+  },
+  "recordVoices": "Record your voice",
+  "@recordVoices": {
+    "description": "Record your own voice reading a story"
+  },
+  "recordVoicesDescription": "Read each line of your story aloud: when the story plays, your voice tells it in time with the lights, even far from home. Recordings stay on this phone and are not shared with the story.",
+  "@recordVoicesDescription": {
+    "description": "Explains recording one's voice"
+  },
+  "recordLine": "Record",
+  "@recordLine": {
+    "description": "Button: record this line"
+  },
+  "stopRecording": "Stop",
+  "@stopRecording": {
+    "description": "Button: stop recording"
+  },
+  "playRecording": "Listen",
+  "@playRecording": {
+    "description": "Button: listen to the recording"
+  },
+  "deleteRecording": "Delete recording",
+  "@deleteRecording": {
+    "description": "Button: delete the recording"
+  },
+  "recorded": "Recorded",
+  "@recorded": {
+    "description": "This line has been recorded"
+  },
+  "recordingNoWords": "Add words to the moments of your story to record them.",
+  "@recordingNoWords": {
+    "description": "No lines with words to record"
+  },
+  "recordingDenied": "LumiFX needs the microphone to record your voice. You can allow it in your phone settings.",
+  "@recordingDenied": {
+    "description": "The microphone cannot be used to record"
   }
 }

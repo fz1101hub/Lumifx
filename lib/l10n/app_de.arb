@@ -794,5 +794,14 @@
   "kidsModeExit": "Erwachsene: beenden",
   "kidsGateQuestion": "Um den Kindermodus zu beenden, gib das Ergebnis von {a} + {b} ein.",
   "kidsGateWrong": "Das stimmt nicht.",
-  "kidsGateOk": "Beenden"
+  "kidsGateOk": "Beenden",
+  "recordVoices": "Deine Stimme aufnehmen",
+  "recordVoicesDescription": "Lies jede Zeile deiner Geschichte laut vor: Wenn die Geschichte läuft, erzählt deine Stimme sie im Takt mit dem Licht, auch wenn du weit weg bist. Die Aufnahmen bleiben auf diesem Telefon und werden nicht mit der Geschichte geteilt.",
+  "recordLine": "Aufnehmen",
+  "stopRecording": "Stopp",
+  "playRecording": "Anhören",
+  "deleteRecording": "Aufnahme löschen",
+  "recorded": "Aufgenommen",
+  "recordingNoWords": "Füge den Momenten deiner Geschichte Worte hinzu, um sie aufzunehmen.",
+  "recordingDenied": "LumiFX braucht das Mikrofon, um deine Stimme aufzunehmen. Du kannst es in den Telefoneinstellungen erlauben."
 }

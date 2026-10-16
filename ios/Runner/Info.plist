@@ -11,7 +11,7 @@
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Choose a photo and LumiFX makes a light scene from its colours. The photo is analysed on your phone and never sent.</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>Music Sync listens to the music in the room so your lights can move with it, and at a birthday party the microphone hears the candles being blown out. Audio never leaves your phone.</string>
+		<string>Music Sync listens to the music in the room so your lights can move with it, at a birthday party the microphone hears the candles being blown out, and you can record your own voice reading your stories. Audio never leaves your phone.</string>
 		<key>NSBonjourServices</key>
 		<array>
 			<string>_hue._tcp</string>

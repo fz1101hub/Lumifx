@@ -20,6 +20,7 @@ dependencies:
   image_picker: ^1.2.4
   intl: ^0.20.3
   nsd: ^5.0.1
+  path_provider: ^2.1.6
   pointycastle: ^4.0.0
   qr_flutter: ^4.1.0
   quick_actions: ^1.1.1

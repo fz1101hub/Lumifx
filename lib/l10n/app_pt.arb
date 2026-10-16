@@ -794,5 +794,14 @@
   "kidsModeExit": "Adultos: sair",
   "kidsGateQuestion": "Para sair do modo infantil, digite o resultado de {a} + {b}.",
   "kidsGateWrong": "Não está certo.",
-  "kidsGateOk": "Sair"
+  "kidsGateOk": "Sair",
+  "recordVoices": "Gravar sua voz",
+  "recordVoicesDescription": "Leia em voz alta cada frase da sua história: quando a história tocar, sua voz conta no ritmo das luzes, mesmo de longe. As gravações ficam neste celular e não são compartilhadas com a história.",
+  "recordLine": "Gravar",
+  "stopRecording": "Parar",
+  "playRecording": "Ouvir",
+  "deleteRecording": "Excluir gravação",
+  "recorded": "Gravada",
+  "recordingNoWords": "Adicione palavras aos momentos da sua história para gravá-las.",
+  "recordingDenied": "O LumiFX precisa do microfone para gravar sua voz. Você pode permitir nas configurações do celular."
 }

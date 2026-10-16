@@ -4,6 +4,7 @@ import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
 import 'core/photos/photo_picker.dart';
+import 'core/speech/voice_recordings.dart';
 import 'core/weather/weather.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/effects/playback_controller.dart';
@@ -24,6 +25,9 @@ class AppScope extends InheritedWidget {
     this.phoneAudioInput,
     this.photos = const NoPhotoPicker(),
     this.weather = const NoWeatherService(),
+    this.voices,
+    this.voiceRecorder = const NoVoiceRecorder(),
+    this.voicePlayer = const NoVoicePlayer(),
     required super.child,
     super.key,
   });
@@ -58,6 +62,11 @@ class AppScope extends InheritedWidget {
   /// The weather for the weather lights.
   final WeatherService weather;
 
+  /// Story lines in the user's own voice.
+  final VoiceRecordings? voices;
+  final VoiceRecorder voiceRecorder;
+  final VoicePlayer voicePlayer;
+
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
     assert(scope != null, 'No AppScope found in context');
@@ -75,5 +84,8 @@ class AppScope extends InheritedWidget {
       background != oldWidget.background ||
       phoneAudioInput != oldWidget.phoneAudioInput ||
       photos != oldWidget.photos ||
-      weather != oldWidget.weather;
+      weather != oldWidget.weather ||
+      voices != oldWidget.voices ||
+      voiceRecorder != oldWidget.voiceRecorder ||
+      voicePlayer != oldWidget.voicePlayer;
 }

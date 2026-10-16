@@ -223,6 +223,10 @@ artifact, see RELEASE.md § 1b).
   data types list, do **not** declare "Audio files" or "Voice or sound
   recordings"; audio is processed ephemerally on device and never stored
   or sent (Play's definition of "collected" excludes ephemeral processing).
+- Voice recordings: users can record their own voice for stories they
+  made; the files stay on the device (Android backup is off) and are
+  never transmitted. Not "collected" in Play's sense: do not declare
+  "Voice or sound recordings".
 - Photos: "From a photo" (scene editor) uses the system photo picker or
   camera; the picture is read once on the device to take its colours and
   is never stored or sent. Do **not** declare "Photos". Android needs no

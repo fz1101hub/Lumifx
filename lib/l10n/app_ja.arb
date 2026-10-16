@@ -794,5 +794,14 @@
   "kidsModeExit": "大人の方：終了",
   "kidsGateQuestion": "キッズモードを終了するには、{a} + {b} の答えを入力してください。",
   "kidsGateWrong": "ちがいます。",
-  "kidsGateOk": "終了"
+  "kidsGateOk": "終了",
+  "recordVoices": "自分の声を録音",
+  "recordVoicesDescription": "お話の一文ずつを声に出して読んでください。お話が流れると、明かりに合わせてあなたの声が語ります。録音はこのスマートフォンにだけ保存され、お話と一緒に共有されません。",
+  "recordLine": "録音",
+  "stopRecording": "停止",
+  "playRecording": "聞く",
+  "deleteRecording": "録音を削除",
+  "recorded": "録音済み",
+  "recordingNoWords": "録音するには、お話の場面にことばを追加してください。",
+  "recordingDenied": "声を録音するにはマイクが必要です。スマートフォンの設定で許可できます。"
 }

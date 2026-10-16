@@ -794,5 +794,14 @@
   "kidsModeExit": "Volwassenen: afsluiten",
   "kidsGateQuestion": "Typ de uitkomst van {a} + {b} om de kindermodus te verlaten.",
   "kidsGateWrong": "Dat klopt niet.",
-  "kidsGateOk": "Afsluiten"
+  "kidsGateOk": "Afsluiten",
+  "recordVoices": "Neem je stem op",
+  "recordVoicesDescription": "Lees elke zin van je verhaal hardop voor: als het verhaal speelt, vertelt jouw stem het op het ritme van het licht, ook van ver weg. De opnames blijven op deze telefoon en worden niet met het verhaal gedeeld.",
+  "recordLine": "Opnemen",
+  "stopRecording": "Stop",
+  "playRecording": "Luisteren",
+  "deleteRecording": "Opname verwijderen",
+  "recorded": "Opgenomen",
+  "recordingNoWords": "Voeg woorden toe aan de momenten van je verhaal om ze op te nemen.",
+  "recordingDenied": "LumiFX heeft de microfoon nodig om je stem op te nemen. Je kunt dit toestaan in de instellingen van je telefoon."
 }
