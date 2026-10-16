@@ -86,6 +86,8 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
       - run: flutter pub get
+      # A Japanese font, so the Japanese screenshots show text, not boxes.
+      - run: sudo apt-get install -y --no-install-recommends fonts-ipafont-gothic
       - run: flutter test test/screenshots
         env:
           LUMIFX_SCREENSHOTS: "1"

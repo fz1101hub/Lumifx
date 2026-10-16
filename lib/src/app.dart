@@ -31,6 +31,7 @@ class LumiFxApp extends StatefulWidget {
     this.shortcuts = const NoShortcuts(),
     this.screenWake = const WakelockScreenWake(),
     this.locale,
+    @visibleForTesting this.fontFallback,
     super.key,
   });
 
@@ -50,6 +51,11 @@ class LumiFxApp extends StatefulWidget {
 
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
+
+  /// Font families to fall back on for scripts Roboto lacks. Phones do
+  /// this by themselves; the screenshot test, which has no system fonts,
+  /// passes a Japanese font here.
+  final List<String>? fontFallback;
 
   @override
   State<LumiFxApp> createState() => _LumiFxAppState();
@@ -212,6 +218,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
           brightness: Brightness.dark,
           colorSchemeSeed: const Color(0xFF7CFF6B),
           useMaterial3: true,
+          fontFamilyFallback: widget.fontFallback,
         ),
         builder: (context, child) => ShortcutsBridge(
           shortcuts: widget.shortcuts,

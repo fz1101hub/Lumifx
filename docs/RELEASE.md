@@ -71,7 +71,9 @@ keyPassword=********
 ## 1b. Screenshots (every release)
 
 The CI renders the store screenshots from the app itself, with the real
-fonts, in all six languages and three sizes: download the
+fonts, in all eight languages and three sizes (Japanese needs a system
+Japanese font: the CI installs `fonts-ipafont-gothic`; locally, without
+one, the Japanese screenshots are skipped): download the
 `store-screenshots` artifact of any green run (Actions › the run › Artifacts).
 Inside, `iphone-6.5/<lang>/` holds 1242×2688 PNGs for App Store Connect
 (the 6.5" slot, accepted for every iPhone), `ipad-12.9/<lang>/` holds

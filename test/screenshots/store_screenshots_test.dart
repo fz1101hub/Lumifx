@@ -39,17 +39,26 @@ const _devices = {
   'ipad-12.9': (size: Size(2048, 2732), ratio: 2.0),
 };
 
+/// A Japanese font from the system (Ubuntu: fonts-ipafont-gothic, which
+/// the CI installs). Without one, Japanese screenshots are skipped rather
+/// than rendered as empty boxes.
+final _japaneseFont = [
+  '/usr/share/fonts/opentype/ipafont-gothic/ipag.ttf',
+  '/usr/share/fonts/truetype/fonts-japanese-gothic.ttf',
+].map(File.new).where((f) => f.existsSync()).firstOrNull;
+
 void main() {
   setUpAll(_loadFonts);
 
   for (final MapEntry(key: device, value: frame) in _devices.entries) {
     for (final locale in AppLocalizations.supportedLocales) {
+      final noFont = locale.languageCode == 'ja' && _japaneseFont == null;
       testWidgets('$device ${locale.languageCode}', (tester) async {
         tester.view.physicalSize = frame.size;
         tester.view.devicePixelRatio = frame.ratio;
         addTearDown(tester.view.reset);
         await _capture(tester, device, locale);
-      }, skip: !_enabled);
+      }, skip: !_enabled || noFont);
     }
   }
 }
@@ -75,6 +84,7 @@ Future<void> _capture(WidgetTester tester, String device, Locale locale) async {
       preferences: preferences,
       audioInput: FakeAudioInput(),
       locale: locale,
+      fontFallback: const ['JapaneseFallback'],
     ),
   ));
   await tester.pumpAndSettle();
@@ -166,6 +176,13 @@ Future<void> _loadFonts() async {
     'Roboto-Light.ttf',
   ]);
   await load('MaterialIcons', ['MaterialIcons-Regular.otf']);
+  final japanese = _japaneseFont;
+  if (japanese != null) {
+    await (FontLoader('JapaneseFallback')
+          ..addFont(
+              Future.value(ByteData.sublistView(japanese.readAsBytesSync()))))
+        .load();
+  }
 }
 
 class _NoDiscovery implements BridgeDiscovery {

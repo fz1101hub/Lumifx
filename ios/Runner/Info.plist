@@ -22,6 +22,8 @@
 			<string>fr</string>
 			<string>es</string>
 			<string>nl</string>
+			<string>pt-BR</string>
+			<string>ja</string>
 		</array>
 		<key>CFBundleDisplayName</key>
 		<string>LumiFX</string>
