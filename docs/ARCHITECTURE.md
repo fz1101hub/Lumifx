@@ -212,6 +212,52 @@ their end with a `finished` notice.
   service outside the home besides Hue discovery; it sends only the
   typed city and the chosen coordinates.
 
+More generated effects follow the same pattern: `PathStory` parts
+(`lib/src/features/paths`: a part with a turn waits ten minutes on its
+last background for the choice), `SimonGame.background` (the colours are
+live flashes, see below), `BreathingPattern.effect` (the `ramp` event
+glides brightness and colour, eased), `Pomodoro` (countdown and break
+phases), `Advent.effect` and `Countdown.effect`. Each is parsed back
+from its id by `narrationOf` so its words are read along and aloud.
+
+`EffectPlayer.flashNow` (and `PlaybackController.flash`) overlays one
+colour on every light at once, for a set time, over whatever the effect
+renders: the memory game answers taps with it.
+
+### Around the house (`lib/src/core/hue/hue_house*.dart`)
+
+Routines the bridge runs by itself, created and read back by the
+`HueHouseRoutines` extension (a part of `hue_bridge_client.dart`):
+
+- Away mode: two older-API schedules per room (on, off) with the
+  bridge's randomised times (`W127/T19:00:00A00:30:00`), rooms 15 minutes
+  apart; tagged `lumifx:<token>:away-on|away-off` in the description.
+- Night path: two older-API rules on a `ZLLPresence` sensor, named
+  `lumifx:<token>:path-on|path-off`: presence true + changed inside the
+  night window switches the room on dim; presence false for N minutes
+  (`ddx`) switches it off, with the window extended a little.
+- Natural light: five scenes and a `smart_scene` (newer API) with week
+  timeslots; the bridge does not say who made a smart scene, so LumiFX
+  remembers the ids it created in the preferences.
+
+Everything is removed together, and a refused part removes what was
+already created.
+
+### Kids mode (`lib/src/features/kids`)
+
+`KidsModeScreen` is a route named `/kids` under a `PopScope` that cannot
+pop; `PlaybackShell` hides the mini-player under it and `LinkHandler`
+neither opens screens nor imports while `preferences.kidsLocked`. The
+app reopens it at start while locked. Leaving takes a sum of two
+two-digit numbers.
+
+### Voices (`lib/src/core/speech/voice_recordings.dart`)
+
+`FileVoiceRecordings` keeps one AAC file per line of a user story under
+the app support directory (`voices/<story>/<second>.m4a`), indexed at
+start; `ReadAloud` plays a recorded line in place of the system voice,
+and plays recordings even with Read aloud off.
+
 ### Speech and photos
 
 - `ReadAloud` (`lib/src/features/effects/read_aloud.dart`) follows the

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
@@ -17,14 +18,22 @@ import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/core/weather/weather.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
+import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
+import 'package:lumifx/src/features/fun/advent_screen.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
+import 'package:lumifx/src/features/fun/countdowns_screen.dart';
 import 'package:lumifx/src/features/fun/game_screen.dart';
 import 'package:lumifx/src/features/fun/light_games.dart';
+import 'package:lumifx/src/features/kids/kids_mode.dart';
+import 'package:lumifx/src/features/fun/simon.dart';
+import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
@@ -108,6 +117,7 @@ Future<void> _pumpApp(
   PhotoPicker photos = const NoPhotoPicker(),
   AudioInput? audioInput,
   WeatherService weather = const NoWeatherService(),
+  DateTime Function()? clock,
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -125,6 +135,7 @@ Future<void> _pumpApp(
       audioInput: audioInput ?? FakeAudioInput(),
       photos: photos,
       weather: weather,
+      clock: clock ?? DateTime.now,
     ),
   );
 }
@@ -459,6 +470,327 @@ void main() {
     await tester.tap(find.byTooltip('Search'));
     await tester.pumpAndSettle();
     expect(find.textContaining("Couldn't get the weather"), findsOneWidget);
+  });
+
+  testWidgets('light memory: watch, repeat, a wrong colour ends the game',
+      (tester) async {
+    await _pumpApp(tester);
+    await openBirthday(tester);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Light memory'), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('Light memory'), findsOneWidget);
+    // The same draw as the screen's, to know the colours.
+    final expected = SimonGame(math.Random(3));
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const SimonScreen(seed: 3))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Watch the lights…'), findsOneWidget);
+
+    Future<void> watch(int colours) async {
+      for (var i = 0; i < colours * 3 + 3; i++) {
+        await tester.pump(const Duration(milliseconds: 500));
+      }
+    }
+
+    String name(SimonColor color) => switch (color) {
+          SimonColor.red => 'Red',
+          SimonColor.green => 'Green',
+          SimonColor.blue => 'Blue',
+          SimonColor.yellow => 'Yellow',
+        };
+
+    expected.nextRound();
+    await watch(1);
+    expect(find.text('Your turn!'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel(name(expected.sequence[0])));
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.text('Round 2'), findsOneWidget);
+
+    expected.nextRound();
+    await watch(2);
+    expect(find.text('Your turn!'), findsOneWidget);
+    final wrong =
+        SimonColor.values.firstWhere((c) => c != expected.sequence[0]);
+    await tester.tap(find.bySemanticsLabel(name(wrong)));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Oops! You remembered 1 round.'), findsOneWidget);
+    expect(find.text('New record!'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets('calm breathing: choose, breathe with the circle, done',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Calm breathing'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Calm breathing'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Calm breathing'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Square breathing'));
+    await tester.tap(find.text('1 min'));
+    await tester.pump();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Breathe in…'), findsOneWidget);
+    expect(find.text('1:04'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(BreathingScreen))).playback;
+    playback.player!.advance(const Duration(seconds: 5));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Hold…'), findsOneWidget);
+    expect(find.text('0:59'), findsOneWidget);
+
+    playback.player!.advance(const Duration(seconds: 64));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.textContaining('Well done'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a pomodoro shows the round and the time left', (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Light timers'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('2 rounds'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('2 rounds'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('2 rounds'));
+    await tester.pump();
+    await tester.tap(find.descendant(
+        of: find.ancestor(
+            of: find.text('Pomodoro'), matching: find.byType(ListTile)),
+        matching: find.text('Start')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Focus: round 1 of 2'), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^2[45]:\d\d$')), findsOneWidget);
+
+    final playback =
+        AppScope.of(tester.element(find.byType(PomodoroRunningScreen)))
+            .playback;
+    playback.player!.advance(const Duration(minutes: 25));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Break: stretch and drink some water'), findsOneWidget);
+
+    await tester.tap(find.text('Stop'));
+    await tester.pump();
+    expect(find.text('Well done, all rounds finished!'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a choose-your-path story waits for the choice and follows it',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choose your path'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('The Lost Star'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining('A little star has slipped'), findsOneWidget);
+    expect(find.text('The quiet lake'), findsNothing);
+
+    final playback =
+        AppScope.of(tester.element(find.byType(PathStoryScreen))).playback;
+    playback.player!.advance(const Duration(seconds: 18));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('The dark forest'), findsOneWidget);
+    await tester.tap(find.text('The quiet lake'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining('At the lake'), findsOneWidget);
+
+    playback.player!.advance(const Duration(seconds: 18));
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.text('Ask the frog'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining('The frog croaks'), findsOneWidget);
+
+    // The ending plays once, then the lights go back.
+    playback.player!.advance(const Duration(seconds: 21));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('The end'), findsOneWidget);
+    expect(find.text('Try another path'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  Future<void> openFun(WidgetTester tester) async {
+    await tester.scrollUntilVisible(
+      find.text('Parties and games'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('the advent calendar opens today\'s door, not tomorrow\'s',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 12, 5, 18));
+    await openFun(tester);
+    await tester.tap(find.text('Advent calendar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Day 6'));
+    await tester.pump();
+    expect(
+        find.textContaining('This door opens on December 6'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+
+    await tester.tap(find.bySemanticsLabel('Day 5'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Day 5'), findsWidgets);
+    final playback =
+        AppScope.of(tester.element(find.byType(AdventScreen))).playback;
+    expect(playback.effect.name, 'Day 5');
+    playback.player!.advance(const Duration(seconds: 4));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('The northern lights are glowing!'), findsOneWidget);
+    await playback.stop();
+    await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets('a countdown counts the sleeps and shows them on the lights',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 10, 16, 9));
+    await openFun(tester);
+    await tester.tap(find.text('How many sleeps?'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('No countdowns yet'), findsOneWidget);
+    await tester.tap(find.text('New countdown'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Grandma');
+    await tester.pump();
+    // A week ahead by default.
+    expect(find.text('October 23, 2026'), findsOneWidget);
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('7 sleeps to Grandma!'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Show on the lights'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(CountdownsScreen))).playback;
+    expect(playback.effect.name, '7 sleeps to Grandma!');
+    await playback.stop();
+    await tester.pump(const Duration(seconds: 2));
+
+    await tester.tap(find.byTooltip('Delete'));
+    await tester.pumpAndSettle();
+    expect(find.text('7 sleeps to Grandma!'), findsNothing);
+  });
+
+  Future<void> answerGrownUpSum(WidgetTester tester,
+      {bool right = true}) async {
+    final question = tester
+        .widgetList<Text>(find.byType(Text))
+        .map((t) => t.data ?? '')
+        .firstWhere((t) => t.contains(' + '));
+    final match = RegExp(r'(\d+) \+ (\d+)').firstMatch(question)!;
+    final sum = int.parse(match[1]!) + int.parse(match[2]!);
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog), matching: find.byType(TextField)),
+        '${right ? sum : sum + 1}');
+    await tester.tap(find.widgetWithText(FilledButton, 'Exit'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('kids mode: big buttons, no way out without a grown-up',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Kids mode'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Kids mode'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Kids mode'));
+    await tester.pumpAndSettle();
+    // Flashing effects cannot be chosen.
+    await tester.scrollUntilVisible(
+        find.text('Has flashes: not offered').first, 300,
+        scrollable: find.byType(Scrollable).first);
+    await tester.scrollUntilVisible(find.text('Start kids mode'), -300,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Start kids mode'));
+    await tester.pumpAndSettle();
+    expect(find.byType(KidsModeScreen), findsOneWidget);
+
+    await tester.tap(find.byType(InkWell).first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(KidsModeScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+    expect(find.byType(MiniPlayer), findsNothing);
+
+    // Back does nothing.
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.byType(KidsModeScreen), findsOneWidget);
+
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(playback.isPlaying, isFalse);
+
+    await tester.tap(find.byTooltip('Grown-ups: exit'));
+    await tester.pumpAndSettle();
+    await answerGrownUpSum(tester, right: false);
+    expect(find.text("That's not right."), findsOneWidget);
+    await answerGrownUpSum(tester);
+    expect(find.byType(KidsModeScreen), findsNothing);
+    expect(
+        AppScope.of(tester.element(find.byType(KidsSetupScreen)))
+            .preferences
+            .kidsLocked,
+        isFalse);
+  });
+
+  testWidgets('kids mode is still on when LumiFX opens again', (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setOnboardingDone();
+    await preferences.setKidsLocked(true);
+    await preferences.load();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.byType(KidsModeScreen), findsOneWidget);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {
@@ -1413,6 +1745,13 @@ Future<BridgeController> _connectedBridge(
         }
         if (request.method == 'POST') {
           puts?.add('POST ${request.url.path}');
+          if (request.url.path.startsWith('/api/')) {
+            return json([
+              {
+                'success': {'id': '${puts?.length ?? 1}'},
+              },
+            ]);
+          }
           return json({
             'data': [
               {'rid': 's2', 'rtype': 'scene'},
@@ -1420,6 +1759,12 @@ Future<BridgeController> _connectedBridge(
           });
         }
         switch (request.url.path) {
+          case '/api/key/sensors':
+            return json({
+              '2': {'type': 'ZLLPresence', 'name': 'Hallway sensor'},
+            });
+          case '/api/key/rules':
+            return json(<String, Object>{});
           case '/api/key/schedules':
             return json({
               '7': {
@@ -1536,6 +1881,7 @@ Future<BridgeController> _connectedBridge(
               'data': [
                 {
                   'id': 'r1',
+                  'id_v1': '/groups/1',
                   'metadata': {'name': 'Living room'},
                   'children': [
                     {'rid': 'd1', 'rtype': 'device'},
@@ -1593,6 +1939,56 @@ void streamingTests() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(puts, contains('/clip/v2/resource/scene/s1'));
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('around the house: away mode, night path, natural light',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Around the house'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Around the house'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Around the house'));
+    await tester.pumpAndSettle();
+    expect(find.text('Away mode'), findsOneWidget);
+
+    await tester.tap(find.text('New away mode'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilterChip, 'Living room'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(puts.where((p) => p == 'POST /api/key/schedules'), hasLength(2));
+
+    await tester.scrollUntilVisible(find.text('New night path'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('New night path'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hallway sensor'), findsOneWidget);
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(puts.where((p) => p == 'POST /api/key/rules'), hasLength(2));
+
+    await tester.scrollUntilVisible(find.text('Natural light in a room'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Natural light in a room'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Living room').last);
+    await tester.pumpAndSettle();
+    expect(
+        puts.where((p) => p == 'POST /clip/v2/resource/scene'), hasLength(5));
+    expect(puts, contains('POST /clip/v2/resource/smart_scene'));
+    expect(puts, contains('/clip/v2/resource/smart_scene/s2'),
+        reason: 'switched on at once');
+    expect(preferences.naturalLightIds, {'s2'});
   });
 
   testWidgets('a playing effect can be saved as a Hue scene', (tester) async {

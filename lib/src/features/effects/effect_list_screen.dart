@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/effects/effect.dart';
 import '../../app_scope.dart';
 import '../common/app_text.dart';
+import '../paths/path_story_screen.dart';
 import '../library/scene_editor.dart';
 import '../library/story_editor.dart';
 import '../search/effect_search.dart';
@@ -74,13 +75,21 @@ class EffectListScreen extends StatelessWidget {
               ),
             )
           : context.isWide
-              ? _EffectGrid(effects)
+              ? _EffectGrid(effects, header: _header(kind))
               : ListView.separated(
                   padding: EdgeInsets.fromLTRB(
                       20, 20, 20, kind == EffectKind.interactive ? 20 : 96),
-                  itemCount: effects.length,
+                  itemCount: effects.length + (_header(kind) == null ? 0 : 1),
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) => _EffectCard(effects[index]),
+                  itemBuilder: (context, index) {
+                    final header = _header(kind);
+                    if (header != null) {
+                      return index == 0
+                          ? header
+                          : _EffectCard(effects[index - 1]);
+                    }
+                    return _EffectCard(effects[index]);
+                  },
                 ),
     );
   }
@@ -90,9 +99,12 @@ class EffectListScreen extends StatelessWidget {
 /// tallest card, so no fixed height has to fit every language and font
 /// size.
 class _EffectGrid extends StatelessWidget {
-  const _EffectGrid(this.effects);
+  const _EffectGrid(this.effects, {this.header});
 
   final List<LightingEffect> effects;
+
+  /// Shown above the cards, full width.
+  final Widget? header;
 
   @override
   Widget build(BuildContext context) {
@@ -103,23 +115,59 @@ class _EffectGrid extends StatelessWidget {
       for (var i = 0; i < effects.length; i += columns)
         effects.sublist(i, (i + columns).clamp(0, effects.length)),
     ];
+    final header = this.header;
+    final offset = header == null ? 0 : 1;
     return ListView.separated(
       padding: insets,
-      itemCount: rows.length,
+      itemCount: rows.length + offset,
       separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (context, index) => IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var i = 0; i < columns; i++) ...[
-              if (i > 0) const SizedBox(width: 12),
-              Expanded(
-                child: i < rows[index].length
-                    ? _EffectCard(rows[index][i], compact: true)
-                    : const SizedBox.shrink(),
-              ),
+      itemBuilder: (context, item) {
+        if (header != null && item == 0) {
+          return header;
+        }
+        final index = item - offset;
+        return IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < columns; i++) ...[
+                if (i > 0) const SizedBox(width: 12),
+                Expanded(
+                  child: i < rows[index].length
+                      ? _EffectCard(rows[index][i], compact: true)
+                      : const SizedBox.shrink(),
+                ),
+              ],
             ],
-          ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Above the stories: the way to the choose-your-path stories.
+Widget? _header(EffectKind kind) =>
+    kind == EffectKind.story ? const _PathStoriesCard() : null;
+
+class _PathStoriesCard extends StatelessWidget {
+  const _PathStoriesCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    return Card(
+      color: theme.colorScheme.tertiaryContainer,
+      child: ListTile(
+        minVerticalPadding: 16,
+        leading:
+            Icon(Icons.alt_route, color: theme.colorScheme.onTertiaryContainer),
+        title: Text(l10n.pathStories),
+        subtitle: Text(l10n.pathStoriesSubtitle),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const PathStoriesScreen()),
         ),
       ),
     );

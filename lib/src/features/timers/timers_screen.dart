@@ -9,6 +9,8 @@ import '../common/layout.dart';
 import '../effects/light_color_ui.dart';
 import '../effects/playback_controller.dart';
 import 'light_timer.dart';
+import 'pomodoro.dart';
+import 'pomodoro_screen.dart';
 
 /// The light timers, each a tap away; cooking asks how long.
 class TimersScreen extends StatefulWidget {
@@ -22,6 +24,26 @@ class TimersScreen extends StatefulWidget {
 
 class _TimersScreenState extends State<TimersScreen> {
   int _cookingMinutes = LightTimer.cooking.minutes;
+  int _pomodoroRounds = 4;
+
+  Future<void> _startPomodoro() async {
+    final l10n = context.l10n;
+    final playback = AppScope.of(context).playback;
+    final pomodoro = Pomodoro(rounds: _pomodoroRounds);
+    final effect = pomodoro.effect(l10n.pomodoro);
+    await playback.switchEffect(effect);
+    if (playback.status == PlaybackStatus.idle) {
+      await playback.start();
+    } else if (playback.status == PlaybackStatus.paused) {
+      await playback.resume();
+    }
+    if (!mounted || playback.effect.id != effect.id) {
+      return;
+    }
+    await Navigator.of(context).push(MaterialPageRoute<void>(
+      builder: (_) => PomodoroRunningScreen(pomodoro: pomodoro, effect: effect),
+    ));
+  }
 
   static String nameOf(AppLocalizations l10n, LightTimer timer) =>
       switch (timer) {
@@ -118,6 +140,45 @@ class _TimersScreenState extends State<TimersScreen> {
                 ),
               ),
             ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ListTile(
+                    leading: const CircleAvatar(
+                      backgroundColor: Color(0xFFFF8A2B),
+                      foregroundColor: Colors.black87,
+                      child: Icon(Icons.repeat),
+                    ),
+                    title: Text(l10n.pomodoro),
+                    subtitle: Text(l10n.pomodoroSubtitle(25, 5)),
+                    trailing: FilledButton(
+                      onPressed: _startPomodoro,
+                      child: Text(l10n.timerStart),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                    child: Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: [
+                        for (final rounds in Pomodoro.roundChoices)
+                          ChoiceChip(
+                            label: Text(l10n.pomodoroRounds(rounds)),
+                            selected: _pomodoroRounds == rounds,
+                            onSelected: (_) =>
+                                setState(() => _pomodoroRounds = rounds),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -4,8 +4,13 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../common/app_text.dart';
+import '../calm/breathing.dart';
+import '../fun/advent.dart';
 import '../fun/birthday.dart';
+import '../fun/countdown.dart';
 import '../fun/light_games.dart';
+import '../paths/path_story.dart';
+import '../timers/pomodoro.dart';
 import '../library/effect_library.dart';
 
 /// One line of a story, shown from [at] (seconds into the story's cycle)
@@ -171,6 +176,22 @@ List<(int, String)> narrationOf(
   }
   if (GamePlan.of(effect) case final game?) {
     return game.narration(l10n);
+  }
+  if (BreathingPattern.of(effect) case (final pattern, final minutes)) {
+    return pattern.narration(minutes, l10n);
+  }
+  if (Pomodoro.of(effect) case final pomodoro?) {
+    return pomodoro.narration(l10n);
+  }
+  if (PathStory.of(effect) case (_, final part)) {
+    return PathStory.narrationOf(part, l10n);
+  }
+  if (Advent.dayOf(effect) case final day?) {
+    return Advent.narration(day, l10n);
+  }
+  if (Countdown.sleepsOf(effect) != null) {
+    // Its name says it: "5 sleeps to Anna's birthday!".
+    return [(0, effect.name)];
   }
   return library.userStory(effect.id)?.narration ?? const [];
 }

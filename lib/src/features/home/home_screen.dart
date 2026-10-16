@@ -13,7 +13,10 @@ import '../effects/effect_list_screen.dart';
 import '../effects/effect_palette.dart';
 import '../effects/player_route.dart';
 import '../playlists/playlists_screen.dart';
+import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
+import '../house/house_screen.dart';
+import '../kids/kids_mode.dart';
 import '../rooms/rooms_screen.dart';
 import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
@@ -145,6 +148,20 @@ class HomeScreen extends StatelessWidget {
             Card(
               child: ListTile(
                 minVerticalPadding: 20,
+                leading: const Icon(Icons.spa_outlined),
+                title: Text(l10n.breathe),
+                subtitle: Text(l10n.breatheSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                      builder: (_) => const BreathingScreen()),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: ListTile(
+                minVerticalPadding: 20,
                 leading: const Icon(Icons.timer_outlined),
                 title: Text(l10n.timers),
                 subtitle: Text(l10n.timersSubtitle),
@@ -164,6 +181,20 @@ class HomeScreen extends StatelessWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => const FunScreen()),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: ListTile(
+                minVerticalPadding: 20,
+                leading: const Icon(Icons.child_care),
+                title: Text(l10n.kidsMode),
+                subtitle: Text(l10n.kidsModeSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                      builder: (_) => const KidsSetupScreen()),
                 ),
               ),
             ),
@@ -207,6 +238,20 @@ class HomeScreen extends StatelessWidget {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
                         builder: (_) => const AutomationsScreen()),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Card(
+                child: ListTile(
+                  minVerticalPadding: 20,
+                  leading: const Icon(Icons.house_outlined),
+                  title: Text(l10n.house),
+                  subtitle: Text(l10n.houseSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) => const HouseScreen()),
                   ),
                 ),
               ),

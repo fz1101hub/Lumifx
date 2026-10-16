@@ -13,6 +13,7 @@ import 'features/buttons/hue_button_listener.dart';
 import 'features/effects/read_aloud.dart';
 import 'core/photos/photo_picker.dart';
 import 'core/speech/speaker.dart';
+import 'core/speech/voice_recordings.dart';
 import 'core/weather/weather.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
@@ -21,6 +22,7 @@ import 'features/effects/mini_player.dart';
 import 'features/effects/playback_controller.dart';
 import 'features/effects/player_route.dart';
 import 'features/home/home_screen.dart';
+import 'features/kids/kids_mode.dart';
 import 'features/library/effect_library.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/links/app_link.dart';
@@ -47,6 +49,9 @@ class LumiFxApp extends StatefulWidget {
     this.speaker = const NoSpeaker(),
     this.photos = const NoPhotoPicker(),
     this.weather = const NoWeatherService(),
+    this.voices,
+    this.voiceRecorder = const NoVoiceRecorder(),
+    this.voicePlayer = const NoVoicePlayer(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -90,6 +95,11 @@ class LumiFxApp extends StatefulWidget {
   /// The weather for the weather lights.
   final WeatherService weather;
 
+  /// Story lines in the user's own voice; none by default.
+  final VoiceRecordings? voices;
+  final VoiceRecorder voiceRecorder;
+  final VoicePlayer voicePlayer;
+
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
 
@@ -108,6 +118,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   final _routes = RouteTracker();
   late final EffectLibrary _library = EffectLibrary(widget.preferences);
   late final PlaybackController _playback;
+  late final VoiceRecordings _voices = widget.voices ?? NoVoiceRecordings();
   late final LinkHandler _links;
   late final HueButtonListener _buttons;
   late final ReadAloud _readAloud;
@@ -129,13 +140,18 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       camera: widget.camera,
     );
     _notices = _playback.notices.listen(_showNotice);
+    unawaited(_voices.load());
     didChangeAccessibilityFeatures();
     widget.background.onStop = () => unawaited(_playback.stop());
     _playback.addListener(_syncBackground);
     widget.preferences.addListener(_syncBackground);
     widget.preferences.addListener(_maybeWelcome);
+    widget.preferences.addListener(_maybeKidsMode);
     widget.bridge.addListener(_maybeWelcome);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeWelcome());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _maybeWelcome();
+      _maybeKidsMode();
+    });
     _links = LinkHandler(
       playback: _playback,
       library: _library,
@@ -154,6 +170,8 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       preferences: widget.preferences,
       library: _library,
       speaker: widget.speaker,
+      voices: _voices,
+      voicePlayer: widget.voicePlayer,
       locale: () {
         final context = _navigatorKey.currentContext;
         return context == null
@@ -241,6 +259,21 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     )));
   }
 
+  bool _kidsReopened = false;
+
+  /// Kids mode was on when LumiFX closed: it opens in it again.
+  void _maybeKidsMode() {
+    final preferences = widget.preferences;
+    if (_kidsReopened || !preferences.isLoaded) {
+      return;
+    }
+    _kidsReopened = true;
+    final navigator = _navigatorKey.currentState;
+    if (preferences.kidsLocked && navigator != null) {
+      unawaited(openKidsMode(navigator));
+    }
+  }
+
   /// A `lumifx://` link while the app runs.
   @override
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
@@ -295,6 +328,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     widget.preferences.removeListener(_maybeWelcome);
+    widget.preferences.removeListener(_maybeKidsMode);
     widget.preferences.removeListener(_syncBackground);
     _playback.removeListener(_syncBackground);
     widget.background.onStop = null;
@@ -336,6 +370,9 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       clock: widget.clock,
       photos: widget.photos,
       weather: widget.weather,
+      voices: _voices,
+      voiceRecorder: widget.voiceRecorder,
+      voicePlayer: widget.voicePlayer,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

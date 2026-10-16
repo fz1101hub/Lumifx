@@ -1921,7 +1921,7 @@
   "@timers": {
     "description": "Home entry: timers shown by the lights"
   },
-  "timersSubtitle": "Teeth, tidying up, homework, focus, cooking",
+  "timersSubtitle": "Teeth, tidying up, homework, focus, cooking, pomodoro",
   "@timersSubtitle": {
     "description": "Subtitle of the light timers on the home screen"
   },
@@ -1994,7 +1994,7 @@
   "@fun": {
     "description": "Home entry: parties and games played with the lights"
   },
-  "funSubtitle": "Birthday, red light green light, statues, colour hunt",
+  "funSubtitle": "Birthday, sleeps to wait, advent calendar, games",
   "@funSubtitle": {
     "description": "Subtitle of parties and games on the home screen"
   },
@@ -2307,5 +2307,707 @@
         "type": "String"
       }
     }
+  },
+  "gameSimon": "Light memory",
+  "@gameSimon": {
+    "description": "Memory game: repeat the colours the lights show"
+  },
+  "gameSimonSubtitle": "Repeat the colours of the lights",
+  "@gameSimonSubtitle": {
+    "description": "Subtitle of the memory game"
+  },
+  "gameSimonRules": "Watch the lights: they show a few colours, one after the other. Then tap the same colours in the same order. Each round adds one more. How many can you remember?",
+  "@gameSimonRules": {
+    "description": "Rules of the memory game"
+  },
+  "simonWatch": "Watch the lights…",
+  "@simonWatch": {
+    "description": "Memory game: the lights show the sequence"
+  },
+  "simonYourTurn": "Your turn!",
+  "@simonYourTurn": {
+    "description": "Memory game: the player repeats the sequence"
+  },
+  "simonRound": "Round {round}",
+  "@simonRound": {
+    "description": "Memory game: the current round",
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "simonOops": "{count, plural, =0{Oops! Try again.} =1{Oops! You remembered 1 round.} other{Oops! You remembered {count} rounds.}}",
+  "@simonOops": {
+    "description": "Memory game over, with the number of sequences repeated",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "simonBest": "Best: {count}",
+  "@simonBest": {
+    "description": "Memory game: best score so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "simonNewBest": "New record!",
+  "@simonNewBest": {
+    "description": "Memory game: a new best score"
+  },
+  "simonRed": "Red",
+  "@simonRed": {
+    "description": "Memory game colour button"
+  },
+  "simonGreen": "Green",
+  "@simonGreen": {
+    "description": "Memory game colour button"
+  },
+  "simonBlue": "Blue",
+  "@simonBlue": {
+    "description": "Memory game colour button"
+  },
+  "simonYellow": "Yellow",
+  "@simonYellow": {
+    "description": "Memory game colour button"
+  },
+  "breathe": "Calm breathing",
+  "@breathe": {
+    "description": "Home entry: guided slow breathing with the lights"
+  },
+  "breatheSubtitle": "Breathe slowly with the lights",
+  "@breatheSubtitle": {
+    "description": "Subtitle of calm breathing"
+  },
+  "breatheDescription": "The lamps grow brighter as you breathe in and dimmer as you breathe out. Follow them, and the circle on screen, to calm down before sleep or after a busy day.",
+  "@breatheDescription": {
+    "description": "Explains calm breathing"
+  },
+  "breathePatternFlower": "Flower and candle",
+  "@breathePatternFlower": {
+    "description": "Breathing for children"
+  },
+  "breathePatternFlowerDescription": "For children: smell the flower, then blow out the candle.",
+  "@breathePatternFlowerDescription": {
+    "description": "Explains flower and candle breathing"
+  },
+  "breathePatternBox": "Square breathing",
+  "@breathePatternBox": {
+    "description": "Square breathing"
+  },
+  "breathePatternBoxDescription": "In, hold, out, hold: four seconds each.",
+  "@breathePatternBoxDescription": {
+    "description": "Explains square breathing"
+  },
+  "breathePattern478": "4-7-8 breathing",
+  "@breathePattern478": {
+    "description": "4-7-8 breathing"
+  },
+  "breathePattern478Description": "In for 4, hold for 7, out for 8: to fall asleep.",
+  "@breathePattern478Description": {
+    "description": "Explains 4-7-8 breathing"
+  },
+  "breatheIn": "Breathe in…",
+  "@breatheIn": {
+    "description": "Breathing call"
+  },
+  "breatheOut": "Breathe out…",
+  "@breatheOut": {
+    "description": "Breathing call"
+  },
+  "breatheHold": "Hold…",
+  "@breatheHold": {
+    "description": "Breathing call"
+  },
+  "breatheSmell": "Smell the flower…",
+  "@breatheSmell": {
+    "description": "Breathing call for children: breathe in"
+  },
+  "breatheBlow": "Blow out the candle…",
+  "@breatheBlow": {
+    "description": "Breathing call for children: breathe out"
+  },
+  "breatheVoice": "Guide me with a voice",
+  "@breatheVoice": {
+    "description": "Switch: a voice guides the breathing"
+  },
+  "breatheDone": "Well done. Notice how calm you feel.",
+  "@breatheDone": {
+    "description": "Shown when the breathing session ends"
+  },
+  "breatheAgain": "Once more",
+  "@breatheAgain": {
+    "description": "Button: breathe again"
+  },
+  "pomodoro": "Pomodoro",
+  "@pomodoro": {
+    "description": "Timer: rounds of focus with short breaks (the Pomodoro technique)"
+  },
+  "pomodoroSubtitle": "{work} min of focus, {rest} min of break",
+  "@pomodoroSubtitle": {
+    "description": "How long the focus and the breaks last",
+    "placeholders": {
+      "work": {
+        "type": "int"
+      },
+      "rest": {
+        "type": "int"
+      }
+    }
+  },
+  "pomodoroRounds": "{count, plural, =1{1 round} other{{count} rounds}}",
+  "@pomodoroRounds": {
+    "description": "How many rounds of focus",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pomodoroFocus": "Focus: round {round} of {total}",
+  "@pomodoroFocus": {
+    "description": "Pomodoro: which round of focus is running",
+    "placeholders": {
+      "round": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "pomodoroBreak": "Break: stretch and drink some water",
+  "@pomodoroBreak": {
+    "description": "Pomodoro: a break is running"
+  },
+  "pomodoroDone": "Well done, all rounds finished!",
+  "@pomodoroDone": {
+    "description": "Pomodoro: all rounds finished"
+  },
+  "pathStories": "Choose your path",
+  "@pathStories": {
+    "description": "Stories where the listener chooses what happens"
+  },
+  "pathStoriesSubtitle": "Stories where you decide what happens",
+  "@pathStoriesSubtitle": {
+    "description": "Subtitle of the choose-your-path stories"
+  },
+  "pathStoriesDescription": "At each turn of the story, two buttons appear: choose the way, and the lights and the words follow you. Every path has its own ending.",
+  "@pathStoriesDescription": {
+    "description": "Explains choose-your-path stories"
+  },
+  "pathTheEnd": "The end",
+  "@pathTheEnd": {
+    "description": "The end of a story"
+  },
+  "pathPlayAgain": "Try another path",
+  "@pathPlayAgain": {
+    "description": "Button: start the story again to choose another path"
+  },
+  "pathLostStar": "The Lost Star",
+  "@pathLostStar": {
+    "description": "Choose-your-path story title"
+  },
+  "pathLostStarDescription": "A little star has fallen from the sky. Help it home: through the forest or by the lake?",
+  "@pathLostStarDescription": {
+    "description": "Choose-your-path story description"
+  },
+  "pathLostStar1": "A little star has slipped out of the sky and fallen somewhere nearby.",
+  "@pathLostStar1": {
+    "description": "Story line"
+  },
+  "pathLostStar2": "We must bring it home before morning. Where shall we look?",
+  "@pathLostStar2": {
+    "description": "Story line ending with a question"
+  },
+  "pathChoiceForest": "The dark forest",
+  "@pathChoiceForest": {
+    "description": "Choice button"
+  },
+  "pathChoiceLake": "The quiet lake",
+  "@pathChoiceLake": {
+    "description": "Choice button"
+  },
+  "pathLostStarForest1": "Into the forest we go. Fireflies blink between the trees.",
+  "@pathLostStarForest1": {
+    "description": "Story line"
+  },
+  "pathLostStarForest2": "Two paths: one glows softly, the other hides in the dark. Which one?",
+  "@pathLostStarForest2": {
+    "description": "Story line ending with a question"
+  },
+  "pathChoiceGlowingPath": "The glowing path",
+  "@pathChoiceGlowingPath": {
+    "description": "Choice button"
+  },
+  "pathChoiceDarkPath": "The dark path",
+  "@pathChoiceDarkPath": {
+    "description": "Choice button"
+  },
+  "pathLostStarGlow1": "The fireflies lead us to a clearing… and there it is: the little star!",
+  "@pathLostStarGlow1": {
+    "description": "Story line"
+  },
+  "pathLostStarGlow2": "We lift it gently, and up it floats, back into the sky. Good night, little star.",
+  "@pathLostStarGlow2": {
+    "description": "Story line"
+  },
+  "pathLostStarOwl1": "In the dark, two big eyes blink… it's a friendly owl, holding the star!",
+  "@pathLostStarOwl1": {
+    "description": "Story line"
+  },
+  "pathLostStarOwl2": "The owl flies it up to the sky. Thank you, owl! Good night, little star.",
+  "@pathLostStarOwl2": {
+    "description": "Story line"
+  },
+  "pathLostStarLake1": "At the lake, the water is calm and silver under the moon.",
+  "@pathLostStarLake1": {
+    "description": "Story line"
+  },
+  "pathLostStarLake2": "Something shines under the water, and a frog sits on a lily pad. What shall we do?",
+  "@pathLostStarLake2": {
+    "description": "Story line ending with a question"
+  },
+  "pathChoiceDive": "Dive in",
+  "@pathChoiceDive": {
+    "description": "Choice button"
+  },
+  "pathChoiceFrog": "Ask the frog",
+  "@pathChoiceFrog": {
+    "description": "Choice button"
+  },
+  "pathLostStarDive1": "Splash! Down we go… the star is resting on a shell at the bottom.",
+  "@pathLostStarDive1": {
+    "description": "Story line"
+  },
+  "pathLostStarDive2": "We swim it up, and it leaps back into the sky, sparkling. Good night, little star.",
+  "@pathLostStarDive2": {
+    "description": "Story line"
+  },
+  "pathLostStarFrog1": "The frog croaks and jumps… and with one big leap, it tosses the star up high!",
+  "@pathLostStarFrog1": {
+    "description": "Story line"
+  },
+  "pathLostStarFrog2": "The star is home again among its friends. Good night, frog. Good night, star.",
+  "@pathLostStarFrog2": {
+    "description": "Story line"
+  },
+  "pathDragonEgg": "The Dragon's Egg",
+  "@pathDragonEgg": {
+    "description": "Choose-your-path story title"
+  },
+  "pathDragonEggDescription": "Deep in a cave, a dragon's egg is about to hatch. How will you help it?",
+  "@pathDragonEggDescription": {
+    "description": "Choose-your-path story description"
+  },
+  "pathDragonEgg1": "Deep in a cave, a dragon's egg begins to glow.",
+  "@pathDragonEgg1": {
+    "description": "Story line"
+  },
+  "pathDragonEgg2": "It's about to hatch! Shall we keep it warm, or sing it a song?",
+  "@pathDragonEgg2": {
+    "description": "Story line ending with a question"
+  },
+  "pathChoiceWarm": "Keep it warm",
+  "@pathChoiceWarm": {
+    "description": "Choice button"
+  },
+  "pathChoiceSing": "Sing a song",
+  "@pathChoiceSing": {
+    "description": "Choice button"
+  },
+  "pathDragonEggWarm1": "We wrap it in warm light, orange and gold… crack, crack!",
+  "@pathDragonEggWarm1": {
+    "description": "Story line"
+  },
+  "pathDragonEggWarm2": "Out comes a tiny dragon, puffing little sparks of joy.",
+  "@pathDragonEggWarm2": {
+    "description": "Story line"
+  },
+  "pathDragonEggSing1": "We hum a soft song, and the egg sways along… crack!",
+  "@pathDragonEggSing1": {
+    "description": "Story line"
+  },
+  "pathDragonEggSing2": "A sleepy baby dragon yawns, curls up and falls asleep. Shhh.",
+  "@pathDragonEggSing2": {
+    "description": "Story line"
+  },
+  "advent": "Advent calendar",
+  "@advent": {
+    "description": "An advent calendar of light"
+  },
+  "adventSubtitle": "A surprise of light every day from 1 to 24 December",
+  "@adventSubtitle": {
+    "description": "Subtitle of the advent calendar"
+  },
+  "adventDescription": "Open today's door and watch the lights. Doors you have opened show their surprise again with a tap.",
+  "@adventDescription": {
+    "description": "Explains the advent calendar"
+  },
+  "adventLocked": "The doors open from 1 December. Come back then!",
+  "@adventLocked": {
+    "description": "The advent calendar outside its season"
+  },
+  "adventWait": "This door opens on {date}. Patience!",
+  "@adventWait": {
+    "description": "A door that cannot be opened yet; date like 5 December",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adventDay": "Day {day}",
+  "@adventDay": {
+    "description": "A day of the advent calendar",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "adventSnow": "Snowflakes are dancing!",
+  "@adventSnow": {
+    "description": "Advent surprise line"
+  },
+  "adventStar": "Shooting stars cross the sky!",
+  "@adventStar": {
+    "description": "Advent surprise line"
+  },
+  "adventBells": "Golden bells are ringing!",
+  "@adventBells": {
+    "description": "Advent surprise line"
+  },
+  "adventCandy": "Red and white, like a candy cane!",
+  "@adventCandy": {
+    "description": "Advent surprise line"
+  },
+  "adventAurora": "The northern lights are glowing!",
+  "@adventAurora": {
+    "description": "Advent surprise line"
+  },
+  "adventFire": "A cosy fire is crackling!",
+  "@adventFire": {
+    "description": "Advent surprise line"
+  },
+  "adventEve": "It's Christmas Eve! Merry Christmas!",
+  "@adventEve": {
+    "description": "Advent surprise line of 24 December"
+  },
+  "countdowns": "How many sleeps?",
+  "@countdowns": {
+    "description": "Countdowns to big days"
+  },
+  "countdownsSubtitle": "Count down to birthdays, holidays and trips",
+  "@countdownsSubtitle": {
+    "description": "Subtitle of the countdowns"
+  },
+  "countdownsDescription": "Add a big day and see how many sleeps are left. With a tap, the lights show it: one golden spark per sleep, and a party on the day.",
+  "@countdownsDescription": {
+    "description": "Explains the countdowns"
+  },
+  "countdownNew": "New countdown",
+  "@countdownNew": {
+    "description": "Button: add a countdown"
+  },
+  "countdownName": "What are you waiting for?",
+  "@countdownName": {
+    "description": "Field: what the countdown is for"
+  },
+  "countdownNameHint": "Anna's birthday",
+  "@countdownNameHint": {
+    "description": "Example for the countdown name"
+  },
+  "countdownSleeps": "{count, plural, =1{1 sleep to {name}!} other{{count} sleeps to {name}!}}",
+  "@countdownSleeps": {
+    "description": "Sleeps left to a big day",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "countdownToday": "Today's the day: {name}!",
+  "@countdownToday": {
+    "description": "The big day is today",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "countdownPast": "done",
+  "@countdownPast": {
+    "description": "A countdown whose day has passed"
+  },
+  "countdownShow": "Show on the lights",
+  "@countdownShow": {
+    "description": "Button: show the sleeps left on the lights"
+  },
+  "countdownEmpty": "No countdowns yet. Add one with the button below.",
+  "@countdownEmpty": {
+    "description": "No countdowns yet"
+  },
+  "house": "Around the house",
+  "@house": {
+    "description": "Home entry: routines for the house run by the bridge"
+  },
+  "houseSubtitle": "Away mode, night path, natural light",
+  "@houseSubtitle": {
+    "description": "Subtitle of the house routines"
+  },
+  "houseChooseRoom": "Choose a room",
+  "@houseChooseRoom": {
+    "description": "Dialog title: choose a room"
+  },
+  "awayMode": "Away mode",
+  "@awayMode": {
+    "description": "Lights that make the house look lived-in while away"
+  },
+  "awayModeDescription": "While you are away, the rooms you choose light up in the evening and switch off at night, one after the other and at slightly different times every day, so the house looks lived-in. Stored on your Hue Bridge: it runs with your phone far away. Switch it on before leaving, off when you are back.",
+  "@awayModeDescription": {
+    "description": "Explains away mode"
+  },
+  "awayModeNew": "New away mode",
+  "@awayModeNew": {
+    "description": "Button: new away mode"
+  },
+  "awayModeRooms": "Rooms (up to 4)",
+  "@awayModeRooms": {
+    "description": "Which rooms take part, up to four"
+  },
+  "awayModeOnAt": "Lights on from",
+  "@awayModeOnAt": {
+    "description": "When the lights come on"
+  },
+  "awayModeOffAt": "Lights off at",
+  "@awayModeOffAt": {
+    "description": "When the lights go off"
+  },
+  "awayModeHint": "Each room starts 15 minutes after the one before, and the bridge adds up to 30 minutes at random every day.",
+  "@awayModeHint": {
+    "description": "How the times vary"
+  },
+  "awayModeSummary": "{rooms} · {on}–{off}",
+  "@awayModeSummary": {
+    "description": "Summary of an away mode; times like 19:00",
+    "placeholders": {
+      "rooms": {
+        "type": "String"
+      },
+      "on": {
+        "type": "String"
+      },
+      "off": {
+        "type": "String"
+      }
+    }
+  },
+  "nightPath": "Night path",
+  "@nightPath": {
+    "description": "A dim light on a motion sensor at night"
+  },
+  "nightPathDescription": "At night, when a Hue motion sensor sees someone, a room lights up dim and warm, and goes off again a few minutes after the last movement. Stored on your Hue Bridge. If the sensor already does something at night in the Hue app, set it to do nothing during these hours.",
+  "@nightPathDescription": {
+    "description": "Explains the night path"
+  },
+  "nightPathNew": "New night path",
+  "@nightPathNew": {
+    "description": "Button: new night path"
+  },
+  "nightPathNoSensor": "No Hue motion sensor found on your bridge.",
+  "@nightPathNoSensor": {
+    "description": "No motion sensor on the bridge"
+  },
+  "nightPathSensor": "Motion sensor",
+  "@nightPathSensor": {
+    "description": "Field: the motion sensor"
+  },
+  "nightPathFrom": "Night from",
+  "@nightPathFrom": {
+    "description": "When the night starts"
+  },
+  "nightPathTo": "Until",
+  "@nightPathTo": {
+    "description": "When the night ends"
+  },
+  "nightPathStays": "Stays on after the last movement",
+  "@nightPathStays": {
+    "description": "How long the light stays after the last motion"
+  },
+  "nightPathHint": "During the night hours the room switches off after the last movement, even if someone switched it on by hand.",
+  "@nightPathHint": {
+    "description": "A caveat about the night path"
+  },
+  "nightPathTitle": "{sensor} → {room}",
+  "@nightPathTitle": {
+    "description": "A night path: sensor and room",
+    "placeholders": {
+      "sensor": {
+        "type": "String"
+      },
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "nightPathSummary": "{from}–{to} · {minutes} min after the last movement",
+  "@nightPathSummary": {
+    "description": "Summary of a night path",
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "naturalLight": "Natural light",
+  "@naturalLight": {
+    "description": "Whites that follow the day"
+  },
+  "naturalLightDescription": "The whites of a room follow the day: fresh in the morning, bright at midday, warm in the evening, dim and golden at night. A smart scene on your Hue Bridge: switch it on here, or recall it in the Hue app or from a switch.",
+  "@naturalLightDescription": {
+    "description": "Explains natural light"
+  },
+  "naturalLightNew": "Natural light in a room",
+  "@naturalLightNew": {
+    "description": "Button: natural light in a room"
+  },
+  "naturalLightName": "Natural light {room}",
+  "@naturalLightName": {
+    "description": "Name of the natural light smart scene of a room",
+    "placeholders": {
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "naturalLightOn": "Following the day",
+  "@naturalLightOn": {
+    "description": "Natural light is following the day"
+  },
+  "naturalLightOff": "Off",
+  "@naturalLightOff": {
+    "description": "Natural light is not active"
+  },
+  "naturalLightMorning": "Morning light",
+  "@naturalLightMorning": {
+    "description": "Scene name: morning white"
+  },
+  "naturalLightDay": "Daylight",
+  "@naturalLightDay": {
+    "description": "Scene name: bright daylight"
+  },
+  "naturalLightAfternoon": "Afternoon light",
+  "@naturalLightAfternoon": {
+    "description": "Scene name: afternoon white"
+  },
+  "naturalLightEvening": "Evening light",
+  "@naturalLightEvening": {
+    "description": "Scene name: warm evening white"
+  },
+  "naturalLightNight": "Night glow",
+  "@naturalLightNight": {
+    "description": "Scene name: dim golden night"
+  },
+  "kidsMode": "Kids mode",
+  "@kidsMode": {
+    "description": "A locked mode with big buttons for children"
+  },
+  "kidsModeSubtitle": "Big buttons, only the effects you choose",
+  "@kidsModeSubtitle": {
+    "description": "Subtitle of kids mode"
+  },
+  "kidsModeDescription": "Children get big buttons for the effects you choose, and a big stop. Nothing flashes, and they cannot change settings or leave: to exit, a grown-up answers a sum. Kids mode stays on even if LumiFX is closed and opened again.",
+  "@kidsModeDescription": {
+    "description": "Explains kids mode"
+  },
+  "kidsModeTip": "Tip: Guided Access (iPhone) or screen pinning (Android) also keeps the child inside LumiFX.",
+  "@kidsModeTip": {
+    "description": "Tip: keep the child inside the app"
+  },
+  "kidsModeStart": "Start kids mode",
+  "@kidsModeStart": {
+    "description": "Button: start kids mode"
+  },
+  "kidsModeChoose": "Effects for the kids",
+  "@kidsModeChoose": {
+    "description": "Heading: which effects kids mode offers"
+  },
+  "kidsModeFlashing": "Has flashes: not offered",
+  "@kidsModeFlashing": {
+    "description": "An effect that flashes cannot be offered to children"
+  },
+  "kidsModeExit": "Grown-ups: exit",
+  "@kidsModeExit": {
+    "description": "Button and dialog title: a grown-up leaves kids mode"
+  },
+  "kidsGateQuestion": "To leave kids mode, type the result of {a} + {b}.",
+  "@kidsGateQuestion": {
+    "description": "The sum a grown-up answers to leave kids mode",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "kidsGateWrong": "That's not right.",
+  "@kidsGateWrong": {
+    "description": "Wrong answer to the grown-up sum"
+  },
+  "kidsGateOk": "Exit",
+  "@kidsGateOk": {
+    "description": "Button: check the answer"
+  },
+  "recordVoices": "Record your voice",
+  "@recordVoices": {
+    "description": "Record your own voice reading a story"
+  },
+  "recordVoicesDescription": "Read each line of your story aloud: when the story plays, your voice tells it in time with the lights, even far from home. Recordings stay on this phone and are not shared with the story.",
+  "@recordVoicesDescription": {
+    "description": "Explains recording one's voice"
+  },
+  "recordLine": "Record",
+  "@recordLine": {
+    "description": "Button: record this line"
+  },
+  "stopRecording": "Stop",
+  "@stopRecording": {
+    "description": "Button: stop recording"
+  },
+  "playRecording": "Listen",
+  "@playRecording": {
+    "description": "Button: listen to the recording"
+  },
+  "deleteRecording": "Delete recording",
+  "@deleteRecording": {
+    "description": "Button: delete the recording"
+  },
+  "recorded": "Recorded",
+  "@recorded": {
+    "description": "This line has been recorded"
+  },
+  "recordingNoWords": "Add words to the moments of your story to record them.",
+  "@recordingNoWords": {
+    "description": "No lines with words to record"
+  },
+  "recordingDenied": "LumiFX needs the microphone to record your voice. You can allow it in your phone settings.",
+  "@recordingDenied": {
+    "description": "The microphone cannot be used to record"
   }
 }

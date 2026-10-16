@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/weather/weather.dart';
+import '../fun/countdown.dart';
 import '../playlists/playlist.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
@@ -131,6 +133,111 @@ class PreferencesController extends ChangeNotifier {
   Future<void> setReadAloud(bool value) {
     _readAloud = value;
     return _changed();
+  }
+
+  var _adventOpened = <String>[];
+
+  /// Whether door [day] of the advent calendar of the season of [today]
+  /// has been opened (the season runs into early January).
+  bool isAdventOpened(int day, DateTime today) =>
+      _adventOpened.contains(_adventKey(day, today));
+
+  Future<void> openAdventDoor(int day, DateTime today) {
+    final key = _adventKey(day, today);
+    if (_adventOpened.contains(key)) {
+      return Future.value();
+    }
+    // Only this season's doors are worth keeping.
+    final season = _adventKey(0, today).split('-').first;
+    _adventOpened = [
+      for (final k in _adventOpened)
+        if (k.startsWith('$season-')) k,
+      key,
+    ];
+    return _changed();
+  }
+
+  static String _adventKey(int day, DateTime today) =>
+      '${today.month == 1 ? today.year - 1 : today.year}-$day';
+
+  var _countdowns = <Countdown>[];
+
+  /// Days to wait for, soonest first.
+  List<Countdown> get countdowns => List.unmodifiable(_countdowns);
+
+  Future<void> saveCountdown(Countdown countdown) {
+    _countdowns = [
+      for (final c in _countdowns)
+        if (c.id != countdown.id) c,
+      countdown,
+    ]..sort((a, b) => a.date.compareTo(b.date));
+    if (_countdowns.length > Countdown.maxCountdowns) {
+      _countdowns =
+          _countdowns.sublist(_countdowns.length - Countdown.maxCountdowns);
+    }
+    return _changed();
+  }
+
+  Future<void> deleteCountdown(String id) {
+    _countdowns = [
+      for (final c in _countdowns)
+        if (c.id != id) c,
+    ];
+    return _changed();
+  }
+
+  List<String>? _kidsEffects;
+
+  /// The effects offered in kids mode; null until a grown-up chooses.
+  List<String>? get kidsEffects => _kidsEffects;
+
+  Future<void> setKidsEffects(List<String> ids) {
+    _kidsEffects = ids.take(24).toList();
+    return _changed();
+  }
+
+  bool _kidsLocked = false;
+
+  /// Kids mode is on: LumiFX opens in it until a grown-up leaves it.
+  bool get kidsLocked => _kidsLocked;
+
+  Future<void> setKidsLocked(bool value) {
+    if (value == _kidsLocked) {
+      return Future.value();
+    }
+    _kidsLocked = value;
+    return _changed();
+  }
+
+  var _naturalLights = <String>[];
+
+  /// The smart scenes LumiFX made for natural light (the bridge does not
+  /// say who made one).
+  Set<String> get naturalLightIds => _naturalLights.toSet();
+
+  Future<void> addNaturalLight(String id) {
+    _naturalLights = [..._naturalLights.where((i) => i != id), id];
+    return _changed();
+  }
+
+  Future<void> removeNaturalLight(String id) {
+    _naturalLights = [..._naturalLights.where((i) => i != id)];
+    return _changed();
+  }
+
+  int _simonBest = 0;
+
+  /// The longest sequence repeated in the memory game.
+  int get simonBest => _simonBest;
+
+  /// Keeps [score] if it beats the best; true when it does.
+  bool recordSimonScore(int score) {
+    if (score <= _simonBest) {
+      return false;
+    }
+    _simonBest = score;
+    unawaited(_changed());
+    return true;
   }
 
   WeatherPlace? _weatherPlace;
@@ -277,6 +384,22 @@ class PreferencesController extends ChangeNotifier {
       _readAlong = json['readAlong'] as bool? ?? true;
       _readAloud = json['readAloud'] == true;
       _weatherPlace = WeatherPlace.fromJson(json['weatherPlace']);
+      _adventOpened = _strings(json['adventOpened']).take(60).toList();
+      final countdowns = json['countdowns'];
+      _countdowns = [
+        if (countdowns is List)
+          for (final item in countdowns.take(Countdown.maxCountdowns))
+            if (Countdown.fromJson(item) case final countdown?) countdown,
+      ]..sort((a, b) => a.date.compareTo(b.date));
+      final kids = json['kidsEffects'];
+      _kidsEffects = kids is List ? _strings(kids).take(24).toList() : null;
+      _kidsLocked = json['kidsLocked'] == true;
+      _naturalLights = _strings(json['naturalLights'])
+          .where((id) => id.length <= 80)
+          .take(20)
+          .toList();
+      final simon = json['simonBest'];
+      _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
       final buttons = json['buttonActions'];
       _buttonActions = {
         if (buttons is Map)
@@ -542,6 +665,12 @@ class PreferencesController extends ChangeNotifier {
       'readAlong': _readAlong,
       'readAloud': _readAloud,
       'weatherPlace': _weatherPlace?.toJson(),
+      'simonBest': _simonBest,
+      'naturalLights': _naturalLights,
+      'kidsEffects': _kidsEffects,
+      'kidsLocked': _kidsLocked,
+      'adventOpened': _adventOpened,
+      'countdowns': [for (final c in _countdowns) c.toJson()],
       'buttonActions': _buttonActions,
       'bedtime': {
         'story': _bedtimeStory,

@@ -507,6 +507,18 @@ class PlaybackController extends ChangeNotifier {
   bool get isPlaying => _status == PlaybackStatus.playing;
   bool get isBusy => _status == PlaybackStatus.starting;
   EffectPlayer? get player => _player;
+
+  /// Every light shows [color] at once for [length], over the effect: a
+  /// game's answer to a tap. Nothing happens unless an effect plays.
+  void flash(
+    LightColor color, {
+    Duration length = const Duration(milliseconds: 600),
+  }) {
+    if (_status == PlaybackStatus.playing) {
+      _player?.flashNow(color, length: length);
+    }
+  }
+
   MusicSyncController? get music => _music;
 
   /// The camera watching the TV, while a TV Sync effect plays.

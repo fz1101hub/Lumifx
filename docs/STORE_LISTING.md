@@ -74,12 +74,20 @@ artifact, see RELEASE.md § 1b).
 > and never recorded.
 >
 > FAMILY TIME
-> Bedtime in one tap, stories read aloud as the lights tell them, an
+> Bedtime in one tap, stories read aloud as the lights tell them (or in
+> your own recorded voice), stories where the children choose the way, an
 > ok-to-wake light that turns green in the morning, light timers for
-> brushing teeth or tidying up, a birthday party where the candles glow on
-> your lamps until you blow them out, games led by the lights (red light,
-> green light; statues; colour hunt), the weather outside in light, and
-> scenes made from your own photos.
+> brushing teeth or tidying up, calm breathing, a birthday party where the
+> candles glow on your lamps until you blow them out, games led by the
+> lights (red light, green light; statues; colour hunt; light memory), an
+> advent calendar and countdowns to big days, a locked kids mode with big
+> buttons, the weather outside in light, and scenes made from your own
+> photos.
+>
+> AROUND THE HOUSE
+> An away mode that makes the house look lived-in, a night path on a Hue
+> motion sensor, and natural light that follows the day, all kept on your
+> Hue Bridge so they run with your phone off.
 >
 > MADE FOR HUE
 > • Finds and pairs with your Hue Bridge on your Wi-Fi, no account needed.
@@ -161,11 +169,19 @@ artifact, see RELEASE.md § 1b).
 >
 > IN FAMIGLIA
 > La nanna con un tocco, storie lette ad alta voce mentre le luci le
-> raccontano, un semaforo della sveglia che diventa verde al mattino, timer
-> di luce per lavarsi i denti o riordinare, una festa di compleanno con le
-> candeline accese sulle lampade finché non le spegni con un soffio, giochi
-> guidati dalle luci (semaforo, statue, caccia al colore), il meteo di fuori
-> in luce e scene create dalle tue foto.
+> raccontano (o con la tua voce registrata), storie in cui i bambini
+> scelgono la strada, un semaforo della sveglia che diventa verde al
+> mattino, timer di luce per lavarsi i denti o riordinare, respiro calmo,
+> una festa di compleanno con le candeline accese sulle lampade finché non
+> le spegni con un soffio, giochi guidati dalle luci (semaforo, statue,
+> caccia al colore, memoria di luce), il calendario dell'Avvento e il conto
+> alla rovescia per i giorni speciali, una modalità bambini bloccata con
+> pulsanti grandi, il meteo di fuori in luce e scene create dalle tue foto.
+>
+> PER LA CASA
+> Una modalità vacanza che fa sembrare la casa abitata, un percorso
+> notturno con il sensore di movimento Hue e una luce naturale che segue il
+> giorno, tutto salvato sul tuo Hue Bridge così funziona a telefono spento.
 >
 > FATTA PER HUE
 > • Trova e collega il tuo Bridge Hue sul Wi-Fi, senza account.
@@ -223,6 +239,10 @@ artifact, see RELEASE.md § 1b).
   data types list, do **not** declare "Audio files" or "Voice or sound
   recordings"; audio is processed ephemerally on device and never stored
   or sent (Play's definition of "collected" excludes ephemeral processing).
+- Voice recordings: users can record their own voice for stories they
+  made; the files stay on the device (Android backup is off) and are
+  never transmitted. Not "collected" in Play's sense: do not declare
+  "Voice or sound recordings".
 - Photos: "From a photo" (scene editor) uses the system photo picker or
   camera; the picture is read once on the device to take its colours and
   is never stored or sent. Do **not** declare "Photos". Android needs no

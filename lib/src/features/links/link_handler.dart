@@ -49,6 +49,9 @@ class LinkHandler {
         return _voice(words);
       case ImportLink(:final data):
         await _ready();
+        if (preferences.kidsLocked) {
+          return false;
+        }
         final bundle = SharedBundle.decode(data);
         final context = navigatorKey.currentContext;
         if (bundle == null || context == null || !context.mounted) {
@@ -198,7 +201,8 @@ class LinkHandler {
   /// Opens the player unless it is already on top.
   void _showPlayer(String effectId, Route<void> Function() route) {
     final navigator = navigatorKey.currentState;
-    if (navigator == null) {
+    // In kids mode the effect plays, but the screen stays where it is.
+    if (navigator == null || preferences.kidsLocked) {
       return;
     }
     var onTop = false;
