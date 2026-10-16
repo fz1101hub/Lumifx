@@ -5,6 +5,7 @@ import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../common/app_text.dart';
 import '../fun/birthday.dart';
+import '../fun/light_games.dart';
 import '../library/effect_library.dart';
 
 /// One line of a story, shown from [at] (seconds into the story's cycle)
@@ -155,8 +156,8 @@ final Map<String, List<NarrationLine>> storyNarration = {
 };
 
 /// The lines of [effect] to read along, with the second each appears: a
-/// built-in story's, a birthday party's, or the words of a story the user
-/// made. Empty when it has none.
+/// built-in story's, a birthday party's, a game's calls, or the words of a
+/// story the user made. Empty when it has none.
 List<(int, String)> narrationOf(
   LightingEffect effect,
   AppLocalizations l10n,
@@ -167,6 +168,9 @@ List<(int, String)> narrationOf(
   }
   if (Birthday.of(effect) case final birthday?) {
     return birthday.narration(effect, l10n);
+  }
+  if (GamePlan.of(effect) case final game?) {
+    return game.narration(l10n);
   }
   return library.userStory(effect.id)?.narration ?? const [];
 }

@@ -2084,5 +2084,109 @@
   "birthdayAgain": "Again!",
   "@birthdayAgain": {
     "description": "Button: light the candles again"
+  },
+  "gameRedLight": "Red light, green light",
+  "@gameRedLight": {
+    "description": "Game: move on green, freeze on red"
+  },
+  "gameRedLightSubtitle": "Move on green, freeze on red",
+  "@gameRedLightSubtitle": {
+    "description": "Subtitle of the red light, green light game"
+  },
+  "gameRedLightRules": "Move towards the finish while the lights are green, slow down when they turn amber, and freeze on red. Anyone who moves on red goes back to the start!",
+  "@gameRedLightRules": {
+    "description": "Rules of the red light, green light game"
+  },
+  "gameStatues": "Statues",
+  "@gameStatues": {
+    "description": "Game: dance, then freeze like a statue"
+  },
+  "gameStatuesSubtitle": "Dance with the lights, freeze when they do",
+  "@gameStatuesSubtitle": {
+    "description": "Subtitle of the statues game"
+  },
+  "gameStatuesRules": "Put on some music and dance while the lights dance in every colour. When they turn icy blue, freeze like a statue until they dance again!",
+  "@gameStatuesRules": {
+    "description": "Rules of the statues game"
+  },
+  "gameColourHunt": "Colour hunt",
+  "@gameColourHunt": {
+    "description": "Game: find something of the colour the lights show"
+  },
+  "gameColourHuntSubtitle": "Find something of the lights' colour",
+  "@gameColourHuntSubtitle": {
+    "description": "Subtitle of the colour hunt game"
+  },
+  "gameColourHuntRules": "The lights choose a colour: find something of that colour in the house and bring it back before the lamps go out one by one!",
+  "@gameColourHuntRules": {
+    "description": "Rules of the colour hunt game"
+  },
+  "gameSayCalls": "Say the calls out loud",
+  "@gameSayCalls": {
+    "description": "Switch: the phone says the game's calls out loud"
+  },
+  "gameGo": "Green light: go!",
+  "@gameGo": {
+    "description": "Game call: green, move"
+  },
+  "gameSlowDown": "Careful…",
+  "@gameSlowDown": {
+    "description": "Game call: amber, red is coming"
+  },
+  "gameStop": "Red light: stop!",
+  "@gameStop": {
+    "description": "Game call: red, freeze"
+  },
+  "gameDance": "Dance!",
+  "@gameDance": {
+    "description": "Game call: dance"
+  },
+  "gameFreeze": "Freeze like a statue!",
+  "@gameFreeze": {
+    "description": "Game call: freeze like a statue"
+  },
+  "gameFindRed": "Find something red!",
+  "@gameFindRed": {
+    "description": "Colour hunt call"
+  },
+  "gameFindOrange": "Find something orange!",
+  "@gameFindOrange": {
+    "description": "Colour hunt call"
+  },
+  "gameFindYellow": "Find something yellow!",
+  "@gameFindYellow": {
+    "description": "Colour hunt call"
+  },
+  "gameFindGreen": "Find something green!",
+  "@gameFindGreen": {
+    "description": "Colour hunt call"
+  },
+  "gameFindBlue": "Find something blue!",
+  "@gameFindBlue": {
+    "description": "Colour hunt call"
+  },
+  "gameFindPurple": "Find something purple!",
+  "@gameFindPurple": {
+    "description": "Colour hunt call"
+  },
+  "gameFindPink": "Find something pink!",
+  "@gameFindPink": {
+    "description": "Colour hunt call"
+  },
+  "gameFindWhite": "Find something white!",
+  "@gameFindWhite": {
+    "description": "Colour hunt call"
+  },
+  "gameTimeUp": "Time's up! Did you find it?",
+  "@gameTimeUp": {
+    "description": "Colour hunt: the time to find is over"
+  },
+  "gameOver": "Game over! Well played!",
+  "@gameOver": {
+    "description": "The end of a light game"
+  },
+  "gameAgain": "Play again",
+  "@gameAgain": {
+    "description": "Button: play the game again"
   }
 }

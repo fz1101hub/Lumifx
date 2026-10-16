@@ -19,6 +19,8 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
+import 'package:lumifx/src/features/fun/game_screen.dart';
+import 'package:lumifx/src/features/fun/light_games.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
@@ -304,6 +306,41 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Whoosh! The candles are out.'), findsOneWidget);
     expect(microphone.stopped, isTrue, reason: 'it stops listening');
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a light game shows its calls and ends with a cheer',
+      (tester) async {
+    await _pumpApp(tester);
+    await openBirthday(tester);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Red light, green light'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('freeze on red'), findsOneWidget);
+    expect(find.text('Say the calls out loud'), findsOneWidget);
+
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Green light: go!'), findsOneWidget);
+
+    final playback =
+        AppScope.of(tester.element(find.byType(GameScreen))).playback;
+    final plan = GamePlan.of(playback.effect)!;
+    final stop = plan.phases.firstWhere((p) => p.cue == GameCue.stop);
+    playback.player!.advance(Duration(seconds: stop.at) -
+        playback.player!.position +
+        const Duration(milliseconds: 200));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Red light: stop!'), findsOneWidget);
+
+    playback.player!.advance(plan.length);
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Game over! Well played!'), findsOneWidget);
+    expect(find.text('Play again'), findsOneWidget);
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
   });

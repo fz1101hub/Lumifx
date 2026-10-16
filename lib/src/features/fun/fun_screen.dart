@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import 'birthday_screen.dart';
+import 'game_screen.dart';
+import 'light_games.dart';
 
 /// Parties and games played with the lights.
 class FunScreen extends StatelessWidget {
@@ -36,6 +38,17 @@ class FunScreen extends StatelessWidget {
         children: [
           entry(Icons.cake_outlined, l10n.birthday, l10n.birthdaySubtitle,
               () => const BirthdayScreen()),
+          for (final game in LightGame.values)
+            entry(
+              GameScreen.iconOf(game),
+              GameScreen.titleOf(l10n, game),
+              switch (game) {
+                LightGame.redLightGreenLight => l10n.gameRedLightSubtitle,
+                LightGame.statues => l10n.gameStatuesSubtitle,
+                LightGame.colourHunt => l10n.gameColourHuntSubtitle,
+              },
+              () => GameScreen(game: game),
+            ),
         ],
       ),
     );
