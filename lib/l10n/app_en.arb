@@ -2754,5 +2754,172 @@
   "countdownEmpty": "No countdowns yet. Add one with the button below.",
   "@countdownEmpty": {
     "description": "No countdowns yet"
+  },
+  "house": "Around the house",
+  "@house": {
+    "description": "Home entry: routines for the house run by the bridge"
+  },
+  "houseSubtitle": "Away mode, night path, natural light",
+  "@houseSubtitle": {
+    "description": "Subtitle of the house routines"
+  },
+  "houseChooseRoom": "Choose a room",
+  "@houseChooseRoom": {
+    "description": "Dialog title: choose a room"
+  },
+  "awayMode": "Away mode",
+  "@awayMode": {
+    "description": "Lights that make the house look lived-in while away"
+  },
+  "awayModeDescription": "While you are away, the rooms you choose light up in the evening and switch off at night, one after the other and at slightly different times every day, so the house looks lived-in. Stored on your Hue Bridge: it runs with your phone far away. Switch it on before leaving, off when you are back.",
+  "@awayModeDescription": {
+    "description": "Explains away mode"
+  },
+  "awayModeNew": "New away mode",
+  "@awayModeNew": {
+    "description": "Button: new away mode"
+  },
+  "awayModeRooms": "Rooms (up to 4)",
+  "@awayModeRooms": {
+    "description": "Which rooms take part, up to four"
+  },
+  "awayModeOnAt": "Lights on from",
+  "@awayModeOnAt": {
+    "description": "When the lights come on"
+  },
+  "awayModeOffAt": "Lights off at",
+  "@awayModeOffAt": {
+    "description": "When the lights go off"
+  },
+  "awayModeHint": "Each room starts 15 minutes after the one before, and the bridge adds up to 30 minutes at random every day.",
+  "@awayModeHint": {
+    "description": "How the times vary"
+  },
+  "awayModeSummary": "{rooms} · {on}–{off}",
+  "@awayModeSummary": {
+    "description": "Summary of an away mode; times like 19:00",
+    "placeholders": {
+      "rooms": {
+        "type": "String"
+      },
+      "on": {
+        "type": "String"
+      },
+      "off": {
+        "type": "String"
+      }
+    }
+  },
+  "nightPath": "Night path",
+  "@nightPath": {
+    "description": "A dim light on a motion sensor at night"
+  },
+  "nightPathDescription": "At night, when a Hue motion sensor sees someone, a room lights up dim and warm, and goes off again a few minutes after the last movement. Stored on your Hue Bridge. If the sensor already does something at night in the Hue app, set it to do nothing during these hours.",
+  "@nightPathDescription": {
+    "description": "Explains the night path"
+  },
+  "nightPathNew": "New night path",
+  "@nightPathNew": {
+    "description": "Button: new night path"
+  },
+  "nightPathNoSensor": "No Hue motion sensor found on your bridge.",
+  "@nightPathNoSensor": {
+    "description": "No motion sensor on the bridge"
+  },
+  "nightPathSensor": "Motion sensor",
+  "@nightPathSensor": {
+    "description": "Field: the motion sensor"
+  },
+  "nightPathFrom": "Night from",
+  "@nightPathFrom": {
+    "description": "When the night starts"
+  },
+  "nightPathTo": "Until",
+  "@nightPathTo": {
+    "description": "When the night ends"
+  },
+  "nightPathStays": "Stays on after the last movement",
+  "@nightPathStays": {
+    "description": "How long the light stays after the last motion"
+  },
+  "nightPathHint": "During the night hours the room switches off after the last movement, even if someone switched it on by hand.",
+  "@nightPathHint": {
+    "description": "A caveat about the night path"
+  },
+  "nightPathTitle": "{sensor} → {room}",
+  "@nightPathTitle": {
+    "description": "A night path: sensor and room",
+    "placeholders": {
+      "sensor": {
+        "type": "String"
+      },
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "nightPathSummary": "{from}–{to} · {minutes} min after the last movement",
+  "@nightPathSummary": {
+    "description": "Summary of a night path",
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "naturalLight": "Natural light",
+  "@naturalLight": {
+    "description": "Whites that follow the day"
+  },
+  "naturalLightDescription": "The whites of a room follow the day: fresh in the morning, bright at midday, warm in the evening, dim and golden at night. A smart scene on your Hue Bridge: switch it on here, or recall it in the Hue app or from a switch.",
+  "@naturalLightDescription": {
+    "description": "Explains natural light"
+  },
+  "naturalLightNew": "Natural light in a room",
+  "@naturalLightNew": {
+    "description": "Button: natural light in a room"
+  },
+  "naturalLightName": "Natural light {room}",
+  "@naturalLightName": {
+    "description": "Name of the natural light smart scene of a room",
+    "placeholders": {
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "naturalLightOn": "Following the day",
+  "@naturalLightOn": {
+    "description": "Natural light is following the day"
+  },
+  "naturalLightOff": "Off",
+  "@naturalLightOff": {
+    "description": "Natural light is not active"
+  },
+  "naturalLightMorning": "Morning light",
+  "@naturalLightMorning": {
+    "description": "Scene name: morning white"
+  },
+  "naturalLightDay": "Daylight",
+  "@naturalLightDay": {
+    "description": "Scene name: bright daylight"
+  },
+  "naturalLightAfternoon": "Afternoon light",
+  "@naturalLightAfternoon": {
+    "description": "Scene name: afternoon white"
+  },
+  "naturalLightEvening": "Evening light",
+  "@naturalLightEvening": {
+    "description": "Scene name: warm evening white"
+  },
+  "naturalLightNight": "Night glow",
+  "@naturalLightNight": {
+    "description": "Scene name: dim golden night"
   }
 }

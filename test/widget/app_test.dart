@@ -1662,6 +1662,13 @@ Future<BridgeController> _connectedBridge(
         }
         if (request.method == 'POST') {
           puts?.add('POST ${request.url.path}');
+          if (request.url.path.startsWith('/api/')) {
+            return json([
+              {
+                'success': {'id': '${puts?.length ?? 1}'},
+              },
+            ]);
+          }
           return json({
             'data': [
               {'rid': 's2', 'rtype': 'scene'},
@@ -1669,6 +1676,12 @@ Future<BridgeController> _connectedBridge(
           });
         }
         switch (request.url.path) {
+          case '/api/key/sensors':
+            return json({
+              '2': {'type': 'ZLLPresence', 'name': 'Hallway sensor'},
+            });
+          case '/api/key/rules':
+            return json(<String, Object>{});
           case '/api/key/schedules':
             return json({
               '7': {
@@ -1785,6 +1798,7 @@ Future<BridgeController> _connectedBridge(
               'data': [
                 {
                   'id': 'r1',
+                  'id_v1': '/groups/1',
                   'metadata': {'name': 'Living room'},
                   'children': [
                     {'rid': 'd1', 'rtype': 'device'},
@@ -1842,6 +1856,56 @@ void streamingTests() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(puts, contains('/clip/v2/resource/scene/s1'));
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('around the house: away mode, night path, natural light',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Around the house'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Around the house'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Around the house'));
+    await tester.pumpAndSettle();
+    expect(find.text('Away mode'), findsOneWidget);
+
+    await tester.tap(find.text('New away mode'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilterChip, 'Living room'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(puts.where((p) => p == 'POST /api/key/schedules'), hasLength(2));
+
+    await tester.scrollUntilVisible(find.text('New night path'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('New night path'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hallway sensor'), findsOneWidget);
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(puts.where((p) => p == 'POST /api/key/rules'), hasLength(2));
+
+    await tester.scrollUntilVisible(find.text('Natural light in a room'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Natural light in a room'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Living room').last);
+    await tester.pumpAndSettle();
+    expect(
+        puts.where((p) => p == 'POST /clip/v2/resource/scene'), hasLength(5));
+    expect(puts, contains('POST /clip/v2/resource/smart_scene'));
+    expect(puts, contains('/clip/v2/resource/smart_scene/s2'),
+        reason: 'switched on at once');
+    expect(preferences.naturalLightIds, {'s2'});
   });
 
   testWidgets('a playing effect can be saved as a Hue scene', (tester) async {

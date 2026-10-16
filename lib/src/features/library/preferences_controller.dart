@@ -186,6 +186,22 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  var _naturalLights = <String>[];
+
+  /// The smart scenes LumiFX made for natural light (the bridge does not
+  /// say who made one).
+  Set<String> get naturalLightIds => _naturalLights.toSet();
+
+  Future<void> addNaturalLight(String id) {
+    _naturalLights = [..._naturalLights.where((i) => i != id), id];
+    return _changed();
+  }
+
+  Future<void> removeNaturalLight(String id) {
+    _naturalLights = [..._naturalLights.where((i) => i != id)];
+    return _changed();
+  }
+
   int _simonBest = 0;
 
   /// The longest sequence repeated in the memory game.
@@ -352,6 +368,10 @@ class PreferencesController extends ChangeNotifier {
           for (final item in countdowns.take(Countdown.maxCountdowns))
             if (Countdown.fromJson(item) case final countdown?) countdown,
       ]..sort((a, b) => a.date.compareTo(b.date));
+      _naturalLights = _strings(json['naturalLights'])
+          .where((id) => id.length <= 80)
+          .take(20)
+          .toList();
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
       final buttons = json['buttonActions'];
@@ -620,6 +640,7 @@ class PreferencesController extends ChangeNotifier {
       'readAloud': _readAloud,
       'weatherPlace': _weatherPlace?.toJson(),
       'simonBest': _simonBest,
+      'naturalLights': _naturalLights,
       'adventOpened': _adventOpened,
       'countdowns': [for (final c in _countdowns) c.toJson()],
       'buttonActions': _buttonActions,

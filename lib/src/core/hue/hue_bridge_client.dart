@@ -2,11 +2,15 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../color/light_color.dart';
 import 'hue_buttons.dart';
 import 'hue_exceptions.dart';
 import 'hue_automations.dart';
+import 'hue_house.dart';
 import 'hue_models.dart';
 import 'hue_schedules.dart';
+
+part 'hue_house_client.dart';
 
 /// Everything LumiFX reads from a bridge in one snapshot.
 class HueHome {
