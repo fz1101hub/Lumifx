@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../common/app_text.dart';
+import '../kids/kids_mode.dart';
 import 'effect_palette.dart';
 import 'playback_controller.dart';
 import 'player_route.dart';
@@ -145,7 +146,9 @@ class PlaybackShell extends StatelessWidget {
       listenable: Listenable.merge([controller, routes]),
       builder: (context, page) {
         final shownId = playerEffectId(routes.topRouteName);
+        // Kids mode has its own stop, and no way out to the player.
         final visible = controller.status != PlaybackStatus.idle &&
+            routes.topRouteName != kidsModeRouteName &&
             (shownId == null || !controller.isShownBy(shownId));
         return Column(
           children: [

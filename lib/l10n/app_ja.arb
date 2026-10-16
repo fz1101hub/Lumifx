@@ -783,5 +783,16 @@
   "naturalLightDay": "昼の光",
   "naturalLightAfternoon": "午後の光",
   "naturalLightEvening": "夕方の光",
-  "naturalLightNight": "夜のあかり"
+  "naturalLightNight": "夜のあかり",
+  "kidsMode": "キッズモード",
+  "kidsModeSubtitle": "大きなボタン、えらんだ効果だけ",
+  "kidsModeDescription": "子どもには、えらんだ効果の大きなボタンと大きなストップボタンが表示されます。点滅はなく、設定の変更やほかの画面への移動はできません。終了するには大人が足し算に答えます。LumiFX を閉じて開き直してもキッズモードのままです。",
+  "kidsModeTip": "ヒント：アクセスガイド（iPhone）や画面の固定（Android）を使うと、子どもが LumiFX から出られません。",
+  "kidsModeStart": "キッズモードを開始",
+  "kidsModeChoose": "子ども用の効果",
+  "kidsModeFlashing": "点滅あり：選べません",
+  "kidsModeExit": "大人の方：終了",
+  "kidsGateQuestion": "キッズモードを終了するには、{a} + {b} の答えを入力してください。",
+  "kidsGateWrong": "ちがいます。",
+  "kidsGateOk": "終了"
 }

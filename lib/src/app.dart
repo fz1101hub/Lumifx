@@ -21,6 +21,7 @@ import 'features/effects/mini_player.dart';
 import 'features/effects/playback_controller.dart';
 import 'features/effects/player_route.dart';
 import 'features/home/home_screen.dart';
+import 'features/kids/kids_mode.dart';
 import 'features/library/effect_library.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/links/app_link.dart';
@@ -134,8 +135,12 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     _playback.addListener(_syncBackground);
     widget.preferences.addListener(_syncBackground);
     widget.preferences.addListener(_maybeWelcome);
+    widget.preferences.addListener(_maybeKidsMode);
     widget.bridge.addListener(_maybeWelcome);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeWelcome());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _maybeWelcome();
+      _maybeKidsMode();
+    });
     _links = LinkHandler(
       playback: _playback,
       library: _library,
@@ -241,6 +246,21 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     )));
   }
 
+  bool _kidsReopened = false;
+
+  /// Kids mode was on when LumiFX closed: it opens in it again.
+  void _maybeKidsMode() {
+    final preferences = widget.preferences;
+    if (_kidsReopened || !preferences.isLoaded) {
+      return;
+    }
+    _kidsReopened = true;
+    final navigator = _navigatorKey.currentState;
+    if (preferences.kidsLocked && navigator != null) {
+      unawaited(openKidsMode(navigator));
+    }
+  }
+
   /// A `lumifx://` link while the app runs.
   @override
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
@@ -295,6 +315,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     widget.preferences.removeListener(_maybeWelcome);
+    widget.preferences.removeListener(_maybeKidsMode);
     widget.preferences.removeListener(_syncBackground);
     _playback.removeListener(_syncBackground);
     widget.background.onStop = null;

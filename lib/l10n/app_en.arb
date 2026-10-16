@@ -2921,5 +2921,57 @@
   "naturalLightNight": "Night glow",
   "@naturalLightNight": {
     "description": "Scene name: dim golden night"
+  },
+  "kidsMode": "Kids mode",
+  "@kidsMode": {
+    "description": "A locked mode with big buttons for children"
+  },
+  "kidsModeSubtitle": "Big buttons, only the effects you choose",
+  "@kidsModeSubtitle": {
+    "description": "Subtitle of kids mode"
+  },
+  "kidsModeDescription": "Children get big buttons for the effects you choose, and a big stop. Nothing flashes, and they cannot change settings or leave: to exit, a grown-up answers a sum. Kids mode stays on even if LumiFX is closed and opened again.",
+  "@kidsModeDescription": {
+    "description": "Explains kids mode"
+  },
+  "kidsModeTip": "Tip: Guided Access (iPhone) or screen pinning (Android) also keeps the child inside LumiFX.",
+  "@kidsModeTip": {
+    "description": "Tip: keep the child inside the app"
+  },
+  "kidsModeStart": "Start kids mode",
+  "@kidsModeStart": {
+    "description": "Button: start kids mode"
+  },
+  "kidsModeChoose": "Effects for the kids",
+  "@kidsModeChoose": {
+    "description": "Heading: which effects kids mode offers"
+  },
+  "kidsModeFlashing": "Has flashes: not offered",
+  "@kidsModeFlashing": {
+    "description": "An effect that flashes cannot be offered to children"
+  },
+  "kidsModeExit": "Grown-ups: exit",
+  "@kidsModeExit": {
+    "description": "Button and dialog title: a grown-up leaves kids mode"
+  },
+  "kidsGateQuestion": "To leave kids mode, type the result of {a} + {b}.",
+  "@kidsGateQuestion": {
+    "description": "The sum a grown-up answers to leave kids mode",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "kidsGateWrong": "That's not right.",
+  "@kidsGateWrong": {
+    "description": "Wrong answer to the grown-up sum"
+  },
+  "kidsGateOk": "Exit",
+  "@kidsGateOk": {
+    "description": "Button: check the answer"
   }
 }

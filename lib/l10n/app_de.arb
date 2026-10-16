@@ -783,5 +783,16 @@
   "naturalLightDay": "Tageslicht",
   "naturalLightAfternoon": "Nachmittagslicht",
   "naturalLightEvening": "Abendlicht",
-  "naturalLightNight": "Nachtschimmer"
+  "naturalLightNight": "Nachtschimmer",
+  "kidsMode": "Kindermodus",
+  "kidsModeSubtitle": "Große Tasten, nur die Effekte, die du wählst",
+  "kidsModeDescription": "Kinder bekommen große Tasten für die Effekte, die du wählst, und eine große Stopptaste. Nichts blinkt, und sie können weder Einstellungen ändern noch hinaus: Zum Beenden löst ein Erwachsener eine Rechenaufgabe. Der Kindermodus bleibt an, auch wenn LumiFX geschlossen und wieder geöffnet wird.",
+  "kidsModeTip": "Tipp: Geführter Zugriff (iPhone) oder Bildschirmfixierung (Android) hält das Kind zusätzlich in LumiFX.",
+  "kidsModeStart": "Kindermodus starten",
+  "kidsModeChoose": "Effekte für die Kinder",
+  "kidsModeFlashing": "Enthält Blitze: nicht verfügbar",
+  "kidsModeExit": "Erwachsene: beenden",
+  "kidsGateQuestion": "Um den Kindermodus zu beenden, gib das Ergebnis von {a} + {b} ein.",
+  "kidsGateWrong": "Das stimmt nicht.",
+  "kidsGateOk": "Beenden"
 }

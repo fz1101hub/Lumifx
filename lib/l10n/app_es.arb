@@ -783,5 +783,16 @@
   "naturalLightDay": "Luz del día",
   "naturalLightAfternoon": "Luz de la tarde",
   "naturalLightEvening": "Luz del atardecer",
-  "naturalLightNight": "Brillo nocturno"
+  "naturalLightNight": "Brillo nocturno",
+  "kidsMode": "Modo niños",
+  "kidsModeSubtitle": "Botones grandes, solo los efectos que elijas",
+  "kidsModeDescription": "Los niños tienen botones grandes para los efectos que elijas y un gran stop. Nada parpadea y no pueden cambiar ajustes ni salir: para salir, un adulto resuelve una suma. El modo niños sigue activo aunque LumiFX se cierre y se vuelva a abrir.",
+  "kidsModeTip": "Consejo: Acceso guiado (iPhone) o Fijar pantalla (Android) también mantienen al niño dentro de LumiFX.",
+  "kidsModeStart": "Iniciar el modo niños",
+  "kidsModeChoose": "Efectos para los niños",
+  "kidsModeFlashing": "Tiene destellos: no disponible",
+  "kidsModeExit": "Adultos: salir",
+  "kidsGateQuestion": "Para salir del modo niños, escribe el resultado de {a} + {b}.",
+  "kidsGateWrong": "No es correcto.",
+  "kidsGateOk": "Salir"
 }

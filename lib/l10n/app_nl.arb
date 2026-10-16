@@ -783,5 +783,16 @@
   "naturalLightDay": "Daglicht",
   "naturalLightAfternoon": "Middaglicht",
   "naturalLightEvening": "Avondlicht",
-  "naturalLightNight": "Nachtgloed"
+  "naturalLightNight": "Nachtgloed",
+  "kidsMode": "Kindermodus",
+  "kidsModeSubtitle": "Grote knoppen, alleen de effecten die jij kiest",
+  "kidsModeDescription": "Kinderen krijgen grote knoppen voor de effecten die jij kiest, en een grote stopknop. Niets knippert, en ze kunnen geen instellingen wijzigen of eruit: om te stoppen beantwoordt een volwassene een som. De kindermodus blijft aan, ook als LumiFX wordt gesloten en weer geopend.",
+  "kidsModeTip": "Tip: Begeleide toegang (iPhone) of scherm vastzetten (Android) houdt het kind ook in LumiFX.",
+  "kidsModeStart": "Kindermodus starten",
+  "kidsModeChoose": "Effecten voor de kinderen",
+  "kidsModeFlashing": "Bevat flitsen: niet beschikbaar",
+  "kidsModeExit": "Volwassenen: afsluiten",
+  "kidsGateQuestion": "Typ de uitkomst van {a} + {b} om de kindermodus te verlaten.",
+  "kidsGateWrong": "Dat klopt niet.",
+  "kidsGateOk": "Afsluiten"
 }

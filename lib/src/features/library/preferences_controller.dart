@@ -186,6 +186,29 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  List<String>? _kidsEffects;
+
+  /// The effects offered in kids mode; null until a grown-up chooses.
+  List<String>? get kidsEffects => _kidsEffects;
+
+  Future<void> setKidsEffects(List<String> ids) {
+    _kidsEffects = ids.take(24).toList();
+    return _changed();
+  }
+
+  bool _kidsLocked = false;
+
+  /// Kids mode is on: LumiFX opens in it until a grown-up leaves it.
+  bool get kidsLocked => _kidsLocked;
+
+  Future<void> setKidsLocked(bool value) {
+    if (value == _kidsLocked) {
+      return Future.value();
+    }
+    _kidsLocked = value;
+    return _changed();
+  }
+
   var _naturalLights = <String>[];
 
   /// The smart scenes LumiFX made for natural light (the bridge does not
@@ -368,6 +391,9 @@ class PreferencesController extends ChangeNotifier {
           for (final item in countdowns.take(Countdown.maxCountdowns))
             if (Countdown.fromJson(item) case final countdown?) countdown,
       ]..sort((a, b) => a.date.compareTo(b.date));
+      final kids = json['kidsEffects'];
+      _kidsEffects = kids is List ? _strings(kids).take(24).toList() : null;
+      _kidsLocked = json['kidsLocked'] == true;
       _naturalLights = _strings(json['naturalLights'])
           .where((id) => id.length <= 80)
           .take(20)
@@ -641,6 +667,8 @@ class PreferencesController extends ChangeNotifier {
       'weatherPlace': _weatherPlace?.toJson(),
       'simonBest': _simonBest,
       'naturalLights': _naturalLights,
+      'kidsEffects': _kidsEffects,
+      'kidsLocked': _kidsLocked,
       'adventOpened': _adventOpened,
       'countdowns': [for (final c in _countdowns) c.toJson()],
       'buttonActions': _buttonActions,

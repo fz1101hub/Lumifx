@@ -26,6 +26,7 @@ import 'package:lumifx/src/features/fun/birthday_screen.dart';
 import 'package:lumifx/src/features/fun/countdowns_screen.dart';
 import 'package:lumifx/src/features/fun/game_screen.dart';
 import 'package:lumifx/src/features/fun/light_games.dart';
+import 'package:lumifx/src/features/kids/kids_mode.dart';
 import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
@@ -708,6 +709,88 @@ void main() {
     await tester.tap(find.byTooltip('Delete'));
     await tester.pumpAndSettle();
     expect(find.text('7 sleeps to Grandma!'), findsNothing);
+  });
+
+  Future<void> answerGrownUpSum(WidgetTester tester,
+      {bool right = true}) async {
+    final question = tester
+        .widgetList<Text>(find.byType(Text))
+        .map((t) => t.data ?? '')
+        .firstWhere((t) => t.contains(' + '));
+    final match = RegExp(r'(\d+) \+ (\d+)').firstMatch(question)!;
+    final sum = int.parse(match[1]!) + int.parse(match[2]!);
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog), matching: find.byType(TextField)),
+        '${right ? sum : sum + 1}');
+    await tester.tap(find.widgetWithText(FilledButton, 'Exit'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('kids mode: big buttons, no way out without a grown-up',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Kids mode'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Kids mode'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Kids mode'));
+    await tester.pumpAndSettle();
+    // Flashing effects cannot be chosen.
+    await tester.scrollUntilVisible(
+        find.text('Has flashes: not offered').first, 300,
+        scrollable: find.byType(Scrollable).first);
+    await tester.scrollUntilVisible(find.text('Start kids mode'), -300,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Start kids mode'));
+    await tester.pumpAndSettle();
+    expect(find.byType(KidsModeScreen), findsOneWidget);
+
+    await tester.tap(find.byType(InkWell).first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(KidsModeScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+    expect(find.byType(MiniPlayer), findsNothing);
+
+    // Back does nothing.
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.byType(KidsModeScreen), findsOneWidget);
+
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(playback.isPlaying, isFalse);
+
+    await tester.tap(find.byTooltip('Grown-ups: exit'));
+    await tester.pumpAndSettle();
+    await answerGrownUpSum(tester, right: false);
+    expect(find.text("That's not right."), findsOneWidget);
+    await answerGrownUpSum(tester);
+    expect(find.byType(KidsModeScreen), findsNothing);
+    expect(
+        AppScope.of(tester.element(find.byType(KidsSetupScreen)))
+            .preferences
+            .kidsLocked,
+        isFalse);
+  });
+
+  testWidgets('kids mode is still on when LumiFX opens again', (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setOnboardingDone();
+    await preferences.setKidsLocked(true);
+    await preferences.load();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.byType(KidsModeScreen), findsOneWidget);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {
