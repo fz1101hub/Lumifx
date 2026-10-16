@@ -9,6 +9,7 @@ import '../bridge/forget_bridge_dialog.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_areas_screen.dart';
+import '../links/links_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -24,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settings)),
       body: ListenableBuilder(
-        listenable: Listenable.merge([bridge, preferences]),
+        listenable: Listenable.merge([bridge, preferences, scope.playback]),
         builder: (context, _) {
           final controls = preferences.defaultControls;
           void update(EffectControls value) =>
@@ -69,9 +70,13 @@ class SettingsScreen extends StatelessWidget {
               ),
               SwitchListTile(
                 title: Text(l10n.softFlashes),
-                subtitle: Text(l10n.softFlashesDescription),
-                value: preferences.softFlashes,
-                onChanged: preferences.setSoftFlashes,
+                subtitle: Text(scope.playback.systemReducesMotion
+                    ? l10n.softFlashesBySystem
+                    : l10n.softFlashesDescription),
+                value: scope.playback.softFlashes,
+                onChanged: scope.playback.systemReducesMotion
+                    ? null
+                    : preferences.setSoftFlashes,
               ),
               if (scope.phoneAudioInput != null) ...[
                 const Divider(height: 32),
@@ -108,6 +113,16 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () => preferences.setMusicSource(source),
                   ),
               ],
+              const Divider(height: 32),
+              ListTile(
+                leading: const Icon(Icons.link),
+                title: Text(l10n.linksTitle),
+                subtitle: Text(l10n.linksSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const LinksScreen()),
+                ),
+              ),
               const Divider(height: 32),
               _Header(l10n.about),
               ListTile(
@@ -236,6 +251,8 @@ class _SliderTile extends StatelessWidget {
               min: min,
               max: max,
               onChanged: onChanged,
+              semanticFormatterCallback: (v) =>
+                  '$label ${(100 * (v - min) / (max - min)).round()}%',
             ),
           ),
         ],

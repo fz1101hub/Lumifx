@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
 
 import '../common/app_text.dart';
-import '../effects/catalog/effect_catalog.dart';
-import '../effects/effect_player_screen.dart';
+import '../effects/player_route.dart';
+import '../library/effect_library.dart';
 import '../library/preferences_controller.dart';
+import '../effects/effect_palette.dart';
+import '../links/app_link.dart';
 import 'app_shortcuts.dart';
+import 'home_widgets.dart';
 
-/// Keeps the home-screen shortcuts in sync with the user's favourites (or,
-/// without any, the recently played effects) and opens the player when
-/// one is tapped. Lives inside the MaterialApp so the titles follow the
+/// Keeps the home-screen shortcuts and the home-screen widget in sync with
+/// the user's favourites (or, without any, the recently played effects)
+/// and opens the player when a shortcut is tapped (widget taps arrive as
+/// lumifx:// links). Lives inside the MaterialApp so the titles follow the
 /// app's language.
 class ShortcutsBridge extends StatefulWidget {
   const ShortcutsBridge({
     required this.shortcuts,
+    this.widgets = const NoHomeWidgets(),
     required this.preferences,
+    required this.library,
     required this.navigatorKey,
     required this.child,
     super.key,
   });
 
   final AppShortcuts shortcuts;
+  final HomeWidgets widgets;
   final PreferencesController preferences;
+  final EffectLibrary library;
   final GlobalKey<NavigatorState> navigatorKey;
   final Widget child;
 
@@ -65,7 +73,7 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
     final ids = (preferences.favorites.isNotEmpty
             ? preferences.favorites
             : preferences.recents)
-        .where((id) => effectById(id) != null)
+        .where((id) => widget.library.byId(id) != null)
         .take(ShortcutsBridge.maxShortcuts)
         .toList();
     final l10n = context.l10n;
@@ -73,7 +81,7 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
       for (final id in ids)
         ShortcutSpec(
           id: '${ShortcutsBridge._prefix}$id',
-          title: l10n.effectName(effectById(id)!),
+          title: l10n.effectName(widget.library.byId(id)!),
         ),
     ];
     final key = [for (final s in specs) '${s.id}=${s.title}'];
@@ -82,13 +90,31 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
     }
     _published = key;
     widget.shortcuts.setShortcuts(specs);
+    widget.widgets.update(
+      title: l10n.favorites,
+      empty: l10n.widgetEmpty,
+      effects: [
+        for (final id in ids)
+          if (widget.library.byId(id) case final effect?)
+            WidgetEffect(
+              id: id,
+              name: l10n.effectName(effect),
+              colors: [
+                for (final color in effectPalette(effect).take(3))
+                  color.toARGB32(),
+              ],
+              link: AppLink.play(id),
+            ),
+      ],
+    );
   }
 
   void _onLaunch(String id) {
     if (!id.startsWith(ShortcutsBridge._prefix)) {
       return;
     }
-    final effect = effectById(id.substring(ShortcutsBridge._prefix.length));
+    final effect =
+        widget.library.byId(id.substring(ShortcutsBridge._prefix.length));
     if (effect == null) {
       return;
     }
@@ -105,11 +131,7 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
       });
       return;
     }
-    navigator.push(
-      MaterialPageRoute<void>(
-        builder: (_) => EffectPlayerScreen(effect: effect),
-      ),
-    );
+    navigator.push(playerRoute(effect));
   }
 
   @override

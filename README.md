@@ -47,7 +47,23 @@ Also done ahead of schedule:
   Rooms & zones; a sleep timer fades an effect out and switches the lights
   off; a one-time warning and a "soften flashes" mode for photosensitive
   users; lights can be left out of an effect per room; favourites as
-  home-screen shortcuts; six languages.
+  home-screen shortcuts; eight languages (English, Italian, German, French,
+  Spanish, Dutch, Brazilian Portuguese, Japanese).
+- **Continuous playback**: effects keep playing while you browse, with a
+  mini-player on every screen; changing effect cross-fades the lights.
+- **Playlists** of effects, in order or shuffled, each for 1 to 60 minutes.
+- **Scenes of your own**: two to five colours and a motion, with a live
+  preview.
+- **Save as Hue scene**: what the lights show, stored on the bridge for the
+  Hue app, switches and voice assistants.
+- **lumifx:// links** for Siri Shortcuts, Android routines, Tasker and NFC
+  tags (Settings › Shortcuts and automations).
+- **Home-screen widget** of the favourites on Android; on iOS the widget is
+  written and needs one Xcode step with your App Group
+  ([docs/IOS_WIDGET.md](docs/IOS_WIDGET.md)).
+- **Accessibility**: screen-reader labels, Material tap-target and contrast
+  guidelines checked by a test, and the phone's reduce-motion setting
+  softens flashes. Welcome pages on the first launch.
 - **iPad and tablets**: the home, the effect lists and the player use
   wider layouts (tiles, grids, two panes) from 720 logical pixels up;
   the other screens keep a reading width.

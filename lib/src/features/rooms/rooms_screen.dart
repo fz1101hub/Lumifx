@@ -187,6 +187,8 @@ class _GroupTileState extends State<_GroupTile> {
                     : null,
                 onChangeEnd: (value) =>
                     _send(HueLightCommand(brightness: value)),
+                semanticFormatterCallback: (value) =>
+                    '${l10n.brightness} ${widget.group.name} ${value.round()}%',
               ),
             ),
             if (scenes.isNotEmpty)

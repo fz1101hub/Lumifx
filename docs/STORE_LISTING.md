@@ -60,6 +60,14 @@ artifact, see RELEASE.md § 1b).
 > switches them off, your Hue scenes one tap away, and a "soften flashes"
 > mode for anyone sensitive to flashing light.
 >
+> YOUR OWN SCENES AND PLAYLISTS
+> Pick two to five colours and a motion to make a scene of your own.
+> Line effects up in a playlist for a whole evening, in order or
+> shuffled, with the lights fading from one to the next. Effects keep
+> playing while you browse, with a mini-player on every screen. Save
+> what the lights show as a Hue scene, and start effects from Siri
+> Shortcuts or Android automations with lumifx:// links.
+>
 > MUSIC SYNC
 > Beat Pulse, Party Chase, Spectrum and Mood Glow listen to the music in
 > the room and move the lights with it. Audio is analysed on your phone
@@ -91,8 +99,8 @@ artifact, see RELEASE.md § 1b).
 
 > First release: 6 scenes with colour variants, 19 stories including
 > Halloween and Christmas collections, 4 Music Sync effects, Entertainment
-> streaming with an area editor, Hue scenes, a sleep timer, and six
-> languages.
+> streaming with an area editor, your own scenes, playlists, saving as
+> Hue scenes, links for automations, a sleep timer, and eight languages.
 
 ## Italiano
 
@@ -130,6 +138,14 @@ artifact, see RELEASE.md § 1b).
 > le tue scene Hue a un tocco, e una modalità "attenua i lampi" per chi è
 > sensibile alle luci lampeggianti.
 >
+> LE TUE SCENE E LE PLAYLIST
+> Scegli da due a cinque colori e un movimento per creare una scena tua.
+> Metti in fila gli effetti in una playlist per tutta la serata, in ordine
+> o a caso, con le luci che sfumano da uno all'altro. Gli effetti
+> continuano mentre navighi, con un mini-player su ogni schermata. Salva
+> ciò che mostrano le luci come scena Hue e avvia gli effetti dai Comandi
+> rapidi di Siri o dalle automazioni Android con i link lumifx://.
+>
 > MUSIC SYNC
 > Beat Pulse, Party Chase, Spectrum e Mood Glow ascoltano la musica nella
 > stanza e muovono le luci a tempo. L'audio è analizzato sul telefono e non
@@ -159,8 +175,10 @@ artifact, see RELEASE.md § 1b).
 
 **Novità (1.0.0)**
 
-> Prima versione: 6 scene, 12 storie, 4 effetti Music Sync, streaming
-> Entertainment ed editor delle aree.
+> Prima versione: 6 scene con varianti di colore, 19 storie con le
+> raccolte di Halloween e Natale, 4 effetti Music Sync, streaming
+> Entertainment ed editor delle aree, scene tue, playlist, salvataggio come
+> scena Hue, link per le automazioni, timer di spegnimento e otto lingue.
 
 ## Google Play: Data safety form
 
@@ -297,6 +315,14 @@ preview mode works for the player shots):
 > Weihnachtsmanns, stiller Schneefall und ein Lied im Kerzenschein. Jeder
 > Durchlauf ist ein bisschen anders.
 >
+> EIGENE SZENEN UND PLAYLISTS
+> Wähle zwei bis fünf Farben und eine Bewegung für deine eigene Szene.
+> Reihe Effekte in einer Playlist für den ganzen Abend auf, der Reihe nach
+> oder zufällig, mit sanften Übergängen. Effekte laufen weiter, während du
+> dich in der App bewegst, mit einem Mini-Player auf jedem Bildschirm.
+> Speichere das aktuelle Licht als Hue-Szene und starte Effekte über
+> Siri-Kurzbefehle oder Android-Automationen mit lumifx://-Links.
+>
 > MUSIC SYNC
 > Beat Pulse, Party Chase, Spectrum und Mood Glow hören auf die Musik im Raum
 > und bewegen die Lampen dazu. Der Ton wird auf deinem Telefon analysiert und
@@ -357,6 +383,15 @@ preview mode works for the player shots):
 > château du vampire et « des bonbons ou un sort » ; pour Noël : l'atelier du
 > Père Noël, une neige silencieuse et un chant à la bougie. Chaque passage
 > d'une histoire est un peu différent.
+>
+> VOS SCÈNES ET VOS PLAYLISTS
+> Choisissez de deux à cinq couleurs et un mouvement pour créer votre
+> propre scène. Enchaînez des effets dans une playlist pour toute la
+> soirée, dans l'ordre ou au hasard, avec des fondus de l'un à l'autre.
+> Les effets continuent pendant que vous naviguez, avec un mini-lecteur sur
+> chaque écran. Enregistrez l'éclairage du moment comme scène Hue et lancez
+> des effets depuis les Raccourcis Siri ou les automatisations Android avec
+> des liens lumifx://.
 >
 > MUSIC SYNC
 > Beat Pulse, Party Chase, Spectrum et Mood Glow écoutent la musique dans la
@@ -420,6 +455,14 @@ preview mode works for the player shots):
 > una nevada silenciosa y un villancico a la luz de las velas. Cada pasada de
 > una historia es un poco distinta.
 >
+> TUS ESCENAS Y LISTAS
+> Elige de dos a cinco colores y un movimiento para crear tu propia escena.
+> Encadena efectos en una lista para toda la noche, en orden o al azar, con
+> fundidos de uno a otro. Los efectos siguen sonando mientras navegas, con
+> un minirreproductor en cada pantalla. Guarda lo que muestran las luces
+> como escena Hue e inicia efectos desde los Atajos de Siri o las
+> automatizaciones de Android con enlaces lumifx://.
+>
 > MUSIC SYNC
 > Beat Pulse, Party Chase, Spectrum y Mood Glow escuchan la música de la
 > habitación y mueven las luces con ella. El audio se analiza en tu teléfono
@@ -480,6 +523,14 @@ preview mode works for the player shots):
 > Kerstman, stille sneeuwval en een kerstlied bij kaarslicht. Elke ronde van
 > een verhaal is net even anders.
 >
+> EIGEN SCÈNES EN AFSPEELLIJSTEN
+> Kies twee tot vijf kleuren en een beweging voor je eigen scène. Zet
+> effecten in een afspeellijst voor de hele avond, op volgorde of
+> willekeurig, met zachte overgangen. Effecten blijven spelen terwijl je
+> door de app bladert, met een minispeler op elk scherm. Sla het licht van
+> dat moment op als Hue-scène en start effecten vanuit Siri-opdrachten of
+> Android-automatiseringen met lumifx://-links.
+>
 > MUSIC SYNC
 > Beat Pulse, Party Chase, Spectrum en Mood Glow luisteren naar de muziek in
 > de kamer en laten de lampen meebewegen. Het geluid wordt op je telefoon
@@ -509,3 +560,129 @@ preview mode works for the player shots):
 **Trefwoorden**
 
 > hue,philips hue,lampen,slimme lampen,scènes,sfeerverlichting,music sync,feest,sfeer,bridge
+
+## Português (Brasil)
+
+**Subtítulo / descrição curta**
+
+> Histórias e cenas para Philips Hue
+
+**Texto promocional**
+
+> Transforme o cômodo numa tempestade, numa casa assombrada ou numa pista
+> de dança. Histórias de luz originais para Philips Hue, com Music Sync.
+
+**Descrição**
+
+> O LumiFX transforma as luzes Philips Hue numa experiência, não só num
+> controle remoto.
+>
+> CENAS
+> Lareira, Oceano, Aurora, Pôr do sol, Tempestade, Disco: ambientes vivos
+> que continuam se movendo pelo tempo que você quiser, cada um com
+> variações de cor.
+>
+> HISTÓRIAS
+> Pequenos contos de luz que acontecem pelo cômodo: um duende escondido,
+> um dragão adormecido, uma mansão assombrada numa noite de tempestade,
+> uma caça ao tesouro, um kraken sob o navio, uma chuva de meteoros,
+> dinossauros se aproximando, o fundo do mar à noite. O Halloween traz uma
+> plantação de abóboras, o caldeirão da bruxa, o castelo do vampiro e
+> doces ou travessuras; o Natal traz a oficina do Papai Noel, uma neve
+> silenciosa e uma canção à luz de velas.
+>
+> DO SEU JEITO
+> Crie cenas suas com duas a cinco cores e um movimento. Monte playlists
+> para a noite inteira, em ordem ou aleatórias, com as luzes passando de
+> um efeito para o outro. Os efeitos continuam enquanto você navega, com
+> um mini-player em todas as telas. Salve o que as luzes mostram como cena
+> Hue, use um timer para dormir e comece efeitos pelos Atalhos da Siri ou
+> automações do Android com links lumifx://.
+>
+> MUSIC SYNC
+> Pulso da Batida, Corrida da Festa, Espectro e Brilho Ambiente ouvem a
+> música do ambiente (ou, no Android, o próprio áudio do celular) e movem
+> as luzes junto. O som é analisado no celular e nunca é gravado.
+>
+> FEITO PARA HUE
+> • Encontra e pareia com a sua Hue Bridge no Wi-Fi, sem conta.
+> • Toca em qualquer cômodo ou zona e transmite efeitos rápidos para áreas
+>   de entretenimento (50 atualizações por segundo).
+> • Modo "suavizar flashes" para pessoas sensíveis a luzes piscantes.
+> • As luzes voltam ao que eram quando o efeito para.
+>
+> Requer uma Philips Hue Bridge (modelo quadrado) e luzes Hue coloridas ou
+> white ambiance na mesma rede Wi-Fi.
+>
+> O LumiFX é um app independente e não tem vínculo com a Signify. Philips
+> Hue é uma marca registrada da Signify Holding B.V.
+
+**Palavras-chave**
+
+> hue,philips hue,luzes,luz inteligente,cenas,ambiente,music sync,festa,iluminação,bridge
+
+**Novidades (1.0.0)**
+
+> Primeira versão: 6 cenas com variações de cor, 19 histórias, 4 efeitos
+> Music Sync, streaming Entertainment, cenas suas, playlists, links para
+> automações e oito idiomas.
+
+## 日本語
+
+**サブタイトル / 簡単な説明**
+
+> Philips Hue のストーリーとシーン
+
+**プロモーションテキスト**
+
+> 部屋を雷雨に、幽霊屋敷に、ダンスフロアに。Philips Hue のためのオリジナル
+> の光の物語。Music Sync 対応。
+
+**説明**
+
+> LumiFX は、Philips Hue の照明を単なるリモコンではなく「体験」に変えます。
+>
+> シーン
+> 暖炉、海、オーロラ、夕焼け、雷雨、ディスコ。好きなだけ動き続ける生きた雰囲気
+> を、さまざまな色のバリエーションで。
+>
+> ストーリー
+> 部屋じゅうで展開する短い光の物語。隠れたいたずら妖精、眠れるドラゴン、嵐の夜
+> の幽霊屋敷、宝探し、船の下のクラーケン、流星群、近づいてくる恐竜、夜の深海。
+> ハロウィンにはかぼちゃ畑、魔女の大釜、吸血鬼の城、トリック・オア・トリート。
+> クリスマスにはサンタの工房、静かな雪、キャンドルのキャロル。
+>
+> 自分だけの演出
+> 2〜5色と動きを選んでオリジナルのシーンを作成。演出を並べたプレイリストで、
+> 順番またはシャッフルでひと晩じゅう楽しめます。演出はアプリ内を移動しても再生
+> を続け、どの画面にもミニプレーヤーが表示されます。照明の色を Hue シーンとして
+> 保存したり、スリープタイマーを使ったり、lumifx:// リンクで Siri のショートカット
+> や Android のオートメーションから演出を始めたりできます。
+>
+> MUSIC SYNC
+> ビートパルス、パーティーチェイス、スペクトラム、ムードグローが部屋の音楽
+> （Android ではスマートフォン自体の音声も）を聴き取り、照明を動かします。音声は
+> スマートフォン上で解析され、録音されることはありません。
+>
+> HUE のために
+> • アカウント不要。Wi-Fi 上の Hue ブリッジを見つけてペアリングします。
+> • どの部屋やゾーンでも再生でき、速い演出はエンターテインメントエリアにストリー
+>   ミング（毎秒 50 回更新）。
+> • 点滅する光に敏感な方のための「フラッシュを和らげる」モード。
+> • 演出を止めると、照明は元の状態に戻ります。
+>
+> Philips Hue ブリッジ（四角いモデル）と、同じ Wi-Fi ネットワーク上の Hue カラー
+> またはホワイトアンビアンスの照明が必要です。
+>
+> LumiFX は独立したアプリであり、Signify とは関係ありません。Philips Hue は
+> Signify Holding B.V. の商標です。
+
+**キーワード**
+
+> hue,philips hue,照明,スマートライト,シーン,ムード,music sync,パーティー,間接照明,ブリッジ
+
+**新機能（1.0.0）**
+
+> 最初のリリース：色のバリエーション付きシーン 6 種、ストーリー 19 種、Music Sync
+> 演出 4 種、エンターテインメント ストリーミング、オリジナルシーン、プレイリスト、
+> オートメーション用リンク、8 言語に対応。

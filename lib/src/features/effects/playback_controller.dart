@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 
@@ -14,6 +15,7 @@ import '../../core/screen_wake.dart';
 import '../bridge/bridge_controller.dart';
 import '../library/preferences_controller.dart';
 import '../music/music_sync_controller.dart';
+import '../playlists/playlist.dart';
 
 /// Lamps shown when playing without a bridge.
 const previewLightCount = 5;
@@ -93,25 +95,31 @@ class UnnamedChannel extends SlotLabel {
 /// screen on, and putting the lights back afterwards.
 class PlaybackController extends ChangeNotifier {
   PlaybackController({
-    required this.effect,
+    required LightingEffect effect,
     required BridgeController bridge,
     required PreferencesController preferences,
     required AudioInput audioInput,
     AudioInput? phoneAudioInput,
     ScreenWake screenWake = const NoScreenWake(),
     this.sleepFade = const Duration(seconds: 20),
-  })  : _bridge = bridge,
+    LightingEffect? Function(String id)? resolveEffect,
+    math.Random? random,
+  })  : _effect = effect,
+        _resolveEffect = resolveEffect ?? ((_) => null),
+        _random = random ?? math.Random(),
+        _bridge = bridge,
         _preferences = preferences,
         _audioInput = audioInput,
         _phoneAudioInput = phoneAudioInput,
         _screenWake = screenWake,
         _targetKey = preferences.lastTarget,
-        _controls = preferences.defaultControls {
+        _controls = preferences.defaultControls,
+        _defaults = preferences.defaultControls {
     _bridge.addListener(_onBridgeChanged);
     _preferences.addListener(_onPreferencesChanged);
   }
 
-  final LightingEffect effect;
+  LightingEffect _effect;
   final BridgeController _bridge;
   final PreferencesController _preferences;
   final AudioInput _audioInput;
@@ -120,6 +128,23 @@ class PlaybackController extends ChangeNotifier {
 
   /// How long the sleep timer takes to fade the lights to black.
   final Duration sleepFade;
+
+  /// Finds a playlist's effects by id (built-in and the user's own).
+  final LightingEffect? Function(String id) _resolveEffect;
+  final math.Random _random;
+
+  /// The default controls last applied, to notice when Settings change them.
+  EffectControls _defaults;
+
+  /// The user picked a target here, so a late preferences load must not
+  /// replace it.
+  bool _targetChosen = false;
+
+  Playlist? _playlist;
+  int _playlistIndex = 0;
+  Timer? _playlistTimer;
+  DateTime? _playlistNextAt;
+  Duration? _playlistLeft;
 
   final _notices = StreamController<PlaybackNotice>.broadcast();
   PlaybackStatus _status = PlaybackStatus.idle;
@@ -151,6 +176,158 @@ class PlaybackController extends ChangeNotifier {
 
   /// Things worth telling the user, e.g. why playback could not start.
   Stream<PlaybackNotice> get notices => _notices.stream;
+
+  /// The effect playing, or the one that plays on the next [start].
+  LightingEffect get effect => _effect;
+
+  /// The playlist being played, if any.
+  Playlist? get playlist => _playlist;
+
+  bool _systemReducesMotion = false;
+
+  /// The phone asks apps to reduce motion (iOS Reduce Motion, Android
+  /// "Remove animations"): flashes are softened as with the setting.
+  bool get systemReducesMotion => _systemReducesMotion;
+  set systemReducesMotion(bool value) {
+    if (value == _systemReducesMotion) {
+      return;
+    }
+    _systemReducesMotion = value;
+    _player?.softFlashes = softFlashes;
+    _notify();
+  }
+
+  /// Whether flashes are softened: by the user's setting or the phone's.
+  bool get softFlashes => _preferences.softFlashes || _systemReducesMotion;
+
+  /// Whether the player of [effectId] shows what plays now: the effect
+  /// itself, or any effect of the playlist that plays (that player follows
+  /// the playlist from one effect to the next).
+  bool isShownBy(String effectId) =>
+      _effect.id == effectId ||
+      (_playlist?.effectIds.contains(effectId) ?? false);
+
+  /// Position of [effect] in the playlist's order (0-based).
+  int get playlistIndex => _playlistIndex;
+
+  /// The playlist's effects that still exist.
+  List<LightingEffect> get playlistEffects => _playlistEffects(_playlist);
+
+  List<LightingEffect> _playlistEffects(Playlist? playlist) => [
+        for (final id in playlist?.effectIds ?? const <String>[])
+          if (_resolveEffect(id) case final effect?) effect,
+      ];
+
+  /// Plays [playlist] from its first effect (or a random one when it
+  /// shuffles), starting playback if nothing plays. Nothing happens when
+  /// none of its effects exists any more.
+  Future<void> playPlaylist(Playlist playlist) async {
+    final effects = _playlistEffects(playlist);
+    if (effects.isEmpty) {
+      return;
+    }
+    _playlist = playlist;
+    _playlistIndex = playlist.shuffle ? _random.nextInt(effects.length) : 0;
+    await _switchEffect(effects[_playlistIndex]);
+    if (_status == PlaybackStatus.idle) {
+      await start();
+    } else if (_status == PlaybackStatus.paused) {
+      await resume();
+    }
+    if (_playlist == playlist && _status == PlaybackStatus.playing) {
+      _armPlaylistTimer(playlist.each);
+    }
+    _notify();
+  }
+
+  /// Whether [saveAsHueScene] can work now: an effect plays on a room or
+  /// zone.
+  bool get canSaveAsHueScene =>
+      group != null &&
+      _player != null &&
+      _activeLightIds.isNotEmpty &&
+      (_status == PlaybackStatus.playing || _status == PlaybackStatus.paused);
+
+  /// Saves what the lights show right now as a scene named [name] in the
+  /// room or zone, then refreshes the bridge so it appears with the other
+  /// scenes. Throws when the bridge refuses.
+  Future<HueScene?> saveAsHueScene(String name) async {
+    final group = this.group;
+    final player = _player;
+    final home = this.home;
+    final client = _bridge.client;
+    if (!canSaveAsHueScene ||
+        group == null ||
+        player == null ||
+        home == null ||
+        client == null) {
+      return null;
+    }
+    final frames = player.currentFrames;
+    final lightIds = player.lightIds;
+    final actions = <String, HueLightCommand>{
+      for (var i = 0; i < lightIds.length && i < frames.length; i++)
+        if (home.lights[lightIds[i]] case final light?)
+          light.id: HueLightCommand.forLight(
+              light, frames[i].color, frames[i].brightness),
+    };
+    final id = await client.createScene(
+      name: name,
+      group: group,
+      actions: actions,
+    );
+    await _bridge.refresh();
+    return this.home?.scenes.where((s) => s.id == id).firstOrNull ??
+        HueScene(id: id, name: name, groupId: group.id);
+  }
+
+  /// Moves the playlist on to its next effect now.
+  Future<void> nextInPlaylist() async {
+    final playlist = _playlist;
+    final effects = _playlistEffects(playlist);
+    if (playlist == null || effects.isEmpty) {
+      return;
+    }
+    var next = (_playlistIndex + 1) % effects.length;
+    if (playlist.shuffle && effects.length > 1) {
+      next = _random.nextInt(effects.length - 1);
+      if (next >= _playlistIndex) {
+        next++;
+      }
+    }
+    _playlistIndex = next;
+    await _switchEffect(effects[next]);
+    if (_playlist == playlist && _status == PlaybackStatus.playing) {
+      _armPlaylistTimer(playlist.each);
+    }
+    _notify();
+  }
+
+  void _armPlaylistTimer(Duration after) {
+    _playlistTimer?.cancel();
+    _playlistLeft = null;
+    _playlistNextAt = DateTime.now().add(after);
+    _playlistTimer = Timer(after, () => unawaited(nextInPlaylist()));
+  }
+
+  void _pausePlaylistTimer() {
+    final nextAt = _playlistNextAt;
+    _playlistTimer?.cancel();
+    _playlistTimer = null;
+    if (nextAt != null) {
+      final left = nextAt.difference(DateTime.now());
+      _playlistLeft = left.isNegative ? Duration.zero : left;
+    }
+    _playlistNextAt = null;
+  }
+
+  void _endPlaylist() {
+    _playlistTimer?.cancel();
+    _playlistTimer = null;
+    _playlistNextAt = null;
+    _playlistLeft = null;
+    _playlist = null;
+  }
 
   PlaybackStatus get status => _status;
   bool get isPlaying => _status == PlaybackStatus.playing;
@@ -201,13 +378,18 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     final wasPlaying = _status == PlaybackStatus.playing;
+    final playlist = _playlist;
     if (_status != PlaybackStatus.idle) {
       await stop();
     }
     await _preferences.setLightExcluded(group.id, lightId, current.enabled);
     _notify();
     if (wasPlaying) {
-      await start();
+      if (playlist != null) {
+        await playPlaylist(playlist);
+      } else {
+        await start();
+      }
     }
   }
 
@@ -216,6 +398,47 @@ class PlaybackController extends ChangeNotifier {
 
   /// The effect with the chosen colour variant applied.
   LightingEffect get effectToPlay => effect.withVariant(variantId);
+
+  /// Plays [next] instead of the current effect, leaving any playlist.
+  /// When idle it is only selected; while playing or paused the lights
+  /// cross-fade to it without being put back in between, and Music Sync
+  /// starts or stops as needed.
+  Future<void> switchEffect(LightingEffect next) async {
+    if (_playlist != null) {
+      _endPlaylist();
+      _notify();
+    }
+    await _switchEffect(next);
+  }
+
+  Future<void> _switchEffect(
+    LightingEffect next, {
+    Duration crossfade = const Duration(milliseconds: 1500),
+  }) async {
+    if (identical(next, _effect)) {
+      return;
+    }
+    _effect = next;
+    final player = _player;
+    if (player == null || _status == PlaybackStatus.starting) {
+      _notify();
+      return;
+    }
+    if (next.usesMicrophone) {
+      if (_status == PlaybackStatus.playing && !await _startListening()) {
+        await stop();
+        return;
+      }
+    } else {
+      await _music?.stop();
+    }
+    if (!identical(_player, player)) {
+      return;
+    }
+    player.crossfadeTo(effectToPlay, over: crossfade);
+    unawaited(_preferences.recordPlayed(next.id));
+    _notify();
+  }
 
   /// Picks a colour variant; a running player switches colours in place.
   Future<void> setVariant(String? variantId) async {
@@ -409,15 +632,15 @@ class PlaybackController extends ChangeNotifier {
         seed: DateTime.now().millisecondsSinceEpoch & 0x7FFFFFFF,
         controls: _controls,
         tick: tick,
-        audio: !effect.usesMicrophone
-            ? null
-            : () {
-                final music = _music;
-                return music != null && music.isListening
-                    ? music.features
-                    : null;
-              },
-      )..softFlashes = _preferences.softFlashes;
+        // Read on every tick, so a later switch to (or from) a Music Sync
+        // effect is picked up.
+        audio: () {
+          final music = _music;
+          return _effect.usesMicrophone && music != null && music.isListening
+              ? music.features
+              : null;
+        },
+      )..softFlashes = softFlashes;
       player.play();
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
@@ -442,6 +665,7 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     player.pause();
+    _pausePlaylistTimer();
     _setStatus(PlaybackStatus.paused);
     // No reason to keep the microphone open or the screen on while paused.
     unawaited(_screenWake.keepOn(false));
@@ -463,6 +687,10 @@ class PlaybackController extends ChangeNotifier {
     }
     player.play();
     unawaited(_screenWake.keepOn(true));
+    final left = _playlistLeft;
+    if (_playlist != null && left != null) {
+      _armPlaylistTimer(left);
+    }
     _setStatus(PlaybackStatus.playing);
   }
 
@@ -470,6 +698,7 @@ class PlaybackController extends ChangeNotifier {
   Future<void> stop({bool restore = true}) {
     _generation++;
     _cancelSleepTimer();
+    _endPlaylist();
     final player = _player;
     final commands = _restore;
     _player = null;
@@ -518,12 +747,18 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     final wasPlaying = _status == PlaybackStatus.playing;
+    final playlist = _playlist;
     await stop();
     _targetKey = targetKey;
+    _targetChosen = true;
     unawaited(_preferences.setLastTarget(targetKey));
     _notify();
     if (wasPlaying) {
-      await start();
+      if (playlist != null) {
+        await playPlaylist(playlist);
+      } else {
+        await start();
+      }
     }
   }
 
@@ -725,7 +960,19 @@ class PlaybackController extends ChangeNotifier {
   /// Settings changed while playing (e.g. soften flashes from the warning
   /// dialog): apply them to the running player.
   void _onPreferencesChanged() {
-    _player?.softFlashes = _preferences.softFlashes;
+    _player?.softFlashes = softFlashes;
+    final defaults = _preferences.defaultControls;
+    if (defaults != _defaults) {
+      // New defaults from Settings apply from now on.
+      _defaults = defaults;
+      setControls(defaults);
+    }
+    if (!_targetChosen &&
+        _status == PlaybackStatus.idle &&
+        _targetKey != _preferences.lastTarget) {
+      // The saved preferences finished loading after this was created.
+      _targetKey = _preferences.lastTarget;
+    }
     if (_music != null && _musicSourceInUse != musicSource) {
       unawaited(_switchMusicSource());
     }
@@ -753,6 +1000,7 @@ class PlaybackController extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     _cancelSleepTimer();
+    _endPlaylist();
     _bridge.removeListener(_onBridgeChanged);
     _preferences.removeListener(_onPreferencesChanged);
     final music = _music;

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phone_audio_channel">Music Sync</string>
+    <string name="phone_audio_notification_title">Music Sync ativo</string>
+    <string name="phone_audio_notification_text">O LumiFX segue o áudio que este celular toca. Nada é gravado nem salvo.</string>
+    <string name="widget_title">Favoritos</string>
+    <string name="widget_empty">Marque efeitos como favoritos no LumiFX para vê-los aqui.</string>
+    <string name="widget_description">Seus efeitos favoritos do LumiFX, a um toque.</string>
+</resources>

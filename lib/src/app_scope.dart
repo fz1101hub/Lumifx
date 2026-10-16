@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'core/audio/audio_input.dart';
 import 'core/hue/hue_discovery.dart';
 import 'features/bridge/bridge_controller.dart';
+import 'features/effects/playback_controller.dart';
+import 'features/library/effect_library.dart';
 import 'features/library/preferences_controller.dart';
 
 /// App-wide services, provided at the root of the widget tree.
@@ -12,6 +14,8 @@ class AppScope extends InheritedWidget {
     required this.discovery,
     required this.preferences,
     required this.audioInput,
+    required this.playback,
+    required this.library,
     this.phoneAudioInput,
     required super.child,
     super.key,
@@ -28,6 +32,13 @@ class AppScope extends InheritedWidget {
   /// capture it.
   final AudioInput? phoneAudioInput;
 
+  /// What plays on the lights, for the whole app: it keeps playing while
+  /// the user moves between screens.
+  final PlaybackController playback;
+
+  /// Built-in effects and the user's own scenes.
+  final EffectLibrary library;
+
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
     assert(scope != null, 'No AppScope found in context');
@@ -40,5 +51,7 @@ class AppScope extends InheritedWidget {
       discovery != oldWidget.discovery ||
       preferences != oldWidget.preferences ||
       audioInput != oldWidget.audioInput ||
+      playback != oldWidget.playback ||
+      library != oldWidget.library ||
       phoneAudioInput != oldWidget.phoneAudioInput;
 }

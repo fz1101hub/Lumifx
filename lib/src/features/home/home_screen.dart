@@ -7,10 +7,10 @@ import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
-import '../effects/catalog/effect_catalog.dart';
 import '../effects/effect_list_screen.dart';
 import '../effects/effect_palette.dart';
-import '../effects/effect_player_screen.dart';
+import '../effects/player_route.dart';
+import '../playlists/playlists_screen.dart';
 import '../rooms/rooms_screen.dart';
 import '../settings/settings_screen.dart';
 
@@ -73,6 +73,20 @@ class HomeScreen extends StatelessWidget {
                   kind: EffectKind.interactive,
                 ),
               ],
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: ListTile(
+                minVerticalPadding: 20,
+                leading: const Icon(Icons.queue_music),
+                title: Text(l10n.playlists),
+                subtitle: Text(l10n.playlistsSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                      builder: (_) => const PlaylistsScreen()),
+                ),
+              ),
             ),
             if (bridge.isConnected) ...[
               const SizedBox(height: 12),
@@ -143,7 +157,7 @@ class _EffectShelf extends StatelessWidget {
   Widget build(BuildContext context) {
     final effects = [
       for (final id in effectIds)
-        if (effectById(id) case final effect?) effect,
+        if (AppScope.of(context).library.byId(id) case final effect?) effect,
     ];
     if (effects.isEmpty) {
       return const SizedBox.shrink();
@@ -172,11 +186,7 @@ class _EffectShelf extends StatelessWidget {
                 final colors = effectPalette(effect);
                 return InkWell(
                   borderRadius: BorderRadius.circular(16),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => EffectPlayerScreen(effect: effect),
-                    ),
-                  ),
+                  onTap: () => openPlayer(context, effect),
                   child: Ink(
                     width: tileWidth,
                     padding: const EdgeInsets.all(12),

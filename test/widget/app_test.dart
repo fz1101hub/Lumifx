@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -11,9 +12,11 @@ import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
+import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_home_widgets.dart';
 import '../support/fake_shortcuts.dart';
 import '../support/phone_window.dart';
 
@@ -112,7 +115,242 @@ void main() {
 
     expect(find.text('Favorites'), findsOneWidget);
     expect(find.text('Recently played'), findsOneWidget);
+    // Both shelves, and the mini-player: Ocean keeps playing.
+    expect(find.text('Ocean'), findsNWidgets(3));
+    await tester.tap(find.bySemanticsLabel('Stop'));
+    await tester.pump();
     expect(find.text('Ocean'), findsNWidgets(2));
+  });
+
+  testWidgets('an effect keeps playing across screens, with a mini-player',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    // On its own player there is no mini-player.
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.byType(MiniPlayer), findsNothing);
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(MiniPlayer), findsOneWidget);
+    expect(find.bySemanticsLabel('Pause'), findsOneWidget);
+
+    // Another effect's player says what plays; Play cross-fades to it.
+    await tester.tap(find.text('Aurora'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Ocean is playing now'), findsOneWidget);
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Pause'), findsOneWidget);
+    expect(find.textContaining('is playing now'), findsNothing);
+
+    // Back on the list, the mini-player shows Aurora; tapping it reopens
+    // the player.
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Aurora'), findsNWidgets(2));
+    await tester.tap(find.text('Aurora').last);
+    // The lamps animate while it plays: no settling, just let the page in.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Pause'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a playlist is made in the editor and plays its effects',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Playlists'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Playlists'));
+    await tester.pumpAndSettle();
+    expect(find.text('No playlists yet.'), findsOneWidget);
+
+    await tester.tap(find.text('New playlist'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Evening');
+    await tester.tap(find.text('5 min'));
+    await tester.tap(find.text('Choose effects'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Fireplace'));
+    await tester.tap(find.text('Ocean'));
+    await tester.tap(find.text('Done'));
+    await tester.pumpAndSettle();
+    expect(find.text('2 effects'), findsOneWidget);
+    // Ocean first.
+    await tester.tap(find.byTooltip('Move up').last);
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('Evening'), findsOneWidget);
+    expect(find.text('2 effects · 5 min each'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Play Evening'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Ocean'), findsWidgets);
+    expect(find.text('Playlist Evening · 1 of 2'), findsOneWidget);
+    await tester.tap(find.byTooltip('Next effect'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Playlist Evening · 2 of 2'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a lumifx:// link opens the player and plays, another stops',
+      (tester) async {
+    await _pumpApp(tester);
+    Future<void> openLink(String location) async {
+      final message = const JSONMethodCodec().encodeMethodCall(
+        MethodCall('pushRouteInformation', {'location': location}),
+      );
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+          SystemChannels.navigation.name, message, (_) {});
+    }
+
+    await openLink('lumifx://app/play/aurora');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Aurora'), findsOneWidget, reason: 'the player title');
+    expect(find.text('Pause'), findsOneWidget);
+
+    await openLink('/stop');
+    await tester.pump();
+    expect(find.text('Play'), findsOneWidget);
+
+    // A flashing effect only opens until the warning has been seen.
+    await openLink('lumifx://app/play/thunderstorm');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Thunderstorm'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the welcome pages show once, on the very first launch',
+      (tester) async {
+    final store = InMemoryKeyValueStore();
+    Future<void> launch() async {
+      final bridge = BridgeController(store: InMemoryCredentialStore());
+      await tester.runAsync(bridge.initialize);
+      final preferences = PreferencesController(store: store);
+      await tester.runAsync(preferences.load);
+      await tester.pumpWidget(LumiFxApp(
+        key: UniqueKey(),
+        bridge: bridge,
+        discovery: _FakeDiscovery(),
+        preferences: preferences,
+        audioInput: FakeAudioInput(),
+      ));
+      await tester.pumpAndSettle();
+    }
+
+    await launch();
+    expect(find.text('Light that tells stories'), findsOneWidget);
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('Connect now'), findsOneWidget);
+    await tester.tap(find.text('Later'));
+    await tester.pumpAndSettle();
+    expect(find.text('Try it right away'), findsOneWidget);
+    expect(find.text('Skip'), findsNothing);
+    await tester.tap(find.text('Get started'));
+    await tester.pumpAndSettle();
+    expect(find.text('Connect your Hue Bridge'), findsOneWidget,
+        reason: 'the home with its bridge banner');
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+
+    // Next launch: straight to the home.
+    await launch();
+    expect(find.text('Light that tells stories'), findsNothing);
+  });
+
+  testWidgets('people updating the app never see the welcome pages',
+      (tester) async {
+    final store = InMemoryKeyValueStore();
+    await store.write('lumifx.preferences.v1', '{"favorites": ["ocean"]}');
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: store);
+    await tester.runAsync(preferences.load);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Light that tells stories'), findsNothing);
+    expect(find.text('Favorites'), findsOneWidget);
+  });
+
+  testWidgets('a scene of your own is made, played, edited and deleted',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    // The editor's preview animates, so the screen never settles.
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New scene'));
+    await step();
+    expect(find.text('Save'), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'Reading corner');
+    // Three colours to start with; add a fourth and change the first.
+    await tester.tap(find.bySemanticsLabel('Add a colour'));
+    await step();
+    await tester.tap(find.bySemanticsLabel('Swatch 9'));
+    await step();
+    await tester.tap(find.bySemanticsLabel('Colour 1'));
+    await step();
+    await tester.tap(find.bySemanticsLabel('Swatch 20'));
+    await step();
+    await tester.tap(find.text('Calm'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await step();
+    await tester.pumpAndSettle();
+
+    // First in the list, labelled as the user's own.
+    expect(find.text('Reading corner'), findsOneWidget);
+    expect(find.text('My scenes'), findsOneWidget);
+    await tester.tap(find.text('Reading corner'));
+    await step();
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await tester.tap(find.byTooltip('Edit scene'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.enterText(find.byType(TextField), 'Reading nook');
+    await tester.tap(find.text('Save'));
+    await step();
+    await step();
+    expect(find.text('Reading nook'), findsOneWidget,
+        reason: 'the player shows the edit, and keeps playing');
+    expect(find.text('Pause'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Edit scene'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tap(find.byTooltip('Delete'));
+    await step();
+    await tester.tap(find.text('Delete'));
+    await step();
+    await tester.pumpAndSettle();
+    // Back on the list, without the scene, and nothing plays.
+    expect(find.text('Reading nook'), findsNothing);
+    expect(find.text('New scene'), findsOneWidget);
+    expect(find.byType(MiniPlayer), findsNothing);
   });
 
   testWidgets('settings change the controls a new playback starts with',
@@ -373,12 +611,14 @@ void main() {
     final preferences = PreferencesController(store: InMemoryKeyValueStore());
     await preferences.recordPlayed('fireplace');
     final shortcuts = FakeShortcuts();
+    final widgets = FakeHomeWidgets();
     await tester.pumpWidget(LumiFxApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
       audioInput: FakeAudioInput(),
       shortcuts: shortcuts,
+      widgets: widgets,
       locale: const Locale('it'),
     ));
     await tester.pumpAndSettle();
@@ -391,6 +631,12 @@ void main() {
     expect(shortcuts.items.map((s) => s.id),
         ['effect:haunted_manor', 'effect:aurora']);
     expect(shortcuts.items.first.title, 'La Villa Infestata');
+    // The home-screen widget shows the same, with links that play them.
+    expect(widgets.title, 'Preferiti');
+    expect(
+        widgets.effects.map((e) => e.name), ['La Villa Infestata', 'Aurora']);
+    expect(widgets.effects.first.link, 'lumifx://app/play/haunted_manor');
+    expect(widgets.effects.first.colors, isNotEmpty);
 
     shortcuts.launch('effect:aurora');
     await tester.pumpAndSettle();
@@ -455,6 +701,14 @@ Future<BridgeController> _connectedBridge(
         if (request.method == 'PUT') {
           puts?.add(request.url.path);
           return json({'data': <Object>[]});
+        }
+        if (request.method == 'POST') {
+          puts?.add('POST ${request.url.path}');
+          return json({
+            'data': [
+              {'rid': 's2', 'rtype': 'scene'},
+            ],
+          });
         }
         switch (request.url.path) {
           case '/clip/v2/resource/scene':
@@ -530,6 +784,8 @@ void streamingTests() {
       preferences: PreferencesController(store: InMemoryKeyValueStore()),
       audioInput: FakeAudioInput(),
     ));
+    await tester.scrollUntilVisible(find.text('Rooms & zones'), 200,
+        scrollable: find.byType(Scrollable).first);
     await tester.tap(find.text('Rooms & zones'));
     await tester.pumpAndSettle();
     expect(find.text('Living room'), findsOneWidget);
@@ -538,6 +794,41 @@ void streamingTests() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(puts, contains('/clip/v2/resource/scene/s1'));
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('a playing effect can be saved as a Hue scene', (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setLastTarget('group:r1');
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    expect(find.text('Save as Hue scene'), findsNothing);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    await tester.tap(find.text('Save as Hue scene'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Blue hour');
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Save'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    expect(puts, contains('POST /clip/v2/resource/scene'));
+    expect(find.textContaining('in Living room'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 1));
   });
 
   testWidgets('player offers entertainment areas and reports start errors',
