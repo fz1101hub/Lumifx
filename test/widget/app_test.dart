@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -198,6 +199,36 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Playlist Evening · 2 of 2'), findsOneWidget);
     await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a lumifx:// link opens the player and plays, another stops',
+      (tester) async {
+    await _pumpApp(tester);
+    Future<void> openLink(String location) async {
+      final message = const JSONMethodCodec().encodeMethodCall(
+        MethodCall('pushRouteInformation', {'location': location}),
+      );
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+          SystemChannels.navigation.name, message, (_) {});
+    }
+
+    await openLink('lumifx://app/play/aurora');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Aurora'), findsOneWidget, reason: 'the player title');
+    expect(find.text('Pause'), findsOneWidget);
+
+    await openLink('/stop');
+    await tester.pump();
+    expect(find.text('Play'), findsOneWidget);
+
+    // A flashing effect only opens until the warning has been seen.
+    await openLink('lumifx://app/play/thunderstorm');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Thunderstorm'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget);
     await tester.pumpAndSettle();
   });
 

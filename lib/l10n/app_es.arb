@@ -284,5 +284,15 @@
   "saveAsHueSceneDescription": "Los colores que muestran ahora las luces se guardan en tu puente. Después podrás usar la escena desde la app Hue, los interruptores y los asistentes de voz, incluso sin LumiFX.",
   "sceneSaved": "\"{name}\" guardada en {room}. También está en la app Hue.",
   "sceneNotSaved": "Reproduce el efecto en una habitación o zona para guardarlo como escena.",
-  "couldNotSaveScene": "No se pudo guardar la escena: {reason}"
+  "couldNotSaveScene": "No se pudo guardar la escena: {reason}",
+  "linksTitle": "Atajos y automatizaciones",
+  "linksSubtitle": "Inicia efectos desde Siri, Atajos, Rutinas o Tasker.",
+  "linksDescription": "Cada enlace de abajo abre LumiFX y hace una sola cosa. Añádelo a un atajo de Siri (acción \"Abrir URL\"), una rutina de Android o Tasker, una etiqueta NFC o un marcador en la pantalla de inicio. Los nombres de habitaciones, zonas y listas se pueden cambiar en el enlace.",
+  "linksNote": "El teléfono debe seguir desbloqueado con LumiFX abierta mientras suena un efecto. Los efectos con destellos esperan el aviso inicial antes de empezar desde un enlace.",
+  "linkPlay": "Reproducir {name}",
+  "linkPlayIn": "Reproducir {name} en {room}",
+  "linkPlaylist": "Reproducir la lista {name}",
+  "linkStop": "Detener y restaurar las luces",
+  "copyLink": "Copiar enlace",
+  "linkCopied": "Enlace copiado"
 }

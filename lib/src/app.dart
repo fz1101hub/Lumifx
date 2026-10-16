@@ -14,6 +14,8 @@ import 'features/effects/playback_controller.dart';
 import 'features/effects/player_route.dart';
 import 'features/home/home_screen.dart';
 import 'features/library/effect_library.dart';
+import 'features/links/app_link.dart';
+import 'features/links/link_handler.dart';
 import 'features/library/preferences_controller.dart';
 import 'features/shortcuts/app_shortcuts.dart';
 import 'features/shortcuts/shortcuts_bridge.dart';
@@ -58,6 +60,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   final _routes = RouteTracker();
   late final EffectLibrary _library = EffectLibrary(widget.preferences);
   late final PlaybackController _playback;
+  late final LinkHandler _links;
   StreamSubscription<PlaybackNotice>? _notices;
 
   @override
@@ -74,6 +77,31 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       resolveEffect: _library.byId,
     );
     _notices = _playback.notices.listen(_showNotice);
+    _links = LinkHandler(
+      playback: _playback,
+      library: _library,
+      preferences: widget.preferences,
+      bridge: widget.bridge,
+      navigatorKey: _navigatorKey,
+    );
+    // Opened from a link: the platform hands it over as the first route.
+    final initial = AppLink.parse(
+        WidgetsBinding.instance.platformDispatcher.defaultRouteName);
+    if (initial != null) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => unawaited(_links.handle(initial)));
+    }
+  }
+
+  /// A `lumifx://` link while the app runs.
+  @override
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
+    final link = AppLink.parse(routeInformation.uri.toString());
+    if (link == null) {
+      return Future.value(false);
+    }
+    unawaited(_links.handle(link));
+    return Future.value(true);
   }
 
   void _showNotice(PlaybackNotice notice) {
@@ -115,6 +143,11 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     }
   }
 
+  static Route<void> _homeRoute() => MaterialPageRoute<void>(
+        settings: const RouteSettings(name: Navigator.defaultRouteName),
+        builder: (_) => const HomeScreen(),
+      );
+
   @override
   Widget build(BuildContext context) {
     return AppScope(
@@ -151,7 +184,11 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
             child: child ?? const SizedBox.shrink(),
           ),
         ),
-        home: const HomeScreen(),
+        // A link at launch arrives as the initial route: the app still
+        // opens on the home, and the link is handled on top of it.
+        onGenerateInitialRoutes: (_) => [_homeRoute()],
+        onGenerateRoute: (settings) =>
+            settings.name == Navigator.defaultRouteName ? _homeRoute() : null,
       ),
     );
   }

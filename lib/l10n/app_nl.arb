@@ -284,5 +284,15 @@
   "saveAsHueSceneDescription": "De kleuren die de lampen nu tonen, worden op je bridge opgeslagen. Je kunt de scène daarna gebruiken in de Hue-app, met schakelaars en spraakassistenten, ook zonder LumiFX.",
   "sceneSaved": "\"{name}\" opgeslagen in {room}. Hij staat ook in de Hue-app.",
   "sceneNotSaved": "Speel het effect af in een kamer of zone om het als scène op te slaan.",
-  "couldNotSaveScene": "De scène kon niet worden opgeslagen: {reason}"
+  "couldNotSaveScene": "De scène kon niet worden opgeslagen: {reason}",
+  "linksTitle": "Opdrachten en automatiseringen",
+  "linksSubtitle": "Start effecten vanuit Siri, Opdrachten, Routines of Tasker.",
+  "linksDescription": "Elke link hieronder opent LumiFX en doet één ding. Voeg hem toe aan een Siri-opdracht (actie \"Open URL\"), een Android-routine of Tasker, een NFC-tag of een bladwijzer op het beginscherm. Namen van kamers, zones en afspeellijsten kun je in de link aanpassen.",
+  "linksNote": "De telefoon moet ontgrendeld blijven met LumiFX open zolang een effect speelt. Effecten met flitsen wachten op de eenmalige waarschuwing voordat ze vanuit een link starten.",
+  "linkPlay": "{name} afspelen",
+  "linkPlayIn": "{name} afspelen in {room}",
+  "linkPlaylist": "Afspeellijst {name} afspelen",
+  "linkStop": "Stoppen en lampen herstellen",
+  "copyLink": "Link kopiëren",
+  "linkCopied": "Link gekopieerd"
 }

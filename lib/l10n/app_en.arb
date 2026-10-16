@@ -653,5 +653,63 @@
         "type": "String"
       }
     }
+  },
+  "linksTitle": "Shortcuts and automations",
+  "@linksTitle": {
+    "description": "Settings entry and screen title: links for automations"
+  },
+  "linksSubtitle": "Start effects from Siri, Shortcuts, Routines or Tasker.",
+  "@linksSubtitle": {
+    "description": "Settings entry subtitle for links"
+  },
+  "linksDescription": "Each link below opens LumiFX and does one thing. Add it to a Siri Shortcut (action \"Open URL\"), an Android routine or Tasker, an NFC tag or a home-screen bookmark. Names of rooms, zones and playlists can be changed in the link.",
+  "@linksDescription": {
+    "description": "Explains lumifx:// links"
+  },
+  "linksNote": "The phone has to stay unlocked with LumiFX open while an effect plays. Flashing effects wait for the one-time warning before they start from a link.",
+  "@linksNote": {
+    "description": "Note under the links"
+  },
+  "linkPlay": "Play {name}",
+  "@linkPlay": {
+    "description": "Link example title: play an effect",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "linkPlayIn": "Play {name} in {room}",
+  "@linkPlayIn": {
+    "description": "Link example title: play an effect in a room",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "linkPlaylist": "Play the playlist {name}",
+  "@linkPlaylist": {
+    "description": "Link example title: play a playlist",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "linkStop": "Stop and put the lights back",
+  "@linkStop": {
+    "description": "Link example title: stop"
+  },
+  "copyLink": "Copy link",
+  "@copyLink": {
+    "description": "Tooltip: copy the link"
+  },
+  "linkCopied": "Link copied",
+  "@linkCopied": {
+    "description": "Snackbar after copying a link"
   }
 }

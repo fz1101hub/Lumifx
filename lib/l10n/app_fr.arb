@@ -284,5 +284,15 @@
   "saveAsHueSceneDescription": "Les couleurs affichées par les lampes sont enregistrées sur votre pont. Vous pourrez ensuite utiliser la scène depuis l'app Hue, les interrupteurs et les assistants vocaux, même sans LumiFX.",
   "sceneSaved": "« {name} » enregistrée dans {room}. Elle est aussi dans l'app Hue.",
   "sceneNotSaved": "Lisez l'effet sur une pièce ou une zone pour l'enregistrer comme scène.",
-  "couldNotSaveScene": "Impossible d'enregistrer la scène : {reason}"
+  "couldNotSaveScene": "Impossible d'enregistrer la scène : {reason}",
+  "linksTitle": "Raccourcis et automatisations",
+  "linksSubtitle": "Lancez des effets depuis Siri, Raccourcis, Routines ou Tasker.",
+  "linksDescription": "Chaque lien ci-dessous ouvre LumiFX et fait une seule chose. Ajoutez-le à un raccourci Siri (action « Ouvrir l'URL »), une routine Android ou Tasker, une puce NFC ou un favori sur l'écran d'accueil. Les noms de pièces, zones et playlists peuvent être modifiés dans le lien.",
+  "linksNote": "Le téléphone doit rester déverrouillé avec LumiFX ouverte pendant la lecture d'un effet. Les effets avec des éclairs attendent l'avertissement initial avant de démarrer depuis un lien.",
+  "linkPlay": "Lire {name}",
+  "linkPlayIn": "Lire {name} dans {room}",
+  "linkPlaylist": "Lire la playlist {name}",
+  "linkStop": "Arrêter et rétablir les lumières",
+  "copyLink": "Copier le lien",
+  "linkCopied": "Lien copié"
 }

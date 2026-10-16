@@ -9,6 +9,7 @@ import '../bridge/forget_bridge_dialog.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_areas_screen.dart';
+import '../links/links_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -108,6 +109,16 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () => preferences.setMusicSource(source),
                   ),
               ],
+              const Divider(height: 32),
+              ListTile(
+                leading: const Icon(Icons.link),
+                title: Text(l10n.linksTitle),
+                subtitle: Text(l10n.linksSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const LinksScreen()),
+                ),
+              ),
               const Divider(height: 32),
               _Header(l10n.about),
               ListTile(

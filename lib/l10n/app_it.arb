@@ -284,5 +284,15 @@
   "saveAsHueSceneDescription": "I colori che le luci mostrano ora vengono salvati sul Bridge. Potrai usare la scena dall'app Hue, dagli interruttori e dagli assistenti vocali, anche senza LumiFX.",
   "sceneSaved": "\"{name}\" salvata in {room}. La trovi anche nell'app Hue.",
   "sceneNotSaved": "Riproduci l'effetto su una stanza o una zona per salvarlo come scena.",
-  "couldNotSaveScene": "Impossibile salvare la scena: {reason}"
+  "couldNotSaveScene": "Impossibile salvare la scena: {reason}",
+  "linksTitle": "Comandi rapidi e automazioni",
+  "linksSubtitle": "Avvia effetti da Siri, Comandi rapidi, Routine o Tasker.",
+  "linksDescription": "Ogni link qui sotto apre LumiFX e fa una cosa sola. Aggiungilo a un Comando rapido di Siri (azione \"Apri URL\"), a una routine Android o a Tasker, a un tag NFC o a un segnalibro sulla home. I nomi di stanze, zone e playlist si possono cambiare nel link.",
+  "linksNote": "Il telefono deve restare sbloccato con LumiFX aperta mentre un effetto è in riproduzione. Gli effetti con lampi aspettano l'avviso iniziale prima di partire da un link.",
+  "linkPlay": "Riproduci {name}",
+  "linkPlayIn": "Riproduci {name} in {room}",
+  "linkPlaylist": "Riproduci la playlist {name}",
+  "linkStop": "Ferma e ripristina le luci",
+  "copyLink": "Copia link",
+  "linkCopied": "Link copiato"
 }
