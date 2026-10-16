@@ -566,5 +566,16 @@
   "okToWakeStaysOn": "Sigue encendida",
   "okToWakeSummary": "Ámbar desde las {night}, verde a las {wake}",
   "okToWakeRoom": "Habitación o zona",
-  "okToWakeNoMornings": "Elige al menos una mañana."
+  "okToWakeNoMornings": "Elige al menos una mañana.",
+  "timers": "Temporizadores de luz",
+  "timersSubtitle": "Dientes, ordenar, deberes, concentración, cocina",
+  "timersDescription": "Las luces cambian de color con el paso del tiempo, así nadie tiene que mirar el reloj. Al final llega una pequeña fiesta de luz, o una señal suave, y las luces vuelven a estar como antes.",
+  "timerTeeth": "Cepillarse los dientes",
+  "timerTidyUp": "Ordenar",
+  "timerHomework": "Deberes",
+  "timerFocus": "Concentración",
+  "timerCooking": "Cocina",
+  "timerStart": "Iniciar",
+  "timerDone": "¡Se acabó el tiempo!",
+  "noticeFinished": "{name} ha terminado."
 }

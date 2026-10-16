@@ -1916,5 +1916,54 @@
   "okToWakeNoMornings": "Choose at least one morning.",
   "@okToWakeNoMornings": {
     "description": "Error when no morning is chosen"
+  },
+  "timers": "Light timers",
+  "@timers": {
+    "description": "Home entry: timers shown by the lights"
+  },
+  "timersSubtitle": "Teeth, tidying up, homework, focus, cooking",
+  "@timersSubtitle": {
+    "description": "Subtitle of the light timers on the home screen"
+  },
+  "timersDescription": "The lights change colour as time passes, so nobody has to watch a clock. At the end comes a little party of light, or a gentle signal, and the lights go back as they were.",
+  "@timersDescription": {
+    "description": "Explains light timers"
+  },
+  "timerTeeth": "Brush your teeth",
+  "@timerTeeth": {
+    "description": "Timer preset: brushing teeth"
+  },
+  "timerTidyUp": "Tidy up",
+  "@timerTidyUp": {
+    "description": "Timer preset: tidying up the room"
+  },
+  "timerHomework": "Homework",
+  "@timerHomework": {
+    "description": "Timer preset: homework"
+  },
+  "timerFocus": "Focus",
+  "@timerFocus": {
+    "description": "Timer preset: focused work"
+  },
+  "timerCooking": "Cooking",
+  "@timerCooking": {
+    "description": "Timer preset: cooking"
+  },
+  "timerStart": "Start",
+  "@timerStart": {
+    "description": "Button that starts a light timer"
+  },
+  "timerDone": "Time's up!",
+  "@timerDone": {
+    "description": "Shown when a light timer has finished"
+  },
+  "noticeFinished": "{name} has finished.",
+  "@noticeFinished": {
+    "description": "Snackbar when a one-shot effect (a timer, a game) has finished",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }

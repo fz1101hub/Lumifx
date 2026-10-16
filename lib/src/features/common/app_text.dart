@@ -86,6 +86,7 @@ String describePlaybackNotice(AppLocalizations l10n, PlaybackNotice notice) =>
           _ => l10n.noticeStreamingStopped,
         },
       PlaybackNoticeKind.sleepTimerDone => l10n.noticeSleepTimerDone,
+      PlaybackNoticeKind.finished => l10n.noticeFinished(notice.name ?? ''),
     };
 
 String describeSlot(AppLocalizations l10n, SlotLabel label) => switch (label) {

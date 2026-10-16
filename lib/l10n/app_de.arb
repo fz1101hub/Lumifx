@@ -566,5 +566,16 @@
   "okToWakeStaysOn": "Bleibt an",
   "okToWakeSummary": "Bernstein ab {night}, Grün um {wake}",
   "okToWakeRoom": "Raum oder Zone",
-  "okToWakeNoMornings": "Wähle mindestens einen Morgen."
+  "okToWakeNoMornings": "Wähle mindestens einen Morgen.",
+  "timers": "Licht-Timer",
+  "timersSubtitle": "Zähne, Aufräumen, Hausaufgaben, Konzentration, Kochen",
+  "timersDescription": "Die Lampen ändern ihre Farbe, während die Zeit vergeht, niemand muss auf die Uhr schauen. Am Ende gibt es ein kleines Lichtfest oder ein sanftes Signal, und das Licht wird wie vorher.",
+  "timerTeeth": "Zähne putzen",
+  "timerTidyUp": "Aufräumen",
+  "timerHomework": "Hausaufgaben",
+  "timerFocus": "Konzentration",
+  "timerCooking": "Kochen",
+  "timerStart": "Starten",
+  "timerDone": "Die Zeit ist um!",
+  "noticeFinished": "{name} ist fertig."
 }

@@ -566,5 +566,16 @@
   "okToWakeStaysOn": "Blijft aan",
   "okToWakeSummary": "Amber vanaf {night}, groen om {wake}",
   "okToWakeRoom": "Kamer of zone",
-  "okToWakeNoMornings": "Kies minstens één ochtend."
+  "okToWakeNoMornings": "Kies minstens één ochtend.",
+  "timers": "Lichttimers",
+  "timersSubtitle": "Tanden, opruimen, huiswerk, focus, koken",
+  "timersDescription": "De lampen veranderen van kleur terwijl de tijd verstrijkt, zodat niemand op de klok hoeft te kijken. Aan het eind volgt een klein lichtfeest of een zacht signaal, en het licht wordt weer zoals het was.",
+  "timerTeeth": "Tandenpoetsen",
+  "timerTidyUp": "Opruimen",
+  "timerHomework": "Huiswerk",
+  "timerFocus": "Focus",
+  "timerCooking": "Koken",
+  "timerStart": "Starten",
+  "timerDone": "De tijd is om!",
+  "noticeFinished": "{name} is klaar."
 }

@@ -18,6 +18,7 @@ const _knownTypes = {
   EffectEventTypes.music,
   EffectEventTypes.footsteps,
   EffectEventTypes.screen,
+  EffectEventTypes.countdown,
 };
 
 LightingEffect _effect(List<EffectEvent> events, {Duration? loop}) =>

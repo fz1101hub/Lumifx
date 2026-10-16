@@ -566,5 +566,16 @@
   "okToWakeStaysOn": "Resta accesa",
   "okToWakeSummary": "Ambra dalle {night}, verde alle {wake}",
   "okToWakeRoom": "Stanza o zona",
-  "okToWakeNoMornings": "Scegli almeno una mattina."
+  "okToWakeNoMornings": "Scegli almeno una mattina.",
+  "timers": "Timer di luce",
+  "timersSubtitle": "Denti, riordino, compiti, concentrazione, cucina",
+  "timersDescription": "Le luci cambiano colore man mano che il tempo passa, così nessuno deve guardare l'orologio. Alla fine arriva una piccola festa di luce, o un segnale gentile, e le luci tornano com'erano.",
+  "timerTeeth": "Lavare i denti",
+  "timerTidyUp": "Riordinare",
+  "timerHomework": "Compiti",
+  "timerFocus": "Concentrazione",
+  "timerCooking": "Cucina",
+  "timerStart": "Avvia",
+  "timerDone": "Tempo scaduto!",
+  "noticeFinished": "{name}: finito."
 }

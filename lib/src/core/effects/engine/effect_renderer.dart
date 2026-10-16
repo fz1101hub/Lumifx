@@ -159,6 +159,8 @@ class EffectRenderer {
           if (audio != null) {
             _renderMusic(context, frames, audio, seconds);
           }
+        case EffectEventTypes.countdown:
+          _renderCountdown(context, frames);
         case EffectEventTypes.screen:
           if (screen != null && screen.zones > 0) {
             _renderScreen(context, frames, screen);
@@ -412,6 +414,26 @@ class EffectRenderer {
         frames[i] = frames[i].withBrightness(
             frames[i].brightness * (1 - shake * loudness * alpha));
       }
+    }
+  }
+
+  /// A timer seen from across the room: each light turns from `from` to
+  /// `to` in turn (a single light fades the whole way), with a slow breath.
+  void _renderCountdown(_EventContext context, List<LightFrame> frames) {
+    final p = context.event.parameters;
+    final from = _color(p, 'from', const LightColor(0.2, 0.9, 0.4));
+    final to = _color(p, 'to', const LightColor(1, 0.3, 0.3));
+    final brightness = _number(p, 'brightness', 0.8);
+    final done = context.progress;
+    final seconds = context.local.inMicroseconds / 1e6;
+    final breath = 1 + 0.08 * math.sin(2 * math.pi * seconds / 4);
+    for (var slot = 0; slot < slotCount; slot++) {
+      final turned =
+          slotCount == 1 ? done : (done * slotCount - slot).clamp(0.0, 1.0);
+      frames[slot] = LightFrame(
+        LightColor.lerp(from, to, turned),
+        (brightness * breath).clamp(0.0, 1.0),
+      );
     }
   }
 

@@ -566,5 +566,16 @@
   "okToWakeStaysOn": "つけたまま",
   "okToWakeSummary": "{night} から琥珀色、{wake} に緑",
   "okToWakeRoom": "部屋またはゾーン",
-  "okToWakeNoMornings": "少なくとも1つの朝を選んでください。"
+  "okToWakeNoMornings": "少なくとも1つの朝を選んでください。",
+  "timers": "ライトタイマー",
+  "timersSubtitle": "歯みがき、おかたづけ、宿題、集中、料理",
+  "timersDescription": "時間がたつにつれて明かりの色が変わるので、時計を見なくても大丈夫。最後に小さな光のパーティーかやさしい合図があり、明かりは元に戻ります。",
+  "timerTeeth": "歯みがき",
+  "timerTidyUp": "おかたづけ",
+  "timerHomework": "宿題",
+  "timerFocus": "集中",
+  "timerCooking": "料理",
+  "timerStart": "開始",
+  "timerDone": "時間です！",
+  "noticeFinished": "{name} が終わりました。"
 }

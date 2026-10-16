@@ -16,6 +16,7 @@ import '../playlists/playlists_screen.dart';
 import '../rooms/rooms_screen.dart';
 import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
+import '../timers/timers_screen.dart';
 import 'seasons.dart';
 import 'wall_panel_screen.dart';
 
@@ -135,6 +136,19 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
                       builder: (_) => const BedtimeScreen()),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: ListTile(
+                minVerticalPadding: 20,
+                leading: const Icon(Icons.timer_outlined),
+                title: Text(l10n.timers),
+                subtitle: Text(l10n.timersSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const TimersScreen()),
                 ),
               ),
             ),

@@ -21,6 +21,7 @@ import 'package:lumifx/src/features/effects/catalog/effect_catalog.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/timers/light_timer.dart';
 import 'package:lumifx/src/features/tv/camera_input.dart';
 
 import '../support/fake_audio_input.dart';
@@ -782,6 +783,41 @@ void main() {
     await controller.start();
     expect(controller.canSaveAsHueScene, isTrue);
     expect(controller.canScheduleOnBridge, isFalse);
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('a one-shot effect stops at its end and puts the lights back', () async {
+    final (controller, fake, _) = await _setUp();
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
+    final timer = LightTimer.teeth.effect(
+      name: 'Teeth',
+      length: const Duration(milliseconds: 300),
+    );
+    await controller.switchEffect(timer);
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    // Faster than real time: the ending is six seconds long.
+    controller.player!.advance(const Duration(seconds: 7));
+    await _wait(400);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(notices.single.kind, PlaybackNoticeKind.finished);
+    expect(notices.single.name, 'Teeth');
+    await _wait(700);
+    expect(fake.puts.map((p) => p.$1), containsAll(['color', 'white']),
+        reason: 'the lights got their state back');
+    controller.dispose();
+  });
+
+  test('effects made for one use are not kept as recently played', () async {
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final (controller, _, _) = await _setUp(preferences: preferences);
+    await controller.changeTarget(null);
+    await controller.switchEffect(LightTimer.focus.effect(name: 'Focus'));
+    await controller.start();
+    await controller.switchEffect(ocean);
+    expect(preferences.recents, ['ocean']);
     await controller.stop();
     controller.dispose();
   });

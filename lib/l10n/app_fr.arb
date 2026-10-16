@@ -566,5 +566,16 @@
   "okToWakeStaysOn": "Reste allumé",
   "okToWakeSummary": "Ambre dès {night}, vert à {wake}",
   "okToWakeRoom": "Pièce ou zone",
-  "okToWakeNoMornings": "Choisis au moins un matin."
+  "okToWakeNoMornings": "Choisis au moins un matin.",
+  "timers": "Minuteurs lumineux",
+  "timersSubtitle": "Dents, rangement, devoirs, concentration, cuisine",
+  "timersDescription": "Les lumières changent de couleur au fil du temps : personne n'a besoin de regarder l'heure. À la fin, une petite fête de lumière ou un signal doux, puis les lumières redeviennent comme avant.",
+  "timerTeeth": "Se brosser les dents",
+  "timerTidyUp": "Ranger",
+  "timerHomework": "Devoirs",
+  "timerFocus": "Concentration",
+  "timerCooking": "Cuisine",
+  "timerStart": "Démarrer",
+  "timerDone": "C'est l'heure !",
+  "noticeFinished": "{name} est terminé."
 }
