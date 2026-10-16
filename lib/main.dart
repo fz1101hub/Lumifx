@@ -6,6 +6,7 @@ import 'src/core/audio/phone_audio_input.dart';
 import 'src/core/background_playback.dart';
 import 'src/core/sound/sound_player.dart';
 import 'src/features/tv/plugin_camera_input.dart';
+import 'src/core/photos/photo_picker.dart';
 import 'src/core/speech/speaker.dart';
 import 'src/core/hue/hue_discovery.dart';
 import 'src/features/bridge/bridge_controller.dart';
@@ -42,6 +43,7 @@ Future<void> main() async {
       sound: AudioplayersSoundPlayer(),
       camera: PluginCameraInput(),
       speaker: TtsSpeaker(),
+      photos: PluginPhotoPicker(),
     ),
   );
 }

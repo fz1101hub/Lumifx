@@ -579,5 +579,9 @@
   "timerDone": "¡Se acabó el tiempo!",
   "noticeFinished": "{name} ha terminado.",
   "readAloud": "Leer en voz alta",
-  "readAloudDescription": "El teléfono lee las palabras en voz alta a medida que aparecen, con su propia voz."
+  "readAloudDescription": "El teléfono lee las palabras en voz alta a medida que aparecen, con su propia voz.",
+  "sceneFromPhoto": "De una foto",
+  "choosePhoto": "Elegir una foto",
+  "takePhoto": "Hacer una foto",
+  "photoFailed": "No se pudo abrir la foto. Comprueba que LumiFX puede usar tus fotos o la cámara."
 }

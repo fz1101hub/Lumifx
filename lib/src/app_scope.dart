@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
+import 'core/photos/photo_picker.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/effects/playback_controller.dart';
 import 'features/library/effect_library.dart';
@@ -20,6 +21,7 @@ class AppScope extends InheritedWidget {
     this.background = const NoBackgroundPlayback(),
     this.clock = DateTime.now,
     this.phoneAudioInput,
+    this.photos = const NoPhotoPicker(),
     required super.child,
     super.key,
   });
@@ -48,6 +50,9 @@ class AppScope extends InheritedWidget {
   /// Today, for the seasonal stories (tests pass a fixed date).
   final DateTime Function() clock;
 
+  /// Photos to make scenes from.
+  final PhotoPicker photos;
+
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
     assert(scope != null, 'No AppScope found in context');
@@ -63,5 +68,6 @@ class AppScope extends InheritedWidget {
       playback != oldWidget.playback ||
       library != oldWidget.library ||
       background != oldWidget.background ||
-      phoneAudioInput != oldWidget.phoneAudioInput;
+      phoneAudioInput != oldWidget.phoneAudioInput ||
+      photos != oldWidget.photos;
 }

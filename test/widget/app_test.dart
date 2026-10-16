@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,10 +11,12 @@ import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
+import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
+import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
@@ -38,7 +41,27 @@ PreferencesController _warnedPreferences() =>
     PreferencesController(store: InMemoryKeyValueStore())
       ..setFlashWarningShown(true);
 
-Future<void> _pumpApp(WidgetTester tester) async {
+/// Hands back the same photo every time.
+class _FakePhotoPicker implements PhotoPicker {
+  _FakePhotoPicker(this.photo);
+
+  final Uint8List? photo;
+  final asked = <PhotoSource>[];
+
+  @override
+  Future<Uint8List?> pick(PhotoSource source) async {
+    asked.add(source);
+    if (photo == null) {
+      throw const PhotoUnavailable('denied');
+    }
+    return photo;
+  }
+}
+
+Future<void> _pumpApp(
+  WidgetTester tester, {
+  PhotoPicker photos = const NoPhotoPicker(),
+}) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
   // Loaded as on a phone (links wait for that), past the welcome pages.
@@ -53,6 +76,7 @@ Future<void> _pumpApp(WidgetTester tester) async {
       discovery: _FakeDiscovery(),
       preferences: preferences,
       audioInput: FakeAudioInput(),
+      photos: photos,
     ),
   );
 }
@@ -551,6 +575,69 @@ void main() {
     expect(find.text('Reading nook'), findsNothing);
     expect(find.text('New scene'), findsOneWidget);
     expect(find.byType(MiniPlayer), findsNothing);
+  });
+
+  testWidgets('a scene takes its colours from a photo', (tester) async {
+    // Two thirds blue, one third orange.
+    final photo = (await tester.runAsync(() async {
+      final recorder = ui.PictureRecorder();
+      ui.Canvas(recorder)
+        ..drawRect(const Rect.fromLTWH(0, 0, 30, 30),
+            Paint()..color = const Color(0xFF0040FF))
+        ..drawRect(const Rect.fromLTWH(20, 0, 10, 30),
+            Paint()..color = const Color(0xFFFF8000));
+      final image = await recorder.endRecording().toImage(30, 30);
+      final data = await image.toByteData(format: ui.ImageByteFormat.png);
+      image.dispose();
+      return data!.buffer.asUint8List();
+    }))!;
+    final photos = _FakePhotoPicker(photo);
+    await _pumpApp(tester, photos: photos);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New scene'));
+    await step();
+    expect(find.bySemanticsLabel('Colour 3'), findsOneWidget);
+    await tester.tap(find.text('From a photo'));
+    await step();
+    await tester.tap(find.text('Take a photo'));
+    await step();
+    // The photo is decoded for real, outside the test's fake time.
+    await tester.runAsync(() => Future<void>.delayed(
+          const Duration(milliseconds: 300),
+        ));
+    await step();
+    expect(photos.asked, [PhotoSource.camera]);
+    expect(find.bySemanticsLabel('Colour 1'), findsOneWidget);
+    expect(find.bySemanticsLabel('Colour 2'), findsOneWidget);
+    expect(find.bySemanticsLabel('Colour 3'), findsNothing,
+        reason: 'the two colours of the photo');
+    final slots = tester.widgetList<ColorSlot>(find.byType(ColorSlot));
+    final first = slots.first.color;
+    expect(first.b, greaterThan(first.r), reason: 'blue, the most present');
+  });
+
+  testWidgets('a photo that cannot be opened says so', (tester) async {
+    await _pumpApp(tester, photos: _FakePhotoPicker(null));
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('New scene'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tap(find.text('From a photo'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tap(find.text('Choose a photo'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.textContaining("Couldn't open that photo"), findsOneWidget);
+    expect(find.bySemanticsLabel('Colour 3'), findsOneWidget,
+        reason: 'the colours stay as they were');
   });
 
   testWidgets('a story of your own is written, read along and deleted',

@@ -579,5 +579,9 @@
   "timerDone": "De tijd is om!",
   "noticeFinished": "{name} is klaar.",
   "readAloud": "Voorlezen",
-  "readAloudDescription": "De telefoon leest de woorden met zijn eigen stem voor zodra ze verschijnen."
+  "readAloudDescription": "De telefoon leest de woorden met zijn eigen stem voor zodra ze verschijnen.",
+  "sceneFromPhoto": "Uit een foto",
+  "choosePhoto": "Kies een foto",
+  "takePhoto": "Maak een foto",
+  "photoFailed": "Kan die foto niet openen. Controleer of LumiFX je foto's of camera mag gebruiken."
 }

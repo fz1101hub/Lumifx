@@ -579,5 +579,9 @@
   "timerDone": "時間です！",
   "noticeFinished": "{name} が終わりました。",
   "readAloud": "読み上げ",
-  "readAloudDescription": "言葉が表示されると、スマートフォンの声で読み上げます。"
+  "readAloudDescription": "言葉が表示されると、スマートフォンの声で読み上げます。",
+  "sceneFromPhoto": "写真から",
+  "choosePhoto": "写真を選ぶ",
+  "takePhoto": "写真を撮る",
+  "photoFailed": "写真を開けませんでした。LumiFX が写真またはカメラを使えるか確認してください。"
 }

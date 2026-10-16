@@ -7,7 +7,9 @@
 		<key>NSLocalNetworkUsageDescription</key>
 		<string>LumiFX finds and controls your Philips Hue Bridge on your local network.</string>
 		<key>NSCameraUsageDescription</key>
-		<string>TV Sync looks at your TV so your lights can take its colours. The picture is analysed on your phone and never recorded or sent.</string>
+		<string>TV Sync looks at your TV so your lights can take its colours, and a photo you take can become a scene. Pictures are analysed on your phone and never sent.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Choose a photo and LumiFX makes a light scene from its colours. The photo is analysed on your phone and never sent.</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Music Sync listens to the music in the room so your lights can move with it. Audio never leaves your phone.</string>
 		<key>NSBonjourServices</key>

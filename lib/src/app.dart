@@ -11,6 +11,7 @@ import 'core/sound/sound_player.dart';
 import 'features/tv/camera_input.dart';
 import 'features/buttons/hue_button_listener.dart';
 import 'features/effects/read_aloud.dart';
+import 'core/photos/photo_picker.dart';
 import 'core/speech/speaker.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
@@ -43,6 +44,7 @@ class LumiFxApp extends StatefulWidget {
     this.sound = const NoSoundPlayer(),
     this.camera = const NoCameraInput(),
     this.speaker = const NoSpeaker(),
+    this.photos = const NoPhotoPicker(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -79,6 +81,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// Reads stories aloud.
   final Speaker speaker;
+
+  /// Photos to make scenes from.
+  final PhotoPicker photos;
 
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
@@ -324,6 +329,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       library: _library,
       background: widget.background,
       clock: widget.clock,
+      photos: widget.photos,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

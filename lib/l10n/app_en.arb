@@ -1973,5 +1973,21 @@
   "readAloudDescription": "The phone reads the words aloud as they appear, with its own voice.",
   "@readAloudDescription": {
     "description": "Subtitle of the read-aloud switch"
+  },
+  "sceneFromPhoto": "From a photo",
+  "@sceneFromPhoto": {
+    "description": "Button in the scene editor: take the colours from a photo"
+  },
+  "choosePhoto": "Choose a photo",
+  "@choosePhoto": {
+    "description": "Choose an existing photo from the phone"
+  },
+  "takePhoto": "Take a photo",
+  "@takePhoto": {
+    "description": "Take a new photo with the camera"
+  },
+  "photoFailed": "Couldn't open that photo. Check that LumiFX may use your photos or camera.",
+  "@photoFailed": {
+    "description": "Error when a photo cannot be opened"
   }
 }

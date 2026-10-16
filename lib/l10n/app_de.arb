@@ -579,5 +579,9 @@
   "timerDone": "Die Zeit ist um!",
   "noticeFinished": "{name} ist fertig.",
   "readAloud": "Vorlesen",
-  "readAloudDescription": "Das Telefon liest die Worte mit seiner Stimme vor, sobald sie erscheinen."
+  "readAloudDescription": "Das Telefon liest die Worte mit seiner Stimme vor, sobald sie erscheinen.",
+  "sceneFromPhoto": "Aus einem Foto",
+  "choosePhoto": "Foto auswählen",
+  "takePhoto": "Foto aufnehmen",
+  "photoFailed": "Das Foto konnte nicht geöffnet werden. Prüfe, ob LumiFX auf Fotos oder Kamera zugreifen darf."
 }
