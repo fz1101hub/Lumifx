@@ -364,5 +364,7 @@
   "shareAll": "Compartir o guardar mis escenas y listas",
   "shareAllSubtitle": "Un solo enlace con todo lo que creaste, para otro teléfono o para guardarlo.",
   "nightLight": "Luz nocturna",
-  "nightLightHint": "Toca para volver a ver esto. Cierra o vuelve atrás para salir."
+  "nightLightHint": "Toca para volver a ver esto. Cierra o vuelve atrás para salir.",
+  "seasonHalloween": "Llega Halloween",
+  "seasonChristmas": "Tiempo de Navidad"
 }

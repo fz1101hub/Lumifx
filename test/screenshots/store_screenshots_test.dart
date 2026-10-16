@@ -85,6 +85,8 @@ Future<void> _capture(WidgetTester tester, String device, Locale locale) async {
       audioInput: FakeAudioInput(),
       locale: locale,
       fontFallback: const ['JapaneseFallback'],
+      // Out of season: store screenshots should not show Halloween in May.
+      clock: () => DateTime(2026, 6, 15),
     ),
   ));
   await tester.pumpAndSettle();

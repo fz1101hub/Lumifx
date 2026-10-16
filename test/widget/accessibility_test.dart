@@ -22,6 +22,8 @@ void main() {
       preferences: PreferencesController(store: InMemoryKeyValueStore())
         ..setFlashWarningShown(true),
       audioInput: FakeAudioInput(),
+      // In season, so the seasonal shelf is checked too.
+      clock: () => DateTime(2026, 10, 20),
     ));
     await tester.pumpAndSettle();
   }

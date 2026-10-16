@@ -425,6 +425,34 @@ void main() {
     expect(find.text('Play'), findsOneWidget, reason: 'back on the player');
   });
 
+  testWidgets('the home puts the season\'s stories first', (tester) async {
+    Future<void> launch(DateTime day) async {
+      final bridge = BridgeController(store: InMemoryCredentialStore());
+      await tester.runAsync(bridge.initialize);
+      await tester.pumpWidget(LumiFxApp(
+        key: UniqueKey(),
+        bridge: bridge,
+        discovery: _FakeDiscovery(),
+        preferences: PreferencesController(store: InMemoryKeyValueStore()),
+        audioInput: FakeAudioInput(),
+        clock: () => day,
+      ));
+      await tester.pumpAndSettle();
+    }
+
+    await launch(DateTime(2026, 10, 20));
+    expect(find.text('Halloween is coming'), findsOneWidget);
+    expect(find.text('Pumpkin Patch'), findsOneWidget);
+
+    await launch(DateTime(2026, 12, 24));
+    expect(find.text('Christmas time'), findsOneWidget);
+    expect(find.text('Halloween is coming'), findsNothing);
+
+    await launch(DateTime(2026, 6, 15));
+    expect(find.text('Halloween is coming'), findsNothing);
+    expect(find.text('Christmas time'), findsNothing);
+  });
+
   testWidgets('settings change the controls a new playback starts with',
       (tester) async {
     await _pumpApp(tester);

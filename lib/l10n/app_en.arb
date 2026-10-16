@@ -1050,5 +1050,13 @@
   "nightLightHint": "Tap to show this again. Close or go back to leave.",
   "@nightLightHint": {
     "description": "Night light hint, shown for a few seconds"
+  },
+  "seasonHalloween": "Halloween is coming",
+  "@seasonHalloween": {
+    "description": "Home shelf title in October"
+  },
+  "seasonChristmas": "Christmas time",
+  "@seasonChristmas": {
+    "description": "Home shelf title around Christmas"
   }
 }

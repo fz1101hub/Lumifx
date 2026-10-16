@@ -364,5 +364,7 @@
   "shareAll": "マイシーンとプレイリストを共有・バックアップ",
   "shareAllSubtitle": "作成したものすべてを 1 つのリンクに。別のスマートフォン用や保存用に。",
   "nightLight": "ナイトライト",
-  "nightLightHint": "タップするとこの表示が戻ります。閉じるか戻ると終了します。"
+  "nightLightHint": "タップするとこの表示が戻ります。閉じるか戻ると終了します。",
+  "seasonHalloween": "もうすぐハロウィン",
+  "seasonChristmas": "クリスマスの季節"
 }

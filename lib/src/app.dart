@@ -34,6 +34,7 @@ class LumiFxApp extends StatefulWidget {
     this.widgets = const NoHomeWidgets(),
     this.screenWake = const WakelockScreenWake(),
     this.background = const NoBackgroundPlayback(),
+    this.clock = DateTime.now,
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -58,6 +59,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// Keeps effects playing with the screen off (Android).
   final BackgroundPlayback background;
+
+  /// Today, for the seasonal stories on the home.
+  final DateTime Function() clock;
 
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
@@ -267,6 +271,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       playback: _playback,
       library: _library,
       background: widget.background,
+      clock: widget.clock,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

@@ -18,6 +18,7 @@ class AppScope extends InheritedWidget {
     required this.playback,
     required this.library,
     this.background = const NoBackgroundPlayback(),
+    this.clock = DateTime.now,
     this.phoneAudioInput,
     required super.child,
     super.key,
@@ -43,6 +44,9 @@ class AppScope extends InheritedWidget {
 
   /// Playing on with the screen off (Android).
   final BackgroundPlayback background;
+
+  /// Today, for the seasonal stories (tests pass a fixed date).
+  final DateTime Function() clock;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();

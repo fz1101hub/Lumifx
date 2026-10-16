@@ -364,5 +364,7 @@
   "shareAll": "Partager ou sauvegarder mes scènes et playlists",
   "shareAllSubtitle": "Un seul lien avec tout ce que vous avez créé, pour un autre téléphone ou à garder.",
   "nightLight": "Veilleuse",
-  "nightLightHint": "Touchez pour revoir ceci. Fermez ou revenez en arrière pour quitter."
+  "nightLightHint": "Touchez pour revoir ceci. Fermez ou revenez en arrière pour quitter.",
+  "seasonHalloween": "Halloween approche",
+  "seasonChristmas": "C'est Noël"
 }

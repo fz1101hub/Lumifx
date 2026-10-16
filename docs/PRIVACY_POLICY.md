@@ -35,6 +35,20 @@ sound is analysed in real time in the same way as the microphone and is
 never recorded, stored or transmitted. Capture ends when you pause or stop
 the effect or dismiss it from the notification.
 
+**Playing with the screen off (Android).** While an effect plays on your
+lights, LumiFX can keep running with the screen off. It then shows a
+notification (Android 13 and later ask once for permission to show it) and,
+during a Music Sync effect, keeps using the microphone exactly as described
+above. You can turn this off in Settings.
+
+**Sharing scenes and playlists.** When you choose to share, the scene or
+playlist is packed into a link or QR code that you pass on yourself. It
+contains only the names, colours and settings you made; LumiFX sends it
+nowhere.
+
+**Routines and Hue scenes.** Wake-up and bedtime routines and saved Hue
+scenes are stored on your own Hue Bridge, like those made in the Hue app.
+
 **Preferences.** Favourites, recently played effects and playback settings are
 stored on your phone only.
 
@@ -100,6 +114,20 @@ delle altre app, mostra una notifica persistente mentre lo fa e non cattura
 mai lo schermo. Quel suono è analizzato in tempo reale come quello del
 microfono e non viene mai registrato, salvato o trasmesso. La cattura termina
 quando metti in pausa o fermi l'effetto o la chiudi dalla notifica.
+
+**Riproduzione a schermo spento (Android).** Mentre un effetto è in corso
+sulle luci, LumiFX può continuare a funzionare a schermo spento. In quel caso
+mostra una notifica (da Android 13 il sistema chiede una volta il permesso) e,
+durante un effetto Music Sync, continua a usare il microfono esattamente come
+descritto sopra. Puoi disattivarlo nelle Impostazioni.
+
+**Condivisione di scene e playlist.** Quando scegli di condividere, la scena
+o la playlist viene inserita in un link o codice QR che passi tu. Contiene
+solo i nomi, i colori e le impostazioni che hai creato; LumiFX non lo invia
+da nessuna parte.
+
+**Routine e scene Hue.** Le routine di sveglia e buonanotte e le scene Hue
+salvate sono memorizzate sul tuo Hue Bridge, come quelle create nell'app Hue.
 
 **Preferenze.** Preferiti, effetti recenti e impostazioni di riproduzione sono
 salvati solo sul telefono.

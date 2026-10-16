@@ -160,6 +160,32 @@ build before every store release.
 - [ ] Lock the phone while a playlist plays: playback stops cleanly, as
       for a single effect.
 
+## Screen off, routines, sharing, gradients, night light
+
+- [ ] Android: play Ocean on a room and lock the phone: the lights keep
+      moving for at least 10 minutes; the notification names the effect and
+      room; its Stop stops the effect and puts the lights back. Android 13+
+      asks once for notification access. Music Sync (microphone) keeps
+      reacting with the screen off. Settings › "Keep playing with the
+      screen off" off: locking stops the effect again.
+- [ ] Save Aurora as a Hue scene with "Keep moving": recalled from the Hue
+      app (and from Rooms & zones) it drifts through Aurora's colours.
+- [ ] Wake-up & bedtime: create a wake-up for 3 minutes from now with a
+      5 minute fade and sunrise colours: the lights brighten by themselves
+      with the phone off; it appears in the Hue app's automations. Same for
+      a bedtime routine (the go-to-sleep configuration is untested on a real
+      bridge: if the bridge refuses it, note the error shown). Switching a
+      routine off and deleting it work in both apps.
+- [ ] Share a scene by QR code: another phone's camera opens LumiFX, which
+      asks, then adds it; a playlist brings its scenes along; "Share or back
+      up" in Settings restores everything on a fresh install.
+- [ ] A gradient lightstrip in a room: Ocean and Party Chase move along the
+      strip; stopping brings back the gradient it had.
+- [ ] Night light: soft glows full screen, screen stays on, close returns
+      to the player; with the effect playing on lights they follow the lights.
+- [ ] Between 1 Oct and 2 Nov the home starts with "Halloween is coming";
+      between 20 Nov and 6 Jan with "Christmas time".
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

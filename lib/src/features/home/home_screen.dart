@@ -14,6 +14,7 @@ import '../effects/player_route.dart';
 import '../playlists/playlists_screen.dart';
 import '../rooms/rooms_screen.dart';
 import '../settings/settings_screen.dart';
+import 'seasons.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -43,6 +44,14 @@ class HomeScreen extends StatelessWidget {
           padding: context.pageInsets(maxWidth: 1000),
           children: [
             _BridgeBanner(controller: bridge),
+            if (seasonOf(AppScope.of(context).clock()) case final season?)
+              _EffectShelf(
+                title: switch (season) {
+                  Season.halloween => l10n.seasonHalloween,
+                  Season.christmas => l10n.seasonChristmas,
+                },
+                effectIds: [for (final e in effectsOfSeason(season)) e.id],
+              ),
             _EffectShelf(
               title: l10n.favorites,
               effectIds: preferences.favorites,
@@ -204,7 +213,6 @@ class _EffectShelf extends StatelessWidget {
                   onTap: () => openPlayer(context, effect),
                   child: Ink(
                     width: tileWidth,
-                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       gradient: LinearGradient(
@@ -214,17 +222,33 @@ class _EffectShelf extends StatelessWidget {
                             colors.length > 1 ? colors : [...colors, ...colors],
                       ),
                     ),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        l10n.effectName(effect),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          color: Colors.white,
-                          shadows: const [
-                            Shadow(blurRadius: 6, color: Colors.black),
-                          ],
+                    // A dark fade under the name keeps it readable on pale
+                    // colours (yellow, white) too.
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Color(0x00000000), Color(0xCC000000)],
+                          stops: [0.25, 1],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            l10n.effectName(effect),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              color: Colors.white,
+                              shadows: const [
+                                Shadow(blurRadius: 6, color: Colors.black),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),

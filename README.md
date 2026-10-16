@@ -61,6 +61,16 @@ Also done ahead of schedule:
 - **Home-screen widget** of the favourites on Android; on iOS the widget is
   written and needs one Xcode step with your App Group
   ([docs/IOS_WIDGET.md](docs/IOS_WIDGET.md)).
+- **Screen off on Android**: effects keep playing when the phone locks,
+  with a notification to stop them (foreground service).
+- **Hue scenes that keep moving**: ambient effects saved as dynamic Hue
+  scenes drift through their colours without LumiFX.
+- **Wake-up and bedtime routines** stored on the bridge (sunrise fade,
+  dim at night), alongside those made in the Hue app.
+- **Sharing**: scenes and playlists by link or QR code, also as a backup.
+- **Gradient lightstrips**: effects move along the strip in rooms too.
+- **Night light**: the effect as soft glows full screen, as a bedside lamp.
+- **Seasonal stories** first on the home around Halloween and Christmas.
 - **Accessibility**: screen-reader labels, Material tap-target and contrast
   guidelines checked by a test, and the phone's reduce-motion setting
   softens flashes. Welcome pages on the first launch.
