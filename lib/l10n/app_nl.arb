@@ -515,5 +515,13 @@
   "scheduledEffects": "Geplande effecten",
   "noScheduledEffects": "Nog geen. Speel een scène af in een kamer en tik in de speler op Plannen.",
   "deleteScheduleDescription": "De Hue-scène die het afspeelt, wordt ook verwijderd.",
-  "scheduleUntil": "tot {time}"
+  "scheduleUntil": "tot {time}",
+  "hueButtons": "Hue-knoppen",
+  "hueButtonsSubtitle": "Start effecten met Hue-schakelaars en smart buttons",
+  "hueButtonsDescription": "Een korte druk speelt het gekozen effect af; druk nogmaals om te stoppen. Dit werkt zolang LumiFX open is, of afspeelt met het scherm uit. Stel deze knoppen in de Hue-app in op niets doen, zodat ze niet ook het licht veranderen.",
+  "hueButtonNumber": "Knop {number}",
+  "buttonActionNone": "Niets",
+  "buttonActionStop": "Effect stoppen",
+  "noHueButtons": "Geen Hue-schakelaars of smart buttons op deze bridge.",
+  "couldNotLoadButtons": "De schakelaars konden niet worden geladen: {reason}"
 }

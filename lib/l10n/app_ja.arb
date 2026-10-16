@@ -515,5 +515,13 @@
   "scheduledEffects": "予約した効果",
   "noScheduledEffects": "まだありません。部屋でシーンを再生し、プレーヤーの「予約」を押してください。",
   "deleteScheduleDescription": "再生する Hue シーンも削除されます。",
-  "scheduleUntil": "{time} まで"
+  "scheduleUntil": "{time} まで",
+  "hueButtons": "Hue ボタン",
+  "hueButtonsSubtitle": "Hue スイッチやスマートボタンで効果を開始",
+  "hueButtonsDescription": "短く押すと選んだ効果を再生し、もう一度押すと止まります。LumiFX を開いているとき、または画面オフで再生中に使えます。Hue アプリでこのボタンを「何もしない」に設定すると、照明が二重に変わりません。",
+  "hueButtonNumber": "ボタン {number}",
+  "buttonActionNone": "何もしない",
+  "buttonActionStop": "効果を止める",
+  "noHueButtons": "このブリッジには Hue スイッチやスマートボタンがありません。",
+  "couldNotLoadButtons": "スイッチを読み込めませんでした：{reason}"
 }

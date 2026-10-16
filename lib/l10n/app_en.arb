@@ -1694,5 +1694,47 @@
         "type": "String"
       }
     }
+  },
+  "hueButtons": "Hue buttons",
+  "@hueButtons": {
+    "description": "Settings entry: assign effects to Hue switch buttons"
+  },
+  "hueButtonsSubtitle": "Start effects from Hue switches and smart buttons",
+  "@hueButtonsSubtitle": {
+    "description": "Subtitle of the Hue buttons settings entry"
+  },
+  "hueButtonsDescription": "A short press plays the chosen effect; press again to stop it. This works while LumiFX is open, or playing with the screen off. In the Hue app, set these buttons to do nothing, so they do not also change the lights.",
+  "@hueButtonsDescription": {
+    "description": "Explains how Hue buttons work with LumiFX"
+  },
+  "hueButtonNumber": "Button {number}",
+  "@hueButtonNumber": {
+    "description": "A button of a Hue switch, by its number",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "buttonActionNone": "Nothing",
+  "@buttonActionNone": {
+    "description": "Choice for a Hue button: LumiFX does nothing"
+  },
+  "buttonActionStop": "Stop the effect",
+  "@buttonActionStop": {
+    "description": "Choice for a Hue button: stop whatever plays"
+  },
+  "noHueButtons": "No Hue switches or smart buttons on this bridge.",
+  "@noHueButtons": {
+    "description": "Shown when the bridge has no switches"
+  },
+  "couldNotLoadButtons": "The switches could not be loaded: {reason}",
+  "@couldNotLoadButtons": {
+    "description": "Shown when the switches could not be read from the bridge",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
   }
 }

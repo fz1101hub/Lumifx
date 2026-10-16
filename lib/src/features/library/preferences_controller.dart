@@ -127,6 +127,27 @@ class PreferencesController extends ChangeNotifier {
   int _bedtimeGlowMinutes = 20;
   double _bedtimeBrightness = 0.6;
 
+  Map<String, String> _buttonActions = const {};
+
+  /// What each Hue button does: an effect id, [buttonStop] or
+  /// [buttonBedtime], by the button's id.
+  Map<String, String> get buttonActions => _buttonActions;
+
+  static const buttonStop = '@stop';
+  static const buttonBedtime = '@bedtime';
+  static const _maxButtons = 64;
+
+  /// Sets what [buttonId] does; null leaves the button alone.
+  Future<void> setButtonAction(String buttonId, String? action) {
+    _buttonActions = {
+      for (final MapEntry(:key, :value) in _buttonActions.entries)
+        if (key != buttonId) key: value,
+      if (action != null && _buttonActions.length < _maxButtons)
+        buttonId: action,
+    };
+    return _changed();
+  }
+
   static const defaultBedtimeStory = 'sleeping_dragon';
   static const bedtimeStoryChoices = [5, 10, 15, 20, 30];
   static const bedtimeGlowChoices = [5, 10, 20, 30, 45, 60];
@@ -233,6 +254,17 @@ class PreferencesController extends ChangeNotifier {
       _soundOn = json['soundOn'] as bool? ?? true;
       _soundVolume = _unit(json['soundVolume'], 0.6);
       _readAlong = json['readAlong'] as bool? ?? true;
+      final buttons = json['buttonActions'];
+      _buttonActions = {
+        if (buttons is Map)
+          for (final MapEntry(:key, :value)
+              in buttons.entries.take(_maxButtons))
+            if (key is String &&
+                value is String &&
+                key.length <= 80 &&
+                value.length <= 80)
+              key: value,
+      };
       final bedtime = json['bedtime'];
       if (bedtime is Map) {
         final story = bedtime['story'];
@@ -485,6 +517,7 @@ class PreferencesController extends ChangeNotifier {
       'soundOn': _soundOn,
       'soundVolume': _soundVolume,
       'readAlong': _readAlong,
+      'buttonActions': _buttonActions,
       'bedtime': {
         'story': _bedtimeStory,
         'storyMinutes': _bedtimeStoryMinutes,

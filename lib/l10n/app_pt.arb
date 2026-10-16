@@ -515,5 +515,13 @@
   "scheduledEffects": "Efeitos agendados",
   "noScheduledEffects": "Nenhum ainda. Reproduza uma cena em um cômodo e toque em Agendar no player.",
   "deleteScheduleDescription": "A cena Hue que ele reproduz também é excluída.",
-  "scheduleUntil": "até {time}"
+  "scheduleUntil": "até {time}",
+  "hueButtons": "Botões Hue",
+  "hueButtonsSubtitle": "Inicie efeitos pelos interruptores e botões Hue",
+  "hueButtonsDescription": "Um toque curto inicia o efeito escolhido; toque de novo para parar. Funciona enquanto o LumiFX está aberto ou tocando com a tela desligada. No app Hue, configure esses botões para não fazer nada, assim eles não mudam as luzes também.",
+  "hueButtonNumber": "Botão {number}",
+  "buttonActionNone": "Nada",
+  "buttonActionStop": "Parar o efeito",
+  "noHueButtons": "Nenhum interruptor ou botão Hue neste bridge.",
+  "couldNotLoadButtons": "Não foi possível carregar os interruptores: {reason}"
 }

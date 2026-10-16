@@ -515,5 +515,13 @@
   "scheduledEffects": "Efectos programados",
   "noScheduledEffects": "Aún no hay ninguno. Reproduce una escena en una habitación y pulsa Programar en el reproductor.",
   "deleteScheduleDescription": "También se elimina la escena Hue que reproduce.",
-  "scheduleUntil": "hasta las {time}"
+  "scheduleUntil": "hasta las {time}",
+  "hueButtons": "Botones Hue",
+  "hueButtonsSubtitle": "Inicia efectos desde los interruptores y botones Hue",
+  "hueButtonsDescription": "Una pulsación corta inicia el efecto elegido; vuelve a pulsar para detenerlo. Funciona mientras LumiFX está abierta o reproduciendo con la pantalla apagada. En la app Hue, configura estos botones para que no hagan nada, así no cambian también las luces.",
+  "hueButtonNumber": "Botón {number}",
+  "buttonActionNone": "Nada",
+  "buttonActionStop": "Detener el efecto",
+  "noHueButtons": "No hay interruptores ni botones Hue en este bridge.",
+  "couldNotLoadButtons": "No se pudieron cargar los interruptores: {reason}"
 }

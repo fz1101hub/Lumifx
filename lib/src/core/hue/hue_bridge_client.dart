@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import 'hue_buttons.dart';
 import 'hue_exceptions.dart';
 import 'hue_automations.dart';
 import 'hue_models.dart';
@@ -296,6 +297,37 @@ class HueBridgeClient {
       throw const HueException('The bridge did not create the scene');
     }
     return id;
+  }
+
+  /// The Hue switches and smart buttons, with their buttons.
+  Future<List<HueButtonDevice>> fetchButtonDevices() async {
+    final results = await Future.wait([
+      _resources('button'),
+      _resources('device'),
+    ]);
+    return buttonDevicesOf(results[0], results[1]);
+  }
+
+  /// Button presses as they happen, from the bridge's event stream. The
+  /// stream ends when the connection drops; listen again to reconnect.
+  Stream<HueButtonEvent> buttonEvents() async* {
+    final request = http.Request('GET', Uri.https(host, '/eventstream/clip/v2'))
+      ..headers.addAll({..._headers, 'accept': 'text/event-stream'});
+    final response = await _client.send(request).timeout(_timeout);
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      throw const UnauthorizedException();
+    }
+    if (response.statusCode != 200) {
+      throw HueException('Event stream refused (${response.statusCode})',
+          statusCode: response.statusCode);
+    }
+    final lines =
+        response.stream.transform(utf8.decoder).transform(const LineSplitter());
+    await for (final line in lines) {
+      if (line.startsWith('data:')) {
+        yield* Stream.fromIterable(buttonEventsOf(line.substring(5).trim()));
+      }
+    }
   }
 
   /// The effects the bridge plays at set times (see [HueEffectSchedule]).

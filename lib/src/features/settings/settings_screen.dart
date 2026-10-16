@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../buttons/hue_buttons_screen.dart';
 import '../../app_scope.dart';
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
@@ -147,6 +148,18 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ],
               const Divider(height: 32),
+              if (AppScope.of(context).bridge.isConnected)
+                ListTile(
+                  leading: const Icon(Icons.radio_button_checked),
+                  title: Text(l10n.hueButtons),
+                  subtitle: Text(l10n.hueButtonsSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const HueButtonsScreen(),
+                    ),
+                  ),
+                ),
               ListTile(
                 leading: const Icon(Icons.tablet_outlined),
                 title: Text(l10n.wallPanel),

@@ -515,5 +515,13 @@
   "scheduledEffects": "Effets programmés",
   "noScheduledEffects": "Aucun pour l'instant. Lis une scène dans une pièce et appuie sur Programmer dans le lecteur.",
   "deleteScheduleDescription": "La scène Hue qu'il lit est aussi supprimée.",
-  "scheduleUntil": "jusqu'à {time}"
+  "scheduleUntil": "jusqu'à {time}",
+  "hueButtons": "Boutons Hue",
+  "hueButtonsSubtitle": "Lancer des effets depuis les interrupteurs et boutons Hue",
+  "hueButtonsDescription": "Un appui court lance l'effet choisi ; appuie de nouveau pour l'arrêter. Cela fonctionne tant que LumiFX est ouverte, ou en lecture écran éteint. Dans l'app Hue, règle ces boutons sur « aucune action », pour qu'ils ne changent pas aussi les lumières.",
+  "hueButtonNumber": "Bouton {number}",
+  "buttonActionNone": "Rien",
+  "buttonActionStop": "Arrêter l'effet",
+  "noHueButtons": "Aucun interrupteur ni bouton Hue sur ce bridge.",
+  "couldNotLoadButtons": "Impossible de charger les interrupteurs : {reason}"
 }

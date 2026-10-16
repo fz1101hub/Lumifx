@@ -515,5 +515,13 @@
   "scheduledEffects": "Geplante Effekte",
   "noScheduledEffects": "Noch keine. Spiele eine Szene in einem Raum ab und tippe im Player auf Planen.",
   "deleteScheduleDescription": "Die Hue-Szene, die er abspielt, wird ebenfalls gelöscht.",
-  "scheduleUntil": "bis {time}"
+  "scheduleUntil": "bis {time}",
+  "hueButtons": "Hue-Tasten",
+  "hueButtonsSubtitle": "Effekte mit Hue-Schaltern und Smart Buttons starten",
+  "hueButtonsDescription": "Ein kurzer Druck startet den gewählten Effekt; erneut drücken stoppt ihn. Das funktioniert, solange LumiFX geöffnet ist oder bei ausgeschaltetem Bildschirm abspielt. Stelle diese Tasten in der Hue-App auf „keine Aktion“, damit sie nicht zusätzlich das Licht ändern.",
+  "hueButtonNumber": "Taste {number}",
+  "buttonActionNone": "Nichts",
+  "buttonActionStop": "Effekt stoppen",
+  "noHueButtons": "Keine Hue-Schalter oder Smart Buttons an dieser Bridge.",
+  "couldNotLoadButtons": "Die Schalter konnten nicht geladen werden: {reason}"
 }
