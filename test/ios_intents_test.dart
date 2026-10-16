@@ -18,24 +18,35 @@ void main() {
 
   test('the phrases and names are translated', () {
     const languages = ['it', 'de', 'fr', 'es', 'nl', 'pt-BR', 'ja'];
-    for (final file in ['AppShortcuts', 'Localizable']) {
-      final catalog =
-          jsonDecode(File('ios/Runner/$file.xcstrings').readAsStringSync())
-              as Map<String, Object?>;
-      final strings = catalog['strings']! as Map<String, Object?>;
-      expect(strings, isNotEmpty);
-      for (final MapEntry(:key, :value) in strings.entries) {
-        final localizations =
-            (value! as Map<String, Object?>)['localizations']! as Map;
-        expect(localizations.keys.toSet(), languages.toSet(), reason: key);
-        if (file == 'AppShortcuts') {
-          for (final l in localizations.values) {
-            final text = ((l as Map)['stringUnit'] as Map)['value'] as String;
-            expect(text, contains(r'${applicationName}'), reason: key);
-            expect(text.contains(r'${effect}'), key.contains(r'${effect}'),
-                reason: key);
-          }
-        }
+    final catalog =
+        jsonDecode(File('ios/Runner/Localizable.xcstrings').readAsStringSync())
+            as Map<String, Object?>;
+    final strings = catalog['strings']! as Map<String, Object?>;
+    expect(strings, isNotEmpty);
+    for (final MapEntry(:key, :value) in strings.entries) {
+      final localizations =
+          (value! as Map<String, Object?>)['localizations']! as Map;
+      expect(localizations.keys.toSet(), languages.toSet(), reason: key);
+    }
+
+    // Siri's phrases: one .strings file per language (a string catalog
+    // would need iOS 17), each phrase naming the app.
+    final line = RegExp(r'^"(.+)" = "(.+)";$');
+    Map<String, String> phrases(String language) => {
+          for (final l
+              in File('ios/Runner/$language.lproj/AppShortcuts.strings')
+                  .readAsLinesSync())
+            if (line.firstMatch(l) case final m?) m[1]!: m[2]!,
+        };
+    final english = phrases('en');
+    expect(english, hasLength(6));
+    for (final language in languages) {
+      final translated = phrases(language);
+      expect(translated.keys.toSet(), english.keys.toSet(), reason: language);
+      for (final MapEntry(:key, :value) in translated.entries) {
+        expect(value, contains(r'${applicationName}'), reason: key);
+        expect(value.contains(r'${effect}'), key.contains(r'${effect}'),
+            reason: key);
       }
     }
   });

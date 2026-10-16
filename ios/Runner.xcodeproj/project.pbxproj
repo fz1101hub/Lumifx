@@ -14,7 +14,7 @@
 		7884E8682EC3CC0700C636F2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */; };
 		5A1F00C1D2E3F40516273802 /* LumiFXIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1F00C1D2E3F40516273801 /* LumiFXIntents.swift */; };
 		5A1F00C1D2E3F40516273804 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 5A1F00C1D2E3F40516273803 /* Localizable.xcstrings */; };
-		5A1F00C1D2E3F40516273806 /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 5A1F00C1D2E3F40516273805 /* AppShortcuts.xcstrings */; };
+		5A1F00C1D2E3F40516273806 /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A1F00C1D2E3F40516273805 /* AppShortcuts.strings */; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -56,7 +56,14 @@
 		7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		5A1F00C1D2E3F40516273801 /* LumiFXIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LumiFXIntents.swift; sourceTree = "<group>"; };
 		5A1F00C1D2E3F40516273803 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		5A1F00C1D2E3F40516273805 /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
+		5A1F00C1D2E3F40516273810 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		5A1F00C1D2E3F40516273811 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		5A1F00C1D2E3F40516273812 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		5A1F00C1D2E3F40516273813 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		5A1F00C1D2E3F40516273814 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		5A1F00C1D2E3F40516273815 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		5A1F00C1D2E3F40516273816 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/AppShortcuts.strings"; sourceTree = "<group>"; };
+		5A1F00C1D2E3F40516273817 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
 		78E0A7A72DC9AD7400C4905E /* FlutterGeneratedPluginSwiftPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = FlutterGeneratedPluginSwiftPackage; path = Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
@@ -134,7 +141,7 @@
 				7884E8672EC3CC0400C636F2 /* SceneDelegate.swift */,
 				5A1F00C1D2E3F40516273801 /* LumiFXIntents.swift */,
 				5A1F00C1D2E3F40516273803 /* Localizable.xcstrings */,
-				5A1F00C1D2E3F40516273805 /* AppShortcuts.xcstrings */,
+				5A1F00C1D2E3F40516273805 /* AppShortcuts.strings */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
@@ -250,7 +257,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				5A1F00C1D2E3F40516273804 /* Localizable.xcstrings in Resources */,
-				5A1F00C1D2E3F40516273806 /* AppShortcuts.xcstrings in Resources */,
+				5A1F00C1D2E3F40516273806 /* AppShortcuts.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +342,21 @@
 				97C147001CF9000F007C117D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		5A1F00C1D2E3F40516273805 /* AppShortcuts.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A1F00C1D2E3F40516273810 /* en */,
+				5A1F00C1D2E3F40516273811 /* it */,
+				5A1F00C1D2E3F40516273812 /* de */,
+				5A1F00C1D2E3F40516273813 /* fr */,
+				5A1F00C1D2E3F40516273814 /* es */,
+				5A1F00C1D2E3F40516273815 /* nl */,
+				5A1F00C1D2E3F40516273816 /* pt-BR */,
+				5A1F00C1D2E3F40516273817 /* ja */,
+			);
+			name = AppShortcuts.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
