@@ -666,5 +666,22 @@
   "simonRed": "Rood",
   "simonGreen": "Groen",
   "simonBlue": "Blauw",
-  "simonYellow": "Geel"
+  "simonYellow": "Geel",
+  "breathe": "Rustig ademen",
+  "breatheSubtitle": "Langzaam ademen met het licht",
+  "breatheDescription": "De lampen worden feller als je inademt en zachter als je uitademt. Volg ze, en de cirkel op het scherm, om rustig te worden voor het slapen of na een drukke dag.",
+  "breathePatternFlower": "Bloem en kaars",
+  "breathePatternFlowerDescription": "Voor kinderen: ruik aan de bloem, blaas dan de kaars uit.",
+  "breathePatternBox": "Vierkant ademen",
+  "breathePatternBoxDescription": "In, vasthouden, uit, vasthouden: elk vier seconden.",
+  "breathePattern478": "4-7-8-ademhaling",
+  "breathePattern478Description": "4 in, 7 vasthouden, 8 uit: om in slaap te vallen.",
+  "breatheIn": "Adem in…",
+  "breatheOut": "Adem uit…",
+  "breatheHold": "Vasthouden…",
+  "breatheSmell": "Ruik aan de bloem…",
+  "breatheBlow": "Blaas de kaars uit…",
+  "breatheVoice": "Begeleid me met een stem",
+  "breatheDone": "Goed gedaan. Voel hoe rustig je bent.",
+  "breatheAgain": "Nog een keer"
 }

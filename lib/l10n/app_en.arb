@@ -2374,5 +2374,73 @@
   "simonYellow": "Yellow",
   "@simonYellow": {
     "description": "Memory game colour button"
+  },
+  "breathe": "Calm breathing",
+  "@breathe": {
+    "description": "Home entry: guided slow breathing with the lights"
+  },
+  "breatheSubtitle": "Breathe slowly with the lights",
+  "@breatheSubtitle": {
+    "description": "Subtitle of calm breathing"
+  },
+  "breatheDescription": "The lamps grow brighter as you breathe in and dimmer as you breathe out. Follow them, and the circle on screen, to calm down before sleep or after a busy day.",
+  "@breatheDescription": {
+    "description": "Explains calm breathing"
+  },
+  "breathePatternFlower": "Flower and candle",
+  "@breathePatternFlower": {
+    "description": "Breathing for children"
+  },
+  "breathePatternFlowerDescription": "For children: smell the flower, then blow out the candle.",
+  "@breathePatternFlowerDescription": {
+    "description": "Explains flower and candle breathing"
+  },
+  "breathePatternBox": "Square breathing",
+  "@breathePatternBox": {
+    "description": "Square breathing"
+  },
+  "breathePatternBoxDescription": "In, hold, out, hold: four seconds each.",
+  "@breathePatternBoxDescription": {
+    "description": "Explains square breathing"
+  },
+  "breathePattern478": "4-7-8 breathing",
+  "@breathePattern478": {
+    "description": "4-7-8 breathing"
+  },
+  "breathePattern478Description": "In for 4, hold for 7, out for 8: to fall asleep.",
+  "@breathePattern478Description": {
+    "description": "Explains 4-7-8 breathing"
+  },
+  "breatheIn": "Breathe in…",
+  "@breatheIn": {
+    "description": "Breathing call"
+  },
+  "breatheOut": "Breathe out…",
+  "@breatheOut": {
+    "description": "Breathing call"
+  },
+  "breatheHold": "Hold…",
+  "@breatheHold": {
+    "description": "Breathing call"
+  },
+  "breatheSmell": "Smell the flower…",
+  "@breatheSmell": {
+    "description": "Breathing call for children: breathe in"
+  },
+  "breatheBlow": "Blow out the candle…",
+  "@breatheBlow": {
+    "description": "Breathing call for children: breathe out"
+  },
+  "breatheVoice": "Guide me with a voice",
+  "@breatheVoice": {
+    "description": "Switch: a voice guides the breathing"
+  },
+  "breatheDone": "Well done. Notice how calm you feel.",
+  "@breatheDone": {
+    "description": "Shown when the breathing session ends"
+  },
+  "breatheAgain": "Once more",
+  "@breatheAgain": {
+    "description": "Button: breathe again"
   }
 }

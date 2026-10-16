@@ -666,5 +666,22 @@
   "simonRed": "Rosso",
   "simonGreen": "Verde",
   "simonBlue": "Blu",
-  "simonYellow": "Giallo"
+  "simonYellow": "Giallo",
+  "breathe": "Respiro calmo",
+  "breatheSubtitle": "Respira piano insieme alle luci",
+  "breatheDescription": "Le lampade si illuminano mentre inspiri e si abbassano mentre espiri. Seguile, insieme al cerchio sullo schermo, per calmarti prima di dormire o dopo una giornata movimentata.",
+  "breathePatternFlower": "Fiore e candela",
+  "breathePatternFlowerDescription": "Per bambini: annusa il fiore, poi spegni la candela.",
+  "breathePatternBox": "Respiro quadrato",
+  "breathePatternBoxDescription": "Inspira, trattieni, espira, trattieni: quattro secondi ciascuno.",
+  "breathePattern478": "Respiro 4-7-8",
+  "breathePattern478Description": "Inspira per 4, trattieni per 7, espira per 8: per addormentarsi.",
+  "breatheIn": "Inspira…",
+  "breatheOut": "Espira…",
+  "breatheHold": "Trattieni…",
+  "breatheSmell": "Annusa il fiore…",
+  "breatheBlow": "Spegni la candela…",
+  "breatheVoice": "Guidami con la voce",
+  "breatheDone": "Bravo. Senti quanta calma.",
+  "breatheAgain": "Ancora una volta"
 }

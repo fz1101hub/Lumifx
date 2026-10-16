@@ -666,5 +666,22 @@
   "simonRed": "Rouge",
   "simonGreen": "Vert",
   "simonBlue": "Bleu",
-  "simonYellow": "Jaune"
+  "simonYellow": "Jaune",
+  "breathe": "Respiration calme",
+  "breatheSubtitle": "Respire lentement avec les lumières",
+  "breatheDescription": "Les lampes s'éclairent quand tu inspires et baissent quand tu expires. Suis-les, avec le cercle à l'écran, pour te calmer avant de dormir ou après une journée agitée.",
+  "breathePatternFlower": "Fleur et bougie",
+  "breathePatternFlowerDescription": "Pour les enfants : sens la fleur, puis souffle la bougie.",
+  "breathePatternBox": "Respiration carrée",
+  "breathePatternBoxDescription": "Inspire, retiens, expire, retiens : quatre secondes chacun.",
+  "breathePattern478": "Respiration 4-7-8",
+  "breathePattern478Description": "Inspire 4, retiens 7, expire 8 : pour s'endormir.",
+  "breatheIn": "Inspire…",
+  "breatheOut": "Expire…",
+  "breatheHold": "Retiens…",
+  "breatheSmell": "Sens la fleur…",
+  "breatheBlow": "Souffle la bougie…",
+  "breatheVoice": "Me guider à la voix",
+  "breatheDone": "Bravo. Sens comme tu es calme.",
+  "breatheAgain": "Encore une fois"
 }

@@ -57,4 +57,8 @@ abstract final class EffectEventTypes {
   /// A timer: the lights go from `from` to `to` as the event runs, one
   /// after the other, breathing gently so they look alive.
   static const countdown = 'countdown';
+
+  /// Every light glides from brightness `from` to `to` (and from `color` to
+  /// `toColor`, if given) over the event, eased at both ends: breathing.
+  static const ramp = 'ramp';
 }

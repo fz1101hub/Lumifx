@@ -666,5 +666,22 @@
   "simonRed": "Rojo",
   "simonGreen": "Verde",
   "simonBlue": "Azul",
-  "simonYellow": "Amarillo"
+  "simonYellow": "Amarillo",
+  "breathe": "Respiración tranquila",
+  "breatheSubtitle": "Respira despacio con las luces",
+  "breatheDescription": "Las lámparas se iluminan al inhalar y se atenúan al exhalar. Síguelas, junto con el círculo de la pantalla, para calmarte antes de dormir o después de un día movido.",
+  "breathePatternFlower": "Flor y vela",
+  "breathePatternFlowerDescription": "Para niños: huele la flor y luego sopla la vela.",
+  "breathePatternBox": "Respiración cuadrada",
+  "breathePatternBoxDescription": "Inhala, aguanta, exhala, aguanta: cuatro segundos cada uno.",
+  "breathePattern478": "Respiración 4-7-8",
+  "breathePattern478Description": "Inhala 4, aguanta 7, exhala 8: para dormirse.",
+  "breatheIn": "Inhala…",
+  "breatheOut": "Exhala…",
+  "breatheHold": "Aguanta…",
+  "breatheSmell": "Huele la flor…",
+  "breatheBlow": "Sopla la vela…",
+  "breatheVoice": "Guiarme con la voz",
+  "breatheDone": "Muy bien. Nota qué tranquilo te sientes.",
+  "breatheAgain": "Una vez más"
 }

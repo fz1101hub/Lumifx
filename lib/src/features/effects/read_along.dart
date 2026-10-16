@@ -4,6 +4,7 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../common/app_text.dart';
+import '../calm/breathing.dart';
 import '../fun/birthday.dart';
 import '../fun/light_games.dart';
 import '../library/effect_library.dart';
@@ -171,6 +172,9 @@ List<(int, String)> narrationOf(
   }
   if (GamePlan.of(effect) case final game?) {
     return game.narration(l10n);
+  }
+  if (BreathingPattern.of(effect) case (final pattern, final minutes)) {
+    return pattern.narration(minutes, l10n);
   }
   return library.userStory(effect.id)?.narration ?? const [];
 }

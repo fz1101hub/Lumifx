@@ -161,6 +161,8 @@ class EffectRenderer {
           }
         case EffectEventTypes.countdown:
           _renderCountdown(context, frames);
+        case EffectEventTypes.ramp:
+          _renderRamp(context, frames);
         case EffectEventTypes.screen:
           if (screen != null && screen.zones > 0) {
             _renderScreen(context, frames, screen);
@@ -434,6 +436,22 @@ class EffectRenderer {
         LightColor.lerp(from, to, turned),
         (brightness * breath).clamp(0.0, 1.0),
       );
+    }
+  }
+
+  void _renderRamp(_EventContext context, List<LightFrame> frames) {
+    final p = context.event.parameters;
+    final from = _number(p, 'from', 0.2);
+    final to = _number(p, 'to', 0.8);
+    final color = _color(p, 'color', LightColor.white);
+    final toColor = _color(p, 'toColor', color);
+    final t = _smoothstep(context.progress);
+    final frame = LightFrame(
+      LightColor.lerp(color, toColor, t),
+      (from + (to - from) * t).clamp(0.0, 1.0),
+    );
+    for (var slot = 0; slot < slotCount; slot++) {
+      frames[slot] = frame;
     }
   }
 

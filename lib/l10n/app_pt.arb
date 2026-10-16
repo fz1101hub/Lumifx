@@ -666,5 +666,22 @@
   "simonRed": "Vermelho",
   "simonGreen": "Verde",
   "simonBlue": "Azul",
-  "simonYellow": "Amarelo"
+  "simonYellow": "Amarelo",
+  "breathe": "Respiração calma",
+  "breatheSubtitle": "Respire devagar com as luzes",
+  "breatheDescription": "As lâmpadas clareiam quando você inspira e diminuem quando expira. Siga-as, junto com o círculo na tela, para se acalmar antes de dormir ou depois de um dia agitado.",
+  "breathePatternFlower": "Flor e vela",
+  "breathePatternFlowerDescription": "Para crianças: cheire a flor e depois assopre a vela.",
+  "breathePatternBox": "Respiração quadrada",
+  "breathePatternBoxDescription": "Inspire, segure, expire, segure: quatro segundos cada.",
+  "breathePattern478": "Respiração 4-7-8",
+  "breathePattern478Description": "Inspire 4, segure 7, expire 8: para pegar no sono.",
+  "breatheIn": "Inspire…",
+  "breatheOut": "Expire…",
+  "breatheHold": "Segure…",
+  "breatheSmell": "Cheire a flor…",
+  "breatheBlow": "Assopre a vela…",
+  "breatheVoice": "Me guiar com a voz",
+  "breatheDone": "Muito bem. Perceba como você está calmo.",
+  "breatheAgain": "Mais uma vez"
 }

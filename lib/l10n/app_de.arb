@@ -666,5 +666,22 @@
   "simonRed": "Rot",
   "simonGreen": "Grün",
   "simonBlue": "Blau",
-  "simonYellow": "Gelb"
+  "simonYellow": "Gelb",
+  "breathe": "Ruhig atmen",
+  "breatheSubtitle": "Langsam atmen mit dem Licht",
+  "breatheDescription": "Die Lampen werden heller, wenn du einatmest, und dunkler, wenn du ausatmest. Folge ihnen und dem Kreis auf dem Bildschirm, um vor dem Schlafen oder nach einem wilden Tag zur Ruhe zu kommen.",
+  "breathePatternFlower": "Blume und Kerze",
+  "breathePatternFlowerDescription": "Für Kinder: an der Blume riechen, dann die Kerze auspusten.",
+  "breathePatternBox": "Quadratatmung",
+  "breathePatternBoxDescription": "Ein, halten, aus, halten: je vier Sekunden.",
+  "breathePattern478": "4-7-8-Atmung",
+  "breathePattern478Description": "4 ein, 7 halten, 8 aus: zum Einschlafen.",
+  "breatheIn": "Einatmen…",
+  "breatheOut": "Ausatmen…",
+  "breatheHold": "Halten…",
+  "breatheSmell": "Riech an der Blume…",
+  "breatheBlow": "Puste die Kerze aus…",
+  "breatheVoice": "Mit Stimme anleiten",
+  "breatheDone": "Gut gemacht. Spür, wie ruhig du bist.",
+  "breatheAgain": "Noch einmal"
 }

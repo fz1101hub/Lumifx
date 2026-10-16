@@ -18,6 +18,7 @@ import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/core/weather/weather.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
+import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
@@ -513,6 +514,41 @@ void main() {
     expect(find.text('New record!'), findsOneWidget);
     await tester.tap(find.text('Close'));
     await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets('calm breathing: choose, breathe with the circle, done',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Calm breathing'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Calm breathing'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Calm breathing'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Square breathing'));
+    await tester.tap(find.text('1 min'));
+    await tester.pump();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Breathe in…'), findsOneWidget);
+    expect(find.text('1:04'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(BreathingScreen))).playback;
+    playback.player!.advance(const Duration(seconds: 5));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Hold…'), findsOneWidget);
+    expect(find.text('0:59'), findsOneWidget);
+
+    playback.player!.advance(const Duration(seconds: 64));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.textContaining('Well done'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

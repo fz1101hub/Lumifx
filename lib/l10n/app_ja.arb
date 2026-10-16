@@ -666,5 +666,22 @@
   "simonRed": "赤",
   "simonGreen": "緑",
   "simonBlue": "青",
-  "simonYellow": "黄色"
+  "simonYellow": "黄色",
+  "breathe": "ゆっくり呼吸",
+  "breatheSubtitle": "明かりといっしょにゆっくり呼吸",
+  "breatheDescription": "息を吸うとランプが明るく、吐くと暗くなります。画面の円といっしょに明かりを追いかけて、寝る前やいそがしい一日のあとに心を落ち着けましょう。",
+  "breathePatternFlower": "お花とろうそく",
+  "breathePatternFlowerDescription": "子ども向け：お花のにおいをかいで、ろうそくを吹き消そう。",
+  "breathePatternBox": "四角呼吸",
+  "breathePatternBoxDescription": "吸う、止める、吐く、止める：それぞれ4秒。",
+  "breathePattern478": "4-7-8呼吸",
+  "breathePattern478Description": "4秒吸って、7秒止めて、8秒吐く：眠りにつくために。",
+  "breatheIn": "吸って…",
+  "breatheOut": "吐いて…",
+  "breatheHold": "止めて…",
+  "breatheSmell": "お花のにおいをかいで…",
+  "breatheBlow": "ろうそくをふーっ…",
+  "breatheVoice": "声でガイドする",
+  "breatheDone": "よくできました。心が落ち着いたのを感じてね。",
+  "breatheAgain": "もう一度"
 }
