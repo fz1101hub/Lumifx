@@ -2487,5 +2487,153 @@
   "pomodoroDone": "Well done, all rounds finished!",
   "@pomodoroDone": {
     "description": "Pomodoro: all rounds finished"
+  },
+  "pathStories": "Choose your path",
+  "@pathStories": {
+    "description": "Stories where the listener chooses what happens"
+  },
+  "pathStoriesSubtitle": "Stories where you decide what happens",
+  "@pathStoriesSubtitle": {
+    "description": "Subtitle of the choose-your-path stories"
+  },
+  "pathStoriesDescription": "At each turn of the story, two buttons appear: choose the way, and the lights and the words follow you. Every path has its own ending.",
+  "@pathStoriesDescription": {
+    "description": "Explains choose-your-path stories"
+  },
+  "pathTheEnd": "The end",
+  "@pathTheEnd": {
+    "description": "The end of a story"
+  },
+  "pathPlayAgain": "Try another path",
+  "@pathPlayAgain": {
+    "description": "Button: start the story again to choose another path"
+  },
+  "pathLostStar": "The Lost Star",
+  "@pathLostStar": {
+    "description": "Choose-your-path story title"
+  },
+  "pathLostStarDescription": "A little star has fallen from the sky. Help it home: through the forest or by the lake?",
+  "@pathLostStarDescription": {
+    "description": "Choose-your-path story description"
+  },
+  "pathLostStar1": "A little star has slipped out of the sky and fallen somewhere nearby.",
+  "@pathLostStar1": {
+    "description": "Story line"
+  },
+  "pathLostStar2": "We must bring it home before morning. Where shall we look?",
+  "@pathLostStar2": {
+    "description": "Story line ending with a question"
+  },
+  "pathChoiceForest": "The dark forest",
+  "@pathChoiceForest": {
+    "description": "Choice button"
+  },
+  "pathChoiceLake": "The quiet lake",
+  "@pathChoiceLake": {
+    "description": "Choice button"
+  },
+  "pathLostStarForest1": "Into the forest we go. Fireflies blink between the trees.",
+  "@pathLostStarForest1": {
+    "description": "Story line"
+  },
+  "pathLostStarForest2": "Two paths: one glows softly, the other hides in the dark. Which one?",
+  "@pathLostStarForest2": {
+    "description": "Story line ending with a question"
+  },
+  "pathChoiceGlowingPath": "The glowing path",
+  "@pathChoiceGlowingPath": {
+    "description": "Choice button"
+  },
+  "pathChoiceDarkPath": "The dark path",
+  "@pathChoiceDarkPath": {
+    "description": "Choice button"
+  },
+  "pathLostStarGlow1": "The fireflies lead us to a clearing… and there it is: the little star!",
+  "@pathLostStarGlow1": {
+    "description": "Story line"
+  },
+  "pathLostStarGlow2": "We lift it gently, and up it floats, back into the sky. Good night, little star.",
+  "@pathLostStarGlow2": {
+    "description": "Story line"
+  },
+  "pathLostStarOwl1": "In the dark, two big eyes blink… it's a friendly owl, holding the star!",
+  "@pathLostStarOwl1": {
+    "description": "Story line"
+  },
+  "pathLostStarOwl2": "The owl flies it up to the sky. Thank you, owl! Good night, little star.",
+  "@pathLostStarOwl2": {
+    "description": "Story line"
+  },
+  "pathLostStarLake1": "At the lake, the water is calm and silver under the moon.",
+  "@pathLostStarLake1": {
+    "description": "Story line"
+  },
+  "pathLostStarLake2": "Something shines under the water, and a frog sits on a lily pad. What shall we do?",
+  "@pathLostStarLake2": {
+    "description": "Story line ending with a question"
+  },
+  "pathChoiceDive": "Dive in",
+  "@pathChoiceDive": {
+    "description": "Choice button"
+  },
+  "pathChoiceFrog": "Ask the frog",
+  "@pathChoiceFrog": {
+    "description": "Choice button"
+  },
+  "pathLostStarDive1": "Splash! Down we go… the star is resting on a shell at the bottom.",
+  "@pathLostStarDive1": {
+    "description": "Story line"
+  },
+  "pathLostStarDive2": "We swim it up, and it leaps back into the sky, sparkling. Good night, little star.",
+  "@pathLostStarDive2": {
+    "description": "Story line"
+  },
+  "pathLostStarFrog1": "The frog croaks and jumps… and with one big leap, it tosses the star up high!",
+  "@pathLostStarFrog1": {
+    "description": "Story line"
+  },
+  "pathLostStarFrog2": "The star is home again among its friends. Good night, frog. Good night, star.",
+  "@pathLostStarFrog2": {
+    "description": "Story line"
+  },
+  "pathDragonEgg": "The Dragon's Egg",
+  "@pathDragonEgg": {
+    "description": "Choose-your-path story title"
+  },
+  "pathDragonEggDescription": "Deep in a cave, a dragon's egg is about to hatch. How will you help it?",
+  "@pathDragonEggDescription": {
+    "description": "Choose-your-path story description"
+  },
+  "pathDragonEgg1": "Deep in a cave, a dragon's egg begins to glow.",
+  "@pathDragonEgg1": {
+    "description": "Story line"
+  },
+  "pathDragonEgg2": "It's about to hatch! Shall we keep it warm, or sing it a song?",
+  "@pathDragonEgg2": {
+    "description": "Story line ending with a question"
+  },
+  "pathChoiceWarm": "Keep it warm",
+  "@pathChoiceWarm": {
+    "description": "Choice button"
+  },
+  "pathChoiceSing": "Sing a song",
+  "@pathChoiceSing": {
+    "description": "Choice button"
+  },
+  "pathDragonEggWarm1": "We wrap it in warm light, orange and gold… crack, crack!",
+  "@pathDragonEggWarm1": {
+    "description": "Story line"
+  },
+  "pathDragonEggWarm2": "Out comes a tiny dragon, puffing little sparks of joy.",
+  "@pathDragonEggWarm2": {
+    "description": "Story line"
+  },
+  "pathDragonEggSing1": "We hum a soft song, and the egg sways along… crack!",
+  "@pathDragonEggSing1": {
+    "description": "Story line"
+  },
+  "pathDragonEggSing2": "A sleepy baby dragon yawns, curls up and falls asleep. Shhh.",
+  "@pathDragonEggSing2": {
+    "description": "Story line"
   }
 }

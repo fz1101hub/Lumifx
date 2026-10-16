@@ -28,6 +28,7 @@ import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
@@ -588,6 +589,48 @@ void main() {
     await tester.tap(find.text('Stop'));
     await tester.pump();
     expect(find.text('Well done, all rounds finished!'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a choose-your-path story waits for the choice and follows it',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choose your path'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('The Lost Star'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining('A little star has slipped'), findsOneWidget);
+    expect(find.text('The quiet lake'), findsNothing);
+
+    final playback =
+        AppScope.of(tester.element(find.byType(PathStoryScreen))).playback;
+    playback.player!.advance(const Duration(seconds: 18));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('The dark forest'), findsOneWidget);
+    await tester.tap(find.text('The quiet lake'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining('At the lake'), findsOneWidget);
+
+    playback.player!.advance(const Duration(seconds: 18));
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.text('Ask the frog'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining('The frog croaks'), findsOneWidget);
+
+    // The ending plays once, then the lights go back.
+    playback.player!.advance(const Duration(seconds: 21));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('The end'), findsOneWidget);
+    expect(find.text('Try another path'), findsOneWidget);
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
   });

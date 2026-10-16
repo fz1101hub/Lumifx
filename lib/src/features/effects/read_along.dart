@@ -7,6 +7,7 @@ import '../common/app_text.dart';
 import '../calm/breathing.dart';
 import '../fun/birthday.dart';
 import '../fun/light_games.dart';
+import '../paths/path_story.dart';
 import '../timers/pomodoro.dart';
 import '../library/effect_library.dart';
 
@@ -179,6 +180,9 @@ List<(int, String)> narrationOf(
   }
   if (Pomodoro.of(effect) case final pomodoro?) {
     return pomodoro.narration(l10n);
+  }
+  if (PathStory.of(effect) case (_, final part)) {
+    return PathStory.narrationOf(part, l10n);
   }
   return library.userStory(effect.id)?.narration ?? const [];
 }
