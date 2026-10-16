@@ -4,15 +4,20 @@ import '../common/app_text.dart';
 import '../effects/player_route.dart';
 import '../library/effect_library.dart';
 import '../library/preferences_controller.dart';
+import '../effects/effect_palette.dart';
+import '../links/app_link.dart';
 import 'app_shortcuts.dart';
+import 'home_widgets.dart';
 
-/// Keeps the home-screen shortcuts in sync with the user's favourites (or,
-/// without any, the recently played effects) and opens the player when
-/// one is tapped. Lives inside the MaterialApp so the titles follow the
+/// Keeps the home-screen shortcuts and the home-screen widget in sync with
+/// the user's favourites (or, without any, the recently played effects)
+/// and opens the player when a shortcut is tapped (widget taps arrive as
+/// lumifx:// links). Lives inside the MaterialApp so the titles follow the
 /// app's language.
 class ShortcutsBridge extends StatefulWidget {
   const ShortcutsBridge({
     required this.shortcuts,
+    this.widgets = const NoHomeWidgets(),
     required this.preferences,
     required this.library,
     required this.navigatorKey,
@@ -21,6 +26,7 @@ class ShortcutsBridge extends StatefulWidget {
   });
 
   final AppShortcuts shortcuts;
+  final HomeWidgets widgets;
   final PreferencesController preferences;
   final EffectLibrary library;
   final GlobalKey<NavigatorState> navigatorKey;
@@ -84,6 +90,23 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
     }
     _published = key;
     widget.shortcuts.setShortcuts(specs);
+    widget.widgets.update(
+      title: l10n.favorites,
+      empty: l10n.widgetEmpty,
+      effects: [
+        for (final id in ids)
+          if (widget.library.byId(id) case final effect?)
+            WidgetEffect(
+              id: id,
+              name: l10n.effectName(effect),
+              colors: [
+                for (final color in effectPalette(effect).take(3))
+                  color.toARGB32(),
+              ],
+              link: AppLink.play(id),
+            ),
+      ],
+    );
   }
 
   void _onLaunch(String id) {

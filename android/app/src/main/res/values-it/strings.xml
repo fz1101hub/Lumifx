@@ -3,4 +3,7 @@
     <string name="phone_audio_channel">Music Sync</string>
     <string name="phone_audio_notification_title">Music Sync attivo</string>
     <string name="phone_audio_notification_text">LumiFX segue l\'audio riprodotto da questo telefono. Nulla viene registrato o salvato.</string>
+    <string name="widget_title">Preferiti</string>
+    <string name="widget_empty">Aggiungi effetti ai preferiti in LumiFX per vederli qui.</string>
+    <string name="widget_description">I tuoi effetti LumiFX preferiti, a un tocco.</string>
 </resources>

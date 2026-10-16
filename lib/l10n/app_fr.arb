@@ -325,5 +325,6 @@
   "motionFlicker": "Vacillant",
   "scenePreview": "Aperçu de la scène",
   "deleteSceneQuestion": "Supprimer « {name} » ?",
-  "deleteSceneDescription": "Elle est aussi retirée des favoris et des playlists."
+  "deleteSceneDescription": "Elle est aussi retirée des favoris et des playlists.",
+  "widgetEmpty": "Ajoutez des effets en favoris dans LumiFX pour les voir ici."
 }

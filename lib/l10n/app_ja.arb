@@ -325,5 +325,6 @@
   "motionFlicker": "ゆらめく",
   "scenePreview": "シーンのプレビュー",
   "deleteSceneQuestion": "「{name}」を削除しますか？",
-  "deleteSceneDescription": "お気に入りとプレイリストからも削除されます。"
+  "deleteSceneDescription": "お気に入りとプレイリストからも削除されます。",
+  "widgetEmpty": "LumiFX で演出をお気に入りにすると、ここに表示されます。"
 }

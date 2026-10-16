@@ -325,5 +325,6 @@
   "motionFlicker": "Flakkerend",
   "scenePreview": "Voorbeeld van de scène",
   "deleteSceneQuestion": "\"{name}\" verwijderen?",
-  "deleteSceneDescription": "Hij wordt ook uit favorieten en afspeellijsten verwijderd."
+  "deleteSceneDescription": "Hij wordt ook uit favorieten en afspeellijsten verwijderd.",
+  "widgetEmpty": "Markeer effecten met een ster in LumiFX om ze hier te zien."
 }

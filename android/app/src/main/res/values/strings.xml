@@ -4,4 +4,7 @@
     <string name="phone_audio_channel">Music Sync</string>
     <string name="phone_audio_notification_title">Music Sync is on</string>
     <string name="phone_audio_notification_text">LumiFX follows the audio playing on this phone. Nothing is recorded or saved.</string>
+    <string name="widget_title">Favourites</string>
+    <string name="widget_empty">Star effects in LumiFX to see them here.</string>
+    <string name="widget_description">Your favourite LumiFX effects, one tap away.</string>
 </resources>

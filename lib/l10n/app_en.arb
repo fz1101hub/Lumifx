@@ -866,5 +866,9 @@
   "deleteSceneDescription": "It is also removed from favourites and playlists.",
   "@deleteSceneDescription": {
     "description": "Explains deleting a scene"
+  },
+  "widgetEmpty": "Star effects in LumiFX to see them here.",
+  "@widgetEmpty": {
+    "description": "Home-screen widget text when there are no favourites"
   }
 }

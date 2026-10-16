@@ -325,5 +325,6 @@
   "motionFlicker": "Tremulante",
   "scenePreview": "Prévia da cena",
   "deleteSceneQuestion": "Excluir \"{name}\"?",
-  "deleteSceneDescription": "Ela também é removida dos favoritos e das playlists."
+  "deleteSceneDescription": "Ela também é removida dos favoritos e das playlists.",
+  "widgetEmpty": "Marque efeitos como favoritos no LumiFX para vê-los aqui."
 }

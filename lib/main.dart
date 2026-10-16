@@ -8,6 +8,7 @@ import 'src/features/bridge/bridge_controller.dart';
 import 'src/features/bridge/credential_store.dart';
 import 'src/features/library/preferences_controller.dart';
 import 'src/features/shortcuts/app_shortcuts.dart';
+import 'src/features/shortcuts/home_widgets.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,7 @@ Future<void> main() async {
       audioInput: MicrophoneAudioInput(),
       phoneAudioInput: phoneAudio,
       shortcuts: const QuickActionsShortcuts(),
+      widgets: const ChannelHomeWidgets(),
     ),
   );
 }

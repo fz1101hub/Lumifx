@@ -140,6 +140,50 @@ build before every store release.
       opens the player for that effect, both with the app closed and
       with it in the background.
 
+## Continuous playback, playlists, own scenes
+
+- [ ] Play Ocean on a room, go back to the home: the mini-player shows
+      Ocean and the room; pause, stop and opening the player from it work.
+- [ ] Open Sunset while Ocean plays: the note says Ocean plays; Play
+      cross-fades the real lights to Sunset (no flash back to the original
+      colours in between).
+- [ ] A playlist of three effects at 1 minute each moves on by itself,
+      pauses its clock while paused, and the skip button works. Shuffle
+      never repeats an effect twice in a row.
+- [ ] Make a scene of your own with four colours and Flickering: the
+      preview and the real lights match; edit it while it plays and the
+      lights follow; delete it and it disappears from favourites and
+      playlists.
+- [ ] Save as Hue scene while Aurora plays on a room: the scene appears in
+      the Hue app and in Rooms & zones, and recalling it from the Hue app
+      shows the same colours.
+- [ ] Lock the phone while a playlist plays: playback stops cleanly, as
+      for a single effect.
+
+## Links and widget
+
+- [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it
+      into Safari / Chrome: LumiFX opens and plays it. Same from a Siri
+      Shortcut (iOS, "Open URL") and an Android routine or Tasker.
+- [ ] The room link variant plays in that room; /stop puts the lights back.
+- [ ] A link to Thunderstorm before the flashing warning was ever shown
+      only opens the player.
+- [ ] Android: add the LumiFX widget; it shows "Star effects…" until a
+      favourite exists, then up to four tiles in the effects' colours (grey
+      before Android 12); a tile plays its effect, with the app closed and
+      in the background; the title opens the app.
+
+## Accessibility and first launch
+
+- [ ] TalkBack / VoiceOver: the home, a list, the player (lamp preview read
+      as one description, sliders as percentages), the mini-player and the
+      scene editor can all be used without looking.
+- [ ] Reduce Motion (iOS) / Remove animations (Android): Settings shows
+      "Soften flashes" always on; Thunderstorm's lightning is soft.
+- [ ] Fresh install: the three welcome pages show once; "Connect now"
+      pairs and finishes; reinstalling over an existing install with data
+      (an update) does not show them.
+
 ## iPad and tablets
 
 - [ ] On an iPad (or a 10" Android tablet) in portrait: the home shows

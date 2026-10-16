@@ -325,5 +325,6 @@
   "motionFlicker": "Flackernd",
   "scenePreview": "Vorschau der Szene",
   "deleteSceneQuestion": "\"{name}\" löschen?",
-  "deleteSceneDescription": "Sie wird auch aus Favoriten und Playlists entfernt."
+  "deleteSceneDescription": "Sie wird auch aus Favoriten und Playlists entfernt.",
+  "widgetEmpty": "Markiere Effekte in LumiFX mit einem Stern, um sie hier zu sehen."
 }

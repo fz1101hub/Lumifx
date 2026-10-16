@@ -19,6 +19,7 @@ import 'features/links/app_link.dart';
 import 'features/links/link_handler.dart';
 import 'features/library/preferences_controller.dart';
 import 'features/shortcuts/app_shortcuts.dart';
+import 'features/shortcuts/home_widgets.dart';
 import 'features/shortcuts/shortcuts_bridge.dart';
 
 class LumiFxApp extends StatefulWidget {
@@ -29,6 +30,7 @@ class LumiFxApp extends StatefulWidget {
     required this.audioInput,
     this.phoneAudioInput,
     this.shortcuts = const NoShortcuts(),
+    this.widgets = const NoHomeWidgets(),
     this.screenWake = const WakelockScreenWake(),
     this.locale,
     @visibleForTesting this.fontFallback,
@@ -45,6 +47,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// Home-screen shortcuts to the favourite effects.
   final AppShortcuts shortcuts;
+
+  /// The home-screen widget of the favourite effects.
+  final HomeWidgets widgets;
 
   /// Keeps the screen on while an effect plays.
   final ScreenWake screenWake;
@@ -222,6 +227,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
         ),
         builder: (context, child) => ShortcutsBridge(
           shortcuts: widget.shortcuts,
+          widgets: widget.widgets,
           preferences: widget.preferences,
           library: _library,
           navigatorKey: _navigatorKey,

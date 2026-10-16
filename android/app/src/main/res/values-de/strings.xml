@@ -3,4 +3,7 @@
     <string name="phone_audio_channel">Music Sync</string>
     <string name="phone_audio_notification_title">Music Sync läuft</string>
     <string name="phone_audio_notification_text">LumiFX folgt dem Ton, den dieses Telefon abspielt. Nichts wird aufgenommen oder gespeichert.</string>
+    <string name="widget_title">Favoriten</string>
+    <string name="widget_empty">Markiere Effekte in LumiFX mit einem Stern, um sie hier zu sehen.</string>
+    <string name="widget_description">Deine liebsten LumiFX-Effekte, nur einen Tipp entfernt.</string>
 </resources>

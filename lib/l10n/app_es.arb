@@ -325,5 +325,6 @@
   "motionFlicker": "Parpadeante",
   "scenePreview": "Vista previa de la escena",
   "deleteSceneQuestion": "¿Eliminar \"{name}\"?",
-  "deleteSceneDescription": "También se quita de favoritos y listas."
+  "deleteSceneDescription": "También se quita de favoritos y listas.",
+  "widgetEmpty": "Marca efectos como favoritos en LumiFX para verlos aquí."
 }

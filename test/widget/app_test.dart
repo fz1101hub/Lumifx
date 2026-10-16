@@ -16,6 +16,7 @@ import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_home_widgets.dart';
 import '../support/fake_shortcuts.dart';
 import '../support/phone_window.dart';
 
@@ -610,12 +611,14 @@ void main() {
     final preferences = PreferencesController(store: InMemoryKeyValueStore());
     await preferences.recordPlayed('fireplace');
     final shortcuts = FakeShortcuts();
+    final widgets = FakeHomeWidgets();
     await tester.pumpWidget(LumiFxApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
       audioInput: FakeAudioInput(),
       shortcuts: shortcuts,
+      widgets: widgets,
       locale: const Locale('it'),
     ));
     await tester.pumpAndSettle();
@@ -628,6 +631,12 @@ void main() {
     expect(shortcuts.items.map((s) => s.id),
         ['effect:haunted_manor', 'effect:aurora']);
     expect(shortcuts.items.first.title, 'La Villa Infestata');
+    // The home-screen widget shows the same, with links that play them.
+    expect(widgets.title, 'Preferiti');
+    expect(
+        widgets.effects.map((e) => e.name), ['La Villa Infestata', 'Aurora']);
+    expect(widgets.effects.first.link, 'lumifx://app/play/haunted_manor');
+    expect(widgets.effects.first.colors, isNotEmpty);
 
     shortcuts.launch('effect:aurora');
     await tester.pumpAndSettle();
