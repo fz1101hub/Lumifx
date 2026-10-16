@@ -308,5 +308,22 @@
   "later": "Plus tard",
   "getStarted": "Commencer",
   "skip": "Passer",
-  "pageOf": "Page {page} sur {count}"
+  "pageOf": "Page {page} sur {count}",
+  "newScene": "Nouvelle scène",
+  "editScene": "Modifier la scène",
+  "sceneNameHint": "Par exemple : Coin lecture",
+  "sceneColors": "Couleurs",
+  "sceneColorsHint": "De deux à cinq couleurs, dans l'ordre où elles passent d'une lampe à l'autre. Touchez-en une pour la changer.",
+  "sceneColorNumber": "Couleur {number}",
+  "sceneSwatch": "Teinte {number}",
+  "addColor": "Ajouter une couleur",
+  "chooseColor": "Choisir une couleur",
+  "sceneMotion": "Mouvement",
+  "motionCalm": "Calme",
+  "motionDrift": "Dérivant",
+  "motionLively": "Vif",
+  "motionFlicker": "Vacillant",
+  "scenePreview": "Aperçu de la scène",
+  "deleteSceneQuestion": "Supprimer « {name} » ?",
+  "deleteSceneDescription": "Elle est aussi retirée des favoris et des playlists."
 }

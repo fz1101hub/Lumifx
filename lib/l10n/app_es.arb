@@ -308,5 +308,22 @@
   "later": "Más tarde",
   "getStarted": "Empezar",
   "skip": "Omitir",
-  "pageOf": "Página {page} de {count}"
+  "pageOf": "Página {page} de {count}",
+  "newScene": "Nueva escena",
+  "editScene": "Editar escena",
+  "sceneNameHint": "Por ejemplo: Rincón de lectura",
+  "sceneColors": "Colores",
+  "sceneColorsHint": "De dos a cinco colores, en el orden en que pasan de una luz a otra. Toca uno para cambiarlo.",
+  "sceneColorNumber": "Color {number}",
+  "sceneSwatch": "Tono {number}",
+  "addColor": "Añadir un color",
+  "chooseColor": "Elige un color",
+  "sceneMotion": "Movimiento",
+  "motionCalm": "Tranquila",
+  "motionDrift": "Fluida",
+  "motionLively": "Animada",
+  "motionFlicker": "Parpadeante",
+  "scenePreview": "Vista previa de la escena",
+  "deleteSceneQuestion": "¿Eliminar \"{name}\"?",
+  "deleteSceneDescription": "También se quita de favoritos y listas."
 }

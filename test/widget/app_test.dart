@@ -289,6 +289,69 @@ void main() {
     expect(find.text('Favorites'), findsOneWidget);
   });
 
+  testWidgets('a scene of your own is made, played, edited and deleted',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    // The editor's preview animates, so the screen never settles.
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New scene'));
+    await step();
+    expect(find.text('Save'), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'Reading corner');
+    // Three colours to start with; add a fourth and change the first.
+    await tester.tap(find.bySemanticsLabel('Add a colour'));
+    await step();
+    await tester.tap(find.bySemanticsLabel('Swatch 9'));
+    await step();
+    await tester.tap(find.bySemanticsLabel('Colour 1'));
+    await step();
+    await tester.tap(find.bySemanticsLabel('Swatch 20'));
+    await step();
+    await tester.tap(find.text('Calm'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await step();
+    await tester.pumpAndSettle();
+
+    // First in the list, labelled as the user's own.
+    expect(find.text('Reading corner'), findsOneWidget);
+    expect(find.text('My scenes'), findsOneWidget);
+    await tester.tap(find.text('Reading corner'));
+    await step();
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await tester.tap(find.byTooltip('Edit scene'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.enterText(find.byType(TextField), 'Reading nook');
+    await tester.tap(find.text('Save'));
+    await step();
+    await step();
+    expect(find.text('Reading nook'), findsOneWidget,
+        reason: 'the player shows the edit, and keeps playing');
+    expect(find.text('Pause'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Edit scene'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tap(find.byTooltip('Delete'));
+    await step();
+    await tester.tap(find.text('Delete'));
+    await step();
+    await tester.pumpAndSettle();
+    // Back on the list, without the scene, and nothing plays.
+    expect(find.text('Reading nook'), findsNothing);
+    expect(find.text('New scene'), findsOneWidget);
+    expect(find.byType(MiniPlayer), findsNothing);
+  });
+
   testWidgets('settings change the controls a new playback starts with',
       (tester) async {
     await _pumpApp(tester);

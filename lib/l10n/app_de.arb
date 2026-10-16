@@ -308,5 +308,22 @@
   "later": "Später",
   "getStarted": "Los geht's",
   "skip": "Überspringen",
-  "pageOf": "Seite {page} von {count}"
+  "pageOf": "Seite {page} von {count}",
+  "newScene": "Neue Szene",
+  "editScene": "Szene bearbeiten",
+  "sceneNameHint": "Zum Beispiel: Leseecke",
+  "sceneColors": "Farben",
+  "sceneColorsHint": "Zwei bis fünf Farben, in der Reihenfolge, in der sie über die Lampen wandern. Tippe auf eine, um sie zu ändern.",
+  "sceneColorNumber": "Farbe {number}",
+  "sceneSwatch": "Farbton {number}",
+  "addColor": "Farbe hinzufügen",
+  "chooseColor": "Farbe wählen",
+  "sceneMotion": "Bewegung",
+  "motionCalm": "Ruhig",
+  "motionDrift": "Fließend",
+  "motionLively": "Lebhaft",
+  "motionFlicker": "Flackernd",
+  "scenePreview": "Vorschau der Szene",
+  "deleteSceneQuestion": "\"{name}\" löschen?",
+  "deleteSceneDescription": "Sie wird auch aus Favoriten und Playlists entfernt."
 }

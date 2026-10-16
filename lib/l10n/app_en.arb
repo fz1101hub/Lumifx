@@ -783,5 +783,88 @@
         "type": "int"
       }
     }
+  },
+  "newScene": "New scene",
+  "@newScene": {
+    "description": "Button and title: create a scene of your own"
+  },
+  "editScene": "Edit scene",
+  "@editScene": {
+    "description": "Title and tooltip: edit a scene of your own"
+  },
+  "sceneNameHint": "For example: Reading corner",
+  "@sceneNameHint": {
+    "description": "Hint of the scene name field"
+  },
+  "sceneColors": "Colours",
+  "@sceneColors": {
+    "description": "Scene editor section: colours"
+  },
+  "sceneColorsHint": "Two to five colours, in the order they travel across the lights. Tap one to change it.",
+  "@sceneColorsHint": {
+    "description": "Scene editor hint about colours"
+  },
+  "sceneColorNumber": "Colour {number}",
+  "@sceneColorNumber": {
+    "description": "Screen reader label of a colour slot",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "sceneSwatch": "Swatch {number}",
+  "@sceneSwatch": {
+    "description": "Screen reader label of a colour in the picker",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "addColor": "Add a colour",
+  "@addColor": {
+    "description": "Button: add a colour to the scene"
+  },
+  "chooseColor": "Choose a colour",
+  "@chooseColor": {
+    "description": "Colour picker title"
+  },
+  "sceneMotion": "Motion",
+  "@sceneMotion": {
+    "description": "Scene editor section: motion"
+  },
+  "motionCalm": "Calm",
+  "@motionCalm": {
+    "description": "Scene motion: very slow"
+  },
+  "motionDrift": "Drifting",
+  "@motionDrift": {
+    "description": "Scene motion: colours drift"
+  },
+  "motionLively": "Lively",
+  "@motionLively": {
+    "description": "Scene motion: faster"
+  },
+  "motionFlicker": "Flickering",
+  "@motionFlicker": {
+    "description": "Scene motion: like flames"
+  },
+  "scenePreview": "Preview of the scene",
+  "@scenePreview": {
+    "description": "Screen reader label of the scene preview"
+  },
+  "deleteSceneQuestion": "Delete \"{name}\"?",
+  "@deleteSceneQuestion": {
+    "description": "Confirm deleting a scene",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteSceneDescription": "It is also removed from favourites and playlists.",
+  "@deleteSceneDescription": {
+    "description": "Explains deleting a scene"
   }
 }

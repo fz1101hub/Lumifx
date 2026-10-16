@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../core/effects/effect.dart';
+import '../../app_scope.dart';
 import '../common/app_text.dart';
+import '../library/scene_editor.dart';
 import '../common/layout.dart';
-import 'catalog/effect_catalog.dart';
 import 'effect_palette.dart';
 import 'player_route.dart';
 
@@ -19,9 +20,26 @@ class EffectListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effects = effectsOfKind(kind);
+    final scope = AppScope.of(context);
+    return ListenableBuilder(
+      listenable: scope.preferences,
+      builder: (context, _) => _build(context, scope.library.ofKind(kind)),
+    );
+  }
+
+  Widget _build(BuildContext context, List<LightingEffect> effects) {
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(title: Text(title)),
+      floatingActionButton: kind == EffectKind.scene
+          ? FloatingActionButton.extended(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const SceneEditor()),
+              ),
+              icon: const Icon(Icons.palette_outlined),
+              label: Text(l10n.newScene),
+            )
+          : null,
       body: effects.isEmpty
           ? Center(
               child: Padding(
@@ -35,7 +53,8 @@ class EffectListScreen extends StatelessWidget {
           : context.isWide
               ? _EffectGrid(effects)
               : ListView.separated(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.fromLTRB(
+                      20, 20, 20, kind == EffectKind.scene ? 96 : 20),
                   itemCount: effects.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) => _EffectCard(effects[index]),
@@ -54,7 +73,7 @@ class _EffectGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final insets = context.pageInsets(maxWidth: 1100);
+    final insets = context.pageInsets(maxWidth: 1100, bottom: 96);
     final width = MediaQuery.sizeOf(context).width - insets.horizontal;
     final columns = (width / 360).floor().clamp(2, 3);
     final rows = [
@@ -98,7 +117,9 @@ class _EffectCard extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = context.l10n;
     final colors = effectPalette(effect);
-    final collection = l10n.collectionName(effect);
+    final collection = AppScope.of(context).library.isUserScene(effect.id)
+        ? l10n.myScenes
+        : l10n.collectionName(effect);
     final description = l10n.effectDescription(effect);
     return Card(
       margin: compact ? EdgeInsets.zero : null,

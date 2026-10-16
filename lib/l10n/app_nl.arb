@@ -308,5 +308,22 @@
   "later": "Later",
   "getStarted": "Aan de slag",
   "skip": "Overslaan",
-  "pageOf": "Pagina {page} van {count}"
+  "pageOf": "Pagina {page} van {count}",
+  "newScene": "Nieuwe scène",
+  "editScene": "Scène bewerken",
+  "sceneNameHint": "Bijvoorbeeld: Leeshoek",
+  "sceneColors": "Kleuren",
+  "sceneColorsHint": "Twee tot vijf kleuren, in de volgorde waarin ze over de lampen gaan. Tik op een kleur om hem te wijzigen.",
+  "sceneColorNumber": "Kleur {number}",
+  "sceneSwatch": "Tint {number}",
+  "addColor": "Kleur toevoegen",
+  "chooseColor": "Kies een kleur",
+  "sceneMotion": "Beweging",
+  "motionCalm": "Rustig",
+  "motionDrift": "Zwevend",
+  "motionLively": "Levendig",
+  "motionFlicker": "Flakkerend",
+  "scenePreview": "Voorbeeld van de scène",
+  "deleteSceneQuestion": "\"{name}\" verwijderen?",
+  "deleteSceneDescription": "Hij wordt ook uit favorieten en afspeellijsten verwijderd."
 }

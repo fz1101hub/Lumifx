@@ -12,6 +12,7 @@ import '../../core/hue/hue_bridge_client.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
+import '../library/scene_editor.dart';
 import '../music/music_sync_controller.dart';
 import 'effect_palette.dart';
 import 'light_color_ui.dart';
@@ -37,8 +38,11 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
   bool _isCurrent(PlaybackController c) => c.isShownBy(widget.effect.id);
 
   /// The effect to show: this screen's, or the playlist's current one.
-  LightingEffect _shown(PlaybackController c) =>
-      c.playlist != null && _isCurrent(c) ? c.effect : widget.effect;
+  LightingEffect _shown(PlaybackController c) => c.playlist != null &&
+          _isCurrent(c)
+      ? c.effect
+      // Looked up again, so an edited scene of the user's shows its edit.
+      : AppScope.of(context).library.byId(widget.effect.id) ?? widget.effect;
 
   @override
   void didChangeDependencies() {
@@ -180,7 +184,20 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.effectName(effect)),
-        actions: [_FavoriteButton(effectId: effect.id)],
+        actions: [
+          if (AppScope.of(context).library.userScene(effect.id)
+              case final scene?)
+            IconButton(
+              tooltip: l10n.editScene,
+              icon: const Icon(Icons.edit_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => SceneEditor(scene: scene),
+                ),
+              ),
+            ),
+          _FavoriteButton(effectId: effect.id),
+        ],
       ),
       body: Builder(
         builder: (context) {
