@@ -577,5 +577,7 @@
   "timerCooking": "Koken",
   "timerStart": "Starten",
   "timerDone": "De tijd is om!",
-  "noticeFinished": "{name} is klaar."
+  "noticeFinished": "{name} is klaar.",
+  "readAloud": "Voorlezen",
+  "readAloudDescription": "De telefoon leest de woorden met zijn eigen stem voor zodra ze verschijnen."
 }

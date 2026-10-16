@@ -1965,5 +1965,13 @@
         "type": "String"
       }
     }
+  },
+  "readAloud": "Read aloud",
+  "@readAloud": {
+    "description": "Switch on the player: the phone reads the story's words aloud"
+  },
+  "readAloudDescription": "The phone reads the words aloud as they appear, with its own voice.",
+  "@readAloudDescription": {
+    "description": "Subtitle of the read-aloud switch"
   }
 }

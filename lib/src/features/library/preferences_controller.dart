@@ -122,6 +122,16 @@ class PreferencesController extends ChangeNotifier {
   bool _soundOn = true;
   double _soundVolume = 0.6;
   bool _readAlong = true;
+  bool _readAloud = false;
+
+  /// The phone reads a story's words aloud as they appear.
+  bool get readAloud => _readAloud;
+
+  Future<void> setReadAloud(bool value) {
+    _readAloud = value;
+    return _changed();
+  }
+
   String _bedtimeStory = defaultBedtimeStory;
   int _bedtimeStoryMinutes = 10;
   int _bedtimeGlowMinutes = 20;
@@ -254,6 +264,7 @@ class PreferencesController extends ChangeNotifier {
       _soundOn = json['soundOn'] as bool? ?? true;
       _soundVolume = _unit(json['soundVolume'], 0.6);
       _readAlong = json['readAlong'] as bool? ?? true;
+      _readAloud = json['readAloud'] == true;
       final buttons = json['buttonActions'];
       _buttonActions = {
         if (buttons is Map)
@@ -517,6 +528,7 @@ class PreferencesController extends ChangeNotifier {
       'soundOn': _soundOn,
       'soundVolume': _soundVolume,
       'readAlong': _readAlong,
+      'readAloud': _readAloud,
       'buttonActions': _buttonActions,
       'bedtime': {
         'story': _bedtimeStory,

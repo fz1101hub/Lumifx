@@ -577,5 +577,7 @@
   "timerCooking": "Cozinha",
   "timerStart": "Iniciar",
   "timerDone": "Acabou o tempo!",
-  "noticeFinished": "{name} terminou."
+  "noticeFinished": "{name} terminou.",
+  "readAloud": "Ler em voz alta",
+  "readAloudDescription": "O celular lê as palavras em voz alta conforme aparecem, com a própria voz."
 }

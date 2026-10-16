@@ -577,5 +577,7 @@
   "timerCooking": "料理",
   "timerStart": "開始",
   "timerDone": "時間です！",
-  "noticeFinished": "{name} が終わりました。"
+  "noticeFinished": "{name} が終わりました。",
+  "readAloud": "読み上げ",
+  "readAloudDescription": "言葉が表示されると、スマートフォンの声で読み上げます。"
 }

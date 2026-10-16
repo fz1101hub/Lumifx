@@ -10,6 +10,8 @@ import 'core/screen_wake.dart';
 import 'core/sound/sound_player.dart';
 import 'features/tv/camera_input.dart';
 import 'features/buttons/hue_button_listener.dart';
+import 'features/effects/read_aloud.dart';
+import 'core/speech/speaker.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
 import 'features/effects/catalog/effect_catalog.dart';
@@ -40,6 +42,7 @@ class LumiFxApp extends StatefulWidget {
     this.clock = DateTime.now,
     this.sound = const NoSoundPlayer(),
     this.camera = const NoCameraInput(),
+    this.speaker = const NoSpeaker(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -74,6 +77,9 @@ class LumiFxApp extends StatefulWidget {
   /// Watches the TV for TV Sync.
   final CameraInput camera;
 
+  /// Reads stories aloud.
+  final Speaker speaker;
+
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
 
@@ -94,6 +100,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   late final PlaybackController _playback;
   late final LinkHandler _links;
   late final HueButtonListener _buttons;
+  late final ReadAloud _readAloud;
   StreamSubscription<PlaybackNotice>? _notices;
 
   @override
@@ -131,6 +138,18 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       preferences: widget.preferences,
       playback: _playback,
       library: _library,
+    )..start();
+    _readAloud = ReadAloud(
+      playback: _playback,
+      preferences: widget.preferences,
+      library: _library,
+      speaker: widget.speaker,
+      locale: () {
+        final context = _navigatorKey.currentContext;
+        return context == null
+            ? WidgetsBinding.instance.platformDispatcher.locale
+            : Localizations.localeOf(context);
+      },
     )..start();
     // Opened from a link: the platform hands it over as the first route.
     final initial = AppLink.parse(
@@ -275,6 +294,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     widget.bridge.removeListener(_maybeWelcome);
     unawaited(_notices?.cancel());
     _buttons.dispose();
+    _readAloud.dispose();
     _playback.dispose();
     _routes.dispose();
     super.dispose();
