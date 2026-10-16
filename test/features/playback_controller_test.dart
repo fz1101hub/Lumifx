@@ -45,12 +45,39 @@ class _FakeBridge {
   /// Light reads and writes in order: `GET` and `PUT <id>`.
   final log = <String>[];
 
+  /// Scenes created, as the bridge lists them.
+  final scenes = <Map<String, Object?>>[];
+
+  /// Requests to the older API (schedules).
+  final v1 = <(String, Map<String, Object?>)>[];
+
   /// When set, room loading waits for it: used to stop mid-start.
   Completer<void>? holdRefresh;
   int refreshes = 0;
 
   http.Client get client => MockClient((request) async {
+        if (request.method == 'POST' && request.url.path.startsWith('/api/')) {
+          v1.add((
+            request.url.path,
+            jsonDecode(request.body) as Map<String, Object?>,
+          ));
+          return http.Response(
+              jsonEncode([
+                {
+                  'success': {'id': '${v1.length}'},
+                },
+              ]),
+              200);
+        }
         if (request.method == 'POST') {
+          final body = jsonDecode(request.body) as Map<String, Object?>;
+          if (request.url.path == '/clip/v2/resource/scene') {
+            scenes.add({
+              ...body,
+              'id': 'new-scene',
+              'id_v1': '/scenes/V1scene',
+            });
+          }
           posts.add((
             request.url.path,
             jsonDecode(request.body) as Map<String, Object?>,
@@ -117,11 +144,14 @@ class _FakeBridge {
                 },
               ],
             });
+          case '/clip/v2/resource/scene':
+            return _json({'data': scenes});
           case '/clip/v2/resource/room':
             return _json({
               'data': [
                 {
                   'id': 'room',
+                  'id_v1': '/groups/1',
                   'metadata': {'name': 'Den'},
                   'children': [
                     {'rid': 'd1', 'rtype': 'device'},
@@ -665,6 +695,93 @@ void main() {
     await _wait(20);
     expect(controller.status, PlaybackStatus.playing);
     expect(camera.isRunning, isFalse);
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('bedtime: the story, then the night glow, then lights off', () async {
+    final (controller, fake, _) =
+        await _setUp(sleepFade: const Duration(milliseconds: 100));
+    final before = controller.controls;
+    await controller.startBedtime(
+      sleepingDragon,
+      storyFor: const Duration(milliseconds: 300),
+      glowFor: const Duration(milliseconds: 300),
+      brightness: 0.4,
+    );
+    expect(controller.status, PlaybackStatus.playing);
+    expect(controller.effect.id, 'sleeping_dragon');
+    expect(controller.inBedtime, isTrue);
+    expect(controller.controls.brightness, 0.4);
+    expect(controller.sleepTimer, const Duration(milliseconds: 600));
+    expect(controller.isShownBy('sleeping_dragon'), isTrue);
+
+    await _wait(400);
+    expect(controller.effect.id, PlaybackController.bedtimeGlowId);
+    expect(controller.isShownBy('sleeping_dragon'), isTrue,
+        reason: 'the story\'s player follows bedtime');
+
+    await _wait(1300);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(controller.inBedtime, isFalse);
+    // The lights are off, and bedtime leaves nothing behind.
+    final last = {for (final (id, body) in fake.puts) id: body};
+    expect((last['color']!['on']! as Map)['on'], isFalse);
+    expect(controller.controls, before);
+    expect(controller.sleepTimer, isNull);
+    controller.dispose();
+  });
+
+  test('choosing another effect ends bedtime and puts things back', () async {
+    final (controller, _, _) = await _setUp();
+    controller.setSleepTimer(const Duration(minutes: 45));
+    await controller.startBedtime(
+      sleepingDragon,
+      storyFor: const Duration(minutes: 10),
+      glowFor: const Duration(minutes: 20),
+      brightness: 0.3,
+    );
+    expect(controller.sleepTimer, const Duration(minutes: 30));
+    await controller.switchEffect(ocean);
+    expect(controller.inBedtime, isFalse);
+    expect(controller.controls.brightness, isNot(0.3));
+    expect(controller.sleepTimer, const Duration(minutes: 45),
+        reason: 'the user\'s own timer comes back');
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('an effect is scheduled on the bridge as a dynamic scene', () async {
+    final (controller, fake, _) = await _setUp();
+    expect(controller.canScheduleOnBridge, isFalse, reason: 'not playing');
+    await controller.start();
+    expect(controller.canScheduleOnBridge, isTrue);
+    await controller.scheduleOnBridge(
+      name: 'Evening ocean',
+      hour: 20,
+      minute: 0,
+      days: const [0, 1, 2, 3, 4, 5, 6],
+      stopHour: 22,
+      stopMinute: 0,
+    );
+    // The scene keeps moving by itself...
+    expect(fake.scenes.single['auto_dynamic'], isTrue);
+    // ...and the bridge recalls it on the room, then switches it off.
+    final [(startPath, start), (_, stop)] = fake.v1;
+    expect(startPath, '/api/key/schedules');
+    expect(start['localtime'], 'W127/T20:00:00');
+    expect((start['command']! as Map)['address'], '/api/key/groups/1/action');
+    expect((start['command']! as Map)['body'], {'scene': 'V1scene'});
+    expect(stop['localtime'], 'W127/T22:00:00');
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('stories cannot be scheduled: the bridge cannot play them', () async {
+    final (controller, _, _) = await _setUp(effect: sleepingDragon);
+    await controller.start();
+    expect(controller.canSaveAsHueScene, isTrue);
+    expect(controller.canScheduleOnBridge, isFalse);
     await controller.stop();
     controller.dispose();
   });

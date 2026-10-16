@@ -97,6 +97,19 @@ Also done ahead of schedule:
 - **TV Sync**: the phone's camera watches the TV and the lights take its
   colours left to right; frames are averaged on the phone and never
   stored or sent. Needs testing with a real TV.
+- **Bedtime**: one tap plays a calm story with its words, then the new
+  Goodnight Glow, then the lights fade out and switch off.
+- **Effects scheduled on the bridge**: an effect saved as a dynamic Hue
+  scene and recalled by the bridge at set times (optionally switched off
+  later), with the phone off.
+- **Hue buttons**: a Hue switch or smart button plays an effect, stops it
+  or starts bedtime while LumiFX runs (bridge event stream).
+- **Voice**: Siri phrases in eight languages ("Play Fireplace in LumiFX",
+  "Start bedtime in LumiFX", "Stop LumiFX") and Google Assistant App
+  Actions ("Open Fireplace in LumiFX"), through `lumifx://` links.
+- **Holiday stories** for New Year, Valentine's Day, Carnival and Easter,
+  first on the home in their season (Carnival and Easter follow Easter's
+  date each year).
 
 ## Development
 

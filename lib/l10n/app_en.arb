@@ -1565,5 +1565,304 @@
   "tvSyncPreview": "Camera picture of the TV",
   "@tvSyncPreview": {
     "description": "Screen reader label of the camera picture in TV Sync"
+  },
+  "bedtime": "Bedtime",
+  "@bedtime": {
+    "description": "Name of bedtime mode: a story, a night glow, then lights off"
+  },
+  "bedtimeSubtitle": "A story, a night glow, then lights off",
+  "@bedtimeSubtitle": {
+    "description": "Subtitle of bedtime mode on the home screen"
+  },
+  "bedtimeDescription": "One tap at bedtime: a gentle story to read together, then a warm night glow, then the lights go off by themselves.",
+  "@bedtimeDescription": {
+    "description": "Explanation at the top of the bedtime screen"
+  },
+  "bedtimeStory": "Story",
+  "@bedtimeStory": {
+    "description": "Label of the story picker in bedtime mode"
+  },
+  "bedtimeStoryFor": "Story for",
+  "@bedtimeStoryFor": {
+    "description": "How long the story plays in bedtime mode"
+  },
+  "bedtimeGlowFor": "Then night glow for",
+  "@bedtimeGlowFor": {
+    "description": "How long the night glow lasts in bedtime mode"
+  },
+  "bedtimeWhere": "Lights: {place}. You can change the room in the player.",
+  "@bedtimeWhere": {
+    "description": "Where bedtime plays; place is a room or 'Preview only'",
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "startBedtime": "Start bedtime",
+  "@startBedtime": {
+    "description": "Button that starts bedtime mode"
+  },
+  "bedtimeProgress": "Bedtime: night glow at {glow}, lights off at {off}.",
+  "@bedtimeProgress": {
+    "description": "Info card in the player during bedtime; times like 21:10",
+    "placeholders": {
+      "glow": {
+        "type": "String"
+      },
+      "off": {
+        "type": "String"
+      }
+    }
+  },
+  "bedtimeGlowNow": "Night glow. Lights off at {off}. Sweet dreams.",
+  "@bedtimeGlowNow": {
+    "description": "Info card in the player during the night glow of bedtime",
+    "placeholders": {
+      "off": {
+        "type": "String"
+      }
+    }
+  },
+  "effectNameGoodnightGlow": "Goodnight Glow",
+  "@effectNameGoodnightGlow": {
+    "description": "Name of the warm night-light scene"
+  },
+  "effectDescriptionGoodnightGlow": "A soft amber glow to fall asleep by.",
+  "@effectDescriptionGoodnightGlow": {
+    "description": "Description of the warm night-light scene"
+  },
+  "scheduleOnBridge": "Schedule",
+  "@scheduleOnBridge": {
+    "description": "Button in the player: have the bridge play this effect at set times"
+  },
+  "scheduleTitle": "Play at set times",
+  "@scheduleTitle": {
+    "description": "Title of the dialog scheduling an effect on the bridge"
+  },
+  "scheduleDescription": "Your Hue Bridge turns this effect on at the chosen time, even with your phone off, and keeps it moving. It is saved as a Hue scene.",
+  "@scheduleDescription": {
+    "description": "Explains scheduling an effect on the bridge"
+  },
+  "scheduleStartAt": "Starts at",
+  "@scheduleStartAt": {
+    "description": "Label of the start time of a schedule"
+  },
+  "scheduleStop": "Switch off at a set time",
+  "@scheduleStop": {
+    "description": "Switch: switch the lights off at a set time"
+  },
+  "scheduleStopAt": "Switches off at",
+  "@scheduleStopAt": {
+    "description": "Label of the stop time of a schedule"
+  },
+  "scheduleSaved": "Scheduled on the bridge: {name}.",
+  "@scheduleSaved": {
+    "description": "Snackbar after scheduling an effect on the bridge",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "couldNotSchedule": "The effect could not be scheduled: {reason}",
+  "@couldNotSchedule": {
+    "description": "Snackbar when scheduling failed",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduledEffects": "Scheduled effects",
+  "@scheduledEffects": {
+    "description": "Heading of the list of effects scheduled on the bridge"
+  },
+  "noScheduledEffects": "None yet. Play a scene on a room and press Schedule in the player.",
+  "@noScheduledEffects": {
+    "description": "Shown when no effect is scheduled"
+  },
+  "deleteScheduleDescription": "The Hue scene it plays is deleted too.",
+  "@deleteScheduleDescription": {
+    "description": "Explains what deleting a scheduled effect removes"
+  },
+  "scheduleUntil": "until {time}",
+  "@scheduleUntil": {
+    "description": "Part of a scheduled effect's summary; time like 22:00",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hueButtons": "Hue buttons",
+  "@hueButtons": {
+    "description": "Settings entry: assign effects to Hue switch buttons"
+  },
+  "hueButtonsSubtitle": "Start effects from Hue switches and smart buttons",
+  "@hueButtonsSubtitle": {
+    "description": "Subtitle of the Hue buttons settings entry"
+  },
+  "hueButtonsDescription": "A short press plays the chosen effect; press again to stop it. This works while LumiFX is open, or playing with the screen off. In the Hue app, set these buttons to do nothing, so they do not also change the lights.",
+  "@hueButtonsDescription": {
+    "description": "Explains how Hue buttons work with LumiFX"
+  },
+  "hueButtonNumber": "Button {number}",
+  "@hueButtonNumber": {
+    "description": "A button of a Hue switch, by its number",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "buttonActionNone": "Nothing",
+  "@buttonActionNone": {
+    "description": "Choice for a Hue button: LumiFX does nothing"
+  },
+  "buttonActionStop": "Stop the effect",
+  "@buttonActionStop": {
+    "description": "Choice for a Hue button: stop whatever plays"
+  },
+  "noHueButtons": "No Hue switches or smart buttons on this bridge.",
+  "@noHueButtons": {
+    "description": "Shown when the bridge has no switches"
+  },
+  "couldNotLoadButtons": "The switches could not be loaded: {reason}",
+  "@couldNotLoadButtons": {
+    "description": "Shown when the switches could not be read from the bridge",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "effectNameNewYearCountdown": "New Year's Countdown",
+  "@effectNameNewYearCountdown": {
+    "description": "Name of the New Year story"
+  },
+  "effectDescriptionNewYearCountdown": "Ten golden ticks to midnight, then fireworks.",
+  "@effectDescriptionNewYearCountdown": {
+    "description": "Description of the New Year story"
+  },
+  "effectNameValentinesGlow": "Valentine's Glow",
+  "@effectNameValentinesGlow": {
+    "description": "Name of the Valentine's Day story"
+  },
+  "effectDescriptionValentinesGlow": "A little heart floats from lamp to lamp. Then the room blushes.",
+  "@effectDescriptionValentinesGlow": {
+    "description": "Description of the Valentine's Day story"
+  },
+  "effectNameCarnivalParade": "Carnival Parade",
+  "@effectNameCarnivalParade": {
+    "description": "Name of the Carnival story"
+  },
+  "effectDescriptionCarnivalParade": "Masks, a marching parade and confetti in every colour.",
+  "@effectDescriptionCarnivalParade": {
+    "description": "Description of the Carnival story"
+  },
+  "effectNameEasterEggHunt": "Easter Egg Hunt",
+  "@effectNameEasterEggHunt": {
+    "description": "Name of the Easter story"
+  },
+  "effectDescriptionEasterEggHunt": "A bunny hops through the garden. Can you spot the eggs?",
+  "@effectDescriptionEasterEggHunt": {
+    "description": "Description of the Easter story"
+  },
+  "seasonNewYear": "Happy New Year",
+  "@seasonNewYear": {
+    "description": "Home shelf title around New Year"
+  },
+  "seasonValentine": "Valentine's Day",
+  "@seasonValentine": {
+    "description": "Home shelf title before Valentine's Day"
+  },
+  "seasonCarnival": "Carnival time",
+  "@seasonCarnival": {
+    "description": "Home shelf title at Carnival time"
+  },
+  "seasonEaster": "Easter is coming",
+  "@seasonEaster": {
+    "description": "Home shelf title before Easter"
+  },
+  "collectionNewYear": "New Year",
+  "@collectionNewYear": {
+    "description": "Collection of New Year effects"
+  },
+  "collectionValentine": "Valentine's Day",
+  "@collectionValentine": {
+    "description": "Collection of Valentine's Day effects"
+  },
+  "collectionCarnival": "Carnival",
+  "@collectionCarnival": {
+    "description": "Collection of Carnival effects"
+  },
+  "collectionEaster": "Easter",
+  "@collectionEaster": {
+    "description": "Collection of Easter effects"
+  },
+  "narrationNewYearCountdown1": "The last night of the year. Everyone is waiting…",
+  "@narrationNewYearCountdown1": {
+    "description": "Read-along line of the New Year story"
+  },
+  "narrationNewYearCountdown2": "Ten… nine… eight… let's count down together!",
+  "@narrationNewYearCountdown2": {
+    "description": "Read-along line of the New Year story"
+  },
+  "narrationNewYearCountdown3": "Happy New Year!",
+  "@narrationNewYearCountdown3": {
+    "description": "Read-along line of the New Year story"
+  },
+  "narrationNewYearCountdown4": "Fireworks fill the sky in every colour.",
+  "@narrationNewYearCountdown4": {
+    "description": "Read-along line of the New Year story"
+  },
+  "narrationValentinesGlow1": "A soft pink glow fills the room.",
+  "@narrationValentinesGlow1": {
+    "description": "Read-along line of the Valentine's Day story"
+  },
+  "narrationValentinesGlow2": "A little heart floats from lamp to lamp.",
+  "@narrationValentinesGlow2": {
+    "description": "Read-along line of the Valentine's Day story"
+  },
+  "narrationValentinesGlow3": "It leaves sparkles wherever it goes.",
+  "@narrationValentinesGlow3": {
+    "description": "Read-along line of the Valentine's Day story"
+  },
+  "narrationValentinesGlow4": "Then the whole room glows with love.",
+  "@narrationValentinesGlow4": {
+    "description": "Read-along line of the Valentine's Day story"
+  },
+  "narrationCarnivalParade1": "Music and masks: the carnival is starting!",
+  "@narrationCarnivalParade1": {
+    "description": "Read-along line of the Carnival story"
+  },
+  "narrationCarnivalParade2": "Here comes the parade, step by step.",
+  "@narrationCarnivalParade2": {
+    "description": "Read-along line of the Carnival story"
+  },
+  "narrationCarnivalParade3": "Streamers fly from one side to the other!",
+  "@narrationCarnivalParade3": {
+    "description": "Read-along line of the Carnival story"
+  },
+  "narrationCarnivalParade4": "Confetti everywhere, in every colour!",
+  "@narrationCarnivalParade4": {
+    "description": "Read-along line of the Carnival story"
+  },
+  "narrationEasterEggHunt1": "Spring sunshine over the garden.",
+  "@narrationEasterEggHunt1": {
+    "description": "Read-along line of the Easter story"
+  },
+  "narrationEasterEggHunt2": "A little bunny hops from bush to bush.",
+  "@narrationEasterEggHunt2": {
+    "description": "Read-along line of the Easter story"
+  },
+  "narrationEasterEggHunt3": "Look! A painted egg behind the flowers.",
+  "@narrationEasterEggHunt3": {
+    "description": "Read-along line of the Easter story"
+  },
+  "narrationEasterEggHunt4": "You found them all. Happy Easter!",
+  "@narrationEasterEggHunt4": {
+    "description": "Read-along line of the Easter story"
   }
 }

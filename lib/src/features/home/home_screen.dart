@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
+import '../bedtime/bedtime_screen.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
@@ -68,6 +69,10 @@ class HomeScreen extends StatelessWidget {
             if (seasonOf(AppScope.of(context).clock()) case final season?)
               _EffectShelf(
                 title: switch (season) {
+                  Season.newYear => l10n.seasonNewYear,
+                  Season.valentine => l10n.seasonValentine,
+                  Season.carnival => l10n.seasonCarnival,
+                  Season.easter => l10n.seasonEaster,
                   Season.halloween => l10n.seasonHalloween,
                   Season.christmas => l10n.seasonChristmas,
                 },
@@ -116,6 +121,20 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
                       builder: (_) => const PlaylistsScreen()),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: ListTile(
+                minVerticalPadding: 20,
+                leading: const Icon(Icons.bedtime_outlined),
+                title: Text(l10n.bedtime),
+                subtitle: Text(l10n.bedtimeSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                      builder: (_) => const BedtimeScreen()),
                 ),
               ),
             ),

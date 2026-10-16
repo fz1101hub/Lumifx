@@ -17,6 +17,8 @@ import '../entertainment/entertainment_area_editor.dart';
 import '../library/scene_editor.dart';
 import '../library/sharing.dart';
 import '../library/story_editor.dart';
+import '../automations/automations_screen.dart';
+import '../../core/hue/hue_schedules.dart';
 import '../music/music_sync_controller.dart';
 import '../tv/tv_sync_controller.dart';
 import 'effect_palette.dart';
@@ -45,11 +47,12 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
   bool _isCurrent(PlaybackController c) => c.isShownBy(widget.effect.id);
 
   /// The effect to show: this screen's, or the playlist's current one.
-  LightingEffect _shown(PlaybackController c) => c.playlist != null &&
-          _isCurrent(c)
-      ? c.effect
-      // Looked up again, so an edited scene of the user's shows its edit.
-      : AppScope.of(context).library.byId(widget.effect.id) ?? widget.effect;
+  LightingEffect _shown(PlaybackController c) =>
+      (c.playlist != null || c.inBedtime) && _isCurrent(c)
+          ? c.effect
+          // Looked up again, so an edited scene of the user's shows its edit.
+          : AppScope.of(context).library.byId(widget.effect.id) ??
+              widget.effect;
 
   @override
   void didChangeDependencies() {
@@ -106,6 +109,22 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
       controller
           .setSleepTimer(minutes == 0 ? null : Duration(minutes: minutes));
     }
+  }
+
+  /// When bedtime moves on to the night glow and turns the lights off.
+  String _bedtimeLabel(BuildContext context, PlaybackController c) {
+    final l10n = context.l10n;
+    final localizations = MaterialLocalizations.of(context);
+    final h24 = MediaQuery.alwaysUse24HourFormatOf(context);
+    String time(DateTime? at) => at == null
+        ? ''
+        : localizations.formatTimeOfDay(TimeOfDay.fromDateTime(at),
+            alwaysUse24HourFormat: h24);
+    final glowAt = c.bedtimeGlowAt;
+    final off = time(c.bedtimeOffAt);
+    return glowAt != null && glowAt.isAfter(DateTime.now())
+        ? l10n.bedtimeProgress(time(glowAt), off)
+        : l10n.bedtimeGlowNow(off);
   }
 
   String _sleepLabel(AppLocalizations l10n, PlaybackController c) {
@@ -174,6 +193,37 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           : l10n.sceneSaved(scene.name, room);
     } on Object catch (error) {
       message = l10n.couldNotSaveScene(describeError(l10n, error));
+    }
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  /// Asks when, then has the bridge play the effect at that time.
+  Future<void> _schedule(LightingEffect effect) async {
+    final l10n = context.l10n;
+    final c = controller;
+    final draft = await showDialog<_ScheduleChoice>(
+      context: context,
+      builder: (_) => _ScheduleDialog(initialName: l10n.effectName(effect)),
+    );
+    if (draft == null || !mounted) {
+      return;
+    }
+    final messenger = ScaffoldMessenger.of(context);
+    String message;
+    try {
+      await c.scheduleOnBridge(
+        name: draft.name,
+        hour: draft.start.hour,
+        minute: draft.start.minute,
+        days: draft.days,
+        stopHour: draft.stop?.hour,
+        stopMinute: draft.stop?.minute,
+      );
+      message = l10n.scheduleSaved(draft.name);
+    } on Object catch (error) {
+      message = l10n.couldNotSchedule(describeError(l10n, error));
     }
     messenger
       ..hideCurrentSnackBar()
@@ -458,7 +508,13 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                   onPressed: busy ? null : c.nextInPlaylist,
                 ),
               ),
-            if (other || playlist != null) const SizedBox(height: 16),
+            if (current && c.inBedtime)
+              _InfoCard(
+                icon: Icons.bedtime_outlined,
+                text: _bedtimeLabel(context, c),
+              ),
+            if (other || playlist != null || (current && c.inBedtime))
+              const SizedBox(height: 16),
             _LampPreview(
               player: current ? c.player : null,
               names: [
@@ -519,6 +575,12 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                       onPressed: busy ? null : () => _saveAsHueScene(effect),
                       icon: const Icon(Icons.bookmark_add_outlined),
                       label: Text(l10n.saveAsHueScene),
+                    ),
+                  if (active && c.canScheduleOnBridge)
+                    OutlinedButton.icon(
+                      onPressed: busy ? null : () => _schedule(effect),
+                      icon: const Icon(Icons.schedule),
+                      label: Text(l10n.scheduleOnBridge),
                     ),
                   OutlinedButton.icon(
                     onPressed: busy || c.isFadingOut ? null : _chooseSleepTimer,
@@ -616,6 +678,148 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+/// When the bridge should play the effect.
+class _ScheduleChoice {
+  const _ScheduleChoice({
+    required this.name,
+    required this.start,
+    required this.days,
+    this.stop,
+  });
+
+  final String name;
+  final TimeOfDay start;
+  final List<int> days;
+  final TimeOfDay? stop;
+}
+
+class _ScheduleDialog extends StatefulWidget {
+  const _ScheduleDialog({required this.initialName});
+
+  final String initialName;
+
+  @override
+  State<_ScheduleDialog> createState() => _ScheduleDialogState();
+}
+
+class _ScheduleDialogState extends State<_ScheduleDialog> {
+  late final _name = TextEditingController(text: widget.initialName);
+  TimeOfDay _start = const TimeOfDay(hour: 20, minute: 0);
+  TimeOfDay? _stop;
+  final _days = <int>{0, 1, 2, 3, 4, 5, 6};
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  Future<TimeOfDay?> _pick(TimeOfDay initial) =>
+      showTimePicker(context: context, initialTime: initial);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final localizations = MaterialLocalizations.of(context);
+    final h24 = MediaQuery.alwaysUse24HourFormatOf(context);
+    String time(TimeOfDay t) =>
+        localizations.formatTimeOfDay(t, alwaysUse24HourFormat: h24);
+    final stop = _stop;
+    return AlertDialog(
+      title: Text(l10n.scheduleTitle),
+      scrollable: true,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.scheduleDescription, style: theme.textTheme.bodySmall),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _name,
+            maxLength: HueEffectSchedule.maxName,
+            decoration: InputDecoration(
+              labelText: l10n.name,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.schedule),
+            title: Text(l10n.scheduleStartAt),
+            trailing: Text(time(_start), style: theme.textTheme.titleMedium),
+            onTap: () async {
+              final picked = await _pick(_start);
+              if (picked != null) {
+                setState(() => _start = picked);
+              }
+            },
+          ),
+          Text(l10n.routineDays, style: theme.textTheme.titleSmall),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            runSpacing: 4,
+            children: [
+              for (var d = 0; d < 7; d++)
+                FilterChip(
+                  label: Text(weekdayName(context, d)),
+                  selected: _days.contains(d),
+                  onSelected: (on) => setState(
+                    () => on ? _days.add(d) : _days.remove(d),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            describeDays(context, (_days.toList()..sort())),
+            style: theme.textTheme.bodySmall,
+          ),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n.scheduleStop),
+            value: stop != null,
+            onChanged: (on) => setState(() => _stop = on
+                ? TimeOfDay(hour: (_start.hour + 2) % 24, minute: _start.minute)
+                : null),
+          ),
+          if (stop != null)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.power_settings_new),
+              title: Text(l10n.scheduleStopAt),
+              trailing: Text(time(stop), style: theme.textTheme.titleMedium),
+              onTap: () async {
+                final picked = await _pick(stop);
+                if (picked != null) {
+                  setState(() => _stop = picked);
+                }
+              },
+            ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: _name.text.trim().isEmpty
+              ? null
+              : () => Navigator.of(context).pop(_ScheduleChoice(
+                    name: _name.text.trim(),
+                    start: _start,
+                    days: _days.toList()..sort(),
+                    stop: _stop,
+                  )),
+          child: Text(l10n.save),
+        ),
+      ],
     );
   }
 }

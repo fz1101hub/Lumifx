@@ -14,6 +14,8 @@ import '../../core/effects/engine/light_output.dart';
 import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
+import '../../core/hue/hue_exceptions.dart';
+import '../../core/hue/hue_schedules.dart';
 import '../../core/screen_wake.dart';
 import '../../core/sound/sound_player.dart';
 import '../../core/sound/soundscape.dart';
@@ -165,6 +167,9 @@ class PlaybackController extends ChangeNotifier {
 
   Playlist? _playlist;
   int _playlistIndex = 0;
+
+  _Bedtime? _bedtime;
+  Timer? _bedtimeTimer;
   Timer? _playlistTimer;
   DateTime? _playlistNextAt;
   Duration? _playlistLeft;
@@ -286,7 +291,8 @@ class PlaybackController extends ChangeNotifier {
   /// the playlist from one effect to the next).
   bool isShownBy(String effectId) =>
       _effect.id == effectId ||
-      (_playlist?.effectIds.contains(effectId) ?? false);
+      (_playlist?.effectIds.contains(effectId) ?? false) ||
+      _bedtime?.storyId == effectId;
 
   /// Position of [effect] in the playlist's order (0-based).
   int get playlistIndex => _playlistIndex;
@@ -307,6 +313,7 @@ class PlaybackController extends ChangeNotifier {
     if (effects.isEmpty) {
       return;
     }
+    _endBedtime();
     _playlist = playlist;
     _playlistIndex = playlist.shuffle ? _random.nextInt(effects.length) : 0;
     await _switchEffect(effects[_playlistIndex]);
@@ -401,6 +408,44 @@ class PlaybackController extends ChangeNotifier {
     await _bridge.refresh();
     return this.home?.scenes.where((s) => s.id == id).firstOrNull ??
         HueScene(id: id, name: name, groupId: group.id);
+  }
+
+  /// Whether the effect can be scheduled on the bridge: one drifting
+  /// palette (the bridge plays it as a dynamic scene) on a room or zone.
+  bool get canScheduleOnBridge =>
+      canSaveAsHueScene && dynamicPalette != null && group?.idV1 != null;
+
+  /// Saves the effect as a dynamic Hue scene and has the bridge recall it
+  /// at [hour]:[minute] on [days] (none: once), and switch the room off
+  /// at the stop time if one is given. Runs with the phone off.
+  Future<void> scheduleOnBridge({
+    required String name,
+    required int hour,
+    required int minute,
+    required List<int> days,
+    int? stopHour,
+    int? stopMinute,
+  }) async {
+    final groupId = group?.idV1;
+    final client = _bridge.client;
+    if (!canScheduleOnBridge || groupId == null || client == null) {
+      throw const HueException('Play the effect on a room or zone first');
+    }
+    final scene = await saveAsHueScene(name, dynamic: true);
+    final sceneId = scene?.idV1;
+    if (sceneId == null) {
+      throw const HueException('The bridge did not create the scene');
+    }
+    await client.createEffectSchedule(HueEffectScheduleDraft(
+      name: name,
+      groupId: groupId,
+      sceneId: sceneId,
+      hour: hour,
+      minute: minute,
+      days: days,
+      stopHour: stopHour,
+      stopMinute: stopMinute,
+    ));
   }
 
   /// Moves the playlist on to its next effect now.
@@ -524,16 +569,94 @@ class PlaybackController extends ChangeNotifier {
   /// The effect with the chosen colour variant applied.
   LightingEffect get effectToPlay => effect.withVariant(variantId);
 
-  /// Plays [next] instead of the current effect, leaving any playlist.
-  /// When idle it is only selected; while playing or paused the lights
-  /// cross-fade to it without being put back in between, and Music Sync
-  /// starts or stops as needed.
+  /// Plays [next] instead of the current effect, leaving any playlist
+  /// or bedtime. When idle it is only selected; while playing or paused
+  /// the lights cross-fade to it without being put back in between, and
+  /// Music Sync starts or stops as needed.
   Future<void> switchEffect(LightingEffect next) async {
     if (_playlist != null) {
       _endPlaylist();
       _notify();
     }
+    _endBedtime();
     await _switchEffect(next);
+  }
+
+  /// The night glow bedtime ends with.
+  static const bedtimeGlowId = 'goodnight_glow';
+
+  /// Bedtime is on: [story] now, then the night glow, then lights off.
+  bool get inBedtime => _bedtime != null;
+
+  /// When bedtime moves on to the night glow, and when the lights go off.
+  DateTime? get bedtimeGlowAt => _bedtime?.glowAt;
+  DateTime? get bedtimeOffAt => _bedtime?.offAt;
+
+  /// Bedtime in one tap: [story] for [storyFor] at [brightness], then the
+  /// night glow for [glowFor], then the lights fade out and switch off
+  /// (the sleep timer). Controls and sleep timer go back to what they
+  /// were when bedtime ends.
+  Future<void> startBedtime(
+    LightingEffect story, {
+    required Duration storyFor,
+    required Duration glowFor,
+    double? brightness,
+  }) async {
+    final controls = _controls;
+    final sleep = _sleepAfter;
+    await switchEffect(story);
+    if (brightness != null) {
+      setControls(_controls.copyWith(brightness: brightness));
+    }
+    setSleepTimer(storyFor + glowFor);
+    if (_status == PlaybackStatus.idle) {
+      await start();
+    } else if (_status == PlaybackStatus.paused) {
+      await resume();
+    }
+    if (_status != PlaybackStatus.playing || !identical(_effect, story)) {
+      // It could not start: leave things as they were.
+      setControls(controls);
+      setSleepTimer(sleep);
+      return;
+    }
+    final now = DateTime.now();
+    _bedtime = _Bedtime(
+      storyId: story.id,
+      glowAt: now.add(storyFor),
+      offAt: now.add(storyFor + glowFor),
+      controls: controls,
+      sleepAfter: sleep,
+    );
+    _bedtimeTimer = Timer(storyFor, () {
+      final glow = _resolveEffect(bedtimeGlowId);
+      if (_bedtime != null && glow != null && _player != null) {
+        unawaited(_switchEffect(glow, crossfade: const Duration(seconds: 8)));
+      }
+    });
+    _notify();
+  }
+
+  /// Bedtime is over (stopped, or the user chose something else): the
+  /// brightness and sleep timer from before come back.
+  void _endBedtime() {
+    final bedtime = _bedtime;
+    if (bedtime == null) {
+      return;
+    }
+    _bedtime = null;
+    _bedtimeTimer?.cancel();
+    _bedtimeTimer = null;
+    _controls = bedtime.controls;
+    _player?.controls = bedtime.controls;
+    _sleepAfter = bedtime.sleepAfter;
+    if (_status == PlaybackStatus.playing || _status == PlaybackStatus.paused) {
+      // The user's own timer again, from now (or none).
+      _armSleepTimer();
+    } else {
+      _cancelSleepTimer();
+    }
+    _notify();
   }
 
   Future<void> _switchEffect(
@@ -902,6 +1025,7 @@ class PlaybackController extends ChangeNotifier {
     _restore = const {};
     _activeLightIds = const [];
     _setStatus(PlaybackStatus.idle);
+    _endBedtime();
     final previous = _teardown;
     Future<void>? restoring;
     final stopped = () async {
@@ -1283,6 +1407,7 @@ class PlaybackController extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     _cancelSleepTimer();
+    _bedtimeTimer?.cancel();
     _endPlaylist();
     _stopSound();
     _bridge.removeListener(_onBridgeChanged);
@@ -1500,4 +1625,21 @@ Future<void> restoreLights(
     }
     await Future<void>.delayed(gap);
   }
+}
+
+/// What bedtime remembers to put back when it ends.
+class _Bedtime {
+  const _Bedtime({
+    required this.storyId,
+    required this.glowAt,
+    required this.offAt,
+    required this.controls,
+    required this.sleepAfter,
+  });
+
+  final String storyId;
+  final DateTime glowAt;
+  final DateTime offAt;
+  final EffectControls controls;
+  final Duration? sleepAfter;
 }

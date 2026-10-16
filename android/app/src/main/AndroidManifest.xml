@@ -70,6 +70,10 @@
                 <data android:scheme="lumifx" />
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+            <!-- Voice commands through Google Assistant (App Actions). -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <receiver
             android:name=".FavoritesWidgetProvider"

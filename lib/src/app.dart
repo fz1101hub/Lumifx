@@ -9,6 +9,7 @@ import 'core/hue/hue_discovery.dart';
 import 'core/screen_wake.dart';
 import 'core/sound/sound_player.dart';
 import 'features/tv/camera_input.dart';
+import 'features/buttons/hue_button_listener.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
 import 'features/effects/catalog/effect_catalog.dart';
@@ -92,6 +93,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   late final EffectLibrary _library = EffectLibrary(widget.preferences);
   late final PlaybackController _playback;
   late final LinkHandler _links;
+  late final HueButtonListener _buttons;
   StreamSubscription<PlaybackNotice>? _notices;
 
   @override
@@ -124,6 +126,12 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       bridge: widget.bridge,
       navigatorKey: _navigatorKey,
     );
+    _buttons = HueButtonListener(
+      bridge: widget.bridge,
+      preferences: widget.preferences,
+      playback: _playback,
+      library: _library,
+    )..start();
     // Opened from a link: the platform hands it over as the first route.
     final initial = AppLink.parse(
         WidgetsBinding.instance.platformDispatcher.defaultRouteName);
@@ -243,6 +251,14 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
       unawaited(_playback.handleAppPaused());
+      // Hue buttons keep working while an effect plays on with the screen
+      // off; otherwise the app is suspended and the connection with it.
+      if (_playback.status != PlaybackStatus.playing ||
+          !_playback.keepPlayingInBackground) {
+        _buttons.pause();
+      }
+    } else if (state == AppLifecycleState.resumed) {
+      _buttons.resume();
     }
   }
 
@@ -258,6 +274,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     }
     widget.bridge.removeListener(_maybeWelcome);
     unawaited(_notices?.cancel());
+    _buttons.dispose();
     _playback.dispose();
     _routes.dispose();
     super.dispose();

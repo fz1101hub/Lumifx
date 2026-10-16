@@ -1,5 +1,6 @@
 import '../../../core/effects/effect.dart';
 import 'builtin_adventures.dart';
+import 'builtin_holidays.dart';
 import 'builtin_interactive.dart';
 import 'builtin_scenes.dart';
 import 'builtin_seasonal.dart';
@@ -11,6 +12,7 @@ final List<LightingEffect> effectCatalog = [
   ...builtinStories,
   ...builtinAdventures,
   ...builtinSeasonal,
+  ...builtinHolidays,
   ...builtinInteractive,
 ];
 

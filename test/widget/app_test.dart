@@ -146,6 +146,42 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('bedtime starts a calm story with its words, then glows',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Bedtime'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('Bedtime'));
+    await tester.pumpAndSettle();
+    expect(find.text('Sleeping Dragon'), findsOneWidget);
+    // Nothing that flashes is offered at bedtime.
+    await tester.tap(find.text('Sleeping Dragon'));
+    await tester.pumpAndSettle();
+    expect(find.text('Haunted Manor'), findsNothing);
+    expect(find.text('Silent Snowfall'), findsWidgets);
+    await tester.tap(find.text('Silent Snowfall').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('5 min').first);
+    await tester.pump();
+
+    await tester.scrollUntilVisible(find.text('Start bedtime'), 200);
+    await tester.tap(find.text('Start bedtime'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Silent Snowfall'), findsOneWidget, reason: 'player');
+    expect(find.text('Outside, the world is quiet.'), findsOneWidget);
+    expect(find.textContaining('night glow at'), findsOneWidget);
+    expect(find.text('Pause'), findsOneWidget);
+
+    await tester.tap(find.text('Pause'));
+    await tester.pump();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));
@@ -291,6 +327,41 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Thunderstorm'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('voice commands play, start bedtime and stop in any language',
+      (tester) async {
+    await _pumpApp(tester);
+    Future<void> say(String words) async {
+      final message = const JSONMethodCodec().encodeMethodCall(
+        MethodCall('pushRouteInformation',
+            {'location': 'lumifx://app/voice/${Uri.encodeComponent(words)}'}),
+      );
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+          SystemChannels.navigation.name, message, (_) {});
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    await say('Camino');
+    expect(find.text('Fireplace'), findsOneWidget);
+    expect(find.text('Pause'), findsOneWidget);
+
+    await say('ferma');
+    expect(find.text('Play'), findsOneWidget);
+
+    await say('Kaminfeuer bitte');
+    expect(find.text('Pause'), findsOneWidget, reason: 'found inside a phrase');
+
+    await say('nanna');
+    // The player opens once bedtime has started.
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Sleeping Dragon'), findsOneWidget);
+    expect(find.textContaining('night glow at'), findsOneWidget);
+
+    await say('Stop');
     expect(find.text('Play'), findsOneWidget);
     await tester.pumpAndSettle();
   });
@@ -1007,6 +1078,31 @@ Future<BridgeController> _connectedBridge(
           });
         }
         switch (request.url.path) {
+          case '/api/key/schedules':
+            return json({
+              '7': {
+                'name': 'Evening fire',
+                'description': 'lumifx:abc:start',
+                'command': {
+                  'address': '/api/key/groups/1/action',
+                  'method': 'PUT',
+                  'body': {'scene': 'V1'},
+                },
+                'localtime': 'W003/T20:00:00',
+                'status': 'enabled',
+              },
+              '8': {
+                'name': 'Evening fire',
+                'description': 'lumifx:abc:stop',
+                'command': {
+                  'address': '/api/key/groups/1/action',
+                  'method': 'PUT',
+                  'body': {'on': false},
+                },
+                'localtime': 'W003/T22:00:00',
+                'status': 'enabled',
+              },
+            });
           case '/clip/v2/resource/behavior_script':
             return json({
               'data': [
@@ -1123,6 +1219,8 @@ void streamingTests() {
     ));
     await tester.scrollUntilVisible(find.text('Rooms & zones'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Rooms & zones'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Rooms & zones'));
     await tester.pumpAndSettle();
     expect(find.text('Living room'), findsOneWidget);
@@ -1249,6 +1347,8 @@ void streamingTests() {
     ));
     await tester.scrollUntilVisible(find.text('Wake-up & bedtime'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Wake-up & bedtime'));
+    await tester.pumpAndSettle();
     await tester.runAsync(() async {
       await tester.tap(find.text('Wake-up & bedtime'));
       await Future<void>.delayed(const Duration(milliseconds: 300));
@@ -1258,10 +1358,14 @@ void streamingTests() {
     expect(find.textContaining('7:00 AM · Mon, Tue, Wed, Thu, Fri'),
         findsOneWidget);
     expect(find.textContaining('Living room · 30 min'), findsOneWidget);
+    // Effects LumiFX scheduled on the bridge, below the routines.
+    expect(find.text('Scheduled effects'), findsOneWidget);
+    expect(find.text('Evening fire'), findsOneWidget);
+    expect(find.textContaining('until 10:00 PM'), findsOneWidget);
 
     // Switch it off.
     await tester.runAsync(() async {
-      await tester.tap(find.byType(Switch));
+      await tester.tap(find.byType(Switch).first);
       await Future<void>.delayed(const Duration(milliseconds: 300));
     });
     await tester.pumpAndSettle();
