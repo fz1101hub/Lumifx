@@ -10,6 +10,8 @@ import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/screen_wake.dart';
+import 'package:lumifx/src/core/effects/effect.dart';
+import 'package:lumifx/src/features/effects/catalog/builtin_stories.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/catalog/builtin_interactive.dart';
@@ -133,6 +135,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
   MusicSource musicSource = MusicSource.microphone,
   PreferencesController? preferences,
   bool music = false,
+  LightingEffect? effect,
   math.Random? random,
   Duration sleepFade = const Duration(seconds: 20),
 }) async {
@@ -154,7 +157,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
   await preferences.setMusicSource(musicSource);
   final wake = _RecordingWake();
   final controller = PlaybackController(
-    effect: music ? moodGlow : ocean,
+    effect: effect ?? (music ? moodGlow : ocean),
     bridge: bridge,
     preferences: preferences,
     audioInput: audio ?? FakeAudioInput(),
@@ -597,6 +600,28 @@ void main() {
     expect(white.containsKey('color_temperature'), isTrue);
     await controller.stop();
     controller.dispose();
+  });
+
+  test('an ambient effect can be saved as a scene that keeps moving', () async {
+    final (controller, fake, _) = await _setUp();
+    await controller.start();
+    final palette = controller.dynamicPalette!;
+    expect(palette.colors, hasLength(4), reason: "Ocean's palette");
+    expect(palette.speed, inInclusiveRange(0.05, 1.0));
+    await controller.saveAsHueScene('Waves', dynamic: true);
+    final (_, body) = fake.posts.single;
+    expect(body['auto_dynamic'], isTrue);
+    expect(body['speed'], closeTo(palette.speed, 0.001));
+    final colours = ((body['palette']! as Map)['color']! as List);
+    expect(colours, hasLength(4));
+    expect((colours.first as Map).containsKey('dimming'), isTrue);
+    await controller.stop();
+    controller.dispose();
+
+    // Stories have events the bridge cannot play: no dynamic palette.
+    final (story, _, _) = await _setUp(effect: emeraldTrickster);
+    expect(story.dynamicPalette, isNull);
+    story.dispose();
   });
 
   test('changing the target while playing restarts on the new one', () async {

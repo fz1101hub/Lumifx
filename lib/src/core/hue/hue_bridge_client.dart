@@ -228,9 +228,11 @@ class HueBridgeClient {
     );
   }
 
-  /// Shows a scene on its room or zone, as the Hue app does.
-  Future<void> recallScene(String sceneId) => _put('scene/$sceneId', {
-        'recall': {'action': 'active'},
+  /// Shows a scene on its room or zone, as the Hue app does: a dynamic
+  /// scene starts moving through its palette.
+  Future<void> recallScene(String sceneId, {bool dynamic = false}) =>
+      _put('scene/$sceneId', {
+        'recall': {'action': dynamic ? 'dynamic_palette' : 'active'},
       });
 
   /// The longest scene name the bridge accepts.
@@ -239,10 +241,15 @@ class HueBridgeClient {
   /// Saves a scene on [group] with one action per light and returns its
   /// id. It then shows up in the Hue app, on switches and in voice
   /// assistants like any scene made there.
+  ///
+  /// With a [palette] the scene is dynamic: recalled from the Hue app,
+  /// a switch or a voice assistant it keeps moving through those colours
+  /// by itself, without LumiFX.
   Future<String> createScene({
     required String name,
     required HueGroup group,
     required Map<String, HueLightCommand> actions,
+    HueScenePalette? palette,
   }) async {
     final trimmed = name.trim();
     final response = await _client
@@ -270,6 +277,11 @@ class HueBridgeClient {
                   ).toJson(),
                 },
             ],
+            if (palette != null) ...{
+              'palette': palette.toJson(),
+              'speed': _round(palette.speed.clamp(0.0, 1.0), 3),
+              'auto_dynamic': true,
+            },
           }),
         )
         .timeout(_timeout);
@@ -430,3 +442,6 @@ List<Map<String, Object?>> _list(Object? value) => value is List
           if (item is Map) item.cast<String, Object?>()
       ]
     : const [];
+
+double _round(double value, int digits) =>
+    double.parse(value.toStringAsFixed(digits));

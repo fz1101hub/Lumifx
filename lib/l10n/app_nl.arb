@@ -328,5 +328,7 @@
   "deleteSceneDescription": "Hij wordt ook uit favorieten en afspeellijsten verwijderd.",
   "widgetEmpty": "Markeer effecten met een ster in LumiFX om ze hier te zien.",
   "keepPlayingScreenOff": "Doorspelen met scherm uit",
-  "keepPlayingScreenOffDescription": "Effecten op je lampen gaan door als de telefoon vergrendelt, met een melding om ze te stoppen. Kost iets meer batterij."
+  "keepPlayingScreenOffDescription": "Effecten op je lampen gaan door als de telefoon vergrendelt, met een melding om ze te stoppen. Kost iets meer batterij.",
+  "sceneKeepsMoving": "Blijft bewegen",
+  "sceneKeepsMovingDescription": "De scène gaat vanzelf door de kleuren van het effect, ook als LumiFX dicht is."
 }

@@ -328,5 +328,7 @@
   "deleteSceneDescription": "Viene tolta anche dai preferiti e dalle playlist.",
   "widgetEmpty": "Aggiungi effetti ai preferiti in LumiFX per vederli qui.",
   "keepPlayingScreenOff": "Continua a schermo spento",
-  "keepPlayingScreenOffDescription": "Gli effetti sulle luci continuano quando il telefono si blocca, con una notifica per fermarli. Consuma un po' più di batteria."
+  "keepPlayingScreenOffDescription": "Gli effetti sulle luci continuano quando il telefono si blocca, con una notifica per fermarli. Consuma un po' più di batteria.",
+  "sceneKeepsMoving": "Continua a muoversi",
+  "sceneKeepsMovingDescription": "La scena passa da sola tra i colori dell'effetto, anche con LumiFX chiusa."
 }

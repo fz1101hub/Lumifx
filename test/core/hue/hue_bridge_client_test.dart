@@ -180,6 +180,15 @@ void main() {
                   'metadata': {'name': 'Bright'},
                   'group': {'rid': 'z1', 'rtype': 'zone'},
                   'status': {'active': 'inactive'},
+                  'palette': {
+                    'color': [
+                      {
+                        'color': {
+                          'xy': {'x': 0.6, 'y': 0.3},
+                        },
+                      },
+                    ],
+                  },
                 },
               ],
             });
@@ -193,10 +202,17 @@ void main() {
     expect(home.scenesOf('z1').single.isActive, isFalse);
     expect(home.scenesOf('nope'), isEmpty);
 
+    expect(home.scenesOf('r1').single.isDynamic, isFalse);
+    expect(home.scenesOf('z1').single.isDynamic, isTrue);
+
     await client.recallScene('s1');
     expect(puts.single.$1, '/clip/v2/resource/scene/s1');
     expect(jsonDecode(puts.single.$2), {
       'recall': {'action': 'active'},
+    });
+    await client.recallScene('s2', dynamic: true);
+    expect(jsonDecode(puts.last.$2), {
+      'recall': {'action': 'dynamic_palette'},
     });
   });
 

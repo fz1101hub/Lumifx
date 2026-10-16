@@ -328,5 +328,7 @@
   "deleteSceneDescription": "Ela também é removida dos favoritos e das playlists.",
   "widgetEmpty": "Marque efeitos como favoritos no LumiFX para vê-los aqui.",
   "keepPlayingScreenOff": "Continuar com a tela desligada",
-  "keepPlayingScreenOffDescription": "Os efeitos nas luzes continuam quando o celular bloqueia, com uma notificação para pará-los. Gasta um pouco mais de bateria."
+  "keepPlayingScreenOffDescription": "Os efeitos nas luzes continuam quando o celular bloqueia, com uma notificação para pará-los. Gasta um pouco mais de bateria.",
+  "sceneKeepsMoving": "Continua em movimento",
+  "sceneKeepsMovingDescription": "A cena passa sozinha pelas cores do efeito, mesmo com o LumiFX fechado."
 }

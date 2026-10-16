@@ -878,5 +878,13 @@
   "keepPlayingScreenOffDescription": "Effects on your lights go on when the phone locks, with a notification to stop them. Uses a little more battery.",
   "@keepPlayingScreenOffDescription": {
     "description": "Explains the screen-off setting"
+  },
+  "sceneKeepsMoving": "Keep moving",
+  "@sceneKeepsMoving": {
+    "description": "Save-as-scene option: a dynamic Hue scene"
+  },
+  "sceneKeepsMovingDescription": "The scene drifts through the effect's colours by itself, even with LumiFX closed.",
+  "@sceneKeepsMovingDescription": {
+    "description": "Explains the dynamic scene option"
   }
 }

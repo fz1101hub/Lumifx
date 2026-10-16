@@ -4,7 +4,9 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 
 import '../../core/audio/audio_input.dart';
+import '../../core/color/light_color.dart';
 import '../../core/effects/effect.dart';
+import '../../core/effects/effect_event.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/effects/engine/light_output.dart';
@@ -248,10 +250,45 @@ class PlaybackController extends ChangeNotifier {
       _activeLightIds.isNotEmpty &&
       (_status == PlaybackStatus.playing || _status == PlaybackStatus.paused);
 
+  /// The palette a dynamic Hue scene of the current effect would move
+  /// through: for effects made of one drifting palette (the built-in
+  /// ambient scenes and the user's own), null for stories and the like,
+  /// whose events the bridge cannot play.
+  HueScenePalette? get dynamicPalette {
+    final effect = effectToPlay;
+    final events = effect.events
+        .where((e) => e.type == EffectEventTypes.ambientPalette)
+        .toList();
+    if (events.length != 1 || effect.events.length != 1) {
+      return null;
+    }
+    final p = events.single.parameters;
+    final palette = p['palette'];
+    if (palette is! List || palette.length < 2) {
+      return null;
+    }
+    double number(String key, double fallback) =>
+        (p[key] as num?)?.toDouble() ?? fallback;
+    final middle =
+        (number('brightnessMin', 0.3) + number('brightnessMax', 0.8)) / 2;
+    // The renderer's speeds run from about 0.015 (calm) to 0.12 (flames);
+    // the bridge's from 0 to 1.
+    final speed = number('speed', 0.05) * _controls.speed / 0.15;
+    return HueScenePalette(
+      colors: [
+        for (final hex in palette.whereType<String>()) LightColor.fromHex(hex),
+      ],
+      brightness: (middle * _controls.brightness).clamp(0.05, 1.0),
+      speed: speed.clamp(0.05, 1.0),
+    );
+  }
+
   /// Saves what the lights show right now as a scene named [name] in the
   /// room or zone, then refreshes the bridge so it appears with the other
-  /// scenes. Throws when the bridge refuses.
-  Future<HueScene?> saveAsHueScene(String name) async {
+  /// scenes. When [dynamic] and the effect has a [dynamicPalette], the
+  /// scene keeps moving through it on its own. Throws when the bridge
+  /// refuses.
+  Future<HueScene?> saveAsHueScene(String name, {bool dynamic = false}) async {
     final group = this.group;
     final player = _player;
     final home = this.home;
@@ -275,6 +312,7 @@ class PlaybackController extends ChangeNotifier {
       name: name,
       group: group,
       actions: actions,
+      palette: dynamic ? dynamicPalette : null,
     );
     await _bridge.refresh();
     return this.home?.scenes.where((s) => s.id == id).firstOrNull ??

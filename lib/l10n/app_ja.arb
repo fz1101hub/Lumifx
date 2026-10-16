@@ -328,5 +328,7 @@
   "deleteSceneDescription": "お気に入りとプレイリストからも削除されます。",
   "widgetEmpty": "LumiFX で演出をお気に入りにすると、ここに表示されます。",
   "keepPlayingScreenOff": "画面オフでも再生を続ける",
-  "keepPlayingScreenOffDescription": "スマートフォンがロックされても照明の演出を続け、停止用の通知を表示します。バッテリーを少し多く使います。"
+  "keepPlayingScreenOffDescription": "スマートフォンがロックされても照明の演出を続け、停止用の通知を表示します。バッテリーを少し多く使います。",
+  "sceneKeepsMoving": "動き続ける",
+  "sceneKeepsMovingDescription": "LumiFX を閉じていても、シーンが演出の色の間をひとりでに移り変わります。"
 }

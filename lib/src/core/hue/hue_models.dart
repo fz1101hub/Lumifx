@@ -202,17 +202,21 @@ class HueScene {
     required this.name,
     required this.groupId,
     this.isActive = false,
+    this.isDynamic = false,
   });
 
   factory HueScene.fromJson(Map<String, Object?> json) {
     final metadata = _map(json['metadata']);
     final status = _map(json['status'])['active'];
+    final palette = _map(json['palette'])['color'];
     return HueScene(
       id: json['id']! as String,
       name: metadata['name'] as String? ?? 'Scene',
       groupId: _map(json['group'])['rid'] as String? ?? '',
       // `static` or `dynamic_palette` while the scene is showing.
       isActive: status is String && status != 'inactive',
+      isDynamic: json['auto_dynamic'] == true ||
+          (palette is List && palette.isNotEmpty),
     );
   }
 
@@ -224,6 +228,50 @@ class HueScene {
 
   /// The bridge believes the lights currently show this scene.
   final bool isActive;
+
+  /// It has a colour palette to move through (made in the Hue app as a
+  /// dynamic scene, or saved from LumiFX to keep moving).
+  final bool isDynamic;
+}
+
+/// The colours a dynamic Hue scene moves through, and how fast.
+class HueScenePalette {
+  const HueScenePalette({
+    required this.colors,
+    required this.brightness,
+    required this.speed,
+  });
+
+  /// At most [maxColors] are kept.
+  final List<LightColor> colors;
+
+  /// 0..1.
+  final double brightness;
+
+  /// 0..1, the bridge's own scale (1 is fastest).
+  final double speed;
+
+  static const maxColors = 9;
+
+  Map<String, Object> toJson() => {
+        'color': [
+          for (final color in colors.take(maxColors))
+            {
+              'color': {
+                'xy': {
+                  'x': _round(color.toXy().x, 4),
+                  'y': _round(color.toXy().y, 4),
+                },
+              },
+              'dimming': {
+                'brightness': _round((brightness * 100).clamp(1.0, 100.0), 2),
+              },
+            },
+        ],
+        'dimming': const <Object>[],
+        'color_temperature': const <Object>[],
+        'effects': const <Object>[],
+      };
 }
 
 /// A partial state update for one light (Hue API v2 `PUT light`).
