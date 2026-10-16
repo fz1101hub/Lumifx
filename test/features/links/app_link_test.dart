@@ -46,4 +46,12 @@ void main() {
     expect(playlist.nameOrId, 'Rock & roll');
     expect(AppLink.parse(AppLink.stop), isA<StopLink>());
   });
+
+  test('bedtime, and what a voice assistant heard', () {
+    expect(AppLink.parse(AppLink.bedtime), isA<BedtimeLink>());
+    final voice = AppLink.parse('lumifx://app/voice/feu%20de%20chemin%C3%A9e')!
+        as VoiceLink;
+    expect(voice.words, 'feu de cheminée');
+    expect(AppLink.parse('lumifx://app/voice/%20'), isNull);
+  });
 }

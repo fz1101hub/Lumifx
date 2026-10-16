@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Google Assistant App Actions: "Hey Google, open Fireplace in LumiFX",
+     "open bedtime in LumiFX", "open stop in LumiFX". Whatever the person
+     names is handed to lumifx://app/voice/..., which matches it to an
+     effect, a playlist, stop or bedtime in any of the app's languages
+     (lib/src/features/links/link_handler.dart). No static shortcuts: the
+     launcher shortcuts stay the favourites. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <capability android:name="actions.intent.OPEN_APP_FEATURE">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lumifx.lumifx.MainActivity"
+            android:targetPackage="com.lumifx.lumifx">
+            <url-template android:value="lumifx://app/voice/{feature}" />
+            <parameter
+                android:name="feature"
+                android:key="feature" />
+        </intent>
+    </capability>
+</shortcuts>

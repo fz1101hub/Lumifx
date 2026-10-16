@@ -1,0 +1,282 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Play ${effect} in ${applicationName}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avvia ${effect} con ${applicationName}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spiele ${effect} mit ${applicationName}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lance ${effect} avec ${applicationName}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pon ${effect} en ${applicationName}"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speel ${effect} af met ${applicationName}"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque ${effect} no ${applicationName}"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName}で${effect}を再生"
+          }
+        }
+      }
+    },
+    "Start ${effect} with ${applicationName}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metti ${effect} su ${applicationName}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starte ${effect} in ${applicationName}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joue ${effect} dans ${applicationName}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicia ${effect} con ${applicationName}"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start ${effect} in ${applicationName}"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicie ${effect} com o ${applicationName}"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName}で${effect}をつけて"
+          }
+        }
+      }
+    },
+    "Start bedtime in ${applicationName}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avvia la nanna con ${applicationName}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starte Schlafenszeit mit ${applicationName}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lance l'heure du dodo avec ${applicationName}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empieza la hora de dormir con ${applicationName}"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start bedtijd met ${applicationName}"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comece a hora de dormir no ${applicationName}"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName}でおやすみモード"
+          }
+        }
+      }
+    },
+    "${applicationName} bedtime": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nanna con ${applicationName}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} Schlafenszeit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dodo avec ${applicationName}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora de dormir con ${applicationName}"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} bedtijd"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hora de dormir no ${applicationName}"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName}でおやすみ"
+          }
+        }
+      }
+    },
+    "Stop ${applicationName}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferma ${applicationName}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoppe ${applicationName}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrête ${applicationName}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detén ${applicationName}"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop ${applicationName}"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pare o ${applicationName}"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName}を止めて"
+          }
+        }
+      }
+    },
+    "Stop the effect in ${applicationName}": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferma l'effetto di ${applicationName}"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stoppe den Effekt in ${applicationName}"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrête l'effet de ${applicationName}"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para el efecto de ${applicationName}"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop het effect in ${applicationName}"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pare o efeito do ${applicationName}"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName}の効果を止めて"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

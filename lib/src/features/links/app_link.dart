@@ -7,6 +7,10 @@
 ///   lumifx://app/open/ocean                    open the player only
 ///   lumifx://app/playlist/Evening              play a playlist (name or id)
 ///   lumifx://app/stop                          stop and put the lights back
+///   lumifx://app/bedtime                       start bedtime as last set
+///   lumifx://app/voice/camino                  what someone said: an
+///                                              effect, playlist, "stop"
+///                                              or "bedtime", any language
 ///   lumifx://app/import?d=…                    add shared scenes/playlists
 ///
 /// The host is ignored (Android hands the app only the path), and names
@@ -48,6 +52,10 @@ sealed class AppLink {
         return PlaylistLink(name);
       case ['stop']:
         return const StopLink();
+      case ['bedtime']:
+        return const BedtimeLink();
+      case ['voice', final words] when words.trim().isNotEmpty:
+        return VoiceLink(words.trim());
       case ['import']:
         final data = param('d');
         return data == null ? null : ImportLink(data);
@@ -67,6 +75,8 @@ sealed class AppLink {
       Uri(scheme: scheme, host: 'app', path: '/playlist/$name').toString();
 
   static String get stop => '$scheme://app/stop';
+
+  static String get bedtime => '$scheme://app/bedtime';
 
   static String import(String data) => '$scheme://app/import?d=$data';
 }
@@ -98,6 +108,18 @@ class PlaylistLink extends AppLink {
 
 class StopLink extends AppLink {
   const StopLink();
+}
+
+/// Bedtime with the story and times last chosen.
+class BedtimeLink extends AppLink {
+  const BedtimeLink();
+}
+
+/// Words a voice assistant heard, to be matched to something to play.
+class VoiceLink extends AppLink {
+  const VoiceLink(this.words);
+
+  final String words;
 }
 
 /// Scenes and playlists someone shared (see `SharedBundle`).

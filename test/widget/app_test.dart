@@ -331,6 +331,41 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('voice commands play, start bedtime and stop in any language',
+      (tester) async {
+    await _pumpApp(tester);
+    Future<void> say(String words) async {
+      final message = const JSONMethodCodec().encodeMethodCall(
+        MethodCall('pushRouteInformation',
+            {'location': 'lumifx://app/voice/${Uri.encodeComponent(words)}'}),
+      );
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+          SystemChannels.navigation.name, message, (_) {});
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    await say('Camino');
+    expect(find.text('Fireplace'), findsOneWidget);
+    expect(find.text('Pause'), findsOneWidget);
+
+    await say('ferma');
+    expect(find.text('Play'), findsOneWidget);
+
+    await say('Kaminfeuer bitte');
+    expect(find.text('Pause'), findsOneWidget, reason: 'found inside a phrase');
+
+    await say('nanna');
+    // The player opens once bedtime has started.
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Sleeping Dragon'), findsOneWidget);
+    expect(find.textContaining('night glow at'), findsOneWidget);
+
+    await say('Stop');
+    expect(find.text('Play'), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('a link on a cold start waits for the saved scenes to load',
       (tester) async {
     final store = InMemoryKeyValueStore();

@@ -9,6 +9,8 @@ import '../effects/player_route.dart';
 import '../library/effect_library.dart';
 import '../library/preferences_controller.dart';
 import '../library/sharing.dart';
+import '../common/app_text.dart';
+import '../search/effect_search.dart';
 import 'app_link.dart';
 
 /// Carries out [AppLink]s.
@@ -41,6 +43,10 @@ class LinkHandler {
         return _effect(link);
       case PlaylistLink(:final nameOrId):
         return _playlist(nameOrId);
+      case BedtimeLink():
+        return _bedtime();
+      case VoiceLink(:final words):
+        return _voice(words);
       case ImportLink(:final data):
         await _ready();
         final bundle = SharedBundle.decode(data);
@@ -107,6 +113,87 @@ class LinkHandler {
     _showPlayer(playback.effect.id, () => playerRoute(playback.effect));
     return true;
   }
+
+  Future<bool> _bedtime() async {
+    await _ready();
+    final story = library.byId(preferences.bedtimeStory);
+    if (story == null || story.hasRapidFlashes) {
+      return false;
+    }
+    await playback.startBedtime(
+      story,
+      storyFor: Duration(minutes: preferences.bedtimeStoryMinutes),
+      glowFor: Duration(minutes: preferences.bedtimeGlowMinutes),
+      brightness: preferences.bedtimeBrightness,
+    );
+    _showPlayer(story.id, () => playerRoute(story));
+    return playback.inBedtime;
+  }
+
+  /// What a voice assistant heard ("camino", "stop", "nanna"...): an
+  /// effect or playlist by its name in any of the app's languages, or
+  /// stop or bedtime.
+  Future<bool> _voice(String words) async {
+    await _ready();
+    final said = foldForSearch(words).trim();
+    final languages = [
+      for (final locale in AppLocalizations.supportedLocales)
+        lookupAppLocalizations(locale),
+    ];
+    final stops = {
+      for (final l10n in languages) foldForSearch(l10n.stop),
+      ..._stopWords,
+    };
+    final bedtimes = {
+      for (final l10n in languages) foldForSearch(l10n.bedtime),
+      ..._bedtimeWords,
+    };
+    if (stops.contains(said)) {
+      await playback.stop();
+      return true;
+    }
+    if (bedtimes.contains(said)) {
+      return _bedtime();
+    }
+    final names = <(String, LightingEffect)>[
+      for (final kind in EffectKind.values)
+        for (final effect in library.ofKind(kind)) ...[
+          (foldForSearch(effect.id.replaceAll('_', ' ')), effect),
+          (foldForSearch(effect.name), effect),
+          for (final l10n in languages)
+            (foldForSearch(l10n.effectName(effect)), effect),
+        ],
+    ];
+    final effect = names.where((n) => n.$1 == said).firstOrNull?.$2 ??
+        names
+            .where((n) => n.$1.length > 3 && said.contains(n.$1))
+            .firstOrNull
+            ?.$2;
+    if (effect != null) {
+      return _effect(EffectLink(effectId: effect.id));
+    }
+    final playlist = preferences.playlists
+            .where((p) => foldForSearch(p.name) == said)
+            .firstOrNull ??
+        preferences.playlists
+            .where((p) =>
+                p.name.length > 3 && said.contains(foldForSearch(p.name)))
+            .firstOrNull;
+    if (playlist != null) {
+      return _playlist(playlist.id);
+    }
+    return false;
+  }
+
+  /// Besides each language's own word for stop and bedtime.
+  static const _stopWords = {
+    'stop', 'ferma', 'basta', 'spegni', 'stopp', 'halt', 'arrete', //
+    'arreter', 'detener', 'parar', 'ストップ', '止めて', '停止',
+  };
+  static const _bedtimeWords = {
+    'bedtime', 'nanna', 'la nanna', 'schlafenszeit', 'dodo', //
+    'hora de dormir', 'bedtijd', 'おやすみ',
+  };
 
   /// Opens the player unless it is already on top.
   void _showPlayer(String effectId, Route<void> Function() route) {
