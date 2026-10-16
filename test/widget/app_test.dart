@@ -712,6 +712,47 @@ Future<BridgeController> _connectedBridge(
           });
         }
         switch (request.url.path) {
+          case '/clip/v2/resource/behavior_script':
+            return json({
+              'data': [
+                {
+                  'id': 'sleep-script',
+                  'metadata': {'name': 'Basic go to sleep routine'},
+                },
+              ],
+            });
+          case '/clip/v2/resource/behavior_instance':
+            return json({
+              'data': [
+                {
+                  'id': 'w1',
+                  'script_id': HueBridgeClient.wakeUpScriptId,
+                  'enabled': true,
+                  'metadata': {'name': 'School days'},
+                  'configuration': {
+                    'fade_in_duration': {'seconds': 1800},
+                    'when': {
+                      'recurrence_days': [
+                        'monday',
+                        'tuesday',
+                        'wednesday',
+                        'thursday',
+                        'friday',
+                      ],
+                      'time_point': {
+                        'type': 'time',
+                        'time': {'hour': 7, 'minute': 0},
+                      },
+                    },
+                    'where': [
+                      {
+                        'group': {'rid': 'r1', 'rtype': 'room'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            });
           case '/clip/v2/resource/scene':
             return json({
               'data': [
@@ -893,6 +934,55 @@ void streamingTests() {
     await tester.pump();
     expect(find.text('Play'), findsOneWidget);
     await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('wake-up and bedtime routines are listed and created',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Wake-up & bedtime'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Wake-up & bedtime'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pumpAndSettle();
+    expect(find.text('School days'), findsOneWidget);
+    expect(find.textContaining('7:00 AM · Mon, Tue, Wed, Thu, Fri'),
+        findsOneWidget);
+    expect(find.textContaining('Living room · 30 min'), findsOneWidget);
+
+    // Switch it off.
+    await tester.runAsync(() async {
+      await tester.tap(find.byType(Switch));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pumpAndSettle();
+    expect(puts, contains('/clip/v2/resource/behavior_instance/w1'));
+
+    // A new bedtime routine for the living room.
+    await tester.tap(find.text('New routine'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Go to sleep').first);
+    await tester.pump();
+    expect(find.text('10:30 PM'), findsOneWidget);
+    expect(find.text('Every day'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilterChip, 'Living room'));
+    await tester.pump();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Save'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pumpAndSettle();
+    expect(puts, contains('POST /clip/v2/resource/behavior_instance'));
+    expect(find.text('New routine'), findsOneWidget,
+        reason: 'back on the list');
   });
 
   testWidgets('player offers entertainment areas and reports start errors',

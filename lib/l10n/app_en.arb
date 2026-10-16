@@ -886,5 +886,117 @@
   "sceneKeepsMovingDescription": "The scene drifts through the effect's colours by itself, even with LumiFX closed.",
   "@sceneKeepsMovingDescription": {
     "description": "Explains the dynamic scene option"
+  },
+  "routines": "Wake-up & bedtime",
+  "@routines": {
+    "description": "Home card and screen title: wake-up and bedtime routines on the bridge"
+  },
+  "routinesSubtitle": "Lights that wake you gently and dim at night, even with the phone off.",
+  "@routinesSubtitle": {
+    "description": "Home card subtitle for routines"
+  },
+  "routinesDescription": "These routines are stored on your Hue Bridge and run at their time by themselves, like the ones made in the Hue app (which appear here too).",
+  "@routinesDescription": {
+    "description": "Explains routines"
+  },
+  "noRoutinesYet": "No wake-up or bedtime routines yet.",
+  "@noRoutinesYet": {
+    "description": "Empty state of the routines screen"
+  },
+  "newRoutine": "New routine",
+  "@newRoutine": {
+    "description": "Button and title: new routine"
+  },
+  "routineWakeUp": "Wake up",
+  "@routineWakeUp": {
+    "description": "Routine kind: lights brighten before an alarm"
+  },
+  "routineGoToSleep": "Go to sleep",
+  "@routineGoToSleep": {
+    "description": "Routine kind: lights dim at bedtime"
+  },
+  "routineWakeUpDescription": "The lights slowly brighten until the chosen time, like a sunrise.",
+  "@routineWakeUpDescription": {
+    "description": "Explains the wake-up routine"
+  },
+  "routineGoToSleepDescription": "At the chosen time the lights slowly dim, then switch off.",
+  "@routineGoToSleepDescription": {
+    "description": "Explains the bedtime routine"
+  },
+  "routineLightsOnAt": "Fully on at",
+  "@routineLightsOnAt": {
+    "description": "Editor: time the lights are fully on"
+  },
+  "routineLightsOffAt": "Start dimming at",
+  "@routineLightsOffAt": {
+    "description": "Editor: time the lights start dimming"
+  },
+  "routineDays": "Days",
+  "@routineDays": {
+    "description": "Editor: days"
+  },
+  "routineOnce": "Once",
+  "@routineOnce": {
+    "description": "Routine runs once (no days chosen)"
+  },
+  "routineEveryDay": "Every day",
+  "@routineEveryDay": {
+    "description": "Routine runs every day"
+  },
+  "routineRooms": "Rooms and zones",
+  "@routineRooms": {
+    "description": "Editor: rooms and zones"
+  },
+  "routineFadeIn": "Brightens over",
+  "@routineFadeIn": {
+    "description": "Editor: how long the lights brighten"
+  },
+  "routineFadeOut": "Dims over",
+  "@routineFadeOut": {
+    "description": "Editor: how long the lights dim"
+  },
+  "routineSunrise": "Sunrise colours",
+  "@routineSunrise": {
+    "description": "Editor: sunrise colours for wake up"
+  },
+  "routineSunriseDescription": "Deep red, then orange, then daylight. Colour lights only; others brighten in white.",
+  "@routineSunriseDescription": {
+    "description": "Explains sunrise colours"
+  },
+  "deleteRoutineQuestion": "Delete \"{name}\"?",
+  "@deleteRoutineQuestion": {
+    "description": "Confirm deleting a routine",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "couldNotLoadRoutines": "The routines could not be loaded: {reason}",
+  "@couldNotLoadRoutines": {
+    "description": "Error loading routines",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "couldNotSaveRoutine": "The routine could not be saved: {reason}",
+  "@couldNotSaveRoutine": {
+    "description": "Error saving a routine",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "couldNotUpdateRoutine": "The routine could not be changed: {reason}",
+  "@couldNotUpdateRoutine": {
+    "description": "Error changing a routine",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
   }
 }

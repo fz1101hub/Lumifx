@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
+import '../automations/automations_screen.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
@@ -100,6 +101,20 @@ class HomeScreen extends StatelessWidget {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
                         builder: (_) => const RoomsScreen()),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Card(
+                child: ListTile(
+                  minVerticalPadding: 20,
+                  leading: const Icon(Icons.alarm),
+                  title: Text(l10n.routines),
+                  subtitle: Text(l10n.routinesSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) => const AutomationsScreen()),
                   ),
                 ),
               ),
