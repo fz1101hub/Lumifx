@@ -285,6 +285,8 @@ Paste this in "Notes for review":
 > requested only when TV Sync (Interactive › TV Sync) is started: the
 > camera looks at the TV and a few pixels of each frame are averaged on the
 > device to colour the lights; nothing is recorded or transmitted.
+> Siri phrases (iOS) and Google Assistant App Actions only open LumiFX's
+> own links; no speech is handled by the app itself.
 >
 > The app is not affiliated with Signify / Philips Hue.
 

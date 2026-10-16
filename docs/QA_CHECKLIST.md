@@ -219,6 +219,32 @@ build before every store release.
       stops TV Sync and puts the lights back. Refusing the camera shows the
       explanation and nothing plays.
 
+## This round: bedtime, schedules, buttons, voice, holidays
+
+- [ ] Bedtime: Home › Bedtime with Silent Snowfall, 5 min story, 5 min
+      glow: the story plays dimmer with its words, after 5 minutes it
+      cross-fades to Goodnight Glow, after 10 the lights fade out and stay
+      off. The next time the same choices are already set.
+- [ ] Schedule: play Ocean on a room, Schedule › in 3 minutes, today only,
+      switch off 2 minutes later. With the phone locked the room turns on
+      in Ocean's colours and keeps moving (if it stays still, note it: the
+      scene is recalled through the bridge's older API), then switches
+      off. Wake-up & bedtime lists it; the switch pauses it; delete removes
+      it and its scene from the Hue app.
+- [ ] Hue buttons: give a dimmer's button 1 Aurora and button 4 Stop, set
+      them to do nothing in the Hue app. A short press plays Aurora, again
+      stops it; button 4 stops anything. Works with the screen off while an
+      effect plays (Android); after reopening the app it still works.
+- [ ] Siri (iOS 16+): "Play Fireplace in LumiFX", in Italian "Avvia Camino
+      con LumiFX", "Start bedtime in LumiFX", "Stop LumiFX". The phrases
+      appear in the Shortcuts app under LumiFX.
+- [ ] Google Assistant (Android, app installed from Play internal testing):
+      "Open Fireplace in LumiFX", "Apri nanna su LumiFX". If the Assistant
+      opens only the app, App Actions may need the app on Play first.
+- [ ] Holiday shelves: set the phone's date to 30 Dec (Happy New Year),
+      10 Feb (Valentine's Day), the week before Carnival and the week before
+      Easter: each shows its story first; nothing in them flashes.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

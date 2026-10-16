@@ -1736,5 +1736,133 @@
         "type": "String"
       }
     }
+  },
+  "effectNameNewYearCountdown": "New Year's Countdown",
+  "@effectNameNewYearCountdown": {
+    "description": "Name of the New Year story"
+  },
+  "effectDescriptionNewYearCountdown": "Ten golden ticks to midnight, then fireworks.",
+  "@effectDescriptionNewYearCountdown": {
+    "description": "Description of the New Year story"
+  },
+  "effectNameValentinesGlow": "Valentine's Glow",
+  "@effectNameValentinesGlow": {
+    "description": "Name of the Valentine's Day story"
+  },
+  "effectDescriptionValentinesGlow": "A little heart floats from lamp to lamp. Then the room blushes.",
+  "@effectDescriptionValentinesGlow": {
+    "description": "Description of the Valentine's Day story"
+  },
+  "effectNameCarnivalParade": "Carnival Parade",
+  "@effectNameCarnivalParade": {
+    "description": "Name of the Carnival story"
+  },
+  "effectDescriptionCarnivalParade": "Masks, a marching parade and confetti in every colour.",
+  "@effectDescriptionCarnivalParade": {
+    "description": "Description of the Carnival story"
+  },
+  "effectNameEasterEggHunt": "Easter Egg Hunt",
+  "@effectNameEasterEggHunt": {
+    "description": "Name of the Easter story"
+  },
+  "effectDescriptionEasterEggHunt": "A bunny hops through the garden. Can you spot the eggs?",
+  "@effectDescriptionEasterEggHunt": {
+    "description": "Description of the Easter story"
+  },
+  "seasonNewYear": "Happy New Year",
+  "@seasonNewYear": {
+    "description": "Home shelf title around New Year"
+  },
+  "seasonValentine": "Valentine's Day",
+  "@seasonValentine": {
+    "description": "Home shelf title before Valentine's Day"
+  },
+  "seasonCarnival": "Carnival time",
+  "@seasonCarnival": {
+    "description": "Home shelf title at Carnival time"
+  },
+  "seasonEaster": "Easter is coming",
+  "@seasonEaster": {
+    "description": "Home shelf title before Easter"
+  },
+  "collectionNewYear": "New Year",
+  "@collectionNewYear": {
+    "description": "Collection of New Year effects"
+  },
+  "collectionValentine": "Valentine's Day",
+  "@collectionValentine": {
+    "description": "Collection of Valentine's Day effects"
+  },
+  "collectionCarnival": "Carnival",
+  "@collectionCarnival": {
+    "description": "Collection of Carnival effects"
+  },
+  "collectionEaster": "Easter",
+  "@collectionEaster": {
+    "description": "Collection of Easter effects"
+  },
+  "narrationNewYearCountdown1": "The last night of the year. Everyone is waiting…",
+  "@narrationNewYearCountdown1": {
+    "description": "Read-along line of the New Year story"
+  },
+  "narrationNewYearCountdown2": "Ten… nine… eight… let's count down together!",
+  "@narrationNewYearCountdown2": {
+    "description": "Read-along line of the New Year story"
+  },
+  "narrationNewYearCountdown3": "Happy New Year!",
+  "@narrationNewYearCountdown3": {
+    "description": "Read-along line of the New Year story"
+  },
+  "narrationNewYearCountdown4": "Fireworks fill the sky in every colour.",
+  "@narrationNewYearCountdown4": {
+    "description": "Read-along line of the New Year story"
+  },
+  "narrationValentinesGlow1": "A soft pink glow fills the room.",
+  "@narrationValentinesGlow1": {
+    "description": "Read-along line of the Valentine's Day story"
+  },
+  "narrationValentinesGlow2": "A little heart floats from lamp to lamp.",
+  "@narrationValentinesGlow2": {
+    "description": "Read-along line of the Valentine's Day story"
+  },
+  "narrationValentinesGlow3": "It leaves sparkles wherever it goes.",
+  "@narrationValentinesGlow3": {
+    "description": "Read-along line of the Valentine's Day story"
+  },
+  "narrationValentinesGlow4": "Then the whole room glows with love.",
+  "@narrationValentinesGlow4": {
+    "description": "Read-along line of the Valentine's Day story"
+  },
+  "narrationCarnivalParade1": "Music and masks: the carnival is starting!",
+  "@narrationCarnivalParade1": {
+    "description": "Read-along line of the Carnival story"
+  },
+  "narrationCarnivalParade2": "Here comes the parade, step by step.",
+  "@narrationCarnivalParade2": {
+    "description": "Read-along line of the Carnival story"
+  },
+  "narrationCarnivalParade3": "Streamers fly from one side to the other!",
+  "@narrationCarnivalParade3": {
+    "description": "Read-along line of the Carnival story"
+  },
+  "narrationCarnivalParade4": "Confetti everywhere, in every colour!",
+  "@narrationCarnivalParade4": {
+    "description": "Read-along line of the Carnival story"
+  },
+  "narrationEasterEggHunt1": "Spring sunshine over the garden.",
+  "@narrationEasterEggHunt1": {
+    "description": "Read-along line of the Easter story"
+  },
+  "narrationEasterEggHunt2": "A little bunny hops from bush to bush.",
+  "@narrationEasterEggHunt2": {
+    "description": "Read-along line of the Easter story"
+  },
+  "narrationEasterEggHunt3": "Look! A painted egg behind the flowers.",
+  "@narrationEasterEggHunt3": {
+    "description": "Read-along line of the Easter story"
+  },
+  "narrationEasterEggHunt4": "You found them all. Happy Easter!",
+  "@narrationEasterEggHunt4": {
+    "description": "Read-along line of the Easter story"
   }
 }

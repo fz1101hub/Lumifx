@@ -37,6 +37,10 @@ enum LumiFXEffect: String, AppEnum {
   case candlelightCarol = "candlelight_carol"
   case tvSync = "tv_sync"
   case goodnightGlow = "goodnight_glow"
+  case newYearCountdown = "new_year_countdown"
+  case valentinesGlow = "valentines_glow"
+  case carnivalParade = "carnival_parade"
+  case easterEggHunt = "easter_egg_hunt"
 
   static var typeDisplayRepresentation: TypeDisplayRepresentation = "Effect"
 
@@ -72,6 +76,10 @@ enum LumiFXEffect: String, AppEnum {
     .candlelightCarol: "Candlelight Carol",
     .tvSync: "TV Sync",
     .goodnightGlow: "Goodnight Glow",
+    .newYearCountdown: "New Year's Countdown",
+    .valentinesGlow: "Valentine's Glow",
+    .carnivalParade: "Carnival Parade",
+    .easterEggHunt: "Easter Egg Hunt",
   ]
 }
 

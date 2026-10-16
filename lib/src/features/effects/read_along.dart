@@ -121,6 +121,30 @@ final Map<String, List<NarrationLine>> storyNarration = {
     (26, (l) => l.narrationSilentSnowfall3),
     (40, (l) => l.narrationSilentSnowfall4),
   ],
+  'new_year_countdown': [
+    (0, (l) => l.narrationNewYearCountdown1),
+    (9, (l) => l.narrationNewYearCountdown2),
+    (20, (l) => l.narrationNewYearCountdown3),
+    (22, (l) => l.narrationNewYearCountdown4),
+  ],
+  'valentines_glow': [
+    (0, (l) => l.narrationValentinesGlow1),
+    (6, (l) => l.narrationValentinesGlow2),
+    (15, (l) => l.narrationValentinesGlow3),
+    (24, (l) => l.narrationValentinesGlow4),
+  ],
+  'carnival_parade': [
+    (0, (l) => l.narrationCarnivalParade1),
+    (4, (l) => l.narrationCarnivalParade2),
+    (12, (l) => l.narrationCarnivalParade3),
+    (18, (l) => l.narrationCarnivalParade4),
+  ],
+  'easter_egg_hunt': [
+    (0, (l) => l.narrationEasterEggHunt1),
+    (5, (l) => l.narrationEasterEggHunt2),
+    (14, (l) => l.narrationEasterEggHunt3),
+    (34, (l) => l.narrationEasterEggHunt4),
+  ],
   'candlelight_carol': [
     (0, (l) => l.narrationCandlelightCarol1),
     (2, (l) => l.narrationCandlelightCarol2),

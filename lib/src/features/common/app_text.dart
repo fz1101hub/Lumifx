@@ -129,6 +129,10 @@ extension EffectText on AppLocalizations {
         'santas_workshop' => effectNameSantasWorkshop,
         'silent_snowfall' => effectNameSilentSnowfall,
         'candlelight_carol' => effectNameCandlelightCarol,
+        'new_year_countdown' => effectNameNewYearCountdown,
+        'valentines_glow' => effectNameValentinesGlow,
+        'carnival_parade' => effectNameCarnivalParade,
+        'easter_egg_hunt' => effectNameEasterEggHunt,
         _ => effect.name,
       };
 
@@ -164,6 +168,10 @@ extension EffectText on AppLocalizations {
         'santas_workshop' => effectDescriptionSantasWorkshop,
         'silent_snowfall' => effectDescriptionSilentSnowfall,
         'candlelight_carol' => effectDescriptionCandlelightCarol,
+        'new_year_countdown' => effectDescriptionNewYearCountdown,
+        'valentines_glow' => effectDescriptionValentinesGlow,
+        'carnival_parade' => effectDescriptionCarnivalParade,
+        'easter_egg_hunt' => effectDescriptionEasterEggHunt,
         _ => effect.description,
       };
 
@@ -198,6 +206,10 @@ extension EffectText on AppLocalizations {
         'Dinosaurs' => collectionDinosaurs,
         'Underwater' => collectionUnderwater,
         'Music Sync' => collectionMusicSync,
+        'New Year' => collectionNewYear,
+        'Valentine' => collectionValentine,
+        'Carnival' => collectionCarnival,
+        'Easter' => collectionEaster,
         final other => other,
       };
 }

@@ -69,6 +69,10 @@ class HomeScreen extends StatelessWidget {
             if (seasonOf(AppScope.of(context).clock()) case final season?)
               _EffectShelf(
                 title: switch (season) {
+                  Season.newYear => l10n.seasonNewYear,
+                  Season.valentine => l10n.seasonValentine,
+                  Season.carnival => l10n.seasonCarnival,
+                  Season.easter => l10n.seasonEaster,
                   Season.halloween => l10n.seasonHalloween,
                   Season.christmas => l10n.seasonChristmas,
                 },
