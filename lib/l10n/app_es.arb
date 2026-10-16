@@ -374,5 +374,8 @@
   "noEffectsFound": "No se encontraron efectos.",
   "myStories": "Mis historias",
   "severalRooms": "Varias habitaciones…",
-  "severalRoomsHint": "Con muchas luces el puente actualiza cada una algo menos a menudo; para el efecto más fluido, usa un área de entretenimiento."
+  "severalRoomsHint": "Con muchas luces el puente actualiza cada una algo menos a menudo; para el efecto más fluido, usa un área de entretenimiento.",
+  "sound": "Sonido",
+  "soundDescription": "Lluvia, fuego, olas o viento desde este teléfono, con el trueno después del rayo.",
+  "volume": "Volumen"
 }

@@ -7,6 +7,7 @@ import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
 import 'core/screen_wake.dart';
+import 'core/sound/sound_player.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
 import 'features/effects/catalog/effect_catalog.dart';
@@ -35,6 +36,7 @@ class LumiFxApp extends StatefulWidget {
     this.screenWake = const WakelockScreenWake(),
     this.background = const NoBackgroundPlayback(),
     this.clock = DateTime.now,
+    this.sound = const NoSoundPlayer(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -62,6 +64,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// Today, for the seasonal stories on the home.
   final DateTime Function() clock;
+
+  /// Plays the ambient sounds of effects.
+  final SoundPlayer sound;
 
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
@@ -96,6 +101,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       phoneAudioInput: widget.phoneAudioInput,
       screenWake: widget.screenWake,
       resolveEffect: _library.byId,
+      sound: widget.sound,
     );
     _notices = _playback.notices.listen(_showNotice);
     didChangeAccessibilityFeatures();

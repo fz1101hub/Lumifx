@@ -374,5 +374,8 @@
   "noEffectsFound": "Keine Effekte gefunden.",
   "myStories": "Meine Geschichten",
   "severalRooms": "Mehrere Räume…",
-  "severalRoomsHint": "Bei vielen Lampen aktualisiert die Bridge jede etwas seltener; am flüssigsten wird es mit einem Entertainment-Bereich."
+  "severalRoomsHint": "Bei vielen Lampen aktualisiert die Bridge jede etwas seltener; am flüssigsten wird es mit einem Entertainment-Bereich.",
+  "sound": "Ton",
+  "soundDescription": "Regen, Feuer, Wellen oder Wind von diesem Telefon, mit Donner nach dem Blitz.",
+  "volume": "Lautstärke"
 }

@@ -22,6 +22,7 @@ import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_sound_player.dart';
 
 http.Response _json(Object body) => http.Response(jsonEncode(body), 200);
 
@@ -150,6 +151,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
   bool music = false,
   LightingEffect? effect,
   math.Random? random,
+  FakeSoundPlayer? sound,
   Duration sleepFade = const Duration(seconds: 20),
 }) async {
   final fake = _FakeBridge();
@@ -178,6 +180,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
     screenWake: wake,
     resolveEffect: effectById,
     random: random,
+    sound: sound ?? FakeSoundPlayer(),
     sleepFade: sleepFade,
   );
   return (controller, fake, wake);
@@ -660,6 +663,49 @@ void main() {
     await gone.changeTarget(PlaybackController.severalRoomsKey(['nope']));
     expect(gone.selectedTarget, isNull);
     gone.dispose();
+  });
+
+  test('effects play their sounds, which follow pause, switch and stop',
+      () async {
+    final sound = FakeSoundPlayer();
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final (controller, _, _) = await _setUp(
+      effect: thunderstorm,
+      sound: sound,
+      preferences: preferences,
+    );
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(sound.calls.last, 'play rain');
+    expect(sound.playing!.thunder, isTrue);
+    await controller.pause();
+    expect(sound.calls.last, 'pause');
+    await controller.resume();
+    expect(sound.calls.last, 'resume');
+    await controller.switchEffect(ocean);
+    expect(sound.calls.last, 'play waves');
+
+    // Turned off, then back on, while playing.
+    await preferences.setSoundOn(false);
+    expect(sound.calls.last, 'stop');
+    await preferences.setSoundOn(true);
+    expect(sound.calls.last, 'play waves');
+    await preferences.setSoundVolume(0.2);
+    expect(sound.volume, 0.2);
+
+    await controller.stop();
+    expect(sound.calls.last, 'stop');
+    controller.dispose();
+  });
+
+  test('silent effects and Music Sync play no sound', () async {
+    final sound = FakeSoundPlayer();
+    final (controller, _, _) = await _setUp(music: true, sound: sound);
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(sound.calls, isEmpty);
+    await controller.stop();
+    controller.dispose();
   });
 
   test('changing the target while playing restarts on the new one', () async {

@@ -9,6 +9,7 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../../core/hue/hue_bridge_client.dart';
+import '../../core/sound/soundscape.dart';
 import '../../core/hue/hue_models.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
@@ -515,6 +516,24 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 max: 3,
                 onChanged: (v) => c.setControls(controls.copyWith(speed: v)),
               ),
+            if (!soundscapeOf(effect).isSilent) ...[
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                secondary: Icon(preferences.soundOn
+                    ? Icons.volume_up_outlined
+                    : Icons.volume_off_outlined),
+                title: Text(l10n.sound),
+                subtitle: Text(l10n.soundDescription),
+                value: preferences.soundOn,
+                onChanged: preferences.setSoundOn,
+              ),
+              if (preferences.soundOn)
+                _ControlSlider(
+                  label: l10n.volume,
+                  value: preferences.soundVolume,
+                  onChanged: preferences.setSoundVolume,
+                ),
+            ],
           ];
           if (context.isWide) {
             return ListView(

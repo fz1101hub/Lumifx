@@ -114,6 +114,24 @@ class PreferencesController extends ChangeNotifier {
   bool _onboardingDone = false;
   bool _keepPlayingScreenOff = true;
   bool _gentleStart = true;
+  bool _soundOn = true;
+  double _soundVolume = 0.6;
+
+  /// Ambient sounds under the effects that have them.
+  bool get soundOn => _soundOn;
+
+  /// 0..1.
+  double get soundVolume => _soundVolume;
+
+  Future<void> setSoundOn(bool value) {
+    _soundOn = value;
+    return _changed();
+  }
+
+  Future<void> setSoundVolume(double value) {
+    _soundVolume = value.clamp(0.0, 1.0);
+    return _changed();
+  }
 
   /// Effects fade in from what the lights show instead of jumping.
   bool get gentleStart => _gentleStart;
@@ -165,6 +183,8 @@ class PreferencesController extends ChangeNotifier {
       _onboardingDone = json['onboardingDone'] as bool? ?? true;
       _keepPlayingScreenOff = json['keepPlayingScreenOff'] as bool? ?? true;
       _gentleStart = json['gentleStart'] as bool? ?? true;
+      _soundOn = json['soundOn'] as bool? ?? true;
+      _soundVolume = _unit(json['soundVolume'], 0.6);
       _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
           MusicSource.microphone;
       final scenes = json['userScenes'];
@@ -356,6 +376,8 @@ class PreferencesController extends ChangeNotifier {
       'onboardingDone': _onboardingDone,
       'keepPlayingScreenOff': _keepPlayingScreenOff,
       'gentleStart': _gentleStart,
+      'soundOn': _soundOn,
+      'soundVolume': _soundVolume,
       'musicSource': _musicSource.name,
       'playlists': [for (final p in _playlists) p.toJson()],
       'userScenes': [for (final s in _userScenes) s.toJson()],

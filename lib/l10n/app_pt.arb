@@ -374,5 +374,8 @@
   "noEffectsFound": "Nenhum efeito encontrado.",
   "myStories": "Minhas histórias",
   "severalRooms": "Vários cômodos…",
-  "severalRoomsHint": "Com muitas luzes, a bridge atualiza cada uma um pouco menos; para o efeito mais suave, use uma área de entretenimento."
+  "severalRoomsHint": "Com muitas luzes, a bridge atualiza cada uma um pouco menos; para o efeito mais suave, use uma área de entretenimento.",
+  "sound": "Som",
+  "soundDescription": "Chuva, fogo, ondas ou vento deste celular, com o trovão depois do relâmpago.",
+  "volume": "Volume"
 }

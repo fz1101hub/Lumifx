@@ -1090,5 +1090,17 @@
   "severalRoomsHint": "With many lights the bridge updates each a little less often; for the smoothest effect, use an entertainment area.",
   "@severalRoomsHint": {
     "description": "Hint when several rooms play together"
+  },
+  "sound": "Sound",
+  "@sound": {
+    "description": "Player switch: ambient sounds"
+  },
+  "soundDescription": "Rain, fire, waves or wind from this phone, with thunder after the lightning.",
+  "@soundDescription": {
+    "description": "Explains the effect sounds"
+  },
+  "volume": "Volume",
+  "@volume": {
+    "description": "Slider: sound volume"
   }
 }

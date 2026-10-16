@@ -374,5 +374,8 @@
   "noEffectsFound": "Aucun effet trouvé.",
   "myStories": "Mes histoires",
   "severalRooms": "Plusieurs pièces…",
-  "severalRoomsHint": "Avec beaucoup de lampes, le pont met à jour chacune un peu moins souvent ; pour l'effet le plus fluide, utilisez une zone de divertissement."
+  "severalRoomsHint": "Avec beaucoup de lampes, le pont met à jour chacune un peu moins souvent ; pour l'effet le plus fluide, utilisez une zone de divertissement.",
+  "sound": "Son",
+  "soundDescription": "Pluie, feu, vagues ou vent depuis ce téléphone, avec le tonnerre après l'éclair.",
+  "volume": "Volume"
 }

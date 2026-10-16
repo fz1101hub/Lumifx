@@ -15,6 +15,8 @@ import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
 import '../../core/screen_wake.dart';
+import '../../core/sound/sound_player.dart';
+import '../../core/sound/soundscape.dart';
 import '../bridge/bridge_controller.dart';
 import '../library/preferences_controller.dart';
 import '../music/music_sync_controller.dart';
@@ -107,7 +109,9 @@ class PlaybackController extends ChangeNotifier {
     this.sleepFade = const Duration(seconds: 20),
     LightingEffect? Function(String id)? resolveEffect,
     math.Random? random,
+    SoundPlayer sound = const NoSoundPlayer(),
   })  : _effect = effect,
+        _sound = sound,
         _resolveEffect = resolveEffect ?? ((_) => null),
         _random = random ?? math.Random(),
         _bridge = bridge,
@@ -135,6 +139,13 @@ class PlaybackController extends ChangeNotifier {
   /// Finds a playlist's effects by id (built-in and the user's own).
   final LightingEffect? Function(String id) _resolveEffect;
   final math.Random _random;
+  final SoundPlayer _sound;
+
+  /// Watches the frames for lightning, to answer with thunder.
+  StreamSubscription<List<LightFrame>>? _lightningWatch;
+  Timer? _thunderTimer;
+  DateTime? _lastThunder;
+  bool _soundPlaying = false;
 
   /// The default controls last applied, to notice when Settings change them.
   EffectControls _defaults;
@@ -185,6 +196,63 @@ class PlaybackController extends ChangeNotifier {
 
   /// The playlist being played, if any.
   Playlist? get playlist => _playlist;
+
+  /// What the current effect sounds like (silent for most).
+  Soundscape get soundscape => soundscapeOf(effectToPlay);
+
+  /// Starts (or replaces) the sounds of the current effect for [player].
+  void _startSound(EffectPlayer player) {
+    _stopSound();
+    final scape = soundscape;
+    if (!_preferences.soundOn || scape.isSilent) {
+      return;
+    }
+    _soundPlaying = true;
+    unawaited(_sound.play(scape, volume: _preferences.soundVolume));
+    if (scape.thunder) {
+      double? previous;
+      _lightningWatch = player.frames.listen((frames) {
+        if (frames.isEmpty) {
+          return;
+        }
+        final mean =
+            frames.fold<double>(0, (s, f) => s + f.brightness) / frames.length;
+        // A sudden jump in brightness is a strike: thunder follows, a
+        // moment later, as sound travels slower than light.
+        if (previous != null && mean - previous! > 0.3) {
+          _scheduleThunder();
+        }
+        previous = mean;
+      });
+    }
+  }
+
+  void _scheduleThunder() {
+    final last = _lastThunder;
+    if ((_thunderTimer?.isActive ?? false) ||
+        (last != null &&
+            DateTime.now().difference(last) < const Duration(seconds: 3))) {
+      return;
+    }
+    _thunderTimer =
+        Timer(Duration(milliseconds: 400 + _random.nextInt(1600)), () {
+      if (_status == PlaybackStatus.playing && _soundPlaying) {
+        _lastThunder = DateTime.now();
+        unawaited(_sound.thunder(volume: _preferences.soundVolume));
+      }
+    });
+  }
+
+  void _stopSound() {
+    unawaited(_lightningWatch?.cancel());
+    _lightningWatch = null;
+    _thunderTimer?.cancel();
+    _thunderTimer = null;
+    if (_soundPlaying) {
+      _soundPlaying = false;
+      unawaited(_sound.stop());
+    }
+  }
 
   bool _systemReducesMotion = false;
 
@@ -474,6 +542,10 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     player.crossfadeTo(effectToPlay, over: crossfade);
+    _startSound(player);
+    if (_status == PlaybackStatus.paused && _soundPlaying) {
+      unawaited(_sound.pause());
+    }
     unawaited(_preferences.recordPlayed(next.id));
     _notify();
   }
@@ -727,6 +799,7 @@ class PlaybackController extends ChangeNotifier {
             .fadeInFrom(before ?? List.filled(lightIds.length, LightFrame.off));
       }
       player.play();
+      _startSound(player);
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
       _armSleepTimer();
@@ -751,6 +824,9 @@ class PlaybackController extends ChangeNotifier {
     }
     player.pause();
     _pausePlaylistTimer();
+    if (_soundPlaying) {
+      unawaited(_sound.pause());
+    }
     _setStatus(PlaybackStatus.paused);
     // No reason to keep the microphone open or the screen on while paused.
     unawaited(_screenWake.keepOn(false));
@@ -776,6 +852,9 @@ class PlaybackController extends ChangeNotifier {
     if (_playlist != null && left != null) {
       _armPlaylistTimer(left);
     }
+    if (_soundPlaying) {
+      unawaited(_sound.resume());
+    }
     _setStatus(PlaybackStatus.playing);
   }
 
@@ -784,6 +863,7 @@ class PlaybackController extends ChangeNotifier {
     _generation++;
     _cancelSleepTimer();
     _endPlaylist();
+    _stopSound();
     final player = _player;
     final commands = _restore;
     _player = null;
@@ -927,6 +1007,10 @@ class PlaybackController extends ChangeNotifier {
     _fadeTimer = Timer.periodic(step, (timer) {
       elapsed++;
       player.masterLevel = (1 - elapsed / steps).clamp(0.0, 1.0);
+      if (_soundPlaying) {
+        unawaited(
+            _sound.setVolume(_preferences.soundVolume * player.masterLevel));
+      }
       if (elapsed >= steps) {
         timer.cancel();
         unawaited(_finishSleep());
@@ -1058,6 +1142,7 @@ class PlaybackController extends ChangeNotifier {
   /// dialog): apply them to the running player.
   void _onPreferencesChanged() {
     _player?.softFlashes = softFlashes;
+    _applySoundPreferences();
     final defaults = _preferences.defaultControls;
     if (defaults != _defaults) {
       // New defaults from Settings apply from now on.
@@ -1074,6 +1159,25 @@ class PlaybackController extends ChangeNotifier {
       unawaited(_switchMusicSource());
     }
     _notify();
+  }
+
+  /// Sound switched on or off, or its volume changed, while playing.
+  void _applySoundPreferences() {
+    final player = _player;
+    if (player == null || _status == PlaybackStatus.starting) {
+      return;
+    }
+    final wanted = _preferences.soundOn && !soundscape.isSilent;
+    if (wanted && !_soundPlaying) {
+      _startSound(player);
+      if (_status == PlaybackStatus.paused) {
+        unawaited(_sound.pause());
+      }
+    } else if (!wanted && _soundPlaying) {
+      _stopSound();
+    } else if (_soundPlaying && !_fadingOut) {
+      unawaited(_sound.setVolume(_preferences.soundVolume));
+    }
   }
 
   void _setStatus(PlaybackStatus status) {
@@ -1098,6 +1202,7 @@ class PlaybackController extends ChangeNotifier {
     _disposed = true;
     _cancelSleepTimer();
     _endPlaylist();
+    _stopSound();
     _bridge.removeListener(_onBridgeChanged);
     _preferences.removeListener(_onPreferencesChanged);
     final music = _music;
