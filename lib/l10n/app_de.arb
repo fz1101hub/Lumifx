@@ -372,5 +372,7 @@
   "searchEffects": "Effekte suchen",
   "clearSearch": "Löschen",
   "noEffectsFound": "Keine Effekte gefunden.",
-  "myStories": "Meine Geschichten"
+  "myStories": "Meine Geschichten",
+  "severalRooms": "Mehrere Räume…",
+  "severalRoomsHint": "Bei vielen Lampen aktualisiert die Bridge jede etwas seltener; am flüssigsten wird es mit einem Entertainment-Bereich."
 }

@@ -372,5 +372,7 @@
   "searchEffects": "Buscar efectos",
   "clearSearch": "Borrar",
   "noEffectsFound": "No se encontraron efectos.",
-  "myStories": "Mis historias"
+  "myStories": "Mis historias",
+  "severalRooms": "Varias habitaciones…",
+  "severalRoomsHint": "Con muchas luces el puente actualiza cada una algo menos a menudo; para el efecto más fluido, usa un área de entretenimiento."
 }

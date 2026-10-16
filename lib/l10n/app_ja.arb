@@ -372,5 +372,7 @@
   "searchEffects": "演出を検索",
   "clearSearch": "クリア",
   "noEffectsFound": "演出が見つかりません。",
-  "myStories": "マイストーリー"
+  "myStories": "マイストーリー",
+  "severalRooms": "複数の部屋…",
+  "severalRoomsHint": "照明が多いとブリッジは各照明を少しずつ間隔をあけて更新します。いちばんなめらかにするには、エンターテインメントエリアを使ってください。"
 }

@@ -9,6 +9,7 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../../core/hue/hue_bridge_client.dart';
+import '../../core/hue/hue_models.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
@@ -116,6 +117,28 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
     return timer == null
         ? l10n.sleepTimer
         : l10n.sleepTimerMinutes(timer.inMinutes);
+  }
+
+  /// The dropdown entry that opens the several-rooms picker.
+  static const _severalRooms = '__several__';
+
+  Future<void> _chooseSeveralRooms() async {
+    final c = controller;
+    final chosen = await showDialog<List<String>>(
+      context: context,
+      builder: (_) => _SeveralRoomsDialog(
+        groups: c.groups,
+        selected: {for (final g in c.roomGroups) g.id},
+      ),
+    );
+    if (chosen == null || chosen.isEmpty || !mounted) {
+      // Rebuild so the dropdown shows the target again.
+      setState(() {});
+      return;
+    }
+    await c.changeTarget(chosen.length == 1
+        ? 'group:${chosen.single}'
+        : PlaybackController.severalRoomsKey(chosen));
   }
 
   /// Asks for a name and saves the lights' current colours as a Hue
@@ -280,7 +303,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
             DropdownButtonFormField<String?>(
               // Rebuilt when the available targets change, so the field
               // never holds a value that is no longer in the list.
-              key: ValueKey(Object.hashAll(targetKeys)),
+              key: ValueKey(Object.hashAll([...targetKeys, c.selectedTarget])),
               initialValue: c.selectedTarget,
               isExpanded: true,
               decoration: InputDecoration(
@@ -305,9 +328,33 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                       text: l10n.targetGroup(group.name, group.lightIds.length),
                     ),
                   ),
+                if (c.playsSeveralRooms)
+                  DropdownMenuItem(
+                    value: c.selectedTarget,
+                    child: _TargetLabel(
+                      icon: Icons.house_outlined,
+                      text: c.targetName!,
+                    ),
+                  ),
+                if (groups.length > 1)
+                  DropdownMenuItem(
+                    value: _severalRooms,
+                    child: _TargetLabel(
+                      icon: Icons.add_home_outlined,
+                      text: l10n.severalRooms,
+                    ),
+                  ),
               ],
-              onChanged: busy ? null : c.changeTarget,
+              onChanged: busy
+                  ? null
+                  : (value) => value == _severalRooms
+                      ? _chooseSeveralRooms()
+                      : c.changeTarget(value),
             ),
+            if (c.playsSeveralRooms) ...[
+              const SizedBox(height: 8),
+              Text(l10n.severalRoomsHint, style: theme.textTheme.bodySmall),
+            ],
             if (c.bridgeUnreachable) ...[
               const SizedBox(height: 8),
               Text(
@@ -500,6 +547,60 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+/// Ticks for the rooms and zones that should play together.
+class _SeveralRoomsDialog extends StatefulWidget {
+  const _SeveralRoomsDialog({required this.groups, required this.selected});
+
+  final List<HueGroup> groups;
+  final Set<String> selected;
+
+  @override
+  State<_SeveralRoomsDialog> createState() => _SeveralRoomsDialogState();
+}
+
+class _SeveralRoomsDialogState extends State<_SeveralRoomsDialog> {
+  late final Set<String> _chosen = {...widget.selected};
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.severalRooms),
+      scrollable: true,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final group in widget.groups)
+            CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(group.name),
+              subtitle: Text(l10n.lightCount(group.lightIds.length)),
+              value: _chosen.contains(group.id),
+              onChanged: (on) => setState(() {
+                on ?? false ? _chosen.add(group.id) : _chosen.remove(group.id);
+              }),
+            ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: _chosen.isEmpty
+              ? null
+              : () => Navigator.of(context).pop([
+                    for (final g in widget.groups)
+                      if (_chosen.contains(g.id)) g.id,
+                  ]),
+          child: Text(l10n.done),
+        ),
+      ],
     );
   }
 }

@@ -372,5 +372,7 @@
   "searchEffects": "Effecten zoeken",
   "clearSearch": "Wissen",
   "noEffectsFound": "Geen effecten gevonden.",
-  "myStories": "Mijn verhalen"
+  "myStories": "Mijn verhalen",
+  "severalRooms": "Meerdere kamers…",
+  "severalRoomsHint": "Met veel lampen werkt de bridge elke lamp iets minder vaak bij; voor het vloeiendste effect gebruik je een entertainmentruimte."
 }

@@ -123,6 +123,19 @@ class _FakeBridge {
                 },
               ],
             });
+          case '/clip/v2/resource/zone':
+            return _json({
+              'data': [
+                {
+                  'id': 'zone',
+                  'metadata': {'name': 'Corner'},
+                  'children': [
+                    {'rid': 'color', 'rtype': 'light'},
+                  ],
+                  'services': <Object>[],
+                },
+              ],
+            });
         }
         return _json({'data': <Object>[]});
       });
@@ -622,6 +635,31 @@ void main() {
     final (story, _, _) = await _setUp(effect: emeraldTrickster);
     expect(story.dynamicPalette, isNull);
     story.dispose();
+  });
+
+  test('several rooms play together, each light once', () async {
+    final (controller, fake, _) = await _setUp();
+    await controller
+        .changeTarget(PlaybackController.severalRoomsKey(['room', 'zone']));
+    expect(controller.playsSeveralRooms, isTrue);
+    expect(controller.targetName, 'Den + Corner');
+    expect(controller.roomGroups.map((g) => g.id), ['room', 'zone']);
+    // The colour bulb is in both: it shows up once.
+    expect(controller.lightNames.length, 2);
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    expect(controller.player!.lightIds, ['color', 'white']);
+    expect(controller.canSaveAsHueScene, isFalse,
+        reason: 'a Hue scene belongs to one room');
+    await controller.stop();
+    controller.dispose();
+
+    // A room that disappears from the bridge is left out; with none left
+    // it is the preview again.
+    final (gone, _, _) = await _setUp();
+    await gone.changeTarget(PlaybackController.severalRoomsKey(['nope']));
+    expect(gone.selectedTarget, isNull);
+    gone.dispose();
   });
 
   test('changing the target while playing restarts on the new one', () async {

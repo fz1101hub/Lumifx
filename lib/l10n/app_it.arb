@@ -372,5 +372,7 @@
   "searchEffects": "Cerca effetti",
   "clearSearch": "Cancella",
   "noEffectsFound": "Nessun effetto trovato.",
-  "myStories": "Le mie storie"
+  "myStories": "Le mie storie",
+  "severalRooms": "Più stanze…",
+  "severalRoomsHint": "Con molte luci il Bridge aggiorna ciascuna un po' meno spesso; per l'effetto più fluido usa un'area di intrattenimento."
 }

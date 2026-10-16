@@ -144,7 +144,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       return;
     }
     final l10n = context.l10n;
-    final where = playback.group?.name ?? playback.area?.name ?? '';
+    final where = playback.targetName ?? '';
     final playlist = playback.playlist;
     final title = l10n.effectName(playback.effect);
     final text = playlist == null ? where : '${playlist.name} · $where';

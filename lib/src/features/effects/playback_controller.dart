@@ -532,9 +532,41 @@ class PlaybackController extends ChangeNotifier {
   HueEntertainmentArea? get area =>
       areas.where((a) => _targetKey == 'area:${a.id}').firstOrNull;
 
+  static const _severalPrefix = 'groups:';
+
+  /// The target key that plays on all of [groupIds] at once.
+  static String severalRoomsKey(Iterable<String> groupIds) =>
+      '$_severalPrefix${groupIds.join(',')}';
+
+  /// The rooms and zones the effect plays on: the selected one, or the
+  /// several chosen together (those that still exist).
+  List<HueGroup> get roomGroups {
+    final key = _targetKey;
+    if (key != null && key.startsWith(_severalPrefix)) {
+      final ids = key.substring(_severalPrefix.length).split(',');
+      return [
+        for (final id in ids)
+          if (groups.where((g) => g.id == id).firstOrNull case final g?) g,
+      ];
+    }
+    final single = group;
+    return single == null ? const [] : [single];
+  }
+
+  /// Whether several rooms or zones play together.
+  bool get playsSeveralRooms =>
+      (_targetKey?.startsWith(_severalPrefix) ?? false) &&
+      roomGroups.isNotEmpty;
+
+  /// Where the effect plays, for labels: the area, or the rooms joined
+  /// with "+"; null for the preview.
+  String? get targetName =>
+      area?.name ??
+      (roomGroups.isEmpty ? null : roomGroups.map((g) => g.name).join(' + '));
+
   /// The selected target if it still exists; null means the preview.
   String? get selectedTarget =>
-      group != null || area != null ? _targetKey : null;
+      roomGroups.isNotEmpty || area != null ? _targetKey : null;
 
   /// One label per slot of the lamp preview.
   List<SlotLabel> get lightNames {
@@ -543,10 +575,10 @@ class PlaybackController extends ChangeNotifier {
       return playing;
     }
     final home = this.home;
-    final group = this.group;
+    final rooms = roomGroups;
     final area = this.area;
-    if (home != null && group != null) {
-      return _slotLabels(home, _effectLights(home, group));
+    if (home != null && rooms.isNotEmpty) {
+      return _slotLabels(home, _lightsOfGroups(home, rooms));
     }
     if (home != null && area != null) {
       return _channelNames(home, area);
@@ -618,7 +650,7 @@ class PlaybackController extends ChangeNotifier {
           ));
         }
         final area = this.area;
-        final group = this.group;
+        final rooms = roomGroups;
         if (area != null) {
           restore = _snapshot(home, {
             for (final channel in area.channels) ...channel.lightIds,
@@ -646,12 +678,12 @@ class PlaybackController extends ChangeNotifier {
             (_) => _onStreamEnded(opened, null),
             onError: (Object error) => _onStreamEnded(opened, error),
           ));
-        } else if (group != null) {
-          final usable = _effectLights(home, group);
+        } else if (rooms.isNotEmpty) {
+          final usable = _lightsOfGroups(home, rooms);
           if (usable.isEmpty) {
             return _abortStart(PlaybackNotice(
               PlaybackNoticeKind.onOffOnlyLights,
-              name: group.name,
+              name: rooms.map((g) => g.name).join(' + '),
             ));
           }
           restore = _snapshot(home, {for (final id in usable) lightOfSlot(id)});
@@ -1090,6 +1122,17 @@ class PlaybackController extends ChangeNotifier {
             id
           else
             for (var s = 0; s < light.segments; s++) '$id#$s',
+    ];
+  }
+
+  /// The slots of several rooms and zones, each light once (a light can
+  /// be in a room and a zone).
+  List<String> _lightsOfGroups(HueHome home, List<HueGroup> groups) {
+    final seen = <String>{};
+    return [
+      for (final group in groups)
+        for (final slot in _effectLights(home, group))
+          if (seen.add(slot)) slot,
     ];
   }
 

@@ -1082,5 +1082,13 @@
   "myStories": "My stories",
   "@myStories": {
     "description": "Section of the user's own stories"
+  },
+  "severalRooms": "Several rooms…",
+  "@severalRooms": {
+    "description": "Target option and dialog title: play on several rooms at once"
+  },
+  "severalRoomsHint": "With many lights the bridge updates each a little less often; for the smoothest effect, use an entertainment area.",
+  "@severalRoomsHint": {
+    "description": "Hint when several rooms play together"
   }
 }
