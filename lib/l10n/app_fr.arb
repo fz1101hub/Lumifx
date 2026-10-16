@@ -585,7 +585,7 @@
   "takePhoto": "Prendre une photo",
   "photoFailed": "Impossible d'ouvrir cette photo. Vérifie que LumiFX peut utiliser tes photos ou l'appareil photo.",
   "fun": "Fêtes et jeux",
-  "funSubtitle": "Anniversaire, feu rouge feu vert, statues, chasse aux couleurs",
+  "funSubtitle": "Anniversaire, feu rouge feu vert, statues, chasse aux couleurs, mémoire de lumière",
   "birthday": "Fête d'anniversaire",
   "birthdaySubtitle": "Des bougies, un vœu et des confettis de lumière",
   "birthdayDescription": "Écris le prénom et l'âge : les bougies s'allument sur tes lampes. Fais un vœu, souffle, et la pièce éclate de couleurs.",
@@ -653,5 +653,18 @@
   "weatherTemperature": "{degrees}°",
   "weatherHighLow": "{high}° / {low}°",
   "weatherNowName": "Météo à {place}",
-  "weatherTomorrowName": "Demain à {place}"
+  "weatherTomorrowName": "Demain à {place}",
+  "gameSimon": "Mémoire de lumière",
+  "gameSimonSubtitle": "Répète les couleurs des lumières",
+  "gameSimonRules": "Regarde les lumières : elles montrent quelques couleurs, l'une après l'autre. Touche ensuite les mêmes couleurs dans le même ordre. À chaque tour, une de plus. Combien peux-tu en retenir ?",
+  "simonWatch": "Regarde les lumières…",
+  "simonYourTurn": "À toi !",
+  "simonRound": "Tour {round}",
+  "simonOops": "{count, plural, =0{Oups ! Réessaie.} =1{Oups ! Tu as retenu 1 tour.} other{Oups ! Tu as retenu {count} tours.}}",
+  "simonBest": "Record : {count}",
+  "simonNewBest": "Nouveau record !",
+  "simonRed": "Rouge",
+  "simonGreen": "Vert",
+  "simonBlue": "Bleu",
+  "simonYellow": "Jaune"
 }

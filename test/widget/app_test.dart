@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
@@ -22,6 +23,8 @@ import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
 import 'package:lumifx/src/features/fun/game_screen.dart';
 import 'package:lumifx/src/features/fun/light_games.dart';
+import 'package:lumifx/src/features/fun/simon.dart';
+import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
@@ -459,6 +462,57 @@ void main() {
     await tester.tap(find.byTooltip('Search'));
     await tester.pumpAndSettle();
     expect(find.textContaining("Couldn't get the weather"), findsOneWidget);
+  });
+
+  testWidgets('light memory: watch, repeat, a wrong colour ends the game',
+      (tester) async {
+    await _pumpApp(tester);
+    await openBirthday(tester);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('Light memory'), findsOneWidget);
+    // The same draw as the screen's, to know the colours.
+    final expected = SimonGame(math.Random(3));
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const SimonScreen(seed: 3))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Watch the lights…'), findsOneWidget);
+
+    Future<void> watch(int colours) async {
+      for (var i = 0; i < colours * 3 + 3; i++) {
+        await tester.pump(const Duration(milliseconds: 500));
+      }
+    }
+
+    String name(SimonColor color) => switch (color) {
+          SimonColor.red => 'Red',
+          SimonColor.green => 'Green',
+          SimonColor.blue => 'Blue',
+          SimonColor.yellow => 'Yellow',
+        };
+
+    expected.nextRound();
+    await watch(1);
+    expect(find.text('Your turn!'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel(name(expected.sequence[0])));
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.text('Round 2'), findsOneWidget);
+
+    expected.nextRound();
+    await watch(2);
+    expect(find.text('Your turn!'), findsOneWidget);
+    final wrong =
+        SimonColor.values.firstWhere((c) => c != expected.sequence[0]);
+    await tester.tap(find.bySemanticsLabel(name(wrong)));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Oops! You remembered 1 round.'), findsOneWidget);
+    expect(find.text('New record!'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pump(const Duration(seconds: 2));
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

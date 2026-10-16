@@ -35,6 +35,37 @@ const _sweep = LightingEffect(
 
 void main() {
   group('EffectPlayer', () {
+    test('a flash shows at once over the effect, then fades away', () {
+      final output = _RecordingOutput();
+      final player = EffectPlayer(
+        effect: ocean,
+        lightIds: const ['a', 'b'],
+        output: output,
+      );
+      player.advance(const Duration(seconds: 1));
+      const red = LightColor(1, 0, 0);
+      player.flashNow(red, length: const Duration(milliseconds: 600));
+      // Not playing: shown with the next frame, not on its own.
+      player.advance(const Duration(milliseconds: 100));
+      for (final frame in player.currentFrames) {
+        expect(frame.color, red);
+        expect(frame.brightness, 1);
+      }
+      // Fading over the last third, then gone.
+      player.advance(const Duration(milliseconds: 400));
+      for (final frame in player.currentFrames) {
+        expect(frame.color.r, greaterThan(frame.color.b));
+        expect(frame.color, isNot(red));
+      }
+      player.advance(const Duration(milliseconds: 200));
+      final ocean0 = EffectPlayer(
+        effect: ocean,
+        lightIds: const ['a', 'b'],
+        output: _RecordingOutput(),
+      )..advance(const Duration(milliseconds: 1700));
+      expect(player.currentFrames, ocean0.currentFrames);
+    });
+
     test('maps frames to light ids in order', () {
       final output = _RecordingOutput();
       final player = EffectPlayer(

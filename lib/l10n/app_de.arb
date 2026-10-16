@@ -585,7 +585,7 @@
   "takePhoto": "Foto aufnehmen",
   "photoFailed": "Das Foto konnte nicht geöffnet werden. Prüfe, ob LumiFX auf Fotos oder Kamera zugreifen darf.",
   "fun": "Feste und Spiele",
-  "funSubtitle": "Geburtstag, Ampelspiel, Stopptanz, Farbenjagd",
+  "funSubtitle": "Geburtstag, Ampelspiel, Stopptanz, Farbenjagd, Lichtgedächtnis",
   "birthday": "Geburtstagsfeier",
   "birthdaySubtitle": "Kerzen, ein Wunsch und Konfetti aus Licht",
   "birthdayDescription": "Gib Namen und Alter ein: Die Kerzen leuchten auf deinen Lampen auf. Wünsch dir etwas, puste sie aus, und der Raum explodiert vor Farben.",
@@ -653,5 +653,18 @@
   "weatherTemperature": "{degrees}°",
   "weatherHighLow": "{high}° / {low}°",
   "weatherNowName": "Wetter in {place}",
-  "weatherTomorrowName": "Morgen in {place}"
+  "weatherTomorrowName": "Morgen in {place}",
+  "gameSimon": "Lichtgedächtnis",
+  "gameSimonSubtitle": "Wiederhole die Farben des Lichts",
+  "gameSimonRules": "Schau auf das Licht: Es zeigt ein paar Farben nacheinander. Tippe dann dieselben Farben in derselben Reihenfolge. Jede Runde kommt eine dazu. Wie viele kannst du dir merken?",
+  "simonWatch": "Schau aufs Licht…",
+  "simonYourTurn": "Du bist dran!",
+  "simonRound": "Runde {round}",
+  "simonOops": "{count, plural, =0{Hoppla! Versuch's nochmal.} =1{Hoppla! Du hast dir 1 Runde gemerkt.} other{Hoppla! Du hast dir {count} Runden gemerkt.}}",
+  "simonBest": "Rekord: {count}",
+  "simonNewBest": "Neuer Rekord!",
+  "simonRed": "Rot",
+  "simonGreen": "Grün",
+  "simonBlue": "Blau",
+  "simonYellow": "Gelb"
 }

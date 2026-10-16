@@ -1994,7 +1994,7 @@
   "@fun": {
     "description": "Home entry: parties and games played with the lights"
   },
-  "funSubtitle": "Birthday, red light green light, statues, colour hunt",
+  "funSubtitle": "Birthday, red light green light, statues, colour hunt, light memory",
   "@funSubtitle": {
     "description": "Subtitle of parties and games on the home screen"
   },
@@ -2307,5 +2307,72 @@
         "type": "String"
       }
     }
+  },
+  "gameSimon": "Light memory",
+  "@gameSimon": {
+    "description": "Memory game: repeat the colours the lights show"
+  },
+  "gameSimonSubtitle": "Repeat the colours of the lights",
+  "@gameSimonSubtitle": {
+    "description": "Subtitle of the memory game"
+  },
+  "gameSimonRules": "Watch the lights: they show a few colours, one after the other. Then tap the same colours in the same order. Each round adds one more. How many can you remember?",
+  "@gameSimonRules": {
+    "description": "Rules of the memory game"
+  },
+  "simonWatch": "Watch the lights…",
+  "@simonWatch": {
+    "description": "Memory game: the lights show the sequence"
+  },
+  "simonYourTurn": "Your turn!",
+  "@simonYourTurn": {
+    "description": "Memory game: the player repeats the sequence"
+  },
+  "simonRound": "Round {round}",
+  "@simonRound": {
+    "description": "Memory game: the current round",
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "simonOops": "{count, plural, =0{Oops! Try again.} =1{Oops! You remembered 1 round.} other{Oops! You remembered {count} rounds.}}",
+  "@simonOops": {
+    "description": "Memory game over, with the number of sequences repeated",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "simonBest": "Best: {count}",
+  "@simonBest": {
+    "description": "Memory game: best score so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "simonNewBest": "New record!",
+  "@simonNewBest": {
+    "description": "Memory game: a new best score"
+  },
+  "simonRed": "Red",
+  "@simonRed": {
+    "description": "Memory game colour button"
+  },
+  "simonGreen": "Green",
+  "@simonGreen": {
+    "description": "Memory game colour button"
+  },
+  "simonBlue": "Blue",
+  "@simonBlue": {
+    "description": "Memory game colour button"
+  },
+  "simonYellow": "Yellow",
+  "@simonYellow": {
+    "description": "Memory game colour button"
   }
 }

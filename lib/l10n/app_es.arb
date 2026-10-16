@@ -585,7 +585,7 @@
   "takePhoto": "Hacer una foto",
   "photoFailed": "No se pudo abrir la foto. Comprueba que LumiFX puede usar tus fotos o la cámara.",
   "fun": "Fiestas y juegos",
-  "funSubtitle": "Cumpleaños, luz roja luz verde, estatuas, caza de colores",
+  "funSubtitle": "Cumpleaños, luz roja luz verde, estatuas, caza de colores, memoria de luz",
   "birthday": "Fiesta de cumpleaños",
   "birthdaySubtitle": "Velas, un deseo y confeti de luz",
   "birthdayDescription": "Escribe el nombre y la edad: las velas se encienden en tus lámparas. Pide un deseo, sopla y la habitación estalla de color.",
@@ -653,5 +653,18 @@
   "weatherTemperature": "{degrees}°",
   "weatherHighLow": "{high}° / {low}°",
   "weatherNowName": "El tiempo en {place}",
-  "weatherTomorrowName": "Mañana en {place}"
+  "weatherTomorrowName": "Mañana en {place}",
+  "gameSimon": "Memoria de luz",
+  "gameSimonSubtitle": "Repite los colores de las luces",
+  "gameSimonRules": "Mira las luces: muestran unos colores, uno tras otro. Luego toca los mismos colores en el mismo orden. Cada ronda se añade uno. ¿Cuántos puedes recordar?",
+  "simonWatch": "Mira las luces…",
+  "simonYourTurn": "¡Te toca!",
+  "simonRound": "Ronda {round}",
+  "simonOops": "{count, plural, =0{¡Uy! Inténtalo otra vez.} =1{¡Uy! Recordaste 1 ronda.} other{¡Uy! Recordaste {count} rondas.}}",
+  "simonBest": "Récord: {count}",
+  "simonNewBest": "¡Nuevo récord!",
+  "simonRed": "Rojo",
+  "simonGreen": "Verde",
+  "simonBlue": "Azul",
+  "simonYellow": "Amarillo"
 }

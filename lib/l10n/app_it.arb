@@ -585,7 +585,7 @@
   "takePhoto": "Scatta una foto",
   "photoFailed": "Impossibile aprire la foto. Controlla che LumiFX possa usare le foto o la fotocamera.",
   "fun": "Feste e giochi",
-  "funSubtitle": "Compleanno, semaforo, statue, caccia al colore",
+  "funSubtitle": "Compleanno, semaforo, statue, caccia al colore, memoria di luce",
   "birthday": "Festa di compleanno",
   "birthdaySubtitle": "Candeline, un desiderio e coriandoli di luce",
   "birthdayDescription": "Scrivi il nome e l'età: le candeline si accendono sulle tue lampade. Esprimi un desiderio, soffia, e la stanza esplode di colori.",
@@ -653,5 +653,18 @@
   "weatherTemperature": "{degrees}°",
   "weatherHighLow": "{high}° / {low}°",
   "weatherNowName": "Meteo a {place}",
-  "weatherTomorrowName": "Domani a {place}"
+  "weatherTomorrowName": "Domani a {place}",
+  "gameSimon": "Memoria di luce",
+  "gameSimonSubtitle": "Ripeti i colori delle luci",
+  "gameSimonRules": "Guarda le luci: mostrano alcuni colori, uno dopo l'altro. Poi tocca gli stessi colori nello stesso ordine. Ogni turno se ne aggiunge uno. Quanti riesci a ricordarne?",
+  "simonWatch": "Guarda le luci…",
+  "simonYourTurn": "Tocca a te!",
+  "simonRound": "Turno {round}",
+  "simonOops": "{count, plural, =0{Ops! Riprova.} =1{Ops! Hai ricordato 1 turno.} other{Ops! Hai ricordato {count} turni.}}",
+  "simonBest": "Record: {count}",
+  "simonNewBest": "Nuovo record!",
+  "simonRed": "Rosso",
+  "simonGreen": "Verde",
+  "simonBlue": "Blu",
+  "simonYellow": "Giallo"
 }

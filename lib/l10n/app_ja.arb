@@ -585,7 +585,7 @@
   "takePhoto": "写真を撮る",
   "photoFailed": "写真を開けませんでした。LumiFX が写真またはカメラを使えるか確認してください。",
   "fun": "パーティーとゲーム",
-  "funSubtitle": "誕生日、信号ゲーム、ストップダンス、色さがし",
+  "funSubtitle": "誕生日、信号ゲーム、ストップダンス、色さがし、ひかりの記憶ゲーム",
   "birthday": "誕生日パーティー",
   "birthdaySubtitle": "ろうそく、願いごと、光の紙ふぶき",
   "birthdayDescription": "名前と年齢を入力すると、ランプにろうそくが灯ります。願いごとをして吹き消すと、部屋が色であふれます。",
@@ -653,5 +653,18 @@
   "weatherTemperature": "{degrees}°",
   "weatherHighLow": "{high}° / {low}°",
   "weatherNowName": "{place}の天気",
-  "weatherTomorrowName": "{place}の明日の天気"
+  "weatherTomorrowName": "{place}の明日の天気",
+  "gameSimon": "ひかりの記憶ゲーム",
+  "gameSimonSubtitle": "明かりの色の順番をくりかえそう",
+  "gameSimonRules": "明かりを見てね。いくつかの色が順番に光ります。同じ色を同じ順番でタップしよう。ラウンドごとに1つずつ増えるよ。いくつ覚えられるかな？",
+  "simonWatch": "明かりを見て…",
+  "simonYourTurn": "きみの番！",
+  "simonRound": "ラウンド {round}",
+  "simonOops": "{count, plural, =0{あっ！もう一度やってみよう。} other{あっ！{count} ラウンド覚えられたね。}}",
+  "simonBest": "ベスト：{count}",
+  "simonNewBest": "新記録！",
+  "simonRed": "赤",
+  "simonGreen": "緑",
+  "simonBlue": "青",
+  "simonYellow": "黄色"
 }

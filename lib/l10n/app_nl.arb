@@ -585,7 +585,7 @@
   "takePhoto": "Maak een foto",
   "photoFailed": "Kan die foto niet openen. Controleer of LumiFX je foto's of camera mag gebruiken.",
   "fun": "Feestjes en spelletjes",
-  "funSubtitle": "Verjaardag, rood licht groen licht, standbeelden, kleurenjacht",
+  "funSubtitle": "Verjaardag, rood licht groen licht, standbeelden, kleurenjacht, lichtgeheugen",
   "birthday": "Verjaardagsfeest",
   "birthdaySubtitle": "Kaarsjes, een wens en confetti van licht",
   "birthdayDescription": "Typ de naam en leeftijd: de kaarsjes gaan aan op je lampen. Doe een wens, blaas ze uit en de kamer barst los in kleur.",
@@ -653,5 +653,18 @@
   "weatherTemperature": "{degrees}°",
   "weatherHighLow": "{high}° / {low}°",
   "weatherNowName": "Weer in {place}",
-  "weatherTomorrowName": "Morgen in {place}"
+  "weatherTomorrowName": "Morgen in {place}",
+  "gameSimon": "Lichtgeheugen",
+  "gameSimonSubtitle": "Herhaal de kleuren van het licht",
+  "gameSimonRules": "Kijk naar het licht: het toont een paar kleuren na elkaar. Tik daarna dezelfde kleuren in dezelfde volgorde. Elke ronde komt er een bij. Hoeveel kun jij onthouden?",
+  "simonWatch": "Kijk naar het licht…",
+  "simonYourTurn": "Jouw beurt!",
+  "simonRound": "Ronde {round}",
+  "simonOops": "{count, plural, =0{Oeps! Probeer het nog eens.} =1{Oeps! Je hebt 1 ronde onthouden.} other{Oeps! Je hebt {count} rondes onthouden.}}",
+  "simonBest": "Record: {count}",
+  "simonNewBest": "Nieuw record!",
+  "simonRed": "Rood",
+  "simonGreen": "Groen",
+  "simonBlue": "Blauw",
+  "simonYellow": "Geel"
 }

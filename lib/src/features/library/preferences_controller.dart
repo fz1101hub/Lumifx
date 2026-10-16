@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -131,6 +132,21 @@ class PreferencesController extends ChangeNotifier {
   Future<void> setReadAloud(bool value) {
     _readAloud = value;
     return _changed();
+  }
+
+  int _simonBest = 0;
+
+  /// The longest sequence repeated in the memory game.
+  int get simonBest => _simonBest;
+
+  /// Keeps [score] if it beats the best; true when it does.
+  bool recordSimonScore(int score) {
+    if (score <= _simonBest) {
+      return false;
+    }
+    _simonBest = score;
+    unawaited(_changed());
+    return true;
   }
 
   WeatherPlace? _weatherPlace;
@@ -277,6 +293,8 @@ class PreferencesController extends ChangeNotifier {
       _readAlong = json['readAlong'] as bool? ?? true;
       _readAloud = json['readAloud'] == true;
       _weatherPlace = WeatherPlace.fromJson(json['weatherPlace']);
+      final simon = json['simonBest'];
+      _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
       final buttons = json['buttonActions'];
       _buttonActions = {
         if (buttons is Map)
@@ -542,6 +560,7 @@ class PreferencesController extends ChangeNotifier {
       'readAlong': _readAlong,
       'readAloud': _readAloud,
       'weatherPlace': _weatherPlace?.toJson(),
+      'simonBest': _simonBest,
       'buttonActions': _buttonActions,
       'bedtime': {
         'story': _bedtimeStory,

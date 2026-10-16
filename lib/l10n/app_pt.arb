@@ -585,7 +585,7 @@
   "takePhoto": "Tirar uma foto",
   "photoFailed": "Não foi possível abrir a foto. Verifique se o LumiFX pode usar suas fotos ou a câmera.",
   "fun": "Festas e jogos",
-  "funSubtitle": "Aniversário, sinal vermelho sinal verde, estátua, caça às cores",
+  "funSubtitle": "Aniversário, sinal vermelho sinal verde, estátua, caça às cores, memória de luz",
   "birthday": "Festa de aniversário",
   "birthdaySubtitle": "Velinhas, um desejo e confete de luz",
   "birthdayDescription": "Digite o nome e a idade: as velinhas acendem nas suas lâmpadas. Faça um desejo, assopre, e o cômodo explode em cores.",
@@ -653,5 +653,18 @@
   "weatherTemperature": "{degrees}°",
   "weatherHighLow": "{high}° / {low}°",
   "weatherNowName": "Clima em {place}",
-  "weatherTomorrowName": "Amanhã em {place}"
+  "weatherTomorrowName": "Amanhã em {place}",
+  "gameSimon": "Memória de luz",
+  "gameSimonSubtitle": "Repita as cores das luzes",
+  "gameSimonRules": "Olhe as luzes: elas mostram algumas cores, uma depois da outra. Depois toque as mesmas cores na mesma ordem. A cada rodada entra mais uma. Quantas você consegue lembrar?",
+  "simonWatch": "Olhe as luzes…",
+  "simonYourTurn": "Sua vez!",
+  "simonRound": "Rodada {round}",
+  "simonOops": "{count, plural, =0{Ops! Tente de novo.} =1{Ops! Você lembrou 1 rodada.} other{Ops! Você lembrou {count} rodadas.}}",
+  "simonBest": "Recorde: {count}",
+  "simonNewBest": "Novo recorde!",
+  "simonRed": "Vermelho",
+  "simonGreen": "Verde",
+  "simonBlue": "Azul",
+  "simonYellow": "Amarelo"
 }

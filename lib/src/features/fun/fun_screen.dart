@@ -5,6 +5,7 @@ import '../common/layout.dart';
 import 'birthday_screen.dart';
 import 'game_screen.dart';
 import 'light_games.dart';
+import 'simon_screen.dart';
 
 /// Parties and games played with the lights.
 class FunScreen extends StatelessWidget {
@@ -49,6 +50,8 @@ class FunScreen extends StatelessWidget {
               },
               () => GameScreen(game: game),
             ),
+          entry(Icons.psychology_outlined, l10n.gameSimon,
+              l10n.gameSimonSubtitle, () => const SimonScreen()),
         ],
       ),
     );
