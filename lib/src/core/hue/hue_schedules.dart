@@ -135,4 +135,81 @@ String scheduleLocaltime({
 List<int> stopDays(List<int> days, {required bool nextDay}) =>
     nextDay ? ([for (final day in days) (day + 1) % 7]..sort()) : [...days];
 
+/// The days before each of [days]: the evenings before chosen mornings.
+List<int> daysBefore(List<int> days) =>
+    [for (final day in days) (day + 6) % 7]..sort();
+
+/// A light that tells children when they may get up: a dim warm colour
+/// from bedtime, green in the morning, and optionally off a while later.
+/// Kept as the bridge's own schedules, like [HueEffectSchedule].
+class HueOkToWake {
+  const HueOkToWake({
+    required this.nightId,
+    required this.wakeId,
+    required this.name,
+    required this.groupId,
+    required this.nightHour,
+    required this.nightMinute,
+    required this.wakeHour,
+    required this.wakeMinute,
+    required this.mornings,
+    required this.enabled,
+    this.offId,
+    this.offHour,
+    this.offMinute,
+  });
+
+  final String nightId;
+  final String wakeId;
+  final String? offId;
+  final String name;
+
+  /// The v1 id of the room or zone.
+  final String groupId;
+  final int nightHour;
+  final int nightMinute;
+  final int wakeHour;
+  final int wakeMinute;
+  final int? offHour;
+  final int? offMinute;
+
+  /// The mornings it turns green, 0 (Monday) to 6; never empty.
+  final List<int> mornings;
+  final bool enabled;
+
+  List<String> get scheduleIds =>
+      [nightId, wakeId, if (offId case final id?) id];
+}
+
+/// What a new [HueOkToWake] should do.
+class HueOkToWakeDraft {
+  const HueOkToWakeDraft({
+    required this.name,
+    required this.groupId,
+    required this.nightHour,
+    required this.nightMinute,
+    required this.wakeHour,
+    required this.wakeMinute,
+    required this.mornings,
+    this.offAfter,
+  });
+
+  final String name;
+  final String groupId;
+  final int nightHour;
+  final int nightMinute;
+  final int wakeHour;
+  final int wakeMinute;
+  final List<int> mornings;
+
+  /// How long the green stays before the lights switch off; null: on.
+  final Duration? offAfter;
+
+  /// Warm amber, barely there, and a clear green (CIE xy, 1-254).
+  static const nightXy = (x: 0.5873, y: 0.3776);
+  static const nightBrightness = 20;
+  static const wakeXy = (x: 0.183, y: 0.6342);
+  static const wakeBrightness = 160;
+}
+
 String _two(int value) => value.toString().padLeft(2, '0');

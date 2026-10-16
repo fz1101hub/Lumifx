@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,15 +9,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/app.dart';
+import 'package:lumifx/src/app_scope.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
+import 'package:lumifx/src/core/photos/photo_picker.dart';
+import 'package:lumifx/src/core/weather/weather.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
+import 'package:lumifx/src/features/fun/birthday_screen.dart';
+import 'package:lumifx/src/features/fun/game_screen.dart';
+import 'package:lumifx/src/features/fun/light_games.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
+import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/weather/weather_screen.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
 import 'package:lumifx/src/features/library/story_editor.dart';
@@ -38,7 +49,66 @@ PreferencesController _warnedPreferences() =>
     PreferencesController(store: InMemoryKeyValueStore())
       ..setFlashWarningShown(true);
 
-Future<void> _pumpApp(WidgetTester tester) async {
+/// Hands back the same photo every time.
+class _FakePhotoPicker implements PhotoPicker {
+  _FakePhotoPicker(this.photo);
+
+  final Uint8List? photo;
+  final asked = <PhotoSource>[];
+
+  @override
+  Future<Uint8List?> pick(PhotoSource source) async {
+    asked.add(source);
+    if (photo == null) {
+      throw const PhotoUnavailable('denied');
+    }
+    return photo;
+  }
+}
+
+/// The weather of a sunny Milan with rain tomorrow, or no network.
+class _FakeWeather implements WeatherService {
+  _FakeWeather({this.online = true});
+
+  bool online;
+  final searches = <(String, String)>[];
+
+  @override
+  Future<List<WeatherPlace>> search(String name,
+      {String language = 'en'}) async {
+    searches.add((name, language));
+    if (!online) {
+      throw const WeatherUnavailable('offline');
+    }
+    return const [
+      WeatherPlace(
+          name: 'Milan',
+          region: 'Lombardy',
+          country: 'Italy',
+          latitude: 45.46,
+          longitude: 9.19),
+    ];
+  }
+
+  @override
+  Future<WeatherReport> forecast(WeatherPlace place) async {
+    if (!online) {
+      throw const WeatherUnavailable('offline');
+    }
+    return const WeatherReport(
+      now: WeatherReading(kind: WeatherKind.clear, temperature: 21.4),
+      tomorrow:
+          WeatherReading(kind: WeatherKind.rain, temperature: 18, low: 12),
+    );
+  }
+}
+
+Future<void> _pumpApp(
+  WidgetTester tester, {
+  PhotoPicker photos = const NoPhotoPicker(),
+  AudioInput? audioInput,
+  WeatherService weather = const NoWeatherService(),
+}) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
   // Loaded as on a phone (links wait for that), past the welcome pages.
@@ -52,7 +122,9 @@ Future<void> _pumpApp(WidgetTester tester) async {
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
-      audioInput: FakeAudioInput(),
+      audioInput: audioInput ?? FakeAudioInput(),
+      photos: photos,
+      weather: weather,
     ),
   );
 }
@@ -180,6 +252,213 @@ void main() {
     await tester.pump();
     await tester.pageBack();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('a light timer counts down on screen and can be stopped',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Light timers'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    expect(find.text('Brush your teeth'), findsOneWidget);
+    expect(find.text('2 min'), findsWidgets);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Start').first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining(RegExp(r'^[12]:\d\d$')), findsOneWidget);
+    expect(find.text('Pause'), findsOneWidget);
+
+    await tester.tap(find.text('Stop'));
+    await tester.pump();
+    expect(find.text("Time's up!"), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.text('Brush your teeth'), findsOneWidget);
+  });
+
+  Future<void> openBirthday(WidgetTester tester) async {
+    await tester.scrollUntilVisible(
+      find.text('Parties and games'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Birthday party'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('a birthday: candles, a wish, blow them out, a party',
+      (tester) async {
+    await _pumpApp(tester);
+    await openBirthday(tester);
+    await tester.enterText(find.byType(TextField).first, 'Anna');
+    await tester.enterText(find.byType(TextField).last, '7');
+    await tester.tap(find.text('Light the candles'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Happy birthday, Anna!'), findsWidgets);
+    expect(find.text('Blow out the candles'), findsOneWidget);
+
+    await tester.tap(find.text('Blow out the candles'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Whoosh! The candles are out.'), findsOneWidget);
+
+    // The party plays once, then the lights go back.
+    final playback =
+        AppScope.of(tester.element(find.byType(BirthdayScreen))).playback;
+    playback.player!.advance(const Duration(seconds: 31));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('7 years old today!'), findsOneWidget);
+    expect(find.text('Again!'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.text('Birthday party'), findsOneWidget);
+  });
+
+  testWidgets('blowing on the phone blows the candles out', (tester) async {
+    final random = math.Random(3);
+    final blow = Uint8List(44100 * 2);
+    final data = ByteData.sublistView(blow);
+    for (var i = 0; i < 44100; i++) {
+      data.setInt16(i * 2, random.nextInt(50000) - 25000, Endian.little);
+    }
+    final microphone = FakeAudioInput(pcm: blow);
+    await _pumpApp(tester, audioInput: microphone);
+    await openBirthday(tester);
+    await tester.tap(find.text('Light the candles'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Happy birthday!'), findsWidgets);
+
+    await tester.tap(find.text('Blow on the phone'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Whoosh! The candles are out.'), findsOneWidget);
+    expect(microphone.stopped, isTrue, reason: 'it stops listening');
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a light game shows its calls and ends with a cheer',
+      (tester) async {
+    await _pumpApp(tester);
+    await openBirthday(tester);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Red light, green light'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('freeze on red'), findsOneWidget);
+    expect(find.text('Say the calls out loud'), findsOneWidget);
+
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Green light: go!'), findsOneWidget);
+
+    final playback =
+        AppScope.of(tester.element(find.byType(GameScreen))).playback;
+    final plan = GamePlan.of(playback.effect)!;
+    final stop = plan.phases.firstWhere((p) => p.cue == GameCue.stop);
+    playback.player!.advance(Duration(seconds: stop.at) -
+        playback.player!.position +
+        const Duration(milliseconds: 200));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Red light: stop!'), findsOneWidget);
+
+    playback.player!.advance(plan.length);
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Game over! Well played!'), findsOneWidget);
+    expect(find.text('Play again'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  Future<void> openWeather(WidgetTester tester) async {
+    await tester.scrollUntilVisible(
+      find.text('Weather lights'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Weather lights'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Weather lights'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('weather lights: a city, the weather, on the lamps',
+      (tester) async {
+    tester.platformDispatcher.localeTestValue = const Locale('en', 'GB');
+    addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+    final weather = _FakeWeather();
+    await _pumpApp(tester, weather: weather);
+    await openWeather(tester);
+    expect(find.textContaining('Open-Meteo.com'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), 'Mil');
+    await tester.testTextInput.receiveAction(TextInputAction.search);
+    await tester.pumpAndSettle();
+    expect(weather.searches, [('Mil', 'en')]);
+    await tester.tap(find.text('Milan, Lombardy, Italy'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Now'), findsOneWidget);
+    expect(find.text('Clear sky'), findsOneWidget);
+    expect(find.text('21°'), findsOneWidget);
+    expect(find.text('Tomorrow'), findsOneWidget);
+    expect(find.text('Rain'), findsOneWidget);
+    expect(find.text('18° / 12°'), findsOneWidget);
+
+    await tester.tap(find.text('Show on the lights').first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(WeatherScreen))).playback;
+    expect(playback.effect.name, 'Weather in Milan');
+    expect(playback.isPlaying, isTrue);
+    // Its player, from the mini player, offers no favourite star.
+    await tester.tap(find.descendant(
+        of: find.byType(MiniPlayer), matching: find.text('Weather in Milan')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Weather in Milan'), findsWidgets);
+    expect(find.byTooltip('Add to favorites'), findsNothing);
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await playback.stop();
+    await tester.pump(const Duration(seconds: 2));
+
+    // Remembered, and can be changed.
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await openWeather(tester);
+    expect(find.text('Milan, Lombardy, Italy'), findsOneWidget);
+    await tester.tap(find.text('Change'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TextField), findsOneWidget);
+  });
+
+  testWidgets('weather lights say so when offline', (tester) async {
+    final weather = _FakeWeather(online: false);
+    await _pumpApp(tester, weather: weather);
+    await openWeather(tester);
+    await tester.enterText(find.byType(TextField), 'Milan');
+    await tester.tap(find.byTooltip('Search'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining("Couldn't get the weather"), findsOneWidget);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {
@@ -522,6 +801,69 @@ void main() {
     expect(find.text('Reading nook'), findsNothing);
     expect(find.text('New scene'), findsOneWidget);
     expect(find.byType(MiniPlayer), findsNothing);
+  });
+
+  testWidgets('a scene takes its colours from a photo', (tester) async {
+    // Two thirds blue, one third orange.
+    final photo = (await tester.runAsync(() async {
+      final recorder = ui.PictureRecorder();
+      ui.Canvas(recorder)
+        ..drawRect(const Rect.fromLTWH(0, 0, 30, 30),
+            Paint()..color = const Color(0xFF0040FF))
+        ..drawRect(const Rect.fromLTWH(20, 0, 10, 30),
+            Paint()..color = const Color(0xFFFF8000));
+      final image = await recorder.endRecording().toImage(30, 30);
+      final data = await image.toByteData(format: ui.ImageByteFormat.png);
+      image.dispose();
+      return data!.buffer.asUint8List();
+    }))!;
+    final photos = _FakePhotoPicker(photo);
+    await _pumpApp(tester, photos: photos);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New scene'));
+    await step();
+    expect(find.bySemanticsLabel('Colour 3'), findsOneWidget);
+    await tester.tap(find.text('From a photo'));
+    await step();
+    await tester.tap(find.text('Take a photo'));
+    await step();
+    // The photo is decoded for real, outside the test's fake time.
+    await tester.runAsync(() => Future<void>.delayed(
+          const Duration(milliseconds: 300),
+        ));
+    await step();
+    expect(photos.asked, [PhotoSource.camera]);
+    expect(find.bySemanticsLabel('Colour 1'), findsOneWidget);
+    expect(find.bySemanticsLabel('Colour 2'), findsOneWidget);
+    expect(find.bySemanticsLabel('Colour 3'), findsNothing,
+        reason: 'the two colours of the photo');
+    final slots = tester.widgetList<ColorSlot>(find.byType(ColorSlot));
+    final first = slots.first.color;
+    expect(first.b, greaterThan(first.r), reason: 'blue, the most present');
+  });
+
+  testWidgets('a photo that cannot be opened says so', (tester) async {
+    await _pumpApp(tester, photos: _FakePhotoPicker(null));
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('New scene'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tap(find.text('From a photo'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tap(find.text('Choose a photo'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.textContaining("Couldn't open that photo"), findsOneWidget);
+    expect(find.bySemanticsLabel('Colour 3'), findsOneWidget,
+        reason: 'the colours stay as they were');
   });
 
   testWidgets('a story of your own is written, read along and deleted',
@@ -1102,6 +1444,28 @@ Future<BridgeController> _connectedBridge(
                 'localtime': 'W003/T22:00:00',
                 'status': 'enabled',
               },
+              '9': {
+                'name': 'Mia',
+                'description': 'lumifx:ok1:wake-night',
+                'command': {
+                  'address': '/api/key/groups/1/action',
+                  'method': 'PUT',
+                  'body': {'on': true, 'bri': 20},
+                },
+                'localtime': 'W121/T19:30:00',
+                'status': 'enabled',
+              },
+              '10': {
+                'name': 'Mia',
+                'description': 'lumifx:ok1:wake-green',
+                'command': {
+                  'address': '/api/key/groups/1/action',
+                  'method': 'PUT',
+                  'body': {'on': true, 'bri': 160},
+                },
+                'localtime': 'W124/T06:45:00',
+                'status': 'enabled',
+              },
             });
           case '/clip/v2/resource/behavior_script':
             return json({
@@ -1358,10 +1722,18 @@ void streamingTests() {
     expect(find.textContaining('7:00 AM · Mon, Tue, Wed, Thu, Fri'),
         findsOneWidget);
     expect(find.textContaining('Living room · 30 min'), findsOneWidget);
-    // Effects LumiFX scheduled on the bridge, below the routines.
+    // Below the routines: ok-to-wake lights and scheduled effects.
+    final list = find.byType(Scrollable).last;
+    await tester.scrollUntilVisible(find.text('Mia'), 200, scrollable: list);
+    expect(find.textContaining('Amber from 7:30 PM, green at 6:45 AM'),
+        findsOneWidget);
+    expect(find.text('New ok-to-wake light'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Evening fire'), 200,
+        scrollable: list);
     expect(find.text('Scheduled effects'), findsOneWidget);
-    expect(find.text('Evening fire'), findsOneWidget);
     expect(find.textContaining('until 10:00 PM'), findsOneWidget);
+    await tester.drag(list, const Offset(0, 2000));
+    await tester.pumpAndSettle();
 
     // Switch it off.
     await tester.runAsync(() async {

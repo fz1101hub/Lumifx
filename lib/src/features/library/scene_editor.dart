@@ -5,10 +5,12 @@ import 'package:flutter/scheduler.dart';
 
 import '../../app_scope.dart';
 import '../../core/color/light_color.dart';
+import '../../core/color/photo_palette.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/effects/engine/light_frame.dart';
+import '../../core/photos/photo_picker.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../effects/light_color_ui.dart';
@@ -137,6 +139,50 @@ class _SceneEditorState extends State<SceneEditor> {
     });
   }
 
+  /// Takes the colours of a photo the user chooses or takes.
+  Future<void> _fromPhoto() async {
+    final l10n = context.l10n;
+    final scope = AppScope.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final source = await showModalBottomSheet<PhotoSource>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: Text(l10n.choosePhoto),
+              onTap: () => Navigator.of(context).pop(PhotoSource.gallery),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_camera_outlined),
+              title: Text(l10n.takePhoto),
+              onTap: () => Navigator.of(context).pop(PhotoSource.camera),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null || !mounted) {
+      return;
+    }
+    try {
+      final bytes = await scope.photos.pick(source);
+      if (bytes == null || !mounted) {
+        return;
+      }
+      final colors = await paletteFromImage(bytes, count: UserScene.maxColors);
+      if (mounted) {
+        setState(() => _colors = colors);
+      }
+    } on Object catch (error) {
+      debugPrint('Scene from a photo: $error');
+      messenger.showSnackBar(SnackBar(content: Text(l10n.photoFailed)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -178,8 +224,19 @@ class _SceneEditorState extends State<SceneEditor> {
             ),
           ),
           const SizedBox(height: 20),
-          Text(l10n.sceneColors, style: theme.textTheme.titleSmall),
-          const SizedBox(height: 4),
+          Row(
+            children: [
+              Expanded(
+                child:
+                    Text(l10n.sceneColors, style: theme.textTheme.titleSmall),
+              ),
+              TextButton.icon(
+                onPressed: _fromPhoto,
+                icon: const Icon(Icons.add_photo_alternate_outlined),
+                label: Text(l10n.sceneFromPhoto),
+              ),
+            ],
+          ),
           Text(l10n.sceneColorsHint, style: theme.textTheme.bodySmall),
           const SizedBox(height: 12),
           Wrap(

@@ -467,6 +467,180 @@ class HueBridgeClient {
     }
   }
 
+  /// The ok-to-wake lights LumiFX stored on the bridge.
+  Future<List<HueOkToWake>> fetchOkToWake() async {
+    final response = await _client.get(_v1('/schedules')).timeout(_timeout);
+    final body = _v1Result(response);
+    if (body is! Map) {
+      return const [];
+    }
+    final parts = <String, Map<String, (String, Map<Object?, Object?>)>>{};
+    for (final MapEntry(:key, :value) in body.entries) {
+      final description = value is Map ? value['description'] : null;
+      if (key is! String ||
+          value is! Map ||
+          description is! String ||
+          !description.startsWith(HueEffectSchedule.tag)) {
+        continue;
+      }
+      final words =
+          description.substring(HueEffectSchedule.tag.length).split(':');
+      if (words.length == 2 && words[1].startsWith('wake-')) {
+        (parts[words[0]] ??= {})[words[1]] = (key, value);
+      }
+    }
+    final lights = <HueOkToWake>[];
+    for (final roles in parts.values) {
+      final night = roles['wake-night'];
+      final wake = roles['wake-green'];
+      final off = roles['wake-off'];
+      if (night == null || wake == null) {
+        continue;
+      }
+      final nightAt = parseLocaltime('${night.$2['localtime'] ?? ''}');
+      final wakeAt = parseLocaltime('${wake.$2['localtime'] ?? ''}');
+      final offAt =
+          off == null ? null : parseLocaltime('${off.$2['localtime'] ?? ''}');
+      final command = wake.$2['command'];
+      final address = command is Map ? command['address'] : null;
+      final group = address is String
+          ? RegExp(r'/groups/([A-Za-z0-9]+)/action$')
+              .firstMatch(address)
+              ?.group(1)
+          : null;
+      if (nightAt == null ||
+          wakeAt == null ||
+          wakeAt.days.isEmpty ||
+          group == null) {
+        continue;
+      }
+      final name = wake.$2['name'];
+      lights.add(HueOkToWake(
+        nightId: night.$1,
+        wakeId: wake.$1,
+        offId: offAt == null ? null : off!.$1,
+        name: name is String ? name : '',
+        groupId: group,
+        nightHour: nightAt.hour,
+        nightMinute: nightAt.minute,
+        wakeHour: wakeAt.hour,
+        wakeMinute: wakeAt.minute,
+        offHour: offAt?.hour,
+        offMinute: offAt?.minute,
+        mornings: wakeAt.days,
+        enabled: wake.$2['status'] == 'enabled',
+      ));
+    }
+    return lights
+      ..sort((a, b) => (a.wakeHour * 60 + a.wakeMinute)
+          .compareTo(b.wakeHour * 60 + b.wakeMinute));
+  }
+
+  /// Stores an ok-to-wake light: the night colour from the evening before
+  /// each chosen morning (or the same day, when it starts after
+  /// midnight), green on those mornings, and the lights off later if
+  /// asked. Nothing is left behind when a part is refused.
+  Future<void> createOkToWake(
+    HueOkToWakeDraft draft, {
+    DateTime? now,
+  }) async {
+    final key = applicationKey;
+    if (key == null) {
+      throw const UnauthorizedException();
+    }
+    final at = now ?? DateTime.now();
+    final token = at.microsecondsSinceEpoch.toRadixString(36);
+    final action = '/api/$key/groups/${draft.groupId}/action';
+    final nightAfterMidnight = draft.nightHour * 60 + draft.nightMinute <
+        draft.wakeHour * 60 + draft.wakeMinute;
+    final created = <String>[];
+    Future<void> add(
+      String role,
+      Map<String, Object> body,
+      int hour,
+      int minute,
+      List<int> days,
+    ) async {
+      created.add(await _postSchedule({
+        'name': _clipName(draft.name),
+        'description': '${HueEffectSchedule.tag}$token:$role',
+        'command': {'address': action, 'method': 'PUT', 'body': body},
+        'localtime': scheduleLocaltime(
+          hour: hour,
+          minute: minute,
+          days: days,
+          now: at,
+        ),
+        'status': 'enabled',
+        'autodelete': false,
+      }));
+    }
+
+    try {
+      await add(
+        'wake-night',
+        {
+          'on': true,
+          'bri': HueOkToWakeDraft.nightBrightness,
+          'xy': [HueOkToWakeDraft.nightXy.x, HueOkToWakeDraft.nightXy.y],
+          'transitiontime': 600,
+        },
+        draft.nightHour,
+        draft.nightMinute,
+        nightAfterMidnight ? [...draft.mornings] : daysBefore(draft.mornings),
+      );
+      await add(
+        'wake-green',
+        {
+          'on': true,
+          'bri': HueOkToWakeDraft.wakeBrightness,
+          'xy': [HueOkToWakeDraft.wakeXy.x, HueOkToWakeDraft.wakeXy.y],
+          'transitiontime': 50,
+        },
+        draft.wakeHour,
+        draft.wakeMinute,
+        draft.mornings,
+      );
+      final offAfter = draft.offAfter;
+      if (offAfter != null) {
+        final minutes =
+            draft.wakeHour * 60 + draft.wakeMinute + offAfter.inMinutes;
+        await add(
+          'wake-off',
+          {'on': false, 'transitiontime': 100},
+          minutes ~/ 60 % 24,
+          minutes % 60,
+          stopDays(draft.mornings, nextDay: minutes >= 24 * 60),
+        );
+      }
+    } on Object {
+      for (final id in created) {
+        await _deleteV1('/schedules/$id').catchError((Object _) {});
+      }
+      rethrow;
+    }
+  }
+
+  /// Pauses or resumes every part of [light].
+  Future<void> setOkToWakeEnabled(HueOkToWake light, bool enabled) async {
+    for (final id in light.scheduleIds) {
+      final response = await _client
+          .put(
+            _v1('/schedules/$id'),
+            headers: {'content-type': 'application/json'},
+            body: jsonEncode({'status': enabled ? 'enabled' : 'disabled'}),
+          )
+          .timeout(_timeout);
+      _v1Result(response);
+    }
+  }
+
+  Future<void> deleteOkToWake(HueOkToWake light) async {
+    for (final id in light.scheduleIds) {
+      await _deleteV1('/schedules/$id');
+    }
+  }
+
   /// Pauses or resumes [schedule] (and its stop).
   Future<void> setEffectScheduleEnabled(
     HueEffectSchedule schedule,

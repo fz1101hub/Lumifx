@@ -73,6 +73,14 @@ artifact, see RELEASE.md § 1b).
 > the room and move the lights with it. Audio is analysed on your phone
 > and never recorded.
 >
+> FAMILY TIME
+> Bedtime in one tap, stories read aloud as the lights tell them, an
+> ok-to-wake light that turns green in the morning, light timers for
+> brushing teeth or tidying up, a birthday party where the candles glow on
+> your lamps until you blow them out, games led by the lights (red light,
+> green light; statues; colour hunt), the weather outside in light, and
+> scenes made from your own photos.
+>
 > MADE FOR HUE
 > • Finds and pairs with your Hue Bridge on your Wi-Fi, no account needed.
 > • Plays on any room or zone, and streams fast effects to Entertainment
@@ -151,6 +159,14 @@ artifact, see RELEASE.md § 1b).
 > stanza e muovono le luci a tempo. L'audio è analizzato sul telefono e non
 > viene mai registrato.
 >
+> IN FAMIGLIA
+> La nanna con un tocco, storie lette ad alta voce mentre le luci le
+> raccontano, un semaforo della sveglia che diventa verde al mattino, timer
+> di luce per lavarsi i denti o riordinare, una festa di compleanno con le
+> candeline accese sulle lampade finché non le spegni con un soffio, giochi
+> guidati dalle luci (semaforo, statue, caccia al colore), il meteo di fuori
+> in luce e scene create dalle tue foto.
+>
 > FATTA PER HUE
 > • Trova e collega il tuo Bridge Hue sul Wi-Fi, senza account.
 > • Funziona su qualsiasi stanza o zona e invia gli effetti veloci alle
@@ -182,16 +198,35 @@ artifact, see RELEASE.md § 1b).
 
 ## Google Play: Data safety form
 
-- Does your app collect or share any of the required user data types? **No.**
+- Does your app collect or share any of the required user data types?
+  **Yes**, one, because of Weather lights (everything else stays on the
+  device):
+  - **Location › Approximate location: collected, not shared.** The city
+    the user types, and the coordinates of the place they pick, are sent
+    to Open-Meteo to get the weather. Collection is **optional** (only if
+    the user opens Weather lights and searches); purpose **App
+    functionality**. Answer **No** to "processed ephemerally": the
+    request goes to a third-party service we do not control, so we
+    cannot promise how long it keeps it. It is not "shared" in Play's
+    sense: the
+    transfer is initiated by the user to get exactly that weather. The
+    app never requests the device's location permission.
+  - If Play insists on a "shared" answer, declare it shared with purpose
+    App functionality; nothing else changes.
 - Is all of the user data collected by your app encrypted in transit?
-  (asked anyway) **Yes.**
+  **Yes** (HTTPS to Open-Meteo).
 - Do you provide a way for users to request that their data is deleted?
-  **Not applicable: no data is collected.** If forced to answer: Yes,
-  "Forget this bridge" and uninstalling remove everything.
+  **No**: LumiFX keeps nothing on any server; the chosen place lives on
+  the phone and goes with "Change" or uninstalling. (Bridge credentials
+  go with "Forget this bridge".)
 - Microphone: the app uses RECORD_AUDIO but does not collect audio. In the
   data types list, do **not** declare "Audio files" or "Voice or sound
   recordings"; audio is processed ephemerally on device and never stored
   or sent (Play's definition of "collected" excludes ephemeral processing).
+- Photos: "From a photo" (scene editor) uses the system photo picker or
+  camera; the picture is read once on the device to take its colours and
+  is never stored or sent. Do **not** declare "Photos". Android needs no
+  storage permission (the photo picker is used).
 - Camera: the app uses CAMERA for TV Sync but does not collect images.
   Do **not** declare "Photos" or "Videos"; frames are averaged ephemerally
   on device and never stored or sent. A camera is not required to install
@@ -231,14 +266,27 @@ location, no purchases. Result: Everyone (ESRB) / PEGI 3.
 **Target audience:** 18 and over (simplest; the app is not designed for
 children). Do not tick "designed for families".
 
+The family features (timers, birthday, games, bedtime) are used by a
+parent with their children, and the parent runs the app: keep the target
+audience 18+ and write the listing for parents, as above. Choosing an
+audience that includes children would put the app under Google Play's
+Families policy and Apple's Kids category rules; check those first (for
+instance, Weather lights send an approximate location to Open-Meteo).
+Play may still ask whether the app "unintentionally appeals to children":
+answer that it is designed for adults who play with their families.
+
 ## App Store Connect: App Privacy
 
-- Data collection: **Data Not Collected.** (Microphone audio and camera
-  frames are processed on device and not stored; bridge credentials never
-  leave the device.)
+- Data collection: **Coarse Location** only, because of Weather lights:
+  not linked to the user's identity, not used for tracking, purpose **App
+  Functionality**. (The place the user types is sent to Open-Meteo.
+  Microphone audio, photos and camera frames are processed on device and
+  not stored; bridge credentials never leave the device.) This matches
+  `NSPrivacyCollectedDataTypes` in `ios/Runner/PrivacyInfo.xcprivacy`.
 - Tracking: **No.**
 - Privacy manifest: `ios/Runner/PrivacyInfo.xcprivacy` (no tracking, no
-  collected data, UserDefaults reason CA92.1).
+  collected data except coarse location for Weather lights, UserDefaults
+  reason CA92.1).
 
 **Export compliance:** `ITSAppUsesNonExemptEncryption` is `false`, so
 TestFlight does not ask on every build. The app uses only standard
@@ -287,6 +335,13 @@ Paste this in "Notes for review":
 > device to colour the lights; nothing is recorded or transmitted.
 > Siri phrases (iOS) and Google Assistant App Actions only open LumiFX's
 > own links; no speech is handled by the app itself.
+> Photo library access is used only when the user taps "From a photo" in
+> the scene editor, to take the colours of one photo on the device. At a
+> birthday party (Parties and games › Birthday party) the microphone is
+> used only after tapping "Blow on the phone", to hear the candles being
+> blown out; nothing is recorded. Weather lights (home › Weather lights)
+> send the city the user types to Open-Meteo (open-meteo.com) to show the
+> weather; the device location is never requested.
 >
 > The app is not affiliated with Signify / Philips Hue.
 

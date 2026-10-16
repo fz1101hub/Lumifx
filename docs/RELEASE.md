@@ -238,12 +238,26 @@ last upload. For a build made by hand, pass `--build-number` to
   searches for a bridge. If the reviewer denies it, discovery finds
   nothing; the manual IP entry still works and the preview mode needs no
   bridge at all. This is explained in the review notes.
-- **Microphone.** Only requested when a Music Sync effect starts. Both
+- **Microphone.** Only requested when a Music Sync effect starts, or when
+  "Blow on the phone" is tapped at a birthday party. Both
   stores accept this as long as the purpose string explains it (it does).
 - **Camera.** Only requested when TV Sync starts; the purpose string
   (`NSCameraUsageDescription`) explains it. On Android the camera is
   marked not required, so phones and tablets without one can still
   install the app.
+- **Photos.** "From a photo" opens the system photo picker (no
+  permission on Android 13+; iOS asks with
+  `NSPhotoLibraryUsageDescription`), or the camera with the TV Sync
+  camera permission.
+- **Weather (Open-Meteo).** Weather lights use Open-Meteo's free API
+  (no key). Its free tier is for non-commercial use: fine while LumiFX is
+  free with no ads or purchases. If that changes, buy an Open-Meteo API
+  plan and switch `OpenMeteoWeather` to the customer endpoints with the
+  key. The data is CC BY 4.0: the attribution line under the weather must
+  stay. Declare coarse location in both privacy forms (see
+  STORE_LISTING.md).
+- **Text to speech.** "Read aloud" uses the system voice (no permission;
+  Android 11+ needs the `TTS_SERVICE` query, already in the manifest).
 - **Export compliance.** See STORE_LISTING.md; `ITSAppUsesNonExemptEncryption`
   is set to false so TestFlight does not ask every time.
 - **Trademark.** The listing says the app is not affiliated with Signify.

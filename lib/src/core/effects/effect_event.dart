@@ -53,4 +53,8 @@ abstract final class EffectEventTypes {
 
   /// Follows the colours of the TV, seen by the phone's camera (TV Sync).
   static const screen = 'screen';
+
+  /// A timer: the lights go from `from` to `to` as the event runs, one
+  /// after the other, breathing gently so they look alive.
+  static const countdown = 'countdown';
 }

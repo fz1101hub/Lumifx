@@ -65,6 +65,10 @@ enum PlaybackNoticeKind {
 
   /// The sleep timer ran out: the effect faded and the lights are off.
   sleepTimerDone,
+
+  /// A one-shot effect (a timer, a game) came to its end and stopped;
+  /// [PlaybackNotice.name] is its name.
+  finished,
 }
 
 /// Something worth telling the user; the UI turns it into localised text.
@@ -170,6 +174,9 @@ class PlaybackController extends ChangeNotifier {
 
   _Bedtime? _bedtime;
   Timer? _bedtimeTimer;
+
+  /// Watches a one-shot effect for its end.
+  Timer? _endWatch;
   Timer? _playlistTimer;
   DateTime? _playlistNextAt;
   Duration? _playlistLeft;
@@ -637,6 +644,31 @@ class PlaybackController extends ChangeNotifier {
     _notify();
   }
 
+  /// A one-shot effect (a timer, a game) stops by itself at its end and
+  /// puts the lights back; looping effects play until stopped.
+  void _watchEnd() {
+    _endWatch?.cancel();
+    _endWatch = null;
+    if (_effect.isLooping || _player == null) {
+      return;
+    }
+    _endWatch = Timer.periodic(const Duration(milliseconds: 250), (_) {
+      final player = _player;
+      if (player == null || _effect.isLooping) {
+        _endWatch?.cancel();
+        _endWatch = null;
+        return;
+      }
+      if (player.position >= _effect.cycleLength) {
+        _endWatch?.cancel();
+        _endWatch = null;
+        final name = _effect.name;
+        unawaited(stop());
+        _notice(PlaybackNotice(PlaybackNoticeKind.finished, name: name));
+      }
+    });
+  }
+
   /// Bedtime is over (stopped, or the user chose something else): the
   /// brightness and sleep timer from before come back.
   void _endBedtime() {
@@ -688,11 +720,14 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     player.crossfadeTo(effectToPlay, over: crossfade);
+    _watchEnd();
     _startSound(player);
     if (_status == PlaybackStatus.paused && _soundPlaying) {
       unawaited(_sound.pause());
     }
-    unawaited(_preferences.recordPlayed(next.id));
+    if (!next.isGenerated) {
+      unawaited(_preferences.recordPlayed(next.id));
+    }
     _notify();
   }
 
@@ -950,9 +985,12 @@ class PlaybackController extends ChangeNotifier {
       player.play();
       _startSound(player);
       unawaited(_screenWake.keepOn(true));
-      unawaited(_preferences.recordPlayed(effect.id));
+      if (!effect.isGenerated) {
+        unawaited(_preferences.recordPlayed(effect.id));
+      }
       _armSleepTimer();
       _setStatus(PlaybackStatus.playing);
+      _watchEnd();
       if (!identical(_effect, listeningFor)) {
         // Switched while starting: the microphone or camera opened for the
         // effect chosen first.
@@ -1015,6 +1053,8 @@ class PlaybackController extends ChangeNotifier {
   /// Stops playback and, unless [restore] is false, puts the lights back.
   Future<void> stop({bool restore = true}) {
     _generation++;
+    _endWatch?.cancel();
+    _endWatch = null;
     _cancelSleepTimer();
     _endPlaylist();
     _stopSound();
@@ -1408,6 +1448,7 @@ class PlaybackController extends ChangeNotifier {
     _disposed = true;
     _cancelSleepTimer();
     _bedtimeTimer?.cancel();
+    _endWatch?.cancel();
     _endPlaylist();
     _stopSound();
     _bridge.removeListener(_onBridgeChanged);

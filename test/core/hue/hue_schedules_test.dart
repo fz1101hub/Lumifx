@@ -177,6 +177,78 @@ void main() {
       ]);
     });
 
+    test(
+        'an ok-to-wake light glows amber the evening before, green in the '
+        'morning, then switches off', () async {
+      await client.createOkToWake(
+        const HueOkToWakeDraft(
+          name: 'Mia',
+          groupId: '4',
+          nightHour: 19,
+          nightMinute: 30,
+          wakeHour: 7,
+          wakeMinute: 0,
+          mornings: [0, 1, 2, 3, 4],
+          offAfter: Duration(minutes: 60),
+        ),
+        now: evening,
+      );
+      final posts = [
+        for (final r in requests)
+          if (r.$1 == 'POST') r.$3! as Map,
+      ];
+      expect(posts, hasLength(3));
+      final [night, green, off] = posts;
+      // Sunday to Thursday evenings, before school mornings.
+      expect(night['localtime'], 'W121/T19:30:00');
+      final nightBody = (night['command'] as Map)['body'] as Map;
+      expect(nightBody['on'], isTrue);
+      expect(nightBody['bri'], lessThan(40));
+      expect(green['localtime'], 'W124/T07:00:00');
+      expect(((green['command'] as Map)['body'] as Map)['xy'],
+          [HueOkToWakeDraft.wakeXy.x, HueOkToWakeDraft.wakeXy.y]);
+      expect(off['localtime'], 'W124/T08:00:00');
+      expect(((off['command'] as Map)['body'] as Map)['on'], isFalse);
+
+      final lights = await client.fetchOkToWake();
+      expect(lights, hasLength(1));
+      final light = lights.single;
+      expect(light.name, 'Mia');
+      expect(light.groupId, '4');
+      expect((light.nightHour, light.nightMinute), (19, 30));
+      expect((light.wakeHour, light.wakeMinute), (7, 0));
+      expect((light.offHour, light.offMinute), (8, 0));
+      expect(light.mornings, [0, 1, 2, 3, 4]);
+      expect(await client.fetchEffectSchedules(), isEmpty,
+          reason: 'not taken for a scheduled effect');
+
+      requests.clear();
+      await client.deleteOkToWake(light);
+      expect(requests.map((r) => r.$1), everyElement('DELETE'));
+      expect(requests, hasLength(3));
+    });
+
+    test('a night glow after midnight starts the same morning', () async {
+      await client.createOkToWake(
+        const HueOkToWakeDraft(
+          name: 'Late',
+          groupId: '4',
+          nightHour: 1,
+          nightMinute: 0,
+          wakeHour: 7,
+          wakeMinute: 30,
+          mornings: [5, 6],
+        ),
+        now: evening,
+      );
+      final posts = [
+        for (final r in requests)
+          if (r.$1 == 'POST') r.$3! as Map,
+      ];
+      expect(posts, hasLength(2), reason: 'no off time');
+      expect(posts.first['localtime'], 'W003/T01:00:00');
+    });
+
     test('once runs on its day and is removed afterwards', () async {
       await client.createEffectSchedule(
         const HueEffectScheduleDraft(
@@ -226,5 +298,43 @@ void main() {
       ),
       throwsA(isA<HueException>()),
     );
+  });
+
+  test('a refused part of an ok-to-wake light leaves nothing behind', () async {
+    final deleted = <String>[];
+    var posts = 0;
+    final client = HueBridgeClient(
+      host: '10.0.0.5',
+      applicationKey: 'key',
+      client: MockClient((request) async {
+        if (request.method == 'DELETE') {
+          deleted.add(request.url.path);
+          return http.Response('[{"success": "ok"}]', 200);
+        }
+        posts++;
+        return http.Response(
+            posts == 1
+                ? '[{"success": {"id": "21"}}]'
+                : '[{"error": {"type": 7, "description": "invalid value"}}]',
+            200);
+      }),
+    );
+    await expectLater(
+      client.createOkToWake(const HueOkToWakeDraft(
+        name: 'x',
+        groupId: '1',
+        nightHour: 19,
+        nightMinute: 0,
+        wakeHour: 7,
+        wakeMinute: 0,
+        mornings: [0],
+      )),
+      throwsA(isA<HueException>()),
+    );
+    expect(deleted, ['/api/key/schedules/21']);
+  });
+
+  test('evenings before mornings wrap around the week', () {
+    expect(daysBefore([0, 3]), [2, 6]);
   });
 }

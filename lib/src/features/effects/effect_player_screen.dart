@@ -317,7 +317,8 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
               ),
             ),
           ),
-          _FavoriteButton(effectId: effect.id),
+          // Made for one use: nothing to find again among the favourites.
+          if (!effect.isGenerated) _FavoriteButton(effectId: effect.id),
         ],
       ),
       body: Builder(
@@ -645,6 +646,15 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 subtitle: Text(l10n.readAlongDescription),
                 value: preferences.readAlong,
                 onChanged: preferences.setReadAlong,
+              ),
+            if (narration.isNotEmpty)
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                secondary: const Icon(Icons.record_voice_over_outlined),
+                title: Text(l10n.readAloud),
+                subtitle: Text(l10n.readAloudDescription),
+                value: preferences.readAloud,
+                onChanged: preferences.setReadAloud,
               ),
           ];
           if (context.isWide) {

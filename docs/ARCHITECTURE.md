@@ -186,6 +186,44 @@ stream (`max_streams`), spread around the chosen point.
   closes. The renderer's `screen` event gives each light the average of
   its share of the zones. Nothing is recorded, stored or sent.
 
+### Generated effects: timers, parties, games, weather
+
+Some effects are made on the spot rather than taken from the catalogue.
+Their ids start with `gen:` (`LightingEffect.isGenerated`), so they are
+never kept as recently played, favourited or scheduled, and the ones that
+play once (`isLooping: false`) are stopped by `PlaybackController` at
+their end with a `finished` notice.
+
+- `LightTimer` (`lib/src/features/timers`) builds a `countdown` event that
+  turns the lamps from one colour to another one after the other.
+- `Birthday` (`lib/src/features/fun/birthday.dart`) builds the candles
+  (one spark per year, then a warm flicker for up to ten minutes) and the
+  party (darkness, a flash, confetti, a rainbow). Name and age travel in
+  the id, so `narrationOf` can greet the person. `BlowDetector` hears a
+  blow on the microphone: RMS above 0.3 of full scale for 350 ms.
+- `GamePlan` (`lib/src/features/fun/light_games.dart`) draws a game's
+  phases from a seed (whole seconds, so the calls line up with the
+  read-along lines) and turns each phase into ambient, flash, travel,
+  surprise and countdown events. `GameScreen` shows the current phase by
+  the player's position.
+- `weatherEffect` (`lib/src/features/weather`) maps an Open-Meteo reading
+  (WMO code, day or night, temperature) to a looping scene.
+  `OpenMeteoWeather` (`lib/src/core/weather`) is the only client of a
+  service outside the home besides Hue discovery; it sends only the
+  typed city and the chosen coordinates.
+
+### Speech and photos
+
+- `ReadAloud` (`lib/src/features/effects/read_aloud.dart`) follows the
+  app-wide `PlaybackController`: while an effect with words plays and the
+  preference is on, it speaks each new line of `narrationOf` through a
+  `Speaker` (`TtsSpeaker` wraps `flutter_tts`), and stops on pause or
+  stop.
+- `paletteFromImage` (`lib/src/core/color/photo_palette.dart`) decodes a
+  photo at 64 px wide and groups its pixels into 24 hue bins plus whites;
+  vivid pixels weigh more, dark and grey ones are ignored, close hues are
+  merged and washed-out ones strengthened for the lights.
+
 ## Content policy
 
 Effects and visual assets should be original. Inspiration can come from broad themes and genres, but proprietary names, artwork, audio and authored sequences from third-party apps should not be copied.

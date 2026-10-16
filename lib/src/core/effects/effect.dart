@@ -39,6 +39,12 @@ class LightingEffect {
   });
 
   final String id;
+
+  /// Made by the app for one use (a timer, a game, the weather): never
+  /// listed, favourited or kept in the recently played.
+  bool get isGenerated => id.startsWith(generatedPrefix);
+  static const generatedPrefix = 'gen:';
+
   final String name;
   final EffectKind kind;
   final List<EffectEvent> events;

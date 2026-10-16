@@ -245,6 +245,42 @@ build before every store release.
       10 Feb (Valentine's Day), the week before Carnival and the week before
       Easter: each shows its story first; nothing in them flashes.
 
+## This round: wake-up light, timers, read aloud, photos, parties, weather
+
+- [ ] Ok-to-wake: Wake-up & bedtime › New ok-to-wake light on a bedroom,
+      night glow in 2 minutes, green 3 minutes later, off after 5: with the
+      phone off the room turns dim amber, then green, then off. The switch
+      pauses it; delete removes its schedules from the bridge.
+- [ ] Light timers: Teeth (2 min) on a room: the lamps turn from blue to
+      purple one after the other, then a little party and the lights go
+      back as they were. Cooking with 5 minutes ends with three soft
+      flashes. Leaving the timer screen, the mini player keeps counting.
+- [ ] Read aloud: in a story's player switch on Read aloud; each line is
+      spoken in the app language as it appears, a little slowly; pause
+      stops the voice, resume does not repeat the line. Try Italian and
+      Japanese (the voice must be installed on the phone). Music from
+      another app keeps playing (iOS mixes, Android queues).
+- [ ] Scene from a photo: New scene › From a photo › Choose a photo (iOS
+      asks for photos the first time; Android shows its photo picker) and
+      Take a photo: the colours change to the photo's; a black-and-white
+      photo gives warm whites. Deny the permission: a message explains it.
+- [ ] Birthday: Parties and games › Birthday party, name and age 6: six
+      sparks light up the candles, the room flickers warm; "Blow out the
+      candles" darkens the room for a breath, then confetti and a rainbow
+      for 30 s. Again with "Blow on the phone": blowing firmly on the
+      microphone blows them out, talking or singing "Happy birthday" does
+      not. With Read aloud on, the greeting is spoken with the name.
+- [ ] Games: each game for a minute on a room. Red light, green light:
+      green, a second of amber, red, random lengths; the phone shows the
+      call in big letters. Statues: dancing colours, then icy blue.
+      Colour hunt: the colour fills the room, then the lamps go out one by
+      one in 10 s. With "Say the calls out loud" the calls are spoken.
+- [ ] Weather lights: type your city, pick it, check now and tomorrow
+      against a weather site; "Show on the lights" on both. In flight
+      mode the screen says it cannot get the weather and Retry works once
+      back online. Phone language Italian: city names in Italian. In the
+      US region temperatures are in °F.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

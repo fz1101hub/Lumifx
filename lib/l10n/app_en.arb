@@ -1864,5 +1864,448 @@
   "narrationEasterEggHunt4": "You found them all. Happy Easter!",
   "@narrationEasterEggHunt4": {
     "description": "Read-along line of the Easter story"
+  },
+  "okToWake": "Ok-to-wake light",
+  "@okToWake": {
+    "description": "A light that turns green when children may get up"
+  },
+  "okToWakeDescription": "A dim amber glow at night; green in the morning when it is time to get up. Stored on your Hue Bridge, so it works with the phone off.",
+  "@okToWakeDescription": {
+    "description": "Explains the ok-to-wake light"
+  },
+  "newOkToWake": "New ok-to-wake light",
+  "@newOkToWake": {
+    "description": "Button: create an ok-to-wake light"
+  },
+  "okToWakeNightAt": "Night glow from",
+  "@okToWakeNightAt": {
+    "description": "Time the night colour starts"
+  },
+  "okToWakeGreenAt": "Green at",
+  "@okToWakeGreenAt": {
+    "description": "Time the light turns green"
+  },
+  "okToWakeMornings": "Mornings",
+  "@okToWakeMornings": {
+    "description": "Which mornings the light turns green"
+  },
+  "okToWakeOffAfter": "Then switch off after",
+  "@okToWakeOffAfter": {
+    "description": "When the lights switch off after turning green"
+  },
+  "okToWakeStaysOn": "Stays on",
+  "@okToWakeStaysOn": {
+    "description": "Choice: the green light stays on"
+  },
+  "okToWakeSummary": "Amber from {night}, green at {wake}",
+  "@okToWakeSummary": {
+    "description": "Summary of an ok-to-wake light; times like 19:30",
+    "placeholders": {
+      "night": {
+        "type": "String"
+      },
+      "wake": {
+        "type": "String"
+      }
+    }
+  },
+  "okToWakeRoom": "Room or zone",
+  "@okToWakeRoom": {
+    "description": "Label of the room picker of an ok-to-wake light"
+  },
+  "okToWakeNoMornings": "Choose at least one morning.",
+  "@okToWakeNoMornings": {
+    "description": "Error when no morning is chosen"
+  },
+  "timers": "Light timers",
+  "@timers": {
+    "description": "Home entry: timers shown by the lights"
+  },
+  "timersSubtitle": "Teeth, tidying up, homework, focus, cooking",
+  "@timersSubtitle": {
+    "description": "Subtitle of the light timers on the home screen"
+  },
+  "timersDescription": "The lights change colour as time passes, so nobody has to watch a clock. At the end comes a little party of light, or a gentle signal, and the lights go back as they were.",
+  "@timersDescription": {
+    "description": "Explains light timers"
+  },
+  "timerTeeth": "Brush your teeth",
+  "@timerTeeth": {
+    "description": "Timer preset: brushing teeth"
+  },
+  "timerTidyUp": "Tidy up",
+  "@timerTidyUp": {
+    "description": "Timer preset: tidying up the room"
+  },
+  "timerHomework": "Homework",
+  "@timerHomework": {
+    "description": "Timer preset: homework"
+  },
+  "timerFocus": "Focus",
+  "@timerFocus": {
+    "description": "Timer preset: focused work"
+  },
+  "timerCooking": "Cooking",
+  "@timerCooking": {
+    "description": "Timer preset: cooking"
+  },
+  "timerStart": "Start",
+  "@timerStart": {
+    "description": "Button that starts a light timer"
+  },
+  "timerDone": "Time's up!",
+  "@timerDone": {
+    "description": "Shown when a light timer has finished"
+  },
+  "noticeFinished": "{name} has finished.",
+  "@noticeFinished": {
+    "description": "Snackbar when a one-shot effect (a timer, a game) has finished",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "readAloud": "Read aloud",
+  "@readAloud": {
+    "description": "Switch on the player: the phone reads the story's words aloud"
+  },
+  "readAloudDescription": "The phone reads the words aloud as they appear, with its own voice.",
+  "@readAloudDescription": {
+    "description": "Subtitle of the read-aloud switch"
+  },
+  "sceneFromPhoto": "From a photo",
+  "@sceneFromPhoto": {
+    "description": "Button in the scene editor: take the colours from a photo"
+  },
+  "choosePhoto": "Choose a photo",
+  "@choosePhoto": {
+    "description": "Choose an existing photo from the phone"
+  },
+  "takePhoto": "Take a photo",
+  "@takePhoto": {
+    "description": "Take a new photo with the camera"
+  },
+  "photoFailed": "Couldn't open that photo. Check that LumiFX may use your photos or camera.",
+  "@photoFailed": {
+    "description": "Error when a photo cannot be opened"
+  },
+  "fun": "Parties and games",
+  "@fun": {
+    "description": "Home entry: parties and games played with the lights"
+  },
+  "funSubtitle": "Birthday, red light green light, statues, colour hunt",
+  "@funSubtitle": {
+    "description": "Subtitle of parties and games on the home screen"
+  },
+  "birthday": "Birthday party",
+  "@birthday": {
+    "description": "A birthday party played with the lights"
+  },
+  "birthdaySubtitle": "Candles, a wish and confetti of light",
+  "@birthdaySubtitle": {
+    "description": "Subtitle of the birthday party"
+  },
+  "birthdayDescription": "Type the name and age: the candles light up on your lamps. Make a wish, blow them out, and the room bursts into colour.",
+  "@birthdayDescription": {
+    "description": "Explains the birthday party"
+  },
+  "birthdayAge": "Age (optional)",
+  "@birthdayAge": {
+    "description": "Field: how old the person turns; may be left empty"
+  },
+  "birthdayLight": "Light the candles",
+  "@birthdayLight": {
+    "description": "Button: light the birthday candles"
+  },
+  "birthdayBlow": "Blow out the candles",
+  "@birthdayBlow": {
+    "description": "Big button: blow out the birthday candles"
+  },
+  "birthdayBlowOnPhone": "Blow on the phone",
+  "@birthdayBlowOnPhone": {
+    "description": "Button: listen on the microphone so the candles can be blown out by blowing on the phone"
+  },
+  "birthdayListening": "Listening… blow!",
+  "@birthdayListening": {
+    "description": "Shown while the microphone listens for blowing"
+  },
+  "birthdayMicDenied": "The microphone is not available. Tap the button to blow out the candles.",
+  "@birthdayMicDenied": {
+    "description": "Error when the microphone cannot be used to hear blowing"
+  },
+  "birthdayHappy": "Happy birthday!",
+  "@birthdayHappy": {
+    "description": "Birthday greeting without a name"
+  },
+  "birthdayHappyName": "Happy birthday, {name}!",
+  "@birthdayHappyName": {
+    "description": "Birthday greeting with the person's name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "birthdayMakeAWish": "Close your eyes and make a wish… then blow out the candles!",
+  "@birthdayMakeAWish": {
+    "description": "Line said while the candles flicker"
+  },
+  "birthdayWhoosh": "Whoosh! The candles are out.",
+  "@birthdayWhoosh": {
+    "description": "Line said as the candles go out"
+  },
+  "birthdayHooray": "Hooray!",
+  "@birthdayHooray": {
+    "description": "Cheer when the party starts, without a name"
+  },
+  "birthdayHoorayName": "Hooray for {name}!",
+  "@birthdayHoorayName": {
+    "description": "Cheer when the party starts, with the name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "birthdayYearsOld": "{age, plural, =1{One year old today!} other{{age} years old today!}}",
+  "@birthdayYearsOld": {
+    "description": "How old the person turns today",
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "birthdayWonderfulDay": "Have a wonderful day!",
+  "@birthdayWonderfulDay": {
+    "description": "Wish at the end of the party when no age was given"
+  },
+  "birthdayAgain": "Again!",
+  "@birthdayAgain": {
+    "description": "Button: light the candles again"
+  },
+  "gameRedLight": "Red light, green light",
+  "@gameRedLight": {
+    "description": "Game: move on green, freeze on red"
+  },
+  "gameRedLightSubtitle": "Move on green, freeze on red",
+  "@gameRedLightSubtitle": {
+    "description": "Subtitle of the red light, green light game"
+  },
+  "gameRedLightRules": "Move towards the finish while the lights are green, slow down when they turn amber, and freeze on red. Anyone who moves on red goes back to the start!",
+  "@gameRedLightRules": {
+    "description": "Rules of the red light, green light game"
+  },
+  "gameStatues": "Statues",
+  "@gameStatues": {
+    "description": "Game: dance, then freeze like a statue"
+  },
+  "gameStatuesSubtitle": "Dance with the lights, freeze when they do",
+  "@gameStatuesSubtitle": {
+    "description": "Subtitle of the statues game"
+  },
+  "gameStatuesRules": "Put on some music and dance while the lights dance in every colour. When they turn icy blue, freeze like a statue until they dance again!",
+  "@gameStatuesRules": {
+    "description": "Rules of the statues game"
+  },
+  "gameColourHunt": "Colour hunt",
+  "@gameColourHunt": {
+    "description": "Game: find something of the colour the lights show"
+  },
+  "gameColourHuntSubtitle": "Find something of the lights' colour",
+  "@gameColourHuntSubtitle": {
+    "description": "Subtitle of the colour hunt game"
+  },
+  "gameColourHuntRules": "The lights choose a colour: find something of that colour in the house and bring it back before the lamps go out one by one!",
+  "@gameColourHuntRules": {
+    "description": "Rules of the colour hunt game"
+  },
+  "gameSayCalls": "Say the calls out loud",
+  "@gameSayCalls": {
+    "description": "Switch: the phone says the game's calls out loud"
+  },
+  "gameGo": "Green light: go!",
+  "@gameGo": {
+    "description": "Game call: green, move"
+  },
+  "gameSlowDown": "Careful…",
+  "@gameSlowDown": {
+    "description": "Game call: amber, red is coming"
+  },
+  "gameStop": "Red light: stop!",
+  "@gameStop": {
+    "description": "Game call: red, freeze"
+  },
+  "gameDance": "Dance!",
+  "@gameDance": {
+    "description": "Game call: dance"
+  },
+  "gameFreeze": "Freeze like a statue!",
+  "@gameFreeze": {
+    "description": "Game call: freeze like a statue"
+  },
+  "gameFindRed": "Find something red!",
+  "@gameFindRed": {
+    "description": "Colour hunt call"
+  },
+  "gameFindOrange": "Find something orange!",
+  "@gameFindOrange": {
+    "description": "Colour hunt call"
+  },
+  "gameFindYellow": "Find something yellow!",
+  "@gameFindYellow": {
+    "description": "Colour hunt call"
+  },
+  "gameFindGreen": "Find something green!",
+  "@gameFindGreen": {
+    "description": "Colour hunt call"
+  },
+  "gameFindBlue": "Find something blue!",
+  "@gameFindBlue": {
+    "description": "Colour hunt call"
+  },
+  "gameFindPurple": "Find something purple!",
+  "@gameFindPurple": {
+    "description": "Colour hunt call"
+  },
+  "gameFindPink": "Find something pink!",
+  "@gameFindPink": {
+    "description": "Colour hunt call"
+  },
+  "gameFindWhite": "Find something white!",
+  "@gameFindWhite": {
+    "description": "Colour hunt call"
+  },
+  "gameTimeUp": "Time's up! Did you find it?",
+  "@gameTimeUp": {
+    "description": "Colour hunt: the time to find is over"
+  },
+  "gameOver": "Game over! Well played!",
+  "@gameOver": {
+    "description": "The end of a light game"
+  },
+  "gameAgain": "Play again",
+  "@gameAgain": {
+    "description": "Button: play the game again"
+  },
+  "weather": "Weather lights",
+  "@weather": {
+    "description": "Home entry: the weather shown on the lights"
+  },
+  "weatherSubtitle": "The sky outside, on your lamps",
+  "@weatherSubtitle": {
+    "description": "Subtitle of the weather lights"
+  },
+  "weatherDescription": "Type your city: your lights show the weather now or tomorrow's (sun, clouds, rain, snow or a starry night). Handy for deciding what to wear!",
+  "@weatherDescription": {
+    "description": "Explains the weather lights"
+  },
+  "weatherCity": "City",
+  "@weatherCity": {
+    "description": "Field: the city to show the weather of"
+  },
+  "weatherSearch": "Search",
+  "@weatherSearch": {
+    "description": "Button: search the city"
+  },
+  "weatherNoResults": "No place found with that name.",
+  "@weatherNoResults": {
+    "description": "No city matches the search"
+  },
+  "weatherFailed": "Couldn't get the weather. Check your internet connection.",
+  "@weatherFailed": {
+    "description": "The weather could not be fetched"
+  },
+  "weatherChange": "Change",
+  "@weatherChange": {
+    "description": "Button: choose another city"
+  },
+  "weatherNow": "Now",
+  "@weatherNow": {
+    "description": "The weather right now"
+  },
+  "weatherTomorrow": "Tomorrow",
+  "@weatherTomorrow": {
+    "description": "Tomorrow's weather"
+  },
+  "weatherShow": "Show on the lights",
+  "@weatherShow": {
+    "description": "Button: show this weather on the lights"
+  },
+  "weatherAttribution": "Weather data by Open-Meteo.com (CC BY 4.0). The city you search for and its coordinates are sent to Open-Meteo; your phone's location is never used.",
+  "@weatherAttribution": {
+    "description": "Credit for the weather data and what is sent"
+  },
+  "weatherClear": "Clear sky",
+  "@weatherClear": {
+    "description": "Weather: clear sky"
+  },
+  "weatherPartlyCloudy": "Partly cloudy",
+  "@weatherPartlyCloudy": {
+    "description": "Weather: partly cloudy"
+  },
+  "weatherCloudy": "Cloudy",
+  "@weatherCloudy": {
+    "description": "Weather: overcast"
+  },
+  "weatherFog": "Fog",
+  "@weatherFog": {
+    "description": "Weather: fog"
+  },
+  "weatherDrizzle": "Drizzle",
+  "@weatherDrizzle": {
+    "description": "Weather: drizzle"
+  },
+  "weatherRain": "Rain",
+  "@weatherRain": {
+    "description": "Weather: rain"
+  },
+  "weatherSnow": "Snow",
+  "@weatherSnow": {
+    "description": "Weather: snow"
+  },
+  "weatherThunder": "Thunderstorm",
+  "@weatherThunder": {
+    "description": "Weather: thunderstorm"
+  },
+  "weatherTemperature": "{degrees}°",
+  "@weatherTemperature": {
+    "description": "A temperature in degrees",
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "weatherHighLow": "{high}° / {low}°",
+  "@weatherHighLow": {
+    "description": "Highest and lowest temperature of a day",
+    "placeholders": {
+      "high": {
+        "type": "String"
+      },
+      "low": {
+        "type": "String"
+      }
+    }
+  },
+  "weatherNowName": "Weather in {place}",
+  "@weatherNowName": {
+    "description": "Name of the effect showing the weather now in a city",
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "weatherTomorrowName": "Tomorrow in {place}",
+  "@weatherTomorrowName": {
+    "description": "Name of the effect showing tomorrow's weather in a city",
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
   }
 }
