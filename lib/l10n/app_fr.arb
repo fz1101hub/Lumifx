@@ -491,5 +491,17 @@
   "noticeCameraFailed": "Impossible de démarrer l'appareil photo.",
   "tvSyncHint": "Appuie sur Lecture, puis pointe l'appareil photo vers la télé. L'image est analysée sur ton téléphone, sans jamais être enregistrée ni envoyée.",
   "tvSyncAim": "Garde toute la télé dans l'image et cet écran ouvert. Le téléphone peut rester posé sur une table, face à la télé.",
-  "tvSyncPreview": "Image de la télé vue par l'appareil photo"
+  "tvSyncPreview": "Image de la télé vue par l'appareil photo",
+  "bedtime": "Heure du dodo",
+  "bedtimeSubtitle": "Une histoire, une veilleuse, puis lumières éteintes",
+  "bedtimeDescription": "Un seul geste au coucher : une douce histoire à lire ensemble, puis une veilleuse chaleureuse, puis les lumières s'éteignent toutes seules.",
+  "bedtimeStory": "Histoire",
+  "bedtimeStoryFor": "Histoire pendant",
+  "bedtimeGlowFor": "Puis veilleuse pendant",
+  "bedtimeWhere": "Lumières : {place}. Tu peux changer de pièce dans le lecteur.",
+  "startBedtime": "Lancer le dodo",
+  "bedtimeProgress": "Dodo : veilleuse à {glow}, lumières éteintes à {off}.",
+  "bedtimeGlowNow": "Veilleuse. Lumières éteintes à {off}. Fais de beaux rêves.",
+  "effectNameGoodnightGlow": "Lueur de bonne nuit",
+  "effectDescriptionGoodnightGlow": "Une douce lueur ambrée pour s'endormir."
 }

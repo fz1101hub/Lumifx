@@ -146,6 +146,42 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('bedtime starts a calm story with its words, then glows',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Bedtime'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('Bedtime'));
+    await tester.pumpAndSettle();
+    expect(find.text('Sleeping Dragon'), findsOneWidget);
+    // Nothing that flashes is offered at bedtime.
+    await tester.tap(find.text('Sleeping Dragon'));
+    await tester.pumpAndSettle();
+    expect(find.text('Haunted Manor'), findsNothing);
+    expect(find.text('Silent Snowfall'), findsWidgets);
+    await tester.tap(find.text('Silent Snowfall').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('5 min').first);
+    await tester.pump();
+
+    await tester.scrollUntilVisible(find.text('Start bedtime'), 200);
+    await tester.tap(find.text('Start bedtime'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Silent Snowfall'), findsOneWidget, reason: 'player');
+    expect(find.text('Outside, the world is quiet.'), findsOneWidget);
+    expect(find.textContaining('night glow at'), findsOneWidget);
+    expect(find.text('Pause'), findsOneWidget);
+
+    await tester.tap(find.text('Pause'));
+    await tester.pump();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));
@@ -1123,6 +1159,8 @@ void streamingTests() {
     ));
     await tester.scrollUntilVisible(find.text('Rooms & zones'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Rooms & zones'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Rooms & zones'));
     await tester.pumpAndSettle();
     expect(find.text('Living room'), findsOneWidget);
@@ -1249,6 +1287,8 @@ void streamingTests() {
     ));
     await tester.scrollUntilVisible(find.text('Wake-up & bedtime'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Wake-up & bedtime'));
+    await tester.pumpAndSettle();
     await tester.runAsync(() async {
       await tester.tap(find.text('Wake-up & bedtime'));
       await Future<void>.delayed(const Duration(milliseconds: 300));

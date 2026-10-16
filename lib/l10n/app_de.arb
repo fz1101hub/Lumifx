@@ -491,5 +491,17 @@
   "noticeCameraFailed": "Die Kamera konnte nicht gestartet werden.",
   "tvSyncHint": "Tippe auf Abspielen und richte die Kamera auf den Fernseher. Das Bild wird auf deinem Telefon ausgewertet und nie aufgezeichnet oder gesendet.",
   "tvSyncAim": "Halte den ganzen Fernseher im Bild und diesen Bildschirm geöffnet. Das Telefon kann auf einem Tisch liegen, zum Fernseher gerichtet.",
-  "tvSyncPreview": "Kamerabild des Fernsehers"
+  "tvSyncPreview": "Kamerabild des Fernsehers",
+  "bedtime": "Schlafenszeit",
+  "bedtimeSubtitle": "Eine Geschichte, ein Nachtlicht, dann Licht aus",
+  "bedtimeDescription": "Ein Tipp zur Schlafenszeit: eine sanfte Geschichte zum gemeinsamen Lesen, dann ein warmes Nachtlicht, dann geht das Licht von selbst aus.",
+  "bedtimeStory": "Geschichte",
+  "bedtimeStoryFor": "Geschichte für",
+  "bedtimeGlowFor": "Dann Nachtlicht für",
+  "bedtimeWhere": "Lampen: {place}. Den Raum kannst du im Player ändern.",
+  "startBedtime": "Schlafenszeit starten",
+  "bedtimeProgress": "Schlafenszeit: Nachtlicht um {glow}, Licht aus um {off}.",
+  "bedtimeGlowNow": "Nachtlicht. Licht aus um {off}. Träum schön.",
+  "effectNameGoodnightGlow": "Gute-Nacht-Licht",
+  "effectDescriptionGoodnightGlow": "Ein sanftes bernsteinfarbenes Licht zum Einschlafen."
 }

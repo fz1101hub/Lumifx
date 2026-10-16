@@ -669,6 +669,58 @@ void main() {
     controller.dispose();
   });
 
+  test('bedtime: the story, then the night glow, then lights off', () async {
+    final (controller, fake, _) =
+        await _setUp(sleepFade: const Duration(milliseconds: 100));
+    final before = controller.controls;
+    await controller.startBedtime(
+      sleepingDragon,
+      storyFor: const Duration(milliseconds: 300),
+      glowFor: const Duration(milliseconds: 300),
+      brightness: 0.4,
+    );
+    expect(controller.status, PlaybackStatus.playing);
+    expect(controller.effect.id, 'sleeping_dragon');
+    expect(controller.inBedtime, isTrue);
+    expect(controller.controls.brightness, 0.4);
+    expect(controller.sleepTimer, const Duration(milliseconds: 600));
+    expect(controller.isShownBy('sleeping_dragon'), isTrue);
+
+    await _wait(400);
+    expect(controller.effect.id, PlaybackController.bedtimeGlowId);
+    expect(controller.isShownBy('sleeping_dragon'), isTrue,
+        reason: 'the story\'s player follows bedtime');
+
+    await _wait(1300);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(controller.inBedtime, isFalse);
+    // The lights are off, and bedtime leaves nothing behind.
+    final last = {for (final (id, body) in fake.puts) id: body};
+    expect((last['color']!['on']! as Map)['on'], isFalse);
+    expect(controller.controls, before);
+    expect(controller.sleepTimer, isNull);
+    controller.dispose();
+  });
+
+  test('choosing another effect ends bedtime and puts things back', () async {
+    final (controller, _, _) = await _setUp();
+    controller.setSleepTimer(const Duration(minutes: 45));
+    await controller.startBedtime(
+      sleepingDragon,
+      storyFor: const Duration(minutes: 10),
+      glowFor: const Duration(minutes: 20),
+      brightness: 0.3,
+    );
+    expect(controller.sleepTimer, const Duration(minutes: 30));
+    await controller.switchEffect(ocean);
+    expect(controller.inBedtime, isFalse);
+    expect(controller.controls.brightness, isNot(0.3));
+    expect(controller.sleepTimer, const Duration(minutes: 45),
+        reason: 'the user\'s own timer comes back');
+    await controller.stop();
+    controller.dispose();
+  });
+
   test('a playlist moves on by itself, pauses its clock and ends on stop',
       () async {
     final (controller, _, _) = await _setUp();

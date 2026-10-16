@@ -491,5 +491,17 @@
   "noticeCameraFailed": "Non è stato possibile avviare la fotocamera.",
   "tvSyncHint": "Premi Riproduci, poi punta la fotocamera verso la TV. L'immagine viene analizzata sul telefono e non viene mai registrata né inviata.",
   "tvSyncAim": "Tieni tutta la TV dentro l'immagine e questa schermata aperta. Il telefono può stare su un tavolo rivolto verso la TV.",
-  "tvSyncPreview": "Immagine della TV dalla fotocamera"
+  "tvSyncPreview": "Immagine della TV dalla fotocamera",
+  "bedtime": "Modalità nanna",
+  "bedtimeSubtitle": "Una storia, una luce notturna, poi luci spente",
+  "bedtimeDescription": "Un solo tocco all'ora della nanna: una storia dolce da leggere insieme, poi una calda luce notturna, poi le luci si spengono da sole.",
+  "bedtimeStory": "Storia",
+  "bedtimeStoryFor": "Storia per",
+  "bedtimeGlowFor": "Poi luce notturna per",
+  "bedtimeWhere": "Luci: {place}. Puoi cambiare stanza nel lettore.",
+  "startBedtime": "Avvia la nanna",
+  "bedtimeProgress": "Nanna: luce notturna alle {glow}, luci spente alle {off}.",
+  "bedtimeGlowNow": "Luce notturna. Luci spente alle {off}. Sogni d'oro.",
+  "effectNameGoodnightGlow": "Luce della buonanotte",
+  "effectDescriptionGoodnightGlow": "Un tenue bagliore ambrato per addormentarsi."
 }

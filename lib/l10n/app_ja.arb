@@ -491,5 +491,17 @@
   "noticeCameraFailed": "カメラを起動できませんでした。",
   "tvSyncHint": "再生を押して、カメラをテレビに向けてください。映像はスマートフォンの中だけで分析され、録画や送信はされません。",
   "tvSyncAim": "テレビ全体が映るようにして、この画面を開いたままにしてください。スマートフォンはテレビに向けてテーブルに置いておけます。",
-  "tvSyncPreview": "カメラに映ったテレビの映像"
+  "tvSyncPreview": "カメラに映ったテレビの映像",
+  "bedtime": "おやすみモード",
+  "bedtimeSubtitle": "お話、常夜灯、そして消灯",
+  "bedtimeDescription": "寝る時間にワンタップ：いっしょに読むやさしいお話、あたたかい常夜灯、そして明かりが自然に消えます。",
+  "bedtimeStory": "お話",
+  "bedtimeStoryFor": "お話の時間",
+  "bedtimeGlowFor": "そのあと常夜灯の時間",
+  "bedtimeWhere": "明かり：{place}。部屋はプレーヤーで変更できます。",
+  "startBedtime": "おやすみを始める",
+  "bedtimeProgress": "おやすみ：{glow} に常夜灯、{off} に消灯。",
+  "bedtimeGlowNow": "常夜灯。{off} に消灯します。おやすみなさい。",
+  "effectNameGoodnightGlow": "おやすみの灯り",
+  "effectDescriptionGoodnightGlow": "眠りにつくための、やわらかな琥珀色の灯り。"
 }

@@ -262,11 +262,27 @@ const disco = LightingEffect(
   ],
 );
 
+/// A warm, barely-there glow that hardly moves: a night light, and the
+/// last part of bedtime before the lights go off.
+final goodnightGlow = _ambientScene(
+  id: 'goodnight_glow',
+  name: 'Goodnight Glow',
+  collection: 'Relax',
+  description: 'A soft amber glow to fall asleep by.',
+  parameters: {
+    'palette': <String>['#FF8A2B', '#FF6A1A', '#E8561C'],
+    'brightnessMin': 0.05,
+    'brightnessMax': 0.14,
+    'speed': 0.01,
+  },
+);
+
 final builtinScenes = <LightingEffect>[
   fireplace,
   ocean,
   aurora,
   sunset,
+  goodnightGlow,
   thunderstorm,
   disco,
 ];

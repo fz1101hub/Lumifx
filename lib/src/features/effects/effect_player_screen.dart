@@ -45,11 +45,12 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
   bool _isCurrent(PlaybackController c) => c.isShownBy(widget.effect.id);
 
   /// The effect to show: this screen's, or the playlist's current one.
-  LightingEffect _shown(PlaybackController c) => c.playlist != null &&
-          _isCurrent(c)
-      ? c.effect
-      // Looked up again, so an edited scene of the user's shows its edit.
-      : AppScope.of(context).library.byId(widget.effect.id) ?? widget.effect;
+  LightingEffect _shown(PlaybackController c) =>
+      (c.playlist != null || c.inBedtime) && _isCurrent(c)
+          ? c.effect
+          // Looked up again, so an edited scene of the user's shows its edit.
+          : AppScope.of(context).library.byId(widget.effect.id) ??
+              widget.effect;
 
   @override
   void didChangeDependencies() {
@@ -106,6 +107,22 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
       controller
           .setSleepTimer(minutes == 0 ? null : Duration(minutes: minutes));
     }
+  }
+
+  /// When bedtime moves on to the night glow and turns the lights off.
+  String _bedtimeLabel(BuildContext context, PlaybackController c) {
+    final l10n = context.l10n;
+    final localizations = MaterialLocalizations.of(context);
+    final h24 = MediaQuery.alwaysUse24HourFormatOf(context);
+    String time(DateTime? at) => at == null
+        ? ''
+        : localizations.formatTimeOfDay(TimeOfDay.fromDateTime(at),
+            alwaysUse24HourFormat: h24);
+    final glowAt = c.bedtimeGlowAt;
+    final off = time(c.bedtimeOffAt);
+    return glowAt != null && glowAt.isAfter(DateTime.now())
+        ? l10n.bedtimeProgress(time(glowAt), off)
+        : l10n.bedtimeGlowNow(off);
   }
 
   String _sleepLabel(AppLocalizations l10n, PlaybackController c) {
@@ -458,7 +475,13 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                   onPressed: busy ? null : c.nextInPlaylist,
                 ),
               ),
-            if (other || playlist != null) const SizedBox(height: 16),
+            if (current && c.inBedtime)
+              _InfoCard(
+                icon: Icons.bedtime_outlined,
+                text: _bedtimeLabel(context, c),
+              ),
+            if (other || playlist != null || (current && c.inBedtime))
+              const SizedBox(height: 16),
             _LampPreview(
               player: current ? c.player : null,
               names: [

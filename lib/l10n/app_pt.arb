@@ -491,5 +491,17 @@
   "noticeCameraFailed": "Não foi possível iniciar a câmera.",
   "tvSyncHint": "Toque em Reproduzir e aponte a câmera para a TV. A imagem é analisada no seu celular e nunca é gravada nem enviada.",
   "tvSyncAim": "Mantenha a TV inteira dentro da imagem e esta tela aberta. O celular pode ficar apoiado numa mesa, virado para a TV.",
-  "tvSyncPreview": "Imagem da TV pela câmera"
+  "tvSyncPreview": "Imagem da TV pela câmera",
+  "bedtime": "Hora de dormir",
+  "bedtimeSubtitle": "Uma história, uma luz noturna, depois luzes apagadas",
+  "bedtimeDescription": "Um toque na hora de dormir: uma história suave para ler junto, depois uma luz noturna quentinha, e as luzes se apagam sozinhas.",
+  "bedtimeStory": "História",
+  "bedtimeStoryFor": "História por",
+  "bedtimeGlowFor": "Depois luz noturna por",
+  "bedtimeWhere": "Luzes: {place}. Você pode trocar o cômodo no player.",
+  "startBedtime": "Começar a hora de dormir",
+  "bedtimeProgress": "Hora de dormir: luz noturna às {glow}, luzes apagadas às {off}.",
+  "bedtimeGlowNow": "Luz noturna. Luzes apagadas às {off}. Bons sonhos.",
+  "effectNameGoodnightGlow": "Luz de boa noite",
+  "effectDescriptionGoodnightGlow": "Um brilho âmbar suave para pegar no sono."
 }

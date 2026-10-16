@@ -1565,5 +1565,71 @@
   "tvSyncPreview": "Camera picture of the TV",
   "@tvSyncPreview": {
     "description": "Screen reader label of the camera picture in TV Sync"
+  },
+  "bedtime": "Bedtime",
+  "@bedtime": {
+    "description": "Name of bedtime mode: a story, a night glow, then lights off"
+  },
+  "bedtimeSubtitle": "A story, a night glow, then lights off",
+  "@bedtimeSubtitle": {
+    "description": "Subtitle of bedtime mode on the home screen"
+  },
+  "bedtimeDescription": "One tap at bedtime: a gentle story to read together, then a warm night glow, then the lights go off by themselves.",
+  "@bedtimeDescription": {
+    "description": "Explanation at the top of the bedtime screen"
+  },
+  "bedtimeStory": "Story",
+  "@bedtimeStory": {
+    "description": "Label of the story picker in bedtime mode"
+  },
+  "bedtimeStoryFor": "Story for",
+  "@bedtimeStoryFor": {
+    "description": "How long the story plays in bedtime mode"
+  },
+  "bedtimeGlowFor": "Then night glow for",
+  "@bedtimeGlowFor": {
+    "description": "How long the night glow lasts in bedtime mode"
+  },
+  "bedtimeWhere": "Lights: {place}. You can change the room in the player.",
+  "@bedtimeWhere": {
+    "description": "Where bedtime plays; place is a room or 'Preview only'",
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "startBedtime": "Start bedtime",
+  "@startBedtime": {
+    "description": "Button that starts bedtime mode"
+  },
+  "bedtimeProgress": "Bedtime: night glow at {glow}, lights off at {off}.",
+  "@bedtimeProgress": {
+    "description": "Info card in the player during bedtime; times like 21:10",
+    "placeholders": {
+      "glow": {
+        "type": "String"
+      },
+      "off": {
+        "type": "String"
+      }
+    }
+  },
+  "bedtimeGlowNow": "Night glow. Lights off at {off}. Sweet dreams.",
+  "@bedtimeGlowNow": {
+    "description": "Info card in the player during the night glow of bedtime",
+    "placeholders": {
+      "off": {
+        "type": "String"
+      }
+    }
+  },
+  "effectNameGoodnightGlow": "Goodnight Glow",
+  "@effectNameGoodnightGlow": {
+    "description": "Name of the warm night-light scene"
+  },
+  "effectDescriptionGoodnightGlow": "A soft amber glow to fall asleep by.",
+  "@effectDescriptionGoodnightGlow": {
+    "description": "Description of the warm night-light scene"
   }
 }

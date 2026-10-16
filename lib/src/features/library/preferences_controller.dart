@@ -122,6 +122,39 @@ class PreferencesController extends ChangeNotifier {
   bool _soundOn = true;
   double _soundVolume = 0.6;
   bool _readAlong = true;
+  String _bedtimeStory = defaultBedtimeStory;
+  int _bedtimeStoryMinutes = 10;
+  int _bedtimeGlowMinutes = 20;
+  double _bedtimeBrightness = 0.6;
+
+  static const defaultBedtimeStory = 'sleeping_dragon';
+  static const bedtimeStoryChoices = [5, 10, 15, 20, 30];
+  static const bedtimeGlowChoices = [5, 10, 20, 30, 45, 60];
+
+  /// Bedtime as last chosen, so the next one is a single tap.
+  String get bedtimeStory => _bedtimeStory;
+  int get bedtimeStoryMinutes => _bedtimeStoryMinutes;
+  int get bedtimeGlowMinutes => _bedtimeGlowMinutes;
+  double get bedtimeBrightness => _bedtimeBrightness;
+
+  Future<void> setBedtime({
+    String? story,
+    int? storyMinutes,
+    int? glowMinutes,
+    double? brightness,
+  }) {
+    _bedtimeStory = story ?? _bedtimeStory;
+    if (storyMinutes != null && bedtimeStoryChoices.contains(storyMinutes)) {
+      _bedtimeStoryMinutes = storyMinutes;
+    }
+    if (glowMinutes != null && bedtimeGlowChoices.contains(glowMinutes)) {
+      _bedtimeGlowMinutes = glowMinutes;
+    }
+    if (brightness != null) {
+      _bedtimeBrightness = brightness.clamp(0.1, 1.0);
+    }
+    return _changed();
+  }
 
   /// The words of a story shown in time with its lights.
   bool get readAlong => _readAlong;
@@ -200,6 +233,22 @@ class PreferencesController extends ChangeNotifier {
       _soundOn = json['soundOn'] as bool? ?? true;
       _soundVolume = _unit(json['soundVolume'], 0.6);
       _readAlong = json['readAlong'] as bool? ?? true;
+      final bedtime = json['bedtime'];
+      if (bedtime is Map) {
+        final story = bedtime['story'];
+        final storyMinutes = bedtime['storyMinutes'];
+        final glowMinutes = bedtime['glowMinutes'];
+        if (story is String && story.length <= 80) {
+          _bedtimeStory = story;
+        }
+        if (bedtimeStoryChoices.contains(storyMinutes)) {
+          _bedtimeStoryMinutes = storyMinutes as int;
+        }
+        if (bedtimeGlowChoices.contains(glowMinutes)) {
+          _bedtimeGlowMinutes = glowMinutes as int;
+        }
+        _bedtimeBrightness = _unit(bedtime['brightness'], 0.6).clamp(0.1, 1.0);
+      }
       _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
           MusicSource.microphone;
       final scenes = json['userScenes'];
@@ -436,6 +485,12 @@ class PreferencesController extends ChangeNotifier {
       'soundOn': _soundOn,
       'soundVolume': _soundVolume,
       'readAlong': _readAlong,
+      'bedtime': {
+        'story': _bedtimeStory,
+        'storyMinutes': _bedtimeStoryMinutes,
+        'glowMinutes': _bedtimeGlowMinutes,
+        'brightness': _bedtimeBrightness,
+      },
       'musicSource': _musicSource.name,
       'playlists': [for (final p in _playlists) p.toJson()],
       'userScenes': [for (final s in _userScenes) s.toJson()],
@@ -456,6 +511,9 @@ class PreferencesController extends ChangeNotifier {
   static List<String> _strings(Object? value) =>
       value is List ? value.whereType<String>().toList() : const [];
 
+  /// A 0..1 number, or [fallback] for anything else (a wrong type must
+  /// not throw and lose the rest of the preferences).
   static double _unit(Object? value, double fallback) =>
-      ((value as num?)?.toDouble() ?? fallback).clamp(0.0, 1.0);
+      (value is num && value.isFinite ? value.toDouble() : fallback)
+          .clamp(0.0, 1.0);
 }

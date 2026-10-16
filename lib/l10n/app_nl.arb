@@ -491,5 +491,17 @@
   "noticeCameraFailed": "De camera kon niet worden gestart.",
   "tvSyncHint": "Druk op Afspelen en richt de camera op de tv. Het beeld wordt op je telefoon geanalyseerd en nooit opgenomen of verstuurd.",
   "tvSyncAim": "Houd de hele tv in beeld en dit scherm open. De telefoon kan op tafel liggen, gericht op de tv.",
-  "tvSyncPreview": "Camerabeeld van de tv"
+  "tvSyncPreview": "Camerabeeld van de tv",
+  "bedtime": "Bedtijd",
+  "bedtimeSubtitle": "Een verhaal, een nachtlampje, dan licht uit",
+  "bedtimeDescription": "Eén tik bij bedtijd: een rustig verhaal om samen te lezen, dan een warm nachtlampje, en dan gaat het licht vanzelf uit.",
+  "bedtimeStory": "Verhaal",
+  "bedtimeStoryFor": "Verhaal gedurende",
+  "bedtimeGlowFor": "Dan nachtlampje gedurende",
+  "bedtimeWhere": "Lampen: {place}. Je kunt de kamer wijzigen in de speler.",
+  "startBedtime": "Bedtijd starten",
+  "bedtimeProgress": "Bedtijd: nachtlampje om {glow}, licht uit om {off}.",
+  "bedtimeGlowNow": "Nachtlampje. Licht uit om {off}. Slaap lekker.",
+  "effectNameGoodnightGlow": "Welterusten-gloed",
+  "effectDescriptionGoodnightGlow": "Een zachte amberkleurige gloed om bij in slaap te vallen."
 }
