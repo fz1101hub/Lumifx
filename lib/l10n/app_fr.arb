@@ -296,5 +296,17 @@
   "copyLink": "Copier le lien",
   "linkCopied": "Lien copié",
   "softFlashesBySystem": "Toujours activé : votre téléphone est réglé pour réduire les animations.",
-  "lampPreview": "Aperçu de {count} lampes : {names}"
+  "lampPreview": "Aperçu de {count} lampes : {names}",
+  "onboardingWelcomeTitle": "Une lumière qui raconte des histoires",
+  "onboardingWelcomeBody": "LumiFX transforme vos lampes Philips Hue en scènes vivantes, en courtes histoires pleines de surprises et en lumières de fête qui suivent la musique. Tout fonctionne sur votre téléphone et votre propre réseau.",
+  "onboardingBridgeTitle": "Connectez votre pont Hue",
+  "onboardingBridgeBody": "Gardez le téléphone sur le même Wi-Fi que le pont. LumiFX le trouve, puis vous demande d'appuyer une fois sur le bouton rond situé dessus.",
+  "onboardingPreviewTitle": "Essayez tout de suite",
+  "onboardingPreviewBody": "Pas de pont sous la main ? Chaque effet se joue aussi sur des lampes virtuelles à l'écran : explorez d'abord et connectez-vous plus tard depuis l'accueil.",
+  "next": "Suivant",
+  "connectNow": "Connecter maintenant",
+  "later": "Plus tard",
+  "getStarted": "Commencer",
+  "skip": "Passer",
+  "pageOf": "Page {page} sur {count}"
 }

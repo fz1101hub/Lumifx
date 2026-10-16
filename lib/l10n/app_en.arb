@@ -727,5 +727,61 @@
         "type": "String"
       }
     }
+  },
+  "onboardingWelcomeTitle": "Light that tells stories",
+  "@onboardingWelcomeTitle": {
+    "description": "Onboarding page 1 title"
+  },
+  "onboardingWelcomeBody": "LumiFX turns your Philips Hue lights into living scenes, short stories with surprises, and party lights that follow the music. Everything runs on your phone and your own network.",
+  "@onboardingWelcomeBody": {
+    "description": "Onboarding page 1 text"
+  },
+  "onboardingBridgeTitle": "Connect your Hue Bridge",
+  "@onboardingBridgeTitle": {
+    "description": "Onboarding page 2 title"
+  },
+  "onboardingBridgeBody": "Keep the phone on the same Wi-Fi as the bridge. LumiFX finds it, then asks you to press the round button on top of it once.",
+  "@onboardingBridgeBody": {
+    "description": "Onboarding page 2 text"
+  },
+  "onboardingPreviewTitle": "Try it right away",
+  "@onboardingPreviewTitle": {
+    "description": "Onboarding page 3 title"
+  },
+  "onboardingPreviewBody": "No bridge at hand? Every effect also plays on virtual lamps on the screen, so you can look around first and connect later from the home screen.",
+  "@onboardingPreviewBody": {
+    "description": "Onboarding page 3 text"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Onboarding button: next page"
+  },
+  "connectNow": "Connect now",
+  "@connectNow": {
+    "description": "Onboarding button: connect the bridge now"
+  },
+  "later": "Later",
+  "@later": {
+    "description": "Onboarding button: connect later"
+  },
+  "getStarted": "Get started",
+  "@getStarted": {
+    "description": "Onboarding button: finish"
+  },
+  "skip": "Skip",
+  "@skip": {
+    "description": "Onboarding button: skip the pages"
+  },
+  "pageOf": "Page {page} of {count}",
+  "@pageOf": {
+    "description": "Screen reader label of the page dots",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

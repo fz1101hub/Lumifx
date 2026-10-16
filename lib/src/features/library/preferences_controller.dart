@@ -109,10 +109,32 @@ class PreferencesController extends ChangeNotifier {
   bool _dirty = false;
   Future<void> _writes = Future.value();
 
+  bool _loaded = false;
+  bool _firstRun = false;
+  bool _onboardingDone = false;
+
+  /// [load] has finished.
+  bool get isLoaded => _loaded;
+
+  /// Nothing was stored yet when [load] ran: the app was just installed.
+  bool get isFirstRun => _firstRun;
+
+  /// The welcome pages have been seen (or skipped).
+  bool get onboardingDone => _onboardingDone;
+
+  Future<void> setOnboardingDone() {
+    _onboardingDone = true;
+    return _changed();
+  }
+
   Future<void> load() async {
     try {
       final raw = await _store.read(_key);
-      if (raw == null || _dirty) {
+      if (raw == null) {
+        _firstRun = !_dirty;
+        return;
+      }
+      if (_dirty) {
         return;
       }
       final json = (jsonDecode(raw) as Map).cast<String, Object?>();
@@ -122,6 +144,7 @@ class PreferencesController extends ChangeNotifier {
       _restoreLights = json['restoreLights'] as bool? ?? true;
       _softFlashes = json['softFlashes'] as bool? ?? false;
       _flashWarningShown = json['flashWarningShown'] as bool? ?? false;
+      _onboardingDone = json['onboardingDone'] as bool? ?? true;
       _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
           MusicSource.microphone;
       final scenes = json['userScenes'];
@@ -158,8 +181,10 @@ class PreferencesController extends ChangeNotifier {
       }
     } on Object {
       // Unreadable preferences are not worth failing over; start fresh.
+    } finally {
+      _loaded = true;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> toggleFavorite(String effectId) {
@@ -308,6 +333,7 @@ class PreferencesController extends ChangeNotifier {
       'restoreLights': _restoreLights,
       'softFlashes': _softFlashes,
       'flashWarningShown': _flashWarningShown,
+      'onboardingDone': _onboardingDone,
       'musicSource': _musicSource.name,
       'playlists': [for (final p in _playlists) p.toJson()],
       'userScenes': [for (final s in _userScenes) s.toJson()],

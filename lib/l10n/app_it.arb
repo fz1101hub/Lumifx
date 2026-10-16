@@ -296,5 +296,17 @@
   "copyLink": "Copia link",
   "linkCopied": "Link copiato",
   "softFlashesBySystem": "Sempre attivo: il telefono è impostato per ridurre il movimento.",
-  "lampPreview": "Anteprima di {count} lampade: {names}"
+  "lampPreview": "Anteprima di {count} lampade: {names}",
+  "onboardingWelcomeTitle": "Luce che racconta storie",
+  "onboardingWelcomeBody": "LumiFX trasforma le tue luci Philips Hue in scene vive, brevi storie piene di sorprese e luci da festa che seguono la musica. Tutto funziona sul telefono e sulla tua rete.",
+  "onboardingBridgeTitle": "Collega il tuo Hue Bridge",
+  "onboardingBridgeBody": "Tieni il telefono sulla stessa rete Wi-Fi del Bridge. LumiFX lo trova e poi ti chiede di premere una volta il pulsante rotondo sopra.",
+  "onboardingPreviewTitle": "Provala subito",
+  "onboardingPreviewBody": "Non hai un Bridge a portata di mano? Ogni effetto si riproduce anche su lampade virtuali sullo schermo: puoi esplorare prima e collegarti dopo dalla schermata principale.",
+  "next": "Avanti",
+  "connectNow": "Collega ora",
+  "later": "Più tardi",
+  "getStarted": "Inizia",
+  "skip": "Salta",
+  "pageOf": "Pagina {page} di {count}"
 }

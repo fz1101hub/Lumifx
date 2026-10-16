@@ -296,5 +296,17 @@
   "copyLink": "Link kopiëren",
   "linkCopied": "Link gekopieerd",
   "softFlashesBySystem": "Altijd aan: je telefoon is ingesteld op minder beweging.",
-  "lampPreview": "Voorbeeld van {count} lampen: {names}"
+  "lampPreview": "Voorbeeld van {count} lampen: {names}",
+  "onboardingWelcomeTitle": "Licht dat verhalen vertelt",
+  "onboardingWelcomeBody": "LumiFX maakt van je Philips Hue-lampen levende scènes, korte verhalen vol verrassingen en feestverlichting die de muziek volgt. Alles draait op je telefoon en je eigen netwerk.",
+  "onboardingBridgeTitle": "Verbind je Hue Bridge",
+  "onboardingBridgeBody": "Houd de telefoon op hetzelfde wifi-netwerk als de bridge. LumiFX vindt hem en vraagt je dan één keer op de ronde knop bovenop te drukken.",
+  "onboardingPreviewTitle": "Probeer het meteen",
+  "onboardingPreviewBody": "Geen bridge bij de hand? Elk effect speelt ook op virtuele lampen op het scherm, dus je kunt eerst rondkijken en later verbinden vanaf het beginscherm.",
+  "next": "Volgende",
+  "connectNow": "Nu verbinden",
+  "later": "Later",
+  "getStarted": "Aan de slag",
+  "skip": "Overslaan",
+  "pageOf": "Pagina {page} van {count}"
 }

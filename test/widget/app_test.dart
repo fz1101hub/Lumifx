@@ -232,6 +232,63 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('the welcome pages show once, on the very first launch',
+      (tester) async {
+    final store = InMemoryKeyValueStore();
+    Future<void> launch() async {
+      final bridge = BridgeController(store: InMemoryCredentialStore());
+      await tester.runAsync(bridge.initialize);
+      final preferences = PreferencesController(store: store);
+      await tester.runAsync(preferences.load);
+      await tester.pumpWidget(LumiFxApp(
+        key: UniqueKey(),
+        bridge: bridge,
+        discovery: _FakeDiscovery(),
+        preferences: preferences,
+        audioInput: FakeAudioInput(),
+      ));
+      await tester.pumpAndSettle();
+    }
+
+    await launch();
+    expect(find.text('Light that tells stories'), findsOneWidget);
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('Connect now'), findsOneWidget);
+    await tester.tap(find.text('Later'));
+    await tester.pumpAndSettle();
+    expect(find.text('Try it right away'), findsOneWidget);
+    expect(find.text('Skip'), findsNothing);
+    await tester.tap(find.text('Get started'));
+    await tester.pumpAndSettle();
+    expect(find.text('Connect your Hue Bridge'), findsOneWidget,
+        reason: 'the home with its bridge banner');
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+
+    // Next launch: straight to the home.
+    await launch();
+    expect(find.text('Light that tells stories'), findsNothing);
+  });
+
+  testWidgets('people updating the app never see the welcome pages',
+      (tester) async {
+    final store = InMemoryKeyValueStore();
+    await store.write('lumifx.preferences.v1', '{"favorites": ["ocean"]}');
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: store);
+    await tester.runAsync(preferences.load);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Light that tells stories'), findsNothing);
+    expect(find.text('Favorites'), findsOneWidget);
+  });
+
   testWidgets('settings change the controls a new playback starts with',
       (tester) async {
     await _pumpApp(tester);

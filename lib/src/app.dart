@@ -14,6 +14,7 @@ import 'features/effects/playback_controller.dart';
 import 'features/effects/player_route.dart';
 import 'features/home/home_screen.dart';
 import 'features/library/effect_library.dart';
+import 'features/onboarding/onboarding_screen.dart';
 import 'features/links/app_link.dart';
 import 'features/links/link_handler.dart';
 import 'features/library/preferences_controller.dart';
@@ -78,6 +79,9 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     );
     _notices = _playback.notices.listen(_showNotice);
     didChangeAccessibilityFeatures();
+    widget.preferences.addListener(_maybeWelcome);
+    widget.bridge.addListener(_maybeWelcome);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeWelcome());
     _links = LinkHandler(
       playback: _playback,
       library: _library,
@@ -92,6 +96,32 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => unawaited(_links.handle(initial)));
     }
+  }
+
+  bool _welcomed = false;
+
+  /// The welcome pages, once, right after installing: only when nothing
+  /// was stored before and no bridge is paired (so updates never show it).
+  void _maybeWelcome() {
+    final preferences = widget.preferences;
+    final bridge = widget.bridge;
+    if (_welcomed ||
+        !preferences.isLoaded ||
+        !preferences.isFirstRun ||
+        preferences.onboardingDone ||
+        bridge.status == BridgeStatus.initializing ||
+        bridge.credentials != null) {
+      return;
+    }
+    final navigator = _navigatorKey.currentState;
+    if (navigator == null) {
+      return;
+    }
+    _welcomed = true;
+    unawaited(navigator.push(MaterialPageRoute<void>(
+      fullscreenDialog: true,
+      builder: (_) => const OnboardingScreen(),
+    )));
   }
 
   /// A `lumifx://` link while the app runs.
@@ -139,6 +169,8 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    widget.preferences.removeListener(_maybeWelcome);
+    widget.bridge.removeListener(_maybeWelcome);
     unawaited(_notices?.cancel());
     _playback.dispose();
     _routes.dispose();
