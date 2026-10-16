@@ -294,5 +294,7 @@
   "linkPlaylist": "Reproducir la lista {name}",
   "linkStop": "Detener y restaurar las luces",
   "copyLink": "Copiar enlace",
-  "linkCopied": "Enlace copiado"
+  "linkCopied": "Enlace copiado",
+  "softFlashesBySystem": "Siempre activado: tu teléfono está configurado para reducir el movimiento.",
+  "lampPreview": "Vista previa de {count} lámparas: {names}"
 }

@@ -806,6 +806,17 @@ class _LampPreview extends StatelessWidget {
   }
 
   Widget _lamps(BuildContext context, List<LightFrame> frames) {
+    // One description for screen readers instead of a circle per lamp,
+    // which would change many times a second.
+    return Semantics(
+      container: true,
+      label: context.l10n.lampPreview(frames.length, names.join(', ')),
+      excludeSemantics: true,
+      child: _lampWrap(context, frames),
+    );
+  }
+
+  Widget _lampWrap(BuildContext context, List<LightFrame> frames) {
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 16,
@@ -880,6 +891,8 @@ class _ControlSlider extends StatelessWidget {
             min: min,
             max: max,
             onChanged: onChanged,
+            semanticFormatterCallback: (v) =>
+                '$label ${(100 * (v - min) / (max - min)).round()}%',
           ),
         ),
       ],

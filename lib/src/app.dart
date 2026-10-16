@@ -77,6 +77,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       resolveEffect: _library.byId,
     );
     _notices = _playback.notices.listen(_showNotice);
+    didChangeAccessibilityFeatures();
     _links = LinkHandler(
       playback: _playback,
       library: _library,
@@ -115,6 +116,14 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       ..showSnackBar(SnackBar(
         content: Text(describePlaybackNotice(context.l10n, notice)),
       ));
+  }
+
+  @override
+  void didChangeAccessibilityFeatures() {
+    final features =
+        WidgetsBinding.instance.platformDispatcher.accessibilityFeatures;
+    _playback.systemReducesMotion =
+        features.disableAnimations || features.reduceMotion;
   }
 
   @override

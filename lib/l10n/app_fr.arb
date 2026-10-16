@@ -294,5 +294,7 @@
   "linkPlaylist": "Lire la playlist {name}",
   "linkStop": "Arrêter et rétablir les lumières",
   "copyLink": "Copier le lien",
-  "linkCopied": "Lien copié"
+  "linkCopied": "Lien copié",
+  "softFlashesBySystem": "Toujours activé : votre téléphone est réglé pour réduire les animations.",
+  "lampPreview": "Aperçu de {count} lampes : {names}"
 }

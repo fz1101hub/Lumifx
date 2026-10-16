@@ -711,5 +711,21 @@
   "linkCopied": "Link copied",
   "@linkCopied": {
     "description": "Snackbar after copying a link"
+  },
+  "softFlashesBySystem": "Always on: your phone is set to reduce motion.",
+  "@softFlashesBySystem": {
+    "description": "Soft flashes setting subtitle when the phone reduces motion"
+  },
+  "lampPreview": "Preview of {count} lamps: {names}",
+  "@lampPreview": {
+    "description": "Screen reader label of the lamp preview",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "names": {
+        "type": "String"
+      }
+    }
   }
 }

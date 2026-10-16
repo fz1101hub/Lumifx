@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settings)),
       body: ListenableBuilder(
-        listenable: Listenable.merge([bridge, preferences]),
+        listenable: Listenable.merge([bridge, preferences, scope.playback]),
         builder: (context, _) {
           final controls = preferences.defaultControls;
           void update(EffectControls value) =>
@@ -70,9 +70,13 @@ class SettingsScreen extends StatelessWidget {
               ),
               SwitchListTile(
                 title: Text(l10n.softFlashes),
-                subtitle: Text(l10n.softFlashesDescription),
-                value: preferences.softFlashes,
-                onChanged: preferences.setSoftFlashes,
+                subtitle: Text(scope.playback.systemReducesMotion
+                    ? l10n.softFlashesBySystem
+                    : l10n.softFlashesDescription),
+                value: scope.playback.softFlashes,
+                onChanged: scope.playback.systemReducesMotion
+                    ? null
+                    : preferences.setSoftFlashes,
               ),
               if (scope.phoneAudioInput != null) ...[
                 const Divider(height: 32),
@@ -247,6 +251,8 @@ class _SliderTile extends StatelessWidget {
               min: min,
               max: max,
               onChanged: onChanged,
+              semanticFormatterCallback: (v) =>
+                  '$label ${(100 * (v - min) / (max - min)).round()}%',
             ),
           ),
         ],

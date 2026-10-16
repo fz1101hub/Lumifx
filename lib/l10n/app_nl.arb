@@ -294,5 +294,7 @@
   "linkPlaylist": "Afspeellijst {name} afspelen",
   "linkStop": "Stoppen en lampen herstellen",
   "copyLink": "Link kopiëren",
-  "linkCopied": "Link gekopieerd"
+  "linkCopied": "Link gekopieerd",
+  "softFlashesBySystem": "Altijd aan: je telefoon is ingesteld op minder beweging.",
+  "lampPreview": "Voorbeeld van {count} lampen: {names}"
 }

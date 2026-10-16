@@ -183,6 +183,23 @@ class PlaybackController extends ChangeNotifier {
   /// The playlist being played, if any.
   Playlist? get playlist => _playlist;
 
+  bool _systemReducesMotion = false;
+
+  /// The phone asks apps to reduce motion (iOS Reduce Motion, Android
+  /// "Remove animations"): flashes are softened as with the setting.
+  bool get systemReducesMotion => _systemReducesMotion;
+  set systemReducesMotion(bool value) {
+    if (value == _systemReducesMotion) {
+      return;
+    }
+    _systemReducesMotion = value;
+    _player?.softFlashes = softFlashes;
+    _notify();
+  }
+
+  /// Whether flashes are softened: by the user's setting or the phone's.
+  bool get softFlashes => _preferences.softFlashes || _systemReducesMotion;
+
   /// Whether the player of [effectId] shows what plays now: the effect
   /// itself, or any effect of the playlist that plays (that player follows
   /// the playlist from one effect to the next).
@@ -623,7 +640,7 @@ class PlaybackController extends ChangeNotifier {
               ? music.features
               : null;
         },
-      )..softFlashes = _preferences.softFlashes;
+      )..softFlashes = softFlashes;
       player.play();
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
@@ -943,7 +960,7 @@ class PlaybackController extends ChangeNotifier {
   /// Settings changed while playing (e.g. soften flashes from the warning
   /// dialog): apply them to the running player.
   void _onPreferencesChanged() {
-    _player?.softFlashes = _preferences.softFlashes;
+    _player?.softFlashes = softFlashes;
     final defaults = _preferences.defaultControls;
     if (defaults != _defaults) {
       // New defaults from Settings apply from now on.
