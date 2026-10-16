@@ -10,6 +10,7 @@ import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_areas_screen.dart';
 import '../library/sharing.dart';
+import '../home/wall_panel_screen.dart';
 import '../links/links_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -144,6 +145,18 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ],
               const Divider(height: 32),
+              ListTile(
+                leading: const Icon(Icons.tablet_outlined),
+                title: Text(l10n.wallPanel),
+                subtitle: Text(l10n.wallPanelDescription),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    fullscreenDialog: true,
+                    builder: (_) => const WallPanelScreen(),
+                  ),
+                ),
+              ),
               ListTile(
                 leading: const Icon(Icons.link),
                 title: Text(l10n.linksTitle),

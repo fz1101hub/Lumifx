@@ -377,5 +377,7 @@
   "severalRoomsHint": "Com muitas luzes, a bridge atualiza cada uma um pouco menos; para o efeito mais suave, use uma área de entretenimento.",
   "sound": "Som",
   "soundDescription": "Chuva, fogo, ondas ou vento deste celular, com o trovão depois do relâmpago.",
-  "volume": "Volume"
+  "volume": "Volume",
+  "wallPanel": "Painel de parede",
+  "wallPanelDescription": "Para um tablet na parede: hora, cômodos, cenas Hue e favoritos, sempre ligado."
 }

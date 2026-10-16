@@ -1114,6 +1114,50 @@ void streamingTests() {
         reason: 'back on the list');
   });
 
+  testWidgets('the wall panel shows the time, rooms and favourites',
+      (tester) async {
+    tester.view.physicalSize = const Size(2048, 1536);
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    final bridge = await _connectedBridge(tester);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.toggleFavorite('ocean');
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      clock: () => DateTime(2026, 6, 15, 10, 30),
+    ));
+    await tester.tap(find.byTooltip('Wall panel'));
+    await tester.pumpAndSettle();
+    expect(find.text('10:30 AM'), findsOneWidget);
+    expect(find.textContaining('June 15'), findsOneWidget);
+    expect(find.text('Living room'), findsOneWidget);
+    expect(find.text('Movie night'), findsOneWidget, reason: 'Hue scenes');
+
+    // A favourite plays at once, on the last room used (here the preview).
+    await tester.tap(find.text('Ocean'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(MiniPlayer), findsOneWidget);
+
+    // After two minutes without a touch the panel dims; a tap wakes it.
+    await tester.pump(const Duration(minutes: 2, seconds: 2));
+    expect(
+      tester.widget<AnimatedOpacity>(find.byType(AnimatedOpacity).last).opacity,
+      greaterThan(0.5),
+    );
+    await tester.tapAt(const Offset(500, 300));
+    await tester.pump(const Duration(seconds: 2));
+    expect(
+      tester.widget<AnimatedOpacity>(find.byType(AnimatedOpacity).last).opacity,
+      0,
+    );
+    await tester.tap(find.bySemanticsLabel('Stop'));
+    await tester.pump(const Duration(seconds: 1));
+  });
+
   testWidgets('player offers entertainment areas and reports start errors',
       (tester) async {
     final bridge = await _connectedBridge(tester);

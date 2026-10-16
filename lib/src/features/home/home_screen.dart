@@ -16,6 +16,7 @@ import '../rooms/rooms_screen.dart';
 import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
 import 'seasons.dart';
+import 'wall_panel_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -30,6 +31,17 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.appTitle),
         actions: [
+          if (context.isWide)
+            IconButton(
+              tooltip: l10n.wallPanel,
+              icon: const Icon(Icons.tablet_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  fullscreenDialog: true,
+                  builder: (_) => const WallPanelScreen(),
+                ),
+              ),
+            ),
           IconButton(
             tooltip: l10n.searchEffects,
             icon: const Icon(Icons.search),

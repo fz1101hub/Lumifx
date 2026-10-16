@@ -377,5 +377,7 @@
   "severalRoomsHint": "Met veel lampen werkt de bridge elke lamp iets minder vaak bij; voor het vloeiendste effect gebruik je een entertainmentruimte.",
   "sound": "Geluid",
   "soundDescription": "Regen, vuur, golven of wind uit deze telefoon, met donder na de bliksem.",
-  "volume": "Volume"
+  "volume": "Volume",
+  "wallPanel": "Wandpaneel",
+  "wallPanelDescription": "Voor een tablet aan de muur: tijd, kamers, Hue-scènes en favorieten, altijd aan."
 }

@@ -377,5 +377,7 @@
   "severalRoomsHint": "Con muchas luces el puente actualiza cada una algo menos a menudo; para el efecto más fluido, usa un área de entretenimiento.",
   "sound": "Sonido",
   "soundDescription": "Lluvia, fuego, olas o viento desde este teléfono, con el trueno después del rayo.",
-  "volume": "Volumen"
+  "volume": "Volumen",
+  "wallPanel": "Panel de pared",
+  "wallPanelDescription": "Para una tableta en la pared: hora, habitaciones, escenas Hue y favoritos, siempre encendido."
 }

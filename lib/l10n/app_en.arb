@@ -1102,5 +1102,13 @@
   "volume": "Volume",
   "@volume": {
     "description": "Slider: sound volume"
+  },
+  "wallPanel": "Wall panel",
+  "@wallPanel": {
+    "description": "Settings entry and tooltip: wall panel mode"
+  },
+  "wallPanelDescription": "For a tablet on the wall: time, rooms, Hue scenes and favourites, always on.",
+  "@wallPanelDescription": {
+    "description": "Explains wall panel mode"
   }
 }
