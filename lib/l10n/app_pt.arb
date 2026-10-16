@@ -366,5 +366,7 @@
   "nightLight": "Luz noturna",
   "nightLightHint": "Toque para ver isto de novo. Feche ou volte para sair.",
   "seasonHalloween": "O Halloween está chegando",
-  "seasonChristmas": "Época de Natal"
+  "seasonChristmas": "Época de Natal",
+  "gentleStart": "Início suave",
+  "gentleStartDescription": "Os efeitos começam com uma transição de alguns segundos a partir das cores atuais das luzes, em vez de mudá-las de uma vez."
 }

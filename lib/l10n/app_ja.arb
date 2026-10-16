@@ -366,5 +366,7 @@
   "nightLight": "ナイトライト",
   "nightLightHint": "タップするとこの表示が戻ります。閉じるか戻ると終了します。",
   "seasonHalloween": "もうすぐハロウィン",
-  "seasonChristmas": "クリスマスの季節"
+  "seasonChristmas": "クリスマスの季節",
+  "gentleStart": "やさしく開始",
+  "gentleStartDescription": "照明の色を一気に変えず、今の色から数秒かけて演出に切り替わります。"
 }

@@ -366,5 +366,7 @@
   "nightLight": "Veilleuse",
   "nightLightHint": "Touchez pour revoir ceci. Fermez ou revenez en arrière pour quitter.",
   "seasonHalloween": "Halloween approche",
-  "seasonChristmas": "C'est Noël"
+  "seasonChristmas": "C'est Noël",
+  "gentleStart": "Démarrage en douceur",
+  "gentleStartDescription": "Les effets démarrent en fondu en quelques secondes depuis les couleurs actuelles des lampes, au lieu de les changer d'un coup."
 }

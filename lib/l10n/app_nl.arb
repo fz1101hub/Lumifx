@@ -366,5 +366,7 @@
   "nightLight": "Nachtlampje",
   "nightLightHint": "Tik om dit weer te tonen. Sluit of ga terug om te stoppen.",
   "seasonHalloween": "Halloween komt eraan",
-  "seasonChristmas": "Kersttijd"
+  "seasonChristmas": "Kersttijd",
+  "gentleStart": "Zachte start",
+  "gentleStartDescription": "Effecten vloeien in een paar seconden over vanuit de huidige kleuren van de lampen, in plaats van ze in één keer te veranderen."
 }

@@ -64,6 +64,12 @@ class SettingsScreen extends StatelessWidget {
                 onChanged: (v) => update(controls.copyWith(speed: v)),
               ),
               SwitchListTile(
+                title: Text(l10n.gentleStart),
+                subtitle: Text(l10n.gentleStartDescription),
+                value: preferences.gentleStart,
+                onChanged: preferences.setGentleStart,
+              ),
+              SwitchListTile(
                 title: Text(l10n.restoreLights),
                 subtitle: Text(l10n.restoreLightsDescription),
                 value: preferences.restoreLights,

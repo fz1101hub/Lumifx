@@ -366,5 +366,7 @@
   "nightLight": "Nachtlicht",
   "nightLightHint": "Tippen, um dies wieder zu zeigen. Schließen oder zurück zum Verlassen.",
   "seasonHalloween": "Halloween steht vor der Tür",
-  "seasonChristmas": "Weihnachtszeit"
+  "seasonChristmas": "Weihnachtszeit",
+  "gentleStart": "Sanfter Start",
+  "gentleStartDescription": "Effekte blenden in ein paar Sekunden aus den aktuellen Farben der Lampen ein, statt sie sofort zu ändern."
 }

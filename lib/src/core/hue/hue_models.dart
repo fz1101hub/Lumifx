@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import '../color/light_color.dart';
+import '../effects/engine/light_frame.dart';
 
 /// A Hue Bridge found on the local network, before or after pairing.
 class HueBridgeInfo {
@@ -175,6 +176,32 @@ class HueLight {
   final List<({double x, double y})> gradient;
 
   bool get isDimmable => brightness != null;
+
+  /// What the light shows now, as a frame: where a gentle start fades from.
+  LightFrame get currentFrame => currentFrameOfSegment(0, 1);
+
+  /// What segment [index] of [count] shows now (the nearest gradient point
+  /// for gradient lights, the whole light otherwise).
+  LightFrame currentFrameOfSegment(int index, int count) {
+    if (!isOn) {
+      return LightFrame.off;
+    }
+    final level = ((brightness ?? 100) / 100).clamp(0.0, 1.0);
+    final LightColor shown;
+    if (mirek case final mirek?) {
+      shown = LightColor.fromMirek(mirek);
+    } else if (gradient.length >= 2) {
+      final point = gradient[count <= 1
+          ? 0
+          : (index * (gradient.length - 1) / (count - 1)).round()];
+      shown = LightColor.fromXy(point.x, point.y);
+    } else if (color case final xy?) {
+      shown = LightColor.fromXy(xy.x, xy.y);
+    } else {
+      shown = LightColor.white;
+    }
+    return LightFrame(shown, level);
+  }
 
   /// How many slots of an effect this light shows when played on a room:
   /// gradient lights show up to [maxSegments] side by side, so effects

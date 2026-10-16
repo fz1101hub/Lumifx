@@ -1058,5 +1058,13 @@
   "seasonChristmas": "Christmas time",
   "@seasonChristmas": {
     "description": "Home shelf title around Christmas"
+  },
+  "gentleStart": "Gentle start",
+  "@gentleStart": {
+    "description": "Setting: effects fade in"
+  },
+  "gentleStartDescription": "Effects fade in over a couple of seconds from the colours the lights show, instead of changing them at once.",
+  "@gentleStartDescription": {
+    "description": "Explains the gentle start setting"
   }
 }

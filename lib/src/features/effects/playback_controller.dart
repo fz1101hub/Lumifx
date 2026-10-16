@@ -599,6 +599,9 @@ class PlaybackController extends ChangeNotifier {
       LightOutput output = const NullLightOutput();
       var tick = const Duration(milliseconds: 100);
       var restore = <String, HueLightCommand>{};
+      // What each slot shows before the effect, to fade in from; the
+      // preview's lamps start dark.
+      List<LightFrame>? before;
 
       if (selectedTarget != null) {
         // Fresh state, both to find the lights and to restore them later.
@@ -627,6 +630,14 @@ class PlaybackController extends ChangeNotifier {
           output = streaming;
           lightIds = entertainmentSlotIds(area);
           names = _channelNames(home, area);
+          before = [
+            for (final channel in area.spatialChannels)
+              switch (channel.lightIds) {
+                [final id, ...] when home.lights[id] != null =>
+                  home.lights[id]!.currentFrame,
+                _ => LightFrame.off,
+              },
+          ];
           // Hue recommends 50-60 messages per second; the bridge forwards
           // them to the lights at 25 Hz.
           tick = const Duration(milliseconds: 20);
@@ -647,6 +658,9 @@ class PlaybackController extends ChangeNotifier {
           output = hueRestOutput(client, home.lights);
           lightIds = usable;
           names = _slotLabels(home, usable);
+          before = [
+            for (final slot in usable) _currentFrameOfSlot(home, slot),
+          ];
         } else {
           return _abortStart(
               const PlaybackNotice(PlaybackNoticeKind.targetGone));
@@ -676,6 +690,10 @@ class PlaybackController extends ChangeNotifier {
               : null;
         },
       )..softFlashes = softFlashes;
+      if (_preferences.gentleStart) {
+        player
+            .fadeInFrom(before ?? List.filled(lightIds.length, LightFrame.off));
+      }
       player.play();
       unawaited(_screenWake.keepOn(true));
       unawaited(_preferences.recordPlayed(effect.id));
@@ -1073,6 +1091,18 @@ class PlaybackController extends ChangeNotifier {
           else
             for (var s = 0; s < light.segments; s++) '$id#$s',
     ];
+  }
+
+  static LightFrame _currentFrameOfSlot(HueHome home, String slot) {
+    final light = home.lights[lightOfSlot(slot)];
+    if (light == null) {
+      return LightFrame.off;
+    }
+    final hash = slot.indexOf('#');
+    return hash < 0
+        ? light.currentFrame
+        : light.currentFrameOfSegment(
+            int.parse(slot.substring(hash + 1)), light.segments);
   }
 
   static List<SlotLabel> _slotLabels(HueHome home, List<String> slots) => [

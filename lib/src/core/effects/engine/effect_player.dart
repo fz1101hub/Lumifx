@@ -74,6 +74,21 @@ class EffectPlayer {
   /// the same effect.
   set effect(LightingEffect value) => _renderer.effect = value;
 
+  /// Fades in from [from] (what the lights show before the effect starts,
+  /// one frame per light) over [over], instead of jumping to the effect's
+  /// first colours. Call before [play].
+  void fadeInFrom(
+    List<LightFrame> from, {
+    Duration over = const Duration(milliseconds: 2500),
+  }) {
+    if (from.length != lightIds.length) {
+      return;
+    }
+    _fadeFrom = from;
+    _fadeLength = over;
+    _fadeElapsed = Duration.zero;
+  }
+
   /// Starts [next] from its beginning, blending from what the lights show
   /// now over [over], so changing effects never drops the room to black
   /// or snaps it to new colours.
