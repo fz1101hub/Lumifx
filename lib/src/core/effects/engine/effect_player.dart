@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import '../../audio/audio_analyzer.dart';
+import '../../camera/screen_sampler.dart';
 import '../../color/light_color.dart';
 import '../effect.dart';
 import 'effect_renderer.dart';
@@ -23,6 +24,7 @@ class EffectPlayer {
     EffectControls controls = const EffectControls(),
     this.tick = const Duration(milliseconds: 100),
     this.audio,
+    this.screen,
   })  : _seed = seed,
         _renderer = EffectRenderer(
           effect,
@@ -37,6 +39,9 @@ class EffectPlayer {
 
   /// Latest live audio features, read on every tick; null without Music Sync.
   final AudioFeatures? Function()? audio;
+
+  /// Latest colours of the TV, read on every tick; null without TV Sync.
+  final ScreenColors? Function()? screen;
   final int _seed;
   EffectRenderer _renderer;
 
@@ -162,7 +167,11 @@ class EffectPlayer {
     }
     final speed = controls.speed.clamp(0.05, 5.0);
     _effectTime += wallTime * speed;
-    var rendered = _renderer.render(_effectTime, audio: audio?.call());
+    var rendered = _renderer.render(
+      _effectTime,
+      audio: audio?.call(),
+      screen: screen?.call(),
+    );
     final from = _fadeFrom;
     if (from != null && from.length == rendered.length) {
       _fadeElapsed += wallTime;

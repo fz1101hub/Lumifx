@@ -1537,5 +1537,33 @@
         "type": "int"
       }
     }
+  },
+  "effectNameTvSync": "TV Sync",
+  "@effectNameTvSync": {
+    "description": "Name of the effect that follows the TV through the camera"
+  },
+  "effectDescriptionTvSync": "Point the camera at the TV: the lights take the colours on screen, left to right.",
+  "@effectDescriptionTvSync": {
+    "description": "Description of the TV Sync effect"
+  },
+  "noticeCameraDenied": "TV Sync needs camera access. You can allow it in your phone settings.",
+  "@noticeCameraDenied": {
+    "description": "Shown when the camera permission was refused for TV Sync"
+  },
+  "noticeCameraFailed": "The camera could not be started.",
+  "@noticeCameraFailed": {
+    "description": "Shown when the camera could not be opened for TV Sync"
+  },
+  "tvSyncHint": "Press Play, then point the camera at the TV. The picture is analysed on your phone and never recorded or sent.",
+  "@tvSyncHint": {
+    "description": "Shown on the TV Sync player before it plays"
+  },
+  "tvSyncAim": "Keep the whole TV inside the picture and this screen open. The phone can rest on a table facing the TV.",
+  "@tvSyncAim": {
+    "description": "Shown under the camera picture while TV Sync plays"
+  },
+  "tvSyncPreview": "Camera picture of the TV",
+  "@tvSyncPreview": {
+    "description": "Screen reader label of the camera picture in TV Sync"
   }
 }

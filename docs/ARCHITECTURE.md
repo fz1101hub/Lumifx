@@ -165,6 +165,27 @@ stream (`max_streams`), spread around the chosen point.
   a mocked channel (`test/core/audio/phone_audio_input_test.dart`); the
   native capture needs a real device (`docs/QA_CHECKLIST.md`).
 
+### TV Sync (`lib/src/core/camera`, `lib/src/features/tv`)
+
+- `PluginCameraInput` opens the back camera through the `camera` plugin at
+  the low preset (YUV 4:2:0 on Android, BGRA on iOS) and samples a frame
+  at most every 90 ms; frames arriving while one is being read are
+  dropped.
+- `sampleScreen` reads about 64 × 48 pixels of the middle 70 % of the
+  picture, splits them into eight zones left to right as the user sees the
+  TV (the sensor orientation and the device orientation give the
+  clockwise quarter turns), averages each zone, raises its saturation a
+  little and returns a colour at full value plus a brightness. Frames
+  whose buffers are too short are skipped. Tested on synthetic YUV and
+  BGRA frames in every rotation (`test/core/camera`).
+- `TvSyncController` smooths the zones between frames and drops them when
+  no frame arrived for 1.5 s, so the lights fall back to the effect's dim
+  background instead of freezing. `PlaybackController` starts it like the
+  microphone (on play and resume, stopped on pause, switch and stop) and
+  stops TV Sync when the app goes to the background, where the camera
+  closes. The renderer's `screen` event gives each light the average of
+  its share of the zones. Nothing is recorded, stored or sent.
+
 ## Content policy
 
 Effects and visual assets should be original. Inspiration can come from broad themes and genres, but proprietary names, artwork, audio and authored sequences from third-party apps should not be copied.

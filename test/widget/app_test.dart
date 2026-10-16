@@ -116,6 +116,30 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('TV Sync explains itself and a missing camera', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Interactive'));
+    await tester.pumpAndSettle();
+    await tester.dragUntilVisible(
+      find.text('TV Sync'),
+      find.byType(ListView),
+      const Offset(0, -200),
+    );
+    await tester.ensureVisible(find.text('TV Sync'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('TV Sync'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('point the camera at the TV'), findsOneWidget);
+
+    await tester.tap(find.text('Play'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('The camera could not be started.'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget, reason: 'nothing plays');
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));

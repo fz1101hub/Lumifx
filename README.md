@@ -82,6 +82,21 @@ Also done ahead of schedule:
   through Android's playback capture, with the system consent dialog and
   a foreground-service notification; apps that protect their audio stay
   silent to it. Not yet verified on a real device.
+- **Gentle start**: effects fade in from what the lights show.
+- **Sounds** for stories and scenes (crackling fire, waves, rain and
+  thunder that answers the lightning), generated on the phone.
+- **Several rooms at once** from the player's "Play on" menu.
+- **Search and filters** across every effect, in every language.
+- **Wall panel** for a tablet on the wall: clock, rooms, favourites, dims
+  by itself.
+- **Read-along stories**: the words of each story appear in time with its
+  lights, to read aloud together.
+- **Story editor**: stories of your own with moments on a timeline (spark,
+  spell, footsteps, darkness, lightning…) and words to read along;
+  shareable by link.
+- **TV Sync**: the phone's camera watches the TV and the lights take its
+  colours left to right; frames are averaged on the phone and never
+  stored or sent. Needs testing with a real TV.
 
 ## Development
 
@@ -110,6 +125,7 @@ file carries every key.
 lib/src/
 ├── core/
 │   ├── audio/          FFT, beat/spectrum analysis, microphone input
+│   ├── camera/         TV Sync: colours of a camera frame, zone by zone
 │   ├── color/          LightColor and RGB → CIE xy conversion
 │   ├── effects/        effect model, renderer, player, outputs
 │   └── hue/            discovery, pairing, CLIP v2 client, TLS pinning,
@@ -122,7 +138,8 @@ lib/src/
     ├── library/        favorites, recents and defaults (shared_preferences)
     ├── music/          Music Sync controller
     ├── rooms/          room and zone controls
-    └── settings/
+    ├── settings/
+    └── tv/             TV Sync: camera input and controller
 ```
 
 

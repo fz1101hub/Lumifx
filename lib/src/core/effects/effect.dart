@@ -64,6 +64,10 @@ class LightingEffect {
   bool get usesMicrophone =>
       events.any((event) => event.type == EffectEventTypes.music);
 
+  /// Needs the camera: the player follows the colours of the TV.
+  bool get usesCamera =>
+      events.any((event) => event.type == EffectEventTypes.screen);
+
   /// Contains sudden, repeated changes in brightness (lightning strikes,
   /// beats): the player warns photosensitive users before the first one.
   bool get hasRapidFlashes => events.any((event) => const {

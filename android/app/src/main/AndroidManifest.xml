@@ -1,10 +1,24 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Talk to the Hue Bridge on the local network. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Bridge discovery over mDNS / NSD. -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <!-- Music Sync, only requested when the user starts it. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- TV Sync, only requested when the user starts it: frames are
+         sampled on the phone and never stored or sent. A camera is not
+         required to install the app, and the camera plugin's storage
+         permission (for saving photos, which LumiFX never does) is
+         removed. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false"
+        tools:replace="android:required" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:node="remove" />
     <!-- Music Sync from the phone's own audio (Android 10+): the capture
          runs in a foreground service of the media-projection kind, with a
          notification, after the user allows it in Android's dialog. -->

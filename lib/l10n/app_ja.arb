@@ -484,5 +484,12 @@
   "momentWordsHint": "例：すると、金色の火花が！",
   "playFromHere": "ここからプレビュー",
   "storyPreview": "お話のプレビュー",
-  "importedItems": "{count, plural, other{{count} 件を追加しました。}}"
+  "importedItems": "{count, plural, other{{count} 件を追加しました。}}",
+  "effectNameTvSync": "テレビ連動",
+  "effectDescriptionTvSync": "カメラをテレビに向けると、画面の色が左から右へ明かりに映ります。",
+  "noticeCameraDenied": "テレビ連動にはカメラへのアクセスが必要です。スマートフォンの設定で許可できます。",
+  "noticeCameraFailed": "カメラを起動できませんでした。",
+  "tvSyncHint": "再生を押して、カメラをテレビに向けてください。映像はスマートフォンの中だけで分析され、録画や送信はされません。",
+  "tvSyncAim": "テレビ全体が映るようにして、この画面を開いたままにしてください。スマートフォンはテレビに向けてテーブルに置いておけます。",
+  "tvSyncPreview": "カメラに映ったテレビの映像"
 }

@@ -484,5 +484,12 @@
   "momentWordsHint": "Por ejemplo: ¡Y entonces, una chispa dorada!",
   "playFromHere": "Vista previa desde aquí",
   "storyPreview": "Vista previa del cuento",
-  "importedItems": "{count, plural, =1{1 elemento añadido.} other{{count} elementos añadidos.}}"
+  "importedItems": "{count, plural, =1{1 elemento añadido.} other{{count} elementos añadidos.}}",
+  "effectNameTvSync": "Sincro TV",
+  "effectDescriptionTvSync": "Apunta la cámara a la tele: las luces toman los colores de la pantalla, de izquierda a derecha.",
+  "noticeCameraDenied": "Sincro TV necesita acceso a la cámara. Puedes permitirlo en los ajustes del teléfono.",
+  "noticeCameraFailed": "No se pudo iniciar la cámara.",
+  "tvSyncHint": "Pulsa Reproducir y apunta la cámara a la tele. La imagen se analiza en tu teléfono y nunca se graba ni se envía.",
+  "tvSyncAim": "Mantén toda la tele dentro de la imagen y esta pantalla abierta. El teléfono puede quedarse en una mesa mirando a la tele.",
+  "tvSyncPreview": "Imagen de la tele desde la cámara"
 }

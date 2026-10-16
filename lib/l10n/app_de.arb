@@ -484,5 +484,12 @@
   "momentWordsHint": "Zum Beispiel: Und dann ein goldener Funke!",
   "playFromHere": "Vorschau ab hier",
   "storyPreview": "Vorschau der Geschichte",
-  "importedItems": "{count, plural, =1{1 Element hinzugefügt.} other{{count} Elemente hinzugefügt.}}"
+  "importedItems": "{count, plural, =1{1 Element hinzugefügt.} other{{count} Elemente hinzugefügt.}}",
+  "effectNameTvSync": "TV-Sync",
+  "effectDescriptionTvSync": "Richte die Kamera auf den Fernseher: Die Lampen übernehmen die Farben des Bildes, von links nach rechts.",
+  "noticeCameraDenied": "TV-Sync braucht Zugriff auf die Kamera. Du kannst ihn in den Einstellungen deines Telefons erlauben.",
+  "noticeCameraFailed": "Die Kamera konnte nicht gestartet werden.",
+  "tvSyncHint": "Tippe auf Abspielen und richte die Kamera auf den Fernseher. Das Bild wird auf deinem Telefon ausgewertet und nie aufgezeichnet oder gesendet.",
+  "tvSyncAim": "Halte den ganzen Fernseher im Bild und diesen Bildschirm geöffnet. Das Telefon kann auf einem Tisch liegen, zum Fernseher gerichtet.",
+  "tvSyncPreview": "Kamerabild des Fernsehers"
 }

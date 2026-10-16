@@ -484,5 +484,12 @@
   "momentWordsHint": "Bijvoorbeeld: En toen, een gouden vonk!",
   "playFromHere": "Voorbeeld vanaf hier",
   "storyPreview": "Voorbeeld van het verhaal",
-  "importedItems": "{count, plural, =1{1 item toegevoegd.} other{{count} items toegevoegd.}}"
+  "importedItems": "{count, plural, =1{1 item toegevoegd.} other{{count} items toegevoegd.}}",
+  "effectNameTvSync": "Tv-sync",
+  "effectDescriptionTvSync": "Richt de camera op de tv: de lampen nemen de kleuren van het scherm over, van links naar rechts.",
+  "noticeCameraDenied": "Tv-sync heeft toegang tot de camera nodig. Je kunt dit toestaan in de instellingen van je telefoon.",
+  "noticeCameraFailed": "De camera kon niet worden gestart.",
+  "tvSyncHint": "Druk op Afspelen en richt de camera op de tv. Het beeld wordt op je telefoon geanalyseerd en nooit opgenomen of verstuurd.",
+  "tvSyncAim": "Houd de hele tv in beeld en dit scherm open. De telefoon kan op tafel liggen, gericht op de tv.",
+  "tvSyncPreview": "Camerabeeld van de tv"
 }

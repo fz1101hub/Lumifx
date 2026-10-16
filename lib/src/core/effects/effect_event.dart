@@ -50,4 +50,7 @@ abstract final class EffectEventTypes {
 
   /// Reacts to live audio from the microphone (Music Sync).
   static const music = 'music';
+
+  /// Follows the colours of the TV, seen by the phone's camera (TV Sync).
+  static const screen = 'screen';
 }

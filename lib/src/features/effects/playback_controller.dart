@@ -20,6 +20,8 @@ import '../../core/sound/soundscape.dart';
 import '../bridge/bridge_controller.dart';
 import '../library/preferences_controller.dart';
 import '../music/music_sync_controller.dart';
+import '../tv/camera_input.dart';
+import '../tv/tv_sync_controller.dart';
 import '../playlists/playlist.dart';
 
 /// Lamps shown when playing without a bridge.
@@ -42,6 +44,10 @@ enum PlaybackNoticeKind {
   startFailed,
   microphoneDenied,
   microphoneFailed,
+
+  /// TV Sync: the camera was refused, or could not be opened.
+  cameraDenied,
+  cameraFailed,
 
   /// The microphone died mid-effect.
   microphoneStopped,
@@ -110,7 +116,9 @@ class PlaybackController extends ChangeNotifier {
     LightingEffect? Function(String id)? resolveEffect,
     math.Random? random,
     SoundPlayer sound = const NoSoundPlayer(),
+    CameraInput camera = const NoCameraInput(),
   })  : _effect = effect,
+        _camera = camera,
         _sound = sound,
         _resolveEffect = resolveEffect ?? ((_) => null),
         _random = random ?? math.Random(),
@@ -140,6 +148,7 @@ class PlaybackController extends ChangeNotifier {
   final LightingEffect? Function(String id) _resolveEffect;
   final math.Random _random;
   final SoundPlayer _sound;
+  final CameraInput _camera;
 
   /// Watches the frames for lightning, to answer with thunder.
   StreamSubscription<List<LightFrame>>? _lightningWatch;
@@ -164,6 +173,7 @@ class PlaybackController extends ChangeNotifier {
   PlaybackStatus _status = PlaybackStatus.idle;
   EffectPlayer? _player;
   MusicSyncController? _music;
+  TvSyncController? _tv;
   String? _targetKey;
   EffectControls _controls;
   double _sensitivity = 1;
@@ -440,6 +450,9 @@ class PlaybackController extends ChangeNotifier {
   bool get isBusy => _status == PlaybackStatus.starting;
   EffectPlayer? get player => _player;
   MusicSyncController? get music => _music;
+
+  /// The camera watching the TV, while a TV Sync effect plays.
+  TvSyncController? get tvSync => _tv;
   EffectControls get controls => _controls;
   double get sensitivity => _sensitivity;
 
@@ -530,13 +543,17 @@ class PlaybackController extends ChangeNotifier {
       _notify();
       return;
     }
-    if (next.usesMicrophone) {
+    if (!next.usesMicrophone) {
+      await _music?.stop();
+    }
+    if (!next.usesCamera) {
+      await _tv?.stop();
+    }
+    if (next.usesMicrophone || next.usesCamera) {
       if (_status == PlaybackStatus.playing && !await _startListening()) {
         await stop();
         return;
       }
-    } else {
-      await _music?.stop();
     }
     if (!identical(_player, player)) {
       return;
@@ -793,6 +810,7 @@ class PlaybackController extends ChangeNotifier {
               ? music.features
               : null;
         },
+        screen: () => _effect.usesCamera ? _tv?.colors : null,
       )..softFlashes = softFlashes;
       if (_preferences.gentleStart) {
         player
@@ -830,7 +848,7 @@ class PlaybackController extends ChangeNotifier {
     _setStatus(PlaybackStatus.paused);
     // No reason to keep the microphone open or the screen on while paused.
     unawaited(_screenWake.keepOn(false));
-    await _music?.stop();
+    await _stopInputs();
   }
 
   Future<void> resume() async {
@@ -843,7 +861,7 @@ class PlaybackController extends ChangeNotifier {
     }
     if (_player != player) {
       // Stopped or retargeted while the microphone was starting.
-      await _music?.stop();
+      await _stopInputs();
       return;
     }
     player.play();
@@ -881,7 +899,7 @@ class PlaybackController extends ChangeNotifier {
         await player?.stop();
       } finally {
         try {
-          await _music?.stop();
+          await _stopInputs();
         } finally {
           unawaited(_screenWake.keepOn(false));
           final client = _bridge.client;
@@ -911,9 +929,11 @@ class PlaybackController extends ChangeNotifier {
     if (_status == PlaybackStatus.idle) {
       return;
     }
+    // The camera closes in the background, so TV Sync cannot go on.
     if (keepPlayingInBackground &&
         selectedTarget != null &&
-        _status != PlaybackStatus.starting) {
+        _status != PlaybackStatus.starting &&
+        !_effect.usesCamera) {
       return;
     }
     await stop();
@@ -1025,9 +1045,13 @@ class PlaybackController extends ChangeNotifier {
     _notice(const PlaybackNotice(PlaybackNoticeKind.sleepTimerDone));
   }
 
-  /// Starts the microphone (or the phone's audio) for Music Sync effects.
-  /// Returns false (after telling the user why) when it cannot listen.
+  /// Starts the microphone (or the phone's audio) for Music Sync effects,
+  /// or the camera for TV Sync. Returns false (after telling the user why)
+  /// when it cannot.
   Future<bool> _startListening() async {
+    if (effect.usesCamera) {
+      return _startWatching();
+    }
     if (!effect.usesMicrophone) {
       return true;
     }
@@ -1062,6 +1086,29 @@ class PlaybackController extends ChangeNotifier {
     return false;
   }
 
+  /// Opens the camera for TV Sync.
+  Future<bool> _startWatching() async {
+    final tv = _tv ??= TvSyncController(_camera)..addListener(_notify);
+    await tv.start();
+    switch (tv.status) {
+      case TvSyncStatus.watching:
+        return true;
+      case TvSyncStatus.denied:
+        _notice(const PlaybackNotice(PlaybackNoticeKind.cameraDenied));
+      default:
+        _notice(const PlaybackNotice(PlaybackNoticeKind.cameraFailed));
+    }
+    return false;
+  }
+
+  /// Closes the microphone and the camera.
+  Future<void> _stopInputs() async {
+    await Future.wait([
+      if (_music case final music?) music.stop(),
+      if (_tv case final tv?) tv.stop(),
+    ]);
+  }
+
   Future<void> _dropMusic(MusicSyncController music) async {
     if (identical(_music, music)) {
       _music = null;
@@ -1089,7 +1136,7 @@ class PlaybackController extends ChangeNotifier {
   }
 
   void _abortStart(PlaybackNotice notice) {
-    unawaited(_music?.stop());
+    unawaited(_stopInputs());
     _setStatus(PlaybackStatus.idle);
     _notice(notice);
   }
@@ -1104,7 +1151,7 @@ class PlaybackController extends ChangeNotifier {
       }
       await streaming?.close();
       if (_status == PlaybackStatus.idle || _disposed) {
-        await _music?.stop();
+        await _stopInputs();
       }
     }()
         .whenComplete(() {
@@ -1207,7 +1254,12 @@ class PlaybackController extends ChangeNotifier {
     _preferences.removeListener(_onPreferencesChanged);
     final music = _music;
     music?.removeListener(_onMusicChanged);
-    unawaited(stop().whenComplete(() => music?.dispose()));
+    final tv = _tv;
+    tv?.removeListener(_notify);
+    unawaited(stop().whenComplete(() {
+      music?.dispose();
+      tv?.dispose();
+    }));
     unawaited(_notices.close());
     super.dispose();
   }

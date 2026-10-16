@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
+import 'package:lumifx/src/core/camera/screen_sampler.dart';
 import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
@@ -20,8 +21,10 @@ import 'package:lumifx/src/features/effects/catalog/effect_catalog.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/tv/camera_input.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_camera_input.dart';
 import '../support/fake_sound_player.dart';
 
 http.Response _json(Object body) => http.Response(jsonEncode(body), 200);
@@ -152,6 +155,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
   LightingEffect? effect,
   math.Random? random,
   FakeSoundPlayer? sound,
+  FakeCameraInput? camera,
   Duration sleepFade = const Duration(seconds: 20),
 }) async {
   final fake = _FakeBridge();
@@ -181,6 +185,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
     resolveEffect: effectById,
     random: random,
     sound: sound ?? FakeSoundPlayer(),
+    camera: camera ?? FakeCameraInput(),
     sleepFade: sleepFade,
   );
   return (controller, fake, wake);
@@ -532,6 +537,79 @@ void main() {
     await controller.switchEffect(ocean);
     expect(input.stopped, isTrue);
     await controller.stop();
+    controller.dispose();
+  });
+
+  test('TV Sync watches the TV and the lights take its colours', () async {
+    final camera = FakeCameraInput();
+    final (controller, _, wake) = await _setUp(effect: tvSync, camera: camera);
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    expect(controller.tvSync?.isWatching, isTrue);
+    expect(camera.isRunning, isTrue);
+    expect(wake.calls.last, isTrue, reason: 'the screen stays on');
+
+    // Before the first frame: the dim background.
+    final player = controller.player!;
+    player.advance(const Duration(milliseconds: 10));
+    expect(player.currentFrames.every((f) => f.brightness < 0.2), isTrue);
+
+    camera.show(const ScreenColors(
+      [LightColor(1, 0, 0), LightColor(0, 0, 1)],
+      [1, 1],
+    ));
+    // Past the gentle start's fade-in.
+    player.advance(const Duration(seconds: 3));
+    final frames = player.currentFrames;
+    expect(frames.first.color.r, closeTo(1, 0.01));
+    expect(frames.first.color.b, lessThan(0.1));
+    expect(frames.last.color.b, closeTo(1, 0.01));
+    expect(frames.last.color.r, lessThan(0.1));
+    expect(frames.first.brightness, greaterThan(0.8));
+
+    await controller.pause();
+    expect(camera.isRunning, isFalse, reason: 'no camera while paused');
+    await controller.resume();
+    expect(camera.isRunning, isTrue);
+    expect(camera.starts, 2);
+
+    await controller.switchEffect(ocean);
+    expect(camera.isRunning, isFalse);
+    await controller.switchEffect(tvSync);
+    expect(camera.isRunning, isTrue);
+
+    await controller.stop();
+    expect(camera.isRunning, isFalse);
+    controller.dispose();
+  });
+
+  test('a refused camera keeps TV Sync idle and explains why', () async {
+    final camera = FakeCameraInput(result: CameraStartResult.denied);
+    final (controller, _, _) = await _setUp(effect: tvSync, camera: camera);
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
+    await controller.start();
+    await _wait(10);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(notices.single.kind, PlaybackNoticeKind.cameraDenied);
+
+    camera.result = CameraStartResult.unavailable;
+    await controller.start();
+    await _wait(10);
+    expect(notices.last.kind, PlaybackNoticeKind.cameraFailed);
+    controller.dispose();
+  });
+
+  test('TV Sync stops in the background, where the camera closes', () async {
+    final camera = FakeCameraInput();
+    final (controller, _, _) = await _setUp(effect: tvSync, camera: camera);
+    controller.keepPlayingInBackground = true;
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    await controller.handleAppPaused();
+    expect(controller.status, PlaybackStatus.idle);
+    expect(camera.isRunning, isFalse);
     controller.dispose();
   });
 

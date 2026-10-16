@@ -35,22 +35,29 @@ sound is analysed in real time in the same way as the microphone and is
 never recorded, stored or transmitted. Capture ends when you pause or stop
 the effect or dismiss it from the notification.
 
+**Camera (TV Sync).** If you start TV Sync, the app asks for camera
+access and looks at your TV through the phone's camera so the lights can
+take its colours. A few thousand pixels of each frame are averaged on your
+phone, about ten times a second; the picture is never recorded, stored or
+transmitted. The camera is used only while TV Sync plays on screen and is
+switched off when you pause or stop it, or leave the app.
+
 **Playing with the screen off (Android).** While an effect plays on your
 lights, LumiFX can keep running with the screen off. It then shows a
 notification (Android 13 and later ask once for permission to show it) and,
 during a Music Sync effect, keeps using the microphone exactly as described
 above. You can turn this off in Settings.
 
-**Sharing scenes and playlists.** When you choose to share, the scene or
-playlist is packed into a link or QR code that you pass on yourself. It
-contains only the names, colours and settings you made; LumiFX sends it
-nowhere.
+**Sharing scenes, stories and playlists.** When you choose to share, the
+scene, story or playlist is packed into a link or QR code that you pass on
+yourself. It contains only the names, colours, words and settings you
+made; LumiFX sends it nowhere.
 
 **Routines and Hue scenes.** Wake-up and bedtime routines and saved Hue
 scenes are stored on your own Hue Bridge, like those made in the Hue app.
 
-**Preferences.** Favourites, recently played effects and playback settings are
-stored on your phone only.
+**Preferences.** Favourites, recently played effects, playback settings and
+the scenes and stories you make are stored on your phone only.
 
 ## Network connections
 

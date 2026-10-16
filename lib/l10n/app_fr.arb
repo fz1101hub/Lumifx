@@ -484,5 +484,12 @@
   "momentWordsHint": "Par exemple : Et soudain, une étincelle dorée !",
   "playFromHere": "Aperçu à partir d'ici",
   "storyPreview": "Aperçu de l'histoire",
-  "importedItems": "{count, plural, =1{1 élément ajouté.} other{{count} éléments ajoutés.}}"
+  "importedItems": "{count, plural, =1{1 élément ajouté.} other{{count} éléments ajoutés.}}",
+  "effectNameTvSync": "Sync TV",
+  "effectDescriptionTvSync": "Pointe l'appareil photo vers la télé : les lumières prennent les couleurs de l'écran, de gauche à droite.",
+  "noticeCameraDenied": "Sync TV a besoin d'accéder à l'appareil photo. Tu peux l'autoriser dans les réglages du téléphone.",
+  "noticeCameraFailed": "Impossible de démarrer l'appareil photo.",
+  "tvSyncHint": "Appuie sur Lecture, puis pointe l'appareil photo vers la télé. L'image est analysée sur ton téléphone, sans jamais être enregistrée ni envoyée.",
+  "tvSyncAim": "Garde toute la télé dans l'image et cet écran ouvert. Le téléphone peut rester posé sur une table, face à la télé.",
+  "tvSyncPreview": "Image de la télé vue par l'appareil photo"
 }

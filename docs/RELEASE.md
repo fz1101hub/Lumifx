@@ -240,6 +240,10 @@ last upload. For a build made by hand, pass `--build-number` to
   bridge at all. This is explained in the review notes.
 - **Microphone.** Only requested when a Music Sync effect starts. Both
   stores accept this as long as the purpose string explains it (it does).
+- **Camera.** Only requested when TV Sync starts; the purpose string
+  (`NSCameraUsageDescription`) explains it. On Android the camera is
+  marked not required, so phones and tablets without one can still
+  install the app.
 - **Export compliance.** See STORE_LISTING.md; `ITSAppUsesNonExemptEncryption`
   is set to false so TestFlight does not ask every time.
 - **Trademark.** The listing says the app is not affiliated with Signify.

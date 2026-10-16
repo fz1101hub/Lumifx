@@ -484,5 +484,12 @@
   "momentWordsHint": "Per esempio: E poi, una scintilla d'oro!",
   "playFromHere": "Anteprima da qui",
   "storyPreview": "Anteprima della storia",
-  "importedItems": "{count, plural, =1{1 elemento aggiunto.} other{{count} elementi aggiunti.}}"
+  "importedItems": "{count, plural, =1{1 elemento aggiunto.} other{{count} elementi aggiunti.}}",
+  "effectNameTvSync": "Sync TV",
+  "effectDescriptionTvSync": "Punta la fotocamera verso la TV: le luci prendono i colori dello schermo, da sinistra a destra.",
+  "noticeCameraDenied": "Sync TV ha bisogno dell'accesso alla fotocamera. Puoi consentirlo nelle impostazioni del telefono.",
+  "noticeCameraFailed": "Non è stato possibile avviare la fotocamera.",
+  "tvSyncHint": "Premi Riproduci, poi punta la fotocamera verso la TV. L'immagine viene analizzata sul telefono e non viene mai registrata né inviata.",
+  "tvSyncAim": "Tieni tutta la TV dentro l'immagine e questa schermata aperta. Il telefono può stare su un tavolo rivolto verso la TV.",
+  "tvSyncPreview": "Immagine della TV dalla fotocamera"
 }

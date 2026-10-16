@@ -18,6 +18,7 @@ import '../library/scene_editor.dart';
 import '../library/sharing.dart';
 import '../library/story_editor.dart';
 import '../music/music_sync_controller.dart';
+import '../tv/tv_sync_controller.dart';
 import 'effect_palette.dart';
 import 'light_color_ui.dart';
 import 'night_light_screen.dart';
@@ -469,6 +470,13 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 player: current ? c.player : null,
               ),
             ],
+            if (effect.usesCamera) ...[
+              const SizedBox(height: 16),
+              _TvSyncPanel(
+                tv: current ? c.tvSync : null,
+                player: current ? c.player : null,
+              ),
+            ],
             if (effect.usesMicrophone) ...[
               const SizedBox(height: 16),
               _MusicMeter(
@@ -605,6 +613,108 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+/// TV Sync: the camera picture with the part that is read, the colours
+/// it finds left to right, and how to aim; a hint before it plays.
+class _TvSyncPanel extends StatelessWidget {
+  const _TvSyncPanel({required this.tv, required this.player});
+
+  final TvSyncController? tv;
+  final EffectPlayer? player;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final tv = this.tv;
+    final player = this.player;
+    final preview = tv?.buildPreview();
+    if (tv == null || player == null || !tv.isWatching) {
+      return Row(
+        children: [
+          const Icon(Icons.videocam_outlined, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(l10n.tvSyncHint, style: theme.textTheme.bodySmall),
+          ),
+        ],
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (preview != null)
+          Semantics(
+            label: l10n.tvSyncPreview,
+            image: true,
+            excludeSemantics: true,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                height: 200,
+                child: Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      preview,
+                      // The middle of the picture is what counts.
+                      Positioned.fill(
+                        child: FractionallySizedBox(
+                          widthFactor: 0.7,
+                          heightFactor: 0.7,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.white70, width: 2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(height: 8),
+        // The colours found, left to right, at the player's pace.
+        ExcludeSemantics(
+          child: StreamBuilder<List<LightFrame>>(
+            stream: player.frames,
+            builder: (context, _) {
+              final colors = tv.colors;
+              if (colors == null) {
+                return const SizedBox(height: 16);
+              }
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  height: 16,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < colors.zones; i++)
+                        Expanded(
+                          child: ColoredBox(
+                            color: LightFrame(
+                              colors.colors[i],
+                              colors.levels[i],
+                            ).toDisplayColor(),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(l10n.tvSyncAim, style: theme.textTheme.bodySmall),
+      ],
     );
   }
 }

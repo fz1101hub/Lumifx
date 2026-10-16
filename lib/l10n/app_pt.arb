@@ -484,5 +484,12 @@
   "momentWordsHint": "Por exemplo: E então, uma faísca dourada!",
   "playFromHere": "Prévia a partir daqui",
   "storyPreview": "Prévia da história",
-  "importedItems": "{count, plural, =1{1 item adicionado.} other{{count} itens adicionados.}}"
+  "importedItems": "{count, plural, =1{1 item adicionado.} other{{count} itens adicionados.}}",
+  "effectNameTvSync": "Sincronia com a TV",
+  "effectDescriptionTvSync": "Aponte a câmera para a TV: as luzes pegam as cores da tela, da esquerda para a direita.",
+  "noticeCameraDenied": "A sincronia com a TV precisa de acesso à câmera. Você pode permitir nos ajustes do celular.",
+  "noticeCameraFailed": "Não foi possível iniciar a câmera.",
+  "tvSyncHint": "Toque em Reproduzir e aponte a câmera para a TV. A imagem é analisada no seu celular e nunca é gravada nem enviada.",
+  "tvSyncAim": "Mantenha a TV inteira dentro da imagem e esta tela aberta. O celular pode ficar apoiado numa mesa, virado para a TV.",
+  "tvSyncPreview": "Imagem da TV pela câmera"
 }
