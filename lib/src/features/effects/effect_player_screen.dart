@@ -8,6 +8,7 @@ import '../../core/color/light_color.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
+import '../../core/hue/hue_bridge_client.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
@@ -109,6 +110,34 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
     return timer == null
         ? l10n.sleepTimer
         : l10n.sleepTimerMinutes(timer.inMinutes);
+  }
+
+  /// Asks for a name and saves the lights' current colours as a Hue
+  /// scene in the room or zone.
+  Future<void> _saveAsHueScene(LightingEffect effect) async {
+    final l10n = context.l10n;
+    final c = controller;
+    final room = c.group?.name ?? '';
+    final name = await showDialog<String>(
+      context: context,
+      builder: (_) => _SceneNameDialog(initial: l10n.effectName(effect)),
+    );
+    if (name == null || name.trim().isEmpty || !mounted) {
+      return;
+    }
+    final messenger = ScaffoldMessenger.of(context);
+    String message;
+    try {
+      final scene = await c.saveAsHueScene(name);
+      message = scene == null
+          ? l10n.sceneNotSaved
+          : l10n.sceneSaved(scene.name, room);
+    } on Object catch (error) {
+      message = l10n.couldNotSaveScene(describeError(l10n, error));
+    }
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   /// Play/pause, with a one-time warning before the first effect that
@@ -356,6 +385,12 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                       icon: const Icon(Icons.stop),
                       label: Text(l10n.stop),
                     ),
+                  if (active && c.canSaveAsHueScene)
+                    OutlinedButton.icon(
+                      onPressed: busy ? null : () => _saveAsHueScene(effect),
+                      icon: const Icon(Icons.bookmark_add_outlined),
+                      label: Text(l10n.saveAsHueScene),
+                    ),
                   OutlinedButton.icon(
                     onPressed: busy || c.isFadingOut ? null : _chooseSleepTimer,
                     icon: Icon(c.sleepTimer == null
@@ -425,6 +460,67 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+/// Asks for the name of a new Hue scene (the bridge keeps at most 32
+/// characters).
+class _SceneNameDialog extends StatefulWidget {
+  const _SceneNameDialog({required this.initial});
+
+  final String initial;
+
+  @override
+  State<_SceneNameDialog> createState() => _SceneNameDialogState();
+}
+
+class _SceneNameDialogState extends State<_SceneNameDialog> {
+  late final _name = TextEditingController(
+    text: widget.initial.length > HueBridgeClient.maxSceneNameLength
+        ? widget.initial.substring(0, HueBridgeClient.maxSceneNameLength)
+        : widget.initial,
+  );
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.saveAsHueScene),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.saveAsHueSceneDescription),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _name,
+            autofocus: true,
+            maxLength: HueBridgeClient.maxSceneNameLength,
+            decoration: InputDecoration(
+              labelText: l10n.name,
+              border: const OutlineInputBorder(),
+            ),
+            onSubmitted: (value) => Navigator.of(context).pop(value),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(_name.text),
+          child: Text(l10n.save),
+        ),
+      ],
     );
   }
 }

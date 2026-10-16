@@ -223,6 +223,47 @@ class PlaybackController extends ChangeNotifier {
     _notify();
   }
 
+  /// Whether [saveAsHueScene] can work now: an effect plays on a room or
+  /// zone.
+  bool get canSaveAsHueScene =>
+      group != null &&
+      _player != null &&
+      _activeLightIds.isNotEmpty &&
+      (_status == PlaybackStatus.playing || _status == PlaybackStatus.paused);
+
+  /// Saves what the lights show right now as a scene named [name] in the
+  /// room or zone, then refreshes the bridge so it appears with the other
+  /// scenes. Throws when the bridge refuses.
+  Future<HueScene?> saveAsHueScene(String name) async {
+    final group = this.group;
+    final player = _player;
+    final home = this.home;
+    final client = _bridge.client;
+    if (!canSaveAsHueScene ||
+        group == null ||
+        player == null ||
+        home == null ||
+        client == null) {
+      return null;
+    }
+    final frames = player.currentFrames;
+    final lightIds = player.lightIds;
+    final actions = <String, HueLightCommand>{
+      for (var i = 0; i < lightIds.length && i < frames.length; i++)
+        if (home.lights[lightIds[i]] case final light?)
+          light.id: HueLightCommand.forLight(
+              light, frames[i].color, frames[i].brightness),
+    };
+    final id = await client.createScene(
+      name: name,
+      group: group,
+      actions: actions,
+    );
+    await _bridge.refresh();
+    return this.home?.scenes.where((s) => s.id == id).firstOrNull ??
+        HueScene(id: id, name: name, groupId: group.id);
+  }
+
   /// Moves the playlist on to its next effect now.
   Future<void> nextInPlaylist() async {
     final playlist = _playlist;

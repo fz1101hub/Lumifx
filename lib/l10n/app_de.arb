@@ -279,5 +279,10 @@
   "done": "Fertig",
   "playPlaylist": "{name} abspielen",
   "deletePlaylistQuestion": "\"{name}\" löschen?",
-  "myScenes": "Meine Szenen"
+  "myScenes": "Meine Szenen",
+  "saveAsHueScene": "Als Hue-Szene speichern",
+  "saveAsHueSceneDescription": "Die Farben, die die Lampen gerade zeigen, werden auf deiner Bridge gespeichert. Du kannst die Szene dann in der Hue-App, mit Schaltern und Sprachassistenten nutzen, auch ohne LumiFX.",
+  "sceneSaved": "\"{name}\" in {room} gespeichert. Sie ist auch in der Hue-App.",
+  "sceneNotSaved": "Spiele den Effekt in einem Raum oder einer Zone ab, um ihn als Szene zu speichern.",
+  "couldNotSaveScene": "Die Szene konnte nicht gespeichert werden: {reason}"
 }

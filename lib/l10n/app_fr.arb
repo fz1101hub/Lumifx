@@ -279,5 +279,10 @@
   "done": "OK",
   "playPlaylist": "Lire {name}",
   "deletePlaylistQuestion": "Supprimer « {name} » ?",
-  "myScenes": "Mes scènes"
+  "myScenes": "Mes scènes",
+  "saveAsHueScene": "Enregistrer comme scène Hue",
+  "saveAsHueSceneDescription": "Les couleurs affichées par les lampes sont enregistrées sur votre pont. Vous pourrez ensuite utiliser la scène depuis l'app Hue, les interrupteurs et les assistants vocaux, même sans LumiFX.",
+  "sceneSaved": "« {name} » enregistrée dans {room}. Elle est aussi dans l'app Hue.",
+  "sceneNotSaved": "Lisez l'effet sur une pièce ou une zone pour l'enregistrer comme scène.",
+  "couldNotSaveScene": "Impossible d'enregistrer la scène : {reason}"
 }

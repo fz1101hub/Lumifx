@@ -542,6 +542,14 @@ Future<BridgeController> _connectedBridge(
           puts?.add(request.url.path);
           return json({'data': <Object>[]});
         }
+        if (request.method == 'POST') {
+          puts?.add('POST ${request.url.path}');
+          return json({
+            'data': [
+              {'rid': 's2', 'rtype': 'scene'},
+            ],
+          });
+        }
         switch (request.url.path) {
           case '/clip/v2/resource/scene':
             return json({
@@ -626,6 +634,41 @@ void streamingTests() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(puts, contains('/clip/v2/resource/scene/s1'));
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('a playing effect can be saved as a Hue scene', (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setLastTarget('group:r1');
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    expect(find.text('Save as Hue scene'), findsNothing);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    await tester.tap(find.text('Save as Hue scene'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Blue hour');
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Save'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    expect(puts, contains('POST /clip/v2/resource/scene'));
+    expect(find.textContaining('in Living room'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 1));
   });
 
   testWidgets('player offers entertainment areas and reports start errors',

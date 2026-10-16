@@ -34,12 +34,24 @@ class _RecordingWake implements ScreenWake {
 /// white) and a smart plug, all in one room.
 class _FakeBridge {
   final puts = <(String, Map<String, Object?>)>[];
+  final posts = <(String, Map<String, Object?>)>[];
 
   /// When set, room loading waits for it: used to stop mid-start.
   Completer<void>? holdRefresh;
   int refreshes = 0;
 
   http.Client get client => MockClient((request) async {
+        if (request.method == 'POST') {
+          posts.add((
+            request.url.path,
+            jsonDecode(request.body) as Map<String, Object?>,
+          ));
+          return _json({
+            'data': [
+              {'rid': 'new-scene', 'rtype': 'scene'},
+            ],
+          });
+        }
         if (request.method == 'PUT') {
           puts.add((
             request.url.pathSegments.last,
@@ -557,6 +569,32 @@ void main() {
       expect(controller.effect.id, isNot(previous));
       previous = controller.effect.id;
     }
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('what the lights show can be saved as a Hue scene', () async {
+    final (controller, fake, _) = await _setUp();
+    expect(controller.canSaveAsHueScene, isFalse);
+    await controller.start();
+    controller.player!.advance(const Duration(seconds: 2));
+    expect(controller.canSaveAsHueScene, isTrue);
+    await controller.saveAsHueScene('Deep blue evening, a very long name');
+    final (path, body) = fake.posts.single;
+    expect(path, '/clip/v2/resource/scene');
+    expect((body['metadata']! as Map)['name'], hasLength(32));
+    expect(body['group'], {'rid': 'room', 'rtype': 'room'});
+    final actions = (body['actions']! as List).cast<Map<String, Object?>>();
+    // The plug is no part of effects, so no part of the scene.
+    expect([for (final a in actions) (a['target']! as Map)['rid']],
+        ['color', 'white']);
+    final colour = actions.first['action']! as Map;
+    expect(colour.containsKey('color'), isTrue);
+    expect(colour.containsKey('dynamics'), isFalse);
+    final white = actions.last['action']! as Map;
+    expect(white.containsKey('color'), isFalse,
+        reason: 'a white bulb gets a colour temperature');
+    expect(white.containsKey('color_temperature'), isTrue);
     await controller.stop();
     controller.dispose();
   });

@@ -279,5 +279,10 @@
   "done": "Fatto",
   "playPlaylist": "Riproduci {name}",
   "deletePlaylistQuestion": "Eliminare \"{name}\"?",
-  "myScenes": "Le mie scene"
+  "myScenes": "Le mie scene",
+  "saveAsHueScene": "Salva come scena Hue",
+  "saveAsHueSceneDescription": "I colori che le luci mostrano ora vengono salvati sul Bridge. Potrai usare la scena dall'app Hue, dagli interruttori e dagli assistenti vocali, anche senza LumiFX.",
+  "sceneSaved": "\"{name}\" salvata in {room}. La trovi anche nell'app Hue.",
+  "sceneNotSaved": "Riproduci l'effetto su una stanza o una zona per salvarlo come scena.",
+  "couldNotSaveScene": "Impossibile salvare la scena: {reason}"
 }

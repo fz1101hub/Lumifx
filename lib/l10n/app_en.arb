@@ -620,5 +620,38 @@
   "myScenes": "My scenes",
   "@myScenes": {
     "description": "Section of the user's own scenes"
+  },
+  "saveAsHueScene": "Save as Hue scene",
+  "@saveAsHueScene": {
+    "description": "Player button and dialog title: save the lights as a Hue scene"
+  },
+  "saveAsHueSceneDescription": "The colours the lights show now are saved on your bridge. You can then use the scene from the Hue app, switches and voice assistants, even without LumiFX.",
+  "@saveAsHueSceneDescription": {
+    "description": "Explains saving as a Hue scene"
+  },
+  "sceneSaved": "Saved \"{name}\" in {room}. It is in the Hue app too.",
+  "@sceneSaved": {
+    "description": "Snackbar after saving a Hue scene",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "sceneNotSaved": "Play the effect on a room or zone to save it as a scene.",
+  "@sceneNotSaved": {
+    "description": "Snackbar when there was nothing to save"
+  },
+  "couldNotSaveScene": "The scene could not be saved: {reason}",
+  "@couldNotSaveScene": {
+    "description": "Snackbar when the bridge refused the scene",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
   }
 }

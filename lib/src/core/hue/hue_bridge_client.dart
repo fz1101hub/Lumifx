@@ -233,6 +233,55 @@ class HueBridgeClient {
         'recall': {'action': 'active'},
       });
 
+  /// The longest scene name the bridge accepts.
+  static const maxSceneNameLength = 32;
+
+  /// Saves a scene on [group] with one action per light and returns its
+  /// id. It then shows up in the Hue app, on switches and in voice
+  /// assistants like any scene made there.
+  Future<String> createScene({
+    required String name,
+    required HueGroup group,
+    required Map<String, HueLightCommand> actions,
+  }) async {
+    final trimmed = name.trim();
+    final response = await _client
+        .post(
+          Uri.https(host, '/clip/v2/resource/scene'),
+          headers: {..._headers, 'content-type': 'application/json'},
+          body: jsonEncode({
+            'type': 'scene',
+            'metadata': {
+              'name': trimmed.length > maxSceneNameLength
+                  ? trimmed.substring(0, maxSceneNameLength)
+                  : trimmed,
+            },
+            'group': {'rid': group.id, 'rtype': group.kind.name},
+            'actions': [
+              for (final MapEntry(key: id, value: command) in actions.entries)
+                {
+                  'target': {'rid': id, 'rtype': 'light'},
+                  // A scene stores a state, not a fade to it.
+                  'action': HueLightCommand(
+                    on: command.on,
+                    brightness: command.brightness,
+                    xy: command.xy,
+                    mirek: command.mirek,
+                  ).toJson(),
+                },
+            ],
+          }),
+        )
+        .timeout(_timeout);
+    final body = _decode(response);
+    final created = body is Map ? _list(body['data']).firstOrNull : null;
+    final id = created?['rid'];
+    if (id is! String) {
+      throw const HueException('The bridge did not create the scene');
+    }
+    return id;
+  }
+
   /// Creates an entertainment area and returns its id.
   Future<String> createEntertainmentArea(
       HueEntertainmentAreaDraft draft) async {
