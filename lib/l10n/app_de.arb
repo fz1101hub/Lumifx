@@ -568,7 +568,7 @@
   "okToWakeRoom": "Raum oder Zone",
   "okToWakeNoMornings": "Wähle mindestens einen Morgen.",
   "timers": "Licht-Timer",
-  "timersSubtitle": "Zähne, Aufräumen, Hausaufgaben, Konzentration, Kochen",
+  "timersSubtitle": "Zähne, Aufräumen, Hausaufgaben, Konzentration, Kochen, Pomodoro",
   "timersDescription": "Die Lampen ändern ihre Farbe, während die Zeit vergeht, niemand muss auf die Uhr schauen. Am Ende gibt es ein kleines Lichtfest oder ein sanftes Signal, und das Licht wird wie vorher.",
   "timerTeeth": "Zähne putzen",
   "timerTidyUp": "Aufräumen",
@@ -683,5 +683,11 @@
   "breatheBlow": "Puste die Kerze aus…",
   "breatheVoice": "Mit Stimme anleiten",
   "breatheDone": "Gut gemacht. Spür, wie ruhig du bist.",
-  "breatheAgain": "Noch einmal"
+  "breatheAgain": "Noch einmal",
+  "pomodoro": "Pomodoro",
+  "pomodoroSubtitle": "{work} Min. Konzentration, {rest} Min. Pause",
+  "pomodoroRounds": "{count, plural, =1{1 Runde} other{{count} Runden}}",
+  "pomodoroFocus": "Konzentration: Runde {round} von {total}",
+  "pomodoroBreak": "Pause: streck dich und trink etwas Wasser",
+  "pomodoroDone": "Gut gemacht, alle Runden geschafft!"
 }

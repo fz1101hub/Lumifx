@@ -7,6 +7,7 @@ import '../common/app_text.dart';
 import '../calm/breathing.dart';
 import '../fun/birthday.dart';
 import '../fun/light_games.dart';
+import '../timers/pomodoro.dart';
 import '../library/effect_library.dart';
 
 /// One line of a story, shown from [at] (seconds into the story's cycle)
@@ -175,6 +176,9 @@ List<(int, String)> narrationOf(
   }
   if (BreathingPattern.of(effect) case (final pattern, final minutes)) {
     return pattern.narration(minutes, l10n);
+  }
+  if (Pomodoro.of(effect) case final pomodoro?) {
+    return pomodoro.narration(l10n);
   }
   return library.userStory(effect.id)?.narration ?? const [];
 }

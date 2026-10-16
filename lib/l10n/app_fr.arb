@@ -568,7 +568,7 @@
   "okToWakeRoom": "Pièce ou zone",
   "okToWakeNoMornings": "Choisis au moins un matin.",
   "timers": "Minuteurs lumineux",
-  "timersSubtitle": "Dents, rangement, devoirs, concentration, cuisine",
+  "timersSubtitle": "Dents, rangement, devoirs, concentration, cuisine, pomodoro",
   "timersDescription": "Les lumières changent de couleur au fil du temps : personne n'a besoin de regarder l'heure. À la fin, une petite fête de lumière ou un signal doux, puis les lumières redeviennent comme avant.",
   "timerTeeth": "Se brosser les dents",
   "timerTidyUp": "Ranger",
@@ -683,5 +683,11 @@
   "breatheBlow": "Souffle la bougie…",
   "breatheVoice": "Me guider à la voix",
   "breatheDone": "Bravo. Sens comme tu es calme.",
-  "breatheAgain": "Encore une fois"
+  "breatheAgain": "Encore une fois",
+  "pomodoro": "Pomodoro",
+  "pomodoroSubtitle": "{work} min de concentration, {rest} min de pause",
+  "pomodoroRounds": "{count, plural, =1{1 tour} other{{count} tours}}",
+  "pomodoroFocus": "Concentration : tour {round} sur {total}",
+  "pomodoroBreak": "Pause : étire-toi et bois un peu d'eau",
+  "pomodoroDone": "Bravo, tous les tours sont terminés !"
 }

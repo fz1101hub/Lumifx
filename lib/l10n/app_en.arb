@@ -1921,7 +1921,7 @@
   "@timers": {
     "description": "Home entry: timers shown by the lights"
   },
-  "timersSubtitle": "Teeth, tidying up, homework, focus, cooking",
+  "timersSubtitle": "Teeth, tidying up, homework, focus, cooking, pomodoro",
   "@timersSubtitle": {
     "description": "Subtitle of the light timers on the home screen"
   },
@@ -2442,5 +2442,50 @@
   "breatheAgain": "Once more",
   "@breatheAgain": {
     "description": "Button: breathe again"
+  },
+  "pomodoro": "Pomodoro",
+  "@pomodoro": {
+    "description": "Timer: rounds of focus with short breaks (the Pomodoro technique)"
+  },
+  "pomodoroSubtitle": "{work} min of focus, {rest} min of break",
+  "@pomodoroSubtitle": {
+    "description": "How long the focus and the breaks last",
+    "placeholders": {
+      "work": {
+        "type": "int"
+      },
+      "rest": {
+        "type": "int"
+      }
+    }
+  },
+  "pomodoroRounds": "{count, plural, =1{1 round} other{{count} rounds}}",
+  "@pomodoroRounds": {
+    "description": "How many rounds of focus",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pomodoroFocus": "Focus: round {round} of {total}",
+  "@pomodoroFocus": {
+    "description": "Pomodoro: which round of focus is running",
+    "placeholders": {
+      "round": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "pomodoroBreak": "Break: stretch and drink some water",
+  "@pomodoroBreak": {
+    "description": "Pomodoro: a break is running"
+  },
+  "pomodoroDone": "Well done, all rounds finished!",
+  "@pomodoroDone": {
+    "description": "Pomodoro: all rounds finished"
   }
 }

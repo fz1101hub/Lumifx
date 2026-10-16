@@ -29,6 +29,7 @@ import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
@@ -547,6 +548,46 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     await tester.pump(const Duration(seconds: 2));
     expect(find.textContaining('Well done'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a pomodoro shows the round and the time left', (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Light timers'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('2 rounds'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('2 rounds'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('2 rounds'));
+    await tester.pump();
+    await tester.tap(find.descendant(
+        of: find.ancestor(
+            of: find.text('Pomodoro'), matching: find.byType(ListTile)),
+        matching: find.text('Start')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Focus: round 1 of 2'), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^2[45]:\d\d$')), findsOneWidget);
+
+    final playback =
+        AppScope.of(tester.element(find.byType(PomodoroRunningScreen)))
+            .playback;
+    playback.player!.advance(const Duration(minutes: 25));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Break: stretch and drink some water'), findsOneWidget);
+
+    await tester.tap(find.text('Stop'));
+    await tester.pump();
+    expect(find.text('Well done, all rounds finished!'), findsOneWidget);
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
   });

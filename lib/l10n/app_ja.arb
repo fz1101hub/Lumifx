@@ -568,7 +568,7 @@
   "okToWakeRoom": "部屋またはゾーン",
   "okToWakeNoMornings": "少なくとも1つの朝を選んでください。",
   "timers": "ライトタイマー",
-  "timersSubtitle": "歯みがき、おかたづけ、宿題、集中、料理",
+  "timersSubtitle": "歯みがき、おかたづけ、宿題、集中、料理、ポモドーロ",
   "timersDescription": "時間がたつにつれて明かりの色が変わるので、時計を見なくても大丈夫。最後に小さな光のパーティーかやさしい合図があり、明かりは元に戻ります。",
   "timerTeeth": "歯みがき",
   "timerTidyUp": "おかたづけ",
@@ -683,5 +683,11 @@
   "breatheBlow": "ろうそくをふーっ…",
   "breatheVoice": "声でガイドする",
   "breatheDone": "よくできました。心が落ち着いたのを感じてね。",
-  "breatheAgain": "もう一度"
+  "breatheAgain": "もう一度",
+  "pomodoro": "ポモドーロ",
+  "pomodoroSubtitle": "集中{work}分、休憩{rest}分",
+  "pomodoroRounds": "{count, plural, other{{count}ラウンド}}",
+  "pomodoroFocus": "集中：{total}ラウンド中{round}",
+  "pomodoroBreak": "休憩：のびをして水を飲もう",
+  "pomodoroDone": "よくできました、全ラウンド終了！"
 }

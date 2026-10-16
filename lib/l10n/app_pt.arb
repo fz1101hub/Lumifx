@@ -568,7 +568,7 @@
   "okToWakeRoom": "Cômodo ou zona",
   "okToWakeNoMornings": "Escolha pelo menos uma manhã.",
   "timers": "Timers de luz",
-  "timersSubtitle": "Dentes, arrumação, lição de casa, foco, cozinha",
+  "timersSubtitle": "Dentes, arrumação, lição de casa, foco, cozinha, pomodoro",
   "timersDescription": "As luzes mudam de cor conforme o tempo passa, então ninguém precisa olhar o relógio. No fim vem uma festinha de luz, ou um sinal suave, e as luzes voltam a ser como antes.",
   "timerTeeth": "Escovar os dentes",
   "timerTidyUp": "Arrumar",
@@ -683,5 +683,11 @@
   "breatheBlow": "Assopre a vela…",
   "breatheVoice": "Me guiar com a voz",
   "breatheDone": "Muito bem. Perceba como você está calmo.",
-  "breatheAgain": "Mais uma vez"
+  "breatheAgain": "Mais uma vez",
+  "pomodoro": "Pomodoro",
+  "pomodoroSubtitle": "{work} min de foco, {rest} min de pausa",
+  "pomodoroRounds": "{count, plural, =1{1 rodada} other{{count} rodadas}}",
+  "pomodoroFocus": "Foco: rodada {round} de {total}",
+  "pomodoroBreak": "Pausa: alongue-se e beba um pouco de água",
+  "pomodoroDone": "Muito bem, todas as rodadas concluídas!"
 }

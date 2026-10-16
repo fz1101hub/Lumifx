@@ -568,7 +568,7 @@
   "okToWakeRoom": "Kamer of zone",
   "okToWakeNoMornings": "Kies minstens één ochtend.",
   "timers": "Lichttimers",
-  "timersSubtitle": "Tanden, opruimen, huiswerk, focus, koken",
+  "timersSubtitle": "Tanden, opruimen, huiswerk, focus, koken, pomodoro",
   "timersDescription": "De lampen veranderen van kleur terwijl de tijd verstrijkt, zodat niemand op de klok hoeft te kijken. Aan het eind volgt een klein lichtfeest of een zacht signaal, en het licht wordt weer zoals het was.",
   "timerTeeth": "Tandenpoetsen",
   "timerTidyUp": "Opruimen",
@@ -683,5 +683,11 @@
   "breatheBlow": "Blaas de kaars uit…",
   "breatheVoice": "Begeleid me met een stem",
   "breatheDone": "Goed gedaan. Voel hoe rustig je bent.",
-  "breatheAgain": "Nog een keer"
+  "breatheAgain": "Nog een keer",
+  "pomodoro": "Pomodoro",
+  "pomodoroSubtitle": "{work} min focus, {rest} min pauze",
+  "pomodoroRounds": "{count, plural, =1{1 ronde} other{{count} rondes}}",
+  "pomodoroFocus": "Focus: ronde {round} van {total}",
+  "pomodoroBreak": "Pauze: rek je uit en drink wat water",
+  "pomodoroDone": "Goed gedaan, alle rondes klaar!"
 }
