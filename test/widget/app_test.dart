@@ -1102,6 +1102,28 @@ Future<BridgeController> _connectedBridge(
                 'localtime': 'W003/T22:00:00',
                 'status': 'enabled',
               },
+              '9': {
+                'name': 'Mia',
+                'description': 'lumifx:ok1:wake-night',
+                'command': {
+                  'address': '/api/key/groups/1/action',
+                  'method': 'PUT',
+                  'body': {'on': true, 'bri': 20},
+                },
+                'localtime': 'W121/T19:30:00',
+                'status': 'enabled',
+              },
+              '10': {
+                'name': 'Mia',
+                'description': 'lumifx:ok1:wake-green',
+                'command': {
+                  'address': '/api/key/groups/1/action',
+                  'method': 'PUT',
+                  'body': {'on': true, 'bri': 160},
+                },
+                'localtime': 'W124/T06:45:00',
+                'status': 'enabled',
+              },
             });
           case '/clip/v2/resource/behavior_script':
             return json({
@@ -1358,10 +1380,18 @@ void streamingTests() {
     expect(find.textContaining('7:00 AM · Mon, Tue, Wed, Thu, Fri'),
         findsOneWidget);
     expect(find.textContaining('Living room · 30 min'), findsOneWidget);
-    // Effects LumiFX scheduled on the bridge, below the routines.
+    // Below the routines: ok-to-wake lights and scheduled effects.
+    final list = find.byType(Scrollable).last;
+    await tester.scrollUntilVisible(find.text('Mia'), 200, scrollable: list);
+    expect(find.textContaining('Amber from 7:30 PM, green at 6:45 AM'),
+        findsOneWidget);
+    expect(find.text('New ok-to-wake light'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Evening fire'), 200,
+        scrollable: list);
     expect(find.text('Scheduled effects'), findsOneWidget);
-    expect(find.text('Evening fire'), findsOneWidget);
     expect(find.textContaining('until 10:00 PM'), findsOneWidget);
+    await tester.drag(list, const Offset(0, 2000));
+    await tester.pumpAndSettle();
 
     // Switch it off.
     await tester.runAsync(() async {

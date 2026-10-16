@@ -555,5 +555,16 @@
   "narrationEasterEggHunt1": "Le soleil du printemps brille sur le jardin.",
   "narrationEasterEggHunt2": "Un petit lapin sautille de buisson en buisson.",
   "narrationEasterEggHunt3": "Regarde ! Un œuf peint derrière les fleurs.",
-  "narrationEasterEggHunt4": "Tu les as tous trouvés. Joyeuses Pâques !"
+  "narrationEasterEggHunt4": "Tu les as tous trouvés. Joyeuses Pâques !",
+  "okToWake": "Feu du réveil",
+  "okToWakeDescription": "Une faible lueur ambrée la nuit, vert le matin quand il est l'heure de se lever. Enregistré sur ton Hue Bridge, il marche même téléphone éteint.",
+  "newOkToWake": "Nouveau feu du réveil",
+  "okToWakeNightAt": "Veilleuse à partir de",
+  "okToWakeGreenAt": "Vert à",
+  "okToWakeMornings": "Matins",
+  "okToWakeOffAfter": "Puis éteindre après",
+  "okToWakeStaysOn": "Reste allumé",
+  "okToWakeSummary": "Ambre dès {night}, vert à {wake}",
+  "okToWakeRoom": "Pièce ou zone",
+  "okToWakeNoMornings": "Choisis au moins un matin."
 }

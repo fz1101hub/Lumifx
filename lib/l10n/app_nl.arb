@@ -555,5 +555,16 @@
   "narrationEasterEggHunt1": "Lentezon boven de tuin.",
   "narrationEasterEggHunt2": "Een klein konijntje huppelt van struik naar struik.",
   "narrationEasterEggHunt3": "Kijk! Een beschilderd ei achter de bloemen.",
-  "narrationEasterEggHunt4": "Je hebt ze allemaal gevonden. Vrolijk Pasen!"
+  "narrationEasterEggHunt4": "Je hebt ze allemaal gevonden. Vrolijk Pasen!",
+  "okToWake": "Opstaanlamp",
+  "okToWakeDescription": "'s Nachts een zwakke amberkleurige gloed, 's ochtends groen als het tijd is om op te staan. Opgeslagen op je Hue Bridge, dus het werkt ook met je telefoon uit.",
+  "newOkToWake": "Nieuwe opstaanlamp",
+  "okToWakeNightAt": "Nachtlampje vanaf",
+  "okToWakeGreenAt": "Groen om",
+  "okToWakeMornings": "Ochtenden",
+  "okToWakeOffAfter": "Daarna uitschakelen na",
+  "okToWakeStaysOn": "Blijft aan",
+  "okToWakeSummary": "Amber vanaf {night}, groen om {wake}",
+  "okToWakeRoom": "Kamer of zone",
+  "okToWakeNoMornings": "Kies minstens één ochtend."
 }

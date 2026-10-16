@@ -555,5 +555,16 @@
   "narrationEasterEggHunt1": "Frühlingssonne über dem Garten.",
   "narrationEasterEggHunt2": "Ein kleines Häschen hüpft von Busch zu Busch.",
   "narrationEasterEggHunt3": "Schau! Ein bemaltes Ei hinter den Blumen.",
-  "narrationEasterEggHunt4": "Du hast alle gefunden. Frohe Ostern!"
+  "narrationEasterEggHunt4": "Du hast alle gefunden. Frohe Ostern!",
+  "okToWake": "Aufstehampel",
+  "okToWakeDescription": "Nachts ein schwaches Bernsteinlicht, morgens Grün, wenn Aufstehzeit ist. Auf deiner Hue Bridge gespeichert, also auch bei ausgeschaltetem Telefon.",
+  "newOkToWake": "Neue Aufstehampel",
+  "okToWakeNightAt": "Nachtlicht ab",
+  "okToWakeGreenAt": "Grün um",
+  "okToWakeMornings": "Morgen",
+  "okToWakeOffAfter": "Dann ausschalten nach",
+  "okToWakeStaysOn": "Bleibt an",
+  "okToWakeSummary": "Bernstein ab {night}, Grün um {wake}",
+  "okToWakeRoom": "Raum oder Zone",
+  "okToWakeNoMornings": "Wähle mindestens einen Morgen."
 }

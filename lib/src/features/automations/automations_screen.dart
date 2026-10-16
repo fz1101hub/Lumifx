@@ -10,6 +10,7 @@ import '../../core/hue/hue_schedules.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import 'automation_editor.dart';
+import 'ok_to_wake_editor.dart';
 
 /// Wake-up and bedtime routines stored on the bridge: they run at their
 /// time even with the phone off.
@@ -23,6 +24,7 @@ class AutomationsScreen extends StatefulWidget {
 class _AutomationsScreenState extends State<AutomationsScreen> {
   List<HueAutomation>? _automations;
   List<HueEffectSchedule>? _schedules;
+  List<HueOkToWake>? _okToWake;
   Object? _error;
   bool _loading = false;
 
@@ -47,10 +49,14 @@ class _AutomationsScreenState extends State<AutomationsScreen> {
       final schedules = await client
           .fetchEffectSchedules()
           .catchError((Object _) => const <HueEffectSchedule>[]);
+      final okToWake = await client
+          .fetchOkToWake()
+          .catchError((Object _) => const <HueOkToWake>[]);
       if (mounted) {
         setState(() {
           _automations = automations;
           _schedules = schedules;
+          _okToWake = okToWake;
           _error = null;
         });
       }
@@ -126,6 +132,39 @@ class _AutomationsScreenState extends State<AutomationsScreen> {
     );
     if (confirmed == true && client != null) {
       await _run(() => client.deleteEffectSchedule(schedule));
+    }
+  }
+
+  Future<void> _createOkToWake() async {
+    final created = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => const OkToWakeEditor()),
+    );
+    if (created ?? false) {
+      await _load();
+    }
+  }
+
+  Future<void> _deleteOkToWake(HueOkToWake light) async {
+    final l10n = context.l10n;
+    final client = AppScope.of(context).bridge.client;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteRoutineQuestion(light.name)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && client != null) {
+      await _run(() => client.deleteOkToWake(light));
     }
   }
 
@@ -208,6 +247,46 @@ class _AutomationsScreenState extends State<AutomationsScreen> {
                         ),
                       ),
                     ),
+                  if (_okToWake case final lights?) ...[
+                    const SizedBox(height: 24),
+                    Text(l10n.okToWake, style: theme.textTheme.titleMedium),
+                    const SizedBox(height: 4),
+                    Text(l10n.okToWakeDescription,
+                        style: theme.textTheme.bodySmall),
+                    for (final light in lights)
+                      Card(
+                        key: ValueKey('ok-${light.wakeId}'),
+                        child: ListTile(
+                          leading: const Icon(Icons.traffic_outlined),
+                          title: Text(light.name),
+                          subtitle:
+                              Text(describeOkToWake(context, light, home)),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Switch(
+                                value: light.enabled,
+                                onChanged: (value) => _run(() =>
+                                    client.setOkToWakeEnabled(light, value)),
+                              ),
+                              IconButton(
+                                tooltip: l10n.delete,
+                                icon: const Icon(Icons.delete_outline),
+                                onPressed: () => _deleteOkToWake(light),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                        onPressed: _createOkToWake,
+                        icon: const Icon(Icons.add),
+                        label: Text(l10n.newOkToWake),
+                      ),
+                    ),
+                  ],
                   if (_schedules case final schedules?) ...[
                     const SizedBox(height: 24),
                     Text(l10n.scheduledEffects,
@@ -247,6 +326,31 @@ class _AutomationsScreenState extends State<AutomationsScreen> {
             ),
     );
   }
+}
+
+/// "Amber from 19:30, green at 07:00 · Mon, Tue · Kids' room".
+String describeOkToWake(
+  BuildContext context,
+  HueOkToWake light,
+  HueHome? home,
+) {
+  final l10n = context.l10n;
+  final material = MaterialLocalizations.of(context);
+  final h24 = MediaQuery.alwaysUse24HourFormatOf(context);
+  String time(int hour, int minute) => material.formatTimeOfDay(
+        TimeOfDay(hour: hour, minute: minute),
+        alwaysUse24HourFormat: h24,
+      );
+  final room =
+      home?.groups.where((g) => g.idV1 == light.groupId).firstOrNull?.name;
+  return [
+    l10n.okToWakeSummary(
+      time(light.nightHour, light.nightMinute),
+      time(light.wakeHour, light.wakeMinute),
+    ),
+    describeDays(context, light.mornings),
+    if (room != null) room,
+  ].join(' · ');
 }
 
 /// "20:00 · Every day · Living room · until 22:00".

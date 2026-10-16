@@ -555,5 +555,16 @@
   "narrationEasterEggHunt1": "Il sole di primavera splende sul giardino.",
   "narrationEasterEggHunt2": "Un coniglietto saltella di cespuglio in cespuglio.",
   "narrationEasterEggHunt3": "Guarda! Un uovo dipinto dietro i fiori.",
-  "narrationEasterEggHunt4": "Le hai trovate tutte. Buona Pasqua!"
+  "narrationEasterEggHunt4": "Le hai trovate tutte. Buona Pasqua!",
+  "okToWake": "Semaforo della sveglia",
+  "okToWakeDescription": "Una luce ambrata e fioca di notte; verde al mattino quando è ora di alzarsi. Salvata sul tuo Hue Bridge, funziona anche a telefono spento.",
+  "newOkToWake": "Nuovo semaforo della sveglia",
+  "okToWakeNightAt": "Luce notturna dalle",
+  "okToWakeGreenAt": "Verde alle",
+  "okToWakeMornings": "Mattine",
+  "okToWakeOffAfter": "Poi spegni dopo",
+  "okToWakeStaysOn": "Resta accesa",
+  "okToWakeSummary": "Ambra dalle {night}, verde alle {wake}",
+  "okToWakeRoom": "Stanza o zona",
+  "okToWakeNoMornings": "Scegli almeno una mattina."
 }

@@ -1864,5 +1864,57 @@
   "narrationEasterEggHunt4": "You found them all. Happy Easter!",
   "@narrationEasterEggHunt4": {
     "description": "Read-along line of the Easter story"
+  },
+  "okToWake": "Ok-to-wake light",
+  "@okToWake": {
+    "description": "A light that turns green when children may get up"
+  },
+  "okToWakeDescription": "A dim amber glow at night; green in the morning when it is time to get up. Stored on your Hue Bridge, so it works with the phone off.",
+  "@okToWakeDescription": {
+    "description": "Explains the ok-to-wake light"
+  },
+  "newOkToWake": "New ok-to-wake light",
+  "@newOkToWake": {
+    "description": "Button: create an ok-to-wake light"
+  },
+  "okToWakeNightAt": "Night glow from",
+  "@okToWakeNightAt": {
+    "description": "Time the night colour starts"
+  },
+  "okToWakeGreenAt": "Green at",
+  "@okToWakeGreenAt": {
+    "description": "Time the light turns green"
+  },
+  "okToWakeMornings": "Mornings",
+  "@okToWakeMornings": {
+    "description": "Which mornings the light turns green"
+  },
+  "okToWakeOffAfter": "Then switch off after",
+  "@okToWakeOffAfter": {
+    "description": "When the lights switch off after turning green"
+  },
+  "okToWakeStaysOn": "Stays on",
+  "@okToWakeStaysOn": {
+    "description": "Choice: the green light stays on"
+  },
+  "okToWakeSummary": "Amber from {night}, green at {wake}",
+  "@okToWakeSummary": {
+    "description": "Summary of an ok-to-wake light; times like 19:30",
+    "placeholders": {
+      "night": {
+        "type": "String"
+      },
+      "wake": {
+        "type": "String"
+      }
+    }
+  },
+  "okToWakeRoom": "Room or zone",
+  "@okToWakeRoom": {
+    "description": "Label of the room picker of an ok-to-wake light"
+  },
+  "okToWakeNoMornings": "Choose at least one morning.",
+  "@okToWakeNoMornings": {
+    "description": "Error when no morning is chosen"
   }
 }

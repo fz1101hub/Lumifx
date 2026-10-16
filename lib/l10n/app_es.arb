@@ -555,5 +555,16 @@
   "narrationEasterEggHunt1": "El sol de primavera brilla sobre el jardín.",
   "narrationEasterEggHunt2": "Un conejito salta de arbusto en arbusto.",
   "narrationEasterEggHunt3": "¡Mira! Un huevo pintado detrás de las flores.",
-  "narrationEasterEggHunt4": "¡Los encontraste todos! ¡Feliz Pascua!"
+  "narrationEasterEggHunt4": "¡Los encontraste todos! ¡Feliz Pascua!",
+  "okToWake": "Semáforo del despertar",
+  "okToWakeDescription": "Una luz ámbar tenue por la noche y verde por la mañana cuando es hora de levantarse. Se guarda en tu Hue Bridge, así funciona con el teléfono apagado.",
+  "newOkToWake": "Nuevo semáforo del despertar",
+  "okToWakeNightAt": "Luz de noche desde las",
+  "okToWakeGreenAt": "Verde a las",
+  "okToWakeMornings": "Mañanas",
+  "okToWakeOffAfter": "Después apagar tras",
+  "okToWakeStaysOn": "Sigue encendida",
+  "okToWakeSummary": "Ámbar desde las {night}, verde a las {wake}",
+  "okToWakeRoom": "Habitación o zona",
+  "okToWakeNoMornings": "Elige al menos una mañana."
 }

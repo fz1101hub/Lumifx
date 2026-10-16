@@ -555,5 +555,16 @@
   "narrationEasterEggHunt1": "庭に春のおひさまがきらきら。",
   "narrationEasterEggHunt2": "小さなうさぎが茂みから茂みへぴょんぴょん。",
   "narrationEasterEggHunt3": "見て！お花のうしろに色をぬったたまご。",
-  "narrationEasterEggHunt4": "ぜんぶ見つけたね。ハッピーイースター！"
+  "narrationEasterEggHunt4": "ぜんぶ見つけたね。ハッピーイースター！",
+  "okToWake": "おきていいよライト",
+  "okToWakeDescription": "夜はほのかな琥珀色、朝おきる時間になると緑に。Hue ブリッジに保存されるので、スマートフォンの電源が切れていても動きます。",
+  "newOkToWake": "新しいおきていいよライト",
+  "okToWakeNightAt": "常夜灯の開始",
+  "okToWakeGreenAt": "緑になる時刻",
+  "okToWakeMornings": "朝",
+  "okToWakeOffAfter": "そのあと消灯まで",
+  "okToWakeStaysOn": "つけたまま",
+  "okToWakeSummary": "{night} から琥珀色、{wake} に緑",
+  "okToWakeRoom": "部屋またはゾーン",
+  "okToWakeNoMornings": "少なくとも1つの朝を選んでください。"
 }
