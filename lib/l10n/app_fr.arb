@@ -503,5 +503,17 @@
   "bedtimeProgress": "Dodo : veilleuse à {glow}, lumières éteintes à {off}.",
   "bedtimeGlowNow": "Veilleuse. Lumières éteintes à {off}. Fais de beaux rêves.",
   "effectNameGoodnightGlow": "Lueur de bonne nuit",
-  "effectDescriptionGoodnightGlow": "Une douce lueur ambrée pour s'endormir."
+  "effectDescriptionGoodnightGlow": "Une douce lueur ambrée pour s'endormir.",
+  "scheduleOnBridge": "Programmer",
+  "scheduleTitle": "Lire à heures fixes",
+  "scheduleDescription": "Ton Hue Bridge allume cet effet à l'heure choisie, même téléphone éteint, et le garde en mouvement. Il est enregistré comme scène Hue.",
+  "scheduleStartAt": "Commence à",
+  "scheduleStop": "Éteindre à une heure précise",
+  "scheduleStopAt": "S'éteint à",
+  "scheduleSaved": "Programmé sur le bridge : {name}.",
+  "couldNotSchedule": "Impossible de programmer l'effet : {reason}",
+  "scheduledEffects": "Effets programmés",
+  "noScheduledEffects": "Aucun pour l'instant. Lis une scène dans une pièce et appuie sur Programmer dans le lecteur.",
+  "deleteScheduleDescription": "La scène Hue qu'il lit est aussi supprimée.",
+  "scheduleUntil": "jusqu'à {time}"
 }

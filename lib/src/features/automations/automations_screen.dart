@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../app_scope.dart';
 import '../../core/hue/hue_automations.dart';
 import '../../core/hue/hue_bridge_client.dart';
+import '../../core/hue/hue_schedules.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import 'automation_editor.dart';
@@ -21,6 +22,7 @@ class AutomationsScreen extends StatefulWidget {
 
 class _AutomationsScreenState extends State<AutomationsScreen> {
   List<HueAutomation>? _automations;
+  List<HueEffectSchedule>? _schedules;
   Object? _error;
   bool _loading = false;
 
@@ -40,9 +42,15 @@ class _AutomationsScreenState extends State<AutomationsScreen> {
     setState(() => _loading = true);
     try {
       final automations = await client.fetchAutomations();
+      // The older API may be switched off on some bridges: the routines
+      // still show.
+      final schedules = await client
+          .fetchEffectSchedules()
+          .catchError((Object _) => const <HueEffectSchedule>[]);
       if (mounted) {
         setState(() {
           _automations = automations;
+          _schedules = schedules;
           _error = null;
         });
       }
@@ -93,6 +101,31 @@ class _AutomationsScreenState extends State<AutomationsScreen> {
     );
     if (confirmed == true && client != null) {
       await _run(() => client.deleteAutomation(automation.id));
+    }
+  }
+
+  Future<void> _deleteSchedule(HueEffectSchedule schedule) async {
+    final l10n = context.l10n;
+    final client = AppScope.of(context).bridge.client;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteRoutineQuestion(schedule.name)),
+        content: Text(l10n.deleteScheduleDescription),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && client != null) {
+      await _run(() => client.deleteEffectSchedule(schedule));
     }
   }
 
@@ -175,11 +208,71 @@ class _AutomationsScreenState extends State<AutomationsScreen> {
                         ),
                       ),
                     ),
+                  if (_schedules case final schedules?) ...[
+                    const SizedBox(height: 24),
+                    Text(l10n.scheduledEffects,
+                        style: theme.textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    if (schedules.isEmpty)
+                      Text(l10n.noScheduledEffects,
+                          style: theme.textTheme.bodySmall),
+                    for (final schedule in schedules)
+                      Card(
+                        key: ValueKey('schedule-${schedule.id}'),
+                        child: ListTile(
+                          leading: const Icon(Icons.schedule),
+                          title: Text(schedule.name),
+                          subtitle:
+                              Text(describeSchedule(context, schedule, home)),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Switch(
+                                value: schedule.enabled,
+                                onChanged: (value) => _run(() => client
+                                    .setEffectScheduleEnabled(schedule, value)),
+                              ),
+                              IconButton(
+                                tooltip: l10n.delete,
+                                icon: const Icon(Icons.delete_outline),
+                                onPressed: () => _deleteSchedule(schedule),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 ],
               ),
             ),
     );
   }
+}
+
+/// "20:00 · Every day · Living room · until 22:00".
+String describeSchedule(
+  BuildContext context,
+  HueEffectSchedule schedule,
+  HueHome? home,
+) {
+  final l10n = context.l10n;
+  final material = MaterialLocalizations.of(context);
+  final h24 = MediaQuery.alwaysUse24HourFormatOf(context);
+  String time(int hour, int minute) => material.formatTimeOfDay(
+        TimeOfDay(hour: hour, minute: minute),
+        alwaysUse24HourFormat: h24,
+      );
+  final room =
+      home?.groups.where((g) => g.idV1 == schedule.groupId).firstOrNull?.name;
+  final stopHour = schedule.stopHour;
+  final stopMinute = schedule.stopMinute;
+  return [
+    time(schedule.hour, schedule.minute),
+    describeDays(context, schedule.days),
+    if (room != null) room,
+    if (stopHour != null && stopMinute != null)
+      l10n.scheduleUntil(time(stopHour, stopMinute)),
+  ].join(' · ');
 }
 
 String routineKindName(AppLocalizations l10n, HueAutomationKind kind) =>

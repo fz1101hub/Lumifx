@@ -14,6 +14,8 @@ import '../../core/effects/engine/light_output.dart';
 import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
+import '../../core/hue/hue_exceptions.dart';
+import '../../core/hue/hue_schedules.dart';
 import '../../core/screen_wake.dart';
 import '../../core/sound/sound_player.dart';
 import '../../core/sound/soundscape.dart';
@@ -406,6 +408,44 @@ class PlaybackController extends ChangeNotifier {
     await _bridge.refresh();
     return this.home?.scenes.where((s) => s.id == id).firstOrNull ??
         HueScene(id: id, name: name, groupId: group.id);
+  }
+
+  /// Whether the effect can be scheduled on the bridge: one drifting
+  /// palette (the bridge plays it as a dynamic scene) on a room or zone.
+  bool get canScheduleOnBridge =>
+      canSaveAsHueScene && dynamicPalette != null && group?.idV1 != null;
+
+  /// Saves the effect as a dynamic Hue scene and has the bridge recall it
+  /// at [hour]:[minute] on [days] (none: once), and switch the room off
+  /// at the stop time if one is given. Runs with the phone off.
+  Future<void> scheduleOnBridge({
+    required String name,
+    required int hour,
+    required int minute,
+    required List<int> days,
+    int? stopHour,
+    int? stopMinute,
+  }) async {
+    final groupId = group?.idV1;
+    final client = _bridge.client;
+    if (!canScheduleOnBridge || groupId == null || client == null) {
+      throw const HueException('Play the effect on a room or zone first');
+    }
+    final scene = await saveAsHueScene(name, dynamic: true);
+    final sceneId = scene?.idV1;
+    if (sceneId == null) {
+      throw const HueException('The bridge did not create the scene');
+    }
+    await client.createEffectSchedule(HueEffectScheduleDraft(
+      name: name,
+      groupId: groupId,
+      sceneId: sceneId,
+      hour: hour,
+      minute: minute,
+      days: days,
+      stopHour: stopHour,
+      stopMinute: stopMinute,
+    ));
   }
 
   /// Moves the playlist on to its next effect now.

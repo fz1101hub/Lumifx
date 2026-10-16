@@ -1631,5 +1631,68 @@
   "effectDescriptionGoodnightGlow": "A soft amber glow to fall asleep by.",
   "@effectDescriptionGoodnightGlow": {
     "description": "Description of the warm night-light scene"
+  },
+  "scheduleOnBridge": "Schedule",
+  "@scheduleOnBridge": {
+    "description": "Button in the player: have the bridge play this effect at set times"
+  },
+  "scheduleTitle": "Play at set times",
+  "@scheduleTitle": {
+    "description": "Title of the dialog scheduling an effect on the bridge"
+  },
+  "scheduleDescription": "Your Hue Bridge turns this effect on at the chosen time, even with your phone off, and keeps it moving. It is saved as a Hue scene.",
+  "@scheduleDescription": {
+    "description": "Explains scheduling an effect on the bridge"
+  },
+  "scheduleStartAt": "Starts at",
+  "@scheduleStartAt": {
+    "description": "Label of the start time of a schedule"
+  },
+  "scheduleStop": "Switch off at a set time",
+  "@scheduleStop": {
+    "description": "Switch: switch the lights off at a set time"
+  },
+  "scheduleStopAt": "Switches off at",
+  "@scheduleStopAt": {
+    "description": "Label of the stop time of a schedule"
+  },
+  "scheduleSaved": "Scheduled on the bridge: {name}.",
+  "@scheduleSaved": {
+    "description": "Snackbar after scheduling an effect on the bridge",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "couldNotSchedule": "The effect could not be scheduled: {reason}",
+  "@couldNotSchedule": {
+    "description": "Snackbar when scheduling failed",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduledEffects": "Scheduled effects",
+  "@scheduledEffects": {
+    "description": "Heading of the list of effects scheduled on the bridge"
+  },
+  "noScheduledEffects": "None yet. Play a scene on a room and press Schedule in the player.",
+  "@noScheduledEffects": {
+    "description": "Shown when no effect is scheduled"
+  },
+  "deleteScheduleDescription": "The Hue scene it plays is deleted too.",
+  "@deleteScheduleDescription": {
+    "description": "Explains what deleting a scheduled effect removes"
+  },
+  "scheduleUntil": "until {time}",
+  "@scheduleUntil": {
+    "description": "Part of a scheduled effect's summary; time like 22:00",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   }
 }

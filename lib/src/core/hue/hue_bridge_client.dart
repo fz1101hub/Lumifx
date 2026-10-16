@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'hue_exceptions.dart';
 import 'hue_automations.dart';
 import 'hue_models.dart';
+import 'hue_schedules.dart';
 
 /// Everything LumiFX reads from a bridge in one snapshot.
 class HueHome {
@@ -160,6 +161,7 @@ class HueBridgeClient {
         kind: kind,
         lightIds: lightIds,
         groupedLightId: groupedLight,
+        idV1: v1Id(json['id_v1'], 'groups'),
       );
     }
 
@@ -294,6 +296,223 @@ class HueBridgeClient {
       throw const HueException('The bridge did not create the scene');
     }
     return id;
+  }
+
+  /// The effects the bridge plays at set times (see [HueEffectSchedule]).
+  Future<List<HueEffectSchedule>> fetchEffectSchedules() async {
+    final response = await _client.get(_v1('/schedules')).timeout(_timeout);
+    final body = _v1Result(response);
+    if (body is! Map) {
+      return const [];
+    }
+    final starts = <String, (String, Map<Object?, Object?>)>{};
+    final stops = <String, (String, Map<Object?, Object?>)>{};
+    for (final MapEntry(:key, :value) in body.entries) {
+      final description = value is Map ? value['description'] : null;
+      if (key is! String ||
+          value is! Map ||
+          description is! String ||
+          !description.startsWith(HueEffectSchedule.tag)) {
+        continue;
+      }
+      final parts =
+          description.substring(HueEffectSchedule.tag.length).split(':');
+      if (parts.length == 2) {
+        (parts[1] == 'stop' ? stops : starts)[parts[0]] = (key, value);
+      }
+    }
+    return [
+      for (final MapEntry(key: token, value: (id, json)) in starts.entries)
+        if (_effectSchedule(id, json, stops[token]) case final schedule?)
+          schedule,
+    ]..sort(
+        (a, b) => (a.hour * 60 + a.minute).compareTo(b.hour * 60 + b.minute));
+  }
+
+  static HueEffectSchedule? _effectSchedule(
+    String id,
+    Map<Object?, Object?> json,
+    (String, Map<Object?, Object?>)? stop,
+  ) {
+    final when = parseLocaltime('${json['localtime'] ?? ''}');
+    final command = json['command'];
+    final address = command is Map ? command['address'] : null;
+    final body = command is Map ? command['body'] : null;
+    final scene = body is Map ? body['scene'] : null;
+    final group = address is String
+        ? RegExp(r'/groups/([A-Za-z0-9]+)/action$')
+            .firstMatch(address)
+            ?.group(1)
+        : null;
+    if (when == null || group == null || scene is! String) {
+      return null;
+    }
+    final stopWhen =
+        stop == null ? null : parseLocaltime('${stop.$2['localtime'] ?? ''}');
+    final name = json['name'];
+    return HueEffectSchedule(
+      id: id,
+      name: name is String ? name : '',
+      groupId: group,
+      sceneId: scene,
+      hour: when.hour,
+      minute: when.minute,
+      days: when.days,
+      enabled: json['status'] == 'enabled',
+      stopId: stopWhen == null ? null : stop!.$1,
+      stopHour: stopWhen?.hour,
+      stopMinute: stopWhen?.minute,
+    );
+  }
+
+  /// Stores [draft] on the bridge: one schedule recalls the scene, and
+  /// another switches the room off when it has a stop time. A single day
+  /// ([HueEffectScheduleDraft.days] empty) runs once and is then removed.
+  Future<void> createEffectSchedule(
+    HueEffectScheduleDraft draft, {
+    DateTime? now,
+  }) async {
+    final key = applicationKey;
+    if (key == null) {
+      throw const UnauthorizedException();
+    }
+    final at = now ?? DateTime.now();
+    final token = at.microsecondsSinceEpoch.toRadixString(36);
+    final once = draft.days.isEmpty;
+    final action = '/api/$key/groups/${draft.groupId}/action';
+    final startId = await _postSchedule({
+      'name': _clipName(draft.name),
+      'description': '${HueEffectSchedule.tag}$token:start',
+      'command': {
+        'address': action,
+        'method': 'PUT',
+        'body': {'scene': draft.sceneId},
+      },
+      'localtime': scheduleLocaltime(
+        hour: draft.hour,
+        minute: draft.minute,
+        days: draft.days,
+        now: at,
+      ),
+      'status': 'enabled',
+      'autodelete': once,
+    });
+    if (!draft.stops) {
+      return;
+    }
+    final stopHour = draft.stopHour!;
+    final stopMinute = draft.stopMinute!;
+    final nextDay =
+        stopHour * 60 + stopMinute <= draft.hour * 60 + draft.minute;
+    // Once: the next stop time after the start; weekly: the same days, or
+    // the day after each when the stop is past midnight.
+    var start = DateTime(at.year, at.month, at.day, draft.hour, draft.minute);
+    if (!start.isAfter(at)) {
+      start = start.add(const Duration(days: 1));
+    }
+    try {
+      await _postSchedule({
+        'name': _clipName(draft.name),
+        'description': '${HueEffectSchedule.tag}$token:stop',
+        'command': {
+          'address': action,
+          'method': 'PUT',
+          'body': {'on': false},
+        },
+        'localtime': scheduleLocaltime(
+          hour: stopHour,
+          minute: stopMinute,
+          days: stopDays(draft.days, nextDay: nextDay),
+          now: once ? start : at,
+        ),
+        'status': 'enabled',
+        'autodelete': once,
+      });
+    } on Object {
+      // Half a schedule would turn the lights on and never off.
+      await _deleteV1('/schedules/$startId');
+      rethrow;
+    }
+  }
+
+  /// Pauses or resumes [schedule] (and its stop).
+  Future<void> setEffectScheduleEnabled(
+    HueEffectSchedule schedule,
+    bool enabled,
+  ) async {
+    for (final id in [schedule.id, if (schedule.stopId case final s?) s]) {
+      final response = await _client
+          .put(
+            _v1('/schedules/$id'),
+            headers: {'content-type': 'application/json'},
+            body: jsonEncode({'status': enabled ? 'enabled' : 'disabled'}),
+          )
+          .timeout(_timeout);
+      _v1Result(response);
+    }
+  }
+
+  /// Removes [schedule], its stop and the scene it recalls.
+  Future<void> deleteEffectSchedule(HueEffectSchedule schedule) async {
+    await _deleteV1('/schedules/${schedule.id}');
+    final stopId = schedule.stopId;
+    if (stopId != null) {
+      await _deleteV1('/schedules/$stopId');
+    }
+    try {
+      await _deleteV1('/scenes/${schedule.sceneId}');
+    } on HueException {
+      // Already deleted in the Hue app.
+    }
+  }
+
+  Future<String> _postSchedule(Map<String, Object> body) async {
+    final response = await _client
+        .post(
+          _v1('/schedules'),
+          headers: {'content-type': 'application/json'},
+          body: jsonEncode(body),
+        )
+        .timeout(_timeout);
+    final result = _v1Result(response);
+    final first = result is List ? result.firstOrNull : null;
+    final success = first is Map ? first['success'] : null;
+    final id = success is Map ? success['id'] : null;
+    if (id is! String) {
+      throw const HueException('The bridge did not create the schedule');
+    }
+    return id;
+  }
+
+  Future<void> _deleteV1(String path) async {
+    final response = await _client.delete(_v1(path)).timeout(_timeout);
+    _v1Result(response);
+  }
+
+  Uri _v1(String path) {
+    final key = applicationKey;
+    if (key == null) {
+      throw const UnauthorizedException();
+    }
+    return Uri.https(host, '/api/$key$path');
+  }
+
+  /// The older API answers 200 with a list of `success` and `error`
+  /// entries.
+  Object? _v1Result(http.Response response) {
+    final body = _decode(response);
+    if (body is List) {
+      for (final item in body) {
+        final error = item is Map ? item['error'] : null;
+        if (error is Map) {
+          if (error['type'] == 1) {
+            throw const UnauthorizedException();
+          }
+          throw HueException('${error['description'] ?? 'Request failed'}');
+        }
+      }
+    }
+    return body;
   }
 
   /// The bridge's own wake-up script, as made by the Hue app.

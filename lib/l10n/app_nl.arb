@@ -503,5 +503,17 @@
   "bedtimeProgress": "Bedtijd: nachtlampje om {glow}, licht uit om {off}.",
   "bedtimeGlowNow": "Nachtlampje. Licht uit om {off}. Slaap lekker.",
   "effectNameGoodnightGlow": "Welterusten-gloed",
-  "effectDescriptionGoodnightGlow": "Een zachte amberkleurige gloed om bij in slaap te vallen."
+  "effectDescriptionGoodnightGlow": "Een zachte amberkleurige gloed om bij in slaap te vallen.",
+  "scheduleOnBridge": "Plannen",
+  "scheduleTitle": "Op vaste tijden afspelen",
+  "scheduleDescription": "Je Hue Bridge zet dit effect op het gekozen tijdstip aan, ook als je telefoon uit staat, en houdt het in beweging. Het wordt opgeslagen als Hue-scène.",
+  "scheduleStartAt": "Begint om",
+  "scheduleStop": "Op een tijdstip uitschakelen",
+  "scheduleStopAt": "Gaat uit om",
+  "scheduleSaved": "Gepland op de bridge: {name}.",
+  "couldNotSchedule": "Het effect kon niet worden gepland: {reason}",
+  "scheduledEffects": "Geplande effecten",
+  "noScheduledEffects": "Nog geen. Speel een scène af in een kamer en tik in de speler op Plannen.",
+  "deleteScheduleDescription": "De Hue-scène die het afspeelt, wordt ook verwijderd.",
+  "scheduleUntil": "tot {time}"
 }

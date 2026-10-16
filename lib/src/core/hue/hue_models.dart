@@ -240,6 +240,7 @@ class HueGroup {
     required this.lightIds,
     this.groupedLightId,
     this.archetype,
+    this.idV1,
   });
 
   final String id;
@@ -250,6 +251,10 @@ class HueGroup {
   /// The `grouped_light` service for controlling the whole group at once.
   final String? groupedLightId;
   final String? archetype;
+
+  /// The same group in the older API (`3` for `/groups/3`), which the
+  /// bridge's schedules use.
+  final String? idV1;
 }
 
 /// A scene saved on the bridge (made in the Hue app), belonging to one
@@ -261,6 +266,7 @@ class HueScene {
     required this.groupId,
     this.isActive = false,
     this.isDynamic = false,
+    this.idV1,
   });
 
   factory HueScene.fromJson(Map<String, Object?> json) {
@@ -275,6 +281,7 @@ class HueScene {
       // Most gallery scenes carry a palette too but play still, as in the
       // Hue app; only those meant to move start moving.
       isDynamic: json['auto_dynamic'] == true,
+      idV1: v1Id(json['id_v1'], 'scenes'),
     );
   }
 
@@ -286,6 +293,9 @@ class HueScene {
 
   /// The bridge believes the lights currently show this scene.
   final bool isActive;
+
+  /// The same scene in the older API, which the bridge's schedules use.
+  final String? idV1;
 
   /// It starts moving through its palette when recalled (made in the Hue
   /// app to start dynamic, or saved from LumiFX to keep moving).
@@ -641,4 +651,15 @@ class HueEntertainmentAreaDraft {
           'service_locations': [for (final l in locations) l.toJson()],
         },
       };
+}
+
+/// The id in [value] (`/groups/3`, `/scenes/AbC`) when it names a
+/// [collection] of the older API, else null.
+String? v1Id(Object? value, String collection) {
+  if (value is! String) {
+    return null;
+  }
+  final match =
+      RegExp('^/$collection/([A-Za-z0-9-]{1,40})\$').firstMatch(value);
+  return match?[1];
 }

@@ -503,5 +503,17 @@
   "bedtimeProgress": "おやすみ：{glow} に常夜灯、{off} に消灯。",
   "bedtimeGlowNow": "常夜灯。{off} に消灯します。おやすみなさい。",
   "effectNameGoodnightGlow": "おやすみの灯り",
-  "effectDescriptionGoodnightGlow": "眠りにつくための、やわらかな琥珀色の灯り。"
+  "effectDescriptionGoodnightGlow": "眠りにつくための、やわらかな琥珀色の灯り。",
+  "scheduleOnBridge": "予約",
+  "scheduleTitle": "決まった時間に再生",
+  "scheduleDescription": "Hue ブリッジが、スマートフォンの電源が切れていても選んだ時間にこの効果をつけ、動かし続けます。Hue シーンとして保存されます。",
+  "scheduleStartAt": "開始時刻",
+  "scheduleStop": "決まった時間に消灯",
+  "scheduleStopAt": "消灯時刻",
+  "scheduleSaved": "ブリッジに予約しました：{name}",
+  "couldNotSchedule": "効果を予約できませんでした：{reason}",
+  "scheduledEffects": "予約した効果",
+  "noScheduledEffects": "まだありません。部屋でシーンを再生し、プレーヤーの「予約」を押してください。",
+  "deleteScheduleDescription": "再生する Hue シーンも削除されます。",
+  "scheduleUntil": "{time} まで"
 }

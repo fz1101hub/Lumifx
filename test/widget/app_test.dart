@@ -1043,6 +1043,31 @@ Future<BridgeController> _connectedBridge(
           });
         }
         switch (request.url.path) {
+          case '/api/key/schedules':
+            return json({
+              '7': {
+                'name': 'Evening fire',
+                'description': 'lumifx:abc:start',
+                'command': {
+                  'address': '/api/key/groups/1/action',
+                  'method': 'PUT',
+                  'body': {'scene': 'V1'},
+                },
+                'localtime': 'W003/T20:00:00',
+                'status': 'enabled',
+              },
+              '8': {
+                'name': 'Evening fire',
+                'description': 'lumifx:abc:stop',
+                'command': {
+                  'address': '/api/key/groups/1/action',
+                  'method': 'PUT',
+                  'body': {'on': false},
+                },
+                'localtime': 'W003/T22:00:00',
+                'status': 'enabled',
+              },
+            });
           case '/clip/v2/resource/behavior_script':
             return json({
               'data': [
@@ -1298,10 +1323,14 @@ void streamingTests() {
     expect(find.textContaining('7:00 AM · Mon, Tue, Wed, Thu, Fri'),
         findsOneWidget);
     expect(find.textContaining('Living room · 30 min'), findsOneWidget);
+    // Effects LumiFX scheduled on the bridge, below the routines.
+    expect(find.text('Scheduled effects'), findsOneWidget);
+    expect(find.text('Evening fire'), findsOneWidget);
+    expect(find.textContaining('until 10:00 PM'), findsOneWidget);
 
     // Switch it off.
     await tester.runAsync(() async {
-      await tester.tap(find.byType(Switch));
+      await tester.tap(find.byType(Switch).first);
       await Future<void>.delayed(const Duration(milliseconds: 300));
     });
     await tester.pumpAndSettle();

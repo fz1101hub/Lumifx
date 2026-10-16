@@ -503,5 +503,17 @@
   "bedtimeProgress": "Nanna: luce notturna alle {glow}, luci spente alle {off}.",
   "bedtimeGlowNow": "Luce notturna. Luci spente alle {off}. Sogni d'oro.",
   "effectNameGoodnightGlow": "Luce della buonanotte",
-  "effectDescriptionGoodnightGlow": "Un tenue bagliore ambrato per addormentarsi."
+  "effectDescriptionGoodnightGlow": "Un tenue bagliore ambrato per addormentarsi.",
+  "scheduleOnBridge": "Programma",
+  "scheduleTitle": "Riproduci a orari fissi",
+  "scheduleDescription": "Il tuo Hue Bridge accende questo effetto all'ora scelta, anche a telefono spento, e lo mantiene in movimento. Viene salvato come scena Hue.",
+  "scheduleStartAt": "Inizia alle",
+  "scheduleStop": "Spegni a un orario",
+  "scheduleStopAt": "Si spegne alle",
+  "scheduleSaved": "Programmato sul bridge: {name}.",
+  "couldNotSchedule": "Impossibile programmare l'effetto: {reason}",
+  "scheduledEffects": "Effetti programmati",
+  "noScheduledEffects": "Ancora nessuno. Riproduci una scena in una stanza e premi Programma nel lettore.",
+  "deleteScheduleDescription": "Viene eliminata anche la scena Hue che riproduce.",
+  "scheduleUntil": "fino alle {time}"
 }

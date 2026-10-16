@@ -503,5 +503,17 @@
   "bedtimeProgress": "Hora de dormir: luz noturna às {glow}, luzes apagadas às {off}.",
   "bedtimeGlowNow": "Luz noturna. Luzes apagadas às {off}. Bons sonhos.",
   "effectNameGoodnightGlow": "Luz de boa noite",
-  "effectDescriptionGoodnightGlow": "Um brilho âmbar suave para pegar no sono."
+  "effectDescriptionGoodnightGlow": "Um brilho âmbar suave para pegar no sono.",
+  "scheduleOnBridge": "Agendar",
+  "scheduleTitle": "Reproduzir em horários fixos",
+  "scheduleDescription": "Seu Hue Bridge liga este efeito no horário escolhido, mesmo com o celular desligado, e o mantém em movimento. Ele é salvo como cena Hue.",
+  "scheduleStartAt": "Começa às",
+  "scheduleStop": "Desligar em um horário",
+  "scheduleStopAt": "Desliga às",
+  "scheduleSaved": "Agendado no bridge: {name}.",
+  "couldNotSchedule": "Não foi possível agendar o efeito: {reason}",
+  "scheduledEffects": "Efeitos agendados",
+  "noScheduledEffects": "Nenhum ainda. Reproduza uma cena em um cômodo e toque em Agendar no player.",
+  "deleteScheduleDescription": "A cena Hue que ele reproduz também é excluída.",
+  "scheduleUntil": "até {time}"
 }

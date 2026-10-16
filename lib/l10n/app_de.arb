@@ -503,5 +503,17 @@
   "bedtimeProgress": "Schlafenszeit: Nachtlicht um {glow}, Licht aus um {off}.",
   "bedtimeGlowNow": "Nachtlicht. Licht aus um {off}. Träum schön.",
   "effectNameGoodnightGlow": "Gute-Nacht-Licht",
-  "effectDescriptionGoodnightGlow": "Ein sanftes bernsteinfarbenes Licht zum Einschlafen."
+  "effectDescriptionGoodnightGlow": "Ein sanftes bernsteinfarbenes Licht zum Einschlafen.",
+  "scheduleOnBridge": "Planen",
+  "scheduleTitle": "Zu festen Zeiten abspielen",
+  "scheduleDescription": "Deine Hue Bridge schaltet diesen Effekt zur gewählten Zeit ein, auch wenn das Telefon aus ist, und hält ihn in Bewegung. Er wird als Hue-Szene gespeichert.",
+  "scheduleStartAt": "Beginnt um",
+  "scheduleStop": "Zu einer Uhrzeit ausschalten",
+  "scheduleStopAt": "Schaltet aus um",
+  "scheduleSaved": "Auf der Bridge geplant: {name}.",
+  "couldNotSchedule": "Der Effekt konnte nicht geplant werden: {reason}",
+  "scheduledEffects": "Geplante Effekte",
+  "noScheduledEffects": "Noch keine. Spiele eine Szene in einem Raum ab und tippe im Player auf Planen.",
+  "deleteScheduleDescription": "Die Hue-Szene, die er abspielt, wird ebenfalls gelöscht.",
+  "scheduleUntil": "bis {time}"
 }
