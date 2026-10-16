@@ -13,6 +13,7 @@ import 'features/buttons/hue_button_listener.dart';
 import 'features/effects/read_aloud.dart';
 import 'core/photos/photo_picker.dart';
 import 'core/speech/speaker.dart';
+import 'core/weather/weather.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
 import 'features/effects/catalog/effect_catalog.dart';
@@ -45,6 +46,7 @@ class LumiFxApp extends StatefulWidget {
     this.camera = const NoCameraInput(),
     this.speaker = const NoSpeaker(),
     this.photos = const NoPhotoPicker(),
+    this.weather = const NoWeatherService(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -84,6 +86,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// Photos to make scenes from.
   final PhotoPicker photos;
+
+  /// The weather for the weather lights.
+  final WeatherService weather;
 
   /// Forces a language; null follows the device (tests pass one).
   final Locale? locale;
@@ -330,6 +335,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       background: widget.background,
       clock: widget.clock,
       photos: widget.photos,
+      weather: widget.weather,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

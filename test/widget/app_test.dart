@@ -15,6 +15,7 @@ import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
+import 'package:lumifx/src/core/weather/weather.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
@@ -24,6 +25,7 @@ import 'package:lumifx/src/features/fun/light_games.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/weather/weather_screen.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
 import 'package:lumifx/src/features/library/story_editor.dart';
@@ -64,10 +66,48 @@ class _FakePhotoPicker implements PhotoPicker {
   }
 }
 
+/// The weather of a sunny Milan with rain tomorrow, or no network.
+class _FakeWeather implements WeatherService {
+  _FakeWeather({this.online = true});
+
+  bool online;
+  final searches = <(String, String)>[];
+
+  @override
+  Future<List<WeatherPlace>> search(String name,
+      {String language = 'en'}) async {
+    searches.add((name, language));
+    if (!online) {
+      throw const WeatherUnavailable('offline');
+    }
+    return const [
+      WeatherPlace(
+          name: 'Milan',
+          region: 'Lombardy',
+          country: 'Italy',
+          latitude: 45.46,
+          longitude: 9.19),
+    ];
+  }
+
+  @override
+  Future<WeatherReport> forecast(WeatherPlace place) async {
+    if (!online) {
+      throw const WeatherUnavailable('offline');
+    }
+    return const WeatherReport(
+      now: WeatherReading(kind: WeatherKind.clear, temperature: 21.4),
+      tomorrow:
+          WeatherReading(kind: WeatherKind.rain, temperature: 18, low: 12),
+    );
+  }
+}
+
 Future<void> _pumpApp(
   WidgetTester tester, {
   PhotoPicker photos = const NoPhotoPicker(),
   AudioInput? audioInput,
+  WeatherService weather = const NoWeatherService(),
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -84,6 +124,7 @@ Future<void> _pumpApp(
       preferences: preferences,
       audioInput: audioInput ?? FakeAudioInput(),
       photos: photos,
+      weather: weather,
     ),
   );
 }
@@ -343,6 +384,71 @@ void main() {
     expect(find.text('Play again'), findsOneWidget);
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
+  });
+
+  Future<void> openWeather(WidgetTester tester) async {
+    await tester.scrollUntilVisible(
+      find.text('Weather lights'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Weather lights'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Weather lights'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('weather lights: a city, the weather, on the lamps',
+      (tester) async {
+    tester.platformDispatcher.localeTestValue = const Locale('en', 'GB');
+    addTearDown(tester.platformDispatcher.clearLocaleTestValue);
+    final weather = _FakeWeather();
+    await _pumpApp(tester, weather: weather);
+    await openWeather(tester);
+    expect(find.textContaining('Open-Meteo.com'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), 'Mil');
+    await tester.testTextInput.receiveAction(TextInputAction.search);
+    await tester.pumpAndSettle();
+    expect(weather.searches, [('Mil', 'en')]);
+    await tester.tap(find.text('Milan, Lombardy, Italy'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Now'), findsOneWidget);
+    expect(find.text('Clear sky'), findsOneWidget);
+    expect(find.text('21°'), findsOneWidget);
+    expect(find.text('Tomorrow'), findsOneWidget);
+    expect(find.text('Rain'), findsOneWidget);
+    expect(find.text('18° / 12°'), findsOneWidget);
+
+    await tester.tap(find.text('Show on the lights').first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(WeatherScreen))).playback;
+    expect(playback.effect.name, 'Weather in Milan');
+    expect(playback.isPlaying, isTrue);
+    await playback.stop();
+    await tester.pump(const Duration(seconds: 2));
+
+    // Remembered, and can be changed.
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await openWeather(tester);
+    expect(find.text('Milan, Lombardy, Italy'), findsOneWidget);
+    await tester.tap(find.text('Change'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TextField), findsOneWidget);
+  });
+
+  testWidgets('weather lights say so when offline', (tester) async {
+    final weather = _FakeWeather(online: false);
+    await _pumpApp(tester, weather: weather);
+    await openWeather(tester);
+    await tester.enterText(find.byType(TextField), 'Milan');
+    await tester.tap(find.byTooltip('Search'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining("Couldn't get the weather"), findsOneWidget);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

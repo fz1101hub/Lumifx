@@ -1,11 +1,12 @@
 # LumiFX Privacy Policy
 
-_Last updated: 13 October 2026_
+_Last updated: 16 October 2026_
 
 LumiFX is an app that plays lighting effects on Philips Hue lights. It is
-designed to work entirely on your phone and your home network. We do not run
+designed to work on your phone and your home network. We do not run
 servers, we do not have accounts, and we do not collect, store or sell any
-personal data.
+personal data. The only thing that ever leaves your home network is
+described under "Weather lights" below, and only if you use them.
 
 ## What the app does with data
 
@@ -25,6 +26,29 @@ for microphone access and analyses the sound in the room to detect beats and
 loudness. Audio is processed in real time on your phone and is never
 recorded, stored or transmitted. The microphone is used only while a Music
 Sync effect is playing and is switched off when you pause or stop it.
+
+**Microphone (birthday party).** At a birthday party you can tap "Blow on
+the phone" so the candles go out when someone blows on the microphone. The
+app only measures how loud the sound is, on your phone; nothing is
+recorded, stored or transmitted, and the microphone is switched off as soon
+as the candles are out or you leave the party.
+
+**Photos (scene from a photo).** In the scene editor, "From a photo" lets
+you choose a photo or take one. The app reads its main colours on your
+phone; the photo is not kept, copied or sent anywhere.
+
+**Reading stories aloud.** If you switch on "Read aloud", the words of the
+stories and game calls are read by your phone's own text-to-speech voice.
+LumiFX sends them nowhere (depending on your phone's settings, its speech
+engine may use an online voice).
+
+**Weather lights.** If you use Weather lights, the city name you type in
+the search is sent to Open-Meteo (open-meteo.com) to find matching places,
+and the coordinates of the place you choose are sent to Open-Meteo to get
+its weather. The app never uses your phone's location. The chosen place is
+stored on your phone only, until you change it or uninstall the app.
+Open-Meteo is an independent weather service with its own terms
+(open-meteo.com/en/terms).
 
 **Phone audio (Music Sync, Android 10 and later).** In Settings you can let
 Music Sync follow the sound your phone itself is playing instead of the
@@ -67,6 +91,9 @@ the scenes and stories you make are stored on your phone only.
   which helps find bridges on your network. The request contains no
   personal data beyond what any web request contains (your public IP
   address). You can skip it by entering the bridge address by hand.
+- **geocoding-api.open-meteo.com** and **api.open-meteo.com**, only when
+  you use Weather lights: the city name you search for and the
+  coordinates of the place you choose, as described above.
 
 The app makes no other network connections. It contains no analytics, no
 advertising, no crash reporting and no tracking of any kind.
@@ -74,6 +101,8 @@ advertising, no crash reporting and no tracking of any kind.
 ## Children
 
 LumiFX does not collect personal data from anyone, including children.
+Weather lights send only a place name and its coordinates to Open-Meteo,
+never anything that identifies a person.
 
 ## Changes
 
@@ -88,12 +117,13 @@ Questions about privacy: fz1101hub@gmail.com
 
 # Informativa sulla privacy di LumiFX
 
-_Ultimo aggiornamento: 13 ottobre 2026_
+_Ultimo aggiornamento: 16 ottobre 2026_
 
 LumiFX è un'app che riproduce effetti luminosi sulle luci Philips Hue.
-Funziona interamente sul telefono e sulla rete di casa. Non abbiamo server,
-non esistono account e non raccogliamo, conserviamo né vendiamo alcun dato
-personale.
+Funziona sul telefono e sulla rete di casa. Non abbiamo server, non
+esistono account e non raccogliamo, conserviamo né vendiamo alcun dato
+personale. L'unica cosa che esce dalla rete di casa è descritta sotto
+"Meteo in luce", e solo se lo usi.
 
 ## Che cosa fa l'app con i dati
 
@@ -112,6 +142,29 @@ l'accesso al microfono e analizza il suono nella stanza per riconoscere beat
 e volume. L'audio è elaborato in tempo reale sul telefono e non viene mai
 registrato, salvato o trasmesso. Il microfono è attivo solo mentre un effetto
 Music Sync è in riproduzione e viene spento in pausa o allo stop.
+
+**Microfono (festa di compleanno).** Alla festa di compleanno puoi toccare
+"Soffia sul telefono" perché le candeline si spengano quando qualcuno soffia
+sul microfono. L'app misura solo quanto è forte il suono, sul telefono;
+nulla viene registrato, salvato o trasmesso, e il microfono si spegne appena
+le candeline sono spente o lasci la festa.
+
+**Foto (scena da una foto).** Nell'editor delle scene, "Da una foto" ti fa
+scegliere o scattare una foto. L'app ne legge i colori principali sul
+telefono; la foto non viene conservata, copiata né inviata.
+
+**Lettura ad alta voce.** Se attivi "Leggi ad alta voce", le parole delle
+storie e i comandi dei giochi sono letti dalla voce di sintesi del telefono.
+LumiFX non le invia da nessuna parte (a seconda delle impostazioni del
+telefono, il motore vocale potrebbe usare una voce online).
+
+**Meteo in luce.** Se usi Meteo in luce, il nome della città che scrivi
+nella ricerca viene inviato a Open-Meteo (open-meteo.com) per trovare i
+luoghi corrispondenti, e le coordinate del luogo che scegli vengono inviate
+a Open-Meteo per conoscerne il meteo. L'app non usa mai la posizione del
+telefono. Il luogo scelto è salvato solo sul telefono, finché non lo cambi o
+disinstalli l'app. Open-Meteo è un servizio meteo indipendente con i propri
+termini (open-meteo.com/en/terms).
 
 **Audio del telefono (Music Sync, Android 10 e successivi).** Nelle
 Impostazioni puoi far seguire a Music Sync il suono riprodotto dal telefono
@@ -147,13 +200,18 @@ salvati solo sul telefono.
   a trovare i Bridge sulla rete. La richiesta non contiene dati personali
   oltre a quelli di qualsiasi richiesta web (l'indirizzo IP pubblico). Puoi
   evitarla inserendo a mano l'indirizzo del Bridge.
+- **geocoding-api.open-meteo.com** e **api.open-meteo.com**, solo quando
+  usi Meteo in luce: il nome della città cercata e le coordinate del luogo
+  scelto, come descritto sopra.
 
 L'app non effettua altre connessioni. Non contiene analytics, pubblicità,
 segnalazione di crash né alcuna forma di tracciamento.
 
 ## Minori
 
-LumiFX non raccoglie dati personali da nessuno, minori compresi.
+LumiFX non raccoglie dati personali da nessuno, minori compresi. Meteo in
+luce invia a Open-Meteo solo il nome di un luogo e le sue coordinate, mai
+qualcosa che identifichi una persona.
 
 ## Modifiche
 

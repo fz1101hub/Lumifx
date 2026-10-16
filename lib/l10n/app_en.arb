@@ -2188,5 +2188,124 @@
   "gameAgain": "Play again",
   "@gameAgain": {
     "description": "Button: play the game again"
+  },
+  "weather": "Weather lights",
+  "@weather": {
+    "description": "Home entry: the weather shown on the lights"
+  },
+  "weatherSubtitle": "The sky outside, on your lamps",
+  "@weatherSubtitle": {
+    "description": "Subtitle of the weather lights"
+  },
+  "weatherDescription": "Type your city: your lights show the weather now or tomorrow's (sun, clouds, rain, snow or a starry night). Handy for deciding what to wear!",
+  "@weatherDescription": {
+    "description": "Explains the weather lights"
+  },
+  "weatherCity": "City",
+  "@weatherCity": {
+    "description": "Field: the city to show the weather of"
+  },
+  "weatherSearch": "Search",
+  "@weatherSearch": {
+    "description": "Button: search the city"
+  },
+  "weatherNoResults": "No place found with that name.",
+  "@weatherNoResults": {
+    "description": "No city matches the search"
+  },
+  "weatherFailed": "Couldn't get the weather. Check your internet connection.",
+  "@weatherFailed": {
+    "description": "The weather could not be fetched"
+  },
+  "weatherChange": "Change",
+  "@weatherChange": {
+    "description": "Button: choose another city"
+  },
+  "weatherNow": "Now",
+  "@weatherNow": {
+    "description": "The weather right now"
+  },
+  "weatherTomorrow": "Tomorrow",
+  "@weatherTomorrow": {
+    "description": "Tomorrow's weather"
+  },
+  "weatherShow": "Show on the lights",
+  "@weatherShow": {
+    "description": "Button: show this weather on the lights"
+  },
+  "weatherAttribution": "Weather data by Open-Meteo.com (CC BY 4.0). The city you search for and its coordinates are sent to Open-Meteo; your phone's location is never used.",
+  "@weatherAttribution": {
+    "description": "Credit for the weather data and what is sent"
+  },
+  "weatherClear": "Clear sky",
+  "@weatherClear": {
+    "description": "Weather: clear sky"
+  },
+  "weatherPartlyCloudy": "Partly cloudy",
+  "@weatherPartlyCloudy": {
+    "description": "Weather: partly cloudy"
+  },
+  "weatherCloudy": "Cloudy",
+  "@weatherCloudy": {
+    "description": "Weather: overcast"
+  },
+  "weatherFog": "Fog",
+  "@weatherFog": {
+    "description": "Weather: fog"
+  },
+  "weatherDrizzle": "Drizzle",
+  "@weatherDrizzle": {
+    "description": "Weather: drizzle"
+  },
+  "weatherRain": "Rain",
+  "@weatherRain": {
+    "description": "Weather: rain"
+  },
+  "weatherSnow": "Snow",
+  "@weatherSnow": {
+    "description": "Weather: snow"
+  },
+  "weatherThunder": "Thunderstorm",
+  "@weatherThunder": {
+    "description": "Weather: thunderstorm"
+  },
+  "weatherTemperature": "{degrees}°",
+  "@weatherTemperature": {
+    "description": "A temperature in degrees",
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "weatherHighLow": "{high}° / {low}°",
+  "@weatherHighLow": {
+    "description": "Highest and lowest temperature of a day",
+    "placeholders": {
+      "high": {
+        "type": "String"
+      },
+      "low": {
+        "type": "String"
+      }
+    }
+  },
+  "weatherNowName": "Weather in {place}",
+  "@weatherNowName": {
+    "description": "Name of the effect showing the weather now in a city",
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "weatherTomorrowName": "Tomorrow in {place}",
+  "@weatherTomorrowName": {
+    "description": "Name of the effect showing tomorrow's weather in a city",
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -8,6 +8,7 @@ import 'src/core/sound/sound_player.dart';
 import 'src/features/tv/plugin_camera_input.dart';
 import 'src/core/photos/photo_picker.dart';
 import 'src/core/speech/speaker.dart';
+import 'src/core/weather/weather.dart';
 import 'src/core/hue/hue_discovery.dart';
 import 'src/features/bridge/bridge_controller.dart';
 import 'src/features/bridge/credential_store.dart';
@@ -44,6 +45,7 @@ Future<void> main() async {
       camera: PluginCameraInput(),
       speaker: TtsSpeaker(),
       photos: PluginPhotoPicker(),
+      weather: OpenMeteoWeather(),
     ),
   );
 }

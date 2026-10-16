@@ -182,16 +182,35 @@ artifact, see RELEASE.md § 1b).
 
 ## Google Play: Data safety form
 
-- Does your app collect or share any of the required user data types? **No.**
+- Does your app collect or share any of the required user data types?
+  **Yes**, one, because of Weather lights (everything else stays on the
+  device):
+  - **Location › Approximate location: collected, not shared.** The city
+    the user types, and the coordinates of the place they pick, are sent
+    to Open-Meteo to get the weather. Collection is **optional** (only if
+    the user opens Weather lights and searches); purpose **App
+    functionality**. Answer **No** to "processed ephemerally": the
+    request goes to a third-party service we do not control, so we
+    cannot promise how long it keeps it. It is not "shared" in Play's
+    sense: the
+    transfer is initiated by the user to get exactly that weather. The
+    app never requests the device's location permission.
+  - If Play insists on a "shared" answer, declare it shared with purpose
+    App functionality; nothing else changes.
 - Is all of the user data collected by your app encrypted in transit?
-  (asked anyway) **Yes.**
+  **Yes** (HTTPS to Open-Meteo).
 - Do you provide a way for users to request that their data is deleted?
-  **Not applicable: no data is collected.** If forced to answer: Yes,
-  "Forget this bridge" and uninstalling remove everything.
+  **No**: LumiFX keeps nothing on any server; the chosen place lives on
+  the phone and goes with "Change" or uninstalling. (Bridge credentials
+  go with "Forget this bridge".)
 - Microphone: the app uses RECORD_AUDIO but does not collect audio. In the
   data types list, do **not** declare "Audio files" or "Voice or sound
   recordings"; audio is processed ephemerally on device and never stored
   or sent (Play's definition of "collected" excludes ephemeral processing).
+- Photos: "From a photo" (scene editor) uses the system photo picker or
+  camera; the picture is read once on the device to take its colours and
+  is never stored or sent. Do **not** declare "Photos". Android needs no
+  storage permission (the photo picker is used).
 - Camera: the app uses CAMERA for TV Sync but does not collect images.
   Do **not** declare "Photos" or "Videos"; frames are averaged ephemerally
   on device and never stored or sent. A camera is not required to install
@@ -233,12 +252,16 @@ children). Do not tick "designed for families".
 
 ## App Store Connect: App Privacy
 
-- Data collection: **Data Not Collected.** (Microphone audio and camera
-  frames are processed on device and not stored; bridge credentials never
-  leave the device.)
+- Data collection: **Coarse Location** only, because of Weather lights:
+  not linked to the user's identity, not used for tracking, purpose **App
+  Functionality**. (The place the user types is sent to Open-Meteo.
+  Microphone audio, photos and camera frames are processed on device and
+  not stored; bridge credentials never leave the device.) This matches
+  `NSPrivacyCollectedDataTypes` in `ios/Runner/PrivacyInfo.xcprivacy`.
 - Tracking: **No.**
 - Privacy manifest: `ios/Runner/PrivacyInfo.xcprivacy` (no tracking, no
-  collected data, UserDefaults reason CA92.1).
+  collected data except coarse location for Weather lights, UserDefaults
+  reason CA92.1).
 
 **Export compliance:** `ITSAppUsesNonExemptEncryption` is `false`, so
 TestFlight does not ask on every build. The app uses only standard
@@ -287,6 +310,13 @@ Paste this in "Notes for review":
 > device to colour the lights; nothing is recorded or transmitted.
 > Siri phrases (iOS) and Google Assistant App Actions only open LumiFX's
 > own links; no speech is handled by the app itself.
+> Photo library access is used only when the user taps "From a photo" in
+> the scene editor, to take the colours of one photo on the device. At a
+> birthday party (Parties and games › Birthday party) the microphone is
+> used only after tapping "Blow on the phone", to hear the candles being
+> blown out; nothing is recorded. Weather lights (home › Weather lights)
+> send the city the user types to Open-Meteo (open-meteo.com) to show the
+> weather; the device location is never requested.
 >
 > The app is not affiliated with Signify / Philips Hue.
 

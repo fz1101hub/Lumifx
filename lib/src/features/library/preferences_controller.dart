@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
+import '../../core/weather/weather.dart';
 import '../playlists/playlist.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
@@ -129,6 +130,16 @@ class PreferencesController extends ChangeNotifier {
 
   Future<void> setReadAloud(bool value) {
     _readAloud = value;
+    return _changed();
+  }
+
+  WeatherPlace? _weatherPlace;
+
+  /// Where the weather lights look at the sky; null until one is chosen.
+  WeatherPlace? get weatherPlace => _weatherPlace;
+
+  Future<void> setWeatherPlace(WeatherPlace? place) {
+    _weatherPlace = place;
     return _changed();
   }
 
@@ -265,6 +276,7 @@ class PreferencesController extends ChangeNotifier {
       _soundVolume = _unit(json['soundVolume'], 0.6);
       _readAlong = json['readAlong'] as bool? ?? true;
       _readAloud = json['readAloud'] == true;
+      _weatherPlace = WeatherPlace.fromJson(json['weatherPlace']);
       final buttons = json['buttonActions'];
       _buttonActions = {
         if (buttons is Map)
@@ -529,6 +541,7 @@ class PreferencesController extends ChangeNotifier {
       'soundVolume': _soundVolume,
       'readAlong': _readAlong,
       'readAloud': _readAloud,
+      'weatherPlace': _weatherPlace?.toJson(),
       'buttonActions': _buttonActions,
       'bedtime': {
         'story': _bedtimeStory,
