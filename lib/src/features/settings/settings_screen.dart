@@ -129,6 +129,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
               ],
               if (preferences.userScenes.isNotEmpty ||
+                  preferences.userStories.isNotEmpty ||
                   preferences.playlists.isNotEmpty) ...[
                 const Divider(height: 32),
                 ListTile(
@@ -139,6 +140,7 @@ class SettingsScreen extends StatelessWidget {
                     context,
                     SharedBundle(
                       scenes: preferences.userScenes,
+                      stories: preferences.userStories,
                       playlists: preferences.playlists,
                     ),
                   ),

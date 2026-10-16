@@ -4,6 +4,7 @@ import '../../core/effects/effect.dart';
 import '../../app_scope.dart';
 import '../common/app_text.dart';
 import '../library/scene_editor.dart';
+import '../library/story_editor.dart';
 import '../search/effect_search.dart';
 import '../common/layout.dart';
 import 'effect_palette.dart';
@@ -45,15 +46,23 @@ class EffectListScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: kind == EffectKind.scene
-          ? FloatingActionButton.extended(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => const SceneEditor()),
-              ),
-              icon: const Icon(Icons.palette_outlined),
-              label: Text(l10n.newScene),
-            )
-          : null,
+      floatingActionButton: switch (kind) {
+        EffectKind.scene => FloatingActionButton.extended(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const SceneEditor()),
+            ),
+            icon: const Icon(Icons.palette_outlined),
+            label: Text(l10n.newScene),
+          ),
+        EffectKind.story => FloatingActionButton.extended(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const StoryEditor()),
+            ),
+            icon: const Icon(Icons.auto_stories_outlined),
+            label: Text(l10n.newStory),
+          ),
+        _ => null,
+      },
       body: effects.isEmpty
           ? Center(
               child: Padding(
@@ -68,7 +77,7 @@ class EffectListScreen extends StatelessWidget {
               ? _EffectGrid(effects)
               : ListView.separated(
                   padding: EdgeInsets.fromLTRB(
-                      20, 20, 20, kind == EffectKind.scene ? 96 : 20),
+                      20, 20, 20, kind == EffectKind.interactive ? 20 : 96),
                   itemCount: effects.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) => _EffectCard(effects[index]),
@@ -131,9 +140,12 @@ class _EffectCard extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = context.l10n;
     final colors = effectPalette(effect);
-    final collection = AppScope.of(context).library.isUserScene(effect.id)
+    final library = AppScope.of(context).library;
+    final collection = library.isUserScene(effect.id)
         ? l10n.myScenes
-        : l10n.collectionName(effect);
+        : library.isUserStory(effect.id)
+            ? l10n.myStories
+            : l10n.collectionName(effect);
     final description = l10n.effectDescription(effect);
     return Card(
       margin: compact ? EdgeInsets.zero : null,

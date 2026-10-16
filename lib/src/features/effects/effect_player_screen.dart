@@ -16,6 +16,7 @@ import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
 import '../library/scene_editor.dart';
 import '../library/sharing.dart';
+import '../library/story_editor.dart';
 import '../music/music_sync_controller.dart';
 import 'effect_palette.dart';
 import 'light_color_ui.dart';
@@ -234,6 +235,24 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
               ),
             ),
           ],
+          if (AppScope.of(context).library.userStory(effect.id)
+              case final story?) ...[
+            IconButton(
+              tooltip: l10n.share,
+              icon: const Icon(Icons.share_outlined),
+              onPressed: () =>
+                  showShareDialog(context, SharedBundle(stories: [story])),
+            ),
+            IconButton(
+              tooltip: l10n.editStory,
+              icon: const Icon(Icons.edit_outlined),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => StoryEditor(story: story),
+                ),
+              ),
+            ),
+          ],
           IconButton(
             tooltip: l10n.nightLight,
             icon: const Icon(Icons.nightlight_outlined),
@@ -253,6 +272,8 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
           final busy = c.isBusy;
           final current = _isCurrent(c);
           final preferences = AppScope.of(context).preferences;
+          final narration =
+              narrationOf(effect, l10n, AppScope.of(context).library);
           final variantId = preferences.variantOf(effect.id);
           void setVariant(String? id) => current
               ? c.setVariant(id)
@@ -440,10 +461,11 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 for (final slot in c.lightNames) describeSlot(l10n, slot),
               ],
             ),
-            if (hasNarration(effect) && preferences.readAlong) ...[
+            if (narration.isNotEmpty && preferences.readAlong) ...[
               const SizedBox(height: 16),
               ReadAlongCaption(
                 effect: effect,
+                lines: narration,
                 player: current ? c.player : null,
               ),
             ],
@@ -542,7 +564,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                   onChanged: preferences.setSoundVolume,
                 ),
             ],
-            if (hasNarration(effect))
+            if (narration.isNotEmpty)
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 secondary: const Icon(Icons.auto_stories_outlined),

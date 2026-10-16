@@ -17,6 +17,7 @@ import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
+import 'package:lumifx/src/features/library/story_editor.dart';
 
 import '../support/fake_audio_input.dart';
 import '../support/fake_background_playback.dart';
@@ -384,6 +385,82 @@ void main() {
     expect(find.byType(MiniPlayer), findsNothing);
   });
 
+  testWidgets('a story of your own is written, read along and deleted',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    // The editor's preview animates, so the screen never settles.
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New story'));
+    await step();
+    expect(find.text('No moments yet. Add the first one.'), findsOneWidget);
+    await tester.enterText(find.byType(TextField).first, 'The lost star');
+    await tester.pump();
+
+    // A first moment: words only, at the very start.
+    await tester.scrollUntilVisible(
+      find.text('Add a moment'),
+      300,
+      scrollable: find
+          .descendant(
+              of: find.byType(StoryEditor), matching: find.byType(Scrollable))
+          .first,
+    );
+    await tester.ensureVisible(find.text('Add a moment'));
+    await tester.pump();
+    await tester.tap(find.text('Add a moment'));
+    await step();
+    await tester.tap(find.text('Just words'));
+    await tester.pump();
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Words to read along (optional)'),
+        'Once upon a time, a star fell.');
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await step();
+    expect(find.text('0:00  Just words'), findsOneWidget);
+    expect(find.text('Once upon a time, a star fell.'), findsOneWidget);
+
+    // A second one: a spark, five seconds later.
+    await tester.ensureVisible(find.text('Add a moment'));
+    await tester.pump();
+    await tester.tap(find.text('Add a moment'));
+    await step();
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await step();
+    expect(find.text('0:05  Spark'), findsOneWidget);
+    await tester.ensureVisible(find.byTooltip('Preview from here').last);
+    await tester.pump();
+    await tester.tap(find.byTooltip('Preview from here').last);
+    await step();
+
+    await tester.tap(find.widgetWithText(TextButton, 'Save'));
+    await step();
+    await tester.pumpAndSettle();
+
+    // First in the list, labelled as the user's own.
+    expect(find.text('The lost star'), findsOneWidget);
+    expect(find.text('My stories'), findsOneWidget);
+    await tester.tap(find.text('The lost star'));
+    await step();
+    expect(find.text('Once upon a time, a star fell.'), findsOneWidget,
+        reason: 'its words to read along');
+
+    await tester.tap(find.byTooltip('Edit story'));
+    await step();
+    await tester.tap(find.byTooltip('Delete'));
+    await step();
+    await tester.tap(find.text('Delete'));
+    await step();
+    await tester.pumpAndSettle();
+    expect(find.text('The lost star'), findsNothing);
+    expect(find.text('New story'), findsOneWidget);
+  });
+
   testWidgets('a shared link adds the scenes and playlists after asking',
       (tester) async {
     await _pumpApp(tester);
@@ -413,7 +490,7 @@ void main() {
     expect(find.textContaining('Their scene'), findsOneWidget);
     await tester.tap(find.text('Add'));
     await tester.pumpAndSettle();
-    expect(find.text('Added 1 scene and 1 playlist.'), findsOneWidget);
+    expect(find.text('2 items added.'), findsOneWidget);
 
     // The scene is in Scenes, and the playlist plays it.
     await tester.tap(find.text('Scenes'));

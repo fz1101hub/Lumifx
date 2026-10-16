@@ -10,16 +10,24 @@ import '../common/app_text.dart';
 import '../links/app_link.dart';
 import '../playlists/playlist.dart';
 import 'user_scene.dart';
+import 'user_story.dart';
 
-/// Scenes and playlists packed into a link, to pass to another phone (or
-/// keep as a backup): JSON, zlib-compressed, base64url.
+/// Scenes, stories and playlists packed into a link, to pass to another
+/// phone (or keep as a backup): JSON, zlib-compressed, base64url.
 class SharedBundle {
-  const SharedBundle({this.scenes = const [], this.playlists = const []});
+  const SharedBundle({
+    this.scenes = const [],
+    this.stories = const [],
+    this.playlists = const [],
+  });
 
   final List<UserScene> scenes;
+  final List<UserStory> stories;
   final List<Playlist> playlists;
 
-  bool get isEmpty => scenes.isEmpty && playlists.isEmpty;
+  bool get isEmpty => scenes.isEmpty && stories.isEmpty && playlists.isEmpty;
+
+  int get length => scenes.length + stories.length + playlists.length;
 
   static const _version = 1;
 
@@ -27,6 +35,7 @@ class SharedBundle {
     final json = jsonEncode({
       'v': _version,
       'scenes': [for (final s in scenes) s.toJson()],
+      if (stories.isNotEmpty) 'stories': [for (final s in stories) s.toJson()],
       'playlists': [for (final p in playlists) p.toJson()],
     });
     return base64Url
@@ -45,12 +54,18 @@ class SharedBundle {
         return null;
       }
       final scenes = json['scenes'];
+      final stories = json['stories'];
       final playlists = json['playlists'];
       final bundle = SharedBundle(
         scenes: [
           if (scenes is List)
             for (final item in scenes)
               if (UserScene.fromJson(item) case final scene?) scene,
+        ],
+        stories: [
+          if (stories is List)
+            for (final item in stories)
+              if (UserStory.fromJson(item) case final story?) story,
         ],
         playlists: [
           if (playlists is List)
@@ -141,11 +156,12 @@ class _ShareDialog extends StatelessWidget {
 
 /// Asks before adding a received bundle, then adds it with fresh ids (so
 /// importing twice makes copies instead of overwriting), pointing the
-/// playlists at the imported scenes. Returns whether anything was added.
+/// playlists at the imported scenes and stories. Returns whether anything was added.
 Future<bool> importBundle(BuildContext context, SharedBundle bundle) async {
   final l10n = context.l10n;
   final names = [
     for (final s in bundle.scenes) s.name,
+    for (final s in bundle.stories) s.name,
     for (final p in bundle.playlists) p.name,
   ];
   final confirmed = await showDialog<bool>(
@@ -181,6 +197,18 @@ Future<bool> importBundle(BuildContext context, SharedBundle bundle) async {
       motion: scene.motion,
     ));
   }
+  for (final (i, story) in bundle.stories.indexed) {
+    final id = '${UserStory.idPrefix}$stamp-$i';
+    ids[story.id] = id;
+    await preferences.saveUserStory(UserStory(
+      id: id,
+      name: story.name,
+      colors: story.colors,
+      motion: story.motion,
+      length: story.length,
+      moments: story.moments,
+    ));
+  }
   for (final (i, playlist) in bundle.playlists.indexed) {
     await preferences.savePlaylist(Playlist(
       id: 'p$stamp-$i',
@@ -194,20 +222,24 @@ Future<bool> importBundle(BuildContext context, SharedBundle bundle) async {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(
-        content:
-            Text(l10n.imported(bundle.scenes.length, bundle.playlists.length)),
+        content: Text(l10n.importedItems(bundle.length)),
       ));
   }
   return true;
 }
 
-/// The bundle for [playlist]: the playlist and the user's scenes it plays.
+/// The bundle for [playlist]: the playlist and the user's scenes and
+/// stories it plays.
 SharedBundle bundleOfPlaylist(BuildContext context, Playlist playlist) {
   final library = AppScope.of(context).library;
   return SharedBundle(
     scenes: [
       for (final id in playlist.effectIds)
         if (library.userScene(id) case final scene?) scene,
+    ],
+    stories: [
+      for (final id in playlist.effectIds)
+        if (library.userStory(id) case final story?) story,
     ],
     playlists: [playlist],
   );

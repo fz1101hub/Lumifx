@@ -5,6 +5,8 @@ import 'package:flutter/scheduler.dart';
 
 import '../../app_scope.dart';
 import '../../core/color/light_color.dart';
+import '../../core/effects/effect.dart';
+import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../common/app_text.dart';
@@ -118,7 +120,7 @@ class _SceneEditorState extends State<SceneEditor> {
   Future<void> _pickColor(int? index) async {
     final picked = await showDialog<String>(
       context: context,
-      builder: (_) => _ColorPicker(
+      builder: (_) => ColorPickerDialog(
         selected: index == null ? null : _colors[index],
       ),
     );
@@ -160,7 +162,11 @@ class _SceneEditorState extends State<SceneEditor> {
       body: ListView(
         padding: context.pageInsets(),
         children: [
-          _ScenePreview(scene: _draft),
+          EffectPreview(
+            effect: _draft.toEffect(),
+            label: l10n.scenePreview,
+            speed: 3,
+          ),
           const SizedBox(height: 20),
           TextField(
             controller: _name,
@@ -181,7 +187,7 @@ class _SceneEditorState extends State<SceneEditor> {
             runSpacing: 12,
             children: [
               for (final (i, hex) in _colors.indexed)
-                _ColorSlot(
+                ColorSlot(
                   color: LightColor.fromHex(hex).toColor(),
                   label: l10n.sceneColorNumber(i + 1),
                   onTap: () => _pickColor(i),
@@ -221,7 +227,7 @@ class _SceneEditorState extends State<SceneEditor> {
             children: [
               for (final motion in SceneMotion.values)
                 ChoiceChip(
-                  label: Text(_motionName(l10n, motion)),
+                  label: Text(sceneMotionName(l10n, motion)),
                   selected: _motion == motion,
                   onSelected: (_) => setState(() => _motion = motion),
                 ),
@@ -231,23 +237,26 @@ class _SceneEditorState extends State<SceneEditor> {
       ),
     );
   }
-
-  static String _motionName(AppLocalizations l10n, SceneMotion motion) =>
-      switch (motion) {
-        SceneMotion.calm => l10n.motionCalm,
-        SceneMotion.drift => l10n.motionDrift,
-        SceneMotion.lively => l10n.motionLively,
-        SceneMotion.flicker => l10n.motionFlicker,
-      };
 }
 
-class _ColorSlot extends StatelessWidget {
-  const _ColorSlot({
+/// The name of [motion] in the editors.
+String sceneMotionName(AppLocalizations l10n, SceneMotion motion) =>
+    switch (motion) {
+      SceneMotion.calm => l10n.motionCalm,
+      SceneMotion.drift => l10n.motionDrift,
+      SceneMotion.lively => l10n.motionLively,
+      SceneMotion.flicker => l10n.motionFlicker,
+    };
+
+/// A colour to tap and change, with a button under it to remove it.
+class ColorSlot extends StatelessWidget {
+  const ColorSlot({
     required this.color,
     required this.label,
     required this.onTap,
     required this.onRemove,
     required this.removeLabel,
+    super.key,
   });
 
   final Color color;
@@ -300,8 +309,9 @@ class _ColorSlot extends StatelessWidget {
   }
 }
 
-class _ColorPicker extends StatelessWidget {
-  const _ColorPicker({required this.selected});
+/// The swatches to choose a colour from; pops the chosen `#RRGGBB`.
+class ColorPickerDialog extends StatelessWidget {
+  const ColorPickerDialog({required this.selected, super.key});
 
   final String? selected;
 
@@ -352,27 +362,47 @@ class _ColorPicker extends StatelessWidget {
   }
 }
 
-/// Five lamps showing the draft scene as it would play, sped up a little
-/// so the motion can be judged at a glance.
-class _ScenePreview extends StatefulWidget {
-  const _ScenePreview({required this.scene});
+/// Five lamps showing a draft as it would play, [speed] times faster so
+/// a slow motion can be judged at a glance. With [showTime], a bar shows
+/// where in the timeline the preview is.
+class EffectPreview extends StatefulWidget {
+  const EffectPreview({
+    required this.effect,
+    required this.label,
+    this.speed = 1,
+    this.showTime = false,
+    this.softFlashes = false,
+    super.key,
+  });
 
-  final UserScene scene;
+  final LightingEffect effect;
+  final String label;
+  final double speed;
+  final bool showTime;
+
+  /// Flashes rise and fall gently, as on the lights with the setting on.
+  final bool softFlashes;
 
   @override
-  State<_ScenePreview> createState() => _ScenePreviewState();
+  State<EffectPreview> createState() => EffectPreviewState();
 }
 
-class _ScenePreviewState extends State<_ScenePreview>
+class EffectPreviewState extends State<EffectPreview>
     with SingleTickerProviderStateMixin {
   static const _lamps = 5;
   late final Ticker _ticker = createTicker(_tick);
-  late EffectRenderer _renderer = _rendererFor(widget.scene);
+  late EffectRenderer _renderer = _rendererFor(widget.effect);
   Duration _elapsed = Duration.zero;
+
+  /// The ticker time and the effect time of the last [seek].
+  Duration _origin = Duration.zero;
+  Duration _from = Duration.zero;
   List<LightFrame> _frames = List.filled(_lamps, LightFrame.off);
 
-  static EffectRenderer _rendererFor(UserScene scene) =>
-      EffectRenderer(scene.toEffect(), slotCount: _lamps, seed: 3);
+  static EffectRenderer _rendererFor(LightingEffect effect) =>
+      EffectRenderer(effect, slotCount: _lamps, seed: 3);
+
+  Duration get _time => _from + (_elapsed - _origin) * widget.speed;
 
   @override
   void initState() {
@@ -385,15 +415,28 @@ class _ScenePreviewState extends State<_ScenePreview>
   }
 
   @override
-  void didUpdateWidget(_ScenePreview oldWidget) {
+  void didUpdateWidget(EffectPreview oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _renderer = _rendererFor(widget.scene);
-    _frames = _renderer.render(_elapsed * 3);
+    _renderer = _rendererFor(widget.effect);
+    _frames = _renderer.render(_time);
+  }
+
+  /// Plays on from [position] into the effect.
+  void seek(Duration position) {
+    setState(() {
+      _from = position;
+      _origin = _elapsed;
+      _frames = _renderer.render(_time);
+    });
   }
 
   void _tick(Duration elapsed) {
+    final step = elapsed - _elapsed;
     _elapsed = elapsed;
-    setState(() => _frames = _renderer.render(elapsed * 3));
+    final rendered = _renderer.render(_time);
+    setState(() => _frames = widget.softFlashes
+        ? softenFrames(_frames, rendered, step.inMicroseconds / 1e6)
+        : rendered);
   }
 
   @override
@@ -404,39 +447,76 @@ class _ScenePreviewState extends State<_ScenePreview>
 
   @override
   Widget build(BuildContext context) {
+    final cycle = widget.effect.cycleLength;
+    final showTime = widget.showTime && cycle > Duration.zero;
+    final position = showTime
+        ? Duration(
+            microseconds: _time.inMicroseconds % cycle.inMicroseconds,
+          )
+        : Duration.zero;
     return Semantics(
-      label: context.l10n.scenePreview,
+      label: widget.label,
       excludeSemantics: true,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 24),
+        padding: EdgeInsets.fromLTRB(16, 24, 16, showTime ? 12 : 24),
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            for (final frame in _frames)
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: frame.toDisplayColor(),
-                  boxShadow: [
-                    BoxShadow(
-                      color: frame.color
-                          .toColor()
-                          .withValues(alpha: frame.brightness * 0.8),
-                      blurRadius: 20 * frame.brightness,
-                      spreadRadius: 2,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                for (final frame in _frames)
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: frame.toDisplayColor(),
+                      boxShadow: [
+                        BoxShadow(
+                          color: frame.color
+                              .toColor()
+                              .withValues(alpha: frame.brightness * 0.8),
+                          blurRadius: 20 * frame.brightness,
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+              ],
+            ),
+            if (showTime) ...[
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(
+                    formatClock(position),
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: LinearProgressIndicator(
+                      value: position.inMicroseconds / cycle.inMicroseconds,
+                      color: Colors.white70,
+                      backgroundColor: Colors.white12,
+                    ),
+                  ),
+                ],
               ),
+            ],
           ],
         ),
       ),
     );
   }
+}
+
+/// `m:ss`, for times in a story.
+String formatClock(Duration time) {
+  final seconds = time.inSeconds;
+  return '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}';
 }

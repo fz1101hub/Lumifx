@@ -4,6 +4,7 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../common/app_text.dart';
+import '../library/effect_library.dart';
 
 /// One line of a story, shown from [at] (seconds into the story's cycle)
 /// until the next one.
@@ -128,15 +129,29 @@ final Map<String, List<NarrationLine>> storyNarration = {
   ],
 };
 
-/// Whether [effect] has words to read along.
-bool hasNarration(LightingEffect effect) =>
-    storyNarration.containsKey(effect.id);
+/// The lines of [effect] to read along, with the second each appears: a
+/// built-in story's, or the words of a story the user made. Empty when it
+/// has none.
+List<(int, String)> narrationOf(
+  LightingEffect effect,
+  AppLocalizations l10n,
+  EffectLibrary library,
+) {
+  if (storyNarration[effect.id] case final lines?) {
+    return [for (final (at, text) in lines) (at, text(l10n))];
+  }
+  return library.userStory(effect.id)?.narration ?? const [];
+}
 
-/// The index of the line to show at [position] into [effect], or null when
-/// it has no words or a story that does not loop has ended.
-int? narrationIndexAt(LightingEffect effect, Duration position) {
-  final lines = storyNarration[effect.id];
-  if (lines == null || lines.isEmpty) {
+/// The index in [lines] of the line to show at [position] into [effect],
+/// or null before the first line and after a story that does not loop has
+/// ended.
+int? narrationIndexAt(
+  LightingEffect effect,
+  List<(int, String)> lines,
+  Duration position,
+) {
+  if (lines.isEmpty) {
     return null;
   }
   final cycle = effect.cycleLength;
@@ -149,7 +164,7 @@ int? narrationIndexAt(LightingEffect effect, Duration position) {
       return null;
     }
   }
-  var index = 0;
+  int? index;
   for (var i = 0; i < lines.length; i++) {
     if (at.inMilliseconds >= lines[i].$1 * 1000) {
       index = i;
@@ -161,31 +176,38 @@ int? narrationIndexAt(LightingEffect effect, Duration position) {
 /// The story's words in time with its lights, big enough to read aloud
 /// from across a bed. Without a player it shows the opening line.
 class ReadAlongCaption extends StatelessWidget {
-  const ReadAlongCaption({required this.effect, this.player, super.key});
+  const ReadAlongCaption({
+    required this.effect,
+    required this.lines,
+    this.player,
+    super.key,
+  });
 
   final LightingEffect effect;
+  final List<(int, String)> lines;
   final EffectPlayer? player;
 
   @override
   Widget build(BuildContext context) {
     final player = this.player;
     if (player == null) {
-      return _caption(context, 0);
+      return _caption(context, narrationIndexAt(effect, lines, Duration.zero));
     }
     return StreamBuilder<List<LightFrame>>(
       stream: player.frames,
-      builder: (context, _) =>
-          _caption(context, narrationIndexAt(effect, player.position)),
+      builder: (context, _) => _caption(
+        context,
+        narrationIndexAt(effect, lines, player.position),
+      ),
     );
   }
 
   Widget _caption(BuildContext context, int? index) {
-    final lines = storyNarration[effect.id];
-    if (lines == null || index == null) {
+    if (index == null) {
       return const SizedBox.shrink();
     }
     final theme = Theme.of(context);
-    final text = lines[index].$2(context.l10n);
+    final text = lines[index].$2;
     return Card(
       margin: EdgeInsets.zero,
       color: theme.colorScheme.secondaryContainer,

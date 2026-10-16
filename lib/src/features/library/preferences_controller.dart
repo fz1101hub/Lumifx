@@ -7,6 +7,7 @@ import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../playlists/playlist.dart';
 import 'user_scene.dart';
+import 'user_story.dart';
 
 /// Where preferences are persisted. Nothing in here is sensitive; bridge
 /// credentials live in [CredentialStore] instead.
@@ -60,6 +61,7 @@ class PreferencesController extends ChangeNotifier {
   MusicSource _musicSource = MusicSource.microphone;
   List<Playlist> _playlists = const [];
   List<UserScene> _userScenes = const [];
+  List<UserStory> _userStories = const [];
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -94,6 +96,9 @@ class PreferencesController extends ChangeNotifier {
 
   /// The scenes the user made, in the order they were created.
   List<UserScene> get userScenes => _userScenes;
+
+  /// The user's own stories, oldest first.
+  List<UserStory> get userStories => _userStories;
 
   /// The colour variant chosen for an effect, or null for its original.
   String? variantOf(String effectId) => _variants[effectId];
@@ -203,6 +208,12 @@ class PreferencesController extends ChangeNotifier {
           for (final item in scenes)
             if (UserScene.fromJson(item) case final scene?) scene,
       ];
+      final stories = json['userStories'];
+      _userStories = [
+        if (stories is List)
+          for (final item in stories)
+            if (UserStory.fromJson(item) case final story?) story,
+      ];
       final playlists = json['playlists'];
       _playlists = [
         if (playlists is List)
@@ -296,6 +307,16 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  /// Adds [story], or replaces the one with the same id.
+  Future<void> saveUserStory(UserStory story) {
+    final exists = _userStories.any((s) => s.id == story.id);
+    _userStories = [
+      for (final s in _userStories) s.id == story.id ? story : s,
+      if (!exists) story,
+    ];
+    return _changed();
+  }
+
   /// Removes the scene, and takes it out of favourites, recents and
   /// playlists.
   Future<void> deleteUserScene(String id) {
@@ -303,6 +324,20 @@ class PreferencesController extends ChangeNotifier {
       for (final s in _userScenes)
         if (s.id != id) s,
     ];
+    return _forget(id);
+  }
+
+  /// Removes the story, and takes it out of favourites, recents and
+  /// playlists.
+  Future<void> deleteUserStory(String id) {
+    _userStories = [
+      for (final s in _userStories)
+        if (s.id != id) s,
+    ];
+    return _forget(id);
+  }
+
+  Future<void> _forget(String id) {
     _favorites = [
       for (final f in _favorites)
         if (f != id) f,
@@ -392,6 +427,7 @@ class PreferencesController extends ChangeNotifier {
       'musicSource': _musicSource.name,
       'playlists': [for (final p in _playlists) p.toJson()],
       'userScenes': [for (final s in _userScenes) s.toJson()],
+      'userStories': [for (final s in _userStories) s.toJson()],
       'variants': _variants,
       'excludedLights': _excludedLights,
       'defaultControls': {

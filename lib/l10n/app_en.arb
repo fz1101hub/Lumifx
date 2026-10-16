@@ -1023,18 +1023,6 @@
   "@add": {
     "description": "Button: add"
   },
-  "imported": "Added {scenes, plural, =0{} =1{1 scene} other{{scenes} scenes}}{playlists, plural, =0{} =1{ and 1 playlist} other{ and {playlists} playlists}}.",
-  "@imported": {
-    "description": "Snackbar after importing",
-    "placeholders": {
-      "scenes": {
-        "type": "int"
-      },
-      "playlists": {
-        "type": "int"
-      }
-    }
-  },
   "shareAll": "Share or back up my scenes and playlists",
   "@shareAll": {
     "description": "Settings: share all own scenes and playlists"
@@ -1422,5 +1410,132 @@
   "narrationCandlelightCarol4": "One last bright note, and a warm glow everywhere.",
   "@narrationCandlelightCarol4": {
     "description": "Read-along line of the Candlelight Carol story"
+  },
+  "newStory": "New story",
+  "@newStory": {
+    "description": "Button and title: make a story of your own"
+  },
+  "editStory": "Edit story",
+  "@editStory": {
+    "description": "Title and tooltip: edit a story of your own"
+  },
+  "storyNameHint": "For example: The lost star",
+  "@storyNameHint": {
+    "description": "Hint of the name field of the story editor"
+  },
+  "storyBackgroundHint": "The colours the story starts from. The moments light up on top of them.",
+  "@storyBackgroundHint": {
+    "description": "Explains the background colours of a story of your own"
+  },
+  "storyLength": "Length: {time}",
+  "@storyLength": {
+    "description": "Label of the story length slider; time is like 1:30",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "storyLengthHint": "Then the story starts over.",
+  "@storyLengthHint": {
+    "description": "Explains the story length"
+  },
+  "storyMoments": "Moments",
+  "@storyMoments": {
+    "description": "Heading of the timeline of a story of your own"
+  },
+  "storyMomentsHint": "What happens, and when. Each moment can have words to read along.",
+  "@storyMomentsHint": {
+    "description": "Explains the moments of a story"
+  },
+  "noMomentsYet": "No moments yet. Add the first one.",
+  "@noMomentsYet": {
+    "description": "Shown when a story has no moments"
+  },
+  "addMoment": "Add a moment",
+  "@addMoment": {
+    "description": "Button: add a moment to a story"
+  },
+  "editMoment": "Moment",
+  "@editMoment": {
+    "description": "Title of the dialog editing a moment of a story"
+  },
+  "momentAt": "At {time}",
+  "@momentAt": {
+    "description": "Label of the time slider of a moment; time is like 0:08",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "momentWhat": "What happens",
+  "@momentWhat": {
+    "description": "Heading of the kinds of light a moment can be"
+  },
+  "momentSpark": "Spark",
+  "@momentSpark": {
+    "description": "Kind of moment: a short flash on one light"
+  },
+  "momentSpell": "Spell on every light",
+  "@momentSpell": {
+    "description": "Kind of moment: every light flashes at once"
+  },
+  "momentWander": "Wandering light",
+  "@momentWander": {
+    "description": "Kind of moment: a light wanders from lamp to lamp"
+  },
+  "momentWhoosh": "Whoosh across the room",
+  "@momentWhoosh": {
+    "description": "Kind of moment: a light rushes across the room"
+  },
+  "momentSparkles": "Sparkles",
+  "@momentSparkles": {
+    "description": "Kind of moment: little flashes here and there"
+  },
+  "momentDarkness": "Darkness",
+  "@momentDarkness": {
+    "description": "Kind of moment: the room goes almost dark"
+  },
+  "momentLightning": "Lightning",
+  "@momentLightning": {
+    "description": "Kind of moment: lightning strikes"
+  },
+  "momentFootsteps": "Footsteps",
+  "@momentFootsteps": {
+    "description": "Kind of moment: footsteps coming closer"
+  },
+  "momentWordsOnly": "Just words",
+  "@momentWordsOnly": {
+    "description": "Kind of moment: only words to read, no light change"
+  },
+  "momentColor": "Colour",
+  "@momentColor": {
+    "description": "Label of the colour of a moment"
+  },
+  "momentWords": "Words to read along (optional)",
+  "@momentWords": {
+    "description": "Label of the words of a moment"
+  },
+  "momentWordsHint": "For example: And then, a golden spark!",
+  "@momentWordsHint": {
+    "description": "Hint of the words of a moment"
+  },
+  "playFromHere": "Preview from here",
+  "@playFromHere": {
+    "description": "Tooltip: play the story preview from this moment"
+  },
+  "storyPreview": "Preview of the story",
+  "@storyPreview": {
+    "description": "Screen reader label of the story preview"
+  },
+  "importedItems": "{count, plural, =1{1 item added.} other{{count} items added.}}",
+  "@importedItems": {
+    "description": "Snackbar after importing a shared link",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }
