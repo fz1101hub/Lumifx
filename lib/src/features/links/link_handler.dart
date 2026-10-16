@@ -8,6 +8,7 @@ import '../effects/playback_controller.dart';
 import '../effects/player_route.dart';
 import '../library/effect_library.dart';
 import '../library/preferences_controller.dart';
+import '../library/sharing.dart';
 import 'app_link.dart';
 
 /// Carries out [AppLink]s.
@@ -40,6 +41,13 @@ class LinkHandler {
         return _effect(link);
       case PlaylistLink(:final nameOrId):
         return _playlist(nameOrId);
+      case ImportLink(:final data):
+        final bundle = SharedBundle.decode(data);
+        final context = navigatorKey.currentContext;
+        if (bundle == null || context == null) {
+          return false;
+        }
+        return importBundle(context, bundle);
     }
   }
 

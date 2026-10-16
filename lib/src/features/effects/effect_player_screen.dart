@@ -13,6 +13,7 @@ import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
 import '../library/scene_editor.dart';
+import '../library/sharing.dart';
 import '../music/music_sync_controller.dart';
 import 'effect_palette.dart';
 import 'light_color_ui.dart';
@@ -190,7 +191,13 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
         title: Text(l10n.effectName(effect)),
         actions: [
           if (AppScope.of(context).library.userScene(effect.id)
-              case final scene?)
+              case final scene?) ...[
+            IconButton(
+              tooltip: l10n.share,
+              icon: const Icon(Icons.share_outlined),
+              onPressed: () =>
+                  showShareDialog(context, SharedBundle(scenes: [scene])),
+            ),
             IconButton(
               tooltip: l10n.editScene,
               icon: const Icon(Icons.edit_outlined),
@@ -200,6 +207,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 ),
               ),
             ),
+          ],
           _FavoriteButton(effectId: effect.id),
         ],
       ),

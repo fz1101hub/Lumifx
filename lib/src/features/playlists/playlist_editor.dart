@@ -5,6 +5,7 @@ import '../../core/effects/effect.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../effects/effect_palette.dart';
+import '../library/sharing.dart';
 import 'playlist.dart';
 
 /// Creates a playlist, or edits [playlist].
@@ -119,6 +120,13 @@ class _PlaylistEditorState extends State<PlaylistEditor> {
         title: Text(
             widget.playlist == null ? l10n.newPlaylist : l10n.editPlaylist),
         actions: [
+          if (widget.playlist case final playlist?)
+            IconButton(
+              tooltip: l10n.share,
+              icon: const Icon(Icons.share_outlined),
+              onPressed: () =>
+                  showShareDialog(context, bundleOfPlaylist(context, playlist)),
+            ),
           if (widget.playlist != null)
             IconButton(
               tooltip: l10n.delete,

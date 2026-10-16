@@ -998,5 +998,49 @@
         "type": "String"
       }
     }
+  },
+  "share": "Share",
+  "@share": {
+    "description": "Share action and dialog title"
+  },
+  "shareDescription": "Scan the code with another phone's camera, or send the link. LumiFX opens and asks before adding anything.",
+  "@shareDescription": {
+    "description": "Explains sharing"
+  },
+  "qrCode": "QR code",
+  "@qrCode": {
+    "description": "Screen reader label of the QR code"
+  },
+  "tooLongForQr": "Too much for a QR code: copy the link instead.",
+  "@tooLongForQr": {
+    "description": "When the content does not fit a QR code"
+  },
+  "importQuestion": "Add these to LumiFX?",
+  "@importQuestion": {
+    "description": "Confirm adding shared scenes and playlists"
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Button: add"
+  },
+  "imported": "Added {scenes, plural, =0{} =1{1 scene} other{{scenes} scenes}}{playlists, plural, =0{} =1{ and 1 playlist} other{ and {playlists} playlists}}.",
+  "@imported": {
+    "description": "Snackbar after importing",
+    "placeholders": {
+      "scenes": {
+        "type": "int"
+      },
+      "playlists": {
+        "type": "int"
+      }
+    }
+  },
+  "shareAll": "Share or back up my scenes and playlists",
+  "@shareAll": {
+    "description": "Settings: share all own scenes and playlists"
+  },
+  "shareAllSubtitle": "One link with everything you made, for another phone or to keep.",
+  "@shareAllSubtitle": {
+    "description": "Explains sharing everything"
   }
 }

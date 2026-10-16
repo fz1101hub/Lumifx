@@ -353,5 +353,14 @@
   "deleteRoutineQuestion": "「{name}」を削除しますか？",
   "couldNotLoadRoutines": "ルーティンを読み込めませんでした：{reason}",
   "couldNotSaveRoutine": "ルーティンを保存できませんでした：{reason}",
-  "couldNotUpdateRoutine": "ルーティンを変更できませんでした：{reason}"
+  "couldNotUpdateRoutine": "ルーティンを変更できませんでした：{reason}",
+  "share": "共有",
+  "shareDescription": "別のスマートフォンのカメラでコードを読み取るか、リンクを送ってください。LumiFX が開き、追加する前に確認します。",
+  "qrCode": "QR コード",
+  "tooLongForQr": "QR コードに収まりません。リンクをコピーしてください。",
+  "importQuestion": "LumiFX に追加しますか？",
+  "add": "追加",
+  "imported": "追加しました：{scenes, plural, =0{} other{シーン {scenes} 件}}{playlists, plural, =0{} other{ プレイリスト {playlists} 件}}。",
+  "shareAll": "マイシーンとプレイリストを共有・バックアップ",
+  "shareAllSubtitle": "作成したものすべてを 1 つのリンクに。別のスマートフォン用や保存用に。"
 }

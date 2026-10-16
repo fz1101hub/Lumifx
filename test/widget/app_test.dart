@@ -14,6 +14,9 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
+import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/library/user_scene.dart';
+import 'package:lumifx/src/features/library/sharing.dart';
 
 import '../support/fake_audio_input.dart';
 import '../support/fake_background_playback.dart';
@@ -352,6 +355,52 @@ void main() {
     expect(find.text('Reading nook'), findsNothing);
     expect(find.text('New scene'), findsOneWidget);
     expect(find.byType(MiniPlayer), findsNothing);
+  });
+
+  testWidgets('a shared link adds the scenes and playlists after asking',
+      (tester) async {
+    await _pumpApp(tester);
+    const bundle = SharedBundle(
+      scenes: [
+        UserScene(
+          id: 'user:theirs',
+          name: 'Their scene',
+          colors: ['#FF0000', '#0000FF'],
+        ),
+      ],
+      playlists: [
+        Playlist(
+          id: 'their-playlist',
+          name: 'Their playlist',
+          effectIds: ['user:theirs', 'ocean'],
+        ),
+      ],
+    );
+    final message = const JSONMethodCodec().encodeMethodCall(
+      MethodCall('pushRouteInformation', {'location': bundle.link}),
+    );
+    await tester.binding.defaultBinaryMessenger
+        .handlePlatformMessage(SystemChannels.navigation.name, message, (_) {});
+    await tester.pumpAndSettle();
+    expect(find.text('Add these to LumiFX?'), findsOneWidget);
+    expect(find.textContaining('Their scene'), findsOneWidget);
+    await tester.tap(find.text('Add'));
+    await tester.pumpAndSettle();
+    expect(find.text('Added 1 scene and 1 playlist.'), findsOneWidget);
+
+    // The scene is in Scenes, and the playlist plays it.
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    expect(find.text('Their scene'), findsOneWidget);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Playlists'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Playlists'));
+    await tester.pumpAndSettle();
+    expect(find.text('Their playlist'), findsOneWidget);
+    expect(find.text('2 effects · 10 min each'), findsOneWidget,
+        reason: 'the playlist points at the imported scene');
   });
 
   testWidgets('settings change the controls a new playback starts with',

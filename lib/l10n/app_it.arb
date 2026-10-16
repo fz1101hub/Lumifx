@@ -353,5 +353,14 @@
   "deleteRoutineQuestion": "Eliminare \"{name}\"?",
   "couldNotLoadRoutines": "Impossibile caricare le routine: {reason}",
   "couldNotSaveRoutine": "Impossibile salvare la routine: {reason}",
-  "couldNotUpdateRoutine": "Impossibile modificare la routine: {reason}"
+  "couldNotUpdateRoutine": "Impossibile modificare la routine: {reason}",
+  "share": "Condividi",
+  "shareDescription": "Inquadra il codice con la fotocamera di un altro telefono oppure invia il link. LumiFX si apre e chiede conferma prima di aggiungere qualcosa.",
+  "qrCode": "Codice QR",
+  "tooLongForQr": "Troppi dati per un codice QR: copia il link.",
+  "importQuestion": "Aggiungere a LumiFX?",
+  "add": "Aggiungi",
+  "imported": "Aggiunte {scenes, plural, =0{} =1{1 scena} other{{scenes} scene}}{playlists, plural, =0{} =1{ e 1 playlist} other{ e {playlists} playlist}}.",
+  "shareAll": "Condividi o salva le mie scene e playlist",
+  "shareAllSubtitle": "Un solo link con tutto ciò che hai creato, per un altro telefono o da conservare."
 }

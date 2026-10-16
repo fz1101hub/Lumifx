@@ -353,5 +353,14 @@
   "deleteRoutineQuestion": "\"{name}\" verwijderen?",
   "couldNotLoadRoutines": "De routines konden niet worden geladen: {reason}",
   "couldNotSaveRoutine": "De routine kon niet worden opgeslagen: {reason}",
-  "couldNotUpdateRoutine": "De routine kon niet worden gewijzigd: {reason}"
+  "couldNotUpdateRoutine": "De routine kon niet worden gewijzigd: {reason}",
+  "share": "Delen",
+  "shareDescription": "Scan de code met de camera van een andere telefoon of stuur de link. LumiFX opent en vraagt eerst voordat er iets wordt toegevoegd.",
+  "qrCode": "QR-code",
+  "tooLongForQr": "Te veel voor een QR-code: kopieer de link.",
+  "importQuestion": "Toevoegen aan LumiFX?",
+  "add": "Toevoegen",
+  "imported": "Toegevoegd: {scenes, plural, =0{} =1{1 scène} other{{scenes} scènes}}{playlists, plural, =0{} =1{ en 1 afspeellijst} other{ en {playlists} afspeellijsten}}.",
+  "shareAll": "Mijn scènes en afspeellijsten delen of bewaren",
+  "shareAllSubtitle": "Eén link met alles wat je hebt gemaakt, voor een andere telefoon of om te bewaren."
 }
