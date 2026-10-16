@@ -270,12 +270,7 @@ class HueBridgeClient {
                 {
                   'target': {'rid': id, 'rtype': 'light'},
                   // A scene stores a state, not a fade to it.
-                  'action': HueLightCommand(
-                    on: command.on,
-                    brightness: command.brightness,
-                    xy: command.xy,
-                    mirek: command.mirek,
-                  ).toJson(),
+                  'action': command.withoutTransition().toJson(),
                 },
             ],
             if (palette != null) ...{

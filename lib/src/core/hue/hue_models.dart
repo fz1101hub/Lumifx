@@ -101,6 +101,8 @@ class HueLight {
     this.mirekMin = 153,
     this.mirekMax = 500,
     this.archetype,
+    this.gradientPoints = 0,
+    this.gradient = const [],
   });
 
   factory HueLight.fromJson(Map<String, Object?> json) {
@@ -131,6 +133,18 @@ class HueLight {
           : null,
       mirekMin: (schema['mirek_minimum'] as num?)?.toInt() ?? 153,
       mirekMax: (schema['mirek_maximum'] as num?)?.toInt() ?? 500,
+      gradientPoints:
+          (_map(json['gradient'])['points_capable'] as num?)?.toInt() ?? 0,
+      gradient: [
+        if (_map(json['gradient'])['points'] case final List points)
+          for (final point in points)
+            if (_map(_map(_map(point)['color'])['xy'])
+                case {
+                  'x': final num x,
+                  'y': final num y,
+                })
+              (x: x.toDouble(), y: y.toDouble()),
+      ],
     );
   }
 
@@ -153,7 +167,23 @@ class HueLight {
   final int mirekMax;
   final String? archetype;
 
+  /// How many colours a gradient light (lightstrips, Play gradient...)
+  /// takes at once; 0 for ordinary lights.
+  final int gradientPoints;
+
+  /// The colours a gradient light shows now, when it shows a gradient.
+  final List<({double x, double y})> gradient;
+
   bool get isDimmable => brightness != null;
+
+  /// How many slots of an effect this light shows when played on a room:
+  /// gradient lights show up to [maxSegments] side by side, so effects
+  /// move along the strip instead of colouring it all at once.
+  int get segments => supportsColor && gradientPoints >= 2
+      ? gradientPoints.clamp(2, maxSegments)
+      : 1;
+
+  static const maxSegments = 3;
 
   /// The command that puts this light back the way it is now.
   HueLightCommand get restoreCommand {
@@ -165,7 +195,8 @@ class HueLight {
       on: true,
       brightness: brightness,
       mirek: mirek,
-      xy: mirek == null && supportsColor ? color : null,
+      xy: mirek == null && supportsColor && gradient.isEmpty ? color : null,
+      gradient: mirek == null && gradient.length >= 2 ? gradient : null,
       transition: transition,
     );
   }
@@ -282,7 +313,36 @@ class HueLightCommand {
     this.xy,
     this.mirek,
     this.transition,
+    this.gradient,
   });
+
+  /// One colour per segment of a gradient light, at the brightest
+  /// segment's brightness (the bridge has one brightness per light).
+  factory HueLightCommand.gradient(
+    List<LightColor> colors,
+    List<double> brightness, {
+    Duration? transition,
+  }) {
+    final peak = brightness.fold<double>(0, math.max);
+    if (peak < 0.005) {
+      return HueLightCommand(on: false, transition: transition);
+    }
+    return HueLightCommand(
+      on: true,
+      brightness: (peak * 100).clamp(1.0, 100.0),
+      gradient: [
+        for (final (i, color) in colors.indexed)
+          // A dark segment is shown as its colour dimmed towards black,
+          // since segments cannot have their own brightness.
+          LightColor(
+            color.r * (brightness[i] / peak).clamp(0.05, 1.0),
+            color.g * (brightness[i] / peak).clamp(0.05, 1.0),
+            color.b * (brightness[i] / peak).clamp(0.05, 1.0),
+          ).toXy(),
+      ],
+      transition: transition,
+    );
+  }
 
   /// Shows [color] at [brightness] (0..1) as well as [light] can: in color,
   /// as the nearest white for white-ambiance lights, or as brightness only.
@@ -344,6 +404,18 @@ class HueLightCommand {
   final int? mirek;
   final Duration? transition;
 
+  /// Colours of a gradient light's points, in order.
+  final List<({double x, double y})>? gradient;
+
+  /// The same state without the fade, as scenes store it.
+  HueLightCommand withoutTransition() => HueLightCommand(
+        on: on,
+        brightness: brightness,
+        xy: xy,
+        mirek: mirek,
+        gradient: gradient,
+      );
+
   Map<String, Object> toJson() => {
         if (on != null) 'on': {'on': on!},
         if (brightness != null)
@@ -353,6 +425,17 @@ class HueLightCommand {
             'xy': {'x': _round(xy!.x, 4), 'y': _round(xy!.y, 4)},
           },
         if (mirek != null) 'color_temperature': {'mirek': mirek!},
+        if (gradient != null)
+          'gradient': {
+            'points': [
+              for (final point in gradient!)
+                {
+                  'color': {
+                    'xy': {'x': _round(point.x, 4), 'y': _round(point.y, 4)},
+                  },
+                },
+            ],
+          },
         if (transition != null)
           'dynamics': {'duration': transition!.inMilliseconds},
       };

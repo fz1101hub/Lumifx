@@ -9,6 +9,7 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/effect_event.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/effect_renderer.dart';
+import '../../core/effects/engine/light_frame.dart';
 import '../../core/effects/engine/light_output.dart';
 import '../../core/hue/entertainment/entertainment_session.dart';
 import '../../core/hue/hue_bridge_client.dart';
@@ -300,14 +301,13 @@ class PlaybackController extends ChangeNotifier {
         client == null) {
       return null;
     }
-    final frames = player.currentFrames;
-    final lightIds = player.lightIds;
-    final actions = <String, HueLightCommand>{
-      for (var i = 0; i < lightIds.length && i < frames.length; i++)
-        if (home.lights[lightIds[i]] case final light?)
-          light.id: HueLightCommand.forLight(
-              light, frames[i].color, frames[i].brightness),
-    };
+    final actions = lightCommands(
+      home.lights,
+      {
+        for (final (i, id) in player.lightIds.indexed)
+          if (i < player.currentFrames.length) id: player.currentFrames[i],
+      },
+    );
     final id = await client.createScene(
       name: name,
       group: group,
@@ -546,10 +546,7 @@ class PlaybackController extends ChangeNotifier {
     final group = this.group;
     final area = this.area;
     if (home != null && group != null) {
-      return [
-        for (final id in _effectLights(home, group))
-          NamedSlot(home.lights[id]?.name ?? id),
-      ];
+      return _slotLabels(home, _effectLights(home, group));
     }
     if (home != null && area != null) {
       return _channelNames(home, area);
@@ -646,12 +643,10 @@ class PlaybackController extends ChangeNotifier {
               name: group.name,
             ));
           }
-          restore = _snapshot(home, usable);
+          restore = _snapshot(home, {for (final id in usable) lightOfSlot(id)});
           output = hueRestOutput(client, home.lights);
           lightIds = usable;
-          names = [
-            for (final id in usable) NamedSlot(home.lights[id]?.name ?? id),
-          ];
+          names = _slotLabels(home, usable);
         } else {
           return _abortStart(
               const PlaybackNotice(PlaybackNoticeKind.targetGone));
@@ -659,7 +654,9 @@ class PlaybackController extends ChangeNotifier {
       }
 
       _restore = _preferences.restoreLights ? restore : const {};
-      _activeLightIds = selectedTarget == null ? const [] : lightIds;
+      _activeLightIds = selectedTarget == null
+          ? const []
+          : {for (final id in lightIds) lightOfSlot(id)}.toList();
       _slotNames = names;
       // Assigned before play(): if the first tick throws, stop() can still
       // find and stop the player (and its timer).
@@ -1060,17 +1057,33 @@ class PlaybackController extends ChangeNotifier {
     super.dispose();
   }
 
-  /// Lights that can show an effect: on/off-only lights (plugs, relays)
-  /// are skipped, since switching them several times a second is useless
-  /// and can wear them out, and so are the lights the user left out.
+  /// The effect's slots on a room or zone: one per light that can show
+  /// an effect, or several for a gradient light (`<id>#<segment>`).
+  /// On/off-only lights (plugs, relays) are skipped, since switching them
+  /// several times a second is useless and can wear them out, and so are
+  /// the lights the user left out.
   List<String> _effectLights(HueHome home, HueGroup group) {
     final excluded = _preferences.excludedLights(group.id);
     return [
       for (final id in group.lightIds)
-        if ((home.lights[id]?.isDimmable ?? false) && !excluded.contains(id))
-          id,
+        if (home.lights[id] case final light?
+            when light.isDimmable && !excluded.contains(id))
+          if (light.segments == 1)
+            id
+          else
+            for (var s = 0; s < light.segments; s++) '$id#$s',
     ];
   }
+
+  static List<SlotLabel> _slotLabels(HueHome home, List<String> slots) => [
+        for (final slot in slots)
+          switch (slot.indexOf('#')) {
+            -1 => NamedSlot(home.lights[slot]?.name ?? slot),
+            final hash =>
+              NamedSlot('${home.lights[slot.substring(0, hash)]?.name ?? slot} '
+                  '${int.parse(slot.substring(hash + 1)) + 1}'),
+          },
+      ];
 
   static List<SlotLabel> _channelNames(
     HueHome home,
@@ -1095,25 +1108,113 @@ class PlaybackController extends ChangeNotifier {
       };
 }
 
+/// The light a slot belongs to: slots of gradient lights are named
+/// `<light id>#<segment>`.
+String lightOfSlot(String slot) {
+  final hash = slot.indexOf('#');
+  return hash < 0 ? slot : slot.substring(0, hash);
+}
+
+/// One command per light for the frames of [slots]: gradient segments are
+/// combined into the light's gradient.
+Map<String, HueLightCommand> lightCommands(
+  Map<String, HueLight> lights,
+  Map<String, LightFrame> slots, {
+  Duration? transition,
+}) {
+  final segments = <String, List<(int, LightFrame)>>{};
+  final commands = <String, HueLightCommand>{};
+  slots.forEach((slot, frame) {
+    final hash = slot.indexOf('#');
+    if (hash >= 0) {
+      segments
+          .putIfAbsent(slot.substring(0, hash), () => [])
+          .add((int.parse(slot.substring(hash + 1)), frame));
+      return;
+    }
+    final light = lights[slot];
+    commands[slot] = light == null
+        ? HueLightCommand.fromColor(frame.color, frame.brightness,
+            transition: transition)
+        : HueLightCommand.forLight(light, frame.color, frame.brightness,
+            transition: transition);
+  });
+  segments.forEach((id, parts) {
+    parts.sort((a, b) => a.$1.compareTo(b.$1));
+    commands[id] = HueLightCommand.gradient(
+      [for (final p in parts) p.$2.color],
+      [for (final p in parts) p.$2.brightness],
+      transition: transition,
+    );
+  });
+  return commands;
+}
+
 /// Sends frames to Hue lights through the REST API, adapting each command
-/// to what the light supports.
+/// to what the light supports. Gradient segments are sent together as one
+/// gradient command per light, within the same command budget.
 LightOutput hueRestOutput(
   HueBridgeClient client,
   Map<String, HueLight> lights,
 ) {
-  return RateLimitedLightOutput(
+  final segments = <String, Map<String, LightFrame>>{};
+  final limited = RateLimitedLightOutput(
     send: (lightId, frame, transition) {
-      final light = lights[lightId];
-      return client.setLight(
-        lightId,
-        light == null
-            ? HueLightCommand.fromColor(frame.color, frame.brightness,
-                transition: transition)
-            : HueLightCommand.forLight(light, frame.color, frame.brightness,
-                transition: transition),
-      );
+      final parts = segments[lightId] ?? {lightId: frame};
+      final command = lightCommands(lights, parts, transition: transition);
+      return client.setLight(lightId, command[lightId]!);
     },
   );
+  return GradientLightOutput(limited, segments);
+}
+
+/// Folds the segment slots of gradient lights into one frame per light for
+/// the rate limiter (so a strip costs one command, not three), keeping the
+/// segments in [segments] for the command itself.
+class GradientLightOutput implements LightOutput {
+  GradientLightOutput(this._inner, this.segments);
+
+  final LightOutput _inner;
+  final Map<String, Map<String, LightFrame>> segments;
+
+  @override
+  void update(Map<String, LightFrame> frames, Duration tick) {
+    final perLight = <String, LightFrame>{};
+    final grouped = <String, Map<String, LightFrame>>{};
+    frames.forEach((slot, frame) {
+      final light = lightOfSlot(slot);
+      if (light == slot) {
+        perLight[slot] = frame;
+      } else {
+        (grouped[light] ??= {})[slot] = frame;
+      }
+    });
+    grouped.forEach((light, parts) {
+      segments[light] = parts;
+      perLight[light] = _summary(parts.values.toList());
+    });
+    _inner.update(perLight, tick);
+  }
+
+  /// A frame that changes whenever any segment changes noticeably: the
+  /// segments' colours side by side would be ideal, but one frame is all
+  /// the limiter compares, so it gets their sum (and the peak brightness).
+  static LightFrame _summary(List<LightFrame> parts) {
+    var r = 0.0, g = 0.0, b = 0.0, peak = 0.0;
+    for (final (i, frame) in parts.indexed) {
+      // Weighted by position, so colours trading places still register.
+      final weight = (i + 1) / parts.length;
+      r += frame.color.r * weight;
+      g += frame.color.g * weight;
+      b += frame.color.b * weight;
+      peak = math.max(peak, frame.brightness);
+    }
+    final n = parts.isEmpty ? 1 : parts.length;
+    return LightFrame(LightColor(r / n, g / n, b / n), peak);
+  }
+
+  @override
+  Future<void> close() => _inner.close();
 }
 
 /// Puts lights back, one command at a time to stay within the bridge's
