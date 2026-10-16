@@ -317,7 +317,8 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
               ),
             ),
           ),
-          _FavoriteButton(effectId: effect.id),
+          // Made for one use: nothing to find again among the favourites.
+          if (!effect.isGenerated) _FavoriteButton(effectId: effect.id),
         ],
       ),
       body: Builder(

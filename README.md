@@ -110,6 +110,19 @@ Also done ahead of schedule:
 - **Holiday stories** for New Year, Valentine's Day, Carnival and Easter,
   first on the home in their season (Carnival and Easter follow Easter's
   date each year).
+- **Ok-to-wake light**: a dim amber glow at night that turns green when
+  children may get up, stored on the bridge.
+- **Light timers**: teeth, tidying up, homework, focus and cooking; the
+  lights change colour as time passes and end with a little party.
+- **Read aloud**: the phone's voice reads each line of a story (and the
+  game calls) as the lights reach it, in the app's language.
+- **Scene from a photo**: the scene editor takes the main colours of a
+  photo, read on the phone.
+- **Birthday party**: candles on the lamps, a wish, blow them out (a tap
+  or blowing on the microphone) and the room bursts into colour.
+- **Light games**: red light, green light; statues; colour hunt.
+- **Weather lights**: the weather now or tomorrow in a typed city, from
+  Open-Meteo, as sunshine, clouds, rain, snow or a starry night.
 
 ## Development
 

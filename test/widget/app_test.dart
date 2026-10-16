@@ -428,6 +428,16 @@ void main() {
         AppScope.of(tester.element(find.byType(WeatherScreen))).playback;
     expect(playback.effect.name, 'Weather in Milan');
     expect(playback.isPlaying, isTrue);
+    // Its player, from the mini player, offers no favourite star.
+    await tester.tap(find.descendant(
+        of: find.byType(MiniPlayer), matching: find.text('Weather in Milan')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Weather in Milan'), findsWidgets);
+    expect(find.byTooltip('Add to favorites'), findsNothing);
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
     await playback.stop();
     await tester.pump(const Duration(seconds: 2));
 

@@ -73,6 +73,14 @@ artifact, see RELEASE.md § 1b).
 > the room and move the lights with it. Audio is analysed on your phone
 > and never recorded.
 >
+> FAMILY TIME
+> Bedtime in one tap, stories read aloud as the lights tell them, an
+> ok-to-wake light that turns green in the morning, light timers for
+> brushing teeth or tidying up, a birthday party where the candles glow on
+> your lamps until you blow them out, games led by the lights (red light,
+> green light; statues; colour hunt), the weather outside in light, and
+> scenes made from your own photos.
+>
 > MADE FOR HUE
 > • Finds and pairs with your Hue Bridge on your Wi-Fi, no account needed.
 > • Plays on any room or zone, and streams fast effects to Entertainment
@@ -150,6 +158,14 @@ artifact, see RELEASE.md § 1b).
 > Beat Pulse, Party Chase, Spectrum e Mood Glow ascoltano la musica nella
 > stanza e muovono le luci a tempo. L'audio è analizzato sul telefono e non
 > viene mai registrato.
+>
+> IN FAMIGLIA
+> La nanna con un tocco, storie lette ad alta voce mentre le luci le
+> raccontano, un semaforo della sveglia che diventa verde al mattino, timer
+> di luce per lavarsi i denti o riordinare, una festa di compleanno con le
+> candeline accese sulle lampade finché non le spegni con un soffio, giochi
+> guidati dalle luci (semaforo, statue, caccia al colore), il meteo di fuori
+> in luce e scene create dalle tue foto.
 >
 > FATTA PER HUE
 > • Trova e collega il tuo Bridge Hue sul Wi-Fi, senza account.
@@ -249,6 +265,15 @@ location, no purchases. Result: Everyone (ESRB) / PEGI 3.
 
 **Target audience:** 18 and over (simplest; the app is not designed for
 children). Do not tick "designed for families".
+
+The family features (timers, birthday, games, bedtime) are used by a
+parent with their children, and the parent runs the app: keep the target
+audience 18+ and write the listing for parents, as above. Choosing an
+audience that includes children would put the app under Google Play's
+Families policy and Apple's Kids category rules; check those first (for
+instance, Weather lights send an approximate location to Open-Meteo).
+Play may still ask whether the app "unintentionally appeals to children":
+answer that it is designed for adults who play with their families.
 
 ## App Store Connect: App Privacy
 
