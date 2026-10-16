@@ -307,6 +307,18 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  /// Adds scenes, stories and playlists in one go (an imported link).
+  Future<void> addAll({
+    List<UserScene> scenes = const [],
+    List<UserStory> stories = const [],
+    List<Playlist> playlists = const [],
+  }) {
+    _userScenes = [..._userScenes, ...scenes];
+    _userStories = [..._userStories, ...stories];
+    _playlists = [..._playlists, ...playlists];
+    return _changed();
+  }
+
   /// Adds [story], or replaces the one with the same id.
   Future<void> saveUserStory(UserStory story) {
     final exists = _userStories.any((s) => s.id == story.id);

@@ -33,7 +33,7 @@ class PlaybackService : Service() {
     }
 
     private var wakeLock: PowerManager.WakeLock? = null
-    private var wifiLock: WifiManager.WifiLock? = null
+    private val wifiLocks = mutableListOf<WifiManager.WifiLock>()
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -135,18 +135,23 @@ class PlaybackService : Service() {
                     acquire(MAX_HOLD_MS)
                 }
         }
-        if (wifiLock == null) {
-            val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                WifiManager.WIFI_MODE_FULL_LOW_LATENCY
-            } else {
-                WifiManager.WIFI_MODE_FULL_HIGH_PERF
+        if (wifiLocks.isEmpty()) {
+            // Low latency only works with the screen on and the app in front;
+            // high performance keeps Wi-Fi out of power save with the screen
+            // off, which is what this service is for. Both are held.
+            val modes = mutableListOf(WifiManager.WIFI_MODE_FULL_HIGH_PERF)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                modes.add(WifiManager.WIFI_MODE_FULL_LOW_LATENCY)
             }
-            wifiLock = applicationContext.getSystemService(WifiManager::class.java)
-                .createWifiLock(mode, "LumiFX:playback")
-                .apply {
-                    setReferenceCounted(false)
-                    acquire()
-                }
+            val wifi = applicationContext.getSystemService(WifiManager::class.java)
+            for (mode in modes) {
+                wifiLocks.add(
+                    wifi.createWifiLock(mode, "LumiFX:playback:$mode").apply {
+                        setReferenceCounted(false)
+                        acquire()
+                    },
+                )
+            }
         }
     }
 
@@ -156,8 +161,8 @@ class PlaybackService : Service() {
         }
         wakeLock?.let { if (it.isHeld) it.release() }
         wakeLock = null
-        wifiLock?.let { if (it.isHeld) it.release() }
-        wifiLock = null
+        wifiLocks.forEach { if (it.isHeld) it.release() }
+        wifiLocks.clear()
         stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }

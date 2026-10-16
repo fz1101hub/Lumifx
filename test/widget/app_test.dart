@@ -41,11 +41,17 @@ PreferencesController _warnedPreferences() =>
 Future<void> _pumpApp(WidgetTester tester) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
+  // Loaded as on a phone (links wait for that), past the welcome pages.
+  final preferences = PreferencesController(store: InMemoryKeyValueStore());
+  // In the test's own zone: the store answers at once, and later writes
+  // must chain onto futures of this zone to complete in fake time.
+  await preferences.setOnboardingDone();
+  await preferences.load();
   await tester.pumpWidget(
     LumiFxApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
-      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      preferences: preferences,
       audioInput: FakeAudioInput(),
     ),
   );
@@ -287,6 +293,44 @@ void main() {
     expect(find.text('Thunderstorm'), findsOneWidget);
     expect(find.text('Play'), findsOneWidget);
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('a link on a cold start waits for the saved scenes to load',
+      (tester) async {
+    final store = InMemoryKeyValueStore();
+    final earlier = PreferencesController(store: store);
+    await earlier.setOnboardingDone();
+    await earlier.saveUserScene(const UserScene(
+      id: 'user:mine',
+      name: 'My glow',
+      colors: ['#FF0000', '#0000FF'],
+    ));
+    // The app starts with the preferences still loading.
+    final preferences = PreferencesController(store: store);
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    final message = const JSONMethodCodec().encodeMethodCall(
+      const MethodCall(
+          'pushRouteInformation', {'location': 'lumifx://app/play/user:mine'}),
+    );
+    await tester.binding.defaultBinaryMessenger
+        .handlePlatformMessage(SystemChannels.navigation.name, message, (_) {});
+    await tester.pump();
+    expect(find.text('My glow'), findsNothing, reason: 'not loaded yet');
+
+    await preferences.load();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('My glow'), findsOneWidget);
+    expect(find.text('Pause'), findsOneWidget);
+    await tester.tap(find.text('Pause'));
+    await tester.pump();
   });
 
   testWidgets('the welcome pages show once, on the very first launch',

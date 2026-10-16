@@ -50,6 +50,9 @@ class AudioplayersSoundPlayer implements SoundPlayer {
   int _generation = 0;
   double _volume = 0.6;
 
+  /// Paused while the loops were still being made: they wait to resume.
+  bool _paused = false;
+
   static final _context = AudioContext(
     android: const AudioContextAndroid(
       audioFocus: AndroidAudioFocus.none,
@@ -61,7 +64,10 @@ class AudioplayersSoundPlayer implements SoundPlayer {
 
   static final _files = <String, Future<String>>{};
 
-  /// The WAV file of [name], made by [render] the first time.
+  /// The WAV file of [name], made by [render] the first time. Written
+  /// under another name and renamed, so an app killed mid-write never
+  /// leaves half a file; a failure is not remembered, so the next play
+  /// tries again.
   static Future<String> _file(String name, Uint8List Function() render) =>
       _files[name] ??= () async {
         final dir = Directory('${Directory.systemTemp.path}/lumifx_sounds');
@@ -69,10 +75,16 @@ class AudioplayersSoundPlayer implements SoundPlayer {
         if (!file.existsSync()) {
           dir.createSync(recursive: true);
           final bytes = await compute((_) => render(), null);
-          await file.writeAsBytes(bytes, flush: true);
+          final partial = File('${file.path}.part');
+          await partial.writeAsBytes(bytes, flush: true);
+          await partial.rename(file.path);
         }
         return file.path;
-      }();
+      }()
+          .catchError((Object error) {
+        _files.remove(name);
+        throw error;
+      });
 
   static Uint8List _ambienceWav(Ambience a) => wavOf(synthesizeAmbience(a));
 
@@ -80,6 +92,7 @@ class AudioplayersSoundPlayer implements SoundPlayer {
   Future<void> play(Soundscape soundscape, {required double volume}) async {
     final generation = ++_generation;
     _volume = volume;
+    _paused = false;
     await _stopLoops();
     for (final ambience in soundscape.ambiences) {
       final path =
@@ -93,8 +106,14 @@ class AudioplayersSoundPlayer implements SoundPlayer {
         await player.setAudioContext(_context);
         await player.setReleaseMode(ReleaseMode.loop);
         // Several ambiences together are each a little quieter.
-        await player.play(DeviceFileSource(path),
-            volume: _loopVolume(soundscape.ambiences.length));
+        final loudness = _loopVolume(soundscape.ambiences.length);
+        if (_paused) {
+          // Paused meanwhile: ready, and silent until resume().
+          await player.setSource(DeviceFileSource(path));
+          await player.setVolume(loudness);
+        } else {
+          await player.play(DeviceFileSource(path), volume: loudness);
+        }
       } on Object catch (error) {
         debugPrint('Sound: $error');
       }
@@ -104,17 +123,29 @@ class AudioplayersSoundPlayer implements SoundPlayer {
   double _loopVolume(int count) =>
       (_volume / (count > 1 ? 1.4 : 1)).clamp(0.0, 1.0);
 
+  // The loops are copied before each walk: play() and stop() change the
+  // list while these wait on the plugin.
   @override
   Future<void> pause() async {
-    for (final player in _loops) {
-      await player.pause();
+    _paused = true;
+    for (final player in [..._loops]) {
+      try {
+        await player.pause();
+      } on Object {
+        // Released meanwhile.
+      }
     }
   }
 
   @override
   Future<void> resume() async {
-    for (final player in _loops) {
-      await player.resume();
+    _paused = false;
+    for (final player in [..._loops]) {
+      try {
+        await player.resume();
+      } on Object {
+        // Released meanwhile.
+      }
     }
   }
 
@@ -140,8 +171,13 @@ class AudioplayersSoundPlayer implements SoundPlayer {
   @override
   Future<void> setVolume(double volume) async {
     _volume = volume;
-    for (final player in _loops) {
-      await player.setVolume(_loopVolume(_loops.length));
+    final players = [..._loops];
+    for (final player in players) {
+      try {
+        await player.setVolume(_loopVolume(players.length));
+      } on Object {
+        // Released meanwhile.
+      }
     }
   }
 

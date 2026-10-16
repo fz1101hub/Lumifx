@@ -42,6 +42,9 @@ class _FakeBridge {
   final puts = <(String, Map<String, Object?>)>[];
   final posts = <(String, Map<String, Object?>)>[];
 
+  /// Light reads and writes in order: `GET` and `PUT <id>`.
+  final log = <String>[];
+
   /// When set, room loading waits for it: used to stop mid-start.
   Completer<void>? holdRefresh;
   int refreshes = 0;
@@ -59,6 +62,7 @@ class _FakeBridge {
           });
         }
         if (request.method == 'PUT') {
+          log.add('PUT ${request.url.pathSegments.last}');
           puts.add((
             request.url.pathSegments.last,
             jsonDecode(request.body) as Map<String, Object?>,
@@ -67,6 +71,7 @@ class _FakeBridge {
         }
         switch (request.url.path) {
           case '/clip/v2/resource/light':
+            log.add('GET');
             refreshes++;
             await holdRefresh?.future;
             return _json({
@@ -610,6 +615,57 @@ void main() {
     await controller.handleAppPaused();
     expect(controller.status, PlaybackStatus.idle);
     expect(camera.isRunning, isFalse);
+    controller.dispose();
+  });
+
+  test('starting again waits for the lights to be put back first', () async {
+    final (controller, fake, _) = await _setUp();
+    await controller.start();
+    await _wait(250);
+    final stoppedAt = fake.log.length;
+    unawaited(controller.stop());
+    await controller.start();
+    expect(controller.status, PlaybackStatus.playing);
+    final after = fake.log.sublist(stoppedAt);
+    final read = after.indexOf('GET');
+    expect(read, greaterThan(0));
+    // Both lights got their own state back before the new start read
+    // them, so it does not keep the effect's colours as theirs.
+    expect(after.sublist(0, read), containsAll(['PUT color', 'PUT white']));
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('a playlist that cannot start leaves no playlist behind', () async {
+    final (controller, _, _) = await _setUp(
+      audio: FakeAudioInput(granted: false),
+    );
+    await controller.playPlaylist(const Playlist(
+      id: 'p',
+      name: 'Party',
+      effectIds: ['mood_glow', 'ocean'],
+    ));
+    expect(controller.status, PlaybackStatus.idle);
+    expect(controller.playlist, isNull);
+    controller.dispose();
+  });
+
+  test('switching effects while starting closes the camera it opened',
+      () async {
+    final camera = FakeCameraInput();
+    final (controller, fake, _) = await _setUp(effect: tvSync, camera: camera);
+    fake.holdRefresh = Completer<void>();
+    final starting = controller.start();
+    await _wait(20);
+    expect(controller.status, PlaybackStatus.starting);
+    expect(camera.isRunning, isTrue);
+    await controller.switchEffect(ocean);
+    fake.holdRefresh!.complete();
+    await starting;
+    await _wait(20);
+    expect(controller.status, PlaybackStatus.playing);
+    expect(camera.isRunning, isFalse);
+    await controller.stop();
     controller.dispose();
   });
 

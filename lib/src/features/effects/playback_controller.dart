@@ -315,8 +315,14 @@ class PlaybackController extends ChangeNotifier {
     } else if (_status == PlaybackStatus.paused) {
       await resume();
     }
-    if (_playlist == playlist && _status == PlaybackStatus.playing) {
-      _armPlaylistTimer(playlist.each);
+    if (_playlist == playlist) {
+      if (_status == PlaybackStatus.playing) {
+        _armPlaylistTimer(playlist.each);
+      } else {
+        // It could not start (bridge away, microphone refused): no
+        // playlist left behind that would never move on.
+        _endPlaylist();
+      }
     }
     _notify();
   }
@@ -705,6 +711,7 @@ class PlaybackController extends ChangeNotifier {
           return;
         }
       }
+      final listeningFor = _effect;
       if (!await _startListening()) {
         if (!cancelled()) {
           _setStatus(PlaybackStatus.idle);
@@ -789,9 +796,10 @@ class PlaybackController extends ChangeNotifier {
       }
 
       _restore = _preferences.restoreLights ? restore : const {};
-      _activeLightIds = selectedTarget == null
-          ? const []
-          : {for (final id in lightIds) lightOfSlot(id)}.toList();
+      // The real lights (an area's slots are channels, not lights), for
+      // the sleep timer to switch off.
+      _activeLightIds =
+          selectedTarget == null ? const [] : restore.keys.toList();
       _slotNames = names;
       // Assigned before play(): if the first tick throws, stop() can still
       // find and stop the player (and its timer).
@@ -822,6 +830,11 @@ class PlaybackController extends ChangeNotifier {
       unawaited(_preferences.recordPlayed(effect.id));
       _armSleepTimer();
       _setStatus(PlaybackStatus.playing);
+      if (!identical(_effect, listeningFor)) {
+        // Switched while starting: the microphone or camera opened for the
+        // effect chosen first.
+        unawaited(_matchInputs());
+      }
     } on Object catch (error) {
       if (cancelled()) {
         return _cleanUpCancelled(streaming);
@@ -890,8 +903,8 @@ class PlaybackController extends ChangeNotifier {
     _activeLightIds = const [];
     _setStatus(PlaybackStatus.idle);
     final previous = _teardown;
-    late final Future<void> current;
-    current = () async {
+    Future<void>? restoring;
+    final stopped = () async {
       if (previous != null) {
         await previous;
       }
@@ -904,17 +917,25 @@ class PlaybackController extends ChangeNotifier {
           unawaited(_screenWake.keepOn(false));
           final client = _bridge.client;
           if (restore && commands.isNotEmpty && client != null) {
-            unawaited(restoreLights(client, commands));
+            restoring = restoreLights(client, commands);
           }
         }
       }
-    }()
+    }();
+    // The next start waits for the lights to be put back as well, so it
+    // never takes the effect's colours for the lights' own (to restore
+    // later, or to fade in from); the caller only waits for the stop.
+    late final Future<void> current;
+    current = stopped
+        .then((_) => restoring)
+        .catchError((Object _) {})
         .whenComplete(() {
       if (identical(_teardown, current)) {
         _teardown = null;
       }
     });
-    return _teardown = current;
+    _teardown = current;
+    return stopped;
   }
 
   /// Set by the app where the platform can keep it running with the
@@ -1099,6 +1120,20 @@ class PlaybackController extends ChangeNotifier {
         _notice(const PlaybackNotice(PlaybackNoticeKind.cameraFailed));
     }
     return false;
+  }
+
+  /// Opens the microphone or camera the current effect needs and closes
+  /// the others; stops when the needed one cannot open.
+  Future<void> _matchInputs() async {
+    if (!_effect.usesMicrophone) {
+      await _music?.stop();
+    }
+    if (!_effect.usesCamera) {
+      await _tv?.stop();
+    }
+    if (_status == PlaybackStatus.playing && !await _startListening()) {
+      await stop();
+    }
   }
 
   /// Closes the microphone and the camera.

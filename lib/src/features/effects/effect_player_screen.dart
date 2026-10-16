@@ -135,7 +135,10 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
         selected: {for (final g in c.roomGroups) g.id},
       ),
     );
-    if (chosen == null || chosen.isEmpty || !mounted) {
+    if (!mounted) {
+      return;
+    }
+    if (chosen == null || chosen.isEmpty) {
       // Rebuild so the dropdown shows the target again.
       setState(() {});
       return;

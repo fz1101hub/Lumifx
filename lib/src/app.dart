@@ -160,7 +160,10 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     final playlist = playback.playlist;
     final title = l10n.effectName(playback.effect);
     final text = playlist == null ? where : '${playlist.name} · $where';
-    final microphone = playback.effect.usesMicrophone &&
+    // Asked for up front when a playlist will reach a Music Sync effect:
+    // Android refuses to add the microphone later from the background.
+    final microphone = (playback.effect.usesMicrophone ||
+            playback.playlistEffects.any((e) => e.usesMicrophone)) &&
         playback.musicSource == MusicSource.microphone;
     final key = '$title|$text|$microphone|${l10n.stop}';
     if (key == _backgroundShown) {

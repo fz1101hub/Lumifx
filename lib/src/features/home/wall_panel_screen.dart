@@ -17,7 +17,7 @@ import '../rooms/rooms_screen.dart';
 /// stays on and dims after two minutes without a touch.
 class WallPanelScreen extends StatefulWidget {
   const WallPanelScreen({
-    this.screenWake = const WakelockScreenWake(),
+    this.screenWake = const WakelockScreenWake(holder: 'wall_panel'),
     this.dimAfter = const Duration(minutes: 2),
     super.key,
   });
@@ -35,7 +35,6 @@ class _WallPanelScreenState extends State<WallPanelScreen> {
   bool _dimmed = false;
   late DateTime _now;
   DateTime Function() _today = DateTime.now;
-  PlaybackController? _playback;
 
   @override
   void initState() {
@@ -52,7 +51,6 @@ class _WallPanelScreenState extends State<WallPanelScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _playback = AppScope.of(context).playback;
     _today = AppScope.of(context).clock;
     _now = _today();
   }
@@ -73,9 +71,7 @@ class _WallPanelScreenState extends State<WallPanelScreen> {
   void dispose() {
     _clock.cancel();
     _dimTimer?.cancel();
-    if (_playback?.player == null) {
-      unawaited(widget.screenWake.keepOn(false));
-    }
+    unawaited(widget.screenWake.keepOn(false));
     super.dispose();
   }
 

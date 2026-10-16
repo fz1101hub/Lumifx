@@ -180,6 +180,7 @@ void main() {
                   'metadata': {'name': 'Bright'},
                   'group': {'rid': 'z1', 'rtype': 'zone'},
                   'status': {'active': 'inactive'},
+                  'auto_dynamic': true,
                   'palette': {
                     'color': [
                       {
@@ -204,6 +205,23 @@ void main() {
 
     expect(home.scenesOf('r1').single.isDynamic, isFalse);
     expect(home.scenesOf('z1').single.isDynamic, isTrue);
+    // A gallery scene with a palette but not set to start moving.
+    expect(
+      HueScene.fromJson({
+        'id': 's3',
+        'group': {'rid': 'r1', 'rtype': 'room'},
+        'palette': {
+          'color': [
+            {
+              'color': {
+                'xy': {'x': 0.5, 'y': 0.4},
+              },
+            },
+          ],
+        },
+      }).isDynamic,
+      isFalse,
+    );
 
     await client.recallScene('s1');
     expect(puts.single.$1, '/clip/v2/resource/scene/s1');

@@ -60,8 +60,8 @@ void main() {
     final json = commands['strip']!.toJson();
     final points = (json['gradient']! as Map)['points']! as List;
     expect(points, hasLength(3));
-    expect(json['dimming'], {'brightness': 100.0},
-        reason: 'the brightest segment sets the light');
+    // Between the average (0.58) and the brightest segment (1).
+    expect((json['dimming']! as Map)['brightness'], closeTo(79.2, 0.1));
     // In order: red first, even though it came second.
     final first = ((points.first as Map)['color'] as Map)['xy'] as Map;
     expect(first['x'], greaterThan(0.6));
@@ -98,6 +98,22 @@ void main() {
     expect(json.containsKey('color'), isFalse);
     expect(strip.restoreCommand.toJson().containsKey('gradient'), isFalse,
         reason: 'a strip showing one colour gets that colour back');
+  });
+
+  test('dark segments take a lit neighbour\'s colour, never white', () {
+    final command = HueLightCommand.gradient(
+      const [LightColor(0, 0, 1), LightColor.black, LightColor(1, 0, 0)],
+      const [1, 0, 0.05],
+    );
+    final points = (command.toJson()['gradient']! as Map)['points']! as List;
+    final xy = [
+      for (final p in points) ((p as Map)['color'] as Map)['xy'] as Map,
+    ];
+    final blue = const LightColor(0, 0, 1).toXy();
+    for (final point in xy) {
+      expect(point['x'], closeTo(blue.x, 1e-3));
+      expect(point['y'], closeTo(blue.y, 1e-3));
+    }
   });
 
   test('a dark strip is switched off', () {
