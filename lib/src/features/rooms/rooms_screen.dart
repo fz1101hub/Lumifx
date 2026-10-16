@@ -4,6 +4,7 @@ import '../../app_scope.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
 import '../common/app_text.dart';
+import '../common/layout.dart';
 
 /// Basic control of rooms and zones: on/off, brightness and the scenes
 /// saved in the Hue app.
@@ -27,7 +28,7 @@ class RoomsScreen extends StatelessWidget {
           return RefreshIndicator(
             onRefresh: bridge.refresh,
             child: ListView(
-              padding: const EdgeInsets.all(20),
+              padding: context.pageInsets(),
               children: [
                 if (home.rooms.isNotEmpty) _Header(l10n.rooms),
                 for (final room in home.rooms)

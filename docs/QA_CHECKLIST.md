@@ -116,6 +116,19 @@ build before every store release.
       opens the player for that effect, both with the app closed and
       with it in the background.
 
+## iPad and tablets
+
+- [ ] On an iPad (or a 10" Android tablet) in portrait: the home shows
+      the three experience tiles side by side, Stories is a grid of two
+      or three columns, and the player has the setup on the left and the
+      lamps, buttons and sliders on the right.
+- [ ] Rotate to landscape and back: nothing overflows, the selected
+      target and lights are kept.
+- [ ] iPad Split View at a third of the screen: the phone layouts come
+      back and remain usable.
+- [ ] Largest accessibility font size: the home tiles and the effect
+      grid grow with the text and nothing is cut off.
+
 ## Store builds
 
 - [ ] App icon and splash look right on both platforms (adaptive icon on

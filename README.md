@@ -48,6 +48,9 @@ Also done ahead of schedule:
   off; a one-time warning and a "soften flashes" mode for photosensitive
   users; lights can be left out of an effect per room; favourites as
   home-screen shortcuts; six languages.
+- **iPad and tablets**: the home, the effect lists and the player use
+  wider layouts (tiles, grids, two panes) from 720 logical pixels up;
+  the other screens keep a reading width.
 
 ## Development
 

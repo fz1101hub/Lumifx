@@ -6,6 +6,7 @@ import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
 import '../common/app_text.dart';
+import '../common/layout.dart';
 import '../entertainment/entertainment_areas_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -29,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
               preferences.setDefaultControls(value);
 
           return ListView(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: context.pageInsets(horizontal: 0, top: 12, bottom: 12),
             children: [
               _Header(l10n.hueBridge),
               ..._bridgeTiles(context, bridge),

@@ -16,6 +16,7 @@ two stores in sync when you change anything here.
 | Support URL | <https://fz1101hub.github.io/Lumifx/> |
 | Support e-mail | fz1101hub@gmail.com |
 | Content rating | Everyone / 4+ (no user content, no ads, no purchases) |
+| Devices | iPhone and iPad (iOS 15+); Android phones and tablets (Android 7+). Not tested on Apple-silicon Macs: leave "Make available on Mac" off unless you try it |
 
 Not affiliated with Signify. "Philips Hue" is a trademark of Signify
 Holding; the listing must say so and must not use Hue logos or product

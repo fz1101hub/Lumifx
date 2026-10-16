@@ -9,6 +9,7 @@ import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../../core/screen_wake.dart';
 import '../common/app_text.dart';
+import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
 import '../music/music_sync_controller.dart';
 import 'effect_palette.dart';
@@ -185,203 +186,229 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
             for (final group in groups) 'group:${group.id}',
           ];
           final controls = c.controls;
-          return ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              if (description.isNotEmpty)
-                Text(description, style: theme.textTheme.bodyLarge),
-              if (widget.effect.variants.isNotEmpty) ...[
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 4,
-                  children: [
+          // What to play and where (setup) and the lamps with the
+          // transport and sliders (stage): one column on a phone, two
+          // panes side by side on a tablet.
+          final setup = <Widget>[
+            if (description.isNotEmpty)
+              Text(description, style: theme.textTheme.bodyLarge),
+            if (widget.effect.variants.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  _VariantChip(
+                    label: l10n.variantClassic,
+                    colors: effectPalette(widget.effect),
+                    selected: c.variantId == null,
+                    onSelected: () => c.setVariant(null),
+                  ),
+                  for (final variant in widget.effect.variants)
                     _VariantChip(
-                      label: l10n.variantClassic,
-                      colors: effectPalette(widget.effect),
-                      selected: c.variantId == null,
-                      onSelected: () => c.setVariant(null),
-                    ),
-                    for (final variant in widget.effect.variants)
-                      _VariantChip(
-                        label: l10n.variantName(variant),
-                        colors: [
-                          for (final hex in variant.palette)
-                            LightColor.fromHex(hex).toColor(),
-                        ],
-                        selected: c.variantId == variant.id,
-                        onSelected: () => c.setVariant(variant.id),
-                      ),
-                  ],
-                ),
-              ],
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String?>(
-                // Rebuilt when the available targets change, so the field
-                // never holds a value that is no longer in the list.
-                key: ValueKey(Object.hashAll(targetKeys)),
-                initialValue: c.selectedTarget,
-                isExpanded: true,
-                decoration: InputDecoration(
-                  labelText: l10n.playOn,
-                  border: const OutlineInputBorder(),
-                ),
-                items: [
-                  DropdownMenuItem(value: null, child: Text(l10n.previewOnly)),
-                  for (final area in areas)
-                    DropdownMenuItem(
-                      value: 'area:${area.id}',
-                      child: _TargetLabel(
-                        icon: Icons.bolt,
-                        text: l10n.targetStreaming(area.name),
-                      ),
-                    ),
-                  for (final group in groups)
-                    DropdownMenuItem(
-                      value: 'group:${group.id}',
-                      child: _TargetLabel(
-                        icon: Icons.meeting_room_outlined,
-                        text:
-                            l10n.targetGroup(group.name, group.lightIds.length),
-                      ),
+                      label: l10n.variantName(variant),
+                      colors: [
+                        for (final hex in variant.palette)
+                          LightColor.fromHex(hex).toColor(),
+                      ],
+                      selected: c.variantId == variant.id,
+                      onSelected: () => c.setVariant(variant.id),
                     ),
                 ],
-                onChanged: busy ? null : c.changeTarget,
               ),
-              if (c.bridgeUnreachable) ...[
-                const SizedBox(height: 8),
-                Text(
-                  l10n.playerBridgeUnreachable,
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(color: theme.colorScheme.error),
-                ),
+            ],
+            const SizedBox(height: 20),
+            DropdownButtonFormField<String?>(
+              // Rebuilt when the available targets change, so the field
+              // never holds a value that is no longer in the list.
+              key: ValueKey(Object.hashAll(targetKeys)),
+              initialValue: c.selectedTarget,
+              isExpanded: true,
+              decoration: InputDecoration(
+                labelText: l10n.playOn,
+                border: const OutlineInputBorder(),
+              ),
+              items: [
+                DropdownMenuItem(value: null, child: Text(l10n.previewOnly)),
+                for (final area in areas)
+                  DropdownMenuItem(
+                    value: 'area:${area.id}',
+                    child: _TargetLabel(
+                      icon: Icons.bolt,
+                      text: l10n.targetStreaming(area.name),
+                    ),
+                  ),
+                for (final group in groups)
+                  DropdownMenuItem(
+                    value: 'group:${group.id}',
+                    child: _TargetLabel(
+                      icon: Icons.meeting_room_outlined,
+                      text: l10n.targetGroup(group.name, group.lightIds.length),
+                    ),
+                  ),
               ],
-              if (c.streamingUnavailable) ...[
-                const SizedBox(height: 8),
-                Text(
-                  l10n.playerStreamingUnavailable,
-                  style: theme.textTheme.bodySmall,
-                ),
+              onChanged: busy ? null : c.changeTarget,
+            ),
+            if (c.bridgeUnreachable) ...[
+              const SizedBox(height: 8),
+              Text(
+                l10n.playerBridgeUnreachable,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.error),
+              ),
+            ],
+            if (c.streamingUnavailable) ...[
+              const SizedBox(height: 8),
+              Text(
+                l10n.playerStreamingUnavailable,
+                style: theme.textTheme.bodySmall,
+              ),
+            ],
+            if (widget.effect.prefersStreaming && c.group != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                l10n.playerPrefersStreaming,
+                style: theme.textTheme.bodySmall,
+              ),
+            ],
+            if (c.groupLights.length > 1) ...[
+              const SizedBox(height: 12),
+              Text(l10n.lightsToPlay, style: theme.textTheme.labelMedium),
+              const SizedBox(height: 6),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  for (final entry in c.groupLights)
+                    FilterChip(
+                      label: Text(entry.light.name),
+                      selected: entry.enabled,
+                      onSelected:
+                          busy ? null : (_) => c.toggleLight(entry.light.id),
+                    ),
+                ],
+              ),
+            ],
+            if (c.home != null && !c.streamingUnavailable && areas.isEmpty)
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.playerCreateAreaHint,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: busy ? null : _createArea,
+                    child: Text(l10n.createArea),
+                  ),
+                ],
+              ),
+          ];
+          final stage = <Widget>[
+            _LampPreview(
+              player: c.player,
+              names: [
+                for (final slot in c.lightNames) describeSlot(l10n, slot),
               ],
-              if (widget.effect.prefersStreaming && c.group != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  l10n.playerPrefersStreaming,
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-              if (c.groupLights.length > 1) ...[
-                const SizedBox(height: 12),
-                Text(l10n.lightsToPlay, style: theme.textTheme.labelMedium),
-                const SizedBox(height: 6),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 4,
-                  children: [
-                    for (final entry in c.groupLights)
-                      FilterChip(
-                        label: Text(entry.light.name),
-                        selected: entry.enabled,
-                        onSelected:
-                            busy ? null : (_) => c.toggleLight(entry.light.id),
-                      ),
-                  ],
-                ),
-              ],
-              if (c.home != null && !c.streamingUnavailable && areas.isEmpty)
+            ),
+            if (widget.effect.usesMicrophone) ...[
+              const SizedBox(height: 16),
+              _MusicMeter(player: c.player, music: c.music),
+            ],
+            const SizedBox(height: 24),
+            Center(
+              child: Wrap(
+                spacing: 12,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  FilledButton.icon(
+                    onPressed: busy ? null : _toggle,
+                    icon: busy
+                        ? const SizedBox.square(
+                            dimension: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Icon(c.isPlaying ? Icons.pause : Icons.play_arrow),
+                    label: Text(busy
+                        ? l10n.connecting
+                        : c.isPlaying
+                            ? l10n.pause
+                            : l10n.play),
+                  ),
+                  if (c.status == PlaybackStatus.playing ||
+                      c.status == PlaybackStatus.paused)
+                    OutlinedButton.icon(
+                      onPressed: c.stop,
+                      icon: const Icon(Icons.stop),
+                      label: Text(l10n.stop),
+                    ),
+                  OutlinedButton.icon(
+                    onPressed: busy || c.isFadingOut ? null : _chooseSleepTimer,
+                    icon: Icon(c.sleepTimer == null
+                        ? Icons.bedtime_outlined
+                        : Icons.bedtime),
+                    label: Text(_sleepLabel(l10n, c)),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            _ControlSlider(
+              label: l10n.brightness,
+              value: controls.brightness,
+              onChanged: (v) => c.setControls(controls.copyWith(brightness: v)),
+            ),
+            _ControlSlider(
+              label: l10n.intensity,
+              value: controls.intensity,
+              onChanged: (v) => c.setControls(controls.copyWith(intensity: v)),
+            ),
+            if (widget.effect.usesMicrophone)
+              _ControlSlider(
+                label: l10n.sensitivity,
+                value: c.sensitivity,
+                min: 0.5,
+                max: 2.5,
+                onChanged: c.setSensitivity,
+              )
+            else
+              _ControlSlider(
+                label: l10n.speed,
+                value: controls.speed,
+                min: 0.25,
+                max: 3,
+                onChanged: (v) => c.setControls(controls.copyWith(speed: v)),
+              ),
+          ];
+          if (context.isWide) {
+            return ListView(
+              padding: context.pageInsets(maxWidth: 1100),
+              children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Text(
-                        l10n.playerCreateAreaHint,
-                        style: theme.textTheme.bodySmall,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: setup,
                       ),
                     ),
-                    TextButton(
-                      onPressed: busy ? null : _createArea,
-                      child: Text(l10n.createArea),
+                    const SizedBox(width: 32),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [const SizedBox(height: 8), ...stage],
+                      ),
                     ),
                   ],
                 ),
-              const SizedBox(height: 24),
-              _LampPreview(
-                player: c.player,
-                names: [
-                  for (final slot in c.lightNames) describeSlot(l10n, slot),
-                ],
-              ),
-              if (widget.effect.usesMicrophone) ...[
-                const SizedBox(height: 16),
-                _MusicMeter(player: c.player, music: c.music),
               ],
-              const SizedBox(height: 24),
-              Center(
-                child: Wrap(
-                  spacing: 12,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    FilledButton.icon(
-                      onPressed: busy ? null : _toggle,
-                      icon: busy
-                          ? const SizedBox.square(
-                              dimension: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : Icon(c.isPlaying ? Icons.pause : Icons.play_arrow),
-                      label: Text(busy
-                          ? l10n.connecting
-                          : c.isPlaying
-                              ? l10n.pause
-                              : l10n.play),
-                    ),
-                    if (c.status == PlaybackStatus.playing ||
-                        c.status == PlaybackStatus.paused)
-                      OutlinedButton.icon(
-                        onPressed: c.stop,
-                        icon: const Icon(Icons.stop),
-                        label: Text(l10n.stop),
-                      ),
-                    OutlinedButton.icon(
-                      onPressed:
-                          busy || c.isFadingOut ? null : _chooseSleepTimer,
-                      icon: Icon(c.sleepTimer == null
-                          ? Icons.bedtime_outlined
-                          : Icons.bedtime),
-                      label: Text(_sleepLabel(l10n, c)),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              _ControlSlider(
-                label: l10n.brightness,
-                value: controls.brightness,
-                onChanged: (v) =>
-                    c.setControls(controls.copyWith(brightness: v)),
-              ),
-              _ControlSlider(
-                label: l10n.intensity,
-                value: controls.intensity,
-                onChanged: (v) =>
-                    c.setControls(controls.copyWith(intensity: v)),
-              ),
-              if (widget.effect.usesMicrophone)
-                _ControlSlider(
-                  label: l10n.sensitivity,
-                  value: c.sensitivity,
-                  min: 0.5,
-                  max: 2.5,
-                  onChanged: c.setSensitivity,
-                )
-              else
-                _ControlSlider(
-                  label: l10n.speed,
-                  value: controls.speed,
-                  min: 0.25,
-                  max: 3,
-                  onChanged: (v) => c.setControls(controls.copyWith(speed: v)),
-                ),
-            ],
+            );
+          }
+          return ListView(
+            padding: const EdgeInsets.all(20),
+            children: [...setup, const SizedBox(height: 24), ...stage],
           );
         },
       ),

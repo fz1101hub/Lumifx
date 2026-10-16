@@ -14,6 +14,7 @@ import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 import '../support/fake_audio_input.dart';
 import '../support/fake_shortcuts.dart';
+import '../support/phone_window.dart';
 
 class _FakeDiscovery implements BridgeDiscovery {
   @override
@@ -42,6 +43,9 @@ Future<void> _pumpApp(WidgetTester tester) async {
 }
 
 void main() {
+  usePhoneWindow();
+  _tabletTests();
+
   testWidgets('home offers bridge setup and the three experience types',
       (tester) async {
     await _pumpApp(tester);
@@ -532,5 +536,45 @@ void streamingTests() {
     await tester.tap(find.text('TV area · streaming').last);
     await tester.pumpAndSettle();
     expect(find.text('Channel 0'), findsOneWidget);
+  });
+}
+
+/// The tablet layouts: a wide window, as on an iPad or a 10" tablet.
+Future<void> _pumpWideApp(WidgetTester tester) async {
+  tester.view.physicalSize = const Size(2048, 2732);
+  tester.view.devicePixelRatio = 2;
+  addTearDown(tester.view.reset);
+  await _pumpApp(tester);
+}
+
+void _tabletTests() {
+  testWidgets('on a tablet the home sections sit side by side', (tester) async {
+    await _pumpWideApp(tester);
+    final scenes = tester.getTopLeft(find.text('Scenes'));
+    final stories = tester.getTopLeft(find.text('Stories'));
+    final interactive = tester.getTopLeft(find.text('Interactive'));
+    expect(stories.dy, scenes.dy);
+    expect(interactive.dy, scenes.dy);
+    expect(stories.dx, greaterThan(scenes.dx));
+    expect(interactive.dx, greaterThan(stories.dx));
+  });
+
+  testWidgets('on a tablet the effects form a grid and the player two panes',
+      (tester) async {
+    await _pumpWideApp(tester);
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    final first = tester.getTopLeft(find.text('Emerald Trickster'));
+    final second = tester.getTopLeft(find.text('Enchanted Fairy'));
+    expect(second.dy, first.dy, reason: 'two cards share the first row');
+    expect(second.dx, greaterThan(first.dx));
+
+    await tester.tap(find.text('Emerald Trickster'));
+    await tester.pumpAndSettle();
+    // The target picker (setup pane) is left of the Play button (stage).
+    final target = tester.getCenter(find.text('Play on'));
+    final play = tester.getCenter(find.text('Play'));
+    expect(play.dx, greaterThan(target.dx + 200));
+    expect(find.text('Brightness'), findsOneWidget);
   });
 }
