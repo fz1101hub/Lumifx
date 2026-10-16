@@ -21,7 +21,9 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
+import 'package:lumifx/src/features/fun/advent_screen.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
+import 'package:lumifx/src/features/fun/countdowns_screen.dart';
 import 'package:lumifx/src/features/fun/game_screen.dart';
 import 'package:lumifx/src/features/fun/light_games.dart';
 import 'package:lumifx/src/features/fun/simon.dart';
@@ -114,6 +116,7 @@ Future<void> _pumpApp(
   PhotoPicker photos = const NoPhotoPicker(),
   AudioInput? audioInput,
   WeatherService weather = const NoWeatherService(),
+  DateTime Function()? clock,
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -131,6 +134,7 @@ Future<void> _pumpApp(
       audioInput: audioInput ?? FakeAudioInput(),
       photos: photos,
       weather: weather,
+      clock: clock ?? DateTime.now,
     ),
   );
 }
@@ -473,6 +477,8 @@ void main() {
     await openBirthday(tester);
     await tester.pageBack();
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Light memory'), 200,
+        scrollable: find.byType(Scrollable).first);
     expect(find.text('Light memory'), findsOneWidget);
     // The same draw as the screen's, to know the colours.
     final expected = SimonGame(math.Random(3));
@@ -633,6 +639,75 @@ void main() {
     expect(find.text('Try another path'), findsOneWidget);
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
+  });
+
+  Future<void> openFun(WidgetTester tester) async {
+    await tester.scrollUntilVisible(
+      find.text('Parties and games'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('the advent calendar opens today\'s door, not tomorrow\'s',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 12, 5, 18));
+    await openFun(tester);
+    await tester.tap(find.text('Advent calendar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Day 6'));
+    await tester.pump();
+    expect(
+        find.textContaining('This door opens on December 6'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+
+    await tester.tap(find.bySemanticsLabel('Day 5'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Day 5'), findsWidgets);
+    final playback =
+        AppScope.of(tester.element(find.byType(AdventScreen))).playback;
+    expect(playback.effect.name, 'Day 5');
+    playback.player!.advance(const Duration(seconds: 4));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('The northern lights are glowing!'), findsOneWidget);
+    await playback.stop();
+    await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets('a countdown counts the sleeps and shows them on the lights',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 10, 16, 9));
+    await openFun(tester);
+    await tester.tap(find.text('How many sleeps?'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('No countdowns yet'), findsOneWidget);
+    await tester.tap(find.text('New countdown'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Grandma');
+    await tester.pump();
+    // A week ahead by default.
+    expect(find.text('October 23, 2026'), findsOneWidget);
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('7 sleeps to Grandma!'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Show on the lights'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(CountdownsScreen))).playback;
+    expect(playback.effect.name, '7 sleeps to Grandma!');
+    await playback.stop();
+    await tester.pump(const Duration(seconds: 2));
+
+    await tester.tap(find.byTooltip('Delete'));
+    await tester.pumpAndSettle();
+    expect(find.text('7 sleeps to Grandma!'), findsNothing);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

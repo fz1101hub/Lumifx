@@ -5,7 +5,9 @@ import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../common/app_text.dart';
 import '../calm/breathing.dart';
+import '../fun/advent.dart';
 import '../fun/birthday.dart';
+import '../fun/countdown.dart';
 import '../fun/light_games.dart';
 import '../paths/path_story.dart';
 import '../timers/pomodoro.dart';
@@ -183,6 +185,13 @@ List<(int, String)> narrationOf(
   }
   if (PathStory.of(effect) case (_, final part)) {
     return PathStory.narrationOf(part, l10n);
+  }
+  if (Advent.dayOf(effect) case final day?) {
+    return Advent.narration(day, l10n);
+  }
+  if (Countdown.sleepsOf(effect) != null) {
+    // Its name says it: "5 sleeps to Anna's birthday!".
+    return [(0, effect.name)];
   }
   return library.userStory(effect.id)?.narration ?? const [];
 }

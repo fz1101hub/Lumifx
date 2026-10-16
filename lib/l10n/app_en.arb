@@ -1994,7 +1994,7 @@
   "@fun": {
     "description": "Home entry: parties and games played with the lights"
   },
-  "funSubtitle": "Birthday, red light green light, statues, colour hunt, light memory",
+  "funSubtitle": "Birthday, sleeps to wait, advent calendar, games",
   "@funSubtitle": {
     "description": "Subtitle of parties and games on the home screen"
   },
@@ -2635,5 +2635,124 @@
   "pathDragonEggSing2": "A sleepy baby dragon yawns, curls up and falls asleep. Shhh.",
   "@pathDragonEggSing2": {
     "description": "Story line"
+  },
+  "advent": "Advent calendar",
+  "@advent": {
+    "description": "An advent calendar of light"
+  },
+  "adventSubtitle": "A surprise of light every day from 1 to 24 December",
+  "@adventSubtitle": {
+    "description": "Subtitle of the advent calendar"
+  },
+  "adventDescription": "Open today's door and watch the lights. Doors you have opened show their surprise again with a tap.",
+  "@adventDescription": {
+    "description": "Explains the advent calendar"
+  },
+  "adventLocked": "The doors open from 1 December. Come back then!",
+  "@adventLocked": {
+    "description": "The advent calendar outside its season"
+  },
+  "adventWait": "This door opens on {date}. Patience!",
+  "@adventWait": {
+    "description": "A door that cannot be opened yet; date like 5 December",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adventDay": "Day {day}",
+  "@adventDay": {
+    "description": "A day of the advent calendar",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "adventSnow": "Snowflakes are dancing!",
+  "@adventSnow": {
+    "description": "Advent surprise line"
+  },
+  "adventStar": "Shooting stars cross the sky!",
+  "@adventStar": {
+    "description": "Advent surprise line"
+  },
+  "adventBells": "Golden bells are ringing!",
+  "@adventBells": {
+    "description": "Advent surprise line"
+  },
+  "adventCandy": "Red and white, like a candy cane!",
+  "@adventCandy": {
+    "description": "Advent surprise line"
+  },
+  "adventAurora": "The northern lights are glowing!",
+  "@adventAurora": {
+    "description": "Advent surprise line"
+  },
+  "adventFire": "A cosy fire is crackling!",
+  "@adventFire": {
+    "description": "Advent surprise line"
+  },
+  "adventEve": "It's Christmas Eve! Merry Christmas!",
+  "@adventEve": {
+    "description": "Advent surprise line of 24 December"
+  },
+  "countdowns": "How many sleeps?",
+  "@countdowns": {
+    "description": "Countdowns to big days"
+  },
+  "countdownsSubtitle": "Count down to birthdays, holidays and trips",
+  "@countdownsSubtitle": {
+    "description": "Subtitle of the countdowns"
+  },
+  "countdownsDescription": "Add a big day and see how many sleeps are left. With a tap, the lights show it: one golden spark per sleep, and a party on the day.",
+  "@countdownsDescription": {
+    "description": "Explains the countdowns"
+  },
+  "countdownNew": "New countdown",
+  "@countdownNew": {
+    "description": "Button: add a countdown"
+  },
+  "countdownName": "What are you waiting for?",
+  "@countdownName": {
+    "description": "Field: what the countdown is for"
+  },
+  "countdownNameHint": "Anna's birthday",
+  "@countdownNameHint": {
+    "description": "Example for the countdown name"
+  },
+  "countdownSleeps": "{count, plural, =1{1 sleep to {name}!} other{{count} sleeps to {name}!}}",
+  "@countdownSleeps": {
+    "description": "Sleeps left to a big day",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "countdownToday": "Today's the day: {name}!",
+  "@countdownToday": {
+    "description": "The big day is today",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "countdownPast": "done",
+  "@countdownPast": {
+    "description": "A countdown whose day has passed"
+  },
+  "countdownShow": "Show on the lights",
+  "@countdownShow": {
+    "description": "Button: show the sleeps left on the lights"
+  },
+  "countdownEmpty": "No countdowns yet. Add one with the button below.",
+  "@countdownEmpty": {
+    "description": "No countdowns yet"
   }
 }
