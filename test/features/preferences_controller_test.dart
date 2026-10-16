@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/effects/engine/effect_renderer.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
+import 'package:lumifx/src/features/library/user_scene.dart';
+import 'package:lumifx/src/features/playlists/playlist.dart';
 
 void main() {
   test('favorites toggle, newest first', () async {
@@ -42,10 +44,35 @@ void main() {
     await first.setLightExcluded('r1', 'l3', true);
     await first.setLightExcluded('r1', 'l2', false);
     await first.setMusicSource(MusicSource.phoneAudio);
+    await first.saveUserScene(const UserScene(
+      id: 'user:1',
+      name: 'Mine',
+      colors: ['#FF0000', '#00FF00', '#0000FF'],
+      motion: SceneMotion.flicker,
+    ));
+    await first.savePlaylist(const Playlist(
+      id: 'p1',
+      name: 'Evening',
+      effectIds: ['ocean', 'user:1'],
+      each: Duration(minutes: 5),
+      shuffle: true,
+    ));
 
     final second = PreferencesController(store: store);
     await second.load();
     expect(second.musicSource, MusicSource.phoneAudio);
+    expect(second.userScenes.single.colors, hasLength(3));
+    expect(second.userScenes.single.motion, SceneMotion.flicker);
+    final playlist = second.playlists.single;
+    expect(playlist.name, 'Evening');
+    expect(playlist.effectIds, ['ocean', 'user:1']);
+    expect(playlist.each, const Duration(minutes: 5));
+    expect(playlist.shuffle, isTrue);
+
+    // Deleting the scene takes it out of the playlist too.
+    await second.deleteUserScene('user:1');
+    expect(second.userScenes, isEmpty);
+    expect(second.playlists.single.effectIds, ['ocean']);
     expect(second.softFlashes, isTrue);
     expect(second.flashWarningShown, isTrue);
     expect(second.variantOf('aurora'), 'rose_gold');

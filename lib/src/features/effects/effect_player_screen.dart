@@ -8,7 +8,6 @@ import '../../core/color/light_color.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
 import '../../core/effects/engine/light_frame.dart';
-import '../../core/screen_wake.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
@@ -18,71 +17,41 @@ import 'light_color_ui.dart';
 import 'playback_controller.dart';
 
 class EffectPlayerScreen extends StatefulWidget {
-  const EffectPlayerScreen({
-    required this.effect,
-    this.screenWake = const WakelockScreenWake(),
-    super.key,
-  });
+  const EffectPlayerScreen({required this.effect, super.key});
 
   final LightingEffect effect;
-  final ScreenWake screenWake;
 
   @override
   State<EffectPlayerScreen> createState() => _EffectPlayerScreenState();
 }
 
-class _EffectPlayerScreenState extends State<EffectPlayerScreen>
-    with WidgetsBindingObserver {
-  PlaybackController? _controller;
-  StreamSubscription<PlaybackNotice>? _notices;
+/// The player of one effect. Playback itself belongs to the app (see
+/// `AppScope.playback`), so leaving this screen never stops the lights;
+/// when another effect plays, Play here cross-fades to this one.
+class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
+  PlaybackController get controller => AppScope.of(context).playback;
 
-  PlaybackController get controller => _controller!;
+  /// Whether the app's playback is on this screen's effect (or on the
+  /// playlist this effect belongs to, which this screen then follows).
+  bool _isCurrent(PlaybackController c) => c.isShownBy(widget.effect.id);
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
+  /// The effect to show: this screen's, or the playlist's current one.
+  LightingEffect _shown(PlaybackController c) =>
+      c.playlist != null && _isCurrent(c) ? c.effect : widget.effect;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_controller == null) {
-      final scope = AppScope.of(context);
-      _controller = PlaybackController(
-        effect: widget.effect,
-        bridge: scope.bridge,
-        preferences: scope.preferences,
-        audioInput: scope.audioInput,
-        phoneAudioInput: scope.phoneAudioInput,
-        screenWake: widget.screenWake,
-      );
-      _notices = controller.notices.listen((notice) {
-        if (mounted) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-              content: Text(describePlaybackNotice(context.l10n, notice)),
-            ));
+    final c = controller;
+    if (c.status == PlaybackStatus.idle && !_isCurrent(c)) {
+      // Nothing plays: this effect becomes the one Play starts. After the
+      // frame, since listeners of the playback cannot rebuild mid-build.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && c.status == PlaybackStatus.idle) {
+          unawaited(c.switchEffect(widget.effect));
         }
       });
     }
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      controller.handleAppPaused();
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _notices?.cancel();
-    _controller?.dispose();
-    super.dispose();
   }
 
   Future<void> _createArea() async {
@@ -146,41 +115,60 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
   /// flashes. Nothing plays until the user has chosen.
   Future<void> _toggle() async {
     final c = controller;
-    final preferences = AppScope.of(context).preferences;
-    if (c.status == PlaybackStatus.idle &&
+    final current = _isCurrent(c);
+    if ((!current || c.status == PlaybackStatus.idle) &&
         widget.effect.hasRapidFlashes &&
-        !preferences.flashWarningShown) {
-      final soften = await showDialog<bool>(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => const _FlashWarningDialog(),
-      );
-      if (!mounted || soften == null) {
-        return;
+        !await confirmFlashingLights(context)) {
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+    if (!current) {
+      await c.switchEffect(widget.effect);
+      if (c.status == PlaybackStatus.idle) {
+        await c.start();
+      } else if (c.status == PlaybackStatus.paused) {
+        await c.resume();
       }
-      unawaited(preferences.setFlashWarningShown(true));
-      if (soften) {
-        unawaited(preferences.setSoftFlashes(true));
-      }
+      return;
     }
     await c.toggle();
   }
 
   @override
   Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, _) => _buildFor(context, _shown(controller)),
+    );
+  }
+
+  Widget _buildFor(BuildContext context, LightingEffect effect) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
-    final description = l10n.effectDescription(widget.effect);
+    final description = l10n.effectDescription(effect);
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.effectName(widget.effect)),
-        actions: [_FavoriteButton(effectId: widget.effect.id)],
+        title: Text(l10n.effectName(effect)),
+        actions: [_FavoriteButton(effectId: effect.id)],
       ),
-      body: ListenableBuilder(
-        listenable: controller,
-        builder: (context, _) {
+      body: Builder(
+        builder: (context) {
           final c = controller;
           final busy = c.isBusy;
+          final current = _isCurrent(c);
+          final preferences = AppScope.of(context).preferences;
+          final variantId = preferences.variantOf(effect.id);
+          void setVariant(String? id) => current
+              ? c.setVariant(id)
+              : preferences.setVariant(effect.id, id);
+          final playing = current && c.isPlaying;
+          final active = current &&
+              (c.status == PlaybackStatus.playing ||
+                  c.status == PlaybackStatus.paused);
+          final other = !current && c.status != PlaybackStatus.idle;
+          final playlist = current ? c.playlist : null;
           final groups = c.groups;
           final areas = c.areas;
           final targetKeys = [
@@ -194,7 +182,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
           final setup = <Widget>[
             if (description.isNotEmpty)
               Text(description, style: theme.textTheme.bodyLarge),
-            if (widget.effect.variants.isNotEmpty) ...[
+            if (effect.variants.isNotEmpty) ...[
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
@@ -202,19 +190,19 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                 children: [
                   _VariantChip(
                     label: l10n.variantClassic,
-                    colors: effectPalette(widget.effect),
-                    selected: c.variantId == null,
-                    onSelected: () => c.setVariant(null),
+                    colors: effectPalette(effect),
+                    selected: variantId == null,
+                    onSelected: () => setVariant(null),
                   ),
-                  for (final variant in widget.effect.variants)
+                  for (final variant in effect.variants)
                     _VariantChip(
                       label: l10n.variantName(variant),
                       colors: [
                         for (final hex in variant.palette)
                           LightColor.fromHex(hex).toColor(),
                       ],
-                      selected: c.variantId == variant.id,
-                      onSelected: () => c.setVariant(variant.id),
+                      selected: variantId == variant.id,
+                      onSelected: () => setVariant(variant.id),
                     ),
                 ],
               ),
@@ -266,7 +254,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                 style: theme.textTheme.bodySmall,
               ),
             ],
-            if (widget.effect.prefersStreaming && c.group != null) ...[
+            if (effect.prefersStreaming && c.group != null) ...[
               const SizedBox(height: 8),
               Text(
                 l10n.playerPrefersStreaming,
@@ -308,17 +296,37 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
               ),
           ];
           final stage = <Widget>[
+            if (other)
+              _InfoCard(
+                icon: Icons.graphic_eq,
+                text: l10n.nowPlayingOther(l10n.effectName(c.effect)),
+              ),
+            if (playlist != null)
+              _InfoCard(
+                icon: Icons.queue_music,
+                text: l10n.playlistProgress(
+                  playlist.name,
+                  c.playlistIndex + 1,
+                  c.playlistEffects.length,
+                ),
+                action: IconButton(
+                  tooltip: l10n.nextEffect,
+                  icon: const Icon(Icons.skip_next),
+                  onPressed: busy ? null : c.nextInPlaylist,
+                ),
+              ),
+            if (other || playlist != null) const SizedBox(height: 16),
             _LampPreview(
-              player: c.player,
+              player: current ? c.player : null,
               names: [
                 for (final slot in c.lightNames) describeSlot(l10n, slot),
               ],
             ),
-            if (widget.effect.usesMicrophone) ...[
+            if (effect.usesMicrophone) ...[
               const SizedBox(height: 16),
               _MusicMeter(
-                player: c.player,
-                music: c.music,
+                player: current ? c.player : null,
+                music: current ? c.music : null,
                 source: c.musicSource,
               ),
             ],
@@ -335,15 +343,14 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                             dimension: 18,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : Icon(c.isPlaying ? Icons.pause : Icons.play_arrow),
+                        : Icon(playing ? Icons.pause : Icons.play_arrow),
                     label: Text(busy
                         ? l10n.connecting
-                        : c.isPlaying
+                        : playing
                             ? l10n.pause
                             : l10n.play),
                   ),
-                  if (c.status == PlaybackStatus.playing ||
-                      c.status == PlaybackStatus.paused)
+                  if (active)
                     OutlinedButton.icon(
                       onPressed: c.stop,
                       icon: const Icon(Icons.stop),
@@ -370,7 +377,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
               value: controls.intensity,
               onChanged: (v) => c.setControls(controls.copyWith(intensity: v)),
             ),
-            if (widget.effect.usesMicrophone)
+            if (effect.usesMicrophone)
               _ControlSlider(
                 label: l10n.sensitivity,
                 value: c.sensitivity,
@@ -422,6 +429,38 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
   }
 }
 
+/// A short note above the lamps (what else plays, the playlist).
+class _InfoCard extends StatelessWidget {
+  const _InfoCard({required this.icon, required this.text, this.action});
+
+  final IconData icon;
+  final String text;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      margin: EdgeInsets.zero,
+      color: theme.colorScheme.secondaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+        child: Row(
+          children: [
+            Icon(icon, size: 20),
+            const SizedBox(width: 12),
+            Expanded(child: Text(text, style: theme.textTheme.bodyMedium)),
+            if (action case final action?)
+              action
+            else
+              const SizedBox(height: 40),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// A colour variant: a swatch of its palette and its name.
 class _VariantChip extends StatelessWidget {
   const _VariantChip({
@@ -456,6 +495,29 @@ class _VariantChip extends StatelessWidget {
       onSelected: (_) => onSelected(),
     );
   }
+}
+
+/// The one-time warning before the first effect with lightning or beats.
+/// Returns false when the user has not answered (nothing should play);
+/// true at once when the warning was already shown.
+Future<bool> confirmFlashingLights(BuildContext context) async {
+  final preferences = AppScope.of(context).preferences;
+  if (preferences.flashWarningShown) {
+    return true;
+  }
+  final soften = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => const _FlashWarningDialog(),
+  );
+  if (soften == null) {
+    return false;
+  }
+  unawaited(preferences.setFlashWarningShown(true));
+  if (soften) {
+    unawaited(preferences.setSoftFlashes(true));
+  }
+  return true;
 }
 
 /// Shown once before the first effect with lightning or beats.

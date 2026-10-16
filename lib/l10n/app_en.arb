@@ -492,5 +492,133 @@
   "noticePhoneAudioStopped": "Capturing this phone's audio stopped. Press Stop, then Play, to follow it again.",
   "@noticePhoneAudioStopped": {
     "description": "Snackbar when the phone audio capture stopped mid-effect"
+  },
+  "nextEffect": "Next effect",
+  "@nextEffect": {
+    "description": "Tooltip: skip to the playlist's next effect"
+  },
+  "nowPlayingOther": "{name} is playing now. Press Play to switch to this effect.",
+  "@nowPlayingOther": {
+    "description": "Player note when another effect is playing",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playlistProgress": "Playlist {name} · {position} of {count}",
+  "@playlistProgress": {
+    "description": "Player note while a playlist plays: playlist name, position and count",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "position": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playlists": "Playlists",
+  "@playlists": {
+    "description": "Home card and screen title: playlists"
+  },
+  "playlistsSubtitle": "Several effects in turn, for a whole evening.",
+  "@playlistsSubtitle": {
+    "description": "Home card subtitle for playlists"
+  },
+  "playlistsDescription": "A playlist plays its effects one after the other, each for the time you choose, and starts again from the top. The lights fade from one effect to the next.",
+  "@playlistsDescription": {
+    "description": "Explanation at the top of the playlists screen"
+  },
+  "noPlaylistsYet": "No playlists yet.",
+  "@noPlaylistsYet": {
+    "description": "Empty state of the playlists screen"
+  },
+  "newPlaylist": "New playlist",
+  "@newPlaylist": {
+    "description": "Button and title: create a playlist"
+  },
+  "editPlaylist": "Edit playlist",
+  "@editPlaylist": {
+    "description": "Title: edit a playlist"
+  },
+  "playlistNameHint": "For example: Movie night",
+  "@playlistNameHint": {
+    "description": "Hint of the playlist name field"
+  },
+  "playlistEach": "Each effect plays for",
+  "@playlistEach": {
+    "description": "Editor label: how long each effect plays"
+  },
+  "playlistEachShort": "{minutes} min each",
+  "@playlistEachShort": {
+    "description": "Playlist summary: minutes per effect",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "shuffle": "Shuffle",
+  "@shuffle": {
+    "description": "Playlist option: random order"
+  },
+  "shuffleDescription": "Pick the next effect at random, never the same twice in a row.",
+  "@shuffleDescription": {
+    "description": "Explains the shuffle option"
+  },
+  "effectCount": "{count, plural, =0{No effects} =1{1 effect} other{{count} effects}}",
+  "@effectCount": {
+    "description": "Number of effects",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chooseEffects": "Choose effects",
+  "@chooseEffects": {
+    "description": "Button: pick the playlist's effects"
+  },
+  "moveUp": "Move up",
+  "@moveUp": {
+    "description": "Tooltip: move up in the list"
+  },
+  "moveDown": "Move down",
+  "@moveDown": {
+    "description": "Tooltip: move down in the list"
+  },
+  "remove": "Remove",
+  "@remove": {
+    "description": "Tooltip: remove from the list"
+  },
+  "done": "Done",
+  "@done": {
+    "description": "Button: finish choosing"
+  },
+  "playPlaylist": "Play {name}",
+  "@playPlaylist": {
+    "description": "Screen reader label: play this playlist",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deletePlaylistQuestion": "Delete \"{name}\"?",
+  "@deletePlaylistQuestion": {
+    "description": "Confirm deleting a playlist",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "myScenes": "My scenes",
+  "@myScenes": {
+    "description": "Section of the user's own scenes"
   }
 }

@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
+import '../playlists/playlist.dart';
+import 'user_scene.dart';
 
 /// Where preferences are persisted. Nothing in here is sensitive; bridge
 /// credentials live in [CredentialStore] instead.
@@ -56,6 +58,8 @@ class PreferencesController extends ChangeNotifier {
   Map<String, String> _variants = const {};
   Map<String, List<String>> _excludedLights = const {};
   MusicSource _musicSource = MusicSource.microphone;
+  List<Playlist> _playlists = const [];
+  List<UserScene> _userScenes = const [];
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -84,6 +88,12 @@ class PreferencesController extends ChangeNotifier {
   /// the platform can capture it (the player falls back to the
   /// microphone elsewhere).
   MusicSource get musicSource => _musicSource;
+
+  /// The user's playlists, in the order they were created.
+  List<Playlist> get playlists => _playlists;
+
+  /// The scenes the user made, in the order they were created.
+  List<UserScene> get userScenes => _userScenes;
 
   /// The colour variant chosen for an effect, or null for its original.
   String? variantOf(String effectId) => _variants[effectId];
@@ -114,6 +124,18 @@ class PreferencesController extends ChangeNotifier {
       _flashWarningShown = json['flashWarningShown'] as bool? ?? false;
       _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
           MusicSource.microphone;
+      final scenes = json['userScenes'];
+      _userScenes = [
+        if (scenes is List)
+          for (final item in scenes)
+            if (UserScene.fromJson(item) case final scene?) scene,
+      ];
+      final playlists = json['playlists'];
+      _playlists = [
+        if (playlists is List)
+          for (final item in playlists)
+            if (Playlist.fromJson(item) case final playlist?) playlist,
+      ];
       final variants = json['variants'];
       _variants = {
         if (variants is Map)
@@ -179,6 +201,61 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  /// Adds [playlist], or replaces the one with the same id.
+  Future<void> savePlaylist(Playlist playlist) {
+    final index = _playlists.indexWhere((p) => p.id == playlist.id);
+    _playlists = [
+      for (final p in _playlists) p.id == playlist.id ? playlist : p,
+      if (index < 0) playlist,
+    ];
+    return _changed();
+  }
+
+  /// Adds [scene], or replaces the one with the same id.
+  Future<void> saveUserScene(UserScene scene) {
+    final exists = _userScenes.any((s) => s.id == scene.id);
+    _userScenes = [
+      for (final s in _userScenes) s.id == scene.id ? scene : s,
+      if (!exists) scene,
+    ];
+    return _changed();
+  }
+
+  /// Removes the scene, and takes it out of favourites, recents and
+  /// playlists.
+  Future<void> deleteUserScene(String id) {
+    _userScenes = [
+      for (final s in _userScenes)
+        if (s.id != id) s,
+    ];
+    _favorites = [
+      for (final f in _favorites)
+        if (f != id) f,
+    ];
+    _recents = [
+      for (final r in _recents)
+        if (r != id) r,
+    ];
+    _playlists = [
+      for (final p in _playlists)
+        p.effectIds.contains(id)
+            ? p.copyWith(effectIds: [
+                for (final e in p.effectIds)
+                  if (e != id) e,
+              ])
+            : p,
+    ];
+    return _changed();
+  }
+
+  Future<void> deletePlaylist(String id) {
+    _playlists = [
+      for (final p in _playlists)
+        if (p.id != id) p,
+    ];
+    return _changed();
+  }
+
   Future<void> setMusicSource(MusicSource value) {
     _musicSource = value;
     return _changed();
@@ -232,6 +309,8 @@ class PreferencesController extends ChangeNotifier {
       'softFlashes': _softFlashes,
       'flashWarningShown': _flashWarningShown,
       'musicSource': _musicSource.name,
+      'playlists': [for (final p in _playlists) p.toJson()],
+      'userScenes': [for (final s in _userScenes) s.toJson()],
       'variants': _variants,
       'excludedLights': _excludedLights,
       'defaultControls': {

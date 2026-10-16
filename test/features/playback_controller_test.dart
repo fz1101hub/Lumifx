@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -13,8 +14,10 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/catalog/builtin_interactive.dart';
 import 'package:lumifx/src/features/effects/catalog/builtin_scenes.dart';
+import 'package:lumifx/src/features/effects/catalog/effect_catalog.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
+import 'package:lumifx/src/features/playlists/playlist.dart';
 
 import '../support/fake_audio_input.dart';
 
@@ -118,6 +121,7 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
   MusicSource musicSource = MusicSource.microphone,
   PreferencesController? preferences,
   bool music = false,
+  math.Random? random,
   Duration sleepFade = const Duration(seconds: 20),
 }) async {
   final fake = _FakeBridge();
@@ -144,6 +148,8 @@ Future<(PlaybackController, _FakeBridge, _RecordingWake)> _setUp({
     audioInput: audio ?? FakeAudioInput(),
     phoneAudioInput: phoneAudio,
     screenWake: wake,
+    resolveEffect: effectById,
+    random: random,
     sleepFade: sleepFade,
   );
   return (controller, fake, wake);
@@ -464,6 +470,94 @@ void main() {
     await _wait(10);
     expect(controller.status, PlaybackStatus.idle);
     expect(notices.single.kind, PlaybackNoticeKind.phoneAudioDenied);
+    controller.dispose();
+  });
+
+  test('switching effects while playing cross-fades without restoring',
+      () async {
+    final (controller, _, _) = await _setUp();
+    await controller.start();
+    final player = controller.player;
+    await controller.switchEffect(sunset);
+    expect(controller.effect.id, 'sunset');
+    expect(controller.status, PlaybackStatus.playing);
+    expect(identical(controller.player, player), isTrue,
+        reason: 'same player and output: nothing is put back');
+    expect(player!.effect.id, 'sunset');
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('switching to a Music Sync effect starts listening, and back stops',
+      () async {
+    final input = FakeAudioInput();
+    final (controller, _, _) = await _setUp(audio: input);
+    await controller.changeTarget(null);
+    await controller.start();
+    expect(input.started, isFalse);
+    await controller.switchEffect(moodGlow);
+    expect(input.started, isTrue);
+    expect(controller.music?.isListening, isTrue);
+    await controller.switchEffect(ocean);
+    expect(input.stopped, isTrue);
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('a playlist moves on by itself, pauses its clock and ends on stop',
+      () async {
+    final (controller, _, _) = await _setUp();
+    await controller.changeTarget(null);
+    const playlist = Playlist(
+      id: 'p',
+      name: 'Evening',
+      effectIds: ['fireplace', 'gone', 'ocean'],
+      each: Duration(milliseconds: 300),
+    );
+    await controller.playPlaylist(playlist);
+    expect(controller.status, PlaybackStatus.playing);
+    expect(controller.effect.id, 'fireplace');
+    expect(controller.playlistEffects.map((e) => e.id), ['fireplace', 'ocean'],
+        reason: 'effects that no longer exist are skipped');
+
+    await _wait(400);
+    expect(controller.effect.id, 'ocean');
+    expect(controller.playlistIndex, 1);
+
+    // Paused for longer than an effect lasts: the clock waits too.
+    await _wait(100);
+    await controller.pause();
+    await _wait(500);
+    expect(controller.effect.id, 'ocean');
+    await controller.resume();
+    await _wait(320);
+    expect(controller.effect.id, 'fireplace', reason: 'loops around');
+
+    await controller.switchEffect(sunset);
+    expect(controller.playlist, isNull,
+        reason: 'choosing an effect by hand leaves the playlist');
+    await controller.stop();
+    controller.dispose();
+  });
+
+  test('a shuffled playlist never repeats the same effect twice in a row',
+      () async {
+    final (controller, _, _) = await _setUp(random: math.Random(7));
+    await controller.changeTarget(null);
+    const playlist = Playlist(
+      id: 'p',
+      name: 'Mix',
+      effectIds: ['fireplace', 'ocean', 'aurora'],
+      shuffle: true,
+    );
+    await controller.playPlaylist(playlist);
+    var previous = controller.effect.id;
+    for (var i = 0; i < 12; i++) {
+      await controller.nextInPlaylist();
+      expect(controller.effect.id, isNot(previous));
+      previous = controller.effect.id;
+    }
+    await controller.stop();
     controller.dispose();
   });
 

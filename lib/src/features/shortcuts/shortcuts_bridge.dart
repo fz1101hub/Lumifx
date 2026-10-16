@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../common/app_text.dart';
-import '../effects/catalog/effect_catalog.dart';
-import '../effects/effect_player_screen.dart';
+import '../effects/player_route.dart';
+import '../library/effect_library.dart';
 import '../library/preferences_controller.dart';
 import 'app_shortcuts.dart';
 
@@ -14,6 +14,7 @@ class ShortcutsBridge extends StatefulWidget {
   const ShortcutsBridge({
     required this.shortcuts,
     required this.preferences,
+    required this.library,
     required this.navigatorKey,
     required this.child,
     super.key,
@@ -21,6 +22,7 @@ class ShortcutsBridge extends StatefulWidget {
 
   final AppShortcuts shortcuts;
   final PreferencesController preferences;
+  final EffectLibrary library;
   final GlobalKey<NavigatorState> navigatorKey;
   final Widget child;
 
@@ -65,7 +67,7 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
     final ids = (preferences.favorites.isNotEmpty
             ? preferences.favorites
             : preferences.recents)
-        .where((id) => effectById(id) != null)
+        .where((id) => widget.library.byId(id) != null)
         .take(ShortcutsBridge.maxShortcuts)
         .toList();
     final l10n = context.l10n;
@@ -73,7 +75,7 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
       for (final id in ids)
         ShortcutSpec(
           id: '${ShortcutsBridge._prefix}$id',
-          title: l10n.effectName(effectById(id)!),
+          title: l10n.effectName(widget.library.byId(id)!),
         ),
     ];
     final key = [for (final s in specs) '${s.id}=${s.title}'];
@@ -88,7 +90,8 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
     if (!id.startsWith(ShortcutsBridge._prefix)) {
       return;
     }
-    final effect = effectById(id.substring(ShortcutsBridge._prefix.length));
+    final effect =
+        widget.library.byId(id.substring(ShortcutsBridge._prefix.length));
     if (effect == null) {
       return;
     }
@@ -105,11 +108,7 @@ class _ShortcutsBridgeState extends State<ShortcutsBridge> {
       });
       return;
     }
-    navigator.push(
-      MaterialPageRoute<void>(
-        builder: (_) => EffectPlayerScreen(effect: effect),
-      ),
-    );
+    navigator.push(playerRoute(effect));
   }
 
   @override

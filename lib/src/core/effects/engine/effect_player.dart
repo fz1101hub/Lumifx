@@ -23,7 +23,8 @@ class EffectPlayer {
     EffectControls controls = const EffectControls(),
     this.tick = const Duration(milliseconds: 100),
     this.audio,
-  }) : _renderer = EffectRenderer(
+  })  : _seed = seed,
+        _renderer = EffectRenderer(
           effect,
           slotCount: lightIds.length,
           seed: seed,
@@ -36,7 +37,14 @@ class EffectPlayer {
 
   /// Latest live audio features, read on every tick; null without Music Sync.
   final AudioFeatures? Function()? audio;
-  final EffectRenderer _renderer;
+  final int _seed;
+  EffectRenderer _renderer;
+
+  /// Frames shown when [crossfadeTo] was called, blended out over
+  /// [_fadeLength] of wall time.
+  List<LightFrame>? _fadeFrom;
+  Duration _fadeLength = Duration.zero;
+  Duration _fadeElapsed = Duration.zero;
 
   /// Limits how fast each light may change, so lightning and beats become
   /// soft pulses instead of flashes (for photosensitive users).
@@ -61,7 +69,34 @@ class EffectPlayer {
   List<LightFrame> _current = const [];
 
   LightingEffect get effect => _renderer.effect;
+
+  /// Swaps the effect in place, keeping its time: for a colour variant of
+  /// the same effect.
   set effect(LightingEffect value) => _renderer.effect = value;
+
+  /// Starts [next] from its beginning, blending from what the lights show
+  /// now over [over], so changing effects never drops the room to black
+  /// or snaps it to new colours.
+  void crossfadeTo(
+    LightingEffect next, {
+    Duration over = const Duration(milliseconds: 1500),
+  }) {
+    _fadeFrom = _current.isEmpty ? null : _current;
+    _fadeLength = over;
+    _fadeElapsed = Duration.zero;
+    _renderer = EffectRenderer(
+      next,
+      slotCount: lightIds.length,
+      seed: _seed + 1,
+      controls: _renderer.controls,
+    );
+    _effectTime = Duration.zero;
+    _shown = null;
+    if (_state == PlaybackState.playing) {
+      advance(Duration.zero);
+    }
+  }
+
   PlaybackState get state => _state;
   Duration get position => _effectTime;
   List<LightFrame> get currentFrames => _current;
@@ -112,7 +147,22 @@ class EffectPlayer {
     }
     final speed = controls.speed.clamp(0.05, 5.0);
     _effectTime += wallTime * speed;
-    final rendered = _renderer.render(_effectTime, audio: audio?.call());
+    var rendered = _renderer.render(_effectTime, audio: audio?.call());
+    final from = _fadeFrom;
+    if (from != null && from.length == rendered.length) {
+      _fadeElapsed += wallTime;
+      final t = _fadeLength <= Duration.zero
+          ? 1.0
+          : (_fadeElapsed.inMicroseconds / _fadeLength.inMicroseconds)
+              .clamp(0.0, 1.0);
+      rendered = [
+        for (var i = 0; i < rendered.length; i++)
+          blendFrames(from[i], rendered[i], t),
+      ];
+      if (t >= 1) {
+        _fadeFrom = null;
+      }
+    }
     final step = wallTime == Duration.zero ? tick : wallTime;
     final shown = softFlashes
         ? softenFrames(_shown, rendered, step.inMicroseconds / 1e6)
@@ -137,6 +187,16 @@ class EffectPlayer {
     _stopwatch?.stop();
   }
 }
+
+/// The frame [t] of the way from [a] to [b] (0..1).
+LightFrame blendFrames(LightFrame a, LightFrame b, double t) => LightFrame(
+      LightColor(
+        a.color.r + (b.color.r - a.color.r) * t,
+        a.color.g + (b.color.g - a.color.g) * t,
+        a.color.b + (b.color.b - a.color.b) * t,
+      ),
+      a.brightness + (b.brightness - a.brightness) * t,
+    );
 
 /// Moves each light from [previous] towards [target] by at most
 /// [maxRate] (brightness units per second) times [seconds]. The colour

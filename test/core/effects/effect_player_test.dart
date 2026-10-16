@@ -48,6 +48,42 @@ void main() {
           greaterThan(output.updates.single['c']!.brightness));
     });
 
+    test('crossfading to another effect restarts it without a jump', () {
+      final output = _RecordingOutput();
+      final player = EffectPlayer(
+        effect: fireplace,
+        lightIds: const ['a', 'b'],
+        output: output,
+      );
+      player.advance(const Duration(seconds: 3));
+      final before = player.currentFrames;
+      player.crossfadeTo(ocean, over: const Duration(seconds: 2));
+      expect(player.effect.id, 'ocean');
+      expect(player.position, Duration.zero);
+      // A tenth of the way in, the lights are still close to the fire.
+      player.advance(const Duration(milliseconds: 200));
+      final early = player.currentFrames;
+      for (var i = 0; i < 2; i++) {
+        expect(
+            (early[i].brightness - before[i].brightness).abs(), lessThan(0.15));
+      }
+      // Past the fade, the new effect renders on its own.
+      player.advance(const Duration(seconds: 2));
+      final reference =
+          EffectRenderer(ocean, slotCount: 2, seed: 1).render(player.position);
+      expect(player.currentFrames.first.brightness,
+          closeTo(reference.first.brightness, 1e-9));
+    });
+
+    test('blendFrames goes from one frame to the other', () {
+      const a = LightFrame(LightColor(1, 0, 0), 0);
+      const b = LightFrame(LightColor(0, 0, 1), 1);
+      final mid = blendFrames(a, b, 0.5);
+      expect(mid.brightness, 0.5);
+      expect(mid.color.r, 0.5);
+      expect(mid.color.b, 0.5);
+    });
+
     test('speed scales effect time', () {
       final player = EffectPlayer(
         effect: _sweep,

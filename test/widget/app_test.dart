@@ -11,6 +11,7 @@ import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
+import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 import '../support/fake_audio_input.dart';
@@ -112,7 +113,92 @@ void main() {
 
     expect(find.text('Favorites'), findsOneWidget);
     expect(find.text('Recently played'), findsOneWidget);
+    // Both shelves, and the mini-player: Ocean keeps playing.
+    expect(find.text('Ocean'), findsNWidgets(3));
+    await tester.tap(find.bySemanticsLabel('Stop'));
+    await tester.pump();
     expect(find.text('Ocean'), findsNWidgets(2));
+  });
+
+  testWidgets('an effect keeps playing across screens, with a mini-player',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    // On its own player there is no mini-player.
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.byType(MiniPlayer), findsNothing);
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(MiniPlayer), findsOneWidget);
+    expect(find.bySemanticsLabel('Pause'), findsOneWidget);
+
+    // Another effect's player says what plays; Play cross-fades to it.
+    await tester.tap(find.text('Aurora'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Ocean is playing now'), findsOneWidget);
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Pause'), findsOneWidget);
+    expect(find.textContaining('is playing now'), findsNothing);
+
+    // Back on the list, the mini-player shows Aurora; tapping it reopens
+    // the player.
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Aurora'), findsNWidgets(2));
+    await tester.tap(find.text('Aurora').last);
+    // The lamps animate while it plays: no settling, just let the page in.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Pause'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a playlist is made in the editor and plays its effects',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Playlists'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Playlists'));
+    await tester.pumpAndSettle();
+    expect(find.text('No playlists yet.'), findsOneWidget);
+
+    await tester.tap(find.text('New playlist'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Evening');
+    await tester.tap(find.text('5 min'));
+    await tester.tap(find.text('Choose effects'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Fireplace'));
+    await tester.tap(find.text('Ocean'));
+    await tester.tap(find.text('Done'));
+    await tester.pumpAndSettle();
+    expect(find.text('2 effects'), findsOneWidget);
+    // Ocean first.
+    await tester.tap(find.byTooltip('Move up').last);
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('Evening'), findsOneWidget);
+    expect(find.text('2 effects · 5 min each'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Play Evening'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Ocean'), findsWidgets);
+    expect(find.text('Playlist Evening · 1 of 2'), findsOneWidget);
+    await tester.tap(find.byTooltip('Next effect'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Playlist Evening · 2 of 2'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('settings change the controls a new playback starts with',
@@ -530,6 +616,8 @@ void streamingTests() {
       preferences: PreferencesController(store: InMemoryKeyValueStore()),
       audioInput: FakeAudioInput(),
     ));
+    await tester.scrollUntilVisible(find.text('Rooms & zones'), 200,
+        scrollable: find.byType(Scrollable).first);
     await tester.tap(find.text('Rooms & zones'));
     await tester.pumpAndSettle();
     expect(find.text('Living room'), findsOneWidget);

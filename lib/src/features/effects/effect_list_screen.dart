@@ -5,7 +5,7 @@ import '../common/app_text.dart';
 import '../common/layout.dart';
 import 'catalog/effect_catalog.dart';
 import 'effect_palette.dart';
-import 'effect_player_screen.dart';
+import 'player_route.dart';
 
 class EffectListScreen extends StatelessWidget {
   const EffectListScreen({
@@ -104,11 +104,7 @@ class _EffectCard extends StatelessWidget {
       margin: compact ? EdgeInsets.zero : null,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => EffectPlayerScreen(effect: effect),
-          ),
-        ),
+        onTap: () => openPlayer(context, effect),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
