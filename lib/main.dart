@@ -6,6 +6,7 @@ import 'src/core/hue/hue_discovery.dart';
 import 'src/features/bridge/bridge_controller.dart';
 import 'src/features/bridge/credential_store.dart';
 import 'src/features/library/preferences_controller.dart';
+import 'src/features/shortcuts/app_shortcuts.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ void main() {
       discovery: discovery,
       preferences: preferences,
       audioInput: MicrophoneAudioInput(),
+      shortcuts: const QuickActionsShortcuts(),
     ),
   );
 }

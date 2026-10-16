@@ -37,6 +37,9 @@ void main() {
     await first.setVariant('aurora', 'rose_gold');
     await first.setVariant('ocean', 'lagoon');
     await first.setVariant('ocean', null);
+    await first.setLightExcluded('r1', 'l2', true);
+    await first.setLightExcluded('r1', 'l3', true);
+    await first.setLightExcluded('r1', 'l2', false);
 
     final second = PreferencesController(store: store);
     await second.load();
@@ -44,6 +47,8 @@ void main() {
     expect(second.flashWarningShown, isTrue);
     expect(second.variantOf('aurora'), 'rose_gold');
     expect(second.variantOf('ocean'), isNull);
+    expect(second.excludedLights('r1'), ['l3']);
+    expect(second.excludedLights('r2'), isEmpty);
     expect(second.favorites, ['ocean']);
     expect(second.recents, ['disco']);
     expect(second.lastTarget, 'area:123');

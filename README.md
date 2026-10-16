@@ -46,7 +46,8 @@ Also done ahead of schedule:
 - **Everyday use**: the scenes saved in the Hue app can be recalled from
   Rooms & zones; a sleep timer fades an effect out and switches the lights
   off; a one-time warning and a "soften flashes" mode for photosensitive
-  users; six languages.
+  users; lights can be left out of an effect per room; favourites as
+  home-screen shortcuts; six languages.
 
 ## Development
 

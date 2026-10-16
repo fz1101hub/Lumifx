@@ -270,6 +270,24 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
                   style: theme.textTheme.bodySmall,
                 ),
               ],
+              if (c.groupLights.length > 1) ...[
+                const SizedBox(height: 12),
+                Text(l10n.lightsToPlay, style: theme.textTheme.labelMedium),
+                const SizedBox(height: 6),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: [
+                    for (final entry in c.groupLights)
+                      FilterChip(
+                        label: Text(entry.light.name),
+                        selected: entry.enabled,
+                        onSelected:
+                            busy ? null : (_) => c.toggleLight(entry.light.id),
+                      ),
+                  ],
+                ),
+              ],
               if (c.home != null && !c.streamingUnavailable && areas.isEmpty)
                 Row(
                   children: [

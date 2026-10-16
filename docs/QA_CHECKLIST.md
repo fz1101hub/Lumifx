@@ -37,6 +37,9 @@ build before every store release.
       changes and never stops responding (no rejected commands).
 - [ ] A room containing a smart plug: the plug is ignored and the other
       lights play.
+- [ ] "Lights to play on": untick a lamp; it stays as it was while the
+      others play, also after Stop and Play; the last lamp cannot be
+      unticked; the choice survives a restart.
 - [ ] Brightness / intensity / speed sliders take effect while playing.
 - [ ] Aurora › "Rose & gold" changes the colours at once while playing
       and is still selected after reopening the effect.
@@ -104,6 +107,14 @@ build before every store release.
       the app finds it again by itself on the next refresh.
 - [ ] Bridge with an old firmware (no CLIP v2): the message asks for an
       update.
+
+## Home-screen shortcuts
+
+- [ ] Long-press the app icon (Android) / 3D-touch it (iOS): the
+      favourites appear as shortcuts (the recently played effects when
+      there are no favourites), in the phone's language; tapping one
+      opens the player for that effect, both with the app closed and
+      with it in the background.
 
 ## Store builds
 

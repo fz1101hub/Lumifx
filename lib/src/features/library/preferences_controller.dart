@@ -53,6 +53,7 @@ class PreferencesController extends ChangeNotifier {
   bool _softFlashes = false;
   bool _flashWarningShown = false;
   Map<String, String> _variants = const {};
+  Map<String, List<String>> _excludedLights = const {};
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -80,6 +81,10 @@ class PreferencesController extends ChangeNotifier {
   /// The colour variant chosen for an effect, or null for its original.
   String? variantOf(String effectId) => _variants[effectId];
 
+  /// Lights of a room or zone that sit out of effects played on it.
+  List<String> excludedLights(String groupId) =>
+      _excludedLights[groupId] ?? const [];
+
   bool isFavorite(String effectId) => _favorites.contains(effectId);
 
   /// Set once the user changes anything, so a slow [load] cannot overwrite
@@ -105,6 +110,12 @@ class PreferencesController extends ChangeNotifier {
         if (variants is Map)
           for (final MapEntry(:key, :value) in variants.entries)
             if (key is String && value is String) key: value,
+      };
+      final excluded = json['excludedLights'];
+      _excludedLights = {
+        if (excluded is Map)
+          for (final MapEntry(:key, :value) in excluded.entries)
+            if (key is String && value is List) key: _strings(value),
       };
       final controls = json['defaultControls'];
       if (controls is Map) {
@@ -159,6 +170,23 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  Future<void> setLightExcluded(
+    String groupId,
+    String lightId,
+    bool excluded,
+  ) {
+    final ids = {
+      ...excludedLights(groupId),
+      if (excluded) lightId,
+    }..removeWhere((id) => !excluded && id == lightId);
+    _excludedLights = {
+      for (final MapEntry(:key, :value) in _excludedLights.entries)
+        if (key != groupId) key: value,
+      if (ids.isNotEmpty) groupId: ids.toList(),
+    };
+    return _changed();
+  }
+
   Future<void> setVariant(String effectId, String? variantId) {
     _variants = {
       for (final MapEntry(:key, :value) in _variants.entries)
@@ -190,6 +218,7 @@ class PreferencesController extends ChangeNotifier {
       'softFlashes': _softFlashes,
       'flashWarningShown': _flashWarningShown,
       'variants': _variants,
+      'excludedLights': _excludedLights,
       'defaultControls': {
         'brightness': _defaultControls.brightness,
         'intensity': _defaultControls.intensity,

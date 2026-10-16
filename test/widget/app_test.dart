@@ -13,6 +13,7 @@ import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_shortcuts.dart';
 
 class _FakeDiscovery implements BridgeDiscovery {
   @override
@@ -303,6 +304,45 @@ void main() {
     expect(find.text('30 min'), findsOneWidget);
     await tester.pageBack();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('home-screen shortcuts follow the favourites and open the player',
+      (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.recordPlayed('fireplace');
+    final shortcuts = FakeShortcuts();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      shortcuts: shortcuts,
+      locale: const Locale('it'),
+    ));
+    await tester.pumpAndSettle();
+    // Without favourites, the recently played effects are offered.
+    expect(shortcuts.items.map((s) => s.title), ['Camino']);
+
+    await preferences.toggleFavorite('aurora');
+    await preferences.toggleFavorite('haunted_manor');
+    await tester.pump();
+    expect(shortcuts.items.map((s) => s.id),
+        ['effect:haunted_manor', 'effect:aurora']);
+    expect(shortcuts.items.first.title, 'La Villa Infestata');
+
+    shortcuts.launch('effect:aurora');
+    await tester.pumpAndSettle();
+    expect(find.text('Riproduci'), findsOneWidget);
+    expect(find.text('Solo anteprima'), findsOneWidget);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+
+    // Unknown ids are ignored.
+    shortcuts.launch('effect:nope');
+    await tester.pumpAndSettle();
+    expect(find.text('Riproduci'), findsNothing);
   });
 
   testWidgets('the app speaks Italian', (tester) async {

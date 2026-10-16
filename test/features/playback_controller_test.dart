@@ -250,6 +250,30 @@ void main() {
     controller.dispose();
   });
 
+  test('a light can be left out of the effect, never the last one', () async {
+    final (controller, fake, _) = await _setUp();
+    expect(controller.groupLights.map((l) => l.light.id), ['color', 'white']);
+    await controller.toggleLight('white');
+    Iterable<String> enabled() =>
+        controller.groupLights.where((l) => l.enabled).map((l) => l.light.id);
+    expect(enabled(), ['color']);
+    await controller.toggleLight('color'); // the last one stays
+    expect(enabled(), ['color']);
+    expect(controller.lightNames, hasLength(1));
+
+    await controller.start();
+    await _wait(250);
+    expect(fake.puts.map((p) => p.$1).toSet(), {'color'});
+
+    // Bringing the light back while playing restarts on both.
+    await controller.toggleLight('white');
+    await _wait(250);
+    expect(controller.status, PlaybackStatus.playing);
+    expect(fake.puts.map((p) => p.$1).toSet(), {'color', 'white'});
+    await controller.stop();
+    controller.dispose();
+  });
+
   test('choosing a colour variant switches a running player in place',
       () async {
     final (controller, _, _) = await _setUp();
