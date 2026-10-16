@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
+import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
@@ -72,6 +73,41 @@ class SettingsScreen extends StatelessWidget {
                 value: preferences.softFlashes,
                 onChanged: preferences.setSoftFlashes,
               ),
+              if (scope.phoneAudioInput != null) ...[
+                const Divider(height: 32),
+                _Header(l10n.musicSource),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    l10n.musicSourceDescription,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
+                for (final (source, title, subtitle, icon) in [
+                  (
+                    MusicSource.microphone,
+                    l10n.musicSourceMicrophone,
+                    l10n.musicSourceMicrophoneDescription,
+                    Icons.mic_none,
+                  ),
+                  (
+                    MusicSource.phoneAudio,
+                    l10n.musicSourcePhoneAudio,
+                    l10n.musicSourcePhoneAudioDescription,
+                    Icons.phone_android,
+                  ),
+                ])
+                  ListTile(
+                    leading: Icon(icon),
+                    title: Text(title),
+                    subtitle: Text(subtitle),
+                    trailing: Icon(preferences.musicSource == source
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off),
+                    selected: preferences.musicSource == source,
+                    onTap: () => preferences.setMusicSource(source),
+                  ),
+              ],
               const Divider(height: 32),
               _Header(l10n.about),
               ListTile(

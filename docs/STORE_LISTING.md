@@ -180,6 +180,18 @@ artifact, see RELEASE.md § 1b).
 log, location, all files) are requested. RECORD_AUDIO needs no separate
 declaration form.
 
+**Foreground service declaration (App content › Foreground service
+permissions):** the app declares a `mediaProjection` foreground service,
+used only for "Music Sync source › This phone's audio" (Android 10+).
+Answer: task type **Media projection**; description "Captures the audio the
+phone is playing so the lights can follow it, while a Music Sync effect
+runs. Started by the user from the player after Android's consent dialog,
+with an ongoing notification; nothing is recorded or saved." Play asks for
+a short video: record Settings › Music Sync source › This phone's audio,
+then Interactive › Beat Pulse › Play, the Android consent dialog, the
+notification and the lights following the music (see `docs/QA_CHECKLIST.md`
+› Music Sync, phone audio).
+
 **Content rating questionnaire:** no violence, no sexual content, no
 language, no controlled substances, no user interaction, no sharing of
 location, no purchases. Result: Everyone (ESRB) / PEGI 3.
@@ -233,7 +245,10 @@ Paste this in "Notes for review":
 > Local-network permission (iOS) is needed to discover and talk to the Hue
 > Bridge. Microphone permission is requested only when a Music Sync effect
 > is started; audio is analysed in real time on the device and never
-> recorded or transmitted.
+> recorded or transmitted. On Android 10+, Settings offers "This phone's
+> audio" as the Music Sync source: it uses Android's playback capture
+> (media projection consent and a foreground-service notification) to
+> receive the sound of other apps, never the screen.
 >
 > The app is not affiliated with Signify / Philips Hue.
 

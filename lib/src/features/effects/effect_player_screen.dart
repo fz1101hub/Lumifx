@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
+import '../../core/audio/audio_input.dart';
 import '../../core/color/light_color.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/effect_player.dart';
@@ -53,6 +54,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
         bridge: scope.bridge,
         preferences: scope.preferences,
         audioInput: scope.audioInput,
+        phoneAudioInput: scope.phoneAudioInput,
         screenWake: widget.screenWake,
       );
       _notices = controller.notices.listen((notice) {
@@ -314,7 +316,11 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen>
             ),
             if (widget.effect.usesMicrophone) ...[
               const SizedBox(height: 16),
-              _MusicMeter(player: c.player, music: c.music),
+              _MusicMeter(
+                player: c.player,
+                music: c.music,
+                source: c.musicSource,
+              ),
             ],
             const SizedBox(height: 24),
             Center(
@@ -479,10 +485,15 @@ class _FlashWarningDialog extends StatelessWidget {
 
 /// Live bass / mid / treble levels, a beat light and the tempo.
 class _MusicMeter extends StatelessWidget {
-  const _MusicMeter({required this.player, required this.music});
+  const _MusicMeter({
+    required this.player,
+    required this.music,
+    required this.source,
+  });
 
   final EffectPlayer? player;
   final MusicSyncController? music;
+  final MusicSource source;
 
   @override
   Widget build(BuildContext context) {
@@ -490,13 +501,17 @@ class _MusicMeter extends StatelessWidget {
     final music = this.music;
     final theme = Theme.of(context);
     final l10n = context.l10n;
+    final phoneAudio = source == MusicSource.phoneAudio;
     if (player == null || music == null || !music.isListening) {
       return Row(
         children: [
-          const Icon(Icons.mic_none, size: 20),
+          Icon(phoneAudio ? Icons.phone_android : Icons.mic_none, size: 20),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(l10n.musicSyncHint, style: theme.textTheme.bodySmall),
+            child: Text(
+              phoneAudio ? l10n.musicSyncHintPhoneAudio : l10n.musicSyncHint,
+              style: theme.textTheme.bodySmall,
+            ),
           ),
         ],
       );
@@ -509,7 +524,11 @@ class _MusicMeter extends StatelessWidget {
         final onBeat = f.secondsSinceBeat < 0.12;
         return Row(
           children: [
-            Icon(Icons.mic, size: 20, color: theme.colorScheme.primary),
+            Icon(
+              phoneAudio ? Icons.phone_android : Icons.mic,
+              size: 20,
+              color: theme.colorScheme.primary,
+            ),
             const SizedBox(width: 12),
             for (final (label, value) in [
               (l10n.bass, f.bass),

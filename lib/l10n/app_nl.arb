@@ -246,5 +246,15 @@
   "variantSandStorm": "Zandstorm",
   "variantNeon": "Neon",
   "variantPastel": "Pastel",
-  "lightsToPlay": "Lampen die meedoen"
+  "lightsToPlay": "Lampen die meedoen",
+  "musicSource": "Bron van Music Sync",
+  "musicSourceDescription": "Waar Music Sync het geluid vandaan haalt.",
+  "musicSourceMicrophone": "Microfoon",
+  "musicSourceMicrophoneDescription": "Luistert naar de muziek in de kamer. Werkt met elke speaker.",
+  "musicSourcePhoneAudio": "Geluid van deze telefoon",
+  "musicSourcePhoneAudioDescription": "Volgt wat de telefoon afspeelt (Spotify, YouTube, games). Android vraagt toestemming voor schermopname: alleen het geluid wordt gebruikt, er wordt niets opgenomen of bewaard. Apps die hun geluid beschermen blijven stil voor LumiFX.",
+  "musicSyncHintPhoneAudio": "Druk op Afspelen en LumiFX volgt wat deze telefoon afspeelt. Het geluid wordt op de telefoon geanalyseerd en nooit opgenomen.",
+  "noticePhoneAudioDenied": "Music Sync heeft toestemming nodig om het geluid van deze telefoon op te vangen. Druk opnieuw op Afspelen en sta het toe, of kies de microfoon in Instellingen.",
+  "noticePhoneAudioFailed": "Het geluid van deze telefoon kon niet worden opgevangen. Controleer of LumiFX de microfoon mag gebruiken, of kies de microfoon in Instellingen.",
+  "noticePhoneAudioStopped": "Het opvangen van het telefoongeluid is gestopt. Druk op Stop en dan op Afspelen om het weer te volgen."
 }

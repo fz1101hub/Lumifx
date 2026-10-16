@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/effects/engine/effect_renderer.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 
@@ -40,9 +41,11 @@ void main() {
     await first.setLightExcluded('r1', 'l2', true);
     await first.setLightExcluded('r1', 'l3', true);
     await first.setLightExcluded('r1', 'l2', false);
+    await first.setMusicSource(MusicSource.phoneAudio);
 
     final second = PreferencesController(store: store);
     await second.load();
+    expect(second.musicSource, MusicSource.phoneAudio);
     expect(second.softFlashes, isTrue);
     expect(second.flashWarningShown, isTrue);
     expect(second.variantOf('aurora'), 'rose_gold');

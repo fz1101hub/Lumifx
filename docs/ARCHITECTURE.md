@@ -150,6 +150,20 @@ stream (`max_streams`), spread around the chosen point.
   ends is reported.
 - Analysis is verified on synthetic kick tracks, noisy backgrounds, steady
   noise and pure tones (`test/core/audio`).
+- `AudioInput` is the source abstraction: `MicrophoneAudioInput` (the
+  `record` plugin) and, on Android 10+, `PhoneAudioInput`, which feeds the
+  same analyser with the audio the phone itself plays through Android's
+  playback capture. The native side (`PhoneAudioCapture.kt`,
+  `PhoneAudioCaptureService.kt`) asks for the media-projection consent,
+  runs a `mediaProjection` foreground service with a notification, reads
+  an `AudioRecord` built on an `AudioPlaybackCaptureConfiguration` and
+  streams 16-bit mono PCM over an event channel; apps that opt out of
+  capture are silent to it. The user picks the source in Settings
+  (`PreferencesController.musicSource`); `PlaybackController` falls back
+  to the microphone where phone audio is unavailable and switches sources
+  mid-effect when the preference changes. The Dart side is tested against
+  a mocked channel (`test/core/audio/phone_audio_input_test.dart`); the
+  native capture needs a real device (`docs/QA_CHECKLIST.md`).
 
 ## Content policy
 

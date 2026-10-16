@@ -99,6 +99,28 @@ build before every store release.
       If the microphone is lost for good (another app takes it), the app
       says so and Stop then Play recovers.
 
+### Music Sync, phone audio (Android 10+ only; not yet verified on a device)
+
+- [ ] Settings shows "Music Sync source" on Android 10+ and not on iOS or
+      Android 9.
+- [ ] Choose "This phone's audio", play Beat Pulse: Android's "Start
+      recording or casting?" dialog appears; Cancel shows the explanation
+      and nothing plays; Start now shows the "Music Sync is on"
+      notification and the lights follow YouTube / a local music file /
+      a game played on the phone, with the phone speaker, wired and
+      Bluetooth headphones.
+- [ ] Spotify and other apps that block capture: the lights stay at the
+      dim floor (expected: Android does not let LumiFX hear them); the
+      microphone source works for them.
+- [ ] Pause and Stop remove the notification; ending it from the system
+      (the cast/record chip in the status bar) shows the "capture stopped"
+      message, and Stop then Play asks for consent again.
+- [ ] On Android 14+, the consent is asked on every Play (Android no
+      longer reuses it).
+- [ ] Switching the source in Settings while an effect plays moves to the
+      new source without stopping the lights.
+- [ ] Notification is in the phone's language (six languages).
+
 ## Network edge cases
 
 - [ ] Wi-Fi off: the home banner says the bridge is not reachable; Retry

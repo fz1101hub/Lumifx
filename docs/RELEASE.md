@@ -154,6 +154,10 @@ needs attention; the Android half is independent.
    from § 1b (`android-9x16/<lang>/`) and, optionally, the tablet ones
    (`ipad-12.9/<lang>/` as 10" tablet screenshots), per language.
 4. Let Play manage the signing key (default, "Play App Signing").
+5. App content › Foreground service permissions: declare the
+   `mediaProjection` service with the answers and the demo video described
+   in `docs/STORE_LISTING.md` (Play blocks the release until this is done,
+   because the app targets Android 14+ and declares that service type).
 
 ## 3. Android: every release
 

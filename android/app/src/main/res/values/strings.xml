@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Notification of the Music Sync (phone audio) foreground service. -->
+<resources>
+    <string name="phone_audio_channel">Music Sync</string>
+    <string name="phone_audio_notification_title">Music Sync is on</string>
+    <string name="phone_audio_notification_text">LumiFX follows the audio playing on this phone. Nothing is recorded or saved.</string>
+</resources>

@@ -12,6 +12,7 @@ class AppScope extends InheritedWidget {
     required this.discovery,
     required this.preferences,
     required this.audioInput,
+    this.phoneAudioInput,
     required super.child,
     super.key,
   });
@@ -22,6 +23,10 @@ class AppScope extends InheritedWidget {
 
   /// Microphone for Music Sync.
   final AudioInput audioInput;
+
+  /// The phone's own audio for Music Sync; null where the platform cannot
+  /// capture it.
+  final AudioInput? phoneAudioInput;
 
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
@@ -34,5 +39,6 @@ class AppScope extends InheritedWidget {
       bridge != oldWidget.bridge ||
       discovery != oldWidget.discovery ||
       preferences != oldWidget.preferences ||
-      audioInput != oldWidget.audioInput;
+      audioInput != oldWidget.audioInput ||
+      phoneAudioInput != oldWidget.phoneAudioInput;
 }

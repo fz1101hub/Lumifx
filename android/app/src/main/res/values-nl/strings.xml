@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phone_audio_channel">Music Sync</string>
+    <string name="phone_audio_notification_title">Music Sync is actief</string>
+    <string name="phone_audio_notification_text">LumiFX volgt het geluid dat deze telefoon afspeelt. Er wordt niets opgenomen of bewaard.</string>
+</resources>

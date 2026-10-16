@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/app.dart';
+import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
@@ -173,6 +174,61 @@ void main() {
 
     await tester.pageBack();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('Music Sync can follow the phone audio on Android 10+',
+      (tester) async {
+    final microphone = FakeAudioInput();
+    final phone = FakeAudioInput();
+    final preferences = _warnedPreferences();
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: microphone,
+      phoneAudioInput: phone,
+    ));
+
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text("This phone's audio"), 200);
+    await tester.ensureVisible(find.text("This phone's audio"));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text("This phone's audio"));
+    await tester.pumpAndSettle();
+    expect(preferences.musicSource, MusicSource.phoneAudio);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Interactive'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Beat Pulse'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('what this phone is playing'), findsOneWidget);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(phone.started, isTrue);
+    expect(microphone.started, isFalse);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Pause'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pump();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the phone audio choice is hidden where it cannot work',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    expect(find.text('Music Sync source'), findsNothing);
   });
 
   testWidgets('Music Sync explains a refused microphone', (tester) async {

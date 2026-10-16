@@ -246,5 +246,15 @@
   "variantSandStorm": "Tempête de sable",
   "variantNeon": "Néon",
   "variantPastel": "Pastel",
-  "lightsToPlay": "Lampes à utiliser"
+  "lightsToPlay": "Lampes à utiliser",
+  "musicSource": "Source de Music Sync",
+  "musicSourceDescription": "D'où Music Sync prend le son.",
+  "musicSourceMicrophone": "Micro",
+  "musicSourceMicrophoneDescription": "Écoute la musique dans la pièce. Fonctionne avec n'importe quelle enceinte.",
+  "musicSourcePhoneAudio": "Son de ce téléphone",
+  "musicSourcePhoneAudioDescription": "Suit ce que le téléphone diffuse (Spotify, YouTube, jeux). Android demande d'autoriser la capture d'écran : seul le son est utilisé, rien n'est enregistré ni sauvegardé. Les apps qui protègent leur son restent muettes pour LumiFX.",
+  "musicSyncHintPhoneAudio": "Appuyez sur Lecture et LumiFX suivra ce que ce téléphone diffuse. Le son est analysé sur le téléphone et jamais enregistré.",
+  "noticePhoneAudioDenied": "Music Sync a besoin de l'autorisation de capturer le son de ce téléphone. Appuyez à nouveau sur Lecture et autorisez-la, ou choisissez le micro dans les Réglages.",
+  "noticePhoneAudioFailed": "Impossible de capturer le son de ce téléphone. Vérifiez que LumiFX peut utiliser le micro, ou choisissez le micro dans les Réglages.",
+  "noticePhoneAudioStopped": "La capture du son du téléphone s'est arrêtée. Appuyez sur Stop puis sur Lecture pour la reprendre."
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 
 /// Where preferences are persisted. Nothing in here is sensitive; bridge
@@ -54,6 +55,7 @@ class PreferencesController extends ChangeNotifier {
   bool _flashWarningShown = false;
   Map<String, String> _variants = const {};
   Map<String, List<String>> _excludedLights = const {};
+  MusicSource _musicSource = MusicSource.microphone;
 
   /// Effect ids, most recently added first.
   List<String> get favorites => _favorites;
@@ -77,6 +79,11 @@ class PreferencesController extends ChangeNotifier {
 
   /// The one-time warning before a flashing effect has been shown.
   bool get flashWarningShown => _flashWarningShown;
+
+  /// Where Music Sync listens; the phone's own audio only counts where
+  /// the platform can capture it (the player falls back to the
+  /// microphone elsewhere).
+  MusicSource get musicSource => _musicSource;
 
   /// The colour variant chosen for an effect, or null for its original.
   String? variantOf(String effectId) => _variants[effectId];
@@ -105,6 +112,8 @@ class PreferencesController extends ChangeNotifier {
       _restoreLights = json['restoreLights'] as bool? ?? true;
       _softFlashes = json['softFlashes'] as bool? ?? false;
       _flashWarningShown = json['flashWarningShown'] as bool? ?? false;
+      _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
+          MusicSource.microphone;
       final variants = json['variants'];
       _variants = {
         if (variants is Map)
@@ -170,6 +179,11 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  Future<void> setMusicSource(MusicSource value) {
+    _musicSource = value;
+    return _changed();
+  }
+
   Future<void> setLightExcluded(
     String groupId,
     String lightId,
@@ -217,6 +231,7 @@ class PreferencesController extends ChangeNotifier {
       'restoreLights': _restoreLights,
       'softFlashes': _softFlashes,
       'flashWarningShown': _flashWarningShown,
+      'musicSource': _musicSource.name,
       'variants': _variants,
       'excludedLights': _excludedLights,
       'defaultControls': {

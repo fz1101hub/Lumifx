@@ -246,5 +246,15 @@
   "variantSandStorm": "Sandsturm",
   "variantNeon": "Neon",
   "variantPastel": "Pastell",
-  "lightsToPlay": "Lampen für den Effekt"
+  "lightsToPlay": "Lampen für den Effekt",
+  "musicSource": "Quelle für Music Sync",
+  "musicSourceDescription": "Woher Music Sync den Ton nimmt.",
+  "musicSourceMicrophone": "Mikrofon",
+  "musicSourceMicrophoneDescription": "Hört auf die Musik im Raum. Funktioniert mit jedem Lautsprecher.",
+  "musicSourcePhoneAudio": "Ton dieses Telefons",
+  "musicSourcePhoneAudioDescription": "Folgt dem, was das Telefon abspielt (Spotify, YouTube, Spiele). Android fragt nach der Erlaubnis zur Bildschirmaufnahme: Nur der Ton wird verwendet, nichts wird aufgenommen oder gespeichert. Apps, die ihren Ton schützen, bleiben für LumiFX stumm.",
+  "musicSyncHintPhoneAudio": "Drücke Abspielen und LumiFX folgt dem, was dieses Telefon abspielt. Der Ton wird auf dem Telefon analysiert und nie aufgenommen.",
+  "noticePhoneAudioDenied": "Music Sync braucht die Erlaubnis, den Ton dieses Telefons aufzunehmen. Drücke erneut Abspielen und erlaube es, oder wähle in den Einstellungen das Mikrofon.",
+  "noticePhoneAudioFailed": "Der Ton dieses Telefons konnte nicht aufgenommen werden. Prüfe, ob LumiFX das Mikrofon nutzen darf, oder wähle in den Einstellungen das Mikrofon.",
+  "noticePhoneAudioStopped": "Die Aufnahme des Telefontons wurde beendet. Drücke Stopp und dann Abspielen, um ihr wieder zu folgen."
 }

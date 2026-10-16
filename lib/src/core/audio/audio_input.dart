@@ -4,6 +4,15 @@ import 'dart:typed_data';
 
 import 'package:record/record.dart';
 
+/// Where Music Sync takes its sound from.
+enum MusicSource {
+  /// The room, through the microphone.
+  microphone,
+
+  /// What this phone itself plays (Android 10+ only).
+  phoneAudio,
+}
+
 /// A source of mono 16-bit little-endian PCM audio.
 abstract interface class AudioInput {
   int get sampleRate;

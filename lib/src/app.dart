@@ -16,6 +16,7 @@ class LumiFxApp extends StatefulWidget {
     required this.discovery,
     required this.preferences,
     required this.audioInput,
+    this.phoneAudioInput,
     this.shortcuts = const NoShortcuts(),
     this.locale,
     super.key,
@@ -25,6 +26,9 @@ class LumiFxApp extends StatefulWidget {
   final BridgeDiscovery discovery;
   final PreferencesController preferences;
   final AudioInput audioInput;
+
+  /// Music Sync from the phone's own audio, where the platform allows it.
+  final AudioInput? phoneAudioInput;
 
   /// Home-screen shortcuts to the favourite effects.
   final AppShortcuts shortcuts;
@@ -46,6 +50,7 @@ class _LumiFxAppState extends State<LumiFxApp> {
       discovery: widget.discovery,
       preferences: widget.preferences,
       audioInput: widget.audioInput,
+      phoneAudioInput: widget.phoneAudioInput,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
