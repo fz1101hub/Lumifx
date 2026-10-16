@@ -7,6 +7,7 @@
 ///   lumifx://app/open/ocean                    open the player only
 ///   lumifx://app/playlist/Evening              play a playlist (name or id)
 ///   lumifx://app/stop                          stop and put the lights back
+///   lumifx://app/import?d=…                    add shared scenes/playlists
 ///
 /// The host is ignored (Android hands the app only the path), and names
 /// are matched without regard to case.
@@ -47,6 +48,9 @@ sealed class AppLink {
         return PlaylistLink(name);
       case ['stop']:
         return const StopLink();
+      case ['import']:
+        final data = param('d');
+        return data == null ? null : ImportLink(data);
     }
     return null;
   }
@@ -63,6 +67,8 @@ sealed class AppLink {
       Uri(scheme: scheme, host: 'app', path: '/playlist/$name').toString();
 
   static String get stop => '$scheme://app/stop';
+
+  static String import(String data) => '$scheme://app/import?d=$data';
 }
 
 /// Opens an effect's player, and plays it when [start].
@@ -92,4 +98,11 @@ class PlaylistLink extends AppLink {
 
 class StopLink extends AppLink {
   const StopLink();
+}
+
+/// Scenes and playlists someone shared (see `SharedBundle`).
+class ImportLink extends AppLink {
+  const ImportLink(this.data);
+
+  final String data;
 }

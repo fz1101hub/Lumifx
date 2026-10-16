@@ -210,6 +210,15 @@ then Interactive › Beat Pulse › Play, the Android consent dialog, the
 notification and the lights following the music (see `docs/QA_CHECKLIST.md`
 › Music Sync, phone audio).
 
+The app also declares a second foreground service, `PlaybackService`, of
+the types **Connected device** and **Microphone**: "Keeps controlling the
+user's Philips Hue lights over the local network while an effect the user
+started plays with the screen off (and listens to the room during a Music
+Sync effect). Ongoing notification with a Stop button; stops when the
+effect stops. Can be turned off in Settings." Video: start Ocean on a room,
+lock the phone, show the lights still moving and the notification, press
+Stop in the notification.
+
 **Content rating questionnaire:** no violence, no sexual content, no
 language, no controlled substances, no user interaction, no sharing of
 location, no purchases. Result: Everyone (ESRB) / PEGI 3.

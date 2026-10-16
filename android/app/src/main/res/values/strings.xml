@@ -7,4 +7,5 @@
     <string name="widget_title">Favourites</string>
     <string name="widget_empty">Star effects in LumiFX to see them here.</string>
     <string name="widget_description">Your favourite LumiFX effects, one tap away.</string>
+    <string name="playback_channel">Playback</string>
 </resources>

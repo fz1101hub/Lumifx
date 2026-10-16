@@ -13,9 +13,11 @@ import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_area_editor.dart';
 import '../library/scene_editor.dart';
+import '../library/sharing.dart';
 import '../music/music_sync_controller.dart';
 import 'effect_palette.dart';
 import 'light_color_ui.dart';
+import 'night_light_screen.dart';
 import 'playback_controller.dart';
 
 class EffectPlayerScreen extends StatefulWidget {
@@ -122,17 +124,21 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
     final l10n = context.l10n;
     final c = controller;
     final room = c.group?.name ?? '';
-    final name = await showDialog<String>(
+    final answer = await showDialog<(String, bool)>(
       context: context,
-      builder: (_) => _SceneNameDialog(initial: l10n.effectName(effect)),
+      builder: (_) => _SceneNameDialog(
+        initial: l10n.effectName(effect),
+        canMove: c.dynamicPalette != null,
+      ),
     );
-    if (name == null || name.trim().isEmpty || !mounted) {
+    if (answer == null || answer.$1.trim().isEmpty || !mounted) {
       return;
     }
+    final (name, dynamic) = answer;
     final messenger = ScaffoldMessenger.of(context);
     String message;
     try {
-      final scene = await c.saveAsHueScene(name);
+      final scene = await c.saveAsHueScene(name, dynamic: dynamic);
       message = scene == null
           ? l10n.sceneNotSaved
           : l10n.sceneSaved(scene.name, room);
@@ -186,7 +192,13 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
         title: Text(l10n.effectName(effect)),
         actions: [
           if (AppScope.of(context).library.userScene(effect.id)
-              case final scene?)
+              case final scene?) ...[
+            IconButton(
+              tooltip: l10n.share,
+              icon: const Icon(Icons.share_outlined),
+              onPressed: () =>
+                  showShareDialog(context, SharedBundle(scenes: [scene])),
+            ),
             IconButton(
               tooltip: l10n.editScene,
               icon: const Icon(Icons.edit_outlined),
@@ -196,6 +208,17 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 ),
               ),
             ),
+          ],
+          IconButton(
+            tooltip: l10n.nightLight,
+            icon: const Icon(Icons.nightlight_outlined),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                fullscreenDialog: true,
+                builder: (_) => NightLightScreen(effect: effect),
+              ),
+            ),
+          ),
           _FavoriteButton(effectId: effect.id),
         ],
       ),
@@ -484,9 +507,12 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
 /// Asks for the name of a new Hue scene (the bridge keeps at most 32
 /// characters).
 class _SceneNameDialog extends StatefulWidget {
-  const _SceneNameDialog({required this.initial});
+  const _SceneNameDialog({required this.initial, required this.canMove});
 
   final String initial;
+
+  /// The effect can be saved as a scene that keeps moving.
+  final bool canMove;
 
   @override
   State<_SceneNameDialog> createState() => _SceneNameDialogState();
@@ -499,6 +525,8 @@ class _SceneNameDialogState extends State<_SceneNameDialog> {
         : widget.initial,
   );
 
+  late bool _moving = widget.canMove;
+
   @override
   void dispose() {
     _name.dispose();
@@ -510,6 +538,7 @@ class _SceneNameDialogState extends State<_SceneNameDialog> {
     final l10n = context.l10n;
     return AlertDialog(
       title: Text(l10n.saveAsHueScene),
+      scrollable: true,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -524,8 +553,16 @@ class _SceneNameDialogState extends State<_SceneNameDialog> {
               labelText: l10n.name,
               border: const OutlineInputBorder(),
             ),
-            onSubmitted: (value) => Navigator.of(context).pop(value),
+            onSubmitted: (value) => Navigator.of(context).pop((value, _moving)),
           ),
+          if (widget.canMove)
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.sceneKeepsMoving),
+              subtitle: Text(l10n.sceneKeepsMovingDescription),
+              value: _moving,
+              onChanged: (value) => setState(() => _moving = value),
+            ),
         ],
       ),
       actions: [
@@ -534,7 +571,7 @@ class _SceneNameDialogState extends State<_SceneNameDialog> {
           child: Text(l10n.cancel),
         ),
         FilledButton(
-          onPressed: () => Navigator.of(context).pop(_name.text),
+          onPressed: () => Navigator.of(context).pop((_name.text, _moving)),
           child: Text(l10n.save),
         ),
       ],

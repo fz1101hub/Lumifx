@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'hue_exceptions.dart';
+import 'hue_automations.dart';
 import 'hue_models.dart';
 
 /// Everything LumiFX reads from a bridge in one snapshot.
@@ -228,9 +229,11 @@ class HueBridgeClient {
     );
   }
 
-  /// Shows a scene on its room or zone, as the Hue app does.
-  Future<void> recallScene(String sceneId) => _put('scene/$sceneId', {
-        'recall': {'action': 'active'},
+  /// Shows a scene on its room or zone, as the Hue app does: a dynamic
+  /// scene starts moving through its palette.
+  Future<void> recallScene(String sceneId, {bool dynamic = false}) =>
+      _put('scene/$sceneId', {
+        'recall': {'action': dynamic ? 'dynamic_palette' : 'active'},
       });
 
   /// The longest scene name the bridge accepts.
@@ -239,10 +242,15 @@ class HueBridgeClient {
   /// Saves a scene on [group] with one action per light and returns its
   /// id. It then shows up in the Hue app, on switches and in voice
   /// assistants like any scene made there.
+  ///
+  /// With a [palette] the scene is dynamic: recalled from the Hue app,
+  /// a switch or a voice assistant it keeps moving through those colours
+  /// by itself, without LumiFX.
   Future<String> createScene({
     required String name,
     required HueGroup group,
     required Map<String, HueLightCommand> actions,
+    HueScenePalette? palette,
   }) async {
     final trimmed = name.trim();
     final response = await _client
@@ -262,14 +270,14 @@ class HueBridgeClient {
                 {
                   'target': {'rid': id, 'rtype': 'light'},
                   // A scene stores a state, not a fade to it.
-                  'action': HueLightCommand(
-                    on: command.on,
-                    brightness: command.brightness,
-                    xy: command.xy,
-                    mirek: command.mirek,
-                  ).toJson(),
+                  'action': command.withoutTransition().toJson(),
                 },
             ],
+            if (palette != null) ...{
+              'palette': palette.toJson(),
+              'speed': _round(palette.speed.clamp(0.0, 1.0), 3),
+              'auto_dynamic': true,
+            },
           }),
         )
         .timeout(_timeout);
@@ -280,6 +288,87 @@ class HueBridgeClient {
       throw const HueException('The bridge did not create the scene');
     }
     return id;
+  }
+
+  /// The bridge's own wake-up script, as made by the Hue app.
+  static const wakeUpScriptId = 'ff8957e3-2eb9-4699-a0c8-ad2cb3ede704';
+
+  /// Which of the bridge's scripts are wake-up and go-to-sleep routines,
+  /// found by name since only the wake-up id is known for certain.
+  Future<Map<String, HueAutomationKind>> _automationScripts() async {
+    final scripts = <String, HueAutomationKind>{
+      wakeUpScriptId: HueAutomationKind.wakeUp,
+    };
+    for (final script in await _resources('behavior_script')) {
+      final id = script['id'];
+      final name = '${_map(script['metadata'])['name'] ?? ''}'.toLowerCase();
+      if (id is! String) {
+        continue;
+      }
+      if (name.contains('wake')) {
+        scripts[id] = HueAutomationKind.wakeUp;
+      } else if (name.contains('sleep')) {
+        scripts[id] = HueAutomationKind.goToSleep;
+      }
+    }
+    return scripts;
+  }
+
+  /// The wake-up and go-to-sleep routines on the bridge, LumiFX's and the
+  /// Hue app's alike.
+  Future<List<HueAutomation>> fetchAutomations() async {
+    final scripts = await _automationScripts();
+    return [
+      for (final json in await _resources('behavior_instance'))
+        if (HueAutomation.fromJson(json, scripts) case final automation?)
+          automation,
+    ];
+  }
+
+  /// Creates a routine and returns its id. Throws [HueException] when the
+  /// bridge has no such script (very old firmware) or refuses it.
+  Future<String> createAutomation(HueAutomationDraft draft) async {
+    final scripts = await _automationScripts();
+    final scriptId = scripts.entries
+        .where((e) => e.value == draft.kind)
+        .map((e) => e.key)
+        .firstOrNull;
+    if (scriptId == null) {
+      throw const HueException('The bridge has no routine of this kind');
+    }
+    final response = await _client
+        .post(
+          Uri.https(host, '/clip/v2/resource/behavior_instance'),
+          headers: {..._headers, 'content-type': 'application/json'},
+          body: jsonEncode({
+            'type': 'behavior_instance',
+            'script_id': scriptId,
+            'enabled': true,
+            'metadata': {'name': draft.name.trim()},
+            'configuration': draft.toConfiguration(),
+          }),
+        )
+        .timeout(_timeout);
+    final body = _decode(response);
+    final created = body is Map ? _list(body['data']).firstOrNull : null;
+    final id = created?['rid'];
+    if (id is! String) {
+      throw const HueException('The bridge did not create the routine');
+    }
+    return id;
+  }
+
+  Future<void> setAutomationEnabled(String id, bool enabled) =>
+      _put('behavior_instance/$id', {'enabled': enabled});
+
+  Future<void> deleteAutomation(String id) async {
+    final response = await _client
+        .delete(
+          Uri.https(host, '/clip/v2/resource/behavior_instance/$id'),
+          headers: _headers,
+        )
+        .timeout(_timeout);
+    _decode(response);
   }
 
   /// Creates an entertainment area and returns its id.
@@ -430,3 +519,6 @@ List<Map<String, Object?>> _list(Object? value) => value is List
           if (item is Map) item.cast<String, Object?>()
       ]
     : const [];
+
+double _round(double value, int digits) =>
+    double.parse(value.toStringAsFixed(digits));

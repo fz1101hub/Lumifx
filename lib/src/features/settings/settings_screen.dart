@@ -9,6 +9,7 @@ import '../bridge/forget_bridge_dialog.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../entertainment/entertainment_areas_screen.dart';
+import '../library/sharing.dart';
 import '../links/links_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -78,6 +79,13 @@ class SettingsScreen extends StatelessWidget {
                     ? null
                     : preferences.setSoftFlashes,
               ),
+              if (scope.background.isSupported)
+                SwitchListTile(
+                  title: Text(l10n.keepPlayingScreenOff),
+                  subtitle: Text(l10n.keepPlayingScreenOffDescription),
+                  value: preferences.keepPlayingScreenOff,
+                  onChanged: preferences.setKeepPlayingScreenOff,
+                ),
               if (scope.phoneAudioInput != null) ...[
                 const Divider(height: 32),
                 _Header(l10n.musicSource),
@@ -112,6 +120,22 @@ class SettingsScreen extends StatelessWidget {
                     selected: preferences.musicSource == source,
                     onTap: () => preferences.setMusicSource(source),
                   ),
+              ],
+              if (preferences.userScenes.isNotEmpty ||
+                  preferences.playlists.isNotEmpty) ...[
+                const Divider(height: 32),
+                ListTile(
+                  leading: const Icon(Icons.ios_share),
+                  title: Text(l10n.shareAll),
+                  subtitle: Text(l10n.shareAllSubtitle),
+                  onTap: () => showShareDialog(
+                    context,
+                    SharedBundle(
+                      scenes: preferences.userScenes,
+                      playlists: preferences.playlists,
+                    ),
+                  ),
+                ),
               ],
               const Divider(height: 32),
               ListTile(

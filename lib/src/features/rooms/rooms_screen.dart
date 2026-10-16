@@ -128,7 +128,7 @@ class _GroupTileState extends State<_GroupTile> {
       );
 
   Future<void> _recall(HueScene scene) => _apply(
-        () => widget.client.recallScene(scene.id),
+        () => widget.client.recallScene(scene.id, dynamic: scene.isDynamic),
         failure: (l10n) => l10n.couldNotActivateScene(scene.name),
       );
 

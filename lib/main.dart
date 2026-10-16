@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'src/app.dart';
 import 'src/core/audio/audio_input.dart';
 import 'src/core/audio/phone_audio_input.dart';
+import 'src/core/background_playback.dart';
 import 'src/core/hue/hue_discovery.dart';
 import 'src/features/bridge/bridge_controller.dart';
 import 'src/features/bridge/credential_store.dart';
@@ -34,6 +35,7 @@ Future<void> main() async {
       phoneAudioInput: phoneAudio,
       shortcuts: const QuickActionsShortcuts(),
       widgets: const ChannelHomeWidgets(),
+      background: ChannelBackgroundPlayback(),
     ),
   );
 }

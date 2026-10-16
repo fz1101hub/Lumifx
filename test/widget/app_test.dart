@@ -14,8 +14,12 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
+import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/library/user_scene.dart';
+import 'package:lumifx/src/features/library/sharing.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_background_playback.dart';
 import '../support/fake_home_widgets.dart';
 import '../support/fake_shortcuts.dart';
 import '../support/phone_window.dart';
@@ -351,6 +355,102 @@ void main() {
     expect(find.text('Reading nook'), findsNothing);
     expect(find.text('New scene'), findsOneWidget);
     expect(find.byType(MiniPlayer), findsNothing);
+  });
+
+  testWidgets('a shared link adds the scenes and playlists after asking',
+      (tester) async {
+    await _pumpApp(tester);
+    const bundle = SharedBundle(
+      scenes: [
+        UserScene(
+          id: 'user:theirs',
+          name: 'Their scene',
+          colors: ['#FF0000', '#0000FF'],
+        ),
+      ],
+      playlists: [
+        Playlist(
+          id: 'their-playlist',
+          name: 'Their playlist',
+          effectIds: ['user:theirs', 'ocean'],
+        ),
+      ],
+    );
+    final message = const JSONMethodCodec().encodeMethodCall(
+      MethodCall('pushRouteInformation', {'location': bundle.link}),
+    );
+    await tester.binding.defaultBinaryMessenger
+        .handlePlatformMessage(SystemChannels.navigation.name, message, (_) {});
+    await tester.pumpAndSettle();
+    expect(find.text('Add these to LumiFX?'), findsOneWidget);
+    expect(find.textContaining('Their scene'), findsOneWidget);
+    await tester.tap(find.text('Add'));
+    await tester.pumpAndSettle();
+    expect(find.text('Added 1 scene and 1 playlist.'), findsOneWidget);
+
+    // The scene is in Scenes, and the playlist plays it.
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    expect(find.text('Their scene'), findsOneWidget);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Playlists'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Playlists'));
+    await tester.pumpAndSettle();
+    expect(find.text('Their playlist'), findsOneWidget);
+    expect(find.text('2 effects · 10 min each'), findsOneWidget,
+        reason: 'the playlist points at the imported scene');
+  });
+
+  testWidgets('the night light shows the effect full screen', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Night light'));
+    // The glows move all the time: step instead of settling.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.textContaining('Tap to show this again'), findsOneWidget);
+    expect(find.byType(CustomPaint), findsWidgets);
+    await tester.pump(const Duration(seconds: 4));
+    // The hint fades away, and a tap brings it back.
+    await tester.tapAt(const Offset(200, 400));
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Play'), findsOneWidget, reason: 'back on the player');
+  });
+
+  testWidgets('the home puts the season\'s stories first', (tester) async {
+    Future<void> launch(DateTime day) async {
+      final bridge = BridgeController(store: InMemoryCredentialStore());
+      await tester.runAsync(bridge.initialize);
+      await tester.pumpWidget(LumiFxApp(
+        key: UniqueKey(),
+        bridge: bridge,
+        discovery: _FakeDiscovery(),
+        preferences: PreferencesController(store: InMemoryKeyValueStore()),
+        audioInput: FakeAudioInput(),
+        clock: () => day,
+      ));
+      await tester.pumpAndSettle();
+    }
+
+    await launch(DateTime(2026, 10, 20));
+    expect(find.text('Halloween is coming'), findsOneWidget);
+    expect(find.text('Pumpkin Patch'), findsOneWidget);
+
+    await launch(DateTime(2026, 12, 24));
+    expect(find.text('Christmas time'), findsOneWidget);
+    expect(find.text('Halloween is coming'), findsNothing);
+
+    await launch(DateTime(2026, 6, 15));
+    expect(find.text('Halloween is coming'), findsNothing);
+    expect(find.text('Christmas time'), findsNothing);
   });
 
   testWidgets('settings change the controls a new playback starts with',
@@ -711,6 +811,47 @@ Future<BridgeController> _connectedBridge(
           });
         }
         switch (request.url.path) {
+          case '/clip/v2/resource/behavior_script':
+            return json({
+              'data': [
+                {
+                  'id': 'sleep-script',
+                  'metadata': {'name': 'Basic go to sleep routine'},
+                },
+              ],
+            });
+          case '/clip/v2/resource/behavior_instance':
+            return json({
+              'data': [
+                {
+                  'id': 'w1',
+                  'script_id': HueBridgeClient.wakeUpScriptId,
+                  'enabled': true,
+                  'metadata': {'name': 'School days'},
+                  'configuration': {
+                    'fade_in_duration': {'seconds': 1800},
+                    'when': {
+                      'recurrence_days': [
+                        'monday',
+                        'tuesday',
+                        'wednesday',
+                        'thursday',
+                        'friday',
+                      ],
+                      'time_point': {
+                        'type': 'time',
+                        'time': {'hour': 7, 'minute': 0},
+                      },
+                    },
+                    'where': [
+                      {
+                        'group': {'rid': 'r1', 'rtype': 'room'},
+                      },
+                    ],
+                  },
+                },
+              ],
+            });
           case '/clip/v2/resource/scene':
             return json({
               'data': [
@@ -829,6 +970,118 @@ void streamingTests() {
     expect(find.textContaining('in Living room'), findsOneWidget);
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 1));
+  });
+
+  Future<FakeBackgroundPlayback> playOceanInLivingRoom(
+    WidgetTester tester, {
+    bool keepPlaying = true,
+  }) async {
+    final bridge = await _connectedBridge(tester);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setLastTarget('group:r1');
+    await preferences.setKeepPlayingScreenOff(keepPlaying);
+    final background = FakeBackgroundPlayback();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      background: background,
+    ));
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ocean'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Play'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    return background;
+  }
+
+  // The phone locks and unlocks (no frames are drawn while paused).
+  void lockAndUnlock(WidgetTester tester) {
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+  }
+
+  testWidgets('on Android an effect plays on with the screen off',
+      (tester) async {
+    final background = await playOceanInLivingRoom(tester);
+    expect(background.shown, isTrue);
+    expect(background.title, 'Ocean');
+    expect(background.text, 'Living room');
+
+    lockAndUnlock(tester);
+    await tester.pump();
+    expect(find.text('Pause'), findsOneWidget, reason: 'the effect went on');
+
+    // Stop from the notification.
+    background.pressStop();
+    await tester.pump();
+    expect(find.text('Play'), findsOneWidget);
+    expect(background.shown, isFalse);
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('with the setting off, locking the phone stops the effect',
+      (tester) async {
+    final background = await playOceanInLivingRoom(tester, keepPlaying: false);
+    expect(background.shown, isFalse);
+    lockAndUnlock(tester);
+    await tester.pump();
+    expect(find.text('Play'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  testWidgets('wake-up and bedtime routines are listed and created',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Wake-up & bedtime'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Wake-up & bedtime'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pumpAndSettle();
+    expect(find.text('School days'), findsOneWidget);
+    expect(find.textContaining('7:00 AM · Mon, Tue, Wed, Thu, Fri'),
+        findsOneWidget);
+    expect(find.textContaining('Living room · 30 min'), findsOneWidget);
+
+    // Switch it off.
+    await tester.runAsync(() async {
+      await tester.tap(find.byType(Switch));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pumpAndSettle();
+    expect(puts, contains('/clip/v2/resource/behavior_instance/w1'));
+
+    // A new bedtime routine for the living room.
+    await tester.tap(find.text('New routine'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Go to sleep').first);
+    await tester.pump();
+    expect(find.text('10:30 PM'), findsOneWidget);
+    expect(find.text('Every day'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilterChip, 'Living room'));
+    await tester.pump();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Save'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pumpAndSettle();
+    expect(puts, contains('POST /clip/v2/resource/behavior_instance'));
+    expect(find.text('New routine'), findsOneWidget,
+        reason: 'back on the list');
   });
 
   testWidgets('player offers entertainment areas and reports start errors',

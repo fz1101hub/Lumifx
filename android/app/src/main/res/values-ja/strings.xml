@@ -6,4 +6,5 @@
     <string name="widget_title">お気に入り</string>
     <string name="widget_empty">LumiFX で演出をお気に入りにすると、ここに表示されます。</string>
     <string name="widget_description">お気に入りの LumiFX の演出をワンタップで。</string>
+    <string name="playback_channel">再生</string>
 </resources>

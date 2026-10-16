@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'core/audio/audio_input.dart';
+import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/effects/playback_controller.dart';
@@ -16,6 +17,8 @@ class AppScope extends InheritedWidget {
     required this.audioInput,
     required this.playback,
     required this.library,
+    this.background = const NoBackgroundPlayback(),
+    this.clock = DateTime.now,
     this.phoneAudioInput,
     required super.child,
     super.key,
@@ -39,6 +42,12 @@ class AppScope extends InheritedWidget {
   /// Built-in effects and the user's own scenes.
   final EffectLibrary library;
 
+  /// Playing on with the screen off (Android).
+  final BackgroundPlayback background;
+
+  /// Today, for the seasonal stories (tests pass a fixed date).
+  final DateTime Function() clock;
+
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
     assert(scope != null, 'No AppScope found in context');
@@ -53,5 +62,6 @@ class AppScope extends InheritedWidget {
       audioInput != oldWidget.audioInput ||
       playback != oldWidget.playback ||
       library != oldWidget.library ||
+      background != oldWidget.background ||
       phoneAudioInput != oldWidget.phoneAudioInput;
 }

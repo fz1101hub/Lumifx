@@ -10,6 +10,15 @@
          notification, after the user allows it in Android's dialog. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <!-- Effects keep playing with the screen off: a foreground service
+         that talks to the bridge (connected device) and, during Music
+         Sync, listens (microphone), holding wake and Wi-Fi locks. The
+         notification with its Stop button needs notification access on
+         Android 13+. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- No cloud backup: the bridge keys in secure storage are wrapped by
          this device's keystore and would be unreadable after a restore. -->
     <application
@@ -58,6 +67,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_favorites_info" />
         </receiver>
+        <service
+            android:name=".PlaybackService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice|microphone" />
         <service
             android:name=".PhoneAudioCaptureService"
             android:exported="false"
