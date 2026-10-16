@@ -13,6 +13,7 @@ import '../effects/effect_list_screen.dart';
 import '../effects/effect_palette.dart';
 import '../effects/player_route.dart';
 import '../playlists/playlists_screen.dart';
+import '../fun/fun_screen.dart';
 import '../rooms/rooms_screen.dart';
 import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
@@ -149,6 +150,19 @@ class HomeScreen extends StatelessWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => const TimersScreen()),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: ListTile(
+                minVerticalPadding: 20,
+                leading: const Icon(Icons.celebration_outlined),
+                title: Text(l10n.fun),
+                subtitle: Text(l10n.funSubtitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const FunScreen()),
                 ),
               ),
             ),

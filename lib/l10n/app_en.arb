@@ -1989,5 +1989,100 @@
   "photoFailed": "Couldn't open that photo. Check that LumiFX may use your photos or camera.",
   "@photoFailed": {
     "description": "Error when a photo cannot be opened"
+  },
+  "fun": "Parties and games",
+  "@fun": {
+    "description": "Home entry: parties and games played with the lights"
+  },
+  "funSubtitle": "Birthday, red light green light, statues, colour hunt",
+  "@funSubtitle": {
+    "description": "Subtitle of parties and games on the home screen"
+  },
+  "birthday": "Birthday party",
+  "@birthday": {
+    "description": "A birthday party played with the lights"
+  },
+  "birthdaySubtitle": "Candles, a wish and confetti of light",
+  "@birthdaySubtitle": {
+    "description": "Subtitle of the birthday party"
+  },
+  "birthdayDescription": "Type the name and age: the candles light up on your lamps. Make a wish, blow them out, and the room bursts into colour.",
+  "@birthdayDescription": {
+    "description": "Explains the birthday party"
+  },
+  "birthdayAge": "Age (optional)",
+  "@birthdayAge": {
+    "description": "Field: how old the person turns; may be left empty"
+  },
+  "birthdayLight": "Light the candles",
+  "@birthdayLight": {
+    "description": "Button: light the birthday candles"
+  },
+  "birthdayBlow": "Blow out the candles",
+  "@birthdayBlow": {
+    "description": "Big button: blow out the birthday candles"
+  },
+  "birthdayBlowOnPhone": "Blow on the phone",
+  "@birthdayBlowOnPhone": {
+    "description": "Button: listen on the microphone so the candles can be blown out by blowing on the phone"
+  },
+  "birthdayListening": "Listening… blow!",
+  "@birthdayListening": {
+    "description": "Shown while the microphone listens for blowing"
+  },
+  "birthdayMicDenied": "The microphone is not available. Tap the button to blow out the candles.",
+  "@birthdayMicDenied": {
+    "description": "Error when the microphone cannot be used to hear blowing"
+  },
+  "birthdayHappy": "Happy birthday!",
+  "@birthdayHappy": {
+    "description": "Birthday greeting without a name"
+  },
+  "birthdayHappyName": "Happy birthday, {name}!",
+  "@birthdayHappyName": {
+    "description": "Birthday greeting with the person's name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "birthdayMakeAWish": "Close your eyes and make a wish… then blow out the candles!",
+  "@birthdayMakeAWish": {
+    "description": "Line said while the candles flicker"
+  },
+  "birthdayWhoosh": "Whoosh! The candles are out.",
+  "@birthdayWhoosh": {
+    "description": "Line said as the candles go out"
+  },
+  "birthdayHooray": "Hooray!",
+  "@birthdayHooray": {
+    "description": "Cheer when the party starts, without a name"
+  },
+  "birthdayHoorayName": "Hooray for {name}!",
+  "@birthdayHoorayName": {
+    "description": "Cheer when the party starts, with the name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "birthdayYearsOld": "{age, plural, =1{One year old today!} other{{age} years old today!}}",
+  "@birthdayYearsOld": {
+    "description": "How old the person turns today",
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "birthdayWonderfulDay": "Have a wonderful day!",
+  "@birthdayWonderfulDay": {
+    "description": "Wish at the end of the party when no age was given"
+  },
+  "birthdayAgain": "Again!",
+  "@birthdayAgain": {
+    "description": "Button: light the candles again"
   }
 }

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:math' as math;
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/app.dart';
+import 'package:lumifx/src/app_scope.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
@@ -15,6 +18,7 @@ import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
+import 'package:lumifx/src/features/fun/birthday_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
@@ -61,6 +65,7 @@ class _FakePhotoPicker implements PhotoPicker {
 Future<void> _pumpApp(
   WidgetTester tester, {
   PhotoPicker photos = const NoPhotoPicker(),
+  AudioInput? audioInput,
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -75,7 +80,7 @@ Future<void> _pumpApp(
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
-      audioInput: FakeAudioInput(),
+      audioInput: audioInput ?? FakeAudioInput(),
       photos: photos,
     ),
   );
@@ -233,6 +238,74 @@ void main() {
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
     expect(find.text('Brush your teeth'), findsOneWidget);
+  });
+
+  Future<void> openBirthday(WidgetTester tester) async {
+    await tester.scrollUntilVisible(
+      find.text('Parties and games'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Birthday party'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('a birthday: candles, a wish, blow them out, a party',
+      (tester) async {
+    await _pumpApp(tester);
+    await openBirthday(tester);
+    await tester.enterText(find.byType(TextField).first, 'Anna');
+    await tester.enterText(find.byType(TextField).last, '7');
+    await tester.tap(find.text('Light the candles'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Happy birthday, Anna!'), findsWidgets);
+    expect(find.text('Blow out the candles'), findsOneWidget);
+
+    await tester.tap(find.text('Blow out the candles'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Whoosh! The candles are out.'), findsOneWidget);
+
+    // The party plays once, then the lights go back.
+    final playback =
+        AppScope.of(tester.element(find.byType(BirthdayScreen))).playback;
+    playback.player!.advance(const Duration(seconds: 31));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('7 years old today!'), findsOneWidget);
+    expect(find.text('Again!'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.text('Birthday party'), findsOneWidget);
+  });
+
+  testWidgets('blowing on the phone blows the candles out', (tester) async {
+    final random = math.Random(3);
+    final blow = Uint8List(44100 * 2);
+    final data = ByteData.sublistView(blow);
+    for (var i = 0; i < 44100; i++) {
+      data.setInt16(i * 2, random.nextInt(50000) - 25000, Endian.little);
+    }
+    final microphone = FakeAudioInput(pcm: blow);
+    await _pumpApp(tester, audioInput: microphone);
+    await openBirthday(tester);
+    await tester.tap(find.text('Light the candles'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Happy birthday!'), findsWidgets);
+
+    await tester.tap(find.text('Blow on the phone'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Whoosh! The candles are out.'), findsOneWidget);
+    expect(microphone.stopped, isTrue, reason: 'it stops listening');
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {
