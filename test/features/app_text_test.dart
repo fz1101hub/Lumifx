@@ -55,6 +55,8 @@ void main() {
       'fr': 'Lecture',
       'es': 'Reproducir',
       'nl': 'Afspelen',
+      'pt': 'Tocar',
+      'ja': '再生',
     };
     expect(
       AppLocalizations.supportedLocales.map((l) => l.languageCode).toSet(),
