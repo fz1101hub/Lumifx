@@ -1110,5 +1110,317 @@
   "wallPanelDescription": "For a tablet on the wall: time, rooms, Hue scenes and favourites, always on.",
   "@wallPanelDescription": {
     "description": "Explains wall panel mode"
+  },
+  "readAlong": "Read-along",
+  "@readAlong": {
+    "description": "Switch on the player: shows the story's words in time with the lights"
+  },
+  "readAlongDescription": "The story's words appear in time with the lights, to read aloud together.",
+  "@readAlongDescription": {
+    "description": "Subtitle of the read-along switch"
+  },
+  "narrationEmeraldTrickster1": "Shh… something small and green is hiding in this room.",
+  "@narrationEmeraldTrickster1": {
+    "description": "Read-along line of the Emerald Trickster story"
+  },
+  "narrationEmeraldTrickster2": "A golden spark! It dashes from lamp to lamp.",
+  "@narrationEmeraldTrickster2": {
+    "description": "Read-along line of the Emerald Trickster story"
+  },
+  "narrationEmeraldTrickster3": "The lights go quiet… it's tiptoeing closer.",
+  "@narrationEmeraldTrickster3": {
+    "description": "Read-along line of the Emerald Trickster story"
+  },
+  "narrationEmeraldTrickster4": "Boo! The trickster giggles and hides again.",
+  "@narrationEmeraldTrickster4": {
+    "description": "Read-along line of the Emerald Trickster story"
+  },
+  "narrationEnchantedFairy1": "A tiny fairy wakes up inside a flower of light.",
+  "@narrationEnchantedFairy1": {
+    "description": "Read-along line of the Enchanted Fairy story"
+  },
+  "narrationEnchantedFairy2": "She flutters across the room, leaving sparkles behind.",
+  "@narrationEnchantedFairy2": {
+    "description": "Read-along line of the Enchanted Fairy story"
+  },
+  "narrationEnchantedFairy3": "Oh! She found you. She raises her little wand…",
+  "@narrationEnchantedFairy3": {
+    "description": "Read-along line of the Enchanted Fairy story"
+  },
+  "narrationEnchantedFairy4": "One big spell, and the whole room glows.",
+  "@narrationEnchantedFairy4": {
+    "description": "Read-along line of the Enchanted Fairy story"
+  },
+  "narrationGoblinMine1": "Deep under the mountain, the goblins light their lanterns.",
+  "@narrationGoblinMine1": {
+    "description": "Read-along line of the Goblin Mine story"
+  },
+  "narrationGoblinMine2": "Stomp, stomp. They march down into the mine.",
+  "@narrationGoblinMine2": {
+    "description": "Read-along line of the Goblin Mine story"
+  },
+  "narrationGoblinMine3": "Clang! Clang! The pickaxes strike the rock.",
+  "@narrationGoblinMine3": {
+    "description": "Read-along line of the Goblin Mine story"
+  },
+  "narrationGoblinMine4": "Something glitters in the stone… gold!",
+  "@narrationGoblinMine4": {
+    "description": "Read-along line of the Goblin Mine story"
+  },
+  "narrationSleepingDragon1": "A dragon sleeps on its gold. Its embers glow with every breath.",
+  "@narrationSleepingDragon1": {
+    "description": "Read-along line of the Sleeping Dragon story"
+  },
+  "narrationSleepingDragon2": "A warm puff of smoke drifts across the room.",
+  "@narrationSleepingDragon2": {
+    "description": "Read-along line of the Sleeping Dragon story"
+  },
+  "narrationSleepingDragon3": "Shh… it's turning over. Don't make a sound.",
+  "@narrationSleepingDragon3": {
+    "description": "Read-along line of the Sleeping Dragon story"
+  },
+  "narrationSleepingDragon4": "A dream spark! The dragon smiles in its sleep.",
+  "@narrationSleepingDragon4": {
+    "description": "Read-along line of the Sleeping Dragon story"
+  },
+  "narrationMischievousGhost1": "A little ghost floats out of the wardrobe.",
+  "@narrationMischievousGhost1": {
+    "description": "Read-along line of the Mischievous Ghost story"
+  },
+  "narrationMischievousGhost2": "Whoosh! It zooms around the room looking for a friend.",
+  "@narrationMischievousGhost2": {
+    "description": "Read-along line of the Mischievous Ghost story"
+  },
+  "narrationMischievousGhost3": "Where did it go? Everything goes dark…",
+  "@narrationMischievousGhost3": {
+    "description": "Read-along line of the Mischievous Ghost story"
+  },
+  "narrationMischievousGhost4": "Peekaboo! It only wanted to play.",
+  "@narrationMischievousGhost4": {
+    "description": "Read-along line of the Mischievous Ghost story"
+  },
+  "narrationHauntedManor1": "Rain taps on the windows of the old manor.",
+  "@narrationHauntedManor1": {
+    "description": "Read-along line of the Haunted Manor story"
+  },
+  "narrationHauntedManor2": "Lightning! For a moment you can see the whole hall.",
+  "@narrationHauntedManor2": {
+    "description": "Read-along line of the Haunted Manor story"
+  },
+  "narrationHauntedManor3": "Footsteps upstairs… someone is walking from room to room.",
+  "@narrationHauntedManor3": {
+    "description": "Read-along line of the Haunted Manor story"
+  },
+  "narrationHauntedManor4": "Another flash, and the candles flicker…",
+  "@narrationHauntedManor4": {
+    "description": "Read-along line of the Haunted Manor story"
+  },
+  "narrationChristmasElves1": "In the workshop at the North Pole, the elves are wide awake.",
+  "@narrationChristmasElves1": {
+    "description": "Read-along line of the Christmas Elves story"
+  },
+  "narrationChristmasElves2": "They hurry from bench to bench with presents.",
+  "@narrationChristmasElves2": {
+    "description": "Read-along line of the Christmas Elves story"
+  },
+  "narrationChristmasElves3": "Tap, tap, tap! Everyone works to the same tune.",
+  "@narrationChristmasElves3": {
+    "description": "Read-along line of the Christmas Elves story"
+  },
+  "narrationChristmasElves4": "Look up! Santa's sleigh is flying overhead.",
+  "@narrationChristmasElves4": {
+    "description": "Read-along line of the Christmas Elves story"
+  },
+  "narrationHiddenTreasure1": "Your torch flickers as you step into the cave.",
+  "@narrationHiddenTreasure1": {
+    "description": "Read-along line of the Hidden Treasure story"
+  },
+  "narrationHiddenTreasure2": "A glint! Follow it from rock to rock.",
+  "@narrationHiddenTreasure2": {
+    "description": "Read-along line of the Hidden Treasure story"
+  },
+  "narrationHiddenTreasure3": "The torch is getting weaker… hurry!",
+  "@narrationHiddenTreasure3": {
+    "description": "Read-along line of the Hidden Treasure story"
+  },
+  "narrationHiddenTreasure4": "There it is: the treasure chest, shining with gold!",
+  "@narrationHiddenTreasure4": {
+    "description": "Read-along line of the Hidden Treasure story"
+  },
+  "narrationKrakensCove1": "Lanterns sway on the deck of the pirate ship.",
+  "@narrationKrakensCove1": {
+    "description": "Read-along line of the Kraken's Cove story"
+  },
+  "narrationKrakensCove2": "Boom! Boom! The cannons fire into the dark.",
+  "@narrationKrakensCove2": {
+    "description": "Read-along line of the Kraken's Cove story"
+  },
+  "narrationKrakensCove3": "Something huge is moving under the water…",
+  "@narrationKrakensCove3": {
+    "description": "Read-along line of the Kraken's Cove story"
+  },
+  "narrationKrakensCove4": "The kraken! Fire the cannons again!",
+  "@narrationKrakensCove4": {
+    "description": "Read-along line of the Kraken's Cove story"
+  },
+  "narrationMeteorShower1": "Lie back and look at the sky. It's very clear tonight.",
+  "@narrationMeteorShower1": {
+    "description": "Read-along line of the Meteor Shower story"
+  },
+  "narrationMeteorShower2": "A shooting star! And another! Make a wish.",
+  "@narrationMeteorShower2": {
+    "description": "Read-along line of the Meteor Shower story"
+  },
+  "narrationMeteorShower3": "The sky starts to rumble… hold on tight!",
+  "@narrationMeteorShower3": {
+    "description": "Read-along line of the Meteor Shower story"
+  },
+  "narrationMeteorShower4": "A great fireball lights up the whole night.",
+  "@narrationMeteorShower4": {
+    "description": "Read-along line of the Meteor Shower story"
+  },
+  "narrationDinosaurValley1": "Birds sing over a valley of giant ferns.",
+  "@narrationDinosaurValley1": {
+    "description": "Read-along line of the Dinosaur Valley story"
+  },
+  "narrationDinosaurValley2": "Boom… boom… heavy footsteps in the distance.",
+  "@narrationDinosaurValley2": {
+    "description": "Read-along line of the Dinosaur Valley story"
+  },
+  "narrationDinosaurValley3": "Everything goes quiet. Hide behind the ferns!",
+  "@narrationDinosaurValley3": {
+    "description": "Read-along line of the Dinosaur Valley story"
+  },
+  "narrationDinosaurValley4": "Closer… closer… a long-necked giant, munching leaves.",
+  "@narrationDinosaurValley4": {
+    "description": "Read-along line of the Dinosaur Valley story"
+  },
+  "narrationDeepSeaGlow1": "We sink slowly into the deep blue sea.",
+  "@narrationDeepSeaGlow1": {
+    "description": "Read-along line of the Deep Sea Glow story"
+  },
+  "narrationDeepSeaGlow2": "Tiny glowing creatures light up all around us.",
+  "@narrationDeepSeaGlow2": {
+    "description": "Read-along line of the Deep Sea Glow story"
+  },
+  "narrationDeepSeaGlow3": "Listen… a whale is singing.",
+  "@narrationDeepSeaGlow3": {
+    "description": "Read-along line of the Deep Sea Glow story"
+  },
+  "narrationDeepSeaGlow4": "Here it comes! The great whale glides past.",
+  "@narrationDeepSeaGlow4": {
+    "description": "Read-along line of the Deep Sea Glow story"
+  },
+  "narrationPumpkinPatch1": "Orange lanterns glow in a misty field.",
+  "@narrationPumpkinPatch1": {
+    "description": "Read-along line of the Pumpkin Patch story"
+  },
+  "narrationPumpkinPatch2": "A breeze carries the light from pumpkin to pumpkin.",
+  "@narrationPumpkinPatch2": {
+    "description": "Read-along line of the Pumpkin Patch story"
+  },
+  "narrationPumpkinPatch3": "Wait… that one just grinned at you!",
+  "@narrationPumpkinPatch3": {
+    "description": "Read-along line of the Pumpkin Patch story"
+  },
+  "narrationPumpkinPatch4": "The lanterns fade into the mist… then all light up at once!",
+  "@narrationPumpkinPatch4": {
+    "description": "Read-along line of the Pumpkin Patch story"
+  },
+  "narrationWitchesCauldron1": "A witch stirs her bubbling green cauldron.",
+  "@narrationWitchesCauldron1": {
+    "description": "Read-along line of the Witch's Cauldron story"
+  },
+  "narrationWitchesCauldron2": "Purple smoke curls around the room.",
+  "@narrationWitchesCauldron2": {
+    "description": "Read-along line of the Witch's Cauldron story"
+  },
+  "narrationWitchesCauldron3": "Oh no, the wrong ingredient! Crackle! Flash!",
+  "@narrationWitchesCauldron3": {
+    "description": "Read-along line of the Witch's Cauldron story"
+  },
+  "narrationWitchesCauldron4": "Poof! The spell went wrong… but it's beautiful.",
+  "@narrationWitchesCauldron4": {
+    "description": "Read-along line of the Witch's Cauldron story"
+  },
+  "narrationVampiresCastle1": "Candles burn in the old castle on the hill.",
+  "@narrationVampiresCastle1": {
+    "description": "Read-along line of the Vampire's Castle story"
+  },
+  "narrationVampiresCastle2": "Footsteps on the stone stairs… slowly coming up.",
+  "@narrationVampiresCastle2": {
+    "description": "Read-along line of the Vampire's Castle story"
+  },
+  "narrationVampiresCastle3": "A cloak sweeps across the hall!",
+  "@narrationVampiresCastle3": {
+    "description": "Read-along line of the Vampire's Castle story"
+  },
+  "narrationVampiresCastle4": "Lightning outside, and the candles go out!",
+  "@narrationVampiresCastle4": {
+    "description": "Read-along line of the Vampire's Castle story"
+  },
+  "narrationTrickOrTreat1": "Costumes on, bags ready. Let's go!",
+  "@narrationTrickOrTreat1": {
+    "description": "Read-along line of the Trick or Treat story"
+  },
+  "narrationTrickOrTreat2": "Knock knock! Who's there?",
+  "@narrationTrickOrTreat2": {
+    "description": "Read-along line of the Trick or Treat story"
+  },
+  "narrationTrickOrTreat3": "Sweets! And a giggle from behind the door.",
+  "@narrationTrickOrTreat3": {
+    "description": "Read-along line of the Trick or Treat story"
+  },
+  "narrationTrickOrTreat4": "Run to the next house down the street!",
+  "@narrationTrickOrTreat4": {
+    "description": "Read-along line of the Trick or Treat story"
+  },
+  "narrationSantasWorkshop1": "Santa's workshop is buzzing tonight.",
+  "@narrationSantasWorkshop1": {
+    "description": "Read-along line of the Santa's Workshop story"
+  },
+  "narrationSantasWorkshop2": "Bang, bang! The hammers are making toys.",
+  "@narrationSantasWorkshop2": {
+    "description": "Read-along line of the Santa's Workshop story"
+  },
+  "narrationSantasWorkshop3": "The tinsel twinkles in time with the work.",
+  "@narrationSantasWorkshop3": {
+    "description": "Read-along line of the Santa's Workshop story"
+  },
+  "narrationSantasWorkshop4": "Every toy flies into the sack, and it fills with light.",
+  "@narrationSantasWorkshop4": {
+    "description": "Read-along line of the Santa's Workshop story"
+  },
+  "narrationSilentSnowfall1": "Outside, the world is quiet.",
+  "@narrationSilentSnowfall1": {
+    "description": "Read-along line of the Silent Snowfall story"
+  },
+  "narrationSilentSnowfall2": "Soft snowflakes drift down past the window.",
+  "@narrationSilentSnowfall2": {
+    "description": "Read-along line of the Silent Snowfall story"
+  },
+  "narrationSilentSnowfall3": "Behind the clouds, the night sky shimmers.",
+  "@narrationSilentSnowfall3": {
+    "description": "Read-along line of the Silent Snowfall story"
+  },
+  "narrationSilentSnowfall4": "A shooting star over the snow. Sweet dreams.",
+  "@narrationSilentSnowfall4": {
+    "description": "Read-along line of the Silent Snowfall story"
+  },
+  "narrationCandlelightCarol1": "One small candle shines in the dark.",
+  "@narrationCandlelightCarol1": {
+    "description": "Read-along line of the Candlelight Carol story"
+  },
+  "narrationCandlelightCarol2": "It lights the next one, and the next…",
+  "@narrationCandlelightCarol2": {
+    "description": "Read-along line of the Candlelight Carol story"
+  },
+  "narrationCandlelightCarol3": "Now the whole room sings together.",
+  "@narrationCandlelightCarol3": {
+    "description": "Read-along line of the Candlelight Carol story"
+  },
+  "narrationCandlelightCarol4": "One last bright note, and a warm glow everywhere.",
+  "@narrationCandlelightCarol4": {
+    "description": "Read-along line of the Candlelight Carol story"
   }
 }

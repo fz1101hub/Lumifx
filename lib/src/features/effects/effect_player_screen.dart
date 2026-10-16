@@ -21,6 +21,7 @@ import 'effect_palette.dart';
 import 'light_color_ui.dart';
 import 'night_light_screen.dart';
 import 'playback_controller.dart';
+import 'read_along.dart';
 
 class EffectPlayerScreen extends StatefulWidget {
   const EffectPlayerScreen({required this.effect, super.key});
@@ -439,6 +440,13 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                 for (final slot in c.lightNames) describeSlot(l10n, slot),
               ],
             ),
+            if (hasNarration(effect) && preferences.readAlong) ...[
+              const SizedBox(height: 16),
+              ReadAlongCaption(
+                effect: effect,
+                player: current ? c.player : null,
+              ),
+            ],
             if (effect.usesMicrophone) ...[
               const SizedBox(height: 16),
               _MusicMeter(
@@ -534,6 +542,15 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
                   onChanged: preferences.setSoundVolume,
                 ),
             ],
+            if (hasNarration(effect))
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                secondary: const Icon(Icons.auto_stories_outlined),
+                title: Text(l10n.readAlong),
+                subtitle: Text(l10n.readAlongDescription),
+                value: preferences.readAlong,
+                onChanged: preferences.setReadAlong,
+              ),
           ];
           if (context.isWide) {
             return ListView(

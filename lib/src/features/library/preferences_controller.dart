@@ -116,6 +116,15 @@ class PreferencesController extends ChangeNotifier {
   bool _gentleStart = true;
   bool _soundOn = true;
   double _soundVolume = 0.6;
+  bool _readAlong = true;
+
+  /// The words of a story shown in time with its lights.
+  bool get readAlong => _readAlong;
+
+  Future<void> setReadAlong(bool value) {
+    _readAlong = value;
+    return _changed();
+  }
 
   /// Ambient sounds under the effects that have them.
   bool get soundOn => _soundOn;
@@ -185,6 +194,7 @@ class PreferencesController extends ChangeNotifier {
       _gentleStart = json['gentleStart'] as bool? ?? true;
       _soundOn = json['soundOn'] as bool? ?? true;
       _soundVolume = _unit(json['soundVolume'], 0.6);
+      _readAlong = json['readAlong'] as bool? ?? true;
       _musicSource = MusicSource.values.asNameMap()[json['musicSource']] ??
           MusicSource.microphone;
       final scenes = json['userScenes'];
@@ -378,6 +388,7 @@ class PreferencesController extends ChangeNotifier {
       'gentleStart': _gentleStart,
       'soundOn': _soundOn,
       'soundVolume': _soundVolume,
+      'readAlong': _readAlong,
       'musicSource': _musicSource.name,
       'playlists': [for (final p in _playlists) p.toJson()],
       'userScenes': [for (final s in _userScenes) s.toJson()],

@@ -88,6 +88,33 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('a story shows its words to read along, and can hide them',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Stories'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Emerald Trickster'));
+    await tester.pumpAndSettle();
+    const opening = 'Shh… something small and green is hiding in this room.';
+    expect(find.text(opening), findsOneWidget);
+
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text(opening), findsOneWidget, reason: 'the story begins');
+
+    await tester.scrollUntilVisible(find.text('Read-along'), 200);
+    await tester.tap(find.text('Read-along'));
+    await tester.pump();
+    expect(find.text(opening), findsNothing);
+
+    await tester.drag(find.text('Read-along'), const Offset(0, 600));
+    await tester.pump();
+    await tester.tap(find.text('Pause'));
+    await tester.pump();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));
