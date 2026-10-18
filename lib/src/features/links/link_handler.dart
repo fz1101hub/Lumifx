@@ -128,7 +128,9 @@ class LinkHandler {
   Future<bool> _bedtime() async {
     await _ready();
     final story = library.byId(preferences.bedtimeStory);
-    if (story == null || story.hasRapidFlashes) {
+    if (story == null ||
+        story.hasRapidFlashes ||
+        !kidsModeAllowsBedtime(preferences, library, story)) {
       return false;
     }
     await playback.startBedtime(

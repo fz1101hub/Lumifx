@@ -148,7 +148,9 @@ class HueButtonListener {
           return;
         }
         final story = library.byId(preferences.bedtimeStory);
-        if (story == null || story.hasRapidFlashes) {
+        if (story == null ||
+            story.hasRapidFlashes ||
+            !kidsModeAllowsBedtime(preferences, library, story)) {
           return;
         }
         await playback.startBedtime(
