@@ -1134,5 +1134,7 @@
   "pianoEchoBest": "Récord: {count} notas",
   "routineMakeStory": "Inventar un cuento",
   "pianoListenFirst": "Escuchar primero",
-  "routineTidyTimer": "Temporizador de recoger de diez minutos"
+  "routineTidyTimer": "Temporizador de recoger de diez minutos",
+  "nowMorning": "¡Buenos días! ¿Listos para la rutina de la mañana?",
+  "nowEvening": "Ya casi es hora de dormir: ¿empezamos el ritual?"
 }

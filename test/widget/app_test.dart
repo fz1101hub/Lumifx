@@ -263,7 +263,9 @@ Future<void> _pumpApp(
       audioInput: audioInput ?? FakeAudioInput(),
       photos: photos,
       weather: weather,
-      clock: clock ?? DateTime.now,
+      // A fixed time, so nothing depends on when the tests run (the home
+      // suggests a routine in the morning and the ritual at night).
+      clock: clock ?? () => DateTime(2026, 6, 15, 12),
       speaker: speaker,
       nfc: nfc,
       notificationLights: notificationLights,
@@ -948,6 +950,7 @@ void main() {
     await preferences.setKidsLocked(true);
     await preferences.load();
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -965,6 +968,7 @@ void main() {
     await preferences.setKidsLocked(true);
     await preferences.load();
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -1050,6 +1054,34 @@ void main() {
         reason: 'the running game, not its rules');
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets('the home suggests the morning routine and the bedtime ritual',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 6, 15, 7, 30));
+    expect(find.text('Good morning! Ready for the morning routine?'),
+        findsOneWidget);
+    await tester.tap(find.text('Good morning! Ready for the morning routine?'));
+    await tester.pumpAndSettle();
+    expect(find.byType(RoutineScreen), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('in the evening the home suggests the ritual, at noon nothing',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 6, 15, 19, 45));
+    expect(find.text("It's nearly bedtime: start the ritual?"), findsOneWidget);
+    await tester.tap(find.text("It's nearly bedtime: start the ritual?"));
+    await tester.pumpAndSettle();
+    expect(find.byType(BedtimeRitualScreen), findsOneWidget);
+
+    await _pumpApp(tester);
+    expect(find.text("It's nearly bedtime: start the ritual?"), findsNothing);
+    expect(find.text('Good morning! Ready for the morning routine?'),
+        findsNothing);
   });
 
   testWidgets('a picture routine fills the lamps and earns a star',
@@ -2472,6 +2504,7 @@ void main() {
     final bridge = BridgeController(store: InMemoryCredentialStore());
     await tester.runAsync(bridge.initialize);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -2504,6 +2537,7 @@ void main() {
       final preferences = PreferencesController(store: store);
       await tester.runAsync(preferences.load);
       await tester.pumpWidget(LumiFxApp(
+        clock: () => DateTime(2026, 6, 15, 12),
         key: UniqueKey(),
         bridge: bridge,
         discovery: _FakeDiscovery(),
@@ -2542,6 +2576,7 @@ void main() {
     final preferences = PreferencesController(store: store);
     await tester.runAsync(preferences.load);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -2910,6 +2945,7 @@ void main() {
     final bridge = BridgeController(store: InMemoryCredentialStore());
     await tester.runAsync(bridge.initialize);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       // Beat effects flash: the one-time warning has been seen already.
@@ -2952,6 +2988,7 @@ void main() {
     final bridge = BridgeController(store: InMemoryCredentialStore());
     await tester.runAsync(bridge.initialize);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -3003,6 +3040,7 @@ void main() {
     final bridge = BridgeController(store: InMemoryCredentialStore());
     await tester.runAsync(bridge.initialize);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: _warnedPreferences(),
@@ -3027,6 +3065,7 @@ void main() {
     await tester.runAsync(bridge.initialize);
     final preferences = PreferencesController(store: InMemoryKeyValueStore());
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -3080,6 +3119,7 @@ void main() {
     await tester.runAsync(bridge.initialize);
     final preferences = PreferencesController(store: InMemoryKeyValueStore());
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -3143,6 +3183,7 @@ void main() {
     final shortcuts = FakeShortcuts();
     final widgets = FakeHomeWidgets();
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -3185,6 +3226,7 @@ void main() {
     final bridge = BridgeController(store: InMemoryCredentialStore());
     await tester.runAsync(bridge.initialize);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: PreferencesController(store: InMemoryKeyValueStore()),
@@ -3411,6 +3453,7 @@ void streamingTests() {
     final puts = <String>[];
     final bridge = await _connectedBridge(tester, puts: puts);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: PreferencesController(store: InMemoryKeyValueStore()),
@@ -3436,6 +3479,7 @@ void streamingTests() {
     final bridge = await _connectedBridge(tester, puts: puts);
     final preferences = PreferencesController(store: InMemoryKeyValueStore());
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -3486,6 +3530,7 @@ void streamingTests() {
     final preferences = PreferencesController(store: InMemoryKeyValueStore());
     await preferences.setLastTarget('group:r1');
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -3525,6 +3570,7 @@ void streamingTests() {
     await preferences.setKeepPlayingScreenOff(keepPlaying);
     final background = FakeBackgroundPlayback();
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: preferences,
@@ -3589,6 +3635,7 @@ void streamingTests() {
     final puts = <String>[];
     final bridge = await _connectedBridge(tester, puts: puts);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: PreferencesController(store: InMemoryKeyValueStore()),
@@ -3697,6 +3744,7 @@ void streamingTests() {
     expect(bridge.status, BridgeStatus.connected);
     await tester.pumpWidget(
       LumiFxApp(
+        clock: () => DateTime(2026, 6, 15, 12),
         bridge: bridge,
         discovery: _FakeDiscovery(),
         preferences: PreferencesController(store: InMemoryKeyValueStore()),
@@ -3726,6 +3774,7 @@ void streamingTests() {
       (tester) async {
     final bridge = await _connectedBridge(tester, clientKey: 'A' * 32);
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _FakeDiscovery(),
       preferences: PreferencesController(store: InMemoryKeyValueStore()),

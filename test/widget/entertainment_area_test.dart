@@ -94,6 +94,7 @@ void main() {
     expect(bridge.home!.entertainmentServices, hasLength(3));
 
     await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
       bridge: bridge,
       discovery: _NoDiscovery(),
       preferences: PreferencesController(store: InMemoryKeyValueStore()),

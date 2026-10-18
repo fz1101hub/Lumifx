@@ -1134,5 +1134,7 @@
   "pianoEchoBest": "Record: {count} noten",
   "routineMakeStory": "Verzin een verhaal",
   "pianoListenFirst": "Eerst luisteren",
-  "routineTidyTimer": "Opruimtimer van tien minuten"
+  "routineTidyTimer": "Opruimtimer van tien minuten",
+  "nowMorning": "Goedemorgen! Klaar voor de ochtendroutine?",
+  "nowEvening": "Bijna bedtijd: zullen we het ritueel beginnen?"
 }

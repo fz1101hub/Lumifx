@@ -110,6 +110,7 @@ Future<void> _open(
   await preferences.load();
   await preferences.saveUserStory(_story);
   await tester.pumpWidget(LumiFxApp(
+    clock: () => DateTime(2026, 6, 15, 12),
     bridge: bridge,
     discovery: _NoDiscovery(),
     preferences: preferences,

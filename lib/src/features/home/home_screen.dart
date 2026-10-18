@@ -25,6 +25,7 @@ import '../links/nfc_stickers_screen.dart';
 import '../notifications/notification_lights_screen.dart';
 import '../music_box/music_box_screen.dart';
 import '../rooms/rooms_screen.dart';
+import '../routines/kid_routine.dart';
 import '../routines/routines_screen.dart';
 import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
@@ -81,6 +82,8 @@ class HomeScreen extends StatelessWidget {
           padding: context.pageInsets(maxWidth: 1000),
           children: [
             _BridgeBanner(controller: bridge),
+            if (_nowEntry(l10n, AppScope.of(context).clock()) case final now?)
+              _NowCard(entry: now),
             if (festivalOf(AppScope.of(context).clock()) case final festival?)
               _EffectShelf(
                 title: switch (festival) {
@@ -207,6 +210,61 @@ class HomeScreen extends StatelessWidget {
 }
 
 /// One place to go from the home: an icon, a title, a line about it.
+/// What fits the time of day: the morning routine from 6 to 10, the
+/// bedtime ritual from half past six to ten in the evening.
+_HomeEntry? _nowEntry(AppLocalizations l10n, DateTime now) {
+  final minutes = now.hour * 60 + now.minute;
+  if (minutes >= 6 * 60 && minutes < 10 * 60) {
+    return _HomeEntry(
+      Icons.wb_sunny_outlined,
+      KidRoutine.morning.title(l10n),
+      l10n.nowMorning,
+      () => const RoutineScreen(routine: KidRoutine.morning),
+    );
+  }
+  if (minutes >= 18 * 60 + 30 && minutes < 22 * 60) {
+    return _HomeEntry(
+      Icons.nights_stay_outlined,
+      l10n.ritual,
+      l10n.nowEvening,
+      () => const BedtimeRitualScreen(),
+    );
+  }
+  return null;
+}
+
+/// The one thing suggested for now, at the top of the home.
+class _NowCard extends StatelessWidget {
+  const _NowCard({required this.entry});
+
+  final _HomeEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Card(
+        margin: EdgeInsets.zero,
+        color: theme.colorScheme.primaryContainer,
+        child: ListTile(
+          minVerticalPadding: 14,
+          leading:
+              Icon(entry.icon, color: theme.colorScheme.onPrimaryContainer),
+          title: Text(entry.title),
+          subtitle: Text(entry.subtitle),
+          textColor: theme.colorScheme.onPrimaryContainer,
+          trailing: Icon(Icons.arrow_forward,
+              color: theme.colorScheme.onPrimaryContainer),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (_) => entry.screen()),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _HomeEntry {
   const _HomeEntry(this.icon, this.title, this.subtitle, this.screen);
 
