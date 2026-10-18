@@ -71,6 +71,7 @@ import 'package:lumifx/src/features/music_box/music_box_screen.dart';
 import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/routines/kid_routine.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
 import 'package:lumifx/src/features/routines/star_shop_screen.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
@@ -1099,6 +1100,37 @@ void main() {
     expect(find.byIcon(Icons.star), findsNWidgets(2));
   });
 
+  testWidgets('brushing teeth in a routine runs the two-minute timer',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const RoutineScreen(routine: KidRoutine.morning))));
+    await tester.pumpAndSettle();
+    expect(find.text('0 of 6 done'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+
+    await tester.tap(find.byTooltip('Two-minute timer'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(TimerRunningScreen), findsOneWidget);
+    expect(sound.playing?.melody?.id, 'twinkle');
+
+    // The time is up: the step is done.
+    playback.player!.advance(playback.effect.cycleLength);
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text("Time's up!"), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.text('1 of 6 done'), findsOneWidget);
+    expect(find.byTooltip('Two-minute timer'), findsNothing);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('a lullaby plays its tune and then fades the lights out',
       (tester) async {
     await _pumpApp(tester);
@@ -1785,7 +1817,7 @@ void main() {
     }
     expect(find.text('Bravo! One more note'), findsOneWidget);
     await tester.pump(const Duration(seconds: 2));
-    expect(find.text('A tune of 4 notes'), findsOneWidget);
+    expect(find.text('A tune of 4 notes · Best: 3 notes'), findsOneWidget);
     expect(find.text('Listen…'), findsOneWidget);
     await tester.pump(const Duration(seconds: 4));
     expect(find.text('Your turn!'), findsOneWidget);
@@ -1795,7 +1827,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Oops! Listen again'), findsOneWidget);
     await tester.pump(const Duration(seconds: 2));
-    expect(find.text('A tune of 4 notes'), findsOneWidget);
+    expect(find.text('A tune of 4 notes · Best: 3 notes'), findsOneWidget);
     await tester.pump(const Duration(seconds: 4));
     await playback.stop();
     await tester.pumpAndSettle();
@@ -1967,7 +1999,7 @@ void main() {
     await finish();
     expect(MonsterHunt.isGuardian(playback.effect), isTrue);
     expect(playback.sleepTimer, const Duration(minutes: 30));
-    expect(find.text('Goodnight!'), findsOneWidget);
+    expect(find.text('Goodnight, Mia!'), findsOneWidget);
     await playback.stop();
     playback.setSleepTimer(null);
     await tester.pumpAndSettle();

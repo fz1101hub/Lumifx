@@ -92,6 +92,8 @@ void main() {
     final first = PreferencesController(store: store);
     expect(first.recordCountingScore(4), isTrue);
     expect(first.recordCountingScore(3), isFalse);
+    expect(first.recordPianoEcho(5), isTrue);
+    expect(first.recordPianoEcho(4), isFalse);
     await first.setLearnLanguage('fr');
     expect(first.kidsActivities, isNull);
     await first.setKidsActivities(['piano']);
@@ -109,6 +111,7 @@ void main() {
     expect(second.napMinutes, 90);
     expect(second.noiseLimit, 'quiet');
     expect(second.teethTune, isFalse);
+    expect(second.pianoEchoBest, 5);
   });
 
   test('corrupt data is ignored', () async {

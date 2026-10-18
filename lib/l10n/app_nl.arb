@@ -1128,5 +1128,8 @@
   "pianoEchoBravo": "Bravo! Nog een noot erbij",
   "pianoEchoOops": "Oeps! Luister nog eens",
   "pianoEchoNotes": "Een melodie van {count} noten",
-  "noiseStopped": "De microfoon is gestopt. Tik op Begin met luisteren om verder te gaan."
+  "noiseStopped": "De microfoon is gestopt. Tik op Begin met luisteren om verder te gaan.",
+  "routineTeethTimer": "Timer van twee minuten",
+  "ritualGoodnightName": "Welterusten, {name}!",
+  "pianoEchoBest": "Record: {count} noten"
 }

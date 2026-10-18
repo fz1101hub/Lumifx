@@ -717,3 +717,14 @@ iOS lists the languages in `CFBundleLocalizations`.
   notes; the screen plays them with `_press(replay: true)` and ignores
   the keys until it has finished.
 
+### Round 6 notes
+
+- `RoutineScreen` gives the brush-teeth step a timer button: it plays
+  `LightTimer.teeth` (tune per `teethTune`), pushes `TimerRunningScreen`,
+  and ticks the step if the playback's finished notice came for that
+  timer meanwhile; otherwise it shows the routine's progress again.
+- The ritual's guardian step speaks `ritualGoodnightName` (the active
+  child's name) when `readAloud` and sounds are on.
+- `PreferencesController.pianoEchoBest` keeps the longest tune played
+  back in Repeat after me.
+

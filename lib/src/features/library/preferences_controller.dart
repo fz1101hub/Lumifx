@@ -519,6 +519,21 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  int _pianoEchoBest = 0;
+
+  /// The longest tune played back in Repeat after me.
+  int get pianoEchoBest => _pianoEchoBest;
+
+  /// Keeps [notes] if it beats the best; true when it does.
+  bool recordPianoEcho(int notes) {
+    if (notes <= _pianoEchoBest) {
+      return false;
+    }
+    _pianoEchoBest = notes;
+    unawaited(_changed());
+    return true;
+  }
+
   int _simonBest = 0;
 
   /// The longest sequence repeated in the memory game.
@@ -742,6 +757,8 @@ class PreferencesController extends ChangeNotifier {
       final noise = json['noiseLimit'];
       _noiseLimit = noise is String && noise.length <= 20 ? noise : null;
       _teethTune = json['teethTune'] != false;
+      final echo = json['pianoEchoBest'];
+      _pianoEchoBest = echo is int && echo > 0 && echo <= 100 ? echo : 0;
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
       final buttons = json['buttonActions'];
@@ -1010,6 +1027,7 @@ class PreferencesController extends ChangeNotifier {
       'readAloud': _readAloud,
       'weatherPlace': _weatherPlace?.toJson(),
       'simonBest': _simonBest,
+      'pianoEchoBest': _pianoEchoBest,
       'countingBest': _countingBest,
       'learnLanguage': _learnLanguage,
       'napMinutes': _napMinutes,

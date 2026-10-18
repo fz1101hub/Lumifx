@@ -146,7 +146,8 @@ Also done ahead of schedule:
   light that follows the day (a smart scene).
 - **Morning and evening routines**: picture checklists with the steps a
   grown-up chooses; the lamps fill up step by step, then a party and a
-  star, with a chart of the last seven days.
+  star, with a chart of the last seven days. "Brush your teeth" has a
+  two-minute light timer that ticks the step when the time is up.
 - **Lullabies on a music box**: Brahms's Lullaby, Twinkle Twinkle,
   Frère Jacques and Au clair de la lune, made on the phone; each note lights a lamp by its pitch
   (low on one side, high on the other); once, three or five times, then
@@ -205,7 +206,7 @@ Also done ahead of schedule:
   a Little Lamb, Ode to Joy and more, easiest first), a tune played can
   be recorded and played back with its lights, and "Repeat after me"
   plays a short tune for the child to play back, one note longer each
-  time. Notes are named as children learn them (do re mi, ドレミ, or
+  time, with the best tune to beat. Notes are named as children learn them (do re mi, ドレミ, or
   letters with H in German).
 - **Steps of your own** in the routines ("feed the cat"), with a
   picture and a colour, alongside the built-in ones.
@@ -218,7 +219,8 @@ Also done ahead of schedule:
 - **Bedtime ritual** in one tap: the evening routine, the monster spray,
   a minute of calm breathing, a story made up for tonight with the child
   as hero, a lullaby and the guardian light, one after the other, with
-  the steps a grown-up keeps.
+  the steps a grown-up keeps; it ends with "Goodnight, Mia!", said aloud
+  when stories are read aloud.
 - **Halloween party**: a purple and green room; when someone walks past
   a Hue motion sensor (or a grown-up taps Scare now) the lamps flash,
   the phone thunders and red eyes glow on one lamp, with 15 s of rest
