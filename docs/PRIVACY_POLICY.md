@@ -14,7 +14,10 @@ described under "Weather lights" below, and only if you use them.
 bridge gives the app an application key and a streaming key. They are stored
 in your phone's secure storage (Keychain on iOS, Keystore-backed storage on
 Android) and are sent only to your bridge, over your local network. They are
-removed when you choose "Forget this bridge" or uninstall the app.
+removed when you choose "Forget this bridge" or uninstall the app. On iPhone
+the system may keep them in the Keychain after the app is deleted: if you
+install LumiFX again, it erases them on its first launch, and you pair again
+with the bridge's button.
 
 **Lights, rooms and entertainment areas.** The app reads the names and state
 of your lights, rooms, zones and entertainment areas from your bridge to show
@@ -48,7 +51,8 @@ LumiFX.
 
 **Photos (scene from a photo).** In the scene editor, "From a photo" lets
 you choose a photo or take one. The app reads its main colours on your
-phone; the photo is not kept, copied or sent anywhere.
+phone; the photo is not kept or sent anywhere. The small copy the system
+picker hands to the app is deleted as soon as its colours are read.
 
 **Reading stories aloud.** If you switch on "Read aloud", the words of the
 stories and game calls are read by your phone's own text-to-speech voice.
@@ -219,7 +223,10 @@ personale. L'unica cosa che esce dalla rete di casa è descritta sotto
 assegna all'app una chiave applicativa e una chiave per lo streaming. Sono
 salvate nell'archivio sicuro del telefono (Keychain su iOS, Keystore su
 Android) e vengono inviate solo al tuo Bridge, sulla rete locale. Vengono
-eliminate con "Dimentica questo Bridge" o disinstallando l'app.
+eliminate con "Dimentica questo Bridge" o disinstallando l'app. Su iPhone il
+sistema può conservarle nel Portachiavi anche dopo l'eliminazione dell'app:
+se reinstalli LumiFX, l'app le cancella al primo avvio e ricolleghi il Bridge
+con il suo pulsante.
 
 **Luci, stanze e aree Entertainment.** L'app legge dal Bridge nomi e stato di
 luci, stanze, zone e aree Entertainment per mostrarli e controllarli. Queste
@@ -248,7 +255,8 @@ disattivati.
 
 **Foto (scena da una foto).** Nell'editor delle scene, "Da una foto" ti fa
 scegliere o scattare una foto. L'app ne legge i colori principali sul
-telefono; la foto non viene conservata, copiata né inviata.
+telefono; la foto non viene conservata né inviata. La piccola copia che il
+selettore di sistema passa all'app viene eliminata appena letti i colori.
 
 **Lettura ad alta voce.** Se attivi "Leggi ad alta voce", le parole delle
 storie e i comandi dei giochi sono letti dalla voce di sintesi del telefono.

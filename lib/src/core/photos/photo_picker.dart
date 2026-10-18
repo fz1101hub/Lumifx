@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Where a photo comes from.
 enum PhotoSource { gallery, camera }
@@ -30,7 +33,9 @@ class NoPhotoPicker implements PhotoPicker {
   Future<Uint8List?> pick(PhotoSource source) async => null;
 }
 
-/// The system's photo picker and camera. The photo stays on the phone.
+/// The system's photo picker and camera. The photo stays on the phone;
+/// the small copy the picker makes in the app's temporary folder is
+/// deleted once its colours are read.
 class PluginPhotoPicker implements PhotoPicker {
   PluginPhotoPicker();
 
@@ -48,9 +53,42 @@ class PluginPhotoPicker implements PhotoPicker {
         maxHeight: 512,
         requestFullMetadata: false,
       );
-      return await file?.readAsBytes();
+      if (file == null) {
+        return null;
+      }
+      try {
+        return await file.readAsBytes();
+      } finally {
+        await _discard(file.path);
+      }
     } on Object catch (error) {
       throw PhotoUnavailable(error);
     }
+  }
+
+  static Future<void> _discard(String path) async {
+    try {
+      await discardPickedCopy(path, await getTemporaryDirectory());
+    } on Object {
+      // No temporary folder to compare with: the copy is left to the
+      // system, which clears its cache anyway.
+    }
+  }
+}
+
+/// Deletes the picker's copy at [path] when it lies in the app's own
+/// [temporary] folder; a photo anywhere else (the gallery's own file) is
+/// never touched.
+@visibleForTesting
+Future<void> discardPickedCopy(String path, Directory temporary) async {
+  try {
+    final file = File(path);
+    final folder = temporary.resolveSymbolicLinksSync();
+    final copy = file.resolveSymbolicLinksSync();
+    if (copy.startsWith('$folder${Platform.pathSeparator}')) {
+      await file.delete();
+    }
+  } on Object {
+    // Gone already, or never ours: the system clears its cache anyway.
   }
 }
