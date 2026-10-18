@@ -146,8 +146,9 @@ Also done ahead of schedule:
   light that follows the day (a smart scene).
 - **Morning and evening routines**: picture checklists with the steps a
   grown-up chooses; the lamps fill up step by step, then a party and a
-  star, with a chart of the last seven days. "Brush your teeth" has a
-  two-minute light timer that ticks the step when the time is up.
+  star, with a chart of the last seven days. "Brush your teeth" and
+  "Tidy up" have their light timer, and story time opens the story
+  maker; each ticks its step when the time is up or the story is told.
 - **Lullabies on a music box**: Brahms's Lullaby, Twinkle Twinkle,
   Frère Jacques and Au clair de la lune, made on the phone; each note lights a lamp by its pitch
   (low on one side, high on the other); once, three or five times, then
@@ -203,7 +204,8 @@ Also done ahead of schedule:
 - **Light piano**: eight keys from middle C, each a music-box note made
   on the phone and a flash of its rainbow colour on one lamp along the
   room; "Learn a song" makes the next key glow (Hot Cross Buns, Mary Had
-  a Little Lamb, Ode to Joy and more, easiest first), a tune played can
+  a Little Lamb, Ode to Joy and more, easiest first; "Listen first"
+  plays the song with its keys glowing), a tune played can
   be recorded and played back with its lights, and "Repeat after me"
   plays a short tune for the child to play back, one note longer each
   time, with the best tune to beat. Notes are named as children learn them (do re mi, ドレミ, or

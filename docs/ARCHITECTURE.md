@@ -728,3 +728,12 @@ iOS lists the languages in `CFBundleLocalizations`.
 - `PreferencesController.pianoEchoBest` keeps the longest tune played
   back in Repeat after me.
 
+### Round 7 notes
+
+- `RoutineScreen._doWith` opens a helper screen for a step and ticks the
+  step when an effect it counts finishes meanwhile (the playback's
+  finished notice): the light timers for brushing teeth and tidying up,
+  and the story maker for story time (any `Tale` effect).
+- The light piano's Listen first plays the lesson's melody through
+  `_press(replay: true)`, which never advances the lesson.
+
