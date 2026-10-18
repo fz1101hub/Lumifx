@@ -21,6 +21,7 @@ import 'features/effects/catalog/effect_catalog.dart';
 import 'features/effects/mini_player.dart';
 import 'features/effects/playback_controller.dart';
 import 'features/effects/player_route.dart';
+import 'features/effects/playing_route.dart';
 import 'features/home/home_screen.dart';
 import 'features/kids/kids_mode.dart';
 import 'features/library/effect_library.dart';
@@ -347,7 +348,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   void _openPlaying() {
     final navigator = _navigatorKey.currentState;
     if (navigator != null) {
-      unawaited(navigator.push(playerRoute(_playback.effect)));
+      unawaited(navigator.push(routeForPlaying(_playback.effect)));
     }
   }
 

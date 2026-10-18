@@ -13,9 +13,12 @@ import 'light_games.dart';
 /// A light game: its rules and a start button, then the lights' calls in
 /// big letters on their colour, for those who look at the phone.
 class GameScreen extends StatefulWidget {
-  const GameScreen({required this.game, super.key});
+  const GameScreen({required this.game, this.playing, super.key});
 
   final LightGame game;
+
+  /// The game already on the lights, when opened from the mini-player.
+  final LightingEffect? playing;
 
   static String titleOf(AppLocalizations l10n, LightGame game) =>
       switch (game) {
@@ -42,8 +45,11 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  GamePlan? _plan;
-  LightingEffect? _effect;
+  late GamePlan? _plan = switch (widget.playing) {
+    final effect? => GamePlan.of(effect),
+    null => null,
+  };
+  late LightingEffect? _effect = widget.playing;
 
   Future<void> _start() async {
     final l10n = context.l10n;

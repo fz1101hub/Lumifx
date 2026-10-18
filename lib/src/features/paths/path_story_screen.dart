@@ -48,17 +48,23 @@ class PathStoriesScreen extends StatelessWidget {
 /// One choose-your-path story: its words in time with the lights and, at
 /// each turn, two big buttons to choose the way.
 class PathStoryScreen extends StatefulWidget {
-  const PathStoryScreen({required this.story, super.key});
+  const PathStoryScreen({required this.story, this.playing, super.key});
 
   final PathStory story;
+
+  /// The part already on the lights, when opened from the mini-player.
+  final LightingEffect? playing;
 
   @override
   State<PathStoryScreen> createState() => _PathStoryScreenState();
 }
 
 class _PathStoryScreenState extends State<PathStoryScreen> {
-  PathPart? _part;
-  LightingEffect? _effect;
+  late PathPart? _part = switch (widget.playing) {
+    final effect? => PathStory.of(effect)?.$2,
+    null => null,
+  };
+  late LightingEffect? _effect = widget.playing;
 
   Future<void> _play(PathPart part) async {
     final l10n = context.l10n;

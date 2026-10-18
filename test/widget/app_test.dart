@@ -36,6 +36,7 @@ import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
+import 'package:lumifx/src/features/timers/timers_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
@@ -793,6 +794,60 @@ void main() {
     ));
     await tester.pumpAndSettle();
     expect(find.byType(KidsModeScreen), findsOneWidget);
+  });
+
+  testWidgets('the mini-player leads back to a timer or a game screen',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Light timers'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Start').first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(TimerRunningScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.tap(find.descendant(
+        of: find.byType(MiniPlayer), matching: find.text('Brush your teeth')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(TimerRunningScreen), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^[12]:\d\d$')), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    // Back on the home, where the mini-player was tapped.
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+
+    await openBirthday(tester);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Statues'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.descendant(
+        of: find.byType(MiniPlayer), matching: find.text('Statues')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Dance!'), findsOneWidget,
+        reason: 'the running game, not its rules');
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {
