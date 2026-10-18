@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lumifx/src/core/effects/effect_event.dart';
 import 'package:lumifx/src/features/learn/morse.dart';
@@ -46,5 +48,20 @@ void main() {
     final i = message.signals.indexWhere((s) => s.letter == 1);
     expect(message.letterAt(flashes[i].at), 1);
     expect(message.letterAt(effect.cycleLength), isNull);
+  });
+
+  test('the guessing game offers four letters, the right one among them', () {
+    final quiz = MorseQuiz(math.Random(5));
+    String? last;
+    for (var i = 0; i < 100; i++) {
+      quiz.next();
+      expect(quiz.choices.toSet(), hasLength(4));
+      expect(quiz.choices, contains(quiz.target));
+      expect(quiz.target, matches(RegExp('^[A-Z]\$')));
+      expect(quiz.target, isNot(last));
+      last = quiz.target;
+    }
+    expect(quiz.answer(quiz.target), isTrue);
+    expect(quiz.score, 1);
   });
 }

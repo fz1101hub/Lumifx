@@ -1040,5 +1040,11 @@
   "linkRoutines": "Routinen öffnen",
   "pianoRecord": "Aufnehmen",
   "pianoStopRecording": "Aufnahme beenden",
-  "pianoPlayBack": "Abspielen"
+  "pianoPlayBack": "Abspielen",
+  "morseSendMode": "Senden",
+  "morseGuessMode": "Raten",
+  "morseGuessRules": "Die Lampen blinken einen Buchstaben im Morsecode: Welcher ist es? Das Alphabet unten hilft.",
+  "morseFlashLetter": "Einen Buchstaben blinken",
+  "morseFlashAgain": "Noch mal blinken",
+  "morseWhichLetter": "Welcher Buchstabe war es?"
 }

@@ -1040,5 +1040,11 @@
   "linkRoutines": "したくリストを開く",
   "pianoRecord": "録音",
   "pianoStopRecording": "録音をやめる",
-  "pianoPlayBack": "再生"
+  "pianoPlayBack": "再生",
+  "morseSendMode": "送る",
+  "morseGuessMode": "当てる",
+  "morseGuessRules": "ランプがモールス信号で文字を光らせます。どの文字かな？下の表がヒントです。",
+  "morseFlashLetter": "文字を光らせる",
+  "morseFlashAgain": "もういちど光らせる",
+  "morseWhichLetter": "どの文字だった？"
 }

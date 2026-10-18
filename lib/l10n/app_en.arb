@@ -4147,5 +4147,29 @@
   "pianoPlayBack": "Play it back",
   "@pianoPlayBack": {
     "description": "Light piano: play back what was recorded"
+  },
+  "morseSendMode": "Send",
+  "@morseSendMode": {
+    "description": "Secret messages mode: send a message"
+  },
+  "morseGuessMode": "Guess",
+  "@morseGuessMode": {
+    "description": "Secret messages mode: guess the letter"
+  },
+  "morseGuessRules": "The lamps flash a letter in Morse: which one is it? The alphabet below helps.",
+  "@morseGuessRules": {
+    "description": "Rules of guessing Morse letters"
+  },
+  "morseFlashLetter": "Flash a letter",
+  "@morseFlashLetter": {
+    "description": "Button: flash a new letter to guess"
+  },
+  "morseFlashAgain": "Flash it again",
+  "@morseFlashAgain": {
+    "description": "Button: flash the same letter again"
+  },
+  "morseWhichLetter": "Which letter was it?",
+  "@morseWhichLetter": {
+    "description": "Question: which letter did the lamps flash"
   }
 }

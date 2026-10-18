@@ -1040,5 +1040,11 @@
   "linkRoutines": "Abrir as rotinas",
   "pianoRecord": "Gravar",
   "pianoStopRecording": "Parar a gravação",
-  "pianoPlayBack": "Ouvir de novo"
+  "pianoPlayBack": "Ouvir de novo",
+  "morseSendMode": "Enviar",
+  "morseGuessMode": "Adivinhar",
+  "morseGuessRules": "As lâmpadas piscam uma letra em Morse: qual é? O alfabeto abaixo ajuda.",
+  "morseFlashLetter": "Piscar uma letra",
+  "morseFlashAgain": "Piscar de novo",
+  "morseWhichLetter": "Que letra era?"
 }

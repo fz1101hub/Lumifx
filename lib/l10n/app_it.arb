@@ -1040,5 +1040,11 @@
   "linkRoutines": "Apri le routine",
   "pianoRecord": "Registra",
   "pianoStopRecording": "Ferma la registrazione",
-  "pianoPlayBack": "Riascolta"
+  "pianoPlayBack": "Riascolta",
+  "morseSendMode": "Invia",
+  "morseGuessMode": "Indovina",
+  "morseGuessRules": "Le lampade lampeggiano una lettera in Morse: quale sarà? L'alfabeto qui sotto aiuta.",
+  "morseFlashLetter": "Lampeggia una lettera",
+  "morseFlashAgain": "Lampeggia di nuovo",
+  "morseWhichLetter": "Che lettera era?"
 }

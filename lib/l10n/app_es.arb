@@ -1040,5 +1040,11 @@
   "linkRoutines": "Abrir las rutinas",
   "pianoRecord": "Grabar",
   "pianoStopRecording": "Parar la grabación",
-  "pianoPlayBack": "Volver a escuchar"
+  "pianoPlayBack": "Volver a escuchar",
+  "morseSendMode": "Enviar",
+  "morseGuessMode": "Adivinar",
+  "morseGuessRules": "Las lámparas parpadean una letra en morse: ¿cuál es? El alfabeto de abajo ayuda.",
+  "morseFlashLetter": "Parpadear una letra",
+  "morseFlashAgain": "Parpadear otra vez",
+  "morseWhichLetter": "¿Qué letra era?"
 }

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../../core/effects/effect.dart';
 import '../../core/effects/effect_event.dart';
 import '../search/effect_search.dart';
@@ -148,5 +150,43 @@ class MorseMessage {
     } on ArgumentError {
       return null;
     }
+  }
+}
+
+/// Guess the letter: the lamps flash one in Morse, four to choose from.
+class MorseQuiz {
+  MorseQuiz([math.Random? random]) : _random = random ?? math.Random();
+
+  final math.Random _random;
+  static final _letters = [
+    for (final key in morseCode.keys)
+      if (RegExp('[a-z]').hasMatch(key)) key.toUpperCase(),
+  ];
+
+  String? _target;
+  var _choices = const <String>[];
+  var _score = 0;
+
+  String get target => _target!;
+  List<String> get choices => _choices;
+  int get score => _score;
+
+  /// A new letter, never the same twice in a row, among three others.
+  void next() {
+    final others = [..._letters]..remove(_target);
+    final target = others[_random.nextInt(others.length)];
+    final rest = [..._letters]
+      ..remove(target)
+      ..shuffle(_random);
+    _target = target;
+    _choices = [target, ...rest.take(3)]..shuffle(_random);
+  }
+
+  bool answer(String letter) {
+    final right = letter == _target;
+    if (right) {
+      _score++;
+    }
+    return right;
   }
 }

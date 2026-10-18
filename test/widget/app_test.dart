@@ -1745,6 +1745,32 @@ void main() {
     await preferences.setKidsLocked(false);
   });
 
+  testWidgets('guess the letter the lamps flash in Morse', (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const MorseScreen(seed: 2))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Guess'));
+    await tester.pump();
+    await tester.tap(find.text('Flash a letter'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MorseScreen))).playback;
+    final quiz = MorseQuiz(math.Random(2))..next();
+    expect(MorseMessage.of(playback.effect)?.$1.text, quiz.target);
+    expect(find.text('Which letter was it?'), findsOneWidget);
+    final wrong = quiz.choices.firstWhere((l) => l != quiz.target);
+    await tester.tap(find.widgetWithText(FilledButton, wrong));
+    await tester.pump();
+    expect(find.text('Try again'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, quiz.target));
+    await tester.pump();
+    expect(find.textContaining('Well done!'), findsOneWidget);
+    expect(find.text('One right answer'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));
