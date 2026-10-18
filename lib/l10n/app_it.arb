@@ -1068,5 +1068,6 @@
   "taleTeddy1": "Lì {name} sente una vocina: un orsetto ha perso il bambino che lo abbraccia ogni sera.",
   "taleTeddy2": "{name} segue le luci delle finestre una dopo l'altra e riporta l'orsetto a casa, dritto in un caldo abbraccio.",
   "taleMoon1": "Ma stanotte la luna si è addormentata, e senza la sua luce d'argento il cielo intorno a {name} è tutto buio.",
-  "taleMoon2": "{name} canticchia una canzone dolce finché la luna apre un occhio, poi l'altro, e illumina tutti."
+  "taleMoon2": "{name} canticchia una canzone dolce finché la luna apre un occhio, poi l'altro, e illumina tutti.",
+  "kidsModeActivities": "Offri anche questi giochi"
 }

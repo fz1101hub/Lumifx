@@ -1068,5 +1068,6 @@
   "taleTeddy1": "Dort hört {name} ein leises Stimmchen: Ein Teddybär hat das Kind verloren, das ihn jeden Abend umarmt.",
   "taleTeddy2": "{name} folgt den Lichtern der Fenster, eins nach dem anderen, und bringt den Teddy nach Hause, mitten in eine warme Umarmung.",
   "taleMoon1": "Doch heute Nacht hat der Mond verschlafen, und ohne sein silbernes Licht ist der Himmel um {name} ganz dunkel.",
-  "taleMoon2": "{name} summt ein leises Lied, bis der Mond ein Auge öffnet, dann das andere, und für alle scheint."
+  "taleMoon2": "{name} summt ein leises Lied, bis der Mond ein Auge öffnet, dann das andere, und für alle scheint.",
+  "kidsModeActivities": "Auch diese Spiele anbieten"
 }

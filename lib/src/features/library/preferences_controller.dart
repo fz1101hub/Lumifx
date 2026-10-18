@@ -414,6 +414,17 @@ class PreferencesController extends ChangeNotifier {
     return true;
   }
 
+  List<String>? _kidsActivities;
+
+  /// The games kids mode offers besides the effects (by name); null for
+  /// all of them.
+  List<String>? get kidsActivities => _kidsActivities;
+
+  Future<void> setKidsActivities(List<String> names) {
+    _kidsActivities = names.take(10).toList();
+    return _changed();
+  }
+
   List<String>? _kidsEffects;
 
   /// The effects offered in kids mode; null until a grown-up chooses.
@@ -681,6 +692,9 @@ class PreferencesController extends ChangeNotifier {
       };
       _notificationLights =
           NotificationLightsSettings.fromJson(json['notificationLights']);
+      final activities = json['kidsActivities'];
+      _kidsActivities =
+          activities is List ? _strings(activities).take(10).toList() : null;
       final kids = json['kidsEffects'];
       _kidsEffects = kids is List ? _strings(kids).take(24).toList() : null;
       _kidsLocked = json['kidsLocked'] == true;
@@ -965,6 +979,7 @@ class PreferencesController extends ChangeNotifier {
       'learnLanguage': _learnLanguage,
       'naturalLights': _naturalLights,
       'kidsEffects': _kidsEffects,
+      'kidsActivities': _kidsActivities,
       'routineSteps': _routineSteps,
       'stars': _stars,
       'children': [for (final c in _children) c.toJson()],

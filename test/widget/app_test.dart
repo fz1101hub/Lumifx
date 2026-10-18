@@ -881,16 +881,22 @@ void main() {
     await tester.tap(find.text('Kids mode'));
     await tester.pumpAndSettle();
     // Flashing effects cannot be chosen.
-    await tester.scrollUntilVisible(
-        find.text('Has flashes: not offered').first, 300,
-        scrollable: find.byType(Scrollable).first);
+    for (var i = 0;
+        i < 20 && find.text('Has flashes: not offered').evaluate().isEmpty;
+        i++) {
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
+      await tester.pumpAndSettle();
+    }
+    expect(find.text('Has flashes: not offered'), findsWidgets);
     await tester.scrollUntilVisible(find.text('Start kids mode'), -300,
         scrollable: find.byType(Scrollable).first);
     await tester.tap(find.text('Start kids mode'));
     await tester.pumpAndSettle();
     expect(find.byType(KidsModeScreen), findsOneWidget);
 
-    await tester.tap(find.byType(InkWell).first);
+    await tester.tap(find
+        .descendant(of: find.byType(GridView), matching: find.byType(InkWell))
+        .first);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     final playback =
@@ -935,6 +941,41 @@ void main() {
     ));
     await tester.pumpAndSettle();
     expect(find.byType(KidsModeScreen), findsOneWidget);
+  });
+
+  testWidgets('kids mode offers the games a grown-up kept', (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setOnboardingDone();
+    await preferences.setKidsLocked(true);
+    await preferences.load();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Count the lights'), findsOneWidget);
+    expect(find.text('Colours in another language'), findsOneWidget);
+
+    await tester.tap(find.text('Light piano'));
+    await tester.pumpAndSettle();
+    expect(find.byType(LightPianoScreen), findsOneWidget);
+    await tester.tap(find.text('E'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(MiniPlayer), findsNothing,
+        reason: 'no way to the player from a kids mode game');
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.byType(KidsModeScreen), findsOneWidget);
+
+    await preferences.setKidsActivities(['counting']);
+    await tester.pumpAndSettle();
+    expect(find.text('Count the lights'), findsOneWidget);
+    expect(find.text('Light piano'), findsNothing);
   });
 
   testWidgets('the mini-player leads back to a timer or a game screen',

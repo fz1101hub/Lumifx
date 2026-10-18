@@ -4289,5 +4289,9 @@
         "type": "String"
       }
     }
+  },
+  "kidsModeActivities": "Also offer these games",
+  "@kidsModeActivities": {
+    "description": "Kids mode setup: heading of the games offered besides the effects"
   }
 }

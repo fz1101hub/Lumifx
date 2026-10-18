@@ -11,10 +11,51 @@ import '../common/layout.dart';
 import '../effects/effect_palette.dart';
 import '../effects/playback_controller.dart';
 import '../library/effect_library.dart';
+import '../learn/colour_words_screen.dart';
+import '../learn/counting_screen.dart';
 import '../library/preferences_controller.dart';
+import '../music_box/light_piano_screen.dart';
+
+/// Games kids mode can offer besides the effects: nothing on them leads
+/// to the rest of the app.
+enum KidsActivity {
+  piano(Icons.piano_outlined),
+  counting(Icons.filter_9_plus_outlined),
+  colours(Icons.translate);
+
+  const KidsActivity(this.icon);
+
+  final IconData icon;
+
+  String title(AppLocalizations l10n) => switch (this) {
+        piano => l10n.piano,
+        counting => l10n.countLights,
+        colours => l10n.colourWords,
+      };
+
+  Widget screen() => switch (this) {
+        piano => const LightPianoScreen(),
+        counting => const CountingScreen(),
+        colours => const ColourWordsScreen(),
+      };
+
+  /// The games a grown-up kept (all of them until one chooses).
+  static List<KidsActivity> chosen(PreferencesController preferences) {
+    final names = preferences.kidsActivities;
+    return [
+      for (final activity in values)
+        if (names == null || names.contains(activity.name)) activity,
+    ];
+  }
+}
 
 /// The route name of kids mode: the mini-player stays away from it.
 const kidsModeRouteName = '/kids';
+
+/// Whether [routeName] is kids mode or one of its games.
+bool isKidsModeRoute(String? routeName) =>
+    routeName == kidsModeRouteName ||
+    (routeName?.startsWith('$kidsModeRouteName/') ?? false);
 
 /// Effects fit for kids mode: nothing that flashes fast, nothing that
 /// needs the microphone or the camera.
@@ -100,6 +141,20 @@ class KidsSetupScreen extends StatelessWidget {
                 label: Text(l10n.kidsModeStart),
               ),
               const SizedBox(height: 24),
+              Text(l10n.kidsModeActivities, style: theme.textTheme.titleMedium),
+              for (final activity in KidsActivity.values)
+                CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  secondary: Icon(activity.icon),
+                  value: KidsActivity.chosen(preferences).contains(activity),
+                  title: Text(activity.title(l10n)),
+                  onChanged: (on) => preferences.setKidsActivities([
+                    for (final a in KidsActivity.chosen(preferences))
+                      if (a != activity) a.name,
+                    if (on == true) activity.name,
+                  ]),
+                ),
+              const SizedBox(height: 16),
               Text(l10n.kidsModeChoose, style: theme.textTheme.titleMedium),
               for (final effect in candidates)
                 CheckboxListTile(
@@ -180,11 +235,38 @@ class KidsModeScreen extends StatelessWidget {
           ],
         ),
         body: ListenableBuilder(
-          listenable: playback,
+          listenable: Listenable.merge([playback, scope.preferences]),
           builder: (context, _) {
             final playing = playback.status != PlaybackStatus.idle;
+            final activities = KidsActivity.chosen(scope.preferences);
             return Column(
               children: [
+                if (activities.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    child: Wrap(
+                      spacing: 12,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        for (final activity in activities)
+                          FilledButton.tonalIcon(
+                            style: FilledButton.styleFrom(
+                                minimumSize: const Size(0, 56)),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                settings: RouteSettings(
+                                    name:
+                                        '$kidsModeRouteName/${activity.name}'),
+                                builder: (_) => activity.screen(),
+                              ),
+                            ),
+                            icon: Icon(activity.icon),
+                            label: Text(activity.title(l10n)),
+                          ),
+                      ],
+                    ),
+                  ),
                 Expanded(
                   child: GridView.count(
                     padding: const EdgeInsets.all(16),

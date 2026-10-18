@@ -1068,5 +1068,6 @@
   "taleTeddy1": "Lá {name} ouve uma vozinha: um ursinho perdeu a criança que o abraça toda noite.",
   "taleTeddy2": "{name} segue as luzes das janelas uma a uma e leva o ursinho para casa, direto para um abraço quentinho.",
   "taleMoon1": "Mas esta noite a lua ficou dormindo, e sem a sua luz prateada o céu em volta de {name} está escuro.",
-  "taleMoon2": "{name} cantarola uma canção suave até a lua abrir um olho, depois o outro, e brilhar para todos."
+  "taleMoon2": "{name} cantarola uma canção suave até a lua abrir um olho, depois o outro, e brilhar para todos.",
+  "kidsModeActivities": "Oferecer também estes jogos"
 }

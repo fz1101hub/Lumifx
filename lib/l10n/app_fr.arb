@@ -1068,5 +1068,6 @@
   "taleTeddy1": "Là, {name} entend une petite voix : un nounours a perdu l'enfant qui le serre chaque soir.",
   "taleTeddy2": "{name} suit les lumières des fenêtres une à une et ramène le nounours à la maison, droit dans un câlin tout chaud.",
   "taleMoon1": "Mais cette nuit, la lune ne s'est pas réveillée, et sans sa lumière d'argent tout le ciel est noir autour de {name}.",
-  "taleMoon2": "{name} fredonne une douce chanson jusqu'à ce que la lune ouvre un œil, puis l'autre, et brille pour tout le monde."
+  "taleMoon2": "{name} fredonne une douce chanson jusqu'à ce que la lune ouvre un œil, puis l'autre, et brille pour tout le monde.",
+  "kidsModeActivities": "Proposer aussi ces jeux"
 }
