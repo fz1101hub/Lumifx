@@ -1019,5 +1019,12 @@
   "starShopNeedMore": "{count, plural, =1{falta una estrella} other{faltan {count} estrellas}}",
   "starShopRemoveHint": "Una pulsación larga en un premio lo quita (confirma un adulto).",
   "grownUpQuestion": "Para continuar, escribe el resultado de {a} + {b}.",
-  "grownUpConfirm": "Confirmar"
+  "grownUpConfirm": "Confirmar",
+  "ritual": "Ritual de buenas noches",
+  "ritualSubtitle": "Rutina, espray antimonstruos, un cuento, una canción de cuna y la luz guardiana en un toque",
+  "ritualDescription": "Cada noche los mismos pasos tranquilos, uno tras otro: elige los que le gustan a tu familia, la canción de cuna y cuánto se queda encendida la luz guardiana. El cuento de esta noche se inventa con el niño como protagonista.",
+  "ritualStory": "El cuento de esta noche",
+  "ritualStepOf": "Paso {step} de {total}",
+  "ritualNext": "Siguiente paso",
+  "ritualGoodnight": "¡Buenas noches!"
 }

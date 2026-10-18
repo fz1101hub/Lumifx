@@ -41,6 +41,7 @@ import 'package:lumifx/src/features/bedtime/monster_spray.dart';
 import 'package:lumifx/src/features/cinema/cinema.dart';
 import 'package:lumifx/src/features/cinema/cinema_screen.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
+import 'package:lumifx/src/features/bedtime/ritual_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
 import 'package:lumifx/src/features/links/nfc_stickers_screen.dart';
 import 'package:lumifx/src/features/notifications/notification_lights_screen.dart';
@@ -350,6 +351,8 @@ void main() {
       200,
       scrollable: find.byType(Scrollable).first,
     );
+    await tester.ensureVisible(find.text('Bedtime'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Bedtime'));
     await tester.pumpAndSettle();
     expect(find.text('Sleeping Dragon'), findsOneWidget);
@@ -1584,6 +1587,53 @@ void main() {
     expect(find.text('One star to spend'), findsOneWidget);
     expect(scope.playback.isPlaying, isTrue, reason: 'a party of light');
     await scope.playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the bedtime ritual goes from step to step', (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Bedtime ritual'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Bedtime ritual'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Bedtime ritual'));
+    await tester.pumpAndSettle();
+    final scope = AppScope.of(tester.element(find.byType(BedtimeRitualScreen)));
+    final playback = scope.playback;
+    await scope.preferences.addChild('Mia');
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Start'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Start'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pumpAndSettle();
+    // The evening routine, then the monster spray, on their own screens.
+    expect(find.byType(RoutineScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.byType(MonsterSprayScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(playback.effect.name, 'The story of Mia');
+    expect(find.text('Step 3 of 5'), findsOneWidget);
+
+    Future<void> finish() async {
+      playback.player!.advance(playback.effect.cycleLength);
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    await finish();
+    expect(playback.effect.name, "Brahms's Lullaby");
+    expect(find.text('Step 4 of 5'), findsOneWidget);
+    await finish();
+    expect(MonsterHunt.isGuardian(playback.effect), isTrue);
+    expect(playback.sleepTimer, const Duration(minutes: 30));
+    expect(find.text('Goodnight!'), findsOneWidget);
+    await playback.stop();
+    playback.setSleepTimer(null);
     await tester.pumpAndSettle();
   });
 

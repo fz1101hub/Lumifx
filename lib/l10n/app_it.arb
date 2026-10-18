@@ -1019,5 +1019,12 @@
   "starShopNeedMore": "{count, plural, =1{manca una stella} other{mancano {count} stelle}}",
   "starShopRemoveHint": "Una pressione lunga su un premio lo rimuove (conferma un adulto).",
   "grownUpQuestion": "Per continuare, scrivi il risultato di {a} + {b}.",
-  "grownUpConfirm": "Conferma"
+  "grownUpConfirm": "Conferma",
+  "ritual": "Rituale della nanna",
+  "ritualSubtitle": "Routine, spray anti-mostri, una storia, una ninna nanna e la luce guardiana in un tocco",
+  "ritualDescription": "Ogni sera gli stessi passi tranquilli, uno dopo l'altro: scegli quelli che piacciono alla tua famiglia, la ninna nanna e quanto resta accesa la luce guardiana. La storia di stasera è inventata con il bambino come protagonista.",
+  "ritualStory": "La storia di stasera",
+  "ritualStepOf": "Passo {step} di {total}",
+  "ritualNext": "Passo successivo",
+  "ritualGoodnight": "Buonanotte!"
 }

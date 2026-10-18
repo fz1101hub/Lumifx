@@ -4050,5 +4050,41 @@
   "grownUpConfirm": "Confirm",
   "@grownUpConfirm": {
     "description": "Button: a grown-up confirms"
+  },
+  "ritual": "Bedtime ritual",
+  "@ritual": {
+    "description": "Home entry: the bedtime ritual, several bedtime steps one after the other"
+  },
+  "ritualSubtitle": "Routine, monster spray, a story, a lullaby and a guardian light in one tap",
+  "@ritualSubtitle": {
+    "description": "Subtitle of the bedtime ritual"
+  },
+  "ritualDescription": "Every evening the same calm steps, one after the other: choose the ones your family likes, the lullaby and how long the guardian light stays on. Tonight's story is made up with the child as its hero.",
+  "@ritualDescription": {
+    "description": "Explains the bedtime ritual"
+  },
+  "ritualStory": "Tonight's story",
+  "@ritualStory": {
+    "description": "Bedtime ritual step: a story made up for tonight"
+  },
+  "ritualStepOf": "Step {step} of {total}",
+  "@ritualStepOf": {
+    "description": "Bedtime ritual progress",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "ritualNext": "Next step",
+  "@ritualNext": {
+    "description": "Bedtime ritual: go to the next step"
+  },
+  "ritualGoodnight": "Goodnight!",
+  "@ritualGoodnight": {
+    "description": "Bedtime ritual: the end"
   }
 }

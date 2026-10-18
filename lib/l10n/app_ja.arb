@@ -1019,5 +1019,12 @@
   "starShopNeedMore": "{count, plural, other{あと{count}こ}}",
   "starShopRemoveHint": "ごほうびを長押しすると削除できます（おとなが確認します）。",
   "grownUpQuestion": "続けるには、{a} + {b} の答えを入力してください。",
-  "grownUpConfirm": "確認"
+  "grownUpConfirm": "確認",
+  "ritual": "おやすみの儀式",
+  "ritualSubtitle": "したく、モンスターよけ、おはなし、子守歌、見守りライトをワンタップで",
+  "ritualDescription": "毎晩おなじおだやかなステップを順番に。家族にあったステップ、子守歌、見守りライトの時間をえらびます。今夜のおはなしは、子どもが主人公の作りたてです。",
+  "ritualStory": "今夜のおはなし",
+  "ritualStepOf": "ステップ {step}/{total}",
+  "ritualNext": "つぎへ",
+  "ritualGoodnight": "おやすみなさい！"
 }

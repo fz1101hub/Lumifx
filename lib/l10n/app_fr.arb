@@ -1019,5 +1019,12 @@
   "starShopNeedMore": "{count, plural, =1{encore une étoile} other{encore {count} étoiles}}",
   "starShopRemoveHint": "Un appui long sur une récompense la retire (un adulte confirme).",
   "grownUpQuestion": "Pour continuer, tape le résultat de {a} + {b}.",
-  "grownUpConfirm": "Confirmer"
+  "grownUpConfirm": "Confirmer",
+  "ritual": "Rituel du coucher",
+  "ritualSubtitle": "Routine, spray anti-monstres, une histoire, une berceuse et la lumière gardienne en un geste",
+  "ritualDescription": "Chaque soir les mêmes étapes calmes, l'une après l'autre : choisis celles que ta famille aime, la berceuse et combien de temps la lumière gardienne reste allumée. L'histoire du soir est inventée avec l'enfant pour héros.",
+  "ritualStory": "L'histoire du soir",
+  "ritualStepOf": "Étape {step} sur {total}",
+  "ritualNext": "Étape suivante",
+  "ritualGoodnight": "Bonne nuit !"
 }

@@ -1019,5 +1019,12 @@
   "starShopNeedMore": "{count, plural, =1{falta uma estrela} other{faltam {count} estrelas}}",
   "starShopRemoveHint": "Um toque longo num prêmio o remove (um adulto confirma).",
   "grownUpQuestion": "Para continuar, digite o resultado de {a} + {b}.",
-  "grownUpConfirm": "Confirmar"
+  "grownUpConfirm": "Confirmar",
+  "ritual": "Ritual da hora de dormir",
+  "ritualSubtitle": "Rotina, spray antimonstros, uma história, uma canção de ninar e a luz guardiã num toque",
+  "ritualDescription": "Toda noite os mesmos passos tranquilos, um depois do outro: escolha os que sua família gosta, a canção de ninar e quanto tempo a luz guardiã fica acesa. A história desta noite é inventada com a criança como protagonista.",
+  "ritualStory": "A história desta noite",
+  "ritualStepOf": "Passo {step} de {total}",
+  "ritualNext": "Próximo passo",
+  "ritualGoodnight": "Boa noite!"
 }

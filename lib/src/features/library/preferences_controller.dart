@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/weather/weather.dart';
+import '../bedtime/ritual.dart';
 import '../fun/countdown.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
@@ -317,6 +318,16 @@ class PreferencesController extends ChangeNotifier {
 
   static const _maxStars = 800 * Child.maxChildren;
 
+  var _ritual = const RitualSettings();
+
+  /// How the bedtime ritual goes.
+  RitualSettings get ritual => _ritual;
+
+  Future<void> setRitual(RitualSettings settings) {
+    _ritual = settings;
+    return _changed();
+  }
+
   var _rewards = <Reward>[];
 
   /// The star shop's rewards, the same for every child.
@@ -609,6 +620,7 @@ class PreferencesController extends ChangeNotifier {
       ];
       final active = json['activeChild'];
       _activeChild = active is String ? active : '';
+      _ritual = RitualSettings.fromJson(json['ritual']);
       final rewards = json['rewards'];
       _rewards = [
         if (rewards is List)
@@ -913,6 +925,7 @@ class PreferencesController extends ChangeNotifier {
       'activeChild': _activeChild,
       'starsSpent': _starsSpent,
       'rewards': [for (final r in _rewards) r.toJson()],
+      'ritual': _ritual.toJson(),
       'notificationLights': _notificationLights.toJson(),
       'kidsLocked': _kidsLocked,
       'adventOpened': _adventOpened,

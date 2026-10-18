@@ -1019,5 +1019,12 @@
   "starShopNeedMore": "{count, plural, =1{noch ein Stern} other{noch {count} Sterne}}",
   "starShopRemoveHint": "Langes Drücken auf eine Belohnung entfernt sie (ein Erwachsener bestätigt).",
   "grownUpQuestion": "Gib zum Fortfahren das Ergebnis von {a} + {b} ein.",
-  "grownUpConfirm": "Bestätigen"
+  "grownUpConfirm": "Bestätigen",
+  "ritual": "Gute-Nacht-Ritual",
+  "ritualSubtitle": "Routine, Monsterspray, Geschichte, Schlaflied und Wächterlicht mit einem Tipp",
+  "ritualDescription": "Jeden Abend dieselben ruhigen Schritte nacheinander: Wähle die, die eure Familie mag, das Schlaflied und wie lange das Wächterlicht an bleibt. Die Geschichte des Abends wird mit dem Kind als Hauptfigur erfunden.",
+  "ritualStory": "Die Geschichte des Abends",
+  "ritualStepOf": "Schritt {step} von {total}",
+  "ritualNext": "Nächster Schritt",
+  "ritualGoodnight": "Gute Nacht!"
 }
