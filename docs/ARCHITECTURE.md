@@ -468,7 +468,7 @@ and plays recordings even with Read aloud off.
 - `lumifx://app/go/<slug>` parses to a `ScreenLink` of an `AppScreen`
   (ritual, routines, star-shop, story-maker, lullabies, monster-spray,
   piano, games, cinema, timers, breathing, simon, counting, colour-words,
-  colour-mixing, morse, hot-and-cold, halloween, nap). `LinkHandler` pushes `screenOf(screen)` under
+  colour-mixing, morse, hot-and-cold, halloween, nap, noise). `LinkHandler` pushes `screenOf(screen)` under
   the route name `/go/<slug>`, unless that route is on top already or
   kids mode is locked. The ready-made links (and so NFC stickers) offer
   the ritual and the routines.
@@ -677,3 +677,23 @@ iOS lists the languages in `CFBundleLocalizations`.
   ambient for 20 minutes; at its end the player stops and the lamps go
   back. The screen reads the rest from the effect playing, so it shows
   the countdown again when opened from the mini-player.
+
+### Noise light (`lib/src/features/fun/noise_light*.dart`)
+
+- `NoiseWatch` keeps only the RMS loudness of each microphone buffer,
+  as 0..1 between -60 and -10 dBFS, smoothed quick to rise and slow to
+  settle. The zone (`NoiseZone`: calm, loud, too loud, by `NoiseLimit`)
+  rises after 0.6 s of louder noise and falls after 2 s of calmer, so a
+  clap or a breath changes nothing. Each zone is a `gen:noise:<zone>`
+  ambient; the screen switches effects only when the zone changes, and
+  stops the microphone (and the lamps) when it closes.
+
+### Timer tunes and festivals
+
+- A light timer started with `tune: true` has the id
+  `gen:timer:<timer>:tune`; `soundscapeOf` gives it Twinkle on the music
+  box, enough times through to cover the countdown event.
+- `festivalOf` (`lib/src/features/home/seasons.dart`) reads a table of
+  Diwali, Hanukkah and Lunar New Year dates (to 2035) with a window
+  around each; the home shows the festival's shelf above the season's,
+  as both can fall together (Diwali in Halloween, Hanukkah at Christmas).
