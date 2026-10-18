@@ -30,8 +30,8 @@ The project is intentionally built around an original effects engine and origina
 2. ✅ Read rooms, zones and lights
 3. ✅ Basic light controls (room/zone on/off and brightness)
 4. ✅ Shared effect engine (renderer, player, rate-limited Hue output)
-5. ✅ First set of animated scenes and narrative Stories (6 scenes, 19 stories
-   including Halloween and Christmas collections, colour variants for scenes)
+5. ✅ First set of animated scenes and narrative Stories (7 scenes, 23 stories
+   including Halloween, Christmas and holiday collections, colour variants for scenes)
 6. ✅ Favorites, recently played and playback defaults
 
 Also done ahead of schedule:
@@ -190,7 +190,8 @@ flutter run            # on a device or simulator on the same Wi-Fi as the bridg
 Effects can be previewed without a bridge: the player shows virtual lamps
 when no room or zone is selected.
 
-The app is in English, Italian, German, French, Spanish and Dutch. Every
+The app is in English, Italian, German, French, Spanish, Dutch, Brazilian
+Portuguese and Japanese. Every
 user-facing string lives in `lib/l10n/app_en.arb` (the template) and one
 `app_<code>.arb` per language; the Dart classes are generated into
 `lib/l10n/generated/` by `flutter pub get` and are not committed. To add a

@@ -974,5 +974,7 @@
   "notificationLightsQuietSubtitle": "Tijdens deze uren knippert er niets",
   "notificationLightsFrom": "Van",
   "notificationLightsTo": "Tot",
-  "keepPlayingScreenOffIos": "Effecten met geluid gaan door als de iPhone vergrendelt, op het toegangsscherm met een stopknop. Effecten zonder geluid stoppen, zoals iOS vereist."
+  "keepPlayingScreenOffIos": "Effecten met geluid gaan door als de iPhone vergrendelt, op het toegangsscherm met een stopknop. Effecten zonder geluid stoppen, zoals iOS vereist.",
+  "countBest": "Record: {count}",
+  "countNewBest": "Nieuw record!"
 }

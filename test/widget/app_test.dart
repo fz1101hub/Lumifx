@@ -1132,7 +1132,13 @@ void main() {
     await tester.tap(find.text('$target'));
     await tester.pump();
     expect(find.text('Yes, $target!'), findsOneWidget);
-    expect(find.text('One right answer'), findsOneWidget);
+    expect(find.textContaining('One right answer'), findsOneWidget);
+    expect(find.textContaining('New record!'), findsOneWidget);
+    expect(
+        AppScope.of(tester.element(find.byType(CountingScreen)))
+            .preferences
+            .countingBest,
+        1);
     expect(speaker.spoken.last, ('$target', 'en-US'));
     final playback =
         AppScope.of(tester.element(find.byType(CountingScreen))).playback;
@@ -1167,6 +1173,12 @@ void main() {
     await tester.pump();
     expect(find.text('arancione'), findsOneWidget);
     expect(speaker.spoken.last, ('arancione', 'it-IT'));
+    expect(
+        AppScope.of(tester.element(find.byType(ColourWordsScreen)))
+            .preferences
+            .learnLanguage,
+        'it',
+        reason: 'chosen again next time');
 
     await tester.tap(find.text('Quiz'));
     await tester.pump();

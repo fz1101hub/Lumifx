@@ -3829,5 +3829,18 @@
   "keepPlayingScreenOffIos": "Effects with sounds go on when the iPhone locks, shown on the lock screen with a Stop button. Effects without sounds stop, as iOS requires.",
   "@keepPlayingScreenOffIos": {
     "description": "iPhone: explains the screen-off setting (effects with sounds keep playing, with lock screen controls)"
+  },
+  "countBest": "Best: {count}",
+  "@countBest": {
+    "description": "Counting game: the best score so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "countNewBest": "New record!",
+  "@countNewBest": {
+    "description": "Counting game: a new best score"
   }
 }

@@ -124,8 +124,8 @@ artifact, see RELEASE.md § 1b).
 
 **What's new (1.0.0)**
 
-> First release: 6 scenes with colour variants, 19 stories including
-> Halloween and Christmas collections, 4 Music Sync effects, Entertainment
+> First release: 7 scenes with colour variants, 23 stories including
+> Halloween, Christmas and holiday collections, 4 Music Sync effects, Entertainment
 > streaming with an area editor, your own scenes, playlists, saving as
 > Hue scenes, links for automations and NFC stickers, a sleep timer,
 > family time (bedtime, a story maker, lullabies, routines with stars,
@@ -233,8 +233,8 @@ artifact, see RELEASE.md § 1b).
 
 **Novità (1.0.0)**
 
-> Prima versione: 6 scene con varianti di colore, 19 storie con le
-> raccolte di Halloween e Natale, 4 effetti Music Sync, streaming
+> Prima versione: 7 scene con varianti di colore, 23 storie con le
+> raccolte di Halloween, Natale e delle feste, 4 effetti Music Sync, streaming
 > Entertainment ed editor delle aree, scene tue, playlist, salvataggio come
 > scena Hue, link per le automazioni e adesivi NFC, timer di spegnimento,
 > in famiglia (nanna, storie inventate, ninne nanne, routine con le
@@ -909,7 +909,7 @@ preview mode works for the player shots):
 
 **Novidades (1.0.0)**
 
-> Primeira versão: 6 cenas com variações de cor, 19 histórias, 4 efeitos
+> Primeira versão: 7 cenas com variações de cor, 23 histórias, 4 efeitos
 > Music Sync, streaming Entertainment, cenas suas, playlists, links para
 > automações e adesivos NFC, momentos em família (hora de dormir,
 > histórias inventadas, canções de ninar, rotinas com estrelinhas, jogos e
@@ -986,7 +986,7 @@ preview mode works for the player shots):
 
 **新機能（1.0.0）**
 
-> 最初のリリース：色のバリエーション付きシーン 6 種、ストーリー 19 種、Music Sync
+> 最初のリリース：色のバリエーション付きシーン 7 種、ストーリー 23 種、Music Sync
 > 演出 4 種、エンターテインメント ストリーミング、オリジナルシーン、プレイリスト、
 > オートメーション用リンクと NFC シール、家族で楽しむ機能（おやすみモード、おはなし
 > づくり、子守歌、星がもらえるしたくリスト、ゲームと学べるゲーム、キッズモード）、

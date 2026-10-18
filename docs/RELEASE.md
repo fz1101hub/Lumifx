@@ -195,7 +195,8 @@ then promote to Production.
 3. Fill in from `docs/STORE_LISTING.md`: description, keywords, support URL
    (<https://fz1101hub.github.io/Lumifx/>), privacy policy URL
    (<https://fz1101hub.github.io/Lumifx/privacy.html>), App Privacy
-   ("Data Not Collected"), age rating, category, review notes.
+   (only Coarse Location for Weather lights, not linked, no tracking: see
+   `docs/STORE_LISTING.md` › App Store Connect: App Privacy), age rating, category, review notes.
 4. Upload the screenshots from § 1b for each language: `iphone-6.5/<lang>/`
    (the 6.5" set covers every iPhone size) and `ipad-12.9/<lang>/` (the
    12.9" set covers every iPad; App Store Connect insists on it because

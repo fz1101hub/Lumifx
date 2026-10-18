@@ -265,6 +265,31 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  int _countingBest = 0;
+
+  /// The most right answers in one game of Count the lights.
+  int get countingBest => _countingBest;
+
+  /// Keeps [score] if it beats the best; true when it does.
+  bool recordCountingScore(int score) {
+    if (score <= _countingBest) {
+      return false;
+    }
+    _countingBest = score;
+    unawaited(_changed());
+    return true;
+  }
+
+  String? _learnLanguage;
+
+  /// The language chosen last in Colours in another language.
+  String? get learnLanguage => _learnLanguage;
+
+  Future<void> setLearnLanguage(String code) {
+    _learnLanguage = code;
+    return _changed();
+  }
+
   int _simonBest = 0;
 
   /// The longest sequence repeated in the memory game.
@@ -448,6 +473,11 @@ class PreferencesController extends ChangeNotifier {
           .where((id) => id.length <= 80)
           .take(20)
           .toList();
+      final counting = json['countingBest'];
+      _countingBest =
+          counting is int && counting > 0 && counting < 10000 ? counting : 0;
+      final learn = json['learnLanguage'];
+      _learnLanguage = learn is String && learn.length <= 5 ? learn : null;
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
       final buttons = json['buttonActions'];
@@ -716,6 +746,8 @@ class PreferencesController extends ChangeNotifier {
       'readAloud': _readAloud,
       'weatherPlace': _weatherPlace?.toJson(),
       'simonBest': _simonBest,
+      'countingBest': _countingBest,
+      'learnLanguage': _learnLanguage,
       'naturalLights': _naturalLights,
       'kidsEffects': _kidsEffects,
       'routineSteps': _routineSteps,

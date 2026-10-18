@@ -457,7 +457,8 @@ Effects and visual assets should be original. Inspiration can come from broad th
 ### Localisation (`lib/l10n`)
 
 Strings are ARB files (`app_en.arb` is the template; Italian, German,
-French, Spanish and Dutch translations sit next to it) compiled by
+French, Spanish, Dutch, Brazilian Portuguese and Japanese translations sit
+next to it) compiled by
 `flutter gen-l10n` on every `flutter pub get` into `lib/l10n/generated/`
 (git-ignored, excluded from analysis and formatting).
 `test/l10n_completeness_test.dart` fails when a file misses a key or a

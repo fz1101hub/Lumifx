@@ -974,5 +974,7 @@
   "notificationLightsQuietSubtitle": "In queste ore non lampeggia nulla",
   "notificationLightsFrom": "Dalle",
   "notificationLightsTo": "Alle",
-  "keepPlayingScreenOffIos": "Gli effetti con suoni continuano quando l'iPhone si blocca, mostrati nella schermata di blocco con un pulsante Stop. Quelli senza suoni si fermano, come richiede iOS."
+  "keepPlayingScreenOffIos": "Gli effetti con suoni continuano quando l'iPhone si blocca, mostrati nella schermata di blocco con un pulsante Stop. Quelli senza suoni si fermano, come richiede iOS.",
+  "countBest": "Record: {count}",
+  "countNewBest": "Nuovo record!"
 }
