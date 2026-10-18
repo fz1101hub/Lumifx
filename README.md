@@ -134,7 +134,9 @@ Also done ahead of schedule:
   countdowns to big days.
 - **Kids mode**: big buttons for chosen gentle effects, locked behind a
   grown-up's sum, even after a restart; links, voice and Hue buttons
-  start only those effects meanwhile.
+  start only those effects meanwhile. It can also offer the light piano,
+  counting, colour words and colour mixing games, as a grown-up chooses;
+  nothing on them leads out of kids mode.
 - **Your own voice**: record the lines of your stories; they play in time
   with the lights.
 - **Around the house** (on the bridge, phone off): away mode with
@@ -143,15 +145,17 @@ Also done ahead of schedule:
 - **Morning and evening routines**: picture checklists with the steps a
   grown-up chooses; the lamps fill up step by step, then a party and a
   star, with a chart of the last seven days.
-- **Lullabies on a music box**: Brahms's Lullaby, Twinkle Twinkle and
-  Frère Jacques, made on the phone; each note lights a lamp by its pitch
+- **Lullabies on a music box**: Brahms's Lullaby, Twinkle Twinkle,
+  Frère Jacques and Au clair de la lune, made on the phone; each note lights a lamp by its pitch
   (low on one side, high on the other); once, three or five times, then
   the lights can fade out.
 - **Christmas light show**: Jingle Bells, Silent Night and We Wish You a
   Merry Christmas on little bells, the lamps in red, green and gold note
   by note.
 - **Story maker**: a hero, a place, an adventure and a name (or
-  "Surprise me") make a five-line bedtime story with its own lights,
+  "Surprise me") make a five-line bedtime story (heroes include a
+  penguin and a turtle; places a jungle and a little island; adventures
+  a lost teddy and the sleepy moon) with its own lights,
   read along and aloud, ending in a warm glow that fades. Put together
   on the phone from written lines (no AI, no network), worded so it
   never depends on the hero's gender; a story can be kept among My
@@ -160,7 +164,9 @@ Also done ahead of schedule:
   the numbers grow up to 9; the best score is kept) and Colours in
   another language (the room turns a colour and the phone says its name
   in any of the eight languages, then a quiz; the language chosen last
-  comes back).
+  comes back) and Colour mixing (pick two paints: the lamps glow in both,
+  go dark as if stirred and shine in the colour they make, e.g. yellow +
+  blue = green; then guess what two paints make).
 - **Monster spray**: five funny monsters hide in a dim purple room; each
   spray flashes the lamps and chases one away; then a warm guardian
   light for 15, 30 or 60 minutes that fades out.
@@ -171,7 +177,9 @@ Also done ahead of schedule:
   with the unlocked phone starts it; on iPhone the Shortcuts app's NFC
   automation opens the link. `lumifx://app/go/ritual` (and the routines,
   star shop, story maker, lullabies, monster spray, piano, games,
-  cinema) opens a family screen, e.g. from a sticker by the bed.
+  cinema, timers, breathing, simon, counting, colour-words,
+  colour-mixing, morse, hot-and-cold, halloween, nap) opens a family
+  screen, e.g. from a sticker by the bed.
 - **Notification lights** (Android): chosen apps flash the lights of a
   room in their own colour when they post a notification, even with
   LumiFX closed; only the app's name is seen, never what it says; quiet
@@ -191,7 +199,8 @@ Also done ahead of schedule:
   phone says how hot it is, and Found it! ends in confetti of light.
 - **Light piano**: eight keys from middle C, each a music-box note made
   on the phone and a flash of its rainbow colour on one lamp along the
-  room; "Learn a song" makes the next key glow, and a tune played can
+  room; "Learn a song" makes the next key glow (Hot Cross Buns, Mary Had
+  a Little Lamb, Ode to Joy and more, easiest first), and a tune played can
   be recorded and played back with its lights. Notes are named as
   children learn them (do re mi, ドレミ, or letters with H in German).
 - **Steps of your own** in the routines ("feed the cat"), with a
@@ -209,6 +218,9 @@ Also done ahead of schedule:
   a Hue motion sensor (or a grown-up taps Scare now) the lamps flash,
   the phone thunders and red eyes glow on one lamp, with 15 s of rest
   between sensor scares and nothing that flashes fast.
+- **Nap light**: a daytime ok-to-wake; a faint amber glow for a rest of
+  20 minutes to two hours, then the lamps slowly turn green and stay
+  green for 20 minutes before going back to how they were.
 
 ## Development
 

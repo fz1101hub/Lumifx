@@ -467,7 +467,8 @@ and plays recordings even with Read aloud off.
 
 - `lumifx://app/go/<slug>` parses to a `ScreenLink` of an `AppScreen`
   (ritual, routines, star-shop, story-maker, lullabies, monster-spray,
-  piano, games, cinema). `LinkHandler` pushes `screenOf(screen)` under
+  piano, games, cinema, timers, breathing, simon, counting, colour-words,
+  colour-mixing, morse, hot-and-cold, halloween, nap). `LinkHandler` pushes `screenOf(screen)` under
   the route name `/go/<slug>`, unless that route is on top already or
   kids mode is locked. The ready-made links (and so NFC stickers) offer
   the ritual and the routines.
@@ -650,3 +651,29 @@ Controllers never produce user-facing text, because they have no locale:
 
 Android 13+ per-app language settings read `res/xml/locales_config.xml`;
 iOS lists the languages in `CFBundleLocalizations`.
+
+### Kids mode games (`lib/src/features/kids/kids_mode.dart`)
+
+- `KidsActivity` (piano, counting, colours, mixing) names the games kids
+  mode may offer; `PreferencesController.kidsActivities` keeps the ones
+  a grown-up ticked (null: all of them). They open under the route name
+  `/kids/<activity>`, and `isKidsModeRoute` keeps the mini-player (and so
+  the way to the player and the rest of the app) away from them as from
+  kids mode itself.
+
+### Colour mixing (`lib/src/features/learn/colour_mixing*.dart`)
+
+- `paintMixes` lists what two paints make as on a palette (red + yellow
+  = orange, yellow + blue = green, blue + red = purple, red + white =
+  pink); `mixOf` reads it in either order. `ColourMix.effect` is a
+  `gen:mix:<a>:<b>` scene looping over 12 s: an ambient palette of both
+  paints, then a ramp up from dark in the mix and an ambient of the mix.
+  `MixQuiz` never asks the same pair twice in a row.
+
+### Nap light (`lib/src/features/bedtime/nap_light*.dart`)
+
+- `NapLight.effect` is a one-shot `gen:nap:<minutes>` scene: a faint
+  amber ambient for the rest, then a 20 s ramp to green and a green
+  ambient for 20 minutes; at its end the player stops and the lamps go
+  back. The screen reads the rest from the effect playing, so it shows
+  the countdown again when opened from the mini-player.
