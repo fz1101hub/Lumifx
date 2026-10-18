@@ -7,6 +7,7 @@ import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../../core/sound/melodies.dart';
+import '../calm/breathing.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../effects/playback_controller.dart';
@@ -59,6 +60,9 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
     super.dispose();
   }
 
+  /// How long the breathing step lasts.
+  static const _breathingMinutes = 1;
+
   RitualStep? get _step {
     final index = _index;
     return index == null || index >= _steps.length ? null : _steps[index];
@@ -70,7 +74,9 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
     if (notice.kind == PlaybackNoticeKind.finished &&
         effect != null &&
         notice.name == effect.name &&
-        (_step == RitualStep.story || _step == RitualStep.lullaby)) {
+        (_step == RitualStep.breathing ||
+            _step == RitualStep.story ||
+            _step == RitualStep.lullaby)) {
       unawaited(_next());
     }
   }
@@ -126,6 +132,9 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
         if (mounted && _index == index) {
           await _next();
         }
+      case RitualStep.breathing:
+        await _play(BreathingPattern.flowerCandle
+            .effect(minutes: _breathingMinutes, name: l10n.breathe));
       case RitualStep.story:
         final tale =
             Tale.random(_random, name: scope.preferences.activeChild?.name);
@@ -267,6 +276,19 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
                 style: theme.textTheme.titleMedium,
               ),
             ),
+            if (step == RitualStep.breathing)
+              if ((_effect, _playback.player)
+                  case (final effect?, final player?)
+                  when _playback.effect.id == effect.id)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: ReadAlongCaption(
+                    effect: effect,
+                    lines: BreathingPattern.flowerCandle
+                        .narration(_breathingMinutes, l10n),
+                    player: player,
+                  ),
+                ),
             if (step == RitualStep.story)
               if ((_tale, _effect, _playback.player)
                   case (final tale?, final effect?, final player?)

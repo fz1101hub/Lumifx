@@ -9,6 +9,7 @@ void main() {
     final back = RitualSettings.fromJson(settings.toJson());
     expect(back.steps, [
       RitualStep.monsterSpray,
+      RitualStep.breathing,
       RitualStep.story,
       RitualStep.lullaby,
       RitualStep.guardian,

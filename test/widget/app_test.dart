@@ -18,6 +18,7 @@ import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/core/weather/weather.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
+import 'package:lumifx/src/features/calm/breathing.dart';
 import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
@@ -1860,8 +1861,6 @@ void main() {
     expect(find.byType(MonsterSprayScreen), findsOneWidget);
     await tester.pageBack();
     await tester.pump(const Duration(milliseconds: 500));
-    expect(playback.effect.name, 'The story of Mia');
-    expect(find.text('Step 3 of 5'), findsOneWidget);
 
     Future<void> finish() async {
       playback.player!.advance(playback.effect.cycleLength);
@@ -1870,9 +1869,18 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
     }
 
+    // A minute of calm breathing.
+    expect(BreathingPattern.of(playback.effect),
+        (BreathingPattern.flowerCandle, 1));
+    expect(find.text('Step 3 of 6'), findsOneWidget);
+    expect(find.text('Smell the flower…'), findsOneWidget);
+    await finish();
+    expect(playback.effect.name, 'The story of Mia');
+    expect(find.text('Step 4 of 6'), findsOneWidget);
+
     await finish();
     expect(playback.effect.name, "Brahms's Lullaby");
-    expect(find.text('Step 4 of 5'), findsOneWidget);
+    expect(find.text('Step 5 of 6'), findsOneWidget);
     await finish();
     expect(MonsterHunt.isGuardian(playback.effect), isTrue);
     expect(playback.sleepTimer, const Duration(minutes: 30));
