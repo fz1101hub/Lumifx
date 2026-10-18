@@ -8,6 +8,7 @@ import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/weather/weather.dart';
 import '../fun/countdown.dart';
+import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
@@ -193,6 +194,16 @@ class PreferencesController extends ChangeNotifier {
 
   Future<void> setRoutineSteps(String routine, List<String> steps) {
     _routineSteps = {..._routineSteps, routine: steps.take(20).toList()};
+    return _changed();
+  }
+
+  var _notificationLights = const NotificationLightsSettings();
+
+  /// Which apps' notifications flash the lights, and how (Android).
+  NotificationLightsSettings get notificationLights => _notificationLights;
+
+  Future<void> setNotificationLights(NotificationLightsSettings settings) {
+    _notificationLights = settings;
     return _changed();
   }
 
@@ -428,6 +439,8 @@ class PreferencesController extends ChangeNotifier {
               key: _strings(value).take(20).toList(),
       };
       _stars = _strings(json['stars']).take(800).toList();
+      _notificationLights =
+          NotificationLightsSettings.fromJson(json['notificationLights']);
       final kids = json['kidsEffects'];
       _kidsEffects = kids is List ? _strings(kids).take(24).toList() : null;
       _kidsLocked = json['kidsLocked'] == true;
@@ -707,6 +720,7 @@ class PreferencesController extends ChangeNotifier {
       'kidsEffects': _kidsEffects,
       'routineSteps': _routineSteps,
       'stars': _stars,
+      'notificationLights': _notificationLights.toJson(),
       'kidsLocked': _kidsLocked,
       'adventOpened': _adventOpened,
       'countdowns': [for (final c in _countdowns) c.toJson()],

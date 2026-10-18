@@ -34,6 +34,7 @@ import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/core/nfc/nfc_writer.dart';
+import 'package:lumifx/src/core/notification_lights_platform.dart';
 import 'package:lumifx/src/core/speech/speaker.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray.dart';
 import 'package:lumifx/src/features/cinema/cinema.dart';
@@ -41,6 +42,7 @@ import 'package:lumifx/src/features/cinema/cinema_screen.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
 import 'package:lumifx/src/features/links/nfc_stickers_screen.dart';
+import 'package:lumifx/src/features/notifications/notification_lights_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
 import 'package:lumifx/src/features/learn/counting_screen.dart';
@@ -99,6 +101,34 @@ class _FakeNfc implements NfcWriter {
 
   @override
   Future<void> openSettings() async => settingsOpened = true;
+}
+
+class _FakeNotificationLights implements NotificationLightsPlatform {
+  var access = false;
+  var accessAsked = false;
+  final configured = <Map<String, Object?>?>[];
+
+  @override
+  bool get isSupported => true;
+
+  @override
+  Future<bool> hasAccess() async => access;
+
+  @override
+  Future<void> openAccessSettings() async => accessAsked = true;
+
+  @override
+  Future<List<InstalledApp>> apps() async => const [
+        InstalledApp(package: 'com.ring', label: 'Ring'),
+        InstalledApp(package: 'com.whatsapp', label: 'WhatsApp'),
+      ];
+
+  @override
+  Future<void> configure(Map<String, Object?>? config) async =>
+      configured.add(config);
+
+  @override
+  Future<bool> test(Map<String, double> xy) async => true;
 }
 
 class _FakeDiscovery implements BridgeDiscovery {
@@ -176,6 +206,7 @@ Future<void> _pumpApp(
   DateTime Function()? clock,
   Speaker speaker = const NoSpeaker(),
   NfcWriter nfc = const NoNfcWriter(),
+  NotificationLightsPlatform notificationLights = const NoNotificationLights(),
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -196,6 +227,7 @@ Future<void> _pumpApp(
       clock: clock ?? DateTime.now,
       speaker: speaker,
       nfc: nfc,
+      notificationLights: notificationLights,
     ),
   );
 }
@@ -1280,6 +1312,51 @@ void main() {
         findsOneWidget);
     expect(find.byTooltip('Write on a sticker'), findsNothing);
     expect(find.byTooltip('Copy link'), findsWidgets);
+  });
+
+  testWidgets('notification lights: access, an app and its colour',
+      (tester) async {
+    final platform = _FakeNotificationLights();
+    await _pumpApp(tester, notificationLights: platform);
+    expect(platform.configured, [null], reason: 'nothing to flash yet');
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const NotificationLightsScreen())));
+    await tester.pumpAndSettle();
+    expect(find.text('Allow LumiFX to see notifications'), findsOneWidget);
+    await tester.tap(find.text('Allow'));
+    expect(platform.accessAsked, isTrue);
+    platform.access = true;
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(find.text('Allow LumiFX to see notifications'), findsNothing);
+
+    expect(find.text('No apps chosen yet'), findsOneWidget);
+    await tester.tap(find.text('Add an app'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'whats');
+    await tester.pump();
+    expect(find.text('Ring'), findsNothing);
+    await tester.tap(find.text('WhatsApp'));
+    await tester.pumpAndSettle();
+    expect(find.text('Colour for WhatsApp'), findsOneWidget);
+    await tester.tap(find
+        .descendant(
+            of: find.byType(AlertDialog), matching: find.byType(InkWell))
+        .at(1));
+    await tester.pumpAndSettle();
+    final preferences =
+        AppScope.of(tester.element(find.byType(NotificationLightsScreen)))
+            .preferences;
+    final settings = preferences.notificationLights;
+    expect(settings.enabled, isTrue);
+    expect(settings.rules.single.package, 'com.whatsapp');
+    expect(settings.rules.single.color, '#0A84FF');
+    expect(find.text('WhatsApp'), findsOneWidget);
+    await tester.tap(find.byTooltip('Remove'));
+    await tester.pumpAndSettle();
+    expect(preferences.notificationLights.rules, isEmpty);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

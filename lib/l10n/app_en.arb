@@ -3740,5 +3740,90 @@
   "linkBedtime": "Start bedtime",
   "@linkBedtime": {
     "description": "A ready-made link that starts bedtime"
+  },
+  "notificationLights": "Notification lights",
+  "@notificationLights": {
+    "description": "Home entry (Android): the lights flash when chosen apps post a notification"
+  },
+  "notificationLightsSubtitle": "The lights flash when chosen apps notify you",
+  "@notificationLightsSubtitle": {
+    "description": "Subtitle of notification lights"
+  },
+  "notificationLightsDescription": "Choose apps, such as messages or the doorbell, and a colour for each: when one of them posts a notification, the lights of the room flash in that colour, even with LumiFX closed.",
+  "@notificationLightsDescription": {
+    "description": "Explains notification lights"
+  },
+  "notificationLightsPrivacy": "LumiFX only sees which app posted a notification, never what it says, and keeps nothing.",
+  "@notificationLightsPrivacy": {
+    "description": "Privacy note of notification lights"
+  },
+  "notificationLightsAccess": "Allow LumiFX to see notifications",
+  "@notificationLightsAccess": {
+    "description": "Card: notification access must be allowed in Android's settings"
+  },
+  "notificationLightsAllow": "Allow",
+  "@notificationLightsAllow": {
+    "description": "Button: open the notification access settings"
+  },
+  "notificationLightsOn": "Flash the lights for notifications",
+  "@notificationLightsOn": {
+    "description": "Switch: notification lights on"
+  },
+  "notificationLightsRoom": "Lights that flash",
+  "@notificationLightsRoom": {
+    "description": "The room or zone whose lights flash"
+  },
+  "notificationLightsApps": "Apps",
+  "@notificationLightsApps": {
+    "description": "Header of the chosen apps"
+  },
+  "notificationLightsNoApps": "No apps chosen yet",
+  "@notificationLightsNoApps": {
+    "description": "No app chosen yet"
+  },
+  "notificationLightsAddApp": "Add an app",
+  "@notificationLightsAddApp": {
+    "description": "Button: choose an app whose notifications flash the lights"
+  },
+  "notificationLightsSearch": "Search apps",
+  "@notificationLightsSearch": {
+    "description": "Hint of the app search field"
+  },
+  "notificationLightsColor": "Colour for {app}",
+  "@notificationLightsColor": {
+    "description": "Title of the colour chooser for an app",
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationLightsTest": "Try it",
+  "@notificationLightsTest": {
+    "description": "Button: flash the lights now to try"
+  },
+  "notificationLightsTestFailed": "The lights did not answer: check the bridge connection",
+  "@notificationLightsTestFailed": {
+    "description": "The test flash did not reach the lights"
+  },
+  "notificationLightsRemove": "Remove",
+  "@notificationLightsRemove": {
+    "description": "Button: remove this app"
+  },
+  "notificationLightsQuiet": "Quiet hours",
+  "@notificationLightsQuiet": {
+    "description": "Switch: quiet hours when nothing flashes"
+  },
+  "notificationLightsQuietSubtitle": "Nothing flashes during these hours",
+  "@notificationLightsQuietSubtitle": {
+    "description": "Explains quiet hours"
+  },
+  "notificationLightsFrom": "From",
+  "@notificationLightsFrom": {
+    "description": "Start of the quiet hours"
+  },
+  "notificationLightsTo": "To",
+  "@notificationLightsTo": {
+    "description": "End of the quiet hours"
   }
 }

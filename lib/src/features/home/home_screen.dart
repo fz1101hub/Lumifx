@@ -20,6 +20,7 @@ import '../fun/fun_screen.dart';
 import '../house/house_screen.dart';
 import '../kids/kids_mode.dart';
 import '../links/nfc_stickers_screen.dart';
+import '../notifications/notification_lights_screen.dart';
 import '../music_box/music_box_screen.dart';
 import '../rooms/rooms_screen.dart';
 import '../routines/routines_screen.dart';
@@ -175,6 +176,12 @@ class HomeScreen extends StatelessWidget {
                       () => const AutomationsScreen()),
                   _HomeEntry(Icons.house_outlined, l10n.house,
                       l10n.houseSubtitle, () => const HouseScreen()),
+                  if (AppScope.of(context).notificationLights.isSupported)
+                    _HomeEntry(
+                        Icons.notifications_active_outlined,
+                        l10n.notificationLights,
+                        l10n.notificationLightsSubtitle,
+                        () => const NotificationLightsScreen()),
                 ],
               ),
           ],

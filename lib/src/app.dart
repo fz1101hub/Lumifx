@@ -13,6 +13,7 @@ import 'features/buttons/hue_button_listener.dart';
 import 'features/effects/read_aloud.dart';
 import 'core/photos/photo_picker.dart';
 import 'core/nfc/nfc_writer.dart';
+import 'core/notification_lights_platform.dart';
 import 'core/speech/speaker.dart';
 import 'core/speech/voice_recordings.dart';
 import 'core/weather/weather.dart';
@@ -28,6 +29,7 @@ import 'features/kids/kids_mode.dart';
 import 'features/library/effect_library.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/links/app_link.dart';
+import 'features/notifications/notification_lights_sync.dart';
 import 'features/links/link_handler.dart';
 import 'features/library/preferences_controller.dart';
 import 'features/shortcuts/app_shortcuts.dart';
@@ -55,6 +57,7 @@ class LumiFxApp extends StatefulWidget {
     this.voiceRecorder = const NoVoiceRecorder(),
     this.voicePlayer = const NoVoicePlayer(),
     this.nfc = const NoNfcWriter(),
+    this.notificationLights = const NoNotificationLights(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -103,6 +106,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// Writes links on NFC stickers (Android).
   final NfcWriter nfc;
+
+  /// Flashes the lights for chosen apps' notifications (Android).
+  final NotificationLightsPlatform notificationLights;
   final VoiceRecorder voiceRecorder;
   final VoicePlayer voicePlayer;
 
@@ -128,6 +134,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   late final LinkHandler _links;
   late final HueButtonListener _buttons;
   late final ReadAloud _readAloud;
+  late final NotificationLightsSync _notificationLights;
   StreamSubscription<PlaybackNotice>? _notices;
 
   @override
@@ -185,6 +192,11 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
             : Localizations.localeOf(context);
       },
     )..start();
+    _notificationLights = NotificationLightsSync(
+      platform: widget.notificationLights,
+      preferences: widget.preferences,
+      bridge: widget.bridge,
+    );
     // Opened from a link: the platform hands it over as the first route.
     final initial = AppLink.parse(
         WidgetsBinding.instance.platformDispatcher.defaultRouteName);
@@ -345,6 +357,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     unawaited(_notices?.cancel());
     _buttons.dispose();
     _readAloud.dispose();
+    _notificationLights.dispose();
     _playback.dispose();
     _routes.dispose();
     super.dispose();
@@ -381,6 +394,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       voicePlayer: widget.voicePlayer,
       speaker: widget.speaker,
       nfc: widget.nfc,
+      notificationLights: widget.notificationLights,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,
