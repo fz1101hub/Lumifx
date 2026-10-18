@@ -48,6 +48,9 @@ import 'package:lumifx/src/features/bedtime/ritual_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
 import 'package:lumifx/src/features/links/nfc_stickers_screen.dart';
 import 'package:lumifx/src/features/notifications/notification_lights_screen.dart';
+import 'package:lumifx/src/features/effects/playing_route.dart';
+import 'package:lumifx/src/features/learn/colour_mixing.dart';
+import 'package:lumifx/src/features/learn/colour_mixing_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
 import 'package:lumifx/src/features/learn/counting_screen.dart';
@@ -1272,6 +1275,57 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
     expect(find.text('Which colour is it?'), findsOneWidget,
         reason: 'then the next word');
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('two paints mix on the lamps, then the quiz', (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const ColourMixingScreen(seed: 5))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(ColourMixingScreen))).playback;
+    expect(find.text('Pick a paint'), findsOneWidget);
+    await tester.tap(find.text('yellow'));
+    await tester.pump();
+    expect(find.text('Now pick one to mix it with'), findsOneWidget);
+    // White makes no colour with yellow.
+    await tester.tap(find.text('white'));
+    await tester.pump();
+    expect(find.text('Now pick one to mix it with'), findsOneWidget);
+    await tester.tap(find.text('blue'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('yellow + blue = green'), findsOneWidget);
+    expect(
+        ColourMix.of(playback.effect), (LearnColour.yellow, LearnColour.blue));
+    await tester.pump(const Duration(seconds: 4));
+    expect(speaker.spoken.last, ('green', 'en-US'));
+
+    // The mini-player leads back here.
+    expect(
+        (routeForPlaying(playback.effect) as MaterialPageRoute<void>)
+            .builder(tester.element(find.byType(ColourMixingScreen))),
+        isA<ColourMixingScreen>());
+
+    await tester.tap(find.text('Quiz'));
+    await tester.pump();
+    final quiz = MixQuiz(math.Random(5))..next();
+    final (a, b) = quiz.paints;
+    expect(find.text('What do ${a.word('en')} and ${b.word('en')} make?'),
+        findsOneWidget);
+    final wrong = quiz.choices.firstWhere((c) => c != quiz.target);
+    await tester.tap(find.text(wrong.word('en')));
+    await tester.pump();
+    expect(find.text('Try again'), findsOneWidget);
+    await tester.tap(find.text(quiz.target.word('en')));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Well done!'), findsOneWidget);
+    expect(ColourMix.of(playback.effect), (a, b));
+    await tester.pump(const Duration(seconds: 6));
+    expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
     await tester.pumpAndSettle();
   });

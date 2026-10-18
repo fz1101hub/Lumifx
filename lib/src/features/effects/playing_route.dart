@@ -22,6 +22,8 @@ import '../fun/hot_cold.dart';
 import '../fun/hot_cold_screen.dart';
 import '../fun/light_games.dart';
 import '../fun/simon_screen.dart';
+import '../learn/colour_mixing.dart';
+import '../learn/colour_mixing_screen.dart';
 import '../learn/colour_words.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting.dart';
@@ -92,6 +94,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const CountingScreen();
   } else if (MorseMessage.of(effect) != null) {
     screen = MorseScreen(playing: effect);
+  } else if (ColourMix.of(effect) != null) {
+    screen = ColourMixingScreen(playing: effect);
   } else if (LearnColour.of(effect) != null) {
     screen = ColourWordsScreen(playing: effect);
   } else if (isRewardParty(effect)) {

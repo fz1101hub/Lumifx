@@ -1069,5 +1069,12 @@
   "taleTeddy2": "{name} segue as luzes das janelas uma a uma e leva o ursinho para casa, direto para um abraço quentinho.",
   "taleMoon1": "Mas esta noite a lua ficou dormindo, e sem a sua luz prateada o céu em volta de {name} está escuro.",
   "taleMoon2": "{name} cantarola uma canção suave até a lua abrir um olho, depois o outro, e brilhar para todos.",
-  "kidsModeActivities": "Oferecer também estes jogos"
+  "kidsModeActivities": "Oferecer também estes jogos",
+  "colourMixing": "Mistura de cores",
+  "colourMixingSubtitle": "Misture duas tintas e veja a nova cor nas lâmpadas",
+  "colourMixingRules": "Escolha duas tintas para misturar: as lâmpadas brilham nas duas cores e depois na cor que elas formam juntas. Depois tente o quiz: adivinhe o que duas tintas formam.",
+  "colourMixingMix": "Misturar",
+  "colourMixingPick": "Escolha uma tinta",
+  "colourMixingPickAnother": "Agora escolha outra para misturar",
+  "colourMixingWhich": "O que dá misturar {first} e {second}?"
 }

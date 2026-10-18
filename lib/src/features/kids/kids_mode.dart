@@ -11,6 +11,7 @@ import '../common/layout.dart';
 import '../effects/effect_palette.dart';
 import '../effects/playback_controller.dart';
 import '../library/effect_library.dart';
+import '../learn/colour_mixing_screen.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting_screen.dart';
 import '../library/preferences_controller.dart';
@@ -21,7 +22,8 @@ import '../music_box/light_piano_screen.dart';
 enum KidsActivity {
   piano(Icons.piano_outlined),
   counting(Icons.filter_9_plus_outlined),
-  colours(Icons.translate);
+  colours(Icons.translate),
+  mixing(Icons.palette_outlined);
 
   const KidsActivity(this.icon);
 
@@ -31,12 +33,14 @@ enum KidsActivity {
         piano => l10n.piano,
         counting => l10n.countLights,
         colours => l10n.colourWords,
+        mixing => l10n.colourMixing,
       };
 
   Widget screen() => switch (this) {
         piano => const LightPianoScreen(),
         counting => const CountingScreen(),
         colours => const ColourWordsScreen(),
+        mixing => const ColourMixingScreen(),
       };
 
   /// The games a grown-up kept (all of them until one chooses).

@@ -1069,5 +1069,12 @@
   "taleTeddy2": "{name} folgt den Lichtern der Fenster, eins nach dem anderen, und bringt den Teddy nach Hause, mitten in eine warme Umarmung.",
   "taleMoon1": "Doch heute Nacht hat der Mond verschlafen, und ohne sein silbernes Licht ist der Himmel um {name} ganz dunkel.",
   "taleMoon2": "{name} summt ein leises Lied, bis der Mond ein Auge öffnet, dann das andere, und für alle scheint.",
-  "kidsModeActivities": "Auch diese Spiele anbieten"
+  "kidsModeActivities": "Auch diese Spiele anbieten",
+  "colourMixing": "Farben mischen",
+  "colourMixingSubtitle": "Zwei Farben mischen und die neue Farbe an den Lampen sehen",
+  "colourMixingRules": "Wähle zwei Farben zum Mischen: Die Lampen leuchten in beiden Farben und dann in der Farbe, die sie zusammen ergeben. Dann probier das Quiz: Rate, was zwei Farben ergeben.",
+  "colourMixingMix": "Mischen",
+  "colourMixingPick": "Wähle eine Farbe",
+  "colourMixingPickAnother": "Jetzt wähle eine zum Mischen",
+  "colourMixingWhich": "Was ergeben {first} und {second}?"
 }

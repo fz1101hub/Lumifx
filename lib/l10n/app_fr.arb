@@ -1069,5 +1069,12 @@
   "taleTeddy2": "{name} suit les lumières des fenêtres une à une et ramène le nounours à la maison, droit dans un câlin tout chaud.",
   "taleMoon1": "Mais cette nuit, la lune ne s'est pas réveillée, et sans sa lumière d'argent tout le ciel est noir autour de {name}.",
   "taleMoon2": "{name} fredonne une douce chanson jusqu'à ce que la lune ouvre un œil, puis l'autre, et brille pour tout le monde.",
-  "kidsModeActivities": "Proposer aussi ces jeux"
+  "kidsModeActivities": "Proposer aussi ces jeux",
+  "colourMixing": "Mélange des couleurs",
+  "colourMixingSubtitle": "Mélange deux peintures et vois la nouvelle couleur sur les lampes",
+  "colourMixingRules": "Choisis deux peintures à mélanger : les lampes brillent des deux couleurs, puis de la couleur qu'elles forment ensemble. Ensuite, essaie le quiz : devine ce que donnent deux peintures.",
+  "colourMixingMix": "Mélanger",
+  "colourMixingPick": "Choisis une peinture",
+  "colourMixingPickAnother": "Choisis-en maintenant une autre à mélanger",
+  "colourMixingWhich": "Mélange {first} et {second} : ça donne quoi ?"
 }

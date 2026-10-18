@@ -1069,5 +1069,12 @@
   "taleTeddy2": "{name}は窓の明かりをひとつずつたどり、くまちゃんをおうちへ送りとどけます。あたたかいだっこが待っていました。",
   "taleMoon1": "ところが今夜はお月さまがねぼうして、銀色の光がなく、{name}のまわりの空はまっくらです。",
   "taleMoon2": "{name}がやさしい歌を口ずさむと、お月さまは片目を、それからもう片方を開けて、みんなを照らします。",
-  "kidsModeActivities": "このゲームも表示する"
+  "kidsModeActivities": "このゲームも表示する",
+  "colourMixing": "いろまぜ",
+  "colourMixingSubtitle": "2つの絵の具をまぜて、新しい色をライトで見よう",
+  "colourMixingRules": "まぜる絵の具を2つえらんでね。ライトが2つの色に光ったあと、まぜてできる色に変わります。クイズでは、2つの絵の具で何色になるか当ててね。",
+  "colourMixingMix": "まぜる",
+  "colourMixingPick": "絵の具をえらんでね",
+  "colourMixingPickAnother": "まぜるもう1つをえらんでね",
+  "colourMixingWhich": "{first}と{second}をまぜると何色？"
 }

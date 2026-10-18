@@ -4293,5 +4293,41 @@
   "kidsModeActivities": "Also offer these games",
   "@kidsModeActivities": {
     "description": "Kids mode setup: heading of the games offered besides the effects"
+  },
+  "colourMixing": "Colour mixing",
+  "@colourMixing": {
+    "description": "Title of the colour mixing game: mix two paints, the lamps show the result"
+  },
+  "colourMixingSubtitle": "Mix two paints and see the new colour on the lamps",
+  "@colourMixingSubtitle": {
+    "description": "Subtitle of the colour mixing game in the games list"
+  },
+  "colourMixingRules": "Choose two paints to mix: the lamps glow in both colours, then in the colour they make together. Then try the quiz: guess what two paints make.",
+  "@colourMixingRules": {
+    "description": "Colour mixing: how it works"
+  },
+  "colourMixingMix": "Mix",
+  "@colourMixingMix": {
+    "description": "Colour mixing: the mode where the child mixes paints freely"
+  },
+  "colourMixingPick": "Pick a paint",
+  "@colourMixingPick": {
+    "description": "Colour mixing: asks the child to tap a first paint"
+  },
+  "colourMixingPickAnother": "Now pick one to mix it with",
+  "@colourMixingPickAnother": {
+    "description": "Colour mixing: asks the child to tap a second paint to mix with the first"
+  },
+  "colourMixingWhich": "What do {first} and {second} make?",
+  "@colourMixingWhich": {
+    "description": "Colour mixing quiz question; first and second are colour names, as written alone in the app's language",
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
   }
 }

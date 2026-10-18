@@ -1069,5 +1069,12 @@
   "taleTeddy2": "{name} volgt de lichtjes van de ramen een voor een en brengt de teddybeer naar huis, recht in een warme knuffel.",
   "taleMoon1": "Maar vannacht heeft de maan zich verslapen, en zonder haar zilveren licht is de hemel rond {name} donker.",
   "taleMoon2": "{name} neuriet een zacht liedje tot de maan één oog opendoet, dan het andere, en voor iedereen schijnt.",
-  "kidsModeActivities": "Bied ook deze spelletjes aan"
+  "kidsModeActivities": "Bied ook deze spelletjes aan",
+  "colourMixing": "Kleuren mengen",
+  "colourMixingSubtitle": "Meng twee verven en zie de nieuwe kleur op de lampen",
+  "colourMixingRules": "Kies twee verven om te mengen: de lampen gloeien in beide kleuren en daarna in de kleur die ze samen maken. Probeer daarna de quiz: raad wat twee verven samen maken.",
+  "colourMixingMix": "Mengen",
+  "colourMixingPick": "Kies een verf",
+  "colourMixingPickAnother": "Kies nu er een om mee te mengen",
+  "colourMixingWhich": "Wat krijg je als je {first} en {second} mengt?"
 }
