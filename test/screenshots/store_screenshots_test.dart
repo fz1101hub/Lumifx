@@ -93,6 +93,12 @@ Future<void> _capture(WidgetTester tester, String device, Locale locale) async {
   Future<void> shot(String name) =>
       _save(tester, boundary, '$device/${locale.languageCode}/$name');
   Future<void> open(String text) async {
+    // Not built: perhaps above, where the page was left scrolled. Start
+    // from the top and look downwards.
+    if (find.text(text).evaluate().isEmpty) {
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, 20000));
+      await tester.pumpAndSettle();
+    }
     // The outermost Scrollable is the page; shelves scroll sideways.
     await tester.scrollUntilVisible(find.text(text), 200,
         scrollable: find.byType(Scrollable).first);
