@@ -194,7 +194,8 @@ build before every store release.
 - [ ] Sounds: Fireplace crackles, Ocean has waves, Thunderstorm answers
       lightning with thunder; the volume slider and the switch work; sound
       pauses, switches and stops with the effect; music in another app
-      keeps playing underneath (iOS ambient, Android without audio focus).
+      keeps playing underneath (iOS mixes with it, Android without audio
+      focus).
 - [ ] Several rooms: choose two rooms in "Play on › Several rooms": both
       play, a light in both rooms plays once, stopping restores both.
 - [ ] Search: the search icon finds "drago" (Italian) and "Kraken"; the
@@ -315,6 +316,136 @@ build before every store release.
 - [ ] Natural light in a room: the Hue app shows the five scenes and the
       smart scene; switched on, the room shows the white of the hour and
       moves on at the next time slot. Delete removes all of them.
+
+## This round: routines, music, stories, games, cinema, NFC, notifications, lock screen
+
+- [ ] Home: the experience cards, then the groups For the family, More
+      and (with a bridge) Your home; each new entry below is where this
+      list says.
+- [ ] Morning and evening (For the family): Choose the steps, untick two
+      morning steps; Start shows only the kept pictures. Each tap flashes
+      the step's colour and one more lamp fills up; a second tap undoes
+      it. The last step plays a party and earns a star; doing it again the
+      same day says the star is already yours. The chart shows the last
+      seven days (set the date forward a day: a new star can be earned).
+- [ ] Lullabies (For the family) on a room: Brahms's Lullaby, 3 times,
+      "Then fade out the lights" on: the music box plays from the phone,
+      each note lights a lamp (low notes at one end of the room, high at
+      the other), three times through, then the lights fade out and stay
+      off. Twinkle Twinkle once with the switch off: the lights go back as
+      they were. With Settings › Sounds off the screen offers to turn them
+      on. Note any lag between notes and lamps on a room (REST) compared
+      with an entertainment area.
+- [ ] Christmas light show (Parties and games): Jingle Bells, Silent
+      Night and We Wish You a Merry Christmas each play once on little
+      bells, every note a lamp in red, green or gold over a festive glow.
+- [ ] Story maker (For the family, and the card above the Stories list):
+      Dragon, Under the sea, A treasure map, name "Sam": five lines in
+      turn, each with its lights, then a warm glow that fades; with Read
+      aloud on each line is spoken with the name. "Surprise me" changes
+      hero, place and adventure and keeps the typed name. In Italian,
+      German, French, Spanish and Portuguese read the lines with a girl's
+      and a boy's name: nothing in them depends on the hero's gender.
+      With the router's internet unplugged it works the same.
+- [ ] Count the lights (Parties and games) on a room: the lamps and the
+      lamp on screen blink 1 to 3 times in colours, slowly enough to count
+      aloud; the right number flashes gold and, with sounds on, the phone
+      says it; three right in a row add a number, up to 9; a wrong answer
+      shows the same blinks again.
+- [ ] Colours in another language: choose Français; a colour turns the
+      room that colour and the phone says "rouge"; Quiz: hear a word and
+      tap it among four, a wrong tap says it again. Try Japanese and
+      Dutch (the voice must be installed on the phone). With sounds off
+      the screen says so.
+- [ ] Monster spray (For the family): the room goes dim purple with a
+      green glint now and then; each Spray! flashes the lamps and one of
+      the five monsters goes; then the guardian light, warm and low, set
+      to 15 minutes, fades out and switches off at the end. Changing the
+      minutes while it is on starts the time again.
+- [ ] Cinema mode (More) with "Soft glow during the film" on: Start the
+      film dims the room over ~30 s to a faint cool glow; Intermission
+      rises in a few seconds to a warm half light; Back to the film dims
+      again; End of the film brings the lights back over ~45 s, then the
+      room has the colours it had before. Again with the glow off: dark.
+      Left on the intermission, after 20 minutes the room goes back by
+      itself. Android: lock the phone during the film, the lights stay
+      dim. iPhone: the screen stays on; locking it stops the film and the
+      lights come back (no sound, as for any silent effect).
+- [ ] NFC stickers, Android (More › NFC stickers, NFC on): Write on a
+      sticker for Play Fireplace with a blank NTAG213: "Sticker ready".
+      With the phone unlocked and LumiFX closed, touch the sticker:
+      LumiFX opens and plays Fireplace; the same with LumiFX open on
+      another screen. A Start bedtime sticker starts bedtime, a Stop one
+      stops and puts the lights back; a playlist sticker plays it.
+      Touching with the screen locked does nothing (Android reads NFC
+      only when unlocked).
+- [ ] NFC edge cases: a locked (read-only) sticker says it is locked; a
+      long playlist link on a small sticker says it does not fit; a bank
+      or transit card says it cannot hold links; pulling the sticker away
+      mid-write says to try again; Cancel stops waiting. NFC off: the
+      card says so and Turn on opens the settings, coming back the write
+      buttons appear. A phone without NFC explains it and still copies
+      links.
+- [ ] NFC on iPhone (XS or later): the screen explains the Shortcuts
+      app and has no write button. Copy Play Fireplace; Shortcuts ›
+      Automation › New Automation › NFC › Scan the sticker › Open URLs
+      with the copied link (Run Immediately): touching the sticker opens
+      LumiFX and plays Fireplace. Settings › Shortcuts and automations
+      lists Start bedtime too.
+- [ ] Notification lights, Android (Your home › Notification lights):
+      the card says LumiFX only sees which app posted. Allow opens
+      Android's notification access page for LumiFX (the list on Android
+      10 and older); allow it, accept Android's warning, come back: the
+      Allow card is gone. Add a messaging app in green and an e-mail app
+      in blue (only launcher apps are listed; search works), choose a
+      room; Try it flashes the room (colour lights blink in the colour,
+      white lights on and off) and then puts it back.
+- [ ] Send a message from another phone: the room flashes green for ~3
+      s, then goes back as it was. Three messages within 15 s flash once.
+      A music player's ongoing notification, a download in progress and
+      an app that was not chosen flash nothing.
+- [ ] App closed: swipe LumiFX away from the recent apps, and once after
+      restarting the phone: a message still flashes the lights. On phones
+      with aggressive battery savers (Xiaomi, Huawei, Samsung's sleeping
+      apps) note whether it stops after a while.
+- [ ] Quiet hours: set them from now to two minutes later: a message
+      inside flashes nothing, one after flashes again. The default
+      22:00–07:00 crosses midnight. Quiet hours off: always flashes.
+- [ ] Revoke notification access in Android's settings: the screen
+      shows Allow again and nothing flashes. The main switch off, or the
+      bridge forgotten: nothing flashes. After the bridge changes IP
+      address and the app finds it again, flashes work again. A light
+      without signalling (an older bulb) breathes instead.
+- [ ] iPhone: no Notification lights entry anywhere.
+- [ ] Lock screen, iPhone (iOS 16.1+, the widget extension added as in
+      `docs/IOS_WIDGET.md`, Settings › "Keep playing with the screen off"
+      on, with the iOS text): play Fireplace on a room: the lock screen
+      shows Fireplace, the room, its colours and Stop; on an iPhone with
+      a Dynamic Island the bulb shows there and a long press shows the
+      colours and Stop. Pause in the app: the icon changes; switch to
+      Ocean: name and colours update; Stop in the app: it goes away.
+- [ ] The lock screen's Stop opens LumiFX (after Face ID or the code),
+      which stops the effect and puts the lights back; the Live Activity
+      goes away. Preview only (no room): none. Live Activities off for
+      LumiFX in iOS Settings, or "Keep playing with the screen off" off:
+      none, and playing still works.
+- [ ] Locked with sound, iPhone: Lullabies (Brahms, 3 times, fade out)
+      on a room with the silent switch on, then lock the phone: the music
+      box is heard, the notes keep lighting the lamps to the end and the
+      lights fade out. Fireplace with sounds keeps crackling and moving
+      for 10 minutes locked; music from another app keeps playing with
+      it.
+- [ ] Locked without sound, iPhone: Aurora (no sounds), or Fireplace
+      with Settings › Sounds off, then lock the phone: the effect stops,
+      the lights go back and the Live Activity goes away.
+- [ ] Kids mode with two chosen effects: a link, an NFC sticker, a Siri
+      phrase or a Hue button for one of them plays it; one for another
+      effect or a playlist does nothing; Stop and Start bedtime still
+      work.
+- [ ] Mini-player: start a light timer, a game, a birthday, the story
+      maker, a lullaby, the monster spray, cinema mode, a routine and a
+      learning game in turn, go back to the home: the mini-player opens
+      that feature's own screen, where it is, not the player.
 
 ## Links and widget
 

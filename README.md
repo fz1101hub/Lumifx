@@ -133,12 +133,48 @@ Also done ahead of schedule:
 - **Advent calendar** of light (24 doors) and **How many sleeps?**
   countdowns to big days.
 - **Kids mode**: big buttons for chosen gentle effects, locked behind a
-  grown-up's sum, even after a restart.
+  grown-up's sum, even after a restart; links, voice and Hue buttons
+  start only those effects meanwhile.
 - **Your own voice**: record the lines of your stories; they play in time
   with the lights.
 - **Around the house** (on the bridge, phone off): away mode with
   randomised times, a night path on a Hue motion sensor, and natural
   light that follows the day (a smart scene).
+- **Morning and evening routines**: picture checklists with the steps a
+  grown-up chooses; the lamps fill up step by step, then a party and a
+  star, with a chart of the last seven days.
+- **Lullabies on a music box**: Brahms's Lullaby, Twinkle Twinkle and
+  Frère Jacques, made on the phone; each note lights a lamp by its pitch
+  (low on one side, high on the other); once, three or five times, then
+  the lights can fade out.
+- **Christmas light show**: Jingle Bells, Silent Night and We Wish You a
+  Merry Christmas on little bells, the lamps in red, green and gold note
+  by note.
+- **Story maker**: a hero, a place, an adventure and a name (or
+  "Surprise me") make a five-line bedtime story with its own lights,
+  read along and aloud, ending in a warm glow that fades. Put together
+  on the phone from written lines (no AI, no network), worded so it
+  never depends on the hero's gender.
+- **Learning games**: Count the lights (the lamps blink, tap how many;
+  the numbers grow up to 9) and Colours in another language (the room
+  turns a colour and the phone says its name in any of the eight
+  languages, then a quiz).
+- **Monster spray**: five funny monsters hide in a dim purple room; each
+  spray flashes the lamps and chases one away; then a warm guardian
+  light for 15, 30 or 60 minutes that fades out.
+- **Cinema mode**: the lights dim slowly for the film (to a faint glow
+  or to dark), rise for the intermission and come back at the end.
+- **NFC stickers**: on Android LumiFX writes a `lumifx://` link (a
+  favourite, a playlist, bedtime, stop) on a sticker, and touching it
+  with the unlocked phone starts it; on iPhone the Shortcuts app's NFC
+  automation opens the link.
+- **Notification lights** (Android): chosen apps flash the lights of a
+  room in their own colour when they post a notification, even with
+  LumiFX closed; only the app's name is seen, never what it says; quiet
+  hours at night.
+- **Lock screen on iPhone** (iOS 16.1+): the effect playing, its room,
+  colours and a Stop on the lock screen and in the Dynamic Island;
+  effects with sounds or a tune keep playing with the iPhone locked.
 
 ## Development
 

@@ -79,10 +79,11 @@ Inside, `iphone-6.5/<lang>/` holds 1242×2688 PNGs for App Store Connect
 (the 6.5" slot, accepted for every iPhone), `ipad-12.9/<lang>/` holds
 2048×2732 PNGs (the 12.9" iPad slot, which App Store Connect requires
 because the app runs on iPad; Play takes them as 10" tablet screenshots)
-and `android-9x16/<lang>/` holds 1080×1920 PNGs for Play Console. Five
+and `android-9x16/<lang>/` holds 1080×1920 PNGs for Play Console. Nine
 screens each: home, stories, the player, rooms with Hue scenes, the area
-editor. The iPad set shows the tablet layouts (three experience tiles,
-a grid of effects, the player in two panes).
+editor, parties and games, a running game, a birthday and kids mode
+(`06-family` to `09-kids-mode`). The iPad set shows the tablet layouts
+(three experience tiles, a grid of effects, the player in two panes).
 
 To regenerate locally:
 
@@ -161,6 +162,10 @@ needs attention; the Android half is independent.
    playback service with the answers and the demo videos described in
    `docs/STORE_LISTING.md` (Play blocks the release until this is done,
    because the app targets Android 14+ and declares those service types).
+6. The notification listener (Notification lights) and NFC need no
+   declaration form: answer the data safety form and paste the review
+   notes from `docs/STORE_LISTING.md`, which explain the notification
+   access. `QUERY_ALL_PACKAGES` is not used.
 
 ## 3. Android: every release
 
@@ -184,7 +189,9 @@ then promote to Production.
 2. In [App Store Connect](https://appstoreconnect.apple.com) › Apps › **+**:
    platform iOS, name **LumiFX**, primary language English, bundle ID
    `com.lumifx.lumifx` (create it in Certificates, Identifiers & Profiles
-   first with the App ID, no special capabilities needed), SKU `lumifx`.
+   first with the App ID, no special capabilities needed: background
+   audio is a key in `Info.plist`, Live Activities need none and NFC is
+   not used on iOS), SKU `lumifx`.
 3. Fill in from `docs/STORE_LISTING.md`: description, keywords, support URL
    (<https://fz1101hub.github.io/Lumifx/>), privacy policy URL
    (<https://fz1101hub.github.io/Lumifx/privacy.html>), App Privacy
@@ -258,6 +265,24 @@ last upload. For a build made by hand, pass `--build-number` to
   STORE_LISTING.md).
 - **Text to speech.** "Read aloud" uses the system voice (no permission;
   Android 11+ needs the `TTS_SERVICE` query, already in the manifest).
+  The story maker and the learning games speak through it too.
+- **Notification access (Android).** Notification lights use a
+  `NotificationListenerService`; the user turns it on in Android's
+  settings from the in-app "Allow" button, after the disclosure that
+  only the posting app is seen, never the content. Play has no form for
+  it; the data safety answer (nothing collected) and the review notes
+  in STORE_LISTING.md explain it. The apps to choose from come from a
+  launcher-intent `<queries>` entry, not `QUERY_ALL_PACKAGES`.
+- **NFC (Android).** `android.permission.NFC` with `android.hardware.nfc`
+  not required, so phones without NFC can install the app; used only to
+  write a sticker when the user asks. On iPhone the Shortcuts app reads
+  the stickers: no NFC entitlement.
+- **Background audio and Live Activities (iOS).** `UIBackgroundModes`
+  has `audio`, so effects with sounds or a lullaby go on with the iPhone
+  locked; App Review checks that the app really plays audible sound in
+  the background, which the review notes explain.
+  `NSSupportsLiveActivities` lets the app show the effect on the lock
+  screen; it is drawn by the widget extension (`docs/IOS_WIDGET.md`).
 - **Export compliance.** See STORE_LISTING.md; `ITSAppUsesNonExemptEncryption`
   is set to false so TestFlight does not ask every time.
 - **Trademark.** The listing says the app is not affiliated with Signify.

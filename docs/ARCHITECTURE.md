@@ -219,6 +219,17 @@ live flashes, see below), `BreathingPattern.effect` (the `ramp` event
 glides brightness and colour, eased), `Pomodoro` (countdown and break
 phases), `Advent.effect` and `Countdown.effect`. Each is parsed back
 from its id by `narrationOf` so its words are read along and aloud.
+`KidRoutine` (`lib/src/features/routines`) shows its steps with the
+`progress` event (a still bar across the lights, `value` of them lit, one
+after the other); its stars are day keys (`yyyy-mm-dd:routine`) in the
+preferences. `MonsterHunt` (`lib/src/features/bedtime/monster_spray.dart`)
+answers each spray with a live flash (below) and ends in a guardian
+scene under the sleep timer, which fades it out and switches the lights
+off. `Cinema` (`lib/src/features/cinema`) phases are non-looping ramps
+and holds (the film holds four hours, the intermission twenty minutes),
+so their end puts the lights back as they were. `routeForPlaying`
+(`playing_route.dart`) parses each kind back from its id, so the
+mini-player opens the feature's own screen.
 
 `EffectPlayer.flashNow` (and `PlaybackController.flash`) overlays one
 colour on every light at once, for a set time, over whatever the effect
@@ -269,6 +280,175 @@ and plays recordings even with Read aloud off.
   photo at 64 px wide and groups its pixels into 24 hue bins plus whites;
   vivid pixels weigh more, dark and grey ones are ignored, close hues are
   merged and washed-out ones strengthened for the lights.
+
+### Music box and light shows (`lib/src/core/sound/melody*.dart`, `lib/src/features/music_box`)
+
+- A `Melody` is a list of `Note`s (a MIDI pitch, 0 for a rest, held for
+  some beats) at a tempo, with an `Instrument`: a music box for the three
+  lullabies, little bells for the three carols. The tunes
+  (`melodies.dart`) are traditional, long in the public domain, written
+  out note by note.
+- `synthesizeMelody` renders the tune `times` times through: each note is
+  a few sine partials (harmonic for the music box; inharmonic, ringing
+  longer for the bells) with a 4 ms attack and an exponential decay,
+  ringing a little past its length; the whole is then normalised.
+  Nothing is recorded. `AudioplayersSoundPlayer` writes it once as a WAV
+  in the temporary folder (`v1_melody_<id>_x<times>`), like the ambient
+  sounds, and plays it once instead of in a loop.
+- `melodyEffect` (`melody_lights.dart`) turns the same `timeline` into
+  lights: a dim (lullaby) or festive red, green and gold (carol)
+  `ambient_palette` and one `magic_flash` per note on the light at its
+  pitch, through the renderer's `position` target (0 the first slot, 1
+  the last), so low notes sit on one side of the room and high ones on
+  the other. The id (`gen:melody:<id>:<times>`) is all `soundscapeOf`
+  needs to find the tune, so sound and lights start, pause and stop
+  together like any effect's sounds. It does not loop; "Then fade out the
+  lights" sets the sleep timer to its length.
+- Tested in `test/core/sound/melody_test.dart`.
+
+### Story maker (`lib/src/features/tales`)
+
+- A `Tale` is a `TaleHero` (six, each with a default name, a colour and
+  a description), a `TalePlace` (five, each with a palette), a
+  `TaleQuest` (five problems, each with its solution) and the name typed
+  (at most 24 characters: it is read five times). "Surprise me" draws the
+  three at random and keeps a typed name.
+- The words are ARB strings with the name as a placeholder: intro,
+  place, problem, solution and ending, at fixed seconds (0, 9, 19, 30
+  and 42 of 56). The hero always comes as a name with a description after
+  it ("Sam, a baby dragon who…"), and the ARB descriptions tell
+  translators the lines must not depend on the hero's gender, so any
+  name reads right in every language. Every sentence is written in the ARB
+  files: there is no AI and no network.
+- `Tale.effect` gives each line its lights: the hero's colour travelling
+  in, the place's palette with an accent (fireflies, a sweep of stars, a
+  rainbow of flashes), the adventure's own events (the star carried back
+  to the sky, the rainbow's colours coming back lamp by lamp, footsteps
+  to a golden chest…) and a warm `ramp` from 45 % down to 6 %. It does
+  not loop.
+- The id holds everything (`gen:tale:<hero>:<place>:<quest>:<name>`,
+  the name URI-encoded), so `Tale.of` rebuilds the tale for
+  `narrationOf` (read along, read aloud) and for the mini-player. Tested
+  in `test/features/tale_test.dart`.
+
+### Learning games (`lib/src/features/learn`)
+
+- `CountingGame` draws a number of blinks from 1 to the current highest
+  (3 at first, one more after three right answers in a row, up to 9;
+  never the same number twice in a row) and a colour for each. The screen
+  plays a dim background and blinks with `PlaybackController.flash` (600
+  ms on, 450 ms dark) together with a lamp on screen; a right answer
+  flashes gold and, with sounds on, the `Speaker` says the number in the
+  app's language.
+- `LearnColour` has eight colours, each a one-colour scene
+  (`gen:colourword:<colour>`) and a word in each of the app's eight
+  languages (`colourWords`, in code rather than in the ARB files, because
+  the language learnt is not the app's). The `Speaker` says the word with
+  that language's voice (`speechLanguage`), whatever the app's language.
+  `ColourQuiz` picks a colour (never twice in a row) and three others, in
+  any order. Speech follows the Sounds setting and uses the phone's own
+  text-to-speech, as Read aloud does.
+- Tested in `test/features/learn_test.dart`.
+
+### NFC stickers (`lib/src/core/nfc`, `android/.../NfcChannel.kt`)
+
+- `NfcWriter` is the Dart side of the `com.lumifx/nfc` method channel
+  (`isAvailable`, `isEnabled`, `write`, `cancel`, `openSettings`); on
+  iOS `ChannelNfcWriter` answers "unavailable" without calling it.
+- On Android, `write` puts the activity in NFC reader mode (NFC-A, B, F
+  and V) and waits. On a tag it writes one NDEF message with a single URI
+  record (`NdefRecord.createUri`): an NDEF tag is checked for being
+  writable and big enough first, a blank `NdefFormatable` tag is
+  formatted with the message, anything else is "not NDEF". The answer is
+  the name of an `NfcWriteResult` (`written`, `readOnly`, `tooSmall`,
+  `notNdef`, `unavailable`, `failed`, `cancelled`); a new write or
+  `cancel` answers the waiting one with `cancelled` and leaves reader
+  mode.
+- Reading needs no code: the manifest's `NDEF_DISCOVERED` filter for the
+  `lumifx` scheme opens `MainActivity` with the link when the unlocked
+  phone touches the sticker, and `LinkHandler` takes it like any other
+  link. Permission `android.permission.NFC`; `android.hardware.nfc` is
+  not required, so phones without NFC still install the app. No plugin
+  was added.
+- On iPhone LumiFX does not use Core NFC (no entitlement): the screen
+  explains the Shortcuts app's NFC personal automation, with a link
+  copied from `readyLinks`, which now also offers Start bedtime
+  (`lumifx://app/bedtime`).
+- `test/core/nfc/nfc_writer_test.dart` covers the channel; the radio
+  needs a device.
+
+### Notification lights, Android (`lib/src/features/notifications`, `NotificationLights.kt`, `NotificationLightsService.kt`)
+
+- The user's choices (`NotificationLightsSettings`: on or off, the room
+  or zone, a rule `package → #RRGGBB` per app, quiet hours from 22:00 to
+  07:00 by default) live in the preferences. The apps to choose from are
+  the launcher activities (a `<queries>` entry for MAIN/LAUNCHER, no
+  `QUERY_ALL_PACKAGES`).
+- `NotificationLightsSync`, created by the app, listens to the
+  preferences and the bridge and pushes `notificationConfig(...)` as JSON
+  to the native store (`com.lumifx/notification_lights`, `configure`):
+  the bridge's host and id, the certificate fingerprint pinned at
+  pairing, the application key, the lights of the chosen room with
+  whether each takes colour, each package's colour as CIE xy, and the
+  quiet hours. It sends only when the JSON changes; it sends null (which
+  clears the store) when the feature is off, has no apps or no bridge is
+  paired, and keeps the last copy while a paired bridge is out of reach.
+- `NotificationLightsStore` keeps the JSON in the app's private shared
+  preferences, encrypted with AES-GCM under a key generated in the
+  Android Keystore, since it holds the bridge key. A key lost with a
+  restore reads as nothing until the app sends the config again.
+- `NotificationLightsService` is a `NotificationListenerService`, bound
+  by Android only once the user allows notification access. On each
+  posted notification it reads the `packageName` and nothing else (never
+  the title, text or extras), skips LumiFX itself, ongoing notifications,
+  group summaries, apps without a rule and the quiet hours, and flashes
+  at most once per 15 s per app. It stores nothing.
+- `BridgeSignal.flash` PUTs to `/clip/v2/resource/light/<id>` for each
+  light: `signaling` with `on_off_color` in the app's xy (`on_off` for
+  white lights) for 3 s, or `alert: breathe` where the light refuses
+  signalling. It talks to the bridge over HTTPS with its own trust
+  manager, which accepts only a certificate whose CN is the bridge id and
+  whose SHA-256 matches the pinned fingerprint (the rule of
+  `BridgeCertificatePin` in Dart), and checks the host name. So the
+  service flashes with LumiFX closed, without the Flutter engine. "Try
+  it" runs the same flash with the stored config.
+- iOS has no equivalent: no app may see other apps' notifications.
+- `test/features/notification_lights_test.dart` covers the settings, the
+  config and the sync; the service needs a device.
+
+### Lock screen and background audio on iPhone (`lib/src/core/live_activity.dart`, `ios/Runner/AppDelegate.swift`, `ios/LumiFXWidget/PlayingLiveActivity.swift`)
+
+- While an effect plays or is paused on a room or zone (not the preview)
+  and "Keep playing with the screen off" is on, `_syncLiveActivity` in
+  `app.dart` sends a `LiveActivityState` (effect name, room, playing or
+  paused, up to four of the effect's colours as ARGB, the translated
+  "Stop") over `com.lumifx/live_activity`, only when it changes, and
+  ends it when playback stops.
+- `LiveActivityBridge` in `AppDelegate.swift` (iOS 16.1+, ActivityKit)
+  requests an `Activity<PlayingAttributes>` or updates the one shown
+  (`ActivityContent` from 16.2), and answers false when Live Activities
+  are switched off; `end` ends them at once. `NSSupportsLiveActivities`
+  is set in `Info.plist`.
+- The widget extension draws it: `PlayingLiveActivity` is an
+  `ActivityConfiguration` for the lock screen and the Dynamic Island
+  (expanded, compact and minimal). `PlayingAttributes` is declared in
+  both targets and the two must stay alike. Stop is a link to
+  `lumifx://app/stop`: it opens the app, which stops the effect and puts
+  the lights back. The extension's `@main` is now the `LumiFXWidgets`
+  bundle (the favourites widget plus, from 16.1, the Live Activity); see
+  `docs/IOS_WIDGET.md`.
+- iOS suspends an app soon after it leaves the screen unless it plays
+  sound. `UIBackgroundModes` declares `audio`, and the sound player's
+  session is now `playback` with `mixWithOthers` (it was `ambient`), so
+  LumiFX's sounds are heard with the silent switch on and mix with other
+  apps' audio. `_syncBackground` lets playback go on in the background on
+  iOS only when the effect has ambient sounds or a tune, Sounds are on
+  and the screen-off setting is on: the sound keeps the app, and with it
+  the effect's output to the bridge, running while locked. Silent
+  effects still stop when the app leaves the screen, and the Live
+  Activity goes with them.
+- `test/core/live_activity_test.dart` covers the channel and the app
+  tests when it is shown; the lock screen needs a device.
 
 ## Content policy
 
