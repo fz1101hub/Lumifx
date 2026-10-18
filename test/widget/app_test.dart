@@ -1718,6 +1718,55 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets(
+      'the light piano plays a tune to repeat, one note longer each time',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const LightPianoScreen(seed: 4))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
+    final tune = (PianoEcho(math.Random(4))..start()).keys;
+    Finder key(int index) => find
+        .bySemanticsLabel(pianoNoteName('en', index))
+        .at(index == 7 ? 1 : 0);
+
+    await tester.tap(find.text('Repeat after me'));
+    await tester.pump();
+    expect(find.text('Listen…'), findsOneWidget);
+    expect(find.text('A tune of 3 notes'), findsOneWidget);
+    // Keys tapped while the piano plays count for nothing.
+    await tester.tap(key(tune.first));
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('Your turn!'), findsOneWidget);
+    expect(sound.calls.where((c) => c.startsWith('note')),
+        [for (final k in tune) 'note ${pianoKeys[k].midi}']);
+
+    for (final k in tune) {
+      await tester.tap(key(k));
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    expect(find.text('Bravo! One more note'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('A tune of 4 notes'), findsOneWidget);
+    expect(find.text('Listen…'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 4));
+    expect(find.text('Your turn!'), findsOneWidget);
+
+    // A wrong key: the same tune again.
+    await tester.tap(key((tune.first + 1) % pianoKeys.length));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Oops! Listen again'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('A tune of 4 notes'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 4));
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('the light piano records a tune and plays it back',
       (tester) async {
     final sound = FakeSoundPlayer();

@@ -1121,5 +1121,11 @@
   "narrationLunarNewYear1": "Rote Laternen leuchten die ganze Straße entlang: Es ist Mondneujahr.",
   "narrationLunarNewYear2": "Da kommt der Drache! Er tanzt von Haus zu Haus, golden und stolz.",
   "narrationLunarNewYear3": "Bong! Der Gong ertönt, und rote Umschläge bringen Glückwünsche für das neue Jahr.",
-  "narrationLunarNewYear4": "Feuerwerk erblüht in Rot und Gold, und alle jubeln: Frohes neues Jahr!"
+  "narrationLunarNewYear4": "Feuerwerk erblüht in Rot und Gold, und alle jubeln: Frohes neues Jahr!",
+  "pianoEcho": "Nachspielen",
+  "pianoEchoListen": "Hör zu …",
+  "pianoEchoYourTurn": "Du bist dran!",
+  "pianoEchoBravo": "Bravo! Eine Note mehr",
+  "pianoEchoOops": "Hoppla! Hör noch mal zu",
+  "pianoEchoNotes": "Eine Melodie mit {count} Tönen"
 }

@@ -1121,5 +1121,11 @@
   "narrationLunarNewYear1": "Lanterne rosse brillano lungo tutta la strada: è il Capodanno lunare.",
   "narrationLunarNewYear2": "Ecco il drago! Danza di casa in casa, dorato e fiero.",
   "narrationLunarNewYear3": "Bong! Suona il gong, e le buste rosse portano auguri di fortuna per l'anno che arriva.",
-  "narrationLunarNewYear4": "Fuochi d'artificio sbocciano rossi e oro, e tutti esultano: buon anno!"
+  "narrationLunarNewYear4": "Fuochi d'artificio sbocciano rossi e oro, e tutti esultano: buon anno!",
+  "pianoEcho": "Ripeti dopo di me",
+  "pianoEchoListen": "Ascolta…",
+  "pianoEchoYourTurn": "Tocca a te!",
+  "pianoEchoBravo": "Bravo! Una nota in più",
+  "pianoEchoOops": "Ops! Ascolta di nuovo",
+  "pianoEchoNotes": "Una melodia di {count} note"
 }

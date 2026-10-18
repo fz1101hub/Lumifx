@@ -1121,5 +1121,11 @@
   "narrationLunarNewYear1": "通りじゅうに赤いちょうちんが光ります。旧正月です。",
   "narrationLunarNewYear2": "龍がやってきた！金色にかがやき、むねをはって家から家へとおどります。",
   "narrationLunarNewYear3": "ボーン！どらが鳴り、赤いふくろが新しい年の幸運をとどけます。",
-  "narrationLunarNewYear4": "赤と金の花火が咲き、みんなが声をそろえます。「あけましておめでとう！」"
+  "narrationLunarNewYear4": "赤と金の花火が咲き、みんなが声をそろえます。「あけましておめでとう！」",
+  "pianoEcho": "まねしてひく",
+  "pianoEchoListen": "きいてね…",
+  "pianoEchoYourTurn": "きみの番！",
+  "pianoEchoBravo": "すごい！ひとつふえるよ",
+  "pianoEchoOops": "あれれ？もういちどきいてね",
+  "pianoEchoNotes": "{count}音のメロディ"
 }

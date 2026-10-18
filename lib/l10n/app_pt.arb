@@ -1121,5 +1121,11 @@
   "narrationLunarNewYear1": "Lanternas vermelhas brilham por toda a rua: é o Ano-Novo Lunar.",
   "narrationLunarNewYear2": "Lá vem o dragão! Ele dança de casa em casa, dourado e orgulhoso.",
   "narrationLunarNewYear3": "Bong! O gongo soa, e envelopes vermelhos trazem votos de sorte para o ano que chega.",
-  "narrationLunarNewYear4": "Fogos de artifício florescem em vermelho e dourado, e todos comemoram: feliz ano-novo!"
+  "narrationLunarNewYear4": "Fogos de artifício florescem em vermelho e dourado, e todos comemoram: feliz ano-novo!",
+  "pianoEcho": "Repita depois de mim",
+  "pianoEchoListen": "Escute…",
+  "pianoEchoYourTurn": "Sua vez!",
+  "pianoEchoBravo": "Bravo! Mais uma nota",
+  "pianoEchoOops": "Ops! Escute de novo",
+  "pianoEchoNotes": "Uma melodia de {count} notas"
 }

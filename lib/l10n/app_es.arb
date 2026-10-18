@@ -1121,5 +1121,11 @@
   "narrationLunarNewYear1": "Farolillos rojos brillan a lo largo de la calle: es el Año Nuevo lunar.",
   "narrationLunarNewYear2": "¡Aquí llega el dragón! Baila de casa en casa, dorado y orgulloso.",
   "narrationLunarNewYear3": "¡Bong! Suena el gong, y los sobres rojos traen deseos de suerte para el año que empieza.",
-  "narrationLunarNewYear4": "Los fuegos artificiales florecen en rojo y dorado, y todos gritan: ¡feliz año nuevo!"
+  "narrationLunarNewYear4": "Los fuegos artificiales florecen en rojo y dorado, y todos gritan: ¡feliz año nuevo!",
+  "pianoEcho": "Repite después de mí",
+  "pianoEchoListen": "Escucha…",
+  "pianoEchoYourTurn": "¡Te toca!",
+  "pianoEchoBravo": "¡Bravo! Una nota más",
+  "pianoEchoOops": "¡Uy! Escucha otra vez",
+  "pianoEchoNotes": "Una melodía de {count} notas"
 }
