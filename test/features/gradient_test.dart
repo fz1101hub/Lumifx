@@ -154,4 +154,34 @@ void main() {
       greaterThan(0.1),
     );
   });
+
+  test('one segment dimming under a brighter one is a change too', () {
+    final inner = _Recording();
+    final output = GradientLightOutput(inner, {});
+    const red = LightColor(1, 0, 0);
+    const green = LightColor(0, 1, 0);
+    const blue = LightColor(0, 0, 1);
+    output.update({
+      'strip#0': const LightFrame(red, 0.76),
+      'strip#1': const LightFrame(green, 0.76),
+      'strip#2': const LightFrame(blue, 0.76),
+    }, const Duration(milliseconds: 100));
+    // Spectrum: the bass stays, the mids and highs fall away.
+    output.update({
+      'strip#0': const LightFrame(red, 0.76),
+      'strip#1': const LightFrame(green, 0.04),
+      'strip#2': const LightFrame(blue, 0.04),
+    }, const Duration(milliseconds: 100));
+    final before = inner.updates.first['strip']!;
+    final after = inner.updates.last['strip']!;
+    expect(
+      (before.brightness - after.brightness).abs() +
+          ((before.color.r - after.color.r).abs() +
+                  (before.color.g - after.color.g).abs() +
+                  (before.color.b - after.color.b).abs()) /
+              3,
+      greaterThan(0.01),
+      reason: 'the limiter must send the dimmer strip',
+    );
+  });
 }

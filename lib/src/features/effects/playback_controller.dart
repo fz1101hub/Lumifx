@@ -1705,11 +1705,13 @@ class GradientLightOutput implements LightOutput {
   /// A frame that changes whenever any segment changes noticeably: the
   /// segments' colours side by side would be ideal, but one frame is all
   /// the limiter compares, so it gets their sum (and the peak brightness).
+  /// Each colour counts as much as its segment is bright, so one segment
+  /// dimming under a brighter one still registers.
   static LightFrame _summary(List<LightFrame> parts) {
     var r = 0.0, g = 0.0, b = 0.0, peak = 0.0;
     for (final (i, frame) in parts.indexed) {
       // Weighted by position, so colours trading places still register.
-      final weight = (i + 1) / parts.length;
+      final weight = (i + 1) / parts.length * frame.brightness;
       r += frame.color.r * weight;
       g += frame.color.g * weight;
       b += frame.color.b * weight;
