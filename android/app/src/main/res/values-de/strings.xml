@@ -7,4 +7,7 @@
     <string name="widget_empty">Markiere Effekte in LumiFX mit einem Stern, um sie hier zu sehen.</string>
     <string name="widget_description">Deine liebsten LumiFX-Effekte, nur einen Tipp entfernt.</string>
     <string name="playback_channel">Wiedergabe</string>
+    <!-- Quick settings tiles. -->
+    <string name="tile_stop">Effekt stoppen</string>
+    <string name="tile_bedtime">Schlafenszeit</string>
 </resources>
