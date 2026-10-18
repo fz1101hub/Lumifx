@@ -419,7 +419,9 @@ Paste this in "Notes for review":
 > the scene editor, to take the colours of one photo on the device. At a
 > birthday party (Parties and games › Birthday party) the microphone is
 > used only after tapping "Blow on the phone", to hear the candles being
-> blown out; nothing is recorded. Weather lights (home › Weather lights)
+> blown out; nothing is recorded. The noise light (Parties and games ›
+> Noise light) uses the microphone only after tapping "Start listening",
+> to measure how loud the room is; nothing is recorded. Weather lights (home › Weather lights)
 > send the city the user types to Open-Meteo (open-meteo.com) to show the
 > weather; the device location is never requested.
 >
