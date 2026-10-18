@@ -16,6 +16,8 @@ import '../fun/birthday_screen.dart';
 import '../fun/countdown.dart';
 import '../fun/countdowns_screen.dart';
 import '../fun/game_screen.dart';
+import '../fun/haunted_party.dart';
+import '../fun/haunted_party_screen.dart';
 import '../fun/hot_cold.dart';
 import '../fun/hot_cold_screen.dart';
 import '../fun/light_games.dart';
@@ -82,6 +84,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {
     screen = const LightPianoScreen();
+  } else if (HauntedParty.isParty(effect)) {
+    screen = const HauntedPartyScreen();
   } else if (HotCold.isHotCold(effect)) {
     screen = const HotColdScreen();
   } else if (CountingGame.isCounting(effect)) {

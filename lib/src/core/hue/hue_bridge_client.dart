@@ -315,6 +315,20 @@ class HueBridgeClient {
   /// Button presses as they happen, from the bridge's event stream. The
   /// stream ends when the connection drops; listen again to reconnect.
   Stream<HueButtonEvent> buttonEvents() async* {
+    await for (final data in _events()) {
+      yield* Stream.fromIterable(buttonEventsOf(data));
+    }
+  }
+
+  /// Motion on the bridge's motion sensors, while listened to.
+  Stream<HueMotionEvent> motionEvents() async* {
+    await for (final data in _events()) {
+      yield* Stream.fromIterable(motionEventsOf(data));
+    }
+  }
+
+  /// The `data:` lines of the bridge's event stream.
+  Stream<String> _events() async* {
     final request = http.Request('GET', Uri.https(host, '/eventstream/clip/v2'))
       ..headers.addAll({..._headers, 'accept': 'text/event-stream'});
     final response = await _client.send(request).timeout(_timeout);
@@ -329,7 +343,7 @@ class HueBridgeClient {
         response.stream.transform(utf8.decoder).transform(const LineSplitter());
     await for (final line in lines) {
       if (line.startsWith('data:')) {
-        yield* Stream.fromIterable(buttonEventsOf(line.substring(5).trim()));
+        yield line.substring(5).trim();
       }
     }
   }

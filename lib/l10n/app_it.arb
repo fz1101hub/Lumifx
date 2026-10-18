@@ -1026,5 +1026,14 @@
   "ritualStory": "La storia di stasera",
   "ritualStepOf": "Passo {step} di {total}",
   "ritualNext": "Passo successivo",
-  "ritualGoodnight": "Buonanotte!"
+  "ritualGoodnight": "Buonanotte!",
+  "haunted": "Festa di Halloween",
+  "hauntedSubtitle": "Una stanza da brivido, e uno spavento quando qualcuno passa davanti al sensore",
+  "hauntedDescription": "La stanza si colora di viola e verde. Quando qualcuno passa davanti al sensore di movimento Hue, o quando tocchi Spavento ora, le lampade lampeggiano, il telefono tuona e in un angolo compaiono occhi rossi. Da brivido, ma niente lampeggia velocemente. Tieni LumiFX aperta durante la festa.",
+  "hauntedSensor": "Sensore di movimento",
+  "hauntedNoSensor": "Nessun sensore di movimento Hue trovato: il pulsante Spavento ora funziona comunque.",
+  "hauntedArm": "Inizia la festa",
+  "hauntedArmed": "In attesa che qualcuno passi…",
+  "hauntedScare": "Spavento ora",
+  "hauntedScares": "{count, plural, =0{Ancora nessuno spavento} =1{Uno spavento} other{{count} spaventi}}"
 }

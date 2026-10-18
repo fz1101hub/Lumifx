@@ -1026,5 +1026,14 @@
   "ritualStory": "L'histoire du soir",
   "ritualStepOf": "Étape {step} sur {total}",
   "ritualNext": "Étape suivante",
-  "ritualGoodnight": "Bonne nuit !"
+  "ritualGoodnight": "Bonne nuit !",
+  "haunted": "Fête d'Halloween",
+  "hauntedSubtitle": "Une pièce qui fait frissonner, et une frayeur quand quelqu'un passe devant le détecteur",
+  "hauntedDescription": "La pièce s'illumine de violet et de vert. Quand quelqu'un passe devant le détecteur de mouvement Hue, ou quand tu touches Faire peur, les lampes flashent, le téléphone gronde et des yeux rouges apparaissent dans un coin. Ça fait frissonner, mais rien ne clignote vite. Garde LumiFX ouverte pendant la fête.",
+  "hauntedSensor": "Détecteur de mouvement",
+  "hauntedNoSensor": "Aucun détecteur de mouvement Hue trouvé : le bouton Faire peur fonctionne quand même.",
+  "hauntedArm": "Lancer la fête",
+  "hauntedArmed": "On attend que quelqu'un passe…",
+  "hauntedScare": "Faire peur",
+  "hauntedScares": "{count, plural, =0{Pas encore de frayeur} =1{Une frayeur} other{{count} frayeurs}}"
 }

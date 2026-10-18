@@ -522,6 +522,15 @@ class PlaybackController extends ChangeNotifier {
     }
   }
 
+  /// A clap of thunder on the phone (a scare at a Halloween party). Silent
+  /// when sounds are off.
+  Future<void> thunder() async {
+    if (!_preferences.soundOn) {
+      return;
+    }
+    await _sound.thunder(volume: _preferences.soundVolume);
+  }
+
   /// One note of [instrument] on the phone, on top of the effect's sounds
   /// (the light piano). Silent when sounds are off.
   Future<void> note(int midi, Instrument instrument) async {

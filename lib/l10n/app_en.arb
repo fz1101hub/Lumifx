@@ -4086,5 +4086,46 @@
   "ritualGoodnight": "Goodnight!",
   "@ritualGoodnight": {
     "description": "Bedtime ritual: the end"
+  },
+  "haunted": "Halloween party",
+  "@haunted": {
+    "description": "Game: a Halloween party with scares when someone passes the motion sensor"
+  },
+  "hauntedSubtitle": "A spooky room, and a scare when someone walks past the motion sensor",
+  "@hauntedSubtitle": {
+    "description": "Subtitle of the Halloween party"
+  },
+  "hauntedDescription": "The room glows purple and green. When someone walks past the Hue motion sensor, or when you tap Scare now, the lamps flash, the phone thunders and red eyes appear in a corner. Spooky, but nothing flashes fast. Keep LumiFX open during the party.",
+  "@hauntedDescription": {
+    "description": "Explains the Halloween party"
+  },
+  "hauntedSensor": "Motion sensor",
+  "@hauntedSensor": {
+    "description": "Field: the motion sensor that triggers scares"
+  },
+  "hauntedNoSensor": "No Hue motion sensor found: the Scare now button still works.",
+  "@hauntedNoSensor": {
+    "description": "No Hue motion sensor found"
+  },
+  "hauntedArm": "Start the party",
+  "@hauntedArm": {
+    "description": "Button: start the Halloween party"
+  },
+  "hauntedArmed": "Waiting for someone to walk past…",
+  "@hauntedArmed": {
+    "description": "Halloween party: waiting for motion"
+  },
+  "hauntedScare": "Scare now",
+  "@hauntedScare": {
+    "description": "Button: scare now"
+  },
+  "hauntedScares": "{count, plural, =0{No scares yet} =1{One scare} other{{count} scares}}",
+  "@hauntedScares": {
+    "description": "Halloween party: scares so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

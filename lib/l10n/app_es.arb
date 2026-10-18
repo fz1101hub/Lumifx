@@ -1026,5 +1026,14 @@
   "ritualStory": "El cuento de esta noche",
   "ritualStepOf": "Paso {step} de {total}",
   "ritualNext": "Siguiente paso",
-  "ritualGoodnight": "¡Buenas noches!"
+  "ritualGoodnight": "¡Buenas noches!",
+  "haunted": "Fiesta de Halloween",
+  "hauntedSubtitle": "Una habitación que da escalofríos y un susto cuando alguien pasa por delante del sensor",
+  "hauntedDescription": "La habitación se tiñe de morado y verde. Cuando alguien pasa por delante del sensor de movimiento Hue, o cuando tocas Asustar ahora, las lámparas destellan, el teléfono truena y aparecen ojos rojos en un rincón. Da miedo, pero nada parpadea rápido. Mantén LumiFX abierta durante la fiesta.",
+  "hauntedSensor": "Sensor de movimiento",
+  "hauntedNoSensor": "No se encontró ningún sensor de movimiento Hue: el botón Asustar ahora sigue funcionando.",
+  "hauntedArm": "Empezar la fiesta",
+  "hauntedArmed": "Esperando a que alguien pase…",
+  "hauntedScare": "Asustar ahora",
+  "hauntedScares": "{count, plural, =0{Todavía ningún susto} =1{Un susto} other{{count} sustos}}"
 }

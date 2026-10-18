@@ -1026,5 +1026,14 @@
   "ritualStory": "Het verhaal van vanavond",
   "ritualStepOf": "Stap {step} van {total}",
   "ritualNext": "Volgende stap",
-  "ritualGoodnight": "Welterusten!"
+  "ritualGoodnight": "Welterusten!",
+  "haunted": "Halloweenfeest",
+  "hauntedSubtitle": "Een griezelige kamer, en een schrik als iemand langs de bewegingssensor loopt",
+  "hauntedDescription": "De kamer kleurt paars en groen. Loopt iemand langs de Hue-bewegingssensor, of tik je op Nu laten schrikken, dan flitsen de lampen, dondert de telefoon en verschijnen er rode ogen in een hoek. Griezelig, maar niets knippert snel. Laat LumiFX open tijdens het feest.",
+  "hauntedSensor": "Bewegingssensor",
+  "hauntedNoSensor": "Geen Hue-bewegingssensor gevonden: de knop Nu laten schrikken werkt nog steeds.",
+  "hauntedArm": "Feest starten",
+  "hauntedArmed": "Wachten tot er iemand langsloopt…",
+  "hauntedScare": "Nu laten schrikken",
+  "hauntedScares": "{count, plural, =0{Nog geen schrik} =1{Eén schrik} other{{count} keer geschrokken}}"
 }

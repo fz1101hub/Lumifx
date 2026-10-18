@@ -33,6 +33,8 @@ import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/core/hue/hue_buttons.dart';
+import 'package:lumifx/src/core/hue/hue_house.dart';
 import 'package:lumifx/src/core/live_activity.dart';
 import 'package:lumifx/src/core/nfc/nfc_writer.dart';
 import 'package:lumifx/src/core/notification_lights_platform.dart';
@@ -48,6 +50,8 @@ import 'package:lumifx/src/features/notifications/notification_lights_screen.dar
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
 import 'package:lumifx/src/features/learn/counting_screen.dart';
+import 'package:lumifx/src/features/fun/haunted_party.dart';
+import 'package:lumifx/src/features/fun/haunted_party_screen.dart';
 import 'package:lumifx/src/features/fun/hot_cold.dart';
 import 'package:lumifx/src/features/fun/hot_cold_screen.dart';
 import 'package:lumifx/src/features/learn/morse.dart';
@@ -499,6 +503,10 @@ void main() {
     await _pumpApp(tester);
     await openBirthday(tester);
     await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Red light, green light'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Red light, green light'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Red light, green light'));
     await tester.pumpAndSettle();
@@ -1635,6 +1643,44 @@ void main() {
     await playback.stop();
     playback.setSleepTimer(null);
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('the Halloween party scares whoever walks past the sensor',
+      (tester) async {
+    await _pumpApp(tester);
+    final motion = StreamController<HueMotionEvent>.broadcast();
+    addTearDown(motion.close);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(
+            builder: (_) => HauntedPartyScreen(
+                  motion: () => motion.stream,
+                  sensors: const [HueMotionSensor(id: '5', name: 'Hallway')],
+                ))));
+    await tester.pumpAndSettle();
+    expect(find.text('Hallway'), findsOneWidget);
+    await tester.tap(find.text('Start the party'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(HauntedPartyScreen))).playback;
+    expect(HauntedParty.isParty(playback.effect), isTrue);
+    expect(find.text('Waiting for someone to walk past…'), findsOneWidget);
+
+    motion.add(const HueMotionEvent(sensorId: '9', motion: true));
+    await tester.pump();
+    expect(find.text('No scares yet'), findsOneWidget, reason: 'another one');
+    motion.add(const HueMotionEvent(sensorId: '5', motion: true));
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('One scare'), findsOneWidget);
+    motion.add(const HueMotionEvent(sensorId: '5', motion: true));
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('One scare'), findsOneWidget, reason: 'a rest between');
+    await tester.tap(find.text('Scare now'));
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('2 scares'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+    expect(playback.status, PlaybackStatus.idle);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

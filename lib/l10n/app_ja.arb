@@ -1026,5 +1026,14 @@
   "ritualStory": "今夜のおはなし",
   "ritualStepOf": "ステップ {step}/{total}",
   "ritualNext": "つぎへ",
-  "ritualGoodnight": "おやすみなさい！"
+  "ritualGoodnight": "おやすみなさい！",
+  "haunted": "ハロウィンパーティー",
+  "hauntedSubtitle": "こわーい部屋。人感センサーの前を通るとびっくり！",
+  "hauntedDescription": "部屋がむらさきと緑に光ります。Hueの人感センサーの前をだれかが通るか「いま、おどかす」をタップすると、ランプが光り、スマートフォンが雷を鳴らし、すみに赤い目があらわれます。こわいけれど、速い点滅はありません。パーティー中はLumiFXを開いたままにしてください。",
+  "hauntedSensor": "人感センサー",
+  "hauntedNoSensor": "Hueの人感センサーが見つかりません。「いま、おどかす」ボタンは使えます。",
+  "hauntedArm": "パーティーを始める",
+  "hauntedArmed": "だれかが通るのを待っています…",
+  "hauntedScare": "いま、おどかす",
+  "hauntedScares": "{count, plural, other{びっくり {count}回}}"
 }

@@ -1026,5 +1026,14 @@
   "ritualStory": "Die Geschichte des Abends",
   "ritualStepOf": "Schritt {step} von {total}",
   "ritualNext": "Nächster Schritt",
-  "ritualGoodnight": "Gute Nacht!"
+  "ritualGoodnight": "Gute Nacht!",
+  "haunted": "Halloween-Party",
+  "hauntedSubtitle": "Ein gruseliges Zimmer und ein Schreck, wenn jemand am Bewegungsmelder vorbeigeht",
+  "hauntedDescription": "Das Zimmer leuchtet lila und grün. Geht jemand am Hue-Bewegungsmelder vorbei oder tippst du auf Jetzt erschrecken, blitzen die Lampen, das Telefon donnert und in einer Ecke tauchen rote Augen auf. Gruselig, aber nichts blinkt schnell. Lass LumiFX während der Party geöffnet.",
+  "hauntedSensor": "Bewegungsmelder",
+  "hauntedNoSensor": "Kein Hue-Bewegungsmelder gefunden: Die Taste Jetzt erschrecken funktioniert trotzdem.",
+  "hauntedArm": "Party starten",
+  "hauntedArmed": "Warte, bis jemand vorbeigeht…",
+  "hauntedScare": "Jetzt erschrecken",
+  "hauntedScares": "{count, plural, =0{Noch kein Schreck} =1{Ein Schreck} other{{count} Schrecken}}"
 }
