@@ -53,6 +53,9 @@ class PreferencesController extends ChangeNotifier {
   PreferencesController({required KeyValueStore store}) : _store = store;
 
   static const _key = 'lumifx.preferences.v1';
+
+  /// Where the preferences are kept in the [KeyValueStore].
+  static const storageKey = _key;
   static const maxRecents = 8;
 
   final KeyValueStore _store;

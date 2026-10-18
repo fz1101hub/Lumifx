@@ -11,6 +11,7 @@ import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
+import 'package:lumifx/src/features/library/preferences_controller.dart';
 
 const _bridge = HueBridgeInfo(id: '001788fffe000001', host: '10.0.0.2');
 
@@ -64,6 +65,31 @@ BridgeController _controller(_FakeBridge bridge, CredentialStore store) =>
     );
 
 void main() {
+  group('a fresh install', () {
+    const credentials = HueCredentials(bridge: _bridge, applicationKey: 'k');
+
+    test('forgets keys an earlier install left in the keychain', () async {
+      final store = InMemoryKeyValueStore();
+      final keys = InMemoryCredentialStore(credentials);
+      await forgetEarlierInstall(store, keys);
+      expect(await keys.load(), isNull, reason: 'paired again, by the button');
+
+      // Paired now: the next launches keep it.
+      await keys.save(credentials);
+      await forgetEarlierInstall(store, keys);
+      expect(await keys.load(), isNotNull);
+    });
+
+    test('an app updated from an older version keeps its pairing', () async {
+      final store = InMemoryKeyValueStore();
+      await store.write(PreferencesController.storageKey, '{}');
+      final keys = InMemoryCredentialStore(credentials);
+      await forgetEarlierInstall(store, keys);
+      expect(await keys.load(), isNotNull);
+      expect(await store.read(installedKey), isNotNull);
+    });
+  });
+
   test('starts unpaired without saved credentials', () async {
     final controller = _controller(_FakeBridge(), InMemoryCredentialStore());
     await controller.initialize();

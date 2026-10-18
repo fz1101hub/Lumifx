@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../core/hue/hue_models.dart';
+import '../library/preferences_controller.dart';
 
 /// Secure storage could not be read right now (e.g. the keychain is locked
 /// during a launch). The credentials may well still be there.
@@ -79,4 +80,29 @@ class InMemoryCredentialStore implements CredentialStore {
 
   @override
   Future<void> clear() async => _credentials = null;
+}
+
+/// Marks that this install of the app has been seen.
+const installedKey = 'lumifx.installed';
+
+/// The iOS keychain can keep the bridge's keys after the app is deleted;
+/// the app's own storage goes with it. On a fresh install (nothing in
+/// [store] yet) the keys left behind by an earlier one are forgotten, so
+/// a reinstalled app pairs again, as the privacy policy says. Older
+/// installs already have their preferences saved and keep their pairing.
+Future<void> forgetEarlierInstall(
+  KeyValueStore store,
+  CredentialStore credentials,
+) async {
+  try {
+    if (await store.read(installedKey) != null) {
+      return;
+    }
+    if (await store.read(PreferencesController.storageKey) == null) {
+      await credentials.clear();
+    }
+    await store.write(installedKey, '1');
+  } on Object {
+    // The keychain is locked right now: the next launch tries again.
+  }
 }
