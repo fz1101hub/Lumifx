@@ -1665,6 +1665,9 @@ LightOutput hueRestOutput(
 ) {
   final segments = <String, Map<String, LightFrame>>{};
   final limited = RateLimitedLightOutput(
+    // A slow command still on its way when the effect stops is waited for
+    // until it has landed or failed, so it never undoes the restore.
+    closeTimeout: HueBridgeClient.requestTimeout + const Duration(seconds: 1),
     send: (lightId, frame, transition) {
       final parts = segments[lightId] ?? {lightId: frame};
       final command = lightCommands(lights, parts, transition: transition);

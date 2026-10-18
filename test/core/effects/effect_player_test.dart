@@ -1,3 +1,4 @@
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/effects/effect.dart';
@@ -279,6 +280,24 @@ void main() {
       // 5 seconds at 10 commands per second, plus the initial burst.
       expect(sent.length, lessThanOrEqualTo(52));
       expect(sent.toSet(), {'a', 'b', 'c', 'd', 'e'});
+    });
+
+    test('closing waits for a slow command, so a restore lands after it', () {
+      fakeAsync((async) {
+        final output = RateLimitedLightOutput(
+          send: (id, frame, transition) =>
+              Future<void>.delayed(const Duration(seconds: 4)),
+          closeTimeout: const Duration(seconds: 7),
+        );
+        output.update({'a': const LightFrame(LightColor.white, 0.5)},
+            const Duration(milliseconds: 200));
+        var closed = false;
+        output.close().then((_) => closed = true);
+        async.elapse(const Duration(milliseconds: 3500));
+        expect(closed, isFalse, reason: 'the command has not landed yet');
+        async.elapse(const Duration(milliseconds: 600));
+        expect(closed, isTrue);
+      });
     });
 
     test('does not resend unchanged frames', () async {

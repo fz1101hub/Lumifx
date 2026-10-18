@@ -59,6 +59,9 @@ class HueBridgeClient {
 
   static const _timeout = Duration(seconds: 6);
 
+  /// How long a request may take before it counts as failed.
+  static const requestTimeout = _timeout;
+
   /// Releases the underlying connections.
   void close() => _client.close();
 
