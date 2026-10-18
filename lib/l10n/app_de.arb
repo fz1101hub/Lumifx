@@ -828,5 +828,22 @@
   "stepPyjamas": "Schlafanzug an",
   "stepToilet": "Toilette",
   "stepTidyToys": "Spielsachen aufräumen",
-  "stepStoryTime": "Geschichtenzeit"
+  "stepStoryTime": "Geschichtenzeit",
+  "lullabies": "Schlaflieder",
+  "lullabiesSubtitle": "Eine Spieluhr, und die Lampen leuchten Ton für Ton",
+  "lullabiesDescription": "Eine Spieluhr spielt ein Schlaflied auf dem Telefon, und jeder Ton lässt sanft eine Lampe leuchten, tiefe Töne auf der einen Seite, hohe auf der anderen. Am Ende kann das Licht ausblenden und ausgehen.",
+  "lullabyTimes": "Wie oft",
+  "lullabyTimesCount": "{count, plural, =1{Nur einmal} other{{count}-mal}}",
+  "lullabySwitchOff": "Dann das Licht ausblenden",
+  "musicSoundsOff": "Töne sind aus: einschalten, um die Musik zu hören",
+  "melodySeconds": "{seconds} s",
+  "melodyBrahms": "Guten Abend, gut' Nacht (Brahms)",
+  "melodyTwinkle": "Morgen kommt der Weihnachtsmann",
+  "melodyFrereJacques": "Bruder Jakob",
+  "melodyJingleBells": "Jingle Bells",
+  "melodySilentNight": "Stille Nacht",
+  "melodyMerryChristmas": "We Wish You a Merry Christmas",
+  "christmasShow": "Weihnachtliche Lichtshow",
+  "christmasShowSubtitle": "Weihnachtslieder mit dem Licht im Takt, Ton für Ton",
+  "christmasShowDescription": "Klassische Weihnachtslieder erklingen auf Glöckchen, während jeder Ton eine Lampe in Rot, Grün und Gold leuchten lässt, wie ein weihnachtlich geschmücktes Haus."
 }

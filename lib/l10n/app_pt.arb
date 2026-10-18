@@ -828,5 +828,22 @@
   "stepPyjamas": "Pijama",
   "stepToilet": "Banheiro",
   "stepTidyToys": "Guardar os brinquedos",
-  "stepStoryTime": "Hora da história"
+  "stepStoryTime": "Hora da história",
+  "lullabies": "Canções de ninar",
+  "lullabiesSubtitle": "Uma caixinha de música e as lâmpadas brilhando nota a nota",
+  "lullabiesDescription": "Uma caixinha de música toca uma canção de ninar no celular e cada nota acende suavemente uma lâmpada, as graves de um lado e as agudas do outro. No final as luzes podem diminuir e apagar.",
+  "lullabyTimes": "Quantas vezes",
+  "lullabyTimesCount": "{count, plural, =1{Uma vez} other{{count} vezes}}",
+  "lullabySwitchOff": "Depois apagar as luzes devagar",
+  "musicSoundsOff": "Os sons estão desligados: ative para ouvir a música",
+  "melodySeconds": "{seconds} s",
+  "melodyBrahms": "Canção de ninar de Brahms",
+  "melodyTwinkle": "Brilha, brilha, estrelinha",
+  "melodyFrereJacques": "Frei Martinho",
+  "melodyJingleBells": "Bate o sino",
+  "melodySilentNight": "Noite feliz",
+  "melodyMerryChristmas": "We Wish You a Merry Christmas",
+  "christmasShow": "Show de luzes de Natal",
+  "christmasShowSubtitle": "Músicas de Natal com as luzes no ritmo, nota a nota",
+  "christmasShowDescription": "Músicas de Natal clássicas tocam em sininhos enquanto cada nota acende uma lâmpada em vermelho, verde e dourado, como uma casa enfeitada para o Natal."
 }

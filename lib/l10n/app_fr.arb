@@ -828,5 +828,22 @@
   "stepPyjamas": "Mettre le pyjama",
   "stepToilet": "Toilettes",
   "stepTidyToys": "Ranger les jouets",
-  "stepStoryTime": "L'heure de l'histoire"
+  "stepStoryTime": "L'heure de l'histoire",
+  "lullabies": "Berceuses",
+  "lullabiesSubtitle": "Une boîte à musique, et les lampes qui brillent note après note",
+  "lullabiesDescription": "Une boîte à musique joue une berceuse sur le téléphone et chaque note allume doucement une lampe, les graves d'un côté, les aigus de l'autre. À la fin, les lumières peuvent s'atténuer et s'éteindre.",
+  "lullabyTimes": "Combien de fois",
+  "lullabyTimesCount": "{count, plural, =1{Une fois} other{{count} fois}}",
+  "lullabySwitchOff": "Puis éteindre doucement les lumières",
+  "musicSoundsOff": "Les sons sont coupés : active-les pour entendre la musique",
+  "melodySeconds": "{seconds} s",
+  "melodyBrahms": "Berceuse de Brahms",
+  "melodyTwinkle": "Ah ! vous dirai-je, maman",
+  "melodyFrereJacques": "Frère Jacques",
+  "melodyJingleBells": "Vive le vent",
+  "melodySilentNight": "Douce nuit",
+  "melodyMerryChristmas": "We Wish You a Merry Christmas",
+  "christmasShow": "Spectacle de lumières de Noël",
+  "christmasShowSubtitle": "Des chants de Noël avec les lumières en rythme, note après note",
+  "christmasShowDescription": "Des chants de Noël classiques sonnent sur de petites cloches tandis que chaque note allume une lampe en rouge, vert et or, comme une maison décorée pour Noël."
 }

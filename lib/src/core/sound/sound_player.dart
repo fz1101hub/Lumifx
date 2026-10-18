@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
+import 'melody.dart';
 import 'soundscape.dart';
 import 'synth.dart';
 
@@ -94,6 +95,28 @@ class AudioplayersSoundPlayer implements SoundPlayer {
     _volume = volume;
     _paused = false;
     await _stopLoops();
+    if (soundscape.melody case final melody?) {
+      final times = soundscape.melodyTimes;
+      final path = await _file('v1_melody_${melody.id}_x$times',
+          () => wavOf(synthesizeMelody(melody, times: times)));
+      if (generation != _generation) {
+        return;
+      }
+      final player = AudioPlayer();
+      _loops.add(player);
+      try {
+        await player.setAudioContext(_context);
+        await player.setReleaseMode(ReleaseMode.stop);
+        if (_paused) {
+          await player.setSource(DeviceFileSource(path));
+          await player.setVolume(_volume);
+        } else {
+          await player.play(DeviceFileSource(path), volume: _volume);
+        }
+      } on Object catch (error) {
+        debugPrint('Sound: $error');
+      }
+    }
     for (final ambience in soundscape.ambiences) {
       final path =
           await _file('v1_${ambience.name}', () => _ambienceWav(ambience));

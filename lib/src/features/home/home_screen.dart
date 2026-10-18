@@ -17,6 +17,7 @@ import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
 import '../house/house_screen.dart';
 import '../kids/kids_mode.dart';
+import '../music_box/music_box_screen.dart';
 import '../rooms/rooms_screen.dart';
 import '../routines/routines_screen.dart';
 import '../search/effect_search.dart';
@@ -123,6 +124,11 @@ class HomeScreen extends StatelessWidget {
               entries: [
                 _HomeEntry(Icons.bedtime_outlined, l10n.bedtime,
                     l10n.bedtimeSubtitle, () => const BedtimeScreen()),
+                _HomeEntry(
+                    Icons.music_note_outlined,
+                    l10n.lullabies,
+                    l10n.lullabiesSubtitle,
+                    () => const MusicBoxScreen(festive: false)),
                 _HomeEntry(Icons.spa_outlined, l10n.breathe,
                     l10n.breatheSubtitle, () => const BreathingScreen()),
                 _HomeEntry(Icons.timer_outlined, l10n.timers,

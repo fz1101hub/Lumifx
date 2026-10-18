@@ -828,5 +828,22 @@
   "stepPyjamas": "Ponerse el pijama",
   "stepToilet": "Ir al baño",
   "stepTidyToys": "Recoger los juguetes",
-  "stepStoryTime": "Hora del cuento"
+  "stepStoryTime": "Hora del cuento",
+  "lullabies": "Canciones de cuna",
+  "lullabiesSubtitle": "Una caja de música y las lámparas brillando nota a nota",
+  "lullabiesDescription": "Una caja de música toca una canción de cuna en el teléfono y cada nota enciende suavemente una lámpara, las graves a un lado y las agudas al otro. Al final las luces pueden apagarse poco a poco.",
+  "lullabyTimes": "Cuántas veces",
+  "lullabyTimesCount": "{count, plural, =1{Una vez} other{{count} veces}}",
+  "lullabySwitchOff": "Después apagar las luces poco a poco",
+  "musicSoundsOff": "Los sonidos están desactivados: actívalos para oír la música",
+  "melodySeconds": "{seconds} s",
+  "melodyBrahms": "Canción de cuna de Brahms",
+  "melodyTwinkle": "Estrellita, ¿dónde estás?",
+  "melodyFrereJacques": "Martinillo",
+  "melodyJingleBells": "Jingle Bells",
+  "melodySilentNight": "Noche de paz",
+  "melodyMerryChristmas": "Os deseamos una feliz Navidad",
+  "christmasShow": "Espectáculo de luces navideño",
+  "christmasShowSubtitle": "Villancicos con las luces a ritmo, nota a nota",
+  "christmasShowDescription": "Villancicos clásicos suenan con campanitas mientras cada nota enciende una lámpara en rojo, verde y dorado, como una casa adornada para Navidad."
 }

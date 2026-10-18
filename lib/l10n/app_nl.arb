@@ -828,5 +828,22 @@
   "stepPyjamas": "Pyjama aan",
   "stepToilet": "Wc",
   "stepTidyToys": "Speelgoed opruimen",
-  "stepStoryTime": "Verhaaltjestijd"
+  "stepStoryTime": "Verhaaltjestijd",
+  "lullabies": "Slaapliedjes",
+  "lullabiesSubtitle": "Een speeldoos, en de lampen gloeien noot voor noot",
+  "lullabiesDescription": "Een speeldoos speelt een slaapliedje op de telefoon en elke noot laat zacht een lamp oplichten, lage noten aan de ene kant, hoge aan de andere. Aan het eind kan het licht uitdoven en uitgaan.",
+  "lullabyTimes": "Hoe vaak",
+  "lullabyTimesCount": "{count, plural, =1{Eén keer} other{{count} keer}}",
+  "lullabySwitchOff": "Daarna het licht laten uitdoven",
+  "musicSoundsOff": "Geluid staat uit: zet het aan om de muziek te horen",
+  "melodySeconds": "{seconds} s",
+  "melodyBrahms": "Wiegenlied van Brahms",
+  "melodyTwinkle": "Altijd is Kortjakje ziek",
+  "melodyFrereJacques": "Vader Jacob",
+  "melodyJingleBells": "Jingle Bells",
+  "melodySilentNight": "Stille nacht",
+  "melodyMerryChristmas": "We Wish You a Merry Christmas",
+  "christmasShow": "Kerstlichtshow",
+  "christmasShowSubtitle": "Kerstliedjes met het licht in de maat, noot voor noot",
+  "christmasShowDescription": "Klassieke kerstliedjes klinken op belletjes terwijl elke noot een lamp in rood, groen en goud laat oplichten, als een huis in kerstsfeer."
 }

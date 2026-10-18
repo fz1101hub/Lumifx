@@ -33,6 +33,7 @@ import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/features/music_box/music_box_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
@@ -850,6 +851,10 @@ void main() {
     await openBirthday(tester);
     await tester.pageBack();
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Statues'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Statues'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Statues'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Start'));
@@ -915,6 +920,32 @@ void main() {
     expect(find.text('1 star'), findsOneWidget);
     // Next to the morning routine, and in the week.
     expect(find.byIcon(Icons.star), findsNWidgets(2));
+  });
+
+  testWidgets('a lullaby plays its tune and then fades the lights out',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Lullabies'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Lullabies'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Lullabies'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Just once'));
+    await tester.pump();
+    await tester.tap(find.text("Brahms's Lullaby"));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MusicBoxScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+    expect(playback.soundscape.melody?.id, 'brahms');
+    expect(playback.soundscape.melodyTimes, 1);
+    expect(playback.sleepTimer, isNotNull, reason: 'then the lights fade');
+    expect(find.byTooltip('Stop'), findsOneWidget);
+    await tester.tap(find.byTooltip('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(playback.isPlaying, isFalse);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

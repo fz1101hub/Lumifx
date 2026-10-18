@@ -828,5 +828,22 @@
   "stepPyjamas": "パジャマ",
   "stepToilet": "トイレ",
   "stepTidyToys": "おもちゃをかたづける",
-  "stepStoryTime": "お話の時間"
+  "stepStoryTime": "お話の時間",
+  "lullabies": "子守歌",
+  "lullabiesSubtitle": "オルゴールと、音ごとに光るランプ",
+  "lullabiesDescription": "オルゴールがスマートフォンで子守歌を奏で、音ごとにランプがやさしく光ります。低い音は片側、高い音は反対側。最後に明かりがゆっくり消えるようにもできます。",
+  "lullabyTimes": "くりかえし",
+  "lullabyTimesCount": "{count, plural, other{{count}回}}",
+  "lullabySwitchOff": "最後に明かりをゆっくり消す",
+  "musicSoundsOff": "サウンドがオフです。音楽を聞くにはオンにしてください",
+  "melodySeconds": "{seconds}秒",
+  "melodyBrahms": "ブラームスの子守歌",
+  "melodyTwinkle": "きらきら星",
+  "melodyFrereJacques": "フレール・ジャック（グーチョキパー）",
+  "melodyJingleBells": "ジングルベル",
+  "melodySilentNight": "きよしこの夜",
+  "melodyMerryChristmas": "おめでとうクリスマス",
+  "christmasShow": "クリスマスのライトショー",
+  "christmasShowSubtitle": "音に合わせて光るクリスマスソング",
+  "christmasShowDescription": "定番のクリスマスソングが鈴の音で流れ、音ごとにランプが赤・緑・金に光ります。クリスマスに飾られた家のように。"
 }

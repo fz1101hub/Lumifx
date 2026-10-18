@@ -3122,5 +3122,83 @@
   "stepStoryTime": "Story time",
   "@stepStoryTime": {
     "description": "Routine step"
+  },
+  "lullabies": "Lullabies",
+  "@lullabies": {
+    "description": "Home entry: lullabies on a music box with lights"
+  },
+  "lullabiesSubtitle": "A music box, and the lamps glowing note by note",
+  "@lullabiesSubtitle": {
+    "description": "Subtitle of the lullabies"
+  },
+  "lullabiesDescription": "A music box plays a lullaby on the phone and each note softly lights a lamp, low notes on one side, high notes on the other. At the end the lights can fade out and switch off.",
+  "@lullabiesDescription": {
+    "description": "Explains the lullabies"
+  },
+  "lullabyTimes": "How many times",
+  "@lullabyTimes": {
+    "description": "How many times the lullaby plays"
+  },
+  "lullabyTimesCount": "{count, plural, =1{Just once} other{{count} times}}",
+  "@lullabyTimesCount": {
+    "description": "A number of times",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lullabySwitchOff": "Then fade out the lights",
+  "@lullabySwitchOff": {
+    "description": "Switch: fade out and switch off the lights at the end of the lullaby"
+  },
+  "musicSoundsOff": "Sounds are off: turn them on to hear the music",
+  "@musicSoundsOff": {
+    "description": "Sounds are switched off in the settings; switch to turn them on"
+  },
+  "melodySeconds": "{seconds} s",
+  "@melodySeconds": {
+    "description": "A length in seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "melodyBrahms": "Brahms's Lullaby",
+  "@melodyBrahms": {
+    "description": "Melody: Brahms' lullaby"
+  },
+  "melodyTwinkle": "Twinkle, Twinkle, Little Star",
+  "@melodyTwinkle": {
+    "description": "Melody: Twinkle Twinkle Little Star (the French tune Ah! vous dirai-je, maman)"
+  },
+  "melodyFrereJacques": "Are You Sleeping (Frère Jacques)",
+  "@melodyFrereJacques": {
+    "description": "Melody: Frère Jacques"
+  },
+  "melodyJingleBells": "Jingle Bells",
+  "@melodyJingleBells": {
+    "description": "Melody: Jingle Bells"
+  },
+  "melodySilentNight": "Silent Night",
+  "@melodySilentNight": {
+    "description": "Melody: Silent Night"
+  },
+  "melodyMerryChristmas": "We Wish You a Merry Christmas",
+  "@melodyMerryChristmas": {
+    "description": "Melody: We Wish You a Merry Christmas"
+  },
+  "christmasShow": "Christmas light show",
+  "@christmasShow": {
+    "description": "A Christmas light show with carols"
+  },
+  "christmasShowSubtitle": "Carols with the lights in time, note by note",
+  "@christmasShowSubtitle": {
+    "description": "Subtitle of the Christmas light show"
+  },
+  "christmasShowDescription": "Classic carols play on little bells while every note lights a lamp in red, green and gold, like a house dressed for Christmas.",
+  "@christmasShowDescription": {
+    "description": "Explains the Christmas light show"
   }
 }

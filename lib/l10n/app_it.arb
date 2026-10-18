@@ -828,5 +828,22 @@
   "stepPyjamas": "Pigiama",
   "stepToilet": "Bagno",
   "stepTidyToys": "Metti a posto i giochi",
-  "stepStoryTime": "Ora della storia"
+  "stepStoryTime": "Ora della storia",
+  "lullabies": "Ninne nanne",
+  "lullabiesSubtitle": "Un carillon, e le lampade che brillano nota dopo nota",
+  "lullabiesDescription": "Un carillon suona una ninna nanna sul telefono e ogni nota accende piano una lampada, le note basse da un lato e quelle alte dall'altro. Alla fine le luci possono sfumare e spegnersi.",
+  "lullabyTimes": "Quante volte",
+  "lullabyTimesCount": "{count, plural, =1{Una volta} other{{count} volte}}",
+  "lullabySwitchOff": "Poi spegni piano le luci",
+  "musicSoundsOff": "I suoni sono spenti: attivali per sentire la musica",
+  "melodySeconds": "{seconds} s",
+  "melodyBrahms": "Ninna nanna di Brahms",
+  "melodyTwinkle": "Brilla brilla la stellina",
+  "melodyFrereJacques": "Fra Martino",
+  "melodyJingleBells": "Jingle Bells",
+  "melodySilentNight": "Astro del ciel",
+  "melodyMerryChristmas": "We Wish You a Merry Christmas",
+  "christmasShow": "Spettacolo di luci di Natale",
+  "christmasShowSubtitle": "Canti natalizi con le luci a tempo, nota per nota",
+  "christmasShowDescription": "I canti di Natale classici suonano con le campanelle mentre ogni nota accende una lampada di rosso, verde e oro, come una casa addobbata per le feste."
 }

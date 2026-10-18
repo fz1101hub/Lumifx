@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../core/effects/effect.dart';
+import '../../core/sound/melody.dart';
+import '../../core/sound/soundscape.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
 import '../fun/advent.dart';
@@ -12,6 +14,7 @@ import '../fun/countdowns_screen.dart';
 import '../fun/game_screen.dart';
 import '../fun/light_games.dart';
 import '../fun/simon_screen.dart';
+import '../music_box/music_box_screen.dart';
 import '../paths/path_story.dart';
 import '../paths/path_story_screen.dart';
 import '../routines/kid_routine.dart';
@@ -51,6 +54,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const AdventScreen();
   } else if (Countdown.sleepsOf(effect) != null) {
     screen = const CountdownsScreen();
+  } else if (soundscapeOf(effect).melody case final melody?) {
+    screen = MusicBoxScreen(festive: melody.instrument == Instrument.bells);
   } else if (KidRoutine.of(effect) != null) {
     screen = const RoutinesScreen();
   } else if (id.startsWith('${LightingEffect.generatedPrefix}simon')) {

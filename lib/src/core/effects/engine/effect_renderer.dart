@@ -620,6 +620,10 @@ class EffectRenderer {
         final count = _number(p, 'count', 2).round().clamp(1, slotCount);
         return (List<int>.generate(slotCount, (i) => i)..shuffle(random))
             .take(count);
+      case 'position':
+        // One light along the room, 0 the first and 1 the last.
+        final at = _number(p, 'position', 0.5).clamp(0.0, 1.0);
+        return [(at * (slotCount - 1)).round()];
       case 'random_light':
       default:
         return [random.nextInt(slotCount)];
