@@ -1096,5 +1096,6 @@
   "noiseLoud": "Il rumore cresce…",
   "noiseTooLoud": "Troppo rumore!",
   "noiseTooLoudTimes": "{count, plural, =0{Ancora mai troppo rumore} =1{Troppo rumore una volta} other{Troppo rumore {count} volte}}",
-  "noiseMicDenied": "LumiFX ha bisogno del microfono per sentire quanto rumore c'è. Consentilo nelle impostazioni del telefono."
+  "noiseMicDenied": "LumiFX ha bisogno del microfono per sentire quanto rumore c'è. Consentilo nelle impostazioni del telefono.",
+  "timerTune": "Una melodia mentre ti lavi i denti"
 }

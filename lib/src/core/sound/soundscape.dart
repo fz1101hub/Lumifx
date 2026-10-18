@@ -30,6 +30,11 @@ class Soundscape {
 /// The id prefix of the effects that play a melody.
 const melodyEffectPrefix = '${LightingEffect.generatedPrefix}melody:';
 
+/// Ends the id of a light timer that plays a tune while it counts down.
+const timerTuneSuffix = ':tune';
+
+const _timerPrefix = '${LightingEffect.generatedPrefix}timer:';
+
 const _byEffect = <String, Soundscape>{
   'fireplace': Soundscape([Ambience.fire]),
   'ocean': Soundscape([Ambience.waves]),
@@ -73,6 +78,21 @@ Soundscape soundscapeOf(LightingEffect effect) {
         : Soundscape(const [],
             melody: melody,
             melodyTimes: (int.tryParse(times) ?? 1).clamp(1, 20));
+  }
+  if (effect.id.startsWith(_timerPrefix) &&
+      effect.id.endsWith(timerTuneSuffix)) {
+    // Twinkle Twinkle on the music box, round and round until the time
+    // is up.
+    final countdown = effect.events
+        .where((e) => e.type == EffectEventTypes.countdown)
+        .firstOrNull;
+    if (countdown != null) {
+      final times =
+          (countdown.duration.inMilliseconds / twinkle.length.inMilliseconds)
+              .ceil();
+      return Soundscape(const [],
+          melody: twinkle, melodyTimes: times.clamp(1, 20));
+    }
   }
   final known = _byEffect[effect.id];
   if (known != null) {

@@ -1096,5 +1096,6 @@
   "noiseLoud": "Het wordt luid…",
   "noiseTooLoud": "Te luid!",
   "noiseTooLoudTimes": "{count, plural, =0{Nog niet te luid geweest} =1{Eén keer te luid} other{{count} keer te luid}}",
-  "noiseMicDenied": "LumiFX heeft de microfoon nodig om te horen hoe luid het is. Sta het toe in de instellingen van de telefoon."
+  "noiseMicDenied": "LumiFX heeft de microfoon nodig om te horen hoe luid het is. Sta het toe in de instellingen van de telefoon.",
+  "timerTune": "Een melodietje tijdens het poetsen"
 }

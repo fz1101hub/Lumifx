@@ -4419,5 +4419,9 @@
   "noiseMicDenied": "LumiFX needs the microphone to hear how loud it is. Allow it in the phone's settings.",
   "@noiseMicDenied": {
     "description": "Noise light: the microphone cannot be used"
+  },
+  "timerTune": "A tune while brushing",
+  "@timerTune": {
+    "description": "Teeth timer: switch to play a music-box tune while brushing"
   }
 }

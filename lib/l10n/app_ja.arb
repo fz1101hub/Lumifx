@@ -1096,5 +1096,6 @@
   "noiseLoud": "ちょっとにぎやか…",
   "noiseTooLoud": "うるさすぎ！",
   "noiseTooLoudTimes": "{count, plural, other{うるさすぎ：{count}回}}",
-  "noiseMicDenied": "音の大きさを聞くにはマイクが必要です。スマートフォンの設定で許可してください。"
+  "noiseMicDenied": "音の大きさを聞くにはマイクが必要です。スマートフォンの設定で許可してください。",
+  "timerTune": "はみがき中にメロディ"
 }

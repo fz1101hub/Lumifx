@@ -398,7 +398,8 @@ void main() {
 
   testWidgets('a light timer counts down on screen and can be stopped',
       (tester) async {
-    await _pumpApp(tester);
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
     await tester.scrollUntilVisible(
       find.text('Light timers'),
       200,
@@ -416,6 +417,8 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.textContaining(RegExp(r'^[12]:\d\d$')), findsOneWidget);
     expect(find.text('Pause'), findsOneWidget);
+    expect(sound.playing?.melody?.id, 'twinkle',
+        reason: 'a tune while brushing');
 
     await tester.tap(find.text('Stop'));
     await tester.pump();
