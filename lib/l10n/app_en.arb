@@ -4556,5 +4556,23 @@
   "routineTeethTimer": "Two-minute timer",
   "@routineTeethTimer": {
     "description": "Routine: button on the brush-teeth step that starts the two-minute light timer"
+  },
+  "ritualGoodnightName": "Goodnight, {name}!",
+  "@ritualGoodnightName": {
+    "description": "End of the bedtime ritual, with the child's name; said aloud too",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pianoEchoBest": "Best: {count} notes",
+  "@pianoEchoBest": {
+    "description": "Repeat after me: the longest tune played back so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

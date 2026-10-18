@@ -1817,7 +1817,7 @@ void main() {
     }
     expect(find.text('Bravo! One more note'), findsOneWidget);
     await tester.pump(const Duration(seconds: 2));
-    expect(find.text('A tune of 4 notes'), findsOneWidget);
+    expect(find.text('A tune of 4 notes · Best: 3 notes'), findsOneWidget);
     expect(find.text('Listen…'), findsOneWidget);
     await tester.pump(const Duration(seconds: 4));
     expect(find.text('Your turn!'), findsOneWidget);
@@ -1827,7 +1827,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Oops! Listen again'), findsOneWidget);
     await tester.pump(const Duration(seconds: 2));
-    expect(find.text('A tune of 4 notes'), findsOneWidget);
+    expect(find.text('A tune of 4 notes · Best: 3 notes'), findsOneWidget);
     await tester.pump(const Duration(seconds: 4));
     await playback.stop();
     await tester.pumpAndSettle();
@@ -1999,7 +1999,7 @@ void main() {
     await finish();
     expect(MonsterHunt.isGuardian(playback.effect), isTrue);
     expect(playback.sleepTimer, const Duration(minutes: 30));
-    expect(find.text('Goodnight!'), findsOneWidget);
+    expect(find.text('Goodnight, Mia!'), findsOneWidget);
     await playback.stop();
     playback.setSleepTimer(null);
     await tester.pumpAndSettle();

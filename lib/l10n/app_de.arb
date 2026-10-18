@@ -1129,5 +1129,7 @@
   "pianoEchoOops": "Hoppla! Hör noch mal zu",
   "pianoEchoNotes": "Eine Melodie mit {count} Tönen",
   "noiseStopped": "Das Mikrofon hat gestoppt. Tippe auf Zuhören starten, um weiterzumachen.",
-  "routineTeethTimer": "Zwei-Minuten-Timer"
+  "routineTeethTimer": "Zwei-Minuten-Timer",
+  "ritualGoodnightName": "Gute Nacht, {name}!",
+  "pianoEchoBest": "Rekord: {count} Töne"
 }

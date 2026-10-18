@@ -126,6 +126,9 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
     if (result == EchoPress.right) {
       return;
     }
+    if (result == EchoPress.done) {
+      AppScope.of(context).preferences.recordPianoEcho(_echo.keys.length);
+    }
     final generation = ++_generation;
     setState(
         () => _echoing = result == EchoPress.done ? _Echo.bravo : _Echo.oops);
@@ -252,7 +255,11 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
                     ),
                   ),
                   Text(
-                    l10n.pianoEchoNotes(_echo.keys.length),
+                    [
+                      l10n.pianoEchoNotes(_echo.keys.length),
+                      if (preferences.pianoEchoBest > 0)
+                        l10n.pianoEchoBest(preferences.pianoEchoBest),
+                    ].join(' · '),
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium,
                   ),

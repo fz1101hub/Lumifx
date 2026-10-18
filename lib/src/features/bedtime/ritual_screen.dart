@@ -8,6 +8,7 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/engine/light_frame.dart';
 import '../../core/sound/melodies.dart';
 import '../calm/breathing.dart';
+import '../../core/speech/speaker.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../effects/playback_controller.dart';
@@ -147,7 +148,29 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
       case RitualStep.guardian:
         await _play(MonsterHunt.guardian(l10n.guardianLight));
         _playback.setSleepTimer(Duration(minutes: settings.guardianMinutes));
+        _sayGoodnight();
     }
+  }
+
+  /// "Goodnight, Mia!", by the child's name.
+  String _goodnight(AppLocalizations l10n) {
+    final name = AppScope.of(context).preferences.activeChild?.name;
+    return name == null || name.trim().isEmpty
+        ? l10n.ritualGoodnight
+        : l10n.ritualGoodnightName(name.trim());
+  }
+
+  /// Said aloud too, when stories are read aloud.
+  void _sayGoodnight() {
+    final scope = AppScope.of(context);
+    if (!mounted ||
+        !scope.preferences.readAloud ||
+        !scope.preferences.soundOn) {
+      return;
+    }
+    final text = _goodnight(context.l10n);
+    final language = Localizations.localeOf(context).languageCode;
+    unawaited(scope.speaker.speak(text, speechLanguage(language)));
   }
 
   @override
@@ -263,7 +286,7 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
           if (step == null || step == RitualStep.guardian)
             Semantics(
               liveRegion: true,
-              child: Text(l10n.ritualGoodnight,
+              child: Text(_goodnight(l10n),
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineMedium),
             )

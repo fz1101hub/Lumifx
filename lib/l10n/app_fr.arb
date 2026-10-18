@@ -1129,5 +1129,7 @@
   "pianoEchoOops": "Oups ! Écoute encore",
   "pianoEchoNotes": "Un air de {count} notes",
   "noiseStopped": "Le micro s'est arrêté. Touche Commencer à écouter pour continuer.",
-  "routineTeethTimer": "Minuteur de deux minutes"
+  "routineTeethTimer": "Minuteur de deux minutes",
+  "ritualGoodnightName": "Bonne nuit, {name} !",
+  "pianoEchoBest": "Record : {count} notes"
 }

@@ -1129,5 +1129,7 @@
   "pianoEchoOops": "あれれ？もういちどきいてね",
   "pianoEchoNotes": "{count}音のメロディ",
   "noiseStopped": "マイクが止まりました。「聞きはじめる」をタップすると続けられます。",
-  "routineTeethTimer": "2分タイマー"
+  "routineTeethTimer": "2分タイマー",
+  "ritualGoodnightName": "おやすみ、{name}！",
+  "pianoEchoBest": "さいこう：{count}音"
 }
