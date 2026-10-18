@@ -969,6 +969,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Count the lights'), findsOneWidget);
     expect(find.text('Colours in another language'), findsOneWidget);
+    expect(find.text('Light memory'), findsOneWidget);
+    expect(find.text('Calm breathing'), findsOneWidget);
 
     await tester.tap(find.text('Light piano'));
     await tester.pumpAndSettle();

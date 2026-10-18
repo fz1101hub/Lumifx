@@ -6,10 +6,12 @@ import 'package:flutter/services.dart';
 
 import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
+import '../calm/breathing_screen.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../effects/effect_palette.dart';
 import '../effects/playback_controller.dart';
+import '../fun/simon_screen.dart';
 import '../library/effect_library.dart';
 import '../learn/colour_mixing_screen.dart';
 import '../learn/colour_words_screen.dart';
@@ -23,7 +25,9 @@ enum KidsActivity {
   piano(Icons.piano_outlined),
   counting(Icons.filter_9_plus_outlined),
   colours(Icons.translate),
-  mixing(Icons.palette_outlined);
+  mixing(Icons.palette_outlined),
+  simon(Icons.psychology_outlined),
+  breathing(Icons.spa_outlined);
 
   const KidsActivity(this.icon);
 
@@ -34,6 +38,8 @@ enum KidsActivity {
         counting => l10n.countLights,
         colours => l10n.colourWords,
         mixing => l10n.colourMixing,
+        simon => l10n.gameSimon,
+        breathing => l10n.breathe,
       };
 
   Widget screen() => switch (this) {
@@ -41,6 +47,8 @@ enum KidsActivity {
         counting => const CountingScreen(),
         colours => const ColourWordsScreen(),
         mixing => const ColourMixingScreen(),
+        simon => const SimonScreen(),
+        breathing => const BreathingScreen(),
       };
 
   /// The games a grown-up kept (all of them until one chooses).
@@ -246,27 +254,30 @@ class KidsModeScreen extends StatelessWidget {
             return Column(
               children: [
                 if (activities.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    child: Wrap(
-                      spacing: 12,
-                      runSpacing: 8,
-                      alignment: WrapAlignment.center,
+                  // One row that scrolls sideways, so the effects keep
+                  // the screen.
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.fromLTRB(16, 16, 4, 0),
+                    child: Row(
                       children: [
                         for (final activity in activities)
-                          FilledButton.tonalIcon(
-                            style: FilledButton.styleFrom(
-                                minimumSize: const Size(0, 56)),
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                settings: RouteSettings(
-                                    name:
-                                        '$kidsModeRouteName/${activity.name}'),
-                                builder: (_) => activity.screen(),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: FilledButton.tonalIcon(
+                              style: FilledButton.styleFrom(
+                                  minimumSize: const Size(0, 56)),
+                              onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  settings: RouteSettings(
+                                      name: '$kidsModeRouteName/'
+                                          '${activity.name}'),
+                                  builder: (_) => activity.screen(),
+                                ),
                               ),
+                              icon: Icon(activity.icon),
+                              label: Text(activity.title(l10n)),
                             ),
-                            icon: Icon(activity.icon),
-                            label: Text(activity.title(l10n)),
                           ),
                       ],
                     ),
