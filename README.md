@@ -107,6 +107,8 @@ Also done ahead of schedule:
 - **Voice**: Siri phrases in eight languages ("Play Fireplace in LumiFX",
   "Start bedtime in LumiFX", "Stop LumiFX") and Google Assistant App
   Actions ("Open Fireplace in LumiFX"), through `lumifx://` links.
+- **What fits now**: from 6 to 10 in the morning the home starts with
+  the morning routine, in the evening with the bedtime ritual.
 - **Holiday stories** for New Year, Valentine's Day, Carnival and Easter,
   first on the home in their season (Carnival and Easter follow Easter's
   date each year); Diwali, Hanukkah and Lunar New Year have a shelf of

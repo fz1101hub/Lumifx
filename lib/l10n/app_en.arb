@@ -4586,5 +4586,13 @@
   "routineTidyTimer": "Ten-minute tidy-up timer",
   "@routineTidyTimer": {
     "description": "Routine: button on the tidy-toys step that starts the ten-minute tidy-up light timer"
+  },
+  "nowMorning": "Good morning! Ready for the morning routine?",
+  "@nowMorning": {
+    "description": "Home, in the morning: suggests the morning picture routine"
+  },
+  "nowEvening": "It's nearly bedtime: start the ritual?",
+  "@nowEvening": {
+    "description": "Home, in the evening: suggests the bedtime ritual"
   }
 }

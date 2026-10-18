@@ -1134,5 +1134,7 @@
   "pianoEchoBest": "さいこう：{count}音",
   "routineMakeStory": "おはなしをつくる",
   "pianoListenFirst": "まずきく",
-  "routineTidyTimer": "10分のおかたづけタイマー"
+  "routineTidyTimer": "10分のおかたづけタイマー",
+  "nowMorning": "おはよう！朝のしたくをはじめよう",
+  "nowEvening": "もうすぐねる時間。おやすみの儀式をはじめる？"
 }
