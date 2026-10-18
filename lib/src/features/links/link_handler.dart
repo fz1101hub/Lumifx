@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../../core/effects/effect.dart';
 import '../bridge/bridge_controller.dart';
@@ -13,6 +13,7 @@ import '../library/sharing.dart';
 import '../common/app_text.dart';
 import '../search/effect_search.dart';
 import 'app_link.dart';
+import 'screen_links.dart';
 
 /// Carries out [AppLink]s.
 class LinkHandler {
@@ -48,6 +49,8 @@ class LinkHandler {
         return _bedtime();
       case VoiceLink(:final words):
         return _voice(words);
+      case ScreenLink(:final screen):
+        return _screen(screen);
       case ImportLink(:final data):
         await _ready();
         if (preferences.kidsLocked) {
@@ -202,6 +205,27 @@ class LinkHandler {
     'bedtime', 'nanna', 'la nanna', 'schlafenszeit', 'dodo', //
     'hora de dormir', 'bedtijd', 'おやすみ',
   };
+
+  /// Opens [screen] unless it is on top already; not in kids mode.
+  Future<bool> _screen(AppScreen screen) async {
+    await _ready();
+    final navigator = navigatorKey.currentState;
+    if (navigator == null || preferences.kidsLocked) {
+      return false;
+    }
+    var onTop = false;
+    navigator.popUntil((r) {
+      onTop = r.settings.name == screenRouteName(screen);
+      return true;
+    });
+    if (!onTop) {
+      unawaited(navigator.push(MaterialPageRoute<void>(
+        settings: RouteSettings(name: screenRouteName(screen)),
+        builder: (_) => screenOf(screen),
+      )));
+    }
+    return true;
+  }
 
   /// Opens the player unless it is already on top.
   void _showPlayer(String effectId, Route<void> Function() route) {

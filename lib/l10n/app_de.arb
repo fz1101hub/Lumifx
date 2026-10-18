@@ -1035,5 +1035,7 @@
   "hauntedArm": "Party starten",
   "hauntedArmed": "Warte, bis jemand vorbeigeht…",
   "hauntedScare": "Jetzt erschrecken",
-  "hauntedScares": "{count, plural, =0{Noch kein Schreck} =1{Ein Schreck} other{{count} Schrecken}}"
+  "hauntedScares": "{count, plural, =0{Noch kein Schreck} =1{Ein Schreck} other{{count} Schrecken}}",
+  "linkRitual": "Gute-Nacht-Ritual öffnen",
+  "linkRoutines": "Routinen öffnen"
 }

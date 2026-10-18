@@ -12,6 +12,9 @@
 ///                                              effect, playlist, "stop"
 ///                                              or "bedtime", any language
 ///   lumifx://app/import?d=…                    add shared scenes/playlists
+///   lumifx://app/go/ritual                     open a screen (see
+///                                              [AppScreen]): the bedtime
+///                                              ritual, the routines…
 ///
 /// The host is ignored (Android hands the app only the path), and names
 /// are matched without regard to case.
@@ -56,6 +59,11 @@ sealed class AppLink {
         return const BedtimeLink();
       case ['voice', final words] when words.trim().isNotEmpty:
         return VoiceLink(words.trim());
+      case ['go', final name]:
+        final screen = AppScreen.values
+            .where((s) => s.slug == name.toLowerCase())
+            .firstOrNull;
+        return screen == null ? null : ScreenLink(screen);
       case ['import']:
         final data = param('d');
         return data == null ? null : ImportLink(data);
@@ -79,6 +87,34 @@ sealed class AppLink {
   static String get bedtime => '$scheme://app/bedtime';
 
   static String import(String data) => '$scheme://app/import?d=$data';
+
+  /// The link that opens [screen].
+  static String go(AppScreen screen) => '$scheme://app/go/${screen.slug}';
+}
+
+/// The screens a link can open.
+enum AppScreen {
+  ritual('ritual'),
+  routines('routines'),
+  starShop('star-shop'),
+  storyMaker('story-maker'),
+  lullabies('lullabies'),
+  monsterSpray('monster-spray'),
+  piano('piano'),
+  games('games'),
+  cinema('cinema');
+
+  const AppScreen(this.slug);
+
+  /// Its name in links.
+  final String slug;
+}
+
+/// Opens one of the app's screens.
+class ScreenLink extends AppLink {
+  const ScreenLink(this.screen);
+
+  final AppScreen screen;
 }
 
 /// Opens an effect's player, and plays it when [start].

@@ -1035,5 +1035,7 @@
   "hauntedArm": "Feest starten",
   "hauntedArmed": "Wachten tot er iemand langsloopt…",
   "hauntedScare": "Nu laten schrikken",
-  "hauntedScares": "{count, plural, =0{Nog geen schrik} =1{Eén schrik} other{{count} keer geschrokken}}"
+  "hauntedScares": "{count, plural, =0{Nog geen schrik} =1{Eén schrik} other{{count} keer geschrokken}}",
+  "linkRitual": "Slaapritueel openen",
+  "linkRoutines": "Routines openen"
 }

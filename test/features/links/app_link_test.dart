@@ -54,4 +54,16 @@ void main() {
     expect(voice.words, 'feu de cheminée');
     expect(AppLink.parse('lumifx://app/voice/%20'), isNull);
   });
+
+  test('screen links open the family screens by name', () {
+    for (final screen in AppScreen.values) {
+      final link = AppLink.parse(AppLink.go(screen));
+      expect(link, isA<ScreenLink>());
+      expect((link! as ScreenLink).screen, screen);
+    }
+    expect((AppLink.parse('/go/Star-Shop')! as ScreenLink).screen,
+        AppScreen.starShop);
+    expect(AppLink.parse('lumifx://app/go/nowhere'), isNull);
+    expect(AppLink.go(AppScreen.ritual), 'lumifx://app/go/ritual');
+  });
 }

@@ -1035,5 +1035,7 @@
   "hauntedArm": "Inizia la festa",
   "hauntedArmed": "In attesa che qualcuno passi…",
   "hauntedScare": "Spavento ora",
-  "hauntedScares": "{count, plural, =0{Ancora nessuno spavento} =1{Uno spavento} other{{count} spaventi}}"
+  "hauntedScares": "{count, plural, =0{Ancora nessuno spavento} =1{Uno spavento} other{{count} spaventi}}",
+  "linkRitual": "Apri il rituale della nanna",
+  "linkRoutines": "Apri le routine"
 }

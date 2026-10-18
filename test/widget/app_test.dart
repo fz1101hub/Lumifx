@@ -1683,6 +1683,37 @@ void main() {
     expect(playback.status, PlaybackStatus.idle);
   });
 
+  testWidgets('a link opens the bedtime ritual, once, not in kids mode',
+      (tester) async {
+    await _pumpApp(tester);
+    Future<void> openLink(String location) async {
+      final message = const JSONMethodCodec().encodeMethodCall(
+        MethodCall('pushRouteInformation', {'location': location}),
+      );
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+          SystemChannels.navigation.name, message, (_) {});
+    }
+
+    await openLink('lumifx://app/go/ritual');
+    await tester.pumpAndSettle();
+    expect(find.byType(BedtimeRitualScreen), findsOneWidget);
+    await openLink('lumifx://app/go/ritual');
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.byType(BedtimeRitualScreen), findsNothing,
+        reason: 'it was opened only once');
+
+    final preferences =
+        AppScope.of(tester.element(find.byType(HomeScreen))).preferences;
+    await preferences.setKidsLocked(true);
+    await tester.pumpAndSettle();
+    await openLink('lumifx://app/go/piano');
+    await tester.pumpAndSettle();
+    expect(find.byType(LightPianoScreen), findsNothing);
+    await preferences.setKidsLocked(false);
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));

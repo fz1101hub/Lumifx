@@ -26,6 +26,8 @@ List<(String, String)> readyLinks(AppScope scope, AppLocalizations l10n) {
       // By id: a name may hold a "/" or change later.
       (l10n.linkPlaylist(playlist.name), AppLink.playlist(playlist.id)),
     (l10n.linkBedtime, AppLink.bedtime),
+    (l10n.linkRitual, AppLink.go(AppScreen.ritual)),
+    (l10n.linkRoutines, AppLink.go(AppScreen.routines)),
     (l10n.linkStop, AppLink.stop),
   ];
 }

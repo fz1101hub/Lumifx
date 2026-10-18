@@ -1035,5 +1035,7 @@
   "hauntedArm": "パーティーを始める",
   "hauntedArmed": "だれかが通るのを待っています…",
   "hauntedScare": "いま、おどかす",
-  "hauntedScares": "{count, plural, other{びっくり {count}回}}"
+  "hauntedScares": "{count, plural, other{びっくり {count}回}}",
+  "linkRitual": "おやすみの儀式を開く",
+  "linkRoutines": "したくリストを開く"
 }

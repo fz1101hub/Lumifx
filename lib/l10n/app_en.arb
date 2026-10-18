@@ -4127,5 +4127,13 @@
         "type": "int"
       }
     }
+  },
+  "linkRitual": "Open the bedtime ritual",
+  "@linkRitual": {
+    "description": "A ready-made link that opens the bedtime ritual"
+  },
+  "linkRoutines": "Open the routines",
+  "@linkRoutines": {
+    "description": "A ready-made link that opens the picture routines"
   }
 }

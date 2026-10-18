@@ -1035,5 +1035,7 @@
   "hauntedArm": "Empezar la fiesta",
   "hauntedArmed": "Esperando a que alguien pase…",
   "hauntedScare": "Asustar ahora",
-  "hauntedScares": "{count, plural, =0{Todavía ningún susto} =1{Un susto} other{{count} sustos}}"
+  "hauntedScares": "{count, plural, =0{Todavía ningún susto} =1{Un susto} other{{count} sustos}}",
+  "linkRitual": "Abrir el ritual de buenas noches",
+  "linkRoutines": "Abrir las rutinas"
 }
