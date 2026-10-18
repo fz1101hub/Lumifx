@@ -4135,5 +4135,17 @@
   "linkRoutines": "Open the routines",
   "@linkRoutines": {
     "description": "A ready-made link that opens the picture routines"
+  },
+  "pianoRecord": "Record",
+  "@pianoRecord": {
+    "description": "Light piano: start recording what is played"
+  },
+  "pianoStopRecording": "Stop recording",
+  "@pianoStopRecording": {
+    "description": "Light piano: stop recording"
+  },
+  "pianoPlayBack": "Play it back",
+  "@pianoPlayBack": {
+    "description": "Light piano: play back what was recorded"
   }
 }

@@ -28,6 +28,50 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
   int? _pressed;
   var _missed = false;
 
+  /// What was played while recording: when, and which key.
+  final _recorded = <(Duration, int)>[];
+  Stopwatch? _recording;
+  var _playingBack = false;
+
+  /// Bumped to stop a play-back.
+  var _generation = 0;
+
+  @override
+  void dispose() {
+    _generation++;
+    super.dispose();
+  }
+
+  void _toggleRecording() {
+    setState(() {
+      if (_recording != null) {
+        _recording = null;
+      } else {
+        _recorded.clear();
+        _recording = Stopwatch()..start();
+      }
+    });
+  }
+
+  /// Plays back what was recorded, with its own timing.
+  Future<void> _playBack() async {
+    final generation = ++_generation;
+    setState(() => _playingBack = true);
+    var at = Duration.zero;
+    for (final (time, key) in [..._recorded]) {
+      await Future<void>.delayed(time - at);
+      at = time;
+      if (!mounted || generation != _generation) {
+        return;
+      }
+      unawaited(_press(key, replay: true));
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    if (mounted && generation == _generation) {
+      setState(() => _playingBack = false);
+    }
+  }
+
   Future<void> _ensurePlaying(PlaybackController playback) async {
     final background = pianoBackground(context.l10n.piano);
     if (playback.effect.id != background.id ||
@@ -41,9 +85,13 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
     }
   }
 
-  Future<void> _press(int index) async {
+  Future<void> _press(int index, {bool replay = false}) async {
     final playback = AppScope.of(context).playback;
     final key = pianoKeys[index];
+    final recording = _recording;
+    if (!replay && recording != null && _recorded.length < 400) {
+      _recorded.add((recording.elapsed, index));
+    }
     unawaited(HapticFeedback.selectionClick());
     unawaited(playback.note(key.midi, Instrument.musicBox));
     final lesson = _lesson;
@@ -109,11 +157,43 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
                   selected: {lesson != null},
                   onSelectionChanged: (learn) => setState(() {
                     _missed = false;
+                    _recording = null;
+                    _generation++;
+                    _playingBack = false;
                     _lesson =
                         learn.first ? PianoLesson(pianoSongs.first) : null;
                   }),
                 ),
                 const SizedBox(height: 12),
+                if (lesson == null)
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 12,
+                    children: [
+                      OutlinedButton.icon(
+                        onPressed: _playingBack ? null : _toggleRecording,
+                        icon: Icon(
+                          _recording == null
+                              ? Icons.fiber_manual_record
+                              : Icons.stop,
+                          color: _recording == null ? Colors.red : null,
+                        ),
+                        label: Text(_recording == null
+                            ? l10n.pianoRecord
+                            : l10n.pianoStopRecording),
+                      ),
+                      FilledButton.tonalIcon(
+                        onPressed: _recorded.isEmpty ||
+                                _recording != null ||
+                                _playingBack
+                            ? null
+                            : _playBack,
+                        icon: const Icon(Icons.play_arrow),
+                        label: Text(l10n.pianoPlayBack),
+                      ),
+                    ],
+                  ),
+                if (lesson == null) const SizedBox(height: 12),
                 if (lesson != null) ...[
                   Wrap(
                     spacing: 8,

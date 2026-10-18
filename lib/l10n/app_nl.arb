@@ -1037,5 +1037,8 @@
   "hauntedScare": "Nu laten schrikken",
   "hauntedScares": "{count, plural, =0{Nog geen schrik} =1{Eén schrik} other{{count} keer geschrokken}}",
   "linkRitual": "Slaapritueel openen",
-  "linkRoutines": "Routines openen"
+  "linkRoutines": "Routines openen",
+  "pianoRecord": "Opnemen",
+  "pianoStopRecording": "Opname stoppen",
+  "pianoPlayBack": "Terugspelen"
 }

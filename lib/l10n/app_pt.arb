@@ -1037,5 +1037,8 @@
   "hauntedScare": "Assustar agora",
   "hauntedScares": "{count, plural, =0{Nenhum susto ainda} =1{Um susto} other{{count} sustos}}",
   "linkRitual": "Abrir o ritual da hora de dormir",
-  "linkRoutines": "Abrir as rotinas"
+  "linkRoutines": "Abrir as rotinas",
+  "pianoRecord": "Gravar",
+  "pianoStopRecording": "Parar a gravação",
+  "pianoPlayBack": "Ouvir de novo"
 }

@@ -38,6 +38,7 @@ import 'package:lumifx/src/core/hue/hue_house.dart';
 import 'package:lumifx/src/core/live_activity.dart';
 import 'package:lumifx/src/core/nfc/nfc_writer.dart';
 import 'package:lumifx/src/core/notification_lights_platform.dart';
+import 'package:lumifx/src/core/sound/sound_player.dart';
 import 'package:lumifx/src/core/speech/speaker.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray.dart';
 import 'package:lumifx/src/features/cinema/cinema.dart';
@@ -72,6 +73,7 @@ import 'package:lumifx/src/features/library/sharing.dart';
 import 'package:lumifx/src/features/library/story_editor.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_sound_player.dart';
 import '../support/fake_background_playback.dart';
 import '../support/fake_home_widgets.dart';
 import '../support/fake_shortcuts.dart';
@@ -232,6 +234,7 @@ Future<void> _pumpApp(
   NfcWriter nfc = const NoNfcWriter(),
   NotificationLightsPlatform notificationLights = const NoNotificationLights(),
   LiveActivity liveActivity = const NoLiveActivity(),
+  SoundPlayer? sound,
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -254,6 +257,7 @@ Future<void> _pumpApp(
       nfc: nfc,
       notificationLights: notificationLights,
       liveActivity: liveActivity,
+      sound: sound ?? const NoSoundPlayer(),
     ),
   );
 }
@@ -1503,6 +1507,33 @@ void main() {
     await tester.tap(key(first));
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.textContaining('1 of'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light piano records a tune and plays it back',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const LightPianoScreen())));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
+    await tester.tap(find.text('Record'));
+    await tester.pump();
+    for (final note in ['E', 'G']) {
+      await tester.tap(find.bySemanticsLabel(note));
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+    await tester.tap(find.text('Stop recording'));
+    await tester.pump();
+    expect(
+        sound.calls.where((c) => c.startsWith('note')), ['note 64', 'note 67']);
+    await tester.tap(find.text('Play it back'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(sound.calls.where((c) => c.startsWith('note')),
+        ['note 64', 'note 67', 'note 64', 'note 67']);
     await playback.stop();
     await tester.pumpAndSettle();
   });

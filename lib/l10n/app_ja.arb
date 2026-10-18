@@ -1037,5 +1037,8 @@
   "hauntedScare": "いま、おどかす",
   "hauntedScares": "{count, plural, other{びっくり {count}回}}",
   "linkRitual": "おやすみの儀式を開く",
-  "linkRoutines": "したくリストを開く"
+  "linkRoutines": "したくリストを開く",
+  "pianoRecord": "録音",
+  "pianoStopRecording": "録音をやめる",
+  "pianoPlayBack": "再生"
 }

@@ -1037,5 +1037,8 @@
   "hauntedScare": "Spavento ora",
   "hauntedScares": "{count, plural, =0{Ancora nessuno spavento} =1{Uno spavento} other{{count} spaventi}}",
   "linkRitual": "Apri il rituale della nanna",
-  "linkRoutines": "Apri le routine"
+  "linkRoutines": "Apri le routine",
+  "pianoRecord": "Registra",
+  "pianoStopRecording": "Ferma la registrazione",
+  "pianoPlayBack": "Riascolta"
 }

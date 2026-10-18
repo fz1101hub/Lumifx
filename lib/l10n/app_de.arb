@@ -1037,5 +1037,8 @@
   "hauntedScare": "Jetzt erschrecken",
   "hauntedScares": "{count, plural, =0{Noch kein Schreck} =1{Ein Schreck} other{{count} Schrecken}}",
   "linkRitual": "Gute-Nacht-Ritual öffnen",
-  "linkRoutines": "Routinen öffnen"
+  "linkRoutines": "Routinen öffnen",
+  "pianoRecord": "Aufnehmen",
+  "pianoStopRecording": "Aufnahme beenden",
+  "pianoPlayBack": "Abspielen"
 }

@@ -1037,5 +1037,8 @@
   "hauntedScare": "Faire peur",
   "hauntedScares": "{count, plural, =0{Pas encore de frayeur} =1{Une frayeur} other{{count} frayeurs}}",
   "linkRitual": "Ouvrir le rituel du coucher",
-  "linkRoutines": "Ouvrir les routines"
+  "linkRoutines": "Ouvrir les routines",
+  "pianoRecord": "Enregistrer",
+  "pianoStopRecording": "Arrêter l'enregistrement",
+  "pianoPlayBack": "Réécouter"
 }
