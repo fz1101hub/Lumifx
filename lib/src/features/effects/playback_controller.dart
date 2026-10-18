@@ -1085,6 +1085,7 @@ class PlaybackController extends ChangeNotifier {
     if (_soundPlaying) {
       unawaited(_sound.pause());
     }
+    unawaited(_sound.stopCues());
     _setStatus(PlaybackStatus.paused);
     // No reason to keep the microphone open or the screen on while paused.
     unawaited(_screenWake.keepOn(false));
@@ -1125,6 +1126,8 @@ class PlaybackController extends ChangeNotifier {
     _cancelSleepTimer();
     _endPlaylist();
     _stopSound();
+    // A piano note or a clap of thunder still ringing stops with the rest.
+    unawaited(_sound.stopCues());
     final player = _player;
     final commands = _restore;
     _player = null;
@@ -1476,6 +1479,10 @@ class PlaybackController extends ChangeNotifier {
 
   /// Sound switched on or off, or its volume changed, while playing.
   void _applySoundPreferences() {
+    if (!_preferences.soundOn) {
+      // Even with no soundscape playing (the piano's notes).
+      unawaited(_sound.stopCues());
+    }
     final player = _player;
     if (player == null || _status == PlaybackStatus.starting) {
       return;
@@ -1518,6 +1525,7 @@ class PlaybackController extends ChangeNotifier {
     _endWatch?.cancel();
     _endPlaylist();
     _stopSound();
+    unawaited(_sound.stopCues());
     _bridge.removeListener(_onBridgeChanged);
     _preferences.removeListener(_onPreferencesChanged);
     final music = _music;

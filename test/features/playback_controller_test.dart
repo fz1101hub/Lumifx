@@ -11,6 +11,7 @@ import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/screen_wake.dart';
+import 'package:lumifx/src/core/sound/melody.dart';
 import 'package:lumifx/src/core/sound/melodies.dart';
 import 'package:lumifx/src/core/effects/effect.dart';
 import 'package:lumifx/src/core/effects/effect_event.dart';
@@ -1044,6 +1045,32 @@ void main() {
 
     await controller.stop();
     expect(sound.calls.last, 'stop');
+    controller.dispose();
+  });
+
+  test('notes and thunder on top stop with the effect or the sound', () async {
+    final sound = FakeSoundPlayer();
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final (controller, _, _) =
+        await _setUp(sound: sound, preferences: preferences);
+    await controller.changeTarget(null);
+    await controller.start();
+    await controller.note(60, Instrument.musicBox);
+    expect(sound.calls.last, 'note 60');
+    var stops = sound.cueStops;
+    await controller.pause();
+    expect(sound.cueStops, greaterThan(stops),
+        reason: 'paused, nothing rings on');
+    await controller.resume();
+    stops = sound.cueStops;
+    await controller.stop();
+    expect(sound.cueStops, greaterThan(stops),
+        reason: 'stopped, nothing rings on');
+
+    // The piano plays no soundscape: switching sound off still silences it.
+    stops = sound.cueStops;
+    await preferences.setSoundOn(false);
+    expect(sound.cueStops, greaterThan(stops));
     controller.dispose();
   });
 
