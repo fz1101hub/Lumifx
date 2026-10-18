@@ -47,7 +47,9 @@ class _TimersScreenState extends State<TimersScreen> {
     } else if (playback.status == PlaybackStatus.paused) {
       await playback.resume();
     }
-    if (!mounted || playback.effect.id != effect.id) {
+    if (!mounted ||
+        playback.effect.id != effect.id ||
+        playback.status == PlaybackStatus.idle) {
       return;
     }
     await Navigator.of(context).push(MaterialPageRoute<void>(
@@ -81,7 +83,9 @@ class _TimersScreenState extends State<TimersScreen> {
     } else if (playback.status == PlaybackStatus.paused) {
       await playback.resume();
     }
-    if (!mounted || playback.effect.id != effect.id) {
+    if (!mounted ||
+        playback.effect.id != effect.id ||
+        playback.status == PlaybackStatus.idle) {
       return;
     }
     await Navigator.of(context).push(MaterialPageRoute<void>(

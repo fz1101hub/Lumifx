@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -1145,12 +1146,24 @@ void main() {
     expect(find.text('0 of 6 done'), findsOneWidget);
     final playback =
         AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+    // A screen reader can tick a step too.
+    expect(
+        tester
+            .getSemantics(find.bySemanticsLabel('Get up'))
+            .getSemanticsData()
+            .hasAction(SemanticsAction.tap),
+        isTrue);
+    // A sleep timer set before waits while the timer runs.
+    playback.setSleepTimer(const Duration(minutes: 30));
 
     await tester.tap(find.byTooltip('Two-minute timer'));
     await tester.pump();
+    // One timer at a time: the button goes as soon as it is tapped.
+    expect(find.byTooltip('Two-minute timer'), findsNothing);
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(TimerRunningScreen), findsOneWidget);
     expect(sound.playing?.melody?.id, 'twinkle');
+    expect(playback.sleepTimer, isNull);
 
     // The time is up: the step is done.
     playback.player!.advance(playback.effect.cycleLength);
@@ -1161,6 +1174,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('1 of 6 done'), findsOneWidget);
     expect(find.byTooltip('Two-minute timer'), findsNothing);
+    expect(playback.sleepTimer, const Duration(minutes: 30));
+    playback.setSleepTimer(null);
     await playback.stop();
     await tester.pumpAndSettle();
   });

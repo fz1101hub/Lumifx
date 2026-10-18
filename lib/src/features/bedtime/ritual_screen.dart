@@ -162,10 +162,12 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
 
   /// Said aloud too, when stories are read aloud.
   void _sayGoodnight() {
+    // Closed while the guardian light was starting.
+    if (!mounted) {
+      return;
+    }
     final scope = AppScope.of(context);
-    if (!mounted ||
-        !scope.preferences.readAloud ||
-        !scope.preferences.soundOn) {
+    if (!scope.preferences.readAloud || !scope.preferences.soundOn) {
       return;
     }
     final text = _goodnight(context.l10n);

@@ -430,7 +430,11 @@ class _RoutineScreenState extends State<RoutineScreen> {
     );
   }
 
-  Future<void> _tap(RoutineItem step) async {
+  Future<void> _tap(RoutineItem step, {bool fromHelper = false}) async {
+    if (_helperOpen && !fromHelper) {
+      // A timer or the story maker is opening: one thing at a time.
+      return;
+    }
     final scope = AppScope.of(context);
     final l10n = context.l10n;
     unawaited(HapticFeedback.selectionClick());
@@ -452,15 +456,24 @@ class _RoutineScreenState extends State<RoutineScreen> {
     await _show();
   }
 
-  /// Opens [screen] for [step], after [before]; the step is done when an
-  /// effect that [counts] plays to its end meanwhile.
+  /// True while a timer or the story maker opens or is open.
+  var _helperOpen = false;
+
+  /// Opens [screen] for [step], once [before] says it is ready; the step
+  /// is done when an effect that [counts] plays to its end meanwhile. A
+  /// sleep timer set earlier waits meanwhile, so it cannot cut the timer
+  /// or the story short.
   Future<void> _doWith(
     RoutineItem step,
     Widget screen,
     bool Function(LightingEffect) counts, {
-    Future<void> Function()? before,
+    Future<bool> Function()? before,
   }) async {
+    if (_helperOpen) {
+      return;
+    }
     final playback = AppScope.of(context).playback;
+    final sleep = playback.sleepTimer;
     var finished = false;
     final notices = playback.notices.listen((notice) {
       if (notice.kind == PlaybackNoticeKind.finished &&
@@ -468,9 +481,11 @@ class _RoutineScreenState extends State<RoutineScreen> {
         finished = true;
       }
     });
+    setState(() => _helperOpen = true);
     try {
-      await before?.call();
-      if (!mounted) {
+      playback.setSleepTimer(null);
+      final ready = await before?.call() ?? true;
+      if (!mounted || !ready) {
         return;
       }
       await Navigator.of(context)
@@ -478,12 +493,18 @@ class _RoutineScreenState extends State<RoutineScreen> {
     } finally {
       // Not awaited: a broadcast subscription may take its time to go.
       unawaited(notices.cancel());
+      if (sleep != null) {
+        playback.setSleepTimer(sleep);
+      }
+      if (mounted) {
+        setState(() => _helperOpen = false);
+      }
     }
     if (!mounted) {
       return;
     }
     if (finished && !_done.contains(step)) {
-      await _tap(step);
+      await _tap(step, fromHelper: true);
     } else {
       await _show();
     }
@@ -506,8 +527,10 @@ class _RoutineScreenState extends State<RoutineScreen> {
       ),
       (playing) => playing.id == effect.id,
       before: () async {
-        playback.setSleepTimer(null);
         await _play(playback, effect);
+        // Not started (no bridge, the room gone): no timer to show.
+        return playback.effect.id == effect.id &&
+            playback.status != PlaybackStatus.idle;
       },
     );
   }
@@ -522,7 +545,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
 
   /// The button a step's tile offers, if any.
   _StepAction? _actionOf(RoutineItem step) {
-    if (_done.contains(step)) {
+    if (_done.contains(step) || _helperOpen) {
       return null;
     }
     final l10n = context.l10n;
@@ -645,6 +668,7 @@ class _StepTile extends StatelessWidget {
       button: true,
       checked: done,
       label: label,
+      onTap: onTap,
       excludeSemantics: true,
       child: Material(
         color: done
@@ -676,21 +700,21 @@ class _StepTile extends StatelessWidget {
       ),
     );
     final action = this.action;
-    if (action == null) {
-      return tile;
-    }
+    // Always a Stack, so the tile keeps its place (and focus) when the
+    // button goes.
     return Stack(
       children: [
         Positioned.fill(child: tile),
-        Positioned(
-          top: 4,
-          right: 4,
-          child: IconButton.filledTonal(
-            tooltip: action.tooltip,
-            onPressed: action.onPressed,
-            icon: Icon(action.icon),
+        if (action != null)
+          Positioned(
+            top: 4,
+            right: 4,
+            child: IconButton.filledTonal(
+              tooltip: action.tooltip,
+              onPressed: action.onPressed,
+              icon: Icon(action.icon),
+            ),
           ),
-        ),
       ],
     );
   }
