@@ -30,6 +30,9 @@ class _NapLightScreenState extends State<NapLightScreen> {
 
   Future<void> _start() async {
     final playback = AppScope.of(context).playback;
+    // A sleep timer left by a lullaby would switch the lamps off before
+    // they turn green.
+    playback.setSleepTimer(null);
     await playback.switchEffect(
         NapLight.effect(context.l10n.napLight, Duration(minutes: _minutes)));
     if (playback.status == PlaybackStatus.idle) {

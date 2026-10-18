@@ -1326,6 +1326,15 @@ void main() {
     final (a, b) = quiz.paints;
     expect(find.text('What do ${a.word('en')} and ${b.word('en')} make?'),
         findsOneWidget);
+    // The two paints are shown, not faded as if they could not be used.
+    expect(
+        tester
+            .widget<Opacity>(find
+                .ancestor(
+                    of: find.text(a.word('en')), matching: find.byType(Opacity))
+                .first)
+            .opacity,
+        1);
     final wrong = quiz.choices.firstWhere((c) => c != quiz.target);
     await tester.tap(find.text(wrong.word('en')));
     await tester.pump();
@@ -1351,12 +1360,15 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('20 min'));
     await tester.pump();
+    final playback =
+        AppScope.of(tester.element(find.byType(NapLightScreen))).playback;
+    // Left by a lullaby earlier: it must not switch the nap light off.
+    playback.setSleepTimer(const Duration(minutes: 3));
     await tester.tap(find.text('Start the nap'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
-    final playback =
-        AppScope.of(tester.element(find.byType(NapLightScreen))).playback;
     expect(NapLight.restOf(playback.effect), const Duration(minutes: 20));
+    expect(playback.sleepTimer, isNull);
     expect(find.text('Rest until the light turns green'), findsOneWidget);
     expect(find.text('Green in 20 minutes'), findsOneWidget);
 
@@ -1411,6 +1423,8 @@ void main() {
     expect(NoiseZone.of(playback.effect), NoiseZone.tooLoud);
     expect(find.text('Too loud!'), findsOneWidget);
     expect(find.text('Too loud once'), findsOneWidget);
+    expect(find.byType(MiniPlayer), findsNothing,
+        reason: 'the noise light plays only on its own screen');
 
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 2));
@@ -1418,10 +1432,30 @@ void main() {
     expect(playback.isPlaying, isFalse);
     expect(find.text('Start listening'), findsOneWidget);
 
-    // Leaving the screen stops listening, and the lamps.
+    // Something else stopping the lamps stops the listening too.
     await tester.tap(find.text('Start listening'));
     await tester.pump(const Duration(milliseconds: 500));
     expect(microphone.startCount, 2);
+    await playback.stop();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(microphone.stopped, isTrue);
+    expect(find.text('Start listening'), findsOneWidget);
+
+    // So does LumiFX going to the background.
+    await tester.tap(find.text('Start listening'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(microphone.startCount, 3);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await tester.pump(const Duration(seconds: 1));
+    expect(microphone.stopped, isTrue);
+    expect(playback.isPlaying, isFalse);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+
+    // Leaving the screen stops listening, and the lamps.
+    await tester.tap(find.text('Start listening'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(microphone.startCount, 4);
     await tester.pageBack();
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));

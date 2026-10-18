@@ -1127,5 +1127,6 @@
   "pianoEchoYourTurn": "きみの番！",
   "pianoEchoBravo": "すごい！ひとつふえるよ",
   "pianoEchoOops": "あれれ？もういちどきいてね",
-  "pianoEchoNotes": "{count}音のメロディ"
+  "pianoEchoNotes": "{count}音のメロディ",
+  "noiseStopped": "マイクが止まりました。「聞きはじめる」をタップすると続けられます。"
 }

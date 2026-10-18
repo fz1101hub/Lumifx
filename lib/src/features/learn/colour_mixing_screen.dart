@@ -188,6 +188,9 @@ class _ColourMixingScreenState extends State<ColourMixingScreen> {
               onTap: first == null || mixOf(first, paint) != null
                   ? () => _pick(paint)
                   : null,
+              dimmed: first != null &&
+                  paint != first &&
+                  mixOf(first, paint) == null,
             ),
         ],
       ),
@@ -302,6 +305,7 @@ class _Pot extends StatelessWidget {
     required this.size,
     required this.selected,
     this.onTap,
+    this.dimmed = false,
   });
 
   final LearnColour colour;
@@ -310,19 +314,21 @@ class _Pot extends StatelessWidget {
   final bool selected;
   final VoidCallback? onTap;
 
+  /// Faded, as a paint that cannot be picked now.
+  final bool dimmed;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = LightColor.fromHex(colour.hex).toColor();
-    final enabled = onTap != null;
     return Semantics(
-      button: enabled,
-      enabled: enabled,
+      button: onTap != null,
+      enabled: !dimmed,
       selected: selected,
       label: label,
       excludeSemantics: true,
       child: Opacity(
-        opacity: enabled || selected ? 1 : 0.35,
+        opacity: dimmed ? 0.35 : 1,
         child: InkWell(
           customBorder: const StadiumBorder(),
           onTap: onTap,

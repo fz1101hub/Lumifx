@@ -1127,5 +1127,6 @@
   "pianoEchoYourTurn": "Du bist dran!",
   "pianoEchoBravo": "Bravo! Eine Note mehr",
   "pianoEchoOops": "Hoppla! Hör noch mal zu",
-  "pianoEchoNotes": "Eine Melodie mit {count} Tönen"
+  "pianoEchoNotes": "Eine Melodie mit {count} Tönen",
+  "noiseStopped": "Das Mikrofon hat gestoppt. Tippe auf Zuhören starten, um weiterzumachen."
 }

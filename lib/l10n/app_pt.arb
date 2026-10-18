@@ -1127,5 +1127,6 @@
   "pianoEchoYourTurn": "Sua vez!",
   "pianoEchoBravo": "Bravo! Mais uma nota",
   "pianoEchoOops": "Ops! Escute de novo",
-  "pianoEchoNotes": "Uma melodia de {count} notas"
+  "pianoEchoNotes": "Uma melodia de {count} notas",
+  "noiseStopped": "O microfone parou. Toque em Começar a ouvir para continuar."
 }

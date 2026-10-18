@@ -1127,5 +1127,6 @@
   "pianoEchoYourTurn": "À toi !",
   "pianoEchoBravo": "Bravo ! Une note de plus",
   "pianoEchoOops": "Oups ! Écoute encore",
-  "pianoEchoNotes": "Un air de {count} notes"
+  "pianoEchoNotes": "Un air de {count} notes",
+  "noiseStopped": "Le micro s'est arrêté. Touche Commencer à écouter pour continuer."
 }

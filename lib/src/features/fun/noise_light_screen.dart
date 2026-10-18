@@ -22,9 +22,11 @@ class NoiseLightScreen extends StatefulWidget {
   State<NoiseLightScreen> createState() => _NoiseLightScreenState();
 }
 
-class _NoiseLightScreenState extends State<NoiseLightScreen> {
+class _NoiseLightScreenState extends State<NoiseLightScreen>
+    with WidgetsBindingObserver {
   late AudioInput _microphone;
-  late PlaybackController _playback;
+  PlaybackController? _watched;
+  PlaybackController get _playback => _watched!;
   NoiseLimit? _chosen;
   NoiseWatch? _watch;
   StreamSubscription<Uint8List>? _listening;
@@ -32,12 +34,56 @@ class _NoiseLightScreenState extends State<NoiseLightScreen> {
   var _tooLoud = 0;
   var _disposed = false;
 
+  /// True while the lamps change zone, when the effect changes on purpose.
+  var _switching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final scope = AppScope.of(context);
     _microphone = scope.audioInput;
-    _playback = scope.playback;
+    if (!identical(_watched, scope.playback)) {
+      _watched?.removeListener(_onPlayback);
+      _watched = scope.playback..addListener(_onPlayback);
+    }
+  }
+
+  /// Something else took the lamps (a Hue button, a voice command, a
+  /// stop): the noise light stops listening.
+  void _onPlayback() {
+    if (_listening != null &&
+        !_switching &&
+        (_playback.status == PlaybackStatus.idle ||
+            NoiseZone.of(_playback.effect) == null)) {
+      unawaited(_stopListening());
+    }
+  }
+
+  /// Only while the screen is in front: the microphone is never on with
+  /// LumiFX in the background.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused && _listening != null) {
+      unawaited(_stopListening(stopLights: true));
+    }
+  }
+
+  /// The microphone stopped on its own (an error, another use of it).
+  void _lost() {
+    if (_listening == null) {
+      return;
+    }
+    unawaited(_stopListening(stopLights: true));
+    if (mounted && !_disposed) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(context.l10n.noiseStopped)));
+    }
   }
 
   /// The limit chosen here, else last time, else indoor voices.
@@ -50,17 +96,40 @@ class _NoiseLightScreenState extends State<NoiseLightScreen> {
   @override
   void dispose() {
     _disposed = true;
+    WidgetsBinding.instance.removeObserver(this);
+    _watched?.removeListener(_onPlayback);
     unawaited(_stopListening(stopLights: true));
     super.dispose();
   }
 
   Future<void> _show(NoiseZone zone) async {
-    await _playback.switchEffect(zone.effect(context.l10n.noiseLight));
-    if (_playback.status == PlaybackStatus.idle) {
-      await _playback.start();
-    } else if (_playback.status == PlaybackStatus.paused) {
-      await _playback.resume();
+    final playback = _playback;
+    final effect = zone.effect(context.l10n.noiseLight);
+    _switching = true;
+    try {
+      // A sleep timer left by a lullaby would switch the lamps off.
+      playback.setSleepTimer(null);
+      await playback.switchEffect(effect);
+      if (playback.status == PlaybackStatus.idle) {
+        await playback.start();
+      } else if (playback.status == PlaybackStatus.paused) {
+        await playback.resume();
+      }
+    } finally {
+      _switching = false;
     }
+  }
+
+  /// Stops the lamps if they still show the noise light.
+  void _stopLights() {
+    // Not while the screen is being taken down: stopping redraws whatever
+    // listens to the player.
+    final playback = _playback;
+    unawaited(Future.microtask(() {
+      if (NoiseZone.of(playback.effect) != null) {
+        return playback.stop();
+      }
+    }));
   }
 
   Future<void> _listen() async {
@@ -83,9 +152,14 @@ class _NoiseLightScreenState extends State<NoiseLightScreen> {
         limit: _limit,
       );
       await _show(NoiseZone.calm);
+      if (!mounted || _disposed) {
+        _stopLights();
+        return;
+      }
       final audio = await _microphone.start();
-      if (!mounted) {
+      if (!mounted || _disposed) {
         await _microphone.stop();
+        _stopLights();
         return;
       }
       setState(() {
@@ -105,7 +179,10 @@ class _NoiseLightScreenState extends State<NoiseLightScreen> {
             shown = watch.level;
             setState(() {});
           }
-        });
+        }, onError: (Object error) {
+          debugPrint('Noise light microphone: $error');
+          _lost();
+        }, onDone: _lost);
       });
     } on Object catch (error) {
       debugPrint('Noise light microphone: $error');
@@ -125,15 +202,8 @@ class _NoiseLightScreenState extends State<NoiseLightScreen> {
       unawaited(listening.cancel());
       await _microphone.stop();
     }
-    if (stopLights && NoiseZone.of(_playback.effect) != null) {
-      // Not while the screen is being taken down: stopping redraws
-      // whatever listens to the player.
-      final playback = _playback;
-      unawaited(Future.microtask(() {
-        if (NoiseZone.of(playback.effect) != null) {
-          return playback.stop();
-        }
-      }));
+    if (stopLights) {
+      _stopLights();
     }
     if (mounted && !_disposed) {
       setState(() {});

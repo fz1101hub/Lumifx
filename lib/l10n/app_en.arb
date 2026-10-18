@@ -4548,5 +4548,9 @@
         "type": "int"
       }
     }
+  },
+  "noiseStopped": "The microphone stopped. Tap Start listening to go on.",
+  "@noiseStopped": {
+    "description": "Noise light: the microphone stopped on its own (an error, another app took it)"
   }
 }
