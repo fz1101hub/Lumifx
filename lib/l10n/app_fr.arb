@@ -938,5 +938,20 @@
   "cinemaEnd": "Fin du film",
   "cinemaNowFilm": "Bon film",
   "cinemaNowIntermission": "Entracte : le moment de se dégourdir les jambes",
-  "cinemaNowEnd": "Les lumières reviennent"
+  "cinemaNowEnd": "Les lumières reviennent",
+  "nfcStickers": "Autocollants NFC",
+  "nfcStickersSubtitle": "Approche le téléphone d'un autocollant pour lancer un effet",
+  "nfcStickersDescription": "Écris un lien sur un autocollant NFC et place-le là où c'est pratique : près du lit pour le coucher, près du canapé pour la soirée film. Approcher le téléphone déverrouillé lance ce qu'il contient.",
+  "nfcWrite": "Écrire sur un autocollant",
+  "nfcHoldSticker": "Approche un autocollant du dos du téléphone",
+  "nfcWritten": "Autocollant prêt : approche le téléphone pour lancer",
+  "nfcReadOnly": "Cet autocollant est verrouillé et ne peut pas être écrit",
+  "nfcTooSmall": "Le lien ne tient pas sur cet autocollant",
+  "nfcNotNdef": "Cet autocollant ne peut pas contenir de lien",
+  "nfcFailed": "Écriture impossible : tiens l'autocollant immobile et réessaie",
+  "nfcOff": "Le NFC est désactivé",
+  "nfcOpenSettings": "Activer",
+  "nfcShortcuts": "Sur iPhone, utilise l'app Raccourcis : Automatisation, Nouvelle automatisation, NFC, scanne l'autocollant, puis ajoute l'action Ouvrir les URL avec un lien copié ici.",
+  "nfcUnavailable": "Ce téléphone ne peut pas écrire d'autocollants NFC : écris-les avec un autre téléphone ou copie un lien dans une app NFC.",
+  "linkBedtime": "Lancer le coucher"
 }

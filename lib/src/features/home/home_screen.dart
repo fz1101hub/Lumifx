@@ -19,6 +19,7 @@ import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
 import '../house/house_screen.dart';
 import '../kids/kids_mode.dart';
+import '../links/nfc_stickers_screen.dart';
 import '../music_box/music_box_screen.dart';
 import '../rooms/rooms_screen.dart';
 import '../routines/routines_screen.dart';
@@ -160,6 +161,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.weatherSubtitle, () => const WeatherScreen()),
                 _HomeEntry(Icons.movie_outlined, l10n.cinema,
                     l10n.cinemaSubtitle, () => const CinemaScreen()),
+                _HomeEntry(Icons.nfc, l10n.nfcStickers,
+                    l10n.nfcStickersSubtitle, () => const NfcStickersScreen()),
               ],
             ),
             if (bridge.isConnected)

@@ -33,12 +33,14 @@ import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/core/nfc/nfc_writer.dart';
 import 'package:lumifx/src/core/speech/speaker.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray.dart';
 import 'package:lumifx/src/features/cinema/cinema.dart';
 import 'package:lumifx/src/features/cinema/cinema_screen.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
+import 'package:lumifx/src/features/links/nfc_stickers_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
 import 'package:lumifx/src/features/learn/counting_screen.dart';
@@ -69,6 +71,34 @@ class _RecordingSpeaker implements Speaker {
 
   @override
   Future<void> stop() async {}
+}
+
+class _FakeNfc implements NfcWriter {
+  _FakeNfc({this.available = true, this.enabled = true});
+
+  final bool available;
+  bool enabled;
+  final written = <String>[];
+  var settingsOpened = false;
+  Completer<NfcWriteResult>? waiting;
+
+  @override
+  Future<bool> isAvailable() async => available;
+
+  @override
+  Future<bool> isEnabled() async => enabled;
+
+  @override
+  Future<NfcWriteResult> write(String uri) {
+    written.add(uri);
+    return (waiting = Completer<NfcWriteResult>()).future;
+  }
+
+  @override
+  Future<void> cancel() async => waiting?.complete(NfcWriteResult.cancelled);
+
+  @override
+  Future<void> openSettings() async => settingsOpened = true;
 }
 
 class _FakeDiscovery implements BridgeDiscovery {
@@ -145,6 +175,7 @@ Future<void> _pumpApp(
   WeatherService weather = const NoWeatherService(),
   DateTime Function()? clock,
   Speaker speaker = const NoSpeaker(),
+  NfcWriter nfc = const NoNfcWriter(),
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -164,6 +195,7 @@ Future<void> _pumpApp(
       weather: weather,
       clock: clock ?? DateTime.now,
       speaker: speaker,
+      nfc: nfc,
     ),
   );
 }
@@ -1182,6 +1214,72 @@ void main() {
     expect(playback.status, PlaybackStatus.idle,
         reason: 'then the room goes back to how it was');
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('a link is written on an NFC sticker', (tester) async {
+    final nfc = _FakeNfc();
+    await _pumpApp(tester, nfc: nfc);
+    await tester.scrollUntilVisible(find.text('NFC stickers'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('NFC stickers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('NFC stickers'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Start bedtime'), 200,
+        scrollable: find.byType(Scrollable).first);
+    final bedtime = find.ancestor(
+        of: find.text('Start bedtime'), matching: find.byType(ListTile));
+    await tester.tap(find.descendant(
+        of: bedtime, matching: find.byTooltip('Write on a sticker')));
+    await tester.pump();
+    expect(
+        find.text('Hold a sticker near the back of the phone'), findsOneWidget);
+    expect(nfc.written, ['lumifx://app/bedtime']);
+    // Cancelled: nothing to say.
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(
+        find.text('Hold a sticker near the back of the phone'), findsNothing);
+
+    await tester.tap(find.descendant(
+        of: bedtime, matching: find.byTooltip('Write on a sticker')));
+    await tester.pump();
+    nfc.waiting!.complete(NfcWriteResult.written);
+    await tester.pumpAndSettle();
+    expect(
+        find.text('Hold a sticker near the back of the phone'), findsNothing);
+    expect(find.text('Sticker ready: touch it with the phone to start'),
+        findsOneWidget);
+  });
+
+  testWidgets('NFC switched off, or missing, is explained', (tester) async {
+    final off = _FakeNfc(enabled: false);
+    await _pumpApp(tester, nfc: off);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const NfcStickersScreen())));
+    await tester.pumpAndSettle();
+    expect(find.text('NFC is off'), findsOneWidget);
+    expect(find.byTooltip('Write on a sticker'), findsNothing);
+    await tester.tap(find.text('Turn on'));
+    expect(off.settingsOpened, isTrue);
+    // Back from the settings with NFC on.
+    off.enabled = true;
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(find.text('NFC is off'), findsNothing);
+    expect(find.byTooltip('Write on a sticker'), findsWidgets);
+  });
+
+  testWidgets('a phone without NFC is told how else to do it', (tester) async {
+    await _pumpApp(tester, nfc: _FakeNfc(available: false));
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const NfcStickersScreen())));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('This phone cannot write NFC stickers'),
+        findsOneWidget);
+    expect(find.byTooltip('Write on a sticker'), findsNothing);
+    expect(find.byTooltip('Copy link'), findsWidgets);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

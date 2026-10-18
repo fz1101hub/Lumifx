@@ -12,6 +12,7 @@ import 'features/tv/camera_input.dart';
 import 'features/buttons/hue_button_listener.dart';
 import 'features/effects/read_aloud.dart';
 import 'core/photos/photo_picker.dart';
+import 'core/nfc/nfc_writer.dart';
 import 'core/speech/speaker.dart';
 import 'core/speech/voice_recordings.dart';
 import 'core/weather/weather.dart';
@@ -53,6 +54,7 @@ class LumiFxApp extends StatefulWidget {
     this.voices,
     this.voiceRecorder = const NoVoiceRecorder(),
     this.voicePlayer = const NoVoicePlayer(),
+    this.nfc = const NoNfcWriter(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -98,6 +100,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// Story lines in the user's own voice; none by default.
   final VoiceRecordings? voices;
+
+  /// Writes links on NFC stickers (Android).
+  final NfcWriter nfc;
   final VoiceRecorder voiceRecorder;
   final VoicePlayer voicePlayer;
 
@@ -375,6 +380,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       voiceRecorder: widget.voiceRecorder,
       voicePlayer: widget.voicePlayer,
       speaker: widget.speaker,
+      nfc: widget.nfc,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

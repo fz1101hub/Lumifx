@@ -938,5 +938,20 @@
   "cinemaEnd": "Fine del film",
   "cinemaNowFilm": "Buona visione",
   "cinemaNowIntermission": "Intervallo: è il momento di sgranchirsi le gambe",
-  "cinemaNowEnd": "Le luci stanno tornando"
+  "cinemaNowEnd": "Le luci stanno tornando",
+  "nfcStickers": "Adesivi NFC",
+  "nfcStickersSubtitle": "Avvicina il telefono a un adesivo per avviare un effetto",
+  "nfcStickersDescription": "Scrivi un link su un adesivo NFC e mettilo dove serve: vicino al letto per la nanna, vicino al divano per la serata film. Avvicinando il telefono sbloccato parte quello che c'è scritto.",
+  "nfcWrite": "Scrivi su un adesivo",
+  "nfcHoldSticker": "Avvicina un adesivo al retro del telefono",
+  "nfcWritten": "Adesivo pronto: avvicina il telefono per avviarlo",
+  "nfcReadOnly": "Questo adesivo è bloccato e non si può scrivere",
+  "nfcTooSmall": "Il link non entra in questo adesivo",
+  "nfcNotNdef": "Questo adesivo non può contenere link",
+  "nfcFailed": "Scrittura non riuscita: tieni fermo l'adesivo e riprova",
+  "nfcOff": "L'NFC è disattivato",
+  "nfcOpenSettings": "Attiva",
+  "nfcShortcuts": "Su iPhone usa l'app Comandi: Automazione, Nuova automazione, NFC, scansiona l'adesivo, poi aggiungi l'azione Apri URL con un link copiato da qui.",
+  "nfcUnavailable": "Questo telefono non può scrivere adesivi NFC: scrivili con un altro telefono o copia un link in un'app NFC.",
+  "linkBedtime": "Avvia la nanna"
 }

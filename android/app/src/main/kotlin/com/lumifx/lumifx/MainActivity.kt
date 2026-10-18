@@ -9,11 +9,13 @@ import org.json.JSONObject
 class MainActivity : FlutterActivity() {
     private var phoneAudio: PhoneAudioCapture? = null
     private var background: BackgroundPlaybackChannel? = null
+    private var nfc: NfcChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         phoneAudio = PhoneAudioCapture(this, flutterEngine.dartExecutor.binaryMessenger)
         background = BackgroundPlaybackChannel(this, flutterEngine.dartExecutor.binaryMessenger)
+        nfc = NfcChannel(this, flutterEngine.dartExecutor.binaryMessenger)
         // The home-screen widget's content: stored, then every widget redrawn.
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.lumifx/widgets")
             .setMethodCallHandler { call, result ->
@@ -41,6 +43,8 @@ class MainActivity : FlutterActivity() {
         phoneAudio = null
         background?.dispose()
         background = null
+        nfc?.dispose()
+        nfc = null
         super.onDestroy()
     }
 }

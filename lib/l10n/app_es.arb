@@ -938,5 +938,20 @@
   "cinemaEnd": "Fin de la película",
   "cinemaNowFilm": "Disfruta de la película",
   "cinemaNowIntermission": "Intermedio: hora de estirar las piernas",
-  "cinemaNowEnd": "Las luces están volviendo"
+  "cinemaNowEnd": "Las luces están volviendo",
+  "nfcStickers": "Pegatinas NFC",
+  "nfcStickersSubtitle": "Acerca el teléfono a una pegatina para iniciar un efecto",
+  "nfcStickersDescription": "Escribe un enlace en una pegatina NFC y ponla donde te venga bien: junto a la cama para la hora de dormir, junto al sofá para la noche de cine. Al acercar el teléfono desbloqueado se inicia lo que contiene.",
+  "nfcWrite": "Escribir en una pegatina",
+  "nfcHoldSticker": "Acerca una pegatina a la parte trasera del teléfono",
+  "nfcWritten": "Pegatina lista: acerca el teléfono para empezar",
+  "nfcReadOnly": "Esta pegatina está bloqueada y no se puede escribir",
+  "nfcTooSmall": "El enlace no cabe en esta pegatina",
+  "nfcNotNdef": "Esta pegatina no puede guardar enlaces",
+  "nfcFailed": "No se pudo escribir: mantén la pegatina quieta e inténtalo otra vez",
+  "nfcOff": "El NFC está desactivado",
+  "nfcOpenSettings": "Activar",
+  "nfcShortcuts": "En iPhone usa la app Atajos: Automatización, Nueva automatización, NFC, escanea la pegatina y añade la acción Abrir URL con un enlace copiado de aquí.",
+  "nfcUnavailable": "Este teléfono no puede escribir pegatinas NFC: escríbelas con otro teléfono o copia un enlace en una app de NFC.",
+  "linkBedtime": "Empezar la hora de dormir"
 }

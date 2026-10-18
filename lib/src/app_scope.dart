@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
+import 'core/nfc/nfc_writer.dart';
 import 'core/photos/photo_picker.dart';
 import 'core/speech/speaker.dart';
 import 'core/speech/voice_recordings.dart';
@@ -30,6 +31,7 @@ class AppScope extends InheritedWidget {
     this.voiceRecorder = const NoVoiceRecorder(),
     this.voicePlayer = const NoVoicePlayer(),
     this.speaker = const NoSpeaker(),
+    this.nfc = const NoNfcWriter(),
     required super.child,
     super.key,
   });
@@ -72,6 +74,9 @@ class AppScope extends InheritedWidget {
   /// The phone's voice, for words said aloud in the games.
   final Speaker speaker;
 
+  /// Writes links on NFC stickers.
+  final NfcWriter nfc;
+
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
     assert(scope != null, 'No AppScope found in context');
@@ -93,5 +98,6 @@ class AppScope extends InheritedWidget {
       voices != oldWidget.voices ||
       voiceRecorder != oldWidget.voiceRecorder ||
       voicePlayer != oldWidget.voicePlayer ||
-      speaker != oldWidget.speaker;
+      speaker != oldWidget.speaker ||
+      nfc != oldWidget.nfc;
 }

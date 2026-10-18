@@ -938,5 +938,20 @@
   "cinemaEnd": "Einde van de film",
   "cinemaNowFilm": "Veel kijkplezier",
   "cinemaNowIntermission": "Pauze: tijd om de benen te strekken",
-  "cinemaNowEnd": "Het licht komt terug"
+  "cinemaNowEnd": "Het licht komt terug",
+  "nfcStickers": "NFC-stickers",
+  "nfcStickersSubtitle": "Houd de telefoon bij een sticker om een effect te starten",
+  "nfcStickersDescription": "Schrijf een link op een NFC-sticker en plak hem waar het handig is: bij het bed voor bedtijd, bij de bank voor een filmavond. Houd de ontgrendelde telefoon erbij en wat erop staat begint.",
+  "nfcWrite": "Op sticker schrijven",
+  "nfcHoldSticker": "Houd een sticker tegen de achterkant van de telefoon",
+  "nfcWritten": "Sticker klaar: houd de telefoon erbij om te starten",
+  "nfcReadOnly": "Deze sticker is vergrendeld en kan niet worden beschreven",
+  "nfcTooSmall": "De link past niet op deze sticker",
+  "nfcNotNdef": "Deze sticker kan geen links bevatten",
+  "nfcFailed": "Schrijven mislukt: houd de sticker stil en probeer het opnieuw",
+  "nfcOff": "NFC staat uit",
+  "nfcOpenSettings": "Aanzetten",
+  "nfcShortcuts": "Op iPhone gebruik je de app Opdrachten: Automatisering, Nieuwe automatisering, NFC, scan de sticker en voeg de actie Open URL's toe met een link die je hier kopieert.",
+  "nfcUnavailable": "Deze telefoon kan geen NFC-stickers schrijven: schrijf ze met een andere telefoon of kopieer een link naar een NFC-app.",
+  "linkBedtime": "Bedtijd starten"
 }

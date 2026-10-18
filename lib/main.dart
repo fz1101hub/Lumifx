@@ -6,6 +6,7 @@ import 'src/core/audio/phone_audio_input.dart';
 import 'src/core/background_playback.dart';
 import 'src/core/sound/sound_player.dart';
 import 'src/features/tv/plugin_camera_input.dart';
+import 'src/core/nfc/nfc_writer.dart';
 import 'src/core/photos/photo_picker.dart';
 import 'src/core/speech/speaker.dart';
 import 'src/core/speech/voice_recordings.dart';
@@ -50,6 +51,7 @@ Future<void> main() async {
       voices: FileVoiceRecordings(),
       voiceRecorder: PluginVoiceRecorder(),
       voicePlayer: AudioplayersVoicePlayer(),
+      nfc: ChannelNfcWriter(),
     ),
   );
 }

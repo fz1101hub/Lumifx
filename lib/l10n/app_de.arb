@@ -938,5 +938,20 @@
   "cinemaEnd": "Ende des Films",
   "cinemaNowFilm": "Viel Spaß beim Film",
   "cinemaNowIntermission": "Pause: Zeit, die Beine zu vertreten",
-  "cinemaNowEnd": "Das Licht kommt zurück"
+  "cinemaNowEnd": "Das Licht kommt zurück",
+  "nfcStickers": "NFC-Sticker",
+  "nfcStickersSubtitle": "Telefon an einen Sticker halten, um einen Effekt zu starten",
+  "nfcStickersDescription": "Schreib einen Link auf einen NFC-Sticker und kleb ihn dorthin, wo er praktisch ist: ans Bett für die Schlafenszeit, ans Sofa für den Filmabend. Hältst du das entsperrte Telefon daran, startet, was darauf steht.",
+  "nfcWrite": "Auf Sticker schreiben",
+  "nfcHoldSticker": "Halte einen Sticker an die Rückseite des Telefons",
+  "nfcWritten": "Sticker fertig: Halte das Telefon daran, um zu starten",
+  "nfcReadOnly": "Dieser Sticker ist gesperrt und kann nicht beschrieben werden",
+  "nfcTooSmall": "Der Link passt nicht auf diesen Sticker",
+  "nfcNotNdef": "Dieser Sticker kann keine Links speichern",
+  "nfcFailed": "Schreiben fehlgeschlagen: Halte den Sticker ruhig und versuch es noch mal",
+  "nfcOff": "NFC ist aus",
+  "nfcOpenSettings": "Einschalten",
+  "nfcShortcuts": "Auf dem iPhone mit der App Kurzbefehle: Automation, Neue Automation, NFC, Sticker scannen, dann die Aktion URLs öffnen mit einem hier kopierten Link hinzufügen.",
+  "nfcUnavailable": "Dieses Telefon kann keine NFC-Sticker beschreiben: Beschreib sie mit einem anderen Telefon oder kopiere einen Link in eine NFC-App.",
+  "linkBedtime": "Schlafenszeit starten"
 }

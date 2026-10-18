@@ -938,5 +938,20 @@
   "cinemaEnd": "Fim do filme",
   "cinemaNowFilm": "Bom filme",
   "cinemaNowIntermission": "Intervalo: hora de esticar as pernas",
-  "cinemaNowEnd": "As luzes estão voltando"
+  "cinemaNowEnd": "As luzes estão voltando",
+  "nfcStickers": "Adesivos NFC",
+  "nfcStickersSubtitle": "Encoste o celular num adesivo para iniciar um efeito",
+  "nfcStickersDescription": "Grave um link num adesivo NFC e coloque-o onde for prático: perto da cama para a hora de dormir, perto do sofá para a noite de filme. Ao encostar o celular desbloqueado, começa o que está gravado.",
+  "nfcWrite": "Gravar num adesivo",
+  "nfcHoldSticker": "Aproxime um adesivo da parte de trás do celular",
+  "nfcWritten": "Adesivo pronto: encoste o celular para começar",
+  "nfcReadOnly": "Este adesivo está bloqueado e não pode ser gravado",
+  "nfcTooSmall": "O link não cabe neste adesivo",
+  "nfcNotNdef": "Este adesivo não pode guardar links",
+  "nfcFailed": "Não foi possível gravar: segure o adesivo parado e tente de novo",
+  "nfcOff": "O NFC está desligado",
+  "nfcOpenSettings": "Ativar",
+  "nfcShortcuts": "No iPhone, use o app Atalhos: Automação, Nova Automação, NFC, escaneie o adesivo e adicione a ação Abrir URLs com um link copiado daqui.",
+  "nfcUnavailable": "Este celular não grava adesivos NFC: grave-os com outro celular ou copie um link para um app de NFC.",
+  "linkBedtime": "Começar a hora de dormir"
 }

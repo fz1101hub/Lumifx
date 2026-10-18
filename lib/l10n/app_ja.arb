@@ -938,5 +938,20 @@
   "cinemaEnd": "映画のおわり",
   "cinemaNowFilm": "映画をたのしんでね",
   "cinemaNowIntermission": "休憩：ちょっと体をのばそう",
-  "cinemaNowEnd": "明かりがもどってきます"
+  "cinemaNowEnd": "明かりがもどってきます",
+  "nfcStickers": "NFCシール",
+  "nfcStickersSubtitle": "スマートフォンをシールにかざしてエフェクトを開始",
+  "nfcStickersDescription": "NFCシールにリンクを書きこんで、便利な場所にはりましょう。ベッドのそばにはおやすみ用、ソファのそばには映画用。ロックを解除したスマートフォンをかざすと始まります。",
+  "nfcWrite": "シールに書きこむ",
+  "nfcHoldSticker": "スマートフォンの背面にシールを近づけてください",
+  "nfcWritten": "シールの準備ができました。かざすと始まります",
+  "nfcReadOnly": "このシールはロックされていて書きこめません",
+  "nfcTooSmall": "このシールにはリンクが入りきりません",
+  "nfcNotNdef": "このシールにはリンクを保存できません",
+  "nfcFailed": "書きこめませんでした。シールを動かさずにもういちど試してください",
+  "nfcOff": "NFCがオフです",
+  "nfcOpenSettings": "オンにする",
+  "nfcShortcuts": "iPhoneでは「ショートカット」アプリを使います。オートメーション、新規オートメーション、NFCでシールを読み取り、ここでコピーしたリンクで「URLを開く」アクションを追加します。",
+  "nfcUnavailable": "このスマートフォンではNFCシールに書きこめません。別のスマートフォンを使うか、リンクをNFCアプリにコピーしてください。",
+  "linkBedtime": "おやすみを始める"
 }

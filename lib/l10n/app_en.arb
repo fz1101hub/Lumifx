@@ -3680,5 +3680,65 @@
   "cinemaNowEnd": "The lights are coming back",
   "@cinemaNowEnd": {
     "description": "Cinema mode status: the lights are coming back"
+  },
+  "nfcStickers": "NFC stickers",
+  "@nfcStickers": {
+    "description": "Home entry: NFC stickers that start an effect when the phone touches them"
+  },
+  "nfcStickersSubtitle": "Touch a sticker with the phone to start an effect",
+  "@nfcStickersSubtitle": {
+    "description": "Subtitle of NFC stickers"
+  },
+  "nfcStickersDescription": "Write a link on an NFC sticker and put it where it is handy: by the bed for bedtime, by the sofa for a film night. Touching it with the unlocked phone starts what it says.",
+  "@nfcStickersDescription": {
+    "description": "Explains NFC stickers"
+  },
+  "nfcWrite": "Write on a sticker",
+  "@nfcWrite": {
+    "description": "Button: write this link on an NFC sticker"
+  },
+  "nfcHoldSticker": "Hold a sticker near the back of the phone",
+  "@nfcHoldSticker": {
+    "description": "Waiting for an NFC sticker to write"
+  },
+  "nfcWritten": "Sticker ready: touch it with the phone to start",
+  "@nfcWritten": {
+    "description": "The NFC sticker was written"
+  },
+  "nfcReadOnly": "This sticker is locked and cannot be written",
+  "@nfcReadOnly": {
+    "description": "The NFC sticker is locked"
+  },
+  "nfcTooSmall": "The link does not fit on this sticker",
+  "@nfcTooSmall": {
+    "description": "The link does not fit on the NFC sticker"
+  },
+  "nfcNotNdef": "This sticker cannot hold links",
+  "@nfcNotNdef": {
+    "description": "The NFC tag cannot hold links"
+  },
+  "nfcFailed": "Could not write: hold the sticker still and try again",
+  "@nfcFailed": {
+    "description": "Writing the NFC sticker failed"
+  },
+  "nfcOff": "NFC is off",
+  "@nfcOff": {
+    "description": "NFC is switched off on the phone"
+  },
+  "nfcOpenSettings": "Turn on",
+  "@nfcOpenSettings": {
+    "description": "Button: open the NFC settings"
+  },
+  "nfcShortcuts": "On iPhone, use the Shortcuts app: Automation, New Automation, NFC, scan the sticker, then add the Open URLs action with a link copied from here.",
+  "@nfcShortcuts": {
+    "description": "iPhone: how to make an NFC sticker open a link with the Shortcuts app"
+  },
+  "nfcUnavailable": "This phone cannot write NFC stickers: write them with another phone, or copy a link into an NFC app.",
+  "@nfcUnavailable": {
+    "description": "This Android phone cannot write NFC stickers"
+  },
+  "linkBedtime": "Start bedtime",
+  "@linkBedtime": {
+    "description": "A ready-made link that starts bedtime"
   }
 }
