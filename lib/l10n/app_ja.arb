@@ -1048,5 +1048,7 @@
   "morseFlashAgain": "もういちど光らせる",
   "morseWhichLetter": "どの文字だった？",
   "routineAddStep": "ステップを追加",
-  "routineStepName": "やること"
+  "routineStepName": "やること",
+  "storyMakerSave": "マイストーリーに保存",
+  "storyMakerSaved": "マイストーリーに保存しました"
 }

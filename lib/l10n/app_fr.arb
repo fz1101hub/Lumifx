@@ -1048,5 +1048,7 @@
   "morseFlashAgain": "Recommencer",
   "morseWhichLetter": "C'était quelle lettre ?",
   "routineAddStep": "Ajouter une étape",
-  "routineStepName": "Quoi faire"
+  "routineStepName": "Quoi faire",
+  "storyMakerSave": "Garder dans Mes histoires",
+  "storyMakerSaved": "Gardée dans Mes histoires"
 }

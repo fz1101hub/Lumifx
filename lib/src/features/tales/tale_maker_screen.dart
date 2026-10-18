@@ -288,6 +288,20 @@ class _TaleMakerScreenState extends State<TaleMakerScreen> {
                   label: Text(l10n.storyMakerAnother),
                 ),
                 OutlinedButton.icon(
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    await AppScope.of(context)
+                        .preferences
+                        .saveUserStory(_tale.toUserStory(l10n));
+                    messenger
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                          SnackBar(content: Text(l10n.storyMakerSaved)));
+                  },
+                  icon: const Icon(Icons.bookmark_add_outlined),
+                  label: Text(l10n.storyMakerSave),
+                ),
+                OutlinedButton.icon(
                   onPressed: () => setState(() => _effect = null),
                   icon: const Icon(Icons.tune),
                   label: Text(l10n.storyMaker),

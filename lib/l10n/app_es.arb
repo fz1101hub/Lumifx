@@ -1048,5 +1048,7 @@
   "morseFlashAgain": "Parpadear otra vez",
   "morseWhichLetter": "¿Qué letra era?",
   "routineAddStep": "Añadir un paso",
-  "routineStepName": "Qué hacer"
+  "routineStepName": "Qué hacer",
+  "storyMakerSave": "Guardar en Mis cuentos",
+  "storyMakerSaved": "Guardado en Mis cuentos"
 }

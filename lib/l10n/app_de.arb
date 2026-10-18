@@ -1048,5 +1048,7 @@
   "morseFlashAgain": "Noch mal blinken",
   "morseWhichLetter": "Welcher Buchstabe war es?",
   "routineAddStep": "Schritt hinzufügen",
-  "routineStepName": "Was zu tun ist"
+  "routineStepName": "Was zu tun ist",
+  "storyMakerSave": "In Meine Geschichten speichern",
+  "storyMakerSaved": "In Meine Geschichten gespeichert"
 }

@@ -4179,5 +4179,13 @@
   "routineStepName": "What to do",
   "@routineStepName": {
     "description": "Field: what the child does in the new step"
+  },
+  "storyMakerSave": "Save to My stories",
+  "@storyMakerSave": {
+    "description": "Button: keep the made-up story among the user's own stories"
+  },
+  "storyMakerSaved": "Saved in My stories",
+  "@storyMakerSaved": {
+    "description": "The made-up story was saved"
   }
 }

@@ -1111,6 +1111,16 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
     await tester.pump(const Duration(seconds: 1));
     expect(find.text('The end'), findsOneWidget);
+    await tester.tap(find.text('Save to My stories'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Saved in My stories'), findsOneWidget);
+    final saved = AppScope.of(tester.element(find.byType(TaleMakerScreen)))
+        .preferences
+        .userStories
+        .single;
+    expect(saved.name, 'The story of Sofia');
+    expect(saved.narration.first.$2, startsWith('Once upon a time'));
     await tester.tap(find.text('Another story'));
     await tester.pump(const Duration(milliseconds: 500));
     expect(playback.isPlaying, isTrue);

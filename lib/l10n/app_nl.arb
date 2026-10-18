@@ -1048,5 +1048,7 @@
   "morseFlashAgain": "Nog een keer",
   "morseWhichLetter": "Welke letter was het?",
   "routineAddStep": "Stap toevoegen",
-  "routineStepName": "Wat te doen"
+  "routineStepName": "Wat te doen",
+  "storyMakerSave": "Bewaren in Mijn verhalen",
+  "storyMakerSaved": "Bewaard in Mijn verhalen"
 }
