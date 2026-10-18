@@ -162,9 +162,43 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
     }
   }
 
+  /// Plays the song being learnt, at its own pace, the keys glowing as
+  /// they play; then the lesson starts again from its first note.
+  Future<void> _listenToSong() async {
+    final lesson = _lesson;
+    if (lesson == null) {
+      return;
+    }
+    final generation = ++_generation;
+    setState(() => _playingBack = true);
+    var at = Duration.zero;
+    for (final (time, _, midi) in lesson.melody.timeline()) {
+      await Future<void>.delayed(time - at);
+      at = time;
+      if (!mounted || generation != _generation) {
+        return;
+      }
+      if (pianoKeyFor(midi) case final key?) {
+        unawaited(_press(key, replay: true));
+      }
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    if (mounted && generation == _generation) {
+      setState(() {
+        _playingBack = false;
+        _missed = false;
+        _lesson = PianoLesson(lesson.melody);
+      });
+    }
+  }
+
   Future<void> _press(int index, {bool replay = false}) async {
     if (_mode == _Mode.echo && !replay) {
       return _echoPress(index);
+    }
+    if (_mode == _Mode.learn && _playingBack && !replay) {
+      // Listening to the song first.
+      return;
     }
     final playback = AppScope.of(context).playback;
     final key = pianoKeys[index];
@@ -174,7 +208,7 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
     }
     unawaited(HapticFeedback.selectionClick());
     unawaited(playback.note(key.midi, Instrument.musicBox));
-    final lesson = _lesson;
+    final lesson = replay ? null : _lesson;
     setState(() {
       _pressed = index;
       if (lesson != null && !lesson.isFinished) {
@@ -304,6 +338,8 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
                           label: Text(MusicBoxScreen.nameOf(l10n, song)),
                           selected: lesson.melody.id == song.id,
                           onSelected: (_) => setState(() {
+                            _generation++;
+                            _playingBack = false;
                             _missed = false;
                             _lesson = PianoLesson(song);
                           }),
@@ -322,15 +358,24 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
                       style: theme.textTheme.titleMedium,
                     ),
                   ),
-                  if (lesson.isFinished)
-                    Center(
-                      child: TextButton.icon(
-                        onPressed: () => setState(
-                            () => _lesson = PianoLesson(lesson.melody)),
-                        icon: const Icon(Icons.replay),
-                        label: Text(l10n.gameAgain),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    children: [
+                      TextButton.icon(
+                        onPressed: _playingBack ? null : _listenToSong,
+                        icon: const Icon(Icons.hearing_outlined),
+                        label: Text(l10n.pianoListenFirst),
                       ),
-                    ),
+                      if (lesson.isFinished)
+                        TextButton.icon(
+                          onPressed: () => setState(
+                              () => _lesson = PianoLesson(lesson.melody)),
+                          icon: const Icon(Icons.replay),
+                          label: Text(l10n.gameAgain),
+                        ),
+                    ],
+                  ),
                   const SizedBox(height: 8),
                 ],
                 Expanded(

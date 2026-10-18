@@ -1131,5 +1131,7 @@
   "noiseStopped": "De microfoon is gestopt. Tik op Begin met luisteren om verder te gaan.",
   "routineTeethTimer": "Timer van twee minuten",
   "ritualGoodnightName": "Welterusten, {name}!",
-  "pianoEchoBest": "Record: {count} noten"
+  "pianoEchoBest": "Record: {count} noten",
+  "routineMakeStory": "Verzin een verhaal",
+  "pianoListenFirst": "Eerst luisteren"
 }

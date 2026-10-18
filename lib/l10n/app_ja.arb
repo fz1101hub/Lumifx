@@ -1131,5 +1131,7 @@
   "noiseStopped": "マイクが止まりました。「聞きはじめる」をタップすると続けられます。",
   "routineTeethTimer": "2分タイマー",
   "ritualGoodnightName": "おやすみ、{name}！",
-  "pianoEchoBest": "さいこう：{count}音"
+  "pianoEchoBest": "さいこう：{count}音",
+  "routineMakeStory": "おはなしをつくる",
+  "pianoListenFirst": "まずきく"
 }
