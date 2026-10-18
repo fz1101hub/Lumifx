@@ -14,7 +14,6 @@ import '../../core/photos/photo_picker.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../effects/light_color_ui.dart';
-import '../effects/playback_controller.dart';
 import '../effects/player_route.dart';
 import 'user_scene.dart';
 
@@ -71,12 +70,11 @@ class _SceneEditorState extends State<SceneEditor> {
       motion: _motion,
     );
     await scope.preferences.saveUserScene(scene);
-    // Playing it right now: show the edit on the lights at once.
+    // Chosen or playing right now: the edit is what shows on the lights
+    // (at once while playing, at the next Play otherwise).
     final playback = scope.playback;
     final edited = scope.library.byId(scene.id);
-    if (edited != null &&
-        playback.effect.id == scene.id &&
-        playback.status != PlaybackStatus.idle) {
+    if (edited != null && playback.effect.id == scene.id) {
       await playback.switchEffect(edited);
     }
     if (mounted) {

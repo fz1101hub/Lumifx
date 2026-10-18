@@ -22,6 +22,7 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/calm/breathing.dart';
 import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
+import 'package:lumifx/src/features/effects/effect_player_screen.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
 import 'package:lumifx/src/features/home/home_screen.dart';
@@ -2666,6 +2667,43 @@ void main() {
     expect(find.text('Reading nook'), findsNothing);
     expect(find.text('New scene'), findsOneWidget);
     expect(find.byType(MiniPlayer), findsNothing);
+  });
+
+  testWidgets('a scene edited before Play plays as edited', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New scene'));
+    await step();
+    await tester.enterText(find.byType(TextField), 'Reading corner');
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await step();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Reading corner'));
+    await step();
+
+    // Edited from its player, before it ever played.
+    await tester.tap(find.byTooltip('Edit scene'));
+    await step();
+    await tester.enterText(find.byType(TextField), 'Reading nook');
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await step();
+    await step();
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 300));
+    final playback =
+        AppScope.of(tester.element(find.byType(EffectPlayerScreen))).playback;
+    expect(playback.effect.name, 'Reading nook',
+        reason: 'the edit plays, not the scene as it was');
+    await playback.stop(restore: false);
+    await step();
   });
 
   testWidgets('a scene takes its colours from a photo', (tester) async {
