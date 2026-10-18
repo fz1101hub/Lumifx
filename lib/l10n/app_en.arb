@@ -4203,5 +4203,91 @@
   "melodyOdeToJoy": "Ode to Joy",
   "@melodyOdeToJoy": {
     "description": "Melody: Beethoven's Ode to Joy"
+  },
+  "talePenguin": "Penguin",
+  "@talePenguin": {
+    "description": "Story hero: a penguin"
+  },
+  "taleTurtle": "Turtle",
+  "@taleTurtle": {
+    "description": "Story hero: a turtle"
+  },
+  "talePenguinIntro": "a little penguin who loves to slide on its tummy",
+  "@talePenguinIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleTurtleIntro": "a slow, kind turtle with a shell full of shiny spots",
+  "@taleTurtleIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleJungle": "Jungle",
+  "@taleJungle": {
+    "description": "Story place: a jungle"
+  },
+  "taleIsland": "Little island",
+  "@taleIsland": {
+    "description": "Story place: a little island"
+  },
+  "taleJungleLine": "One evening {name} explores the jungle, where parrots chatter and leaves as big as umbrellas sway.",
+  "@taleJungleLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleIslandLine": "One evening {name} sails to a little island, where the waves whisper and the sand is warm.",
+  "@taleIslandLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTeddy": "A lost teddy",
+  "@taleTeddy": {
+    "description": "Story adventure: a lost teddy bear"
+  },
+  "taleMoon": "The sleepy moon",
+  "@taleMoon": {
+    "description": "Story adventure: the moon overslept"
+  },
+  "taleTeddy1": "There {name} hears a tiny voice: a teddy bear has lost the child who hugs it every night.",
+  "@taleTeddy1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTeddy2": "{name} follows the lights of the windows one by one and brings the teddy home, right into a warm hug.",
+  "@taleTeddy2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleMoon1": "But tonight the moon has overslept, and without its silver light the whole sky is dark around {name}.",
+  "@taleMoon1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleMoon2": "{name} hums a soft song until the moon opens one eye, then the other, and shines on everyone.",
+  "@taleMoon2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }

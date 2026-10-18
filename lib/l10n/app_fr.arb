@@ -1054,5 +1054,19 @@
   "melodyAuClair": "Au clair de la lune",
   "melodyMaryLamb": "Marie avait un petit agneau",
   "melodyHotCrossBuns": "Hot Cross Buns",
-  "melodyOdeToJoy": "Hymne à la joie"
+  "melodyOdeToJoy": "Hymne à la joie",
+  "talePenguin": "Pingouin",
+  "taleTurtle": "Tortue",
+  "talePenguinIntro": "un petit pingouin qui adore glisser sur le ventre",
+  "taleTurtleIntro": "une tortue lente et gentille à la carapace pleine de taches brillantes",
+  "taleJungle": "Jungle",
+  "taleIsland": "Petite île",
+  "taleJungleLine": "Un soir, {name} explore la jungle, où les perroquets bavardent et où des feuilles grandes comme des parapluies se balancent.",
+  "taleIslandLine": "Un soir, {name} navigue jusqu'à une petite île, où les vagues chuchotent et où le sable est tiède.",
+  "taleTeddy": "Un nounours perdu",
+  "taleMoon": "La lune endormie",
+  "taleTeddy1": "Là, {name} entend une petite voix : un nounours a perdu l'enfant qui le serre chaque soir.",
+  "taleTeddy2": "{name} suit les lumières des fenêtres une à une et ramène le nounours à la maison, droit dans un câlin tout chaud.",
+  "taleMoon1": "Mais cette nuit, la lune ne s'est pas réveillée, et sans sa lumière d'argent tout le ciel est noir autour de {name}.",
+  "taleMoon2": "{name} fredonne une douce chanson jusqu'à ce que la lune ouvre un œil, puis l'autre, et brille pour tout le monde."
 }

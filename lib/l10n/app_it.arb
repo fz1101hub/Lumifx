@@ -1054,5 +1054,19 @@
   "melodyAuClair": "Al chiaro di luna",
   "melodyMaryLamb": "Mary aveva un agnellino",
   "melodyHotCrossBuns": "Hot Cross Buns",
-  "melodyOdeToJoy": "Inno alla gioia"
+  "melodyOdeToJoy": "Inno alla gioia",
+  "talePenguin": "Pinguino",
+  "taleTurtle": "Tartaruga",
+  "talePenguinIntro": "un piccolo pinguino che adora scivolare sulla pancia",
+  "taleTurtleIntro": "una tartaruga lenta e gentile con il guscio pieno di macchie lucenti",
+  "taleJungle": "Giungla",
+  "taleIsland": "Isoletta",
+  "taleJungleLine": "Una sera {name} esplora la giungla, dove i pappagalli chiacchierano e foglie grandi come ombrelli ondeggiano.",
+  "taleIslandLine": "Una sera {name} naviga fino a un'isoletta, dove le onde sussurrano e la sabbia è calda.",
+  "taleTeddy": "Un orsetto smarrito",
+  "taleMoon": "La luna dormigliona",
+  "taleTeddy1": "Lì {name} sente una vocina: un orsetto ha perso il bambino che lo abbraccia ogni sera.",
+  "taleTeddy2": "{name} segue le luci delle finestre una dopo l'altra e riporta l'orsetto a casa, dritto in un caldo abbraccio.",
+  "taleMoon1": "Ma stanotte la luna si è addormentata, e senza la sua luce d'argento il cielo intorno a {name} è tutto buio.",
+  "taleMoon2": "{name} canticchia una canzone dolce finché la luna apre un occhio, poi l'altro, e illumina tutti."
 }

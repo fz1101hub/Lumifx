@@ -1054,5 +1054,19 @@
   "melodyAuClair": "A la luz de la luna",
   "melodyMaryLamb": "María tenía un corderito",
   "melodyHotCrossBuns": "Hot Cross Buns",
-  "melodyOdeToJoy": "Himno de la alegría"
+  "melodyOdeToJoy": "Himno de la alegría",
+  "talePenguin": "Pingüino",
+  "taleTurtle": "Tortuga",
+  "talePenguinIntro": "un pequeño pingüino al que le encanta deslizarse sobre la barriga",
+  "taleTurtleIntro": "una tortuga lenta y amable con el caparazón lleno de manchas brillantes",
+  "taleJungle": "Selva",
+  "taleIsland": "Islita",
+  "taleJungleLine": "Una noche, {name} explora la selva, donde los loros charlan y se mecen hojas grandes como paraguas.",
+  "taleIslandLine": "Una noche, {name} navega hasta una islita donde las olas susurran y la arena está tibia.",
+  "taleTeddy": "Un osito perdido",
+  "taleMoon": "La luna dormilona",
+  "taleTeddy1": "Allí {name} oye una vocecita: un osito ha perdido al niño que lo abraza cada noche.",
+  "taleTeddy2": "{name} sigue las luces de las ventanas una a una y lleva el osito a casa, directo a un abrazo calentito.",
+  "taleMoon1": "Pero esta noche la luna se ha quedado dormida y, sin su luz plateada, el cielo alrededor de {name} está oscuro.",
+  "taleMoon2": "{name} tararea una canción suave hasta que la luna abre un ojo, luego el otro, y brilla para todos."
 }

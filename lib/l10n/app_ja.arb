@@ -1054,5 +1054,19 @@
   "melodyAuClair": "月の光に",
   "melodyMaryLamb": "メリーさんのひつじ",
   "melodyHotCrossBuns": "ホット・クロス・バンズ",
-  "melodyOdeToJoy": "よろこびの歌"
+  "melodyOdeToJoy": "よろこびの歌",
+  "talePenguin": "ペンギン",
+  "taleTurtle": "カメ",
+  "talePenguinIntro": "おなかですべるのが大好きな小さなペンギン",
+  "taleTurtleIntro": "こうらにぴかぴかの模様がある、ゆっくりでやさしいカメ",
+  "taleJungle": "ジャングル",
+  "taleIsland": "小さな島",
+  "taleJungleLine": "ある晩、{name}はジャングルを探検します。オウムがおしゃべりし、かさのように大きな葉っぱがゆれています。",
+  "taleIslandLine": "ある晩、{name}は小さな島へ船で向かいます。波がささやき、砂はあたたかいです。",
+  "taleTeddy": "まいごのくまちゃん",
+  "taleMoon": "ねぼすけのお月さま",
+  "taleTeddy1": "そこで{name}は小さな声を聞きます。毎晩だっこしてくれる子とはぐれてしまったくまちゃんです。",
+  "taleTeddy2": "{name}は窓の明かりをひとつずつたどり、くまちゃんをおうちへ送りとどけます。あたたかいだっこが待っていました。",
+  "taleMoon1": "ところが今夜はお月さまがねぼうして、銀色の光がなく、{name}のまわりの空はまっくらです。",
+  "taleMoon2": "{name}がやさしい歌を口ずさむと、お月さまは片目を、それからもう片方を開けて、みんなを照らします。"
 }

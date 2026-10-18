@@ -1054,5 +1054,19 @@
   "melodyAuClair": "Au clair de la lune",
   "melodyMaryLamb": "Mary had een lammetje",
   "melodyHotCrossBuns": "Hot Cross Buns",
-  "melodyOdeToJoy": "Ode aan de vreugde"
+  "melodyOdeToJoy": "Ode aan de vreugde",
+  "talePenguin": "Pinguïn",
+  "taleTurtle": "Schildpad",
+  "talePenguinIntro": "een pinguïntje dat graag op zijn buik glijdt",
+  "taleTurtleIntro": "een trage, lieve schildpad met een schild vol glanzende stippen",
+  "taleJungle": "Jungle",
+  "taleIsland": "Eilandje",
+  "taleJungleLine": "Op een avond verkent {name} de jungle, waar papegaaien kwebbelen en bladeren zo groot als paraplu's wiegen.",
+  "taleIslandLine": "Op een avond zeilt {name} naar een eilandje, waar de golven fluisteren en het zand warm is.",
+  "taleTeddy": "Een verdwaalde teddybeer",
+  "taleMoon": "De slaperige maan",
+  "taleTeddy1": "Daar hoort {name} een klein stemmetje: een teddybeer is het kind kwijt dat hem elke avond knuffelt.",
+  "taleTeddy2": "{name} volgt de lichtjes van de ramen een voor een en brengt de teddybeer naar huis, recht in een warme knuffel.",
+  "taleMoon1": "Maar vannacht heeft de maan zich verslapen, en zonder haar zilveren licht is de hemel rond {name} donker.",
+  "taleMoon2": "{name} neuriet een zacht liedje tot de maan één oog opendoet, dan het andere, en voor iedereen schijnt."
 }
