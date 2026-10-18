@@ -247,6 +247,8 @@ Routines the bridge runs by itself, created and read back by the
 - Away mode: two older-API schedules per room (on, off) with the
   bridge's randomised times (`W127/T19:00:00A00:30:00`), rooms 15 minutes
   apart; tagged `lumifx:<token>:away-on|away-off` in the description.
+  The off days move one day on for a window past midnight and one more
+  when the stagger pushes the time past midnight again.
 - Night path: two older-API rules on a `ZLLPresence` sensor, named
   `lumifx:<token>:path-on|path-off`: presence true + changed inside the
   night window switches the room on dim; presence false for N minutes
@@ -310,7 +312,15 @@ and plays recordings even with Read aloud off.
   the other. The id (`gen:melody:<id>:<times>`) is all `soundscapeOf`
   needs to find the tune, so sound and lights start, pause and stop
   together like any effect's sounds. It does not loop; "Then fade out the
-  lights" sets the sleep timer to its length.
+  lights" calls `PlaybackController.switchOffAtEnd`, which fades the
+  lights out and switches them off when the tune ends (as the sleep
+  timer does). A tune always plays at its own pace: `effectiveSpeed`
+  is 1 for an effect with a melody whatever the speed slider says, so
+  the lights never run ahead of the music.
+- The thunder and the piano's notes are cues on top of the soundscape:
+  `SoundPlayer.stopCues` silences them (and any still being rendered)
+  at stop, pause and when sounds are switched off, apart from `stop`,
+  which a new soundscape calls too.
 - Tested in `test/core/sound/melody_test.dart`.
 
 ### Story maker (`lib/src/features/tales`)
