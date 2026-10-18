@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
@@ -12,20 +13,26 @@ import 'features/tv/camera_input.dart';
 import 'features/buttons/hue_button_listener.dart';
 import 'features/effects/read_aloud.dart';
 import 'core/photos/photo_picker.dart';
+import 'core/live_activity.dart';
+import 'core/nfc/nfc_writer.dart';
+import 'core/notification_lights_platform.dart';
 import 'core/speech/speaker.dart';
 import 'core/speech/voice_recordings.dart';
 import 'core/weather/weather.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/common/app_text.dart';
 import 'features/effects/catalog/effect_catalog.dart';
+import 'features/effects/effect_palette.dart';
 import 'features/effects/mini_player.dart';
 import 'features/effects/playback_controller.dart';
 import 'features/effects/player_route.dart';
+import 'features/effects/playing_route.dart';
 import 'features/home/home_screen.dart';
 import 'features/kids/kids_mode.dart';
 import 'features/library/effect_library.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/links/app_link.dart';
+import 'features/notifications/notification_lights_sync.dart';
 import 'features/links/link_handler.dart';
 import 'features/library/preferences_controller.dart';
 import 'features/shortcuts/app_shortcuts.dart';
@@ -52,6 +59,9 @@ class LumiFxApp extends StatefulWidget {
     this.voices,
     this.voiceRecorder = const NoVoiceRecorder(),
     this.voicePlayer = const NoVoicePlayer(),
+    this.nfc = const NoNfcWriter(),
+    this.notificationLights = const NoNotificationLights(),
+    this.liveActivity = const NoLiveActivity(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -97,6 +107,15 @@ class LumiFxApp extends StatefulWidget {
 
   /// Story lines in the user's own voice; none by default.
   final VoiceRecordings? voices;
+
+  /// Writes links on NFC stickers (Android).
+  final NfcWriter nfc;
+
+  /// Flashes the lights for chosen apps' notifications (Android).
+  final NotificationLightsPlatform notificationLights;
+
+  /// The effect playing on the iPhone's lock screen.
+  final LiveActivity liveActivity;
   final VoiceRecorder voiceRecorder;
   final VoicePlayer voicePlayer;
 
@@ -122,6 +141,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   late final LinkHandler _links;
   late final HueButtonListener _buttons;
   late final ReadAloud _readAloud;
+  late final NotificationLightsSync _notificationLights;
   StreamSubscription<PlaybackNotice>? _notices;
 
   @override
@@ -179,6 +199,11 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
             : Localizations.localeOf(context);
       },
     )..start();
+    _notificationLights = NotificationLightsSync(
+      platform: widget.notificationLights,
+      preferences: widget.preferences,
+      bridge: widget.bridge,
+    );
     // Opened from a link: the platform hands it over as the first route.
     final initial = AppLink.parse(
         WidgetsBinding.instance.platformDispatcher.defaultRouteName);
@@ -196,8 +221,18 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   void _syncBackground() {
     final background = widget.background;
     final playback = _playback;
+    final preferences = widget.preferences;
+    // iOS lets an app run on in the background only while it plays sound:
+    // effects with ambient sounds or a tune go on with the phone locked.
+    final soundscape = playback.soundscape;
+    final iosAudio = widget.liveActivity.isSupported &&
+        preferences.keepPlayingScreenOff &&
+        preferences.soundOn &&
+        (soundscape.ambiences.isNotEmpty || soundscape.melody != null);
     playback.keepPlayingInBackground =
-        background.isSupported && widget.preferences.keepPlayingScreenOff;
+        (background.isSupported && preferences.keepPlayingScreenOff) ||
+            iosAudio;
+    _syncLiveActivity();
     final context = _navigatorKey.currentContext;
     final wanted = playback.keepPlayingInBackground &&
         playback.status == PlaybackStatus.playing &&
@@ -231,6 +266,47 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       stopLabel: l10n.stop,
       microphone: microphone,
     ));
+  }
+
+  String? _liveShown;
+
+  /// The effect on the iPhone's lock screen and Dynamic Island while it
+  /// plays on real lights, with a Stop.
+  void _syncLiveActivity() {
+    final live = widget.liveActivity;
+    if (!live.isSupported) {
+      return;
+    }
+    final playback = _playback;
+    final context = _navigatorKey.currentContext;
+    final wanted = widget.preferences.keepPlayingScreenOff &&
+        playback.status != PlaybackStatus.idle &&
+        playback.selectedTarget != null &&
+        context != null;
+    if (!wanted) {
+      if (_liveShown != null) {
+        _liveShown = null;
+        unawaited(live.end());
+      }
+      return;
+    }
+    final l10n = context.l10n;
+    final state = LiveActivityState(
+      effect: l10n.effectName(playback.effect),
+      room: playback.targetName ?? '',
+      playing: playback.status == PlaybackStatus.playing,
+      colors: [
+        for (final color in effectPalette(playback.effect).take(4))
+          color.toARGB32(),
+      ],
+      stopLabel: l10n.stop,
+    );
+    final key = jsonEncode(state.toJson());
+    if (key == _liveShown) {
+      return;
+    }
+    _liveShown = key;
+    unawaited(live.update(state));
   }
 
   bool _welcomed = false;
@@ -335,10 +411,14 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     if (_backgroundShown != null) {
       unawaited(widget.background.hide());
     }
+    if (_liveShown != null) {
+      unawaited(widget.liveActivity.end());
+    }
     widget.bridge.removeListener(_maybeWelcome);
     unawaited(_notices?.cancel());
     _buttons.dispose();
     _readAloud.dispose();
+    _notificationLights.dispose();
     _playback.dispose();
     _routes.dispose();
     super.dispose();
@@ -347,7 +427,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   void _openPlaying() {
     final navigator = _navigatorKey.currentState;
     if (navigator != null) {
-      unawaited(navigator.push(playerRoute(_playback.effect)));
+      unawaited(navigator.push(routeForPlaying(_playback.effect)));
     }
   }
 
@@ -373,6 +453,10 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       voices: _voices,
       voiceRecorder: widget.voiceRecorder,
       voicePlayer: widget.voicePlayer,
+      speaker: widget.speaker,
+      nfc: widget.nfc,
+      notificationLights: widget.notificationLights,
+      liveActivity: widget.liveActivity,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

@@ -6,6 +6,7 @@ import '../../core/effects/effect.dart';
 import '../bridge/bridge_controller.dart';
 import '../effects/playback_controller.dart';
 import '../effects/player_route.dart';
+import '../kids/kids_mode.dart';
 import '../library/effect_library.dart';
 import '../library/preferences_controller.dart';
 import '../library/sharing.dart';
@@ -68,7 +69,7 @@ class LinkHandler {
         [
           for (final kind in EffectKind.values) ...library.ofKind(kind),
         ].where((e) => _same(e.name, link.effectId)).firstOrNull;
-    if (effect == null) {
+    if (effect == null || !kidsModeAllows(preferences, library, effect)) {
       return false;
     }
     if (link.room != null || link.area != null) {
@@ -93,6 +94,10 @@ class LinkHandler {
 
   Future<bool> _playlist(String nameOrId) async {
     await _ready();
+    // A playlist may hold anything: not in kids mode.
+    if (preferences.kidsLocked) {
+      return false;
+    }
     final playlist = preferences.playlists
         .where((p) => p.id == nameOrId || _same(p.name, nameOrId))
         .firstOrNull;

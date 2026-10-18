@@ -1,19 +1,34 @@
 import '../effects/effect.dart';
 import '../effects/effect_event.dart';
+import 'melodies.dart';
+import 'melody.dart';
 import 'synth.dart';
 
 /// What an effect sounds like: ambiences played in a loop under it, and
 /// whether its lightning brings thunder.
 class Soundscape {
-  const Soundscape(this.ambiences, {this.thunder = false});
+  const Soundscape(
+    this.ambiences, {
+    this.thunder = false,
+    this.melody,
+    this.melodyTimes = 1,
+  });
 
   final List<Ambience> ambiences;
   final bool thunder;
 
+  /// A tune played once, [melodyTimes] times through, in time with the
+  /// lights (music box and light shows).
+  final Melody? melody;
+  final int melodyTimes;
+
   static const silent = Soundscape([]);
 
-  bool get isSilent => ambiences.isEmpty && !thunder;
+  bool get isSilent => ambiences.isEmpty && !thunder && melody == null;
 }
+
+/// The id prefix of the effects that play a melody.
+const melodyEffectPrefix = '${LightingEffect.generatedPrefix}melody:';
 
 const _byEffect = <String, Soundscape>{
   'fireplace': Soundscape([Ambience.fire]),
@@ -45,6 +60,19 @@ const _byEffect = <String, Soundscape>{
 Soundscape soundscapeOf(LightingEffect effect) {
   if (effect.usesMicrophone) {
     return Soundscape.silent;
+  }
+  if (effect.id.startsWith(melodyEffectPrefix)) {
+    final [id, times, ...] = [
+      ...effect.id.substring(melodyEffectPrefix.length).split(':'),
+      '',
+      '',
+    ];
+    final melody = melodyById(id);
+    return melody == null
+        ? Soundscape.silent
+        : Soundscape(const [],
+            melody: melody,
+            melodyTimes: (int.tryParse(times) ?? 1).clamp(1, 20));
   }
   final known = _byEffect[effect.id];
   if (known != null) {

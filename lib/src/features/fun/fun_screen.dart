@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../common/app_text.dart';
 import '../common/layout.dart';
+import '../learn/colour_words_screen.dart';
+import '../learn/counting_screen.dart';
 import 'advent_screen.dart';
+import '../music_box/music_box_screen.dart';
 import 'birthday_screen.dart';
 import 'countdowns_screen.dart';
 import 'game_screen.dart';
@@ -45,6 +48,11 @@ class FunScreen extends StatelessWidget {
               l10n.countdownsSubtitle, () => const CountdownsScreen()),
           entry(Icons.calendar_month_outlined, l10n.advent, l10n.adventSubtitle,
               () => const AdventScreen()),
+          entry(
+              Icons.celebration_outlined,
+              l10n.christmasShow,
+              l10n.christmasShowSubtitle,
+              () => const MusicBoxScreen(festive: true)),
           for (final game in LightGame.values)
             entry(
               GameScreen.iconOf(game),
@@ -58,6 +66,10 @@ class FunScreen extends StatelessWidget {
             ),
           entry(Icons.psychology_outlined, l10n.gameSimon,
               l10n.gameSimonSubtitle, () => const SimonScreen()),
+          entry(Icons.filter_9_plus_outlined, l10n.countLights,
+              l10n.countLightsSubtitle, () => const CountingScreen()),
+          entry(Icons.translate, l10n.colourWords, l10n.colourWordsSubtitle,
+              () => const ColourWordsScreen()),
         ],
       ),
     );

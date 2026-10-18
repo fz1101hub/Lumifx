@@ -110,7 +110,6 @@ struct FavoritesView: View {
   }
 }
 
-@main
 struct LumiFXWidget: Widget {
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: "LumiFXFavorites", provider: Provider()) { entry in
@@ -124,5 +123,17 @@ struct LumiFXWidget: Widget {
     .configurationDisplayName("LumiFX")
     .description("Your favourite LumiFX effects, one tap away.")
     .supportedFamilies([.systemMedium])
+  }
+}
+
+/// The favourites widget and, from iOS 16.1, the effect playing on the
+/// lock screen (PlayingLiveActivity.swift).
+@main
+struct LumiFXWidgets: WidgetBundle {
+  var body: some Widget {
+    LumiFXWidget()
+    if #available(iOS 16.1, *) {
+      PlayingLiveActivity()
+    }
   }
 }

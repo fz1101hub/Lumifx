@@ -1,6 +1,6 @@
 # LumiFX Privacy Policy
 
-_Last updated: 16 October 2026_
+_Last updated: 18 October 2026_
 
 LumiFX is an app that plays lighting effects on Philips Hue lights. It is
 designed to work on your phone and your home network. We do not run
@@ -50,6 +50,14 @@ stories and game calls are read by your phone's own text-to-speech voice.
 LumiFX sends them nowhere (depending on your phone's settings, its speech
 engine may use an online voice).
 
+**Story maker and learning games.** The story maker puts each story
+together on your phone from sentences written into the app; it uses no
+AI and no internet connection, and the hero's name you type is used only
+in that story and is not saved. Count the lights and Colours in another
+language also run entirely on your phone. The numbers, the colour words
+and, with "Read aloud" on, the lines of the story are spoken by your
+phone's own text-to-speech voice, as described above.
+
 **Weather lights.** If you use Weather lights, the city name you type in
 the search is sent to Open-Meteo (open-meteo.com) to find matching places,
 and the coordinates of the place you choose are sent to Open-Meteo to get
@@ -80,6 +88,48 @@ notification (Android 13 and later ask once for permission to show it) and,
 during a Music Sync effect, keeps using the microphone exactly as described
 above. You can turn this off in Settings.
 
+**Lock screen and playing with the iPhone locked.** While an effect plays
+on your lights, iPhones with iOS 16.1 or later can show it on the lock
+screen and in the Dynamic Island (a Live Activity): the effect's name,
+the room, its colours and a Stop button, visible without unlocking the
+phone. The app creates and updates it on your phone and sends nothing
+anywhere to show it (no push service is used). Effects with sounds or a
+tune keep playing while the iPhone is locked, because iOS lets an app
+run in the background while it plays sound; effects without sounds
+(Music Sync among them) still stop when the iPhone locks. Both follow "Keep playing with the screen off" in
+Settings, and Live Activities can also be turned off for LumiFX in the
+iPhone's Settings.
+
+**NFC stickers.** On Android, when you tap "Write on a sticker" and hold
+an NFC sticker to the phone, LumiFX writes one `lumifx://` link on it,
+nothing else: an effect, a playlist, bedtime or stop and, for a link you
+chose with a room, that room's name. Anyone who touches the sticker with
+a phone can read that link. When your unlocked phone touches a sticker,
+Android opens LumiFX with the link stored on it; LumiFX uses only that
+link and reads nothing else from the sticker. On iPhone, LumiFX does not use NFC: the Shortcuts
+app reads the sticker and opens the link you copied into it.
+
+**Notification lights (Android).** If you choose apps and allow LumiFX
+"notification access" in Android's settings, Android tells LumiFX
+whenever an app posts a notification. LumiFX looks only at which app
+posted it (its package name, such as `com.whatsapp`) to check whether it
+is one you chose; it never reads the title, the text or anything else in
+the notification. For a chosen app it sends a flash command (which
+lights, which colour) to your Hue Bridge on your local network, also
+while LumiFX is closed. Nothing about your notifications is stored or
+transmitted anywhere else. To let you choose, the app lists the apps in
+your phone's app drawer; that list is shown on your phone only. The
+settings needed to flash the lights with LumiFX closed (your bridge's
+address and key, the lights, and the apps and colours you chose) are
+stored on your phone only, encrypted with a key kept in the Android
+Keystore. You can switch Notification lights off in LumiFX, and revoke
+notification access at any time in Android's settings (usually Apps ›
+Special app access › Notification access, called "Device & app
+notifications" on some phones), or by uninstalling the app. Android
+warns that an app with this access could read all notifications;
+LumiFX does not. iPhones do not let any app see notifications, so the
+feature is not offered there.
+
 **Sharing scenes, stories and playlists.** When you choose to share, the
 scene, story or playlist is packed into a link or QR code that you pass on
 yourself. It contains only the names, colours, words and settings you
@@ -88,13 +138,15 @@ made; LumiFX sends it nowhere.
 **Routines and Hue scenes.** Wake-up and bedtime routines and saved Hue
 scenes are stored on your own Hue Bridge, like those made in the Hue app.
 
-**Preferences.** Favourites, recently played effects, playback settings and
-the scenes and stories you make are stored on your phone only.
+**Preferences.** Favourites, recently played effects, playback settings,
+the stars and steps of the morning and evening routines, and the scenes
+and stories you make are stored on your phone only.
 
 ## Network connections
 
 - **Your Hue Bridge** on your local Wi-Fi network (HTTPS and, for fast
-  effects, an encrypted DTLS stream).
+  effects, an encrypted DTLS stream). Notification lights send their
+  flash commands to it over HTTPS too.
 - **discovery.meethue.com**, a service operated by Signify (Philips Hue),
   which helps find bridges on your network. The request contains no
   personal data beyond what any web request contains (your public IP
@@ -125,7 +177,7 @@ Questions about privacy: fz1101hub@gmail.com
 
 # Informativa sulla privacy di LumiFX
 
-_Ultimo aggiornamento: 16 ottobre 2026_
+_Ultimo aggiornamento: 18 ottobre 2026_
 
 LumiFX è un'app che riproduce effetti luminosi sulle luci Philips Hue.
 Funziona sul telefono e sulla rete di casa. Non abbiamo server, non
@@ -175,6 +227,15 @@ storie e i comandi dei giochi sono letti dalla voce di sintesi del telefono.
 LumiFX non le invia da nessuna parte (a seconda delle impostazioni del
 telefono, il motore vocale potrebbe usare una voce online).
 
+**Inventa una storia e giochi per imparare.** "Inventa una storia" compone
+ogni storia sul telefono con frasi scritte nell'app; non usa
+intelligenza artificiale né connessione a internet, e il nome dell'eroe
+che scrivi è usato solo in quella storia e non viene salvato. Anche
+"Conta le luci" e "I colori in un'altra lingua" funzionano interamente
+sul telefono. I numeri, i nomi dei colori e, con "Leggi ad alta voce"
+attivo, le frasi della storia sono pronunciati dalla voce di sintesi del
+telefono, come descritto sopra.
+
 **Meteo in luce.** Se usi Meteo in luce, il nome della città che scrivi
 nella ricerca viene inviato a Open-Meteo (open-meteo.com) per trovare i
 luoghi corrispondenti, e le coordinate del luogo che scegli vengono inviate
@@ -198,6 +259,52 @@ mostra una notifica (da Android 13 il sistema chiede una volta il permesso) e,
 durante un effetto Music Sync, continua a usare il microfono esattamente come
 descritto sopra. Puoi disattivarlo nelle Impostazioni.
 
+**Schermata di blocco e riproduzione con l'iPhone bloccato.** Mentre un
+effetto è in corso sulle luci, gli iPhone con iOS 16.1 o successivi
+possono mostrarlo nella schermata di blocco e nella Dynamic Island (una
+Live Activity): il nome dell'effetto, la stanza, i suoi colori e un
+pulsante Stop, visibili senza sbloccare il telefono. L'app la crea e la
+aggiorna sul telefono e non invia nulla a nessuno per mostrarla (non usa
+alcun servizio di notifiche push). Gli effetti con suoni o una melodia
+continuano a iPhone bloccato, perché iOS lascia un'app attiva in
+background finché riproduce un suono; gli effetti senza suoni (Music
+Sync compreso) si fermano comunque quando l'iPhone si blocca. Entrambe le cose seguono "Continua a
+schermo spento" nelle Impostazioni, e le Live Activity di LumiFX si
+possono disattivare anche nelle Impostazioni dell'iPhone.
+
+**Adesivi NFC.** Su Android, quando tocchi "Scrivi su un adesivo" e
+avvicini un adesivo NFC al telefono, LumiFX ci scrive un solo link
+`lumifx://` e nient'altro: un effetto, una playlist, la nanna o lo stop
+e, per un link con una stanza, il nome di quella stanza. Chiunque tocchi
+l'adesivo con un telefono può leggere quel link. Quando il tuo telefono
+sbloccato tocca un adesivo, Android apre LumiFX con il link che
+contiene; LumiFX usa solo quel link e non legge nient'altro
+dall'adesivo. Su iPhone LumiFX
+non usa l'NFC: è l'app Comandi a leggere l'adesivo e ad aprire il link
+che ci hai copiato.
+
+**Luci per le notifiche (Android).** Se scegli delle app e consenti a
+LumiFX l'"accesso alle notifiche" nelle impostazioni di Android, Android
+avvisa LumiFX ogni volta che un'app pubblica una notifica. LumiFX guarda
+solo quale app l'ha pubblicata (il nome del pacchetto, per esempio
+`com.whatsapp`) per verificare se è una di quelle che hai scelto; non
+legge mai il titolo, il testo né altro contenuto della notifica. Per
+un'app scelta invia un comando di lampeggio (quali luci, quale colore)
+al tuo Hue Bridge sulla rete locale, anche a LumiFX chiusa. Nulla delle
+tue notifiche viene salvato o trasmesso altrove. Per farti scegliere,
+l'app elenca le app presenti nel cassetto delle app del telefono; quella
+lista è mostrata solo sul telefono. Le impostazioni che servono per far
+lampeggiare le luci a LumiFX chiusa (indirizzo e chiave del Bridge, le
+luci, le app e i colori scelti) sono salvate solo sul telefono, cifrate
+con una chiave custodita nel Keystore di Android. Puoi disattivare le
+luci per le notifiche in LumiFX e revocare l'accesso alle notifiche in
+qualsiasi momento nelle impostazioni di Android (di solito App › Accesso
+speciale per le app › Accesso alle notifiche, su alcuni telefoni
+"Notifiche di app e dispositivi") o disinstallando l'app. Android avvisa
+che un'app con questo accesso potrebbe leggere tutte le notifiche;
+LumiFX non lo fa. Gli iPhone non permettono a nessuna app di vedere le
+notifiche, quindi lì la funzione non c'è.
+
 **Condivisione di scene e playlist.** Quando scegli di condividere, la scena
 o la playlist viene inserita in un link o codice QR che passi tu. Contiene
 solo i nomi, i colori e le impostazioni che hai creato; LumiFX non lo invia
@@ -206,13 +313,15 @@ da nessuna parte.
 **Routine e scene Hue.** Le routine di sveglia e buonanotte e le scene Hue
 salvate sono memorizzate sul tuo Hue Bridge, come quelle create nell'app Hue.
 
-**Preferenze.** Preferiti, effetti recenti e impostazioni di riproduzione sono
-salvati solo sul telefono.
+**Preferenze.** Preferiti, effetti recenti, impostazioni di riproduzione e
+le stelline e i passi delle routine del mattino e della sera sono salvati
+solo sul telefono.
 
 ## Connessioni di rete
 
 - **Il tuo Bridge Hue** sulla rete Wi-Fi locale (HTTPS e, per gli effetti
-  veloci, uno stream DTLS cifrato).
+  veloci, uno stream DTLS cifrato). Anche le luci per le notifiche gli
+  inviano i comandi di lampeggio in HTTPS.
 - **discovery.meethue.com**, un servizio di Signify (Philips Hue) che aiuta
   a trovare i Bridge sulla rete. La richiesta non contiene dati personali
   oltre a quelli di qualsiasi richiesta web (l'indirizzo IP pubblico). Puoi

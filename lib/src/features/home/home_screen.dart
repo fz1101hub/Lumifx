@@ -4,6 +4,8 @@ import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
 import '../bedtime/bedtime_screen.dart';
+import '../bedtime/monster_spray_screen.dart';
+import '../cinema/cinema_screen.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
@@ -17,9 +19,14 @@ import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
 import '../house/house_screen.dart';
 import '../kids/kids_mode.dart';
+import '../links/nfc_stickers_screen.dart';
+import '../notifications/notification_lights_screen.dart';
+import '../music_box/music_box_screen.dart';
 import '../rooms/rooms_screen.dart';
+import '../routines/routines_screen.dart';
 import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
+import '../tales/tale_maker_screen.dart';
 import '../timers/timers_screen.dart';
 import '../weather/weather_screen.dart';
 import 'seasons.dart';
@@ -116,148 +123,127 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                minVerticalPadding: 20,
-                leading: const Icon(Icons.queue_music),
-                title: Text(l10n.playlists),
-                subtitle: Text(l10n.playlistsSubtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                      builder: (_) => const PlaylistsScreen()),
-                ),
-              ),
+            const SizedBox(height: 24),
+            _HomeGroup(
+              title: l10n.homeFamily,
+              entries: [
+                _HomeEntry(Icons.bedtime_outlined, l10n.bedtime,
+                    l10n.bedtimeSubtitle, () => const BedtimeScreen()),
+                _HomeEntry(
+                    Icons.sanitizer_outlined,
+                    l10n.monsterSpray,
+                    l10n.monsterSpraySubtitle,
+                    () => const MonsterSprayScreen()),
+                _HomeEntry(
+                    Icons.music_note_outlined,
+                    l10n.lullabies,
+                    l10n.lullabiesSubtitle,
+                    () => const MusicBoxScreen(festive: false)),
+                _HomeEntry(Icons.auto_stories_outlined, l10n.storyMaker,
+                    l10n.storyMakerSubtitle, () => const TaleMakerScreen()),
+                _HomeEntry(Icons.spa_outlined, l10n.breathe,
+                    l10n.breatheSubtitle, () => const BreathingScreen()),
+                _HomeEntry(Icons.timer_outlined, l10n.timers,
+                    l10n.timersSubtitle, () => const TimersScreen()),
+                _HomeEntry(Icons.checklist, l10n.kidRoutines,
+                    l10n.kidRoutinesSubtitle, () => const RoutinesScreen()),
+                _HomeEntry(Icons.celebration_outlined, l10n.fun,
+                    l10n.funSubtitle, () => const FunScreen()),
+                _HomeEntry(Icons.child_care, l10n.kidsMode,
+                    l10n.kidsModeSubtitle, () => const KidsSetupScreen()),
+              ],
             ),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                minVerticalPadding: 20,
-                leading: const Icon(Icons.bedtime_outlined),
-                title: Text(l10n.bedtime),
-                subtitle: Text(l10n.bedtimeSubtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                      builder: (_) => const BedtimeScreen()),
-                ),
-              ),
+            _HomeGroup(
+              title: l10n.homeMore,
+              entries: [
+                _HomeEntry(Icons.queue_music, l10n.playlists,
+                    l10n.playlistsSubtitle, () => const PlaylistsScreen()),
+                _HomeEntry(Icons.wb_sunny_outlined, l10n.weather,
+                    l10n.weatherSubtitle, () => const WeatherScreen()),
+                _HomeEntry(Icons.movie_outlined, l10n.cinema,
+                    l10n.cinemaSubtitle, () => const CinemaScreen()),
+                _HomeEntry(Icons.nfc, l10n.nfcStickers,
+                    l10n.nfcStickersSubtitle, () => const NfcStickersScreen()),
+              ],
             ),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                minVerticalPadding: 20,
-                leading: const Icon(Icons.spa_outlined),
-                title: Text(l10n.breathe),
-                subtitle: Text(l10n.breatheSubtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                      builder: (_) => const BreathingScreen()),
-                ),
+            if (bridge.isConnected)
+              _HomeGroup(
+                title: l10n.homeYourHome,
+                entries: [
+                  _HomeEntry(Icons.meeting_room_outlined, l10n.roomsAndZones,
+                      l10n.roomsAndZonesSubtitle, () => const RoomsScreen()),
+                  _HomeEntry(Icons.alarm, l10n.routines, l10n.routinesSubtitle,
+                      () => const AutomationsScreen()),
+                  _HomeEntry(Icons.house_outlined, l10n.house,
+                      l10n.houseSubtitle, () => const HouseScreen()),
+                  if (AppScope.of(context).notificationLights.isSupported)
+                    _HomeEntry(
+                        Icons.notifications_active_outlined,
+                        l10n.notificationLights,
+                        l10n.notificationLightsSubtitle,
+                        () => const NotificationLightsScreen()),
+                ],
               ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                minVerticalPadding: 20,
-                leading: const Icon(Icons.timer_outlined),
-                title: Text(l10n.timers),
-                subtitle: Text(l10n.timersSubtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => const TimersScreen()),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                minVerticalPadding: 20,
-                leading: const Icon(Icons.celebration_outlined),
-                title: Text(l10n.fun),
-                subtitle: Text(l10n.funSubtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => const FunScreen()),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                minVerticalPadding: 20,
-                leading: const Icon(Icons.child_care),
-                title: Text(l10n.kidsMode),
-                subtitle: Text(l10n.kidsModeSubtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                      builder: (_) => const KidsSetupScreen()),
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                minVerticalPadding: 20,
-                leading: const Icon(Icons.wb_sunny_outlined),
-                title: Text(l10n.weather),
-                subtitle: Text(l10n.weatherSubtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                      builder: (_) => const WeatherScreen()),
-                ),
-              ),
-            ),
-            if (bridge.isConnected) ...[
-              const SizedBox(height: 12),
-              Card(
-                child: ListTile(
-                  minVerticalPadding: 20,
-                  leading: const Icon(Icons.meeting_room_outlined),
-                  title: Text(l10n.roomsAndZones),
-                  subtitle: Text(l10n.roomsAndZonesSubtitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                        builder: (_) => const RoomsScreen()),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Card(
-                child: ListTile(
-                  minVerticalPadding: 20,
-                  leading: const Icon(Icons.alarm),
-                  title: Text(l10n.routines),
-                  subtitle: Text(l10n.routinesSubtitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                        builder: (_) => const AutomationsScreen()),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Card(
-                child: ListTile(
-                  minVerticalPadding: 20,
-                  leading: const Icon(Icons.house_outlined),
-                  title: Text(l10n.house),
-                  subtitle: Text(l10n.houseSubtitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                        builder: (_) => const HouseScreen()),
-                  ),
-                ),
-              ),
-            ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// One place to go from the home: an icon, a title, a line about it.
+class _HomeEntry {
+  const _HomeEntry(this.icon, this.title, this.subtitle, this.screen);
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Widget Function() screen;
+}
+
+/// A titled group of [entries] in one card, so the home stays short.
+class _HomeGroup extends StatelessWidget {
+  const _HomeGroup({required this.title, required this.entries});
+
+  final String title;
+  final List<_HomeEntry> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+            child: Semantics(
+              header: true,
+              child: Text(title, style: theme.textTheme.titleMedium),
+            ),
+          ),
+          Card(
+            margin: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (final (i, entry) in entries.indexed) ...[
+                  if (i > 0) const Divider(height: 1, indent: 72),
+                  ListTile(
+                    minVerticalPadding: 14,
+                    leading: Icon(entry.icon),
+                    title: Text(entry.title),
+                    subtitle: Text(entry.subtitle),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (_) => entry.screen()),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

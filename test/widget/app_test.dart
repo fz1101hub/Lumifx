@@ -21,6 +21,8 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
+import 'package:lumifx/src/features/effects/playback_controller.dart';
+import 'package:lumifx/src/features/home/home_screen.dart';
 import 'package:lumifx/src/features/fun/advent_screen.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
 import 'package:lumifx/src/features/fun/countdowns_screen.dart';
@@ -31,9 +33,27 @@ import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/core/live_activity.dart';
+import 'package:lumifx/src/core/nfc/nfc_writer.dart';
+import 'package:lumifx/src/core/notification_lights_platform.dart';
+import 'package:lumifx/src/core/speech/speaker.dart';
+import 'package:lumifx/src/features/bedtime/monster_spray.dart';
+import 'package:lumifx/src/features/cinema/cinema.dart';
+import 'package:lumifx/src/features/cinema/cinema_screen.dart';
+import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
+import 'package:lumifx/src/features/learn/colour_words.dart';
+import 'package:lumifx/src/features/links/nfc_stickers_screen.dart';
+import 'package:lumifx/src/features/notifications/notification_lights_screen.dart';
+import 'package:lumifx/src/features/learn/colour_words_screen.dart';
+import 'package:lumifx/src/features/learn/counting.dart';
+import 'package:lumifx/src/features/learn/counting_screen.dart';
+import 'package:lumifx/src/features/music_box/music_box_screen.dart';
+import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/routines/routines_screen.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
+import 'package:lumifx/src/features/timers/timers_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
 import 'package:lumifx/src/features/library/user_scene.dart';
 import 'package:lumifx/src/features/library/sharing.dart';
@@ -44,6 +64,84 @@ import '../support/fake_background_playback.dart';
 import '../support/fake_home_widgets.dart';
 import '../support/fake_shortcuts.dart';
 import '../support/phone_window.dart';
+
+class _RecordingSpeaker implements Speaker {
+  final spoken = <(String, String)>[];
+
+  @override
+  Future<void> speak(String text, String language) async =>
+      spoken.add((text, language));
+
+  @override
+  Future<void> stop() async {}
+}
+
+class _FakeNfc implements NfcWriter {
+  _FakeNfc({this.available = true, this.enabled = true});
+
+  final bool available;
+  bool enabled;
+  final written = <String>[];
+  var settingsOpened = false;
+  Completer<NfcWriteResult>? waiting;
+
+  @override
+  Future<bool> isAvailable() async => available;
+
+  @override
+  Future<bool> isEnabled() async => enabled;
+
+  @override
+  Future<NfcWriteResult> write(String uri) {
+    written.add(uri);
+    return (waiting = Completer<NfcWriteResult>()).future;
+  }
+
+  @override
+  Future<void> cancel() async => waiting?.complete(NfcWriteResult.cancelled);
+
+  @override
+  Future<void> openSettings() async => settingsOpened = true;
+}
+
+class _FakeNotificationLights implements NotificationLightsPlatform {
+  var access = false;
+  var accessAsked = false;
+  final configured = <Map<String, Object?>?>[];
+
+  @override
+  bool get isSupported => true;
+
+  @override
+  Future<bool> hasAccess() async => access;
+
+  @override
+  Future<void> openAccessSettings() async => accessAsked = true;
+
+  @override
+  Future<List<InstalledApp>> apps() async => const [
+        InstalledApp(package: 'com.ring', label: 'Ring'),
+        InstalledApp(package: 'com.whatsapp', label: 'WhatsApp'),
+      ];
+
+  @override
+  Future<void> configure(Map<String, Object?>? config) async =>
+      configured.add(config);
+
+  @override
+  Future<bool> test(Map<String, double> xy) async => true;
+}
+
+class _FakeLiveActivity implements LiveActivity {
+  @override
+  bool get isSupported => true;
+
+  @override
+  Future<bool> update(LiveActivityState state) async => true;
+
+  @override
+  Future<void> end() async {}
+}
 
 class _FakeDiscovery implements BridgeDiscovery {
   @override
@@ -118,6 +216,10 @@ Future<void> _pumpApp(
   AudioInput? audioInput,
   WeatherService weather = const NoWeatherService(),
   DateTime Function()? clock,
+  Speaker speaker = const NoSpeaker(),
+  NfcWriter nfc = const NoNfcWriter(),
+  NotificationLightsPlatform notificationLights = const NoNotificationLights(),
+  LiveActivity liveActivity = const NoLiveActivity(),
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -136,6 +238,10 @@ Future<void> _pumpApp(
       photos: photos,
       weather: weather,
       clock: clock ?? DateTime.now,
+      speaker: speaker,
+      nfc: nfc,
+      notificationLights: notificationLights,
+      liveActivity: liveActivity,
     ),
   );
 }
@@ -336,6 +442,22 @@ void main() {
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
     expect(find.text('Birthday party'), findsOneWidget);
+  });
+
+  testWidgets('leaving with the candles lit puts them out', (tester) async {
+    await _pumpApp(tester);
+    await openBirthday(tester);
+    await tester.tap(find.text('Light the candles'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(BirthdayScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 2));
+    expect(tester.takeException(), isNull);
+    expect(playback.status, PlaybackStatus.idle);
   });
 
   testWidgets('blowing on the phone blows the candles out', (tester) async {
@@ -793,6 +915,476 @@ void main() {
     expect(find.byType(KidsModeScreen), findsOneWidget);
   });
 
+  testWidgets('the mini-player leads back to a timer or a game screen',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('Light timers'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light timers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Start').first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(TimerRunningScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.tap(find.descendant(
+        of: find.byType(MiniPlayer), matching: find.text('Brush your teeth')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(TimerRunningScreen), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^[12]:\d\d$')), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    // Back on the home, where the mini-player was tapped.
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+
+    await openBirthday(tester);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Statues'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Statues'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Statues'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.descendant(
+        of: find.byType(MiniPlayer), matching: find.text('Statues')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Dance!'), findsOneWidget,
+        reason: 'the running game, not its rules');
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets('a picture routine fills the lamps and earns a star',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 10, 18, 7, 30));
+    await tester.scrollUntilVisible(find.text('Morning and evening'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Morning and evening'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Morning and evening'));
+    await tester.pumpAndSettle();
+    expect(find.text('No stars yet'), findsOneWidget);
+
+    // Only two steps, chosen by a grown-up.
+    await tester.tap(find.byTooltip('Choose the steps').first);
+    await tester.pumpAndSettle();
+    for (final step in [
+      'Wash your face',
+      'Get dressed',
+      'Breakfast',
+      'Shoes and backpack',
+    ]) {
+      await tester.tap(find.text(step));
+      await tester.pump();
+    }
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Start').first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('0 of 2 done'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+
+    await tester.tap(find.bySemanticsLabel('Get up'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('1 of 2 done'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Brush your teeth'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Well done! You earned a star!'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pump(const Duration(seconds: 10));
+    await tester.pumpAndSettle();
+    expect(find.text('1 star'), findsOneWidget);
+    // Next to the morning routine, and in the week.
+    expect(find.byIcon(Icons.star), findsNWidgets(2));
+  });
+
+  testWidgets('a lullaby plays its tune and then fades the lights out',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Lullabies'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Lullabies'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Lullabies'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Just once'));
+    await tester.pump();
+    await tester.tap(find.text("Brahms's Lullaby"));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MusicBoxScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+    expect(playback.soundscape.melody?.id, 'brahms');
+    expect(playback.soundscape.melodyTimes, 1);
+    expect(playback.sleepTimer, isNotNull, reason: 'then the lights fade');
+    expect(find.byTooltip('Stop'), findsOneWidget);
+    await tester.tap(find.byTooltip('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(playback.isPlaying, isFalse);
+  });
+
+  testWidgets('the story maker tells the story the child chose',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Story maker'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Story maker'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Story maker'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Owl'));
+    await tester.pump();
+    expect(find.widgetWithText(TextField, 'Momo'), findsOneWidget,
+        reason: 'the hero brings its own name');
+    await tester.enterText(find.byType(TextField), 'Sofia');
+    await tester.tap(find.text('Kitten'));
+    await tester.pump();
+    expect(find.widgetWithText(TextField, 'Sofia'), findsOneWidget,
+        reason: 'a name the child typed stays');
+    for (final choice in ['Cloud castle', 'A treasure map', 'Tell the story']) {
+      await tester.scrollUntilVisible(find.text(choice), 200,
+          scrollable: find.byType(Scrollable).first);
+      await tester.ensureVisible(find.text(choice));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(choice));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(TaleMakerScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+    expect(playback.effect.name, 'The story of Sofia');
+    expect(find.textContaining('Once upon a time there was Sofia, a curious'),
+        findsOneWidget);
+    playback.player!.advance(const Duration(seconds: 31));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.textContaining('Sofia follows the map'), findsOneWidget);
+    playback.player!.advance(const Duration(seconds: 30));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('The end'), findsOneWidget);
+    await tester.tap(find.text('Another story'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(playback.isPlaying, isTrue);
+    expect(playback.effect.name, 'The story of Sofia');
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('counting the lights: the blinks, the number, the voice',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('Parties and games'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+        find.text('Colours in another language'), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('Count the lights'), findsOneWidget);
+
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const CountingScreen(seed: 7))));
+    await tester.pumpAndSettle();
+    final target = (CountingGame(math.Random(7))..next()).target;
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    expect(find.text('Watch and count…'), findsOneWidget);
+    // The answers wait until the blinks are over.
+    await tester.tap(find.text('1'));
+    await tester.pump(const Duration(seconds: 8));
+    expect(find.text('How many?'), findsOneWidget);
+    final wrong = target == 1 ? 2 : 1;
+    await tester.tap(find.text('$wrong'));
+    await tester.pump();
+    expect(find.text("Not quite: let's count again"), findsOneWidget);
+    await tester.pump(const Duration(seconds: 8));
+    await tester.tap(find.text('$target'));
+    await tester.pump();
+    expect(find.text('Yes, $target!'), findsOneWidget);
+    expect(find.text('One right answer'), findsOneWidget);
+    expect(speaker.spoken.last, ('$target', 'en-US'));
+    final playback =
+        AppScope.of(tester.element(find.byType(CountingScreen))).playback;
+    await tester.pageBack();
+    await tester.pump(const Duration(seconds: 2));
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the colours are said in the language to learn', (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const ColourWordsScreen(seed: 3))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(ColourWordsScreen))).playback;
+    // English speakers start with Spanish.
+    expect(find.text('rojo'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Next colour'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Next colour'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('naranja'), findsOneWidget);
+    expect(speaker.spoken.last, ('naranja', 'es-ES'));
+    expect(LearnColour.of(playback.effect), LearnColour.orange);
+
+    await tester.scrollUntilVisible(find.text('Italiano'), -200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Italiano'));
+    await tester.pump();
+    expect(find.text('arancione'), findsOneWidget);
+    expect(speaker.spoken.last, ('arancione', 'it-IT'));
+
+    await tester.tap(find.text('Quiz'));
+    await tester.pump();
+    final quiz = ColourQuiz(math.Random(3))..next();
+    expect(speaker.spoken.last, (quiz.target.word('it'), 'it-IT'));
+    expect(find.text('Which colour is it?'), findsOneWidget);
+    final wrong = quiz.choices.firstWhere((c) => c != quiz.target);
+    await tester.scrollUntilVisible(
+        find.bySemanticsLabel(wrong.word('en')), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.bySemanticsLabel(wrong.word('en')));
+    await tester.pump();
+    expect(find.text('Try again'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel(quiz.target.word('en')));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Well done!'), findsOneWidget);
+    expect(LearnColour.of(playback.effect), quiz.target);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Which colour is it?'), findsOneWidget,
+        reason: 'then the next word');
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the monster spray chases them away and leaves a guardian light',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Monster spray'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Monster spray'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Monster spray'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MonsterSprayScreen))).playback;
+    expect(MonsterHunt.isHunting(playback.effect), isTrue);
+    expect(find.text('5 monsters left'), findsOneWidget);
+    for (var i = 0; i < 4; i++) {
+      await tester.tap(find.text('Spray!'));
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(find.text('One monster left'), findsOneWidget);
+    await tester.tap(find.text('Spray!'));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('All gone! The room is safe.'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 2));
+    expect(MonsterHunt.isGuardian(playback.effect), isTrue);
+    expect(playback.sleepTimer, const Duration(minutes: 30));
+    await tester.tap(find.text('15 min'));
+    await tester.pump();
+    expect(playback.sleepTimer, const Duration(minutes: 15));
+    await playback.stop();
+    playback.setSleepTimer(null);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('cinema mode dims for the film and brings the lights back',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Cinema mode'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Cinema mode'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cinema mode'));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(CinemaScreen))).playback;
+    await tester.tap(find.text('Start the film'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Cinema.phaseOf(playback.effect), CinemaPhase.film);
+    expect(playback.effect.id, endsWith(':glow'));
+    expect(find.text('Enjoy the film'), findsOneWidget);
+    await tester.tap(find.text('Soft glow during the film'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(playback.effect.id, endsWith(':dark'));
+
+    await tester.tap(find.text('Intermission'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Cinema.phaseOf(playback.effect), CinemaPhase.intermission);
+    expect(find.text('Back to the film'), findsOneWidget);
+
+    await tester.tap(find.text('End of the film'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Cinema.phaseOf(playback.effect), CinemaPhase.end);
+    expect(find.text('The lights are coming back'), findsOneWidget);
+    playback.player!.advance(Cinema.end('x').cycleLength);
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    expect(playback.status, PlaybackStatus.idle,
+        reason: 'then the room goes back to how it was');
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a link is written on an NFC sticker', (tester) async {
+    final nfc = _FakeNfc();
+    await _pumpApp(tester, nfc: nfc);
+    await tester.scrollUntilVisible(find.text('NFC stickers'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('NFC stickers'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('NFC stickers'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Start bedtime'), 200,
+        scrollable: find.byType(Scrollable).first);
+    final bedtime = find.ancestor(
+        of: find.text('Start bedtime'), matching: find.byType(ListTile));
+    await tester.tap(find.descendant(
+        of: bedtime, matching: find.byTooltip('Write on a sticker')));
+    await tester.pump();
+    expect(
+        find.text('Hold a sticker near the back of the phone'), findsOneWidget);
+    expect(nfc.written, ['lumifx://app/bedtime']);
+    // Cancelled: nothing to say.
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(
+        find.text('Hold a sticker near the back of the phone'), findsNothing);
+
+    await tester.tap(find.descendant(
+        of: bedtime, matching: find.byTooltip('Write on a sticker')));
+    await tester.pump();
+    nfc.waiting!.complete(NfcWriteResult.written);
+    await tester.pumpAndSettle();
+    expect(
+        find.text('Hold a sticker near the back of the phone'), findsNothing);
+    expect(find.text('Sticker ready: touch it with the phone to start'),
+        findsOneWidget);
+  });
+
+  testWidgets('NFC switched off, or missing, is explained', (tester) async {
+    final off = _FakeNfc(enabled: false);
+    await _pumpApp(tester, nfc: off);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const NfcStickersScreen())));
+    await tester.pumpAndSettle();
+    expect(find.text('NFC is off'), findsOneWidget);
+    expect(find.byTooltip('Write on a sticker'), findsNothing);
+    await tester.tap(find.text('Turn on'));
+    expect(off.settingsOpened, isTrue);
+    // Back from the settings with NFC on.
+    off.enabled = true;
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(find.text('NFC is off'), findsNothing);
+    expect(find.byTooltip('Write on a sticker'), findsWidgets);
+  });
+
+  testWidgets('a phone without NFC is told how else to do it', (tester) async {
+    await _pumpApp(tester, nfc: _FakeNfc(available: false));
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const NfcStickersScreen())));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('This phone cannot write NFC stickers'),
+        findsOneWidget);
+    expect(find.byTooltip('Write on a sticker'), findsNothing);
+    expect(find.byTooltip('Copy link'), findsWidgets);
+  });
+
+  testWidgets('notification lights: access, an app and its colour',
+      (tester) async {
+    final platform = _FakeNotificationLights();
+    await _pumpApp(tester, notificationLights: platform);
+    expect(platform.configured, [null], reason: 'nothing to flash yet');
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const NotificationLightsScreen())));
+    await tester.pumpAndSettle();
+    expect(find.text('Allow LumiFX to see notifications'), findsOneWidget);
+    await tester.tap(find.text('Allow'));
+    expect(platform.accessAsked, isTrue);
+    platform.access = true;
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(find.text('Allow LumiFX to see notifications'), findsNothing);
+
+    expect(find.text('No apps chosen yet'), findsOneWidget);
+    await tester.tap(find.text('Add an app'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'whats');
+    await tester.pump();
+    expect(find.text('Ring'), findsNothing);
+    await tester.tap(find.text('WhatsApp'));
+    await tester.pumpAndSettle();
+    expect(find.text('Colour for WhatsApp'), findsOneWidget);
+    await tester.tap(find
+        .descendant(
+            of: find.byType(AlertDialog), matching: find.byType(InkWell))
+        .at(1));
+    await tester.pumpAndSettle();
+    final preferences =
+        AppScope.of(tester.element(find.byType(NotificationLightsScreen)))
+            .preferences;
+    final settings = preferences.notificationLights;
+    expect(settings.enabled, isTrue);
+    expect(settings.rules.single.package, 'com.whatsapp');
+    expect(settings.rules.single.color, '#0A84FF');
+    expect(find.text('WhatsApp'), findsOneWidget);
+    await tester.tap(find.byTooltip('Remove'));
+    await tester.pumpAndSettle();
+    expect(preferences.notificationLights.rules, isEmpty);
+  });
+
+  testWidgets('on iPhone the screen-off setting tells what iOS allows',
+      (tester) async {
+    await _pumpApp(tester, liveActivity: _FakeLiveActivity());
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+        find.text('Keep playing with the screen off'), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.textContaining('Effects with sounds go on when the iPhone'),
+        findsOneWidget);
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));
@@ -876,6 +1468,8 @@ void main() {
     await _pumpApp(tester);
     await tester.scrollUntilVisible(find.text('Playlists'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Playlists'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Playlists'));
     await tester.pumpAndSettle();
     expect(find.text('No playlists yet.'), findsOneWidget);
@@ -975,6 +1569,38 @@ void main() {
     await say('Stop');
     expect(find.text('Play'), findsOneWidget);
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('in kids mode, the voice plays only the chosen effects',
+      (tester) async {
+    await _pumpApp(tester);
+    final preferences =
+        AppScope.of(tester.element(find.byType(HomeScreen))).preferences;
+    await preferences.setKidsEffects(['ocean']);
+    await preferences.setKidsLocked(true);
+    Future<void> say(String words) async {
+      final message = const JSONMethodCodec().encodeMethodCall(
+        MethodCall('pushRouteInformation',
+            {'location': 'lumifx://app/voice/${Uri.encodeComponent(words)}'}),
+      );
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+          SystemChannels.navigation.name, message, (_) {});
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    final playback =
+        AppScope.of(tester.element(find.byType(HomeScreen))).playback;
+    await say('Fireplace');
+    expect(playback.status, PlaybackStatus.idle, reason: 'not chosen');
+    await say('Ocean');
+    expect(playback.effect.id, 'ocean');
+    expect(playback.isPlaying, isTrue);
+    expect(find.text('Pause'), findsNothing,
+        reason: 'no player opens over kids mode');
+    await say('stop');
+    expect(playback.isPlaying, isFalse);
+    await tester.pump(const Duration(seconds: 2));
   });
 
   testWidgets('a link on a cold start waits for the saved scenes to load',
@@ -1313,6 +1939,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('Playlists'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Playlists'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Playlists'));
     await tester.pumpAndSettle();
     expect(find.text('Their playlist'), findsOneWidget);

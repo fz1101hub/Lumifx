@@ -8,6 +8,7 @@ import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/weather/weather.dart';
 import '../fun/countdown.dart';
+import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
@@ -184,6 +185,45 @@ class PreferencesController extends ChangeNotifier {
         if (c.id != id) c,
     ];
     return _changed();
+  }
+
+  var _routineSteps = <String, List<String>>{};
+
+  /// The steps a grown-up kept in [routine] (by name); null: all of them.
+  List<String>? routineSteps(String routine) => _routineSteps[routine];
+
+  Future<void> setRoutineSteps(String routine, List<String> steps) {
+    _routineSteps = {..._routineSteps, routine: steps.take(20).toList()};
+    return _changed();
+  }
+
+  var _notificationLights = const NotificationLightsSettings();
+
+  /// Which apps' notifications flash the lights, and how (Android).
+  NotificationLightsSettings get notificationLights => _notificationLights;
+
+  Future<void> setNotificationLights(NotificationLightsSettings settings) {
+    _notificationLights = settings;
+    return _changed();
+  }
+
+  var _stars = <String>[];
+
+  /// The stars earned, one per routine and day (`yyyy-mm-dd:routine`).
+  Set<String> get stars => _stars.toSet();
+
+  /// Gives the star of [key] unless it was given already; true if new.
+  bool earnStar(String key) {
+    if (_stars.contains(key)) {
+      return false;
+    }
+    // A year of stars is plenty to keep.
+    _stars = [..._stars, key];
+    if (_stars.length > 800) {
+      _stars = _stars.sublist(_stars.length - 800);
+    }
+    unawaited(_changed());
+    return true;
   }
 
   List<String>? _kidsEffects;
@@ -391,6 +431,16 @@ class PreferencesController extends ChangeNotifier {
           for (final item in countdowns.take(Countdown.maxCountdowns))
             if (Countdown.fromJson(item) case final countdown?) countdown,
       ]..sort((a, b) => a.date.compareTo(b.date));
+      final routines = json['routineSteps'];
+      _routineSteps = {
+        if (routines is Map)
+          for (final MapEntry(:key, :value) in routines.entries)
+            if (key is String && value is List && key.length <= 20)
+              key: _strings(value).take(20).toList(),
+      };
+      _stars = _strings(json['stars']).take(800).toList();
+      _notificationLights =
+          NotificationLightsSettings.fromJson(json['notificationLights']);
       final kids = json['kidsEffects'];
       _kidsEffects = kids is List ? _strings(kids).take(24).toList() : null;
       _kidsLocked = json['kidsLocked'] == true;
@@ -668,6 +718,9 @@ class PreferencesController extends ChangeNotifier {
       'simonBest': _simonBest,
       'naturalLights': _naturalLights,
       'kidsEffects': _kidsEffects,
+      'routineSteps': _routineSteps,
+      'stars': _stars,
+      'notificationLights': _notificationLights.toJson(),
       'kidsLocked': _kidsLocked,
       'adventOpened': _adventOpened,
       'countdowns': [for (final c in _countdowns) c.toJson()],

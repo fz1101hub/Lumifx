@@ -19,7 +19,10 @@ enum _Stage { setup, candles, party }
 /// lamps; blow them out with a tap, or on the phone's microphone, and the
 /// room bursts into colour.
 class BirthdayScreen extends StatefulWidget {
-  const BirthdayScreen({super.key});
+  const BirthdayScreen({this.playing, super.key});
+
+  /// The party already on the lights, when opened from the mini-player.
+  final LightingEffect? playing;
 
   @override
   State<BirthdayScreen> createState() => _BirthdayScreenState();
@@ -34,6 +37,26 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   Birthday? _birthday;
   LightingEffect? _candles;
   LightingEffect? _party;
+
+  @override
+  void initState() {
+    super.initState();
+    final playing = widget.playing;
+    final birthday = playing == null ? null : Birthday.of(playing);
+    if (playing != null && birthday != null) {
+      _birthday = birthday;
+      _name.text = birthday.name;
+      _age.text = birthday.age == 0 ? '' : '${birthday.age}';
+      if (Birthday.isCandles(playing)) {
+        _candles = playing;
+        _stage = _Stage.candles;
+      } else {
+        _party = playing;
+        _stage = _Stage.party;
+      }
+    }
+  }
+
   StreamSubscription<Uint8List>? _listening;
   var _starting = false;
 
@@ -51,10 +74,17 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     // Unlit candles make no sense without this screen; the party may
     // finish on its own.
     final candles = _candles;
+    final playback = _playback;
     if (_stage == _Stage.candles &&
         candles != null &&
-        _playback.effect.id == candles.id) {
-      unawaited(_playback.stop());
+        playback.effect.id == candles.id) {
+      // Not while the screen is being taken down: stopping redraws
+      // whatever listens to the player.
+      unawaited(Future.microtask(() {
+        if (playback.effect.id == candles.id) {
+          return playback.stop();
+        }
+      }));
     }
     _name.dispose();
     _age.dispose();

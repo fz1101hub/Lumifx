@@ -3009,5 +3009,825 @@
   "recordingDenied": "LumiFX needs the microphone to record your voice. You can allow it in your phone settings.",
   "@recordingDenied": {
     "description": "The microphone cannot be used to record"
+  },
+  "homeFamily": "For the family",
+  "@homeFamily": {
+    "description": "Home section title: features for the family"
+  },
+  "homeMore": "More",
+  "@homeMore": {
+    "description": "Home section title: more features"
+  },
+  "homeYourHome": "Your home",
+  "@homeYourHome": {
+    "description": "Home section title: rooms and routines of the house"
+  },
+  "kidRoutines": "Morning and evening",
+  "@kidRoutines": {
+    "description": "Home entry: picture checklists for children's mornings and evenings"
+  },
+  "kidRoutinesSubtitle": "Picture checklists with stars",
+  "@kidRoutinesSubtitle": {
+    "description": "Subtitle of the picture checklists"
+  },
+  "kidRoutinesDescription": "Each picture is something to do. Tap it when it's done: the lamps fill up one after the other, and when everything is done there's a party of light and a star.",
+  "@kidRoutinesDescription": {
+    "description": "Explains the picture checklists"
+  },
+  "routineMorning": "Morning routine",
+  "@routineMorning": {
+    "description": "The morning checklist"
+  },
+  "routineEvening": "Evening routine",
+  "@routineEvening": {
+    "description": "The evening checklist"
+  },
+  "routineChooseSteps": "Choose the steps",
+  "@routineChooseSteps": {
+    "description": "Button: choose which steps a routine has"
+  },
+  "routineStarToday": "Star earned today",
+  "@routineStarToday": {
+    "description": "A star was earned today for this routine"
+  },
+  "routineStars": "{count, plural, =0{No stars yet} =1{1 star} other{{count} stars}}",
+  "@routineStars": {
+    "description": "How many stars were earned",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "routineProgress": "{done} of {total} done",
+  "@routineProgress": {
+    "description": "How many steps are done",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "routineDone": "Well done! You earned a star!",
+  "@routineDone": {
+    "description": "All steps done, star earned"
+  },
+  "routineDoneAgain": "Well done! Today's star is already yours.",
+  "@routineDoneAgain": {
+    "description": "All steps done again the same day"
+  },
+  "stepGetUp": "Get up",
+  "@stepGetUp": {
+    "description": "Routine step"
+  },
+  "stepWashFace": "Wash your face",
+  "@stepWashFace": {
+    "description": "Routine step"
+  },
+  "stepGetDressed": "Get dressed",
+  "@stepGetDressed": {
+    "description": "Routine step"
+  },
+  "stepBreakfast": "Breakfast",
+  "@stepBreakfast": {
+    "description": "Routine step"
+  },
+  "stepBrushTeeth": "Brush your teeth",
+  "@stepBrushTeeth": {
+    "description": "Routine step"
+  },
+  "stepShoesAndBag": "Shoes and backpack",
+  "@stepShoesAndBag": {
+    "description": "Routine step"
+  },
+  "stepBath": "Bath or wash",
+  "@stepBath": {
+    "description": "Routine step"
+  },
+  "stepPyjamas": "Pyjamas on",
+  "@stepPyjamas": {
+    "description": "Routine step"
+  },
+  "stepToilet": "Toilet",
+  "@stepToilet": {
+    "description": "Routine step"
+  },
+  "stepTidyToys": "Tidy the toys",
+  "@stepTidyToys": {
+    "description": "Routine step"
+  },
+  "stepStoryTime": "Story time",
+  "@stepStoryTime": {
+    "description": "Routine step"
+  },
+  "lullabies": "Lullabies",
+  "@lullabies": {
+    "description": "Home entry: lullabies on a music box with lights"
+  },
+  "lullabiesSubtitle": "A music box, and the lamps glowing note by note",
+  "@lullabiesSubtitle": {
+    "description": "Subtitle of the lullabies"
+  },
+  "lullabiesDescription": "A music box plays a lullaby on the phone and each note softly lights a lamp, low notes on one side, high notes on the other. At the end the lights can fade out and switch off.",
+  "@lullabiesDescription": {
+    "description": "Explains the lullabies"
+  },
+  "lullabyTimes": "How many times",
+  "@lullabyTimes": {
+    "description": "How many times the lullaby plays"
+  },
+  "lullabyTimesCount": "{count, plural, =1{Just once} other{{count} times}}",
+  "@lullabyTimesCount": {
+    "description": "A number of times",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lullabySwitchOff": "Then fade out the lights",
+  "@lullabySwitchOff": {
+    "description": "Switch: fade out and switch off the lights at the end of the lullaby"
+  },
+  "musicSoundsOff": "Sounds are off: turn them on to hear the music",
+  "@musicSoundsOff": {
+    "description": "Sounds are switched off in the settings; switch to turn them on"
+  },
+  "melodySeconds": "{seconds} s",
+  "@melodySeconds": {
+    "description": "A length in seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "melodyBrahms": "Brahms's Lullaby",
+  "@melodyBrahms": {
+    "description": "Melody: Brahms' lullaby"
+  },
+  "melodyTwinkle": "Twinkle, Twinkle, Little Star",
+  "@melodyTwinkle": {
+    "description": "Melody: Twinkle Twinkle Little Star (the French tune Ah! vous dirai-je, maman)"
+  },
+  "melodyFrereJacques": "Are You Sleeping (Frère Jacques)",
+  "@melodyFrereJacques": {
+    "description": "Melody: Frère Jacques"
+  },
+  "melodyJingleBells": "Jingle Bells",
+  "@melodyJingleBells": {
+    "description": "Melody: Jingle Bells"
+  },
+  "melodySilentNight": "Silent Night",
+  "@melodySilentNight": {
+    "description": "Melody: Silent Night"
+  },
+  "melodyMerryChristmas": "We Wish You a Merry Christmas",
+  "@melodyMerryChristmas": {
+    "description": "Melody: We Wish You a Merry Christmas"
+  },
+  "christmasShow": "Christmas light show",
+  "@christmasShow": {
+    "description": "A Christmas light show with carols"
+  },
+  "christmasShowSubtitle": "Carols with the lights in time, note by note",
+  "@christmasShowSubtitle": {
+    "description": "Subtitle of the Christmas light show"
+  },
+  "christmasShowDescription": "Classic carols play on little bells while every note lights a lamp in red, green and gold, like a house dressed for Christmas.",
+  "@christmasShowDescription": {
+    "description": "Explains the Christmas light show"
+  },
+  "storyMaker": "Story maker",
+  "@storyMaker": {
+    "description": "Home entry: make up a bedtime story from a hero, a place and an adventure"
+  },
+  "storyMakerSubtitle": "Pick a hero, a place and an adventure: a new story every night",
+  "@storyMakerSubtitle": {
+    "description": "Subtitle of the story maker"
+  },
+  "storyMakerDescription": "Choose who the story is about, where it goes and what happens, or let the app surprise you. The story is told with the lights, and can be read aloud.",
+  "@storyMakerDescription": {
+    "description": "Explains the story maker"
+  },
+  "storyMakerHero": "Who is the hero?",
+  "@storyMakerHero": {
+    "description": "Story maker: choose the hero"
+  },
+  "storyMakerPlace": "Where does it happen?",
+  "@storyMakerPlace": {
+    "description": "Story maker: choose the place"
+  },
+  "storyMakerQuest": "What happens?",
+  "@storyMakerQuest": {
+    "description": "Story maker: choose the adventure"
+  },
+  "storyMakerName": "The hero's name",
+  "@storyMakerName": {
+    "description": "Story maker: text field for the hero's name"
+  },
+  "storyMakerSurprise": "Surprise me",
+  "@storyMakerSurprise": {
+    "description": "Story maker: pick everything at random"
+  },
+  "storyMakerTell": "Tell the story",
+  "@storyMakerTell": {
+    "description": "Story maker: start telling the story"
+  },
+  "storyMakerAnother": "Another story",
+  "@storyMakerAnother": {
+    "description": "Story maker: make up another story"
+  },
+  "taleFox": "Fox",
+  "@taleFox": {
+    "description": "Story hero: a fox"
+  },
+  "taleRobot": "Robot",
+  "@taleRobot": {
+    "description": "Story hero: a robot"
+  },
+  "taleDragon": "Dragon",
+  "@taleDragon": {
+    "description": "Story hero: a dragon"
+  },
+  "taleUnicorn": "Unicorn",
+  "@taleUnicorn": {
+    "description": "Story hero: a unicorn"
+  },
+  "taleOwl": "Owl",
+  "@taleOwl": {
+    "description": "Story hero: an owl"
+  },
+  "taleKitten": "Kitten",
+  "@taleKitten": {
+    "description": "Story hero: a kitten"
+  },
+  "taleFoxIntro": "a little fox with a fluffy red tail",
+  "@taleFoxIntro": {
+    "description": "Story: describes the hero after its name (apposition); must not depend on the hero's gender"
+  },
+  "taleRobotIntro": "a small robot with a blue light blinking on its head",
+  "@taleRobotIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleDragonIntro": "a baby dragon who sneezes green sparks instead of fire",
+  "@taleDragonIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleUnicornIntro": "a unicorn with a mane of every colour",
+  "@taleUnicornIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleOwlIntro": "a wise owl with big golden eyes",
+  "@taleOwlIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleKittenIntro": "a curious kitten with soft white paws",
+  "@taleKittenIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleForest": "Enchanted forest",
+  "@taleForest": {
+    "description": "Story place: an enchanted forest"
+  },
+  "taleSea": "Under the sea",
+  "@taleSea": {
+    "description": "Story place: under the sea"
+  },
+  "taleSpace": "Among the stars",
+  "@taleSpace": {
+    "description": "Story place: among the stars"
+  },
+  "taleCastle": "Cloud castle",
+  "@taleCastle": {
+    "description": "Story place: a castle in the clouds"
+  },
+  "taleMountain": "Snowy mountain",
+  "@taleMountain": {
+    "description": "Story place: a snowy mountain"
+  },
+  "taleForestLine": "One evening {name} walks into the enchanted forest, where fireflies dance between the trees.",
+  "@taleForestLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleSeaLine": "One evening {name} dives under the sea, among shining fish and swaying seaweed.",
+  "@taleSeaLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleSpaceLine": "One evening {name} flies up among the stars, riding a silver comet.",
+  "@taleSpaceLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleCastleLine": "One evening {name} climbs a rainbow staircase up to a castle in the clouds.",
+  "@taleCastleLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleMountainLine": "One evening {name} reaches the top of a snowy mountain, where the snow sparkles like sugar.",
+  "@taleMountainLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleStar": "A lost star",
+  "@taleStar": {
+    "description": "Story adventure: a lost star"
+  },
+  "taleRainbow": "The faded rainbow",
+  "@taleRainbow": {
+    "description": "Story adventure: a rainbow that lost its colours"
+  },
+  "taleTreasure": "A treasure map",
+  "@taleTreasure": {
+    "description": "Story adventure: a treasure map"
+  },
+  "taleFirefly": "A firefly without light",
+  "@taleFirefly": {
+    "description": "Story adventure: a firefly that lost its light"
+  },
+  "taleDark": "Afraid of the dark",
+  "@taleDark": {
+    "description": "Story adventure: afraid of the dark"
+  },
+  "taleStar1": "Suddenly {name} sees a little fallen star, crying because it cannot find its way home.",
+  "@taleStar1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleStar2": "{name} picks it up gently and carries it back up to the sky, where it shines brighter than ever.",
+  "@taleStar2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleRainbow1": "But there {name} finds a rainbow that has lost its colours, and everything has turned grey.",
+  "@taleRainbow1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleRainbow2": "{name} gathers the colours back one by one: red, orange, yellow, green, blue and violet, and the rainbow shines again.",
+  "@taleRainbow2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTreasure1": "There {name} finds an old map with a big X drawn on it.",
+  "@taleTreasure1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTreasure2": "{name} follows the map step by step and discovers a chest full of golden light.",
+  "@taleTreasure2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleFirefly1": "There {name} meets a tiny firefly who has lost its light and cannot find its friends in the dark.",
+  "@taleFirefly1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleFirefly2": "{name} shares a little bit of glow, and the firefly lights up again and calls all its friends.",
+  "@taleFirefly2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleDark1": "Then night falls, everything goes dark, and {name} feels a little bit scared.",
+  "@taleDark1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleDark2": "{name} takes a deep breath, and one by one soft little lights appear all around: the dark is full of friends.",
+  "@taleDark2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleIntro": "Once upon a time there was {name}, {hero}.",
+  "@taleIntro": {
+    "description": "Story line: the opening, with the hero's name and its description (taleFoxIntro...)",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "hero": {
+        "type": "String"
+      }
+    }
+  },
+  "taleEnding": "At last {name} goes home, gives a big yawn and falls asleep under a warm blanket. Goodnight, {name}.",
+  "@taleEnding": {
+    "description": "Story line: the ending, going to sleep; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTitle": "The story of {name}",
+  "@taleTitle": {
+    "description": "The title of a made-up story",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "countLights": "Count the lights",
+  "@countLights": {
+    "description": "Game: count how many times the lamps blink"
+  },
+  "countLightsSubtitle": "How many times do the lamps blink?",
+  "@countLightsSubtitle": {
+    "description": "Subtitle of the counting game"
+  },
+  "countLightsRules": "The lamps blink a few times, each in a colour: count them aloud, then tap the right number. The numbers grow as you get better. The lamp on the screen blinks too.",
+  "@countLightsRules": {
+    "description": "Rules of the counting game"
+  },
+  "countWatch": "Watch and count…",
+  "@countWatch": {
+    "description": "Counting game: the lamps are blinking"
+  },
+  "countHowMany": "How many?",
+  "@countHowMany": {
+    "description": "Counting game: tap the number of blinks"
+  },
+  "countRight": "Yes, {count}!",
+  "@countRight": {
+    "description": "Counting game: the right answer",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "countWrong": "Not quite: let's count again",
+  "@countWrong": {
+    "description": "Counting game: a wrong answer, the lamps blink again"
+  },
+  "countAgain": "Show me again",
+  "@countAgain": {
+    "description": "Counting game: blink the same number again"
+  },
+  "countScore": "{count, plural, =1{One right answer} other{{count} right answers}}",
+  "@countScore": {
+    "description": "Counting game: right answers so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "colourWords": "Colours in another language",
+  "@colourWords": {
+    "description": "Game: learn the names of colours in another language"
+  },
+  "colourWordsSubtitle": "The room turns a colour and a voice says its name",
+  "@colourWordsSubtitle": {
+    "description": "Subtitle of the colours game"
+  },
+  "colourWordsRules": "Choose a language: each colour lights up the room and is said aloud in that language. Then try the quiz: hear a word and tap its colour.",
+  "@colourWordsRules": {
+    "description": "Rules of the colours game"
+  },
+  "colourWordsLanguage": "Language to learn",
+  "@colourWordsLanguage": {
+    "description": "Colours game: the language to learn"
+  },
+  "colourWordsLearn": "Learn",
+  "@colourWordsLearn": {
+    "description": "Colours game mode: learn the words"
+  },
+  "colourWordsQuiz": "Quiz",
+  "@colourWordsQuiz": {
+    "description": "Colours game mode: quiz"
+  },
+  "colourWordsNext": "Next colour",
+  "@colourWordsNext": {
+    "description": "Colours game: show the next colour"
+  },
+  "colourWordsSayAgain": "Say it again",
+  "@colourWordsSayAgain": {
+    "description": "Colours game: say the word again"
+  },
+  "colourWordsWhich": "Which colour is it?",
+  "@colourWordsWhich": {
+    "description": "Colours game quiz: tap the colour you heard"
+  },
+  "colourWordsRight": "Well done!",
+  "@colourWordsRight": {
+    "description": "Colours game quiz: right answer"
+  },
+  "colourWordsTryAgain": "Try again",
+  "@colourWordsTryAgain": {
+    "description": "Colours game quiz: wrong answer"
+  },
+  "colourWordsSoundOff": "Sounds are off: turn them on to hear the words",
+  "@colourWordsSoundOff": {
+    "description": "Sounds are switched off; switch to turn them on"
+  },
+  "monsterSpray": "Monster spray",
+  "@monsterSpray": {
+    "description": "Bedtime game: a pretend spray that chases monsters out of the room"
+  },
+  "monsterSpraySubtitle": "Chase the monsters away before sleep, then a guardian light",
+  "@monsterSpraySubtitle": {
+    "description": "Subtitle of the monster spray"
+  },
+  "monsterSprayDescription": "Some funny little monsters are hiding in the room. Tap the spray to chase them away one by one: the lamps puff with every spray. When they have all gone, a warm guardian light watches over the night.",
+  "@monsterSprayDescription": {
+    "description": "Explains the monster spray"
+  },
+  "monsterSprayButton": "Spray!",
+  "@monsterSprayButton": {
+    "description": "The big spray button"
+  },
+  "monstersLeft": "{count, plural, =1{One monster left} other{{count} monsters left}}",
+  "@monstersLeft": {
+    "description": "Monster spray: monsters still hiding",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monstersGone": "All gone! The room is safe.",
+  "@monstersGone": {
+    "description": "Monster spray: all the monsters have gone"
+  },
+  "guardianLight": "Guardian light",
+  "@guardianLight": {
+    "description": "A warm low light left on for the night after the monster spray"
+  },
+  "guardianLightDescription": "A warm, low guardian light stays on, then fades out by itself.",
+  "@guardianLightDescription": {
+    "description": "Explains the guardian light"
+  },
+  "guardianLightFor": "Stays on for",
+  "@guardianLightFor": {
+    "description": "Label above the minutes the guardian light stays on"
+  },
+  "monsterSprayAgain": "Spray again",
+  "@monsterSprayAgain": {
+    "description": "Monster spray: play again"
+  },
+  "cinema": "Cinema mode",
+  "@cinema": {
+    "description": "Home entry: lights for watching a film"
+  },
+  "cinemaSubtitle": "The lights dim for the film and come back at the end",
+  "@cinemaSubtitle": {
+    "description": "Subtitle of cinema mode"
+  },
+  "cinemaDescription": "Start the film and the lights dim slowly, like at the cinema. At the intermission they rise gently; at the end they come back little by little, then return to how they were.",
+  "@cinemaDescription": {
+    "description": "Explains cinema mode"
+  },
+  "cinemaGlow": "Soft glow during the film",
+  "@cinemaGlow": {
+    "description": "Cinema mode switch: a faint light during the film instead of dark"
+  },
+  "cinemaGlowSubtitle": "A faint cool light, easier on the eyes than total darkness",
+  "@cinemaGlowSubtitle": {
+    "description": "Explains the soft glow"
+  },
+  "cinemaStart": "Start the film",
+  "@cinemaStart": {
+    "description": "Cinema mode: the film starts"
+  },
+  "cinemaResume": "Back to the film",
+  "@cinemaResume": {
+    "description": "Cinema mode: back to the film after the intermission"
+  },
+  "cinemaIntermission": "Intermission",
+  "@cinemaIntermission": {
+    "description": "Cinema mode: the intermission"
+  },
+  "cinemaEnd": "End of the film",
+  "@cinemaEnd": {
+    "description": "Cinema mode: the film is over"
+  },
+  "cinemaNowFilm": "Enjoy the film",
+  "@cinemaNowFilm": {
+    "description": "Cinema mode status: the film is on"
+  },
+  "cinemaNowIntermission": "Intermission: time to stretch your legs",
+  "@cinemaNowIntermission": {
+    "description": "Cinema mode status: intermission"
+  },
+  "cinemaNowEnd": "The lights are coming back",
+  "@cinemaNowEnd": {
+    "description": "Cinema mode status: the lights are coming back"
+  },
+  "nfcStickers": "NFC stickers",
+  "@nfcStickers": {
+    "description": "Home entry: NFC stickers that start an effect when the phone touches them"
+  },
+  "nfcStickersSubtitle": "Touch a sticker with the phone to start an effect",
+  "@nfcStickersSubtitle": {
+    "description": "Subtitle of NFC stickers"
+  },
+  "nfcStickersDescription": "Write a link on an NFC sticker and put it where it is handy: by the bed for bedtime, by the sofa for a film night. Touching it with the unlocked phone starts what it says.",
+  "@nfcStickersDescription": {
+    "description": "Explains NFC stickers"
+  },
+  "nfcWrite": "Write on a sticker",
+  "@nfcWrite": {
+    "description": "Button: write this link on an NFC sticker"
+  },
+  "nfcHoldSticker": "Hold a sticker near the back of the phone",
+  "@nfcHoldSticker": {
+    "description": "Waiting for an NFC sticker to write"
+  },
+  "nfcWritten": "Sticker ready: touch it with the phone to start",
+  "@nfcWritten": {
+    "description": "The NFC sticker was written"
+  },
+  "nfcReadOnly": "This sticker is locked and cannot be written",
+  "@nfcReadOnly": {
+    "description": "The NFC sticker is locked"
+  },
+  "nfcTooSmall": "The link does not fit on this sticker",
+  "@nfcTooSmall": {
+    "description": "The link does not fit on the NFC sticker"
+  },
+  "nfcNotNdef": "This sticker cannot hold links",
+  "@nfcNotNdef": {
+    "description": "The NFC tag cannot hold links"
+  },
+  "nfcFailed": "Could not write: hold the sticker still and try again",
+  "@nfcFailed": {
+    "description": "Writing the NFC sticker failed"
+  },
+  "nfcOff": "NFC is off",
+  "@nfcOff": {
+    "description": "NFC is switched off on the phone"
+  },
+  "nfcOpenSettings": "Turn on",
+  "@nfcOpenSettings": {
+    "description": "Button: open the NFC settings"
+  },
+  "nfcShortcuts": "On iPhone, use the Shortcuts app: Automation, New Automation, NFC, scan the sticker, then add the Open URLs action with a link copied from here.",
+  "@nfcShortcuts": {
+    "description": "iPhone: how to make an NFC sticker open a link with the Shortcuts app"
+  },
+  "nfcUnavailable": "This phone cannot write NFC stickers: write them with another phone, or copy a link into an NFC app.",
+  "@nfcUnavailable": {
+    "description": "This Android phone cannot write NFC stickers"
+  },
+  "linkBedtime": "Start bedtime",
+  "@linkBedtime": {
+    "description": "A ready-made link that starts bedtime"
+  },
+  "notificationLights": "Notification lights",
+  "@notificationLights": {
+    "description": "Home entry (Android): the lights flash when chosen apps post a notification"
+  },
+  "notificationLightsSubtitle": "The lights flash when chosen apps notify you",
+  "@notificationLightsSubtitle": {
+    "description": "Subtitle of notification lights"
+  },
+  "notificationLightsDescription": "Choose apps, such as messages or the doorbell, and a colour for each: when one of them posts a notification, the lights of the room flash in that colour, even with LumiFX closed.",
+  "@notificationLightsDescription": {
+    "description": "Explains notification lights"
+  },
+  "notificationLightsPrivacy": "LumiFX only sees which app posted a notification, never what it says, and keeps nothing.",
+  "@notificationLightsPrivacy": {
+    "description": "Privacy note of notification lights"
+  },
+  "notificationLightsAccess": "Allow LumiFX to see notifications",
+  "@notificationLightsAccess": {
+    "description": "Card: notification access must be allowed in Android's settings"
+  },
+  "notificationLightsAllow": "Allow",
+  "@notificationLightsAllow": {
+    "description": "Button: open the notification access settings"
+  },
+  "notificationLightsOn": "Flash the lights for notifications",
+  "@notificationLightsOn": {
+    "description": "Switch: notification lights on"
+  },
+  "notificationLightsRoom": "Lights that flash",
+  "@notificationLightsRoom": {
+    "description": "The room or zone whose lights flash"
+  },
+  "notificationLightsApps": "Apps",
+  "@notificationLightsApps": {
+    "description": "Header of the chosen apps"
+  },
+  "notificationLightsNoApps": "No apps chosen yet",
+  "@notificationLightsNoApps": {
+    "description": "No app chosen yet"
+  },
+  "notificationLightsAddApp": "Add an app",
+  "@notificationLightsAddApp": {
+    "description": "Button: choose an app whose notifications flash the lights"
+  },
+  "notificationLightsSearch": "Search apps",
+  "@notificationLightsSearch": {
+    "description": "Hint of the app search field"
+  },
+  "notificationLightsColor": "Colour for {app}",
+  "@notificationLightsColor": {
+    "description": "Title of the colour chooser for an app",
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationLightsTest": "Try it",
+  "@notificationLightsTest": {
+    "description": "Button: flash the lights now to try"
+  },
+  "notificationLightsTestFailed": "The lights did not answer: check the bridge connection",
+  "@notificationLightsTestFailed": {
+    "description": "The test flash did not reach the lights"
+  },
+  "notificationLightsRemove": "Remove",
+  "@notificationLightsRemove": {
+    "description": "Button: remove this app"
+  },
+  "notificationLightsQuiet": "Quiet hours",
+  "@notificationLightsQuiet": {
+    "description": "Switch: quiet hours when nothing flashes"
+  },
+  "notificationLightsQuietSubtitle": "Nothing flashes during these hours",
+  "@notificationLightsQuietSubtitle": {
+    "description": "Explains quiet hours"
+  },
+  "notificationLightsFrom": "From",
+  "@notificationLightsFrom": {
+    "description": "Start of the quiet hours"
+  },
+  "notificationLightsTo": "To",
+  "@notificationLightsTo": {
+    "description": "End of the quiet hours"
+  },
+  "keepPlayingScreenOffIos": "Effects with sounds go on when the iPhone locks, shown on the lock screen with a Stop button. Effects without sounds stop, as iOS requires.",
+  "@keepPlayingScreenOffIos": {
+    "description": "iPhone: explains the screen-off setting (effects with sounds keep playing, with lock screen controls)"
   }
 }

@@ -14,7 +14,11 @@ import 'breathing.dart';
 /// then follow the circle and the lamps, up as you breathe in, down as you
 /// breathe out.
 class BreathingScreen extends StatefulWidget {
-  const BreathingScreen({super.key});
+  const BreathingScreen({this.playing, super.key});
+
+  /// The breathing already on the lights, when opened from the
+  /// mini-player.
+  final LightingEffect? playing;
 
   static String nameOf(AppLocalizations l10n, BreathingPattern pattern) =>
       switch (pattern) {
@@ -36,9 +40,14 @@ class BreathingScreen extends StatefulWidget {
 }
 
 class _BreathingScreenState extends State<BreathingScreen> {
-  var _pattern = BreathingPattern.flowerCandle;
-  var _minutes = 3;
-  LightingEffect? _effect;
+  late var _pattern = _running?.$1 ?? BreathingPattern.flowerCandle;
+  late var _minutes = _running?.$2 ?? 3;
+  late LightingEffect? _effect = widget.playing;
+
+  (BreathingPattern, int)? get _running => switch (widget.playing) {
+        final effect? => BreathingPattern.of(effect),
+        null => null,
+      };
 
   Future<void> _start() async {
     final l10n = context.l10n;

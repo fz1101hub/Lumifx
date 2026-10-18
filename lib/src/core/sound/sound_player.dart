@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
+import 'melody.dart';
 import 'soundscape.dart';
 import 'synth.dart';
 
@@ -41,7 +42,10 @@ class NoSoundPlayer implements SoundPlayer {
 /// Plays generated WAV files with the audioplayers plugin. The files are
 /// made once (in a background isolate) and kept in the temporary folder.
 /// Other apps' music keeps playing (no audio focus on Android, a mixing
-/// session that respects the silent switch on iOS).
+/// session on iOS). On iOS the session is of the playback kind: a lullaby
+/// is heard with the silent switch on, and an effect with sounds goes on
+/// with the phone locked (the app may run in the background while it
+/// plays audio).
 class AudioplayersSoundPlayer implements SoundPlayer {
   AudioplayersSoundPlayer();
 
@@ -59,7 +63,10 @@ class AudioplayersSoundPlayer implements SoundPlayer {
       usageType: AndroidUsageType.media,
       contentType: AndroidContentType.sonification,
     ),
-    iOS: AudioContextIOS(category: AVAudioSessionCategory.ambient),
+    iOS: AudioContextIOS(
+      category: AVAudioSessionCategory.playback,
+      options: const {AVAudioSessionOptions.mixWithOthers},
+    ),
   );
 
   static final _files = <String, Future<String>>{};
@@ -94,6 +101,28 @@ class AudioplayersSoundPlayer implements SoundPlayer {
     _volume = volume;
     _paused = false;
     await _stopLoops();
+    if (soundscape.melody case final melody?) {
+      final times = soundscape.melodyTimes;
+      final path = await _file('v1_melody_${melody.id}_x$times',
+          () => wavOf(synthesizeMelody(melody, times: times)));
+      if (generation != _generation) {
+        return;
+      }
+      final player = AudioPlayer();
+      _loops.add(player);
+      try {
+        await player.setAudioContext(_context);
+        await player.setReleaseMode(ReleaseMode.stop);
+        if (_paused) {
+          await player.setSource(DeviceFileSource(path));
+          await player.setVolume(_volume);
+        } else {
+          await player.play(DeviceFileSource(path), volume: _volume);
+        }
+      } on Object catch (error) {
+        debugPrint('Sound: $error');
+      }
+    }
     for (final ambience in soundscape.ambiences) {
       final path =
           await _file('v1_${ambience.name}', () => _ambienceWav(ambience));

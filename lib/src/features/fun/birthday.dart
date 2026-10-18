@@ -57,6 +57,10 @@ class Birthday {
     );
   }
 
+  /// Whether [effect] is the candles (not the party) of a birthday.
+  static bool isCandles(LightingEffect effect) =>
+      effect.id.startsWith(_candlesPrefix);
+
   /// "Happy birthday, Anna!", or without a name "Happy birthday!".
   String title(AppLocalizations l10n) =>
       name.isEmpty ? l10n.birthdayHappy : l10n.birthdayHappyName(name);

@@ -163,6 +163,8 @@ class EffectRenderer {
           _renderCountdown(context, frames);
         case EffectEventTypes.ramp:
           _renderRamp(context, frames);
+        case EffectEventTypes.progress:
+          _renderProgress(context, frames);
         case EffectEventTypes.screen:
           if (screen != null && screen.zones > 0) {
             _renderScreen(context, frames, screen);
@@ -439,6 +441,24 @@ class EffectRenderer {
     }
   }
 
+  void _renderProgress(_EventContext context, List<LightFrame> frames) {
+    final p = context.event.parameters;
+    final value = _number(p, 'value', 0).clamp(0.0, 1.0);
+    final from = _color(p, 'from', const LightColor(0.2, 0.2, 0.4));
+    final to = _color(p, 'to', const LightColor(1, 0.8, 0.3));
+    final brightness = _number(p, 'brightness', 0.85);
+    final seconds = context.local.inMicroseconds / 1e6;
+    final breath = 1 + 0.06 * math.sin(2 * math.pi * seconds / 3);
+    for (var slot = 0; slot < slotCount; slot++) {
+      final lit =
+          slotCount == 1 ? value : (value * slotCount - slot).clamp(0.0, 1.0);
+      frames[slot] = LightFrame(
+        LightColor.lerp(from, to, lit),
+        ((0.15 + (brightness - 0.15) * lit) * breath).clamp(0.0, 1.0),
+      );
+    }
+  }
+
   void _renderRamp(_EventContext context, List<LightFrame> frames) {
     final p = context.event.parameters;
     final from = _number(p, 'from', 0.2);
@@ -600,6 +620,10 @@ class EffectRenderer {
         final count = _number(p, 'count', 2).round().clamp(1, slotCount);
         return (List<int>.generate(slotCount, (i) => i)..shuffle(random))
             .take(count);
+      case 'position':
+        // One light along the room, 0 the first and 1 the last.
+        final at = _number(p, 'position', 0.5).clamp(0.0, 1.0);
+        return [(at * (slotCount - 1)).round()];
       case 'random_light':
       default:
         return [random.nextInt(slotCount)];

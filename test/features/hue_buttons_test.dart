@@ -215,6 +215,22 @@ void main() {
       expect(playback.effect.id, 'thunderstorm');
     });
 
+    test('in kids mode a button plays only what a grown-up chose', () async {
+      await preferences.setFlashWarningShown(true);
+      await preferences.setKidsEffects(['ocean']);
+      await preferences.setKidsLocked(true);
+      await preferences.setButtonAction('b1', 'thunderstorm');
+      await preferences.setButtonAction('b2', 'ocean');
+      await preferences.setButtonAction('b3', 'aurora');
+      await press('b1');
+      expect(playback.status, PlaybackStatus.idle, reason: 'it flashes');
+      await press('b3');
+      expect(playback.status, PlaybackStatus.idle, reason: 'not chosen');
+      await press('b2');
+      expect(playback.effect.id, 'ocean');
+      expect(playback.status, PlaybackStatus.playing);
+    });
+
     test('a dropped stream reconnects; the background closes it', () async {
       await preferences.setButtonAction('b1', 'aurora');
       expect(opened, 1);

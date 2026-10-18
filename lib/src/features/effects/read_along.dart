@@ -10,6 +10,7 @@ import '../fun/birthday.dart';
 import '../fun/countdown.dart';
 import '../fun/light_games.dart';
 import '../paths/path_story.dart';
+import '../tales/tale.dart';
 import '../timers/pomodoro.dart';
 import '../library/effect_library.dart';
 
@@ -185,6 +186,9 @@ List<(int, String)> narrationOf(
   }
   if (PathStory.of(effect) case (_, final part)) {
     return PathStory.narrationOf(part, l10n);
+  }
+  if (Tale.of(effect) case final tale?) {
+    return tale.narration(l10n);
   }
   if (Advent.dayOf(effect) case final day?) {
     return Advent.narration(day, l10n);

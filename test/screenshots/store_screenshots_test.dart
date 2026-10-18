@@ -93,6 +93,12 @@ Future<void> _capture(WidgetTester tester, String device, Locale locale) async {
   Future<void> shot(String name) =>
       _save(tester, boundary, '$device/${locale.languageCode}/$name');
   Future<void> open(String text) async {
+    // Not built: perhaps above, where the page was left scrolled. Start
+    // from the top and look downwards.
+    if (find.text(text).evaluate().isEmpty) {
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, 20000));
+      await tester.pumpAndSettle();
+    }
     // The outermost Scrollable is the page; shelves scroll sideways.
     await tester.scrollUntilVisible(find.text(text), 200,
         scrollable: find.byType(Scrollable).first);
@@ -135,6 +141,37 @@ Future<void> _capture(WidgetTester tester, String device, Locale locale) async {
   await open(l10n.entertainmentStreaming);
   await open('TV area');
   await shot('05-area-editor');
+  await back();
+  await back();
+  await back();
+
+  // The family features.
+  await open(l10n.fun);
+  await shot('06-family');
+  await open(l10n.gameRedLight);
+  await tester.tap(find.text(l10n.timerStart));
+  for (var i = 0; i < 10; i++) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+  await shot('07-game');
+  await tester.tap(find.text(l10n.stop));
+  await tester.pumpAndSettle();
+  await back();
+  await open(l10n.birthday);
+  await tester.enterText(find.byType(TextField).first, 'Anna');
+  await tester.enterText(find.byType(TextField).last, '6');
+  await tester.tap(find.text(l10n.birthdayLight));
+  for (var i = 0; i < 30; i++) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+  await shot('08-birthday');
+  await back();
+  await tester.pumpAndSettle();
+  await back();
+  await open(l10n.kidsMode);
+  await tester.tap(find.text(l10n.kidsModeStart));
+  await tester.pumpAndSettle();
+  await shot('09-kids-mode');
 }
 
 Future<void> _save(WidgetTester tester, GlobalKey boundary, String path) async {
