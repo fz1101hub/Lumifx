@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/notification_lights_platform.dart';
@@ -167,6 +169,35 @@ void main() {
     // Not paired: still nothing to flash.
     await preferences.setNotificationLights(
         const NotificationLightsSettings(enabled: true).withRule(_whatsapp));
+    expect(platform.configured, [null]);
+    sync.dispose();
+  });
+
+  test('switched off while the bridge is away, the service stops anyway',
+      () async {
+    final platform = _FakePlatform();
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.load();
+    await preferences.setNotificationLights(
+        const NotificationLightsSettings(enabled: true).withRule(_whatsapp));
+    // Paired, but the bridge does not answer: no home yet.
+    final bridge = BridgeController(
+      store: InMemoryCredentialStore(_credentials),
+      clientFactory: (pin, key) => HueBridgeClient(
+        host: pin.host,
+        client: MockClient((_) async => throw http.ClientException('away')),
+        applicationKey: key,
+      ),
+    );
+    await bridge.initialize();
+    expect(bridge.home, isNull);
+    final sync = NotificationLightsSync(
+        platform: platform, preferences: preferences, bridge: bridge);
+    expect(platform.configured, isEmpty,
+        reason: 'the service keeps its lights while the bridge is away');
+
+    await preferences.setNotificationLights(
+        preferences.notificationLights.copyWith(enabled: false));
     expect(platform.configured, [null]);
     sync.dispose();
   });
