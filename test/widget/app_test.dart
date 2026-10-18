@@ -22,6 +22,7 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/calm/breathing.dart';
 import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
+import 'package:lumifx/src/features/effects/effect_player_screen.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
 import 'package:lumifx/src/features/home/home_screen.dart';
@@ -1259,9 +1260,12 @@ void main() {
     expect(playback.isPlaying, isTrue);
     expect(playback.soundscape.melody?.id, 'brahms');
     expect(playback.soundscape.melodyTimes, 1);
-    expect(playback.sleepTimer, isNotNull, reason: 'then the lights fade');
     expect(find.byTooltip('Stop'), findsOneWidget);
-    await tester.tap(find.byTooltip('Stop'));
+    // At the end of the tune the lights fade out, then switch off.
+    playback.player!.advance(playback.effect.cycleLength);
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(playback.isFadingOut, isTrue);
+    await tester.pump(const Duration(seconds: 21));
     await tester.pump(const Duration(seconds: 2));
     expect(playback.isPlaying, isFalse);
   });
@@ -2437,6 +2441,36 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('a playlist link with flashes warns, then plays it all',
+      (tester) async {
+    await _pumpApp(tester);
+    final scope = AppScope.of(tester.element(find.byType(Scaffold).first));
+    await tester.runAsync(() => scope.preferences.savePlaylist(const Playlist(
+          id: 'storm-night',
+          name: 'Storm night',
+          effectIds: ['ocean', 'thunderstorm'],
+        )));
+    final message = const JSONMethodCodec().encodeMethodCall(
+      MethodCall('pushRouteInformation',
+          {'location': 'lumifx://app/playlist/Storm%20night'}),
+    );
+    await tester.binding.defaultBinaryMessenger
+        .handlePlatformMessage(SystemChannels.navigation.name, message, (_) {});
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Flashing lights'), findsOneWidget,
+        reason: 'the first effect is calm, but the playlist is not');
+    expect(scope.playback.status, PlaybackStatus.idle);
+    await tester.tap(find.text('Continue'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(scope.playback.playlist?.id, 'storm-night',
+        reason: 'the playlist plays, not only its first effect');
+    expect(scope.playback.status, PlaybackStatus.playing);
+    await scope.playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('voice commands play, start bedtime and stop in any language',
       (tester) async {
     await _pumpApp(tester);
@@ -2663,6 +2697,43 @@ void main() {
     expect(find.text('Reading nook'), findsNothing);
     expect(find.text('New scene'), findsOneWidget);
     expect(find.byType(MiniPlayer), findsNothing);
+  });
+
+  testWidgets('a scene edited before Play plays as edited', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New scene'));
+    await step();
+    await tester.enterText(find.byType(TextField), 'Reading corner');
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await step();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Reading corner'));
+    await step();
+
+    // Edited from its player, before it ever played.
+    await tester.tap(find.byTooltip('Edit scene'));
+    await step();
+    await tester.enterText(find.byType(TextField), 'Reading nook');
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await step();
+    await step();
+    await tester.tap(find.text('Play'));
+    await tester.pump(const Duration(milliseconds: 300));
+    final playback =
+        AppScope.of(tester.element(find.byType(EffectPlayerScreen))).playback;
+    expect(playback.effect.name, 'Reading nook',
+        reason: 'the edit plays, not the scene as it was');
+    await playback.stop(restore: false);
+    await step();
   });
 
   testWidgets('a scene takes its colours from a photo', (tester) async {

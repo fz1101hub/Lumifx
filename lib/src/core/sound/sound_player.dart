@@ -15,8 +15,15 @@ abstract interface class SoundPlayer {
 
   Future<void> pause();
   Future<void> resume();
+
+  /// Stops the ambiences (a new soundscape replacing them calls this too).
   Future<void> stop();
   Future<void> setVolume(double volume);
+
+  /// Stops the thunder and the notes ringing on top, and any still being
+  /// made: kept apart from [stop] so the piano's notes go on when the
+  /// soundscape under them changes.
+  Future<void> stopCues();
 
   /// One clap of thunder on top.
   Future<void> thunder({required double volume});
@@ -38,6 +45,8 @@ class NoSoundPlayer implements SoundPlayer {
   Future<void> stop() async {}
   @override
   Future<void> setVolume(double volume) async {}
+  @override
+  Future<void> stopCues() async {}
   @override
   Future<void> thunder({required double volume}) async {}
   @override
@@ -62,6 +71,10 @@ class AudioplayersSoundPlayer implements SoundPlayer {
   final _notes = <AudioPlayer>[];
   var _nextNote = 0;
   int _generation = 0;
+
+  /// Moves on at [stopCues]: a cue whose file was still being made then
+  /// stays silent.
+  int _cueGeneration = 0;
   double _volume = 0.6;
 
   /// Paused while the loops were still being made: they wait to resume.
@@ -221,10 +234,26 @@ class AudioplayersSoundPlayer implements SoundPlayer {
   }
 
   @override
+  Future<void> stopCues() async {
+    _cueGeneration++;
+    for (final player in [if (_thunder case final t?) t, ..._notes]) {
+      try {
+        await player.stop();
+      } on Object {
+        // Released meanwhile.
+      }
+    }
+  }
+
+  @override
   Future<void> thunder({required double volume}) async {
+    final generation = _cueGeneration;
     final variant = DateTime.now().millisecond % 3;
     final path = await _file('v1_thunder_$variant',
         () => wavOf(synthesizeCue(SoundCue.thunder, seed: variant + 1)));
+    if (generation != _cueGeneration) {
+      return;
+    }
     final player = _thunder ??= AudioPlayer();
     try {
       await player.setAudioContext(_context);
@@ -238,6 +267,7 @@ class AudioplayersSoundPlayer implements SoundPlayer {
   @override
   Future<void> note(int midi, Instrument instrument,
       {required double volume}) async {
+    final generation = _cueGeneration;
     final path = await _file(
         'v1_note_${instrument.name}_$midi',
         () => wavOf(synthesizeMelody(Melody(
@@ -256,6 +286,9 @@ class AudioplayersSoundPlayer implements SoundPlayer {
       } on Object catch (error) {
         debugPrint('Sound: $error');
       }
+    }
+    if (generation != _cueGeneration) {
+      return;
     }
     final player = _notes[_nextNote++ % _notes.length];
     try {

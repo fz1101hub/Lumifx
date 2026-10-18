@@ -129,6 +129,19 @@ void main() {
     ]);
   });
 
+  test('another story cuts the words of the last one short', () async {
+    await playback.start();
+    await _wait();
+    expect(speaker.stops, 0);
+    await playback.switchEffect(enchantedFairy);
+    await _wait();
+    expect(speaker.stops, 1, reason: 'not queued after the old line');
+    expect(speaker.said.map((s) => s.$1), [
+      italian.narrationEmeraldTrickster1,
+      italian.narrationEnchantedFairy1,
+    ]);
+  });
+
   test('scenes have no words to read', () async {
     await playback.switchEffect(ocean);
     await playback.start();

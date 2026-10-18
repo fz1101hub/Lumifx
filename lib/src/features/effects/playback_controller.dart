@@ -609,6 +609,17 @@ class PlaybackController extends ChangeNotifier {
   /// The effect with the chosen colour variant applied.
   LightingEffect get effectToPlay => effect.withVariant(variantId);
 
+  /// The controls the lights run with: an effect with a tune keeps the
+  /// tune's own pace whatever the speed set, so the lights stay with the
+  /// music (and the music is not cut off when the lights end early).
+  EffectControls _playerControls(EffectControls controls) =>
+      controls.speed != 1 && soundscapeOf(effectToPlay).melody != null
+          ? controls.copyWith(speed: 1)
+          : controls;
+
+  /// How fast the lights' time runs now (see [_playerControls]).
+  double get effectiveSpeed => _playerControls(_controls).speed;
+
   /// Plays [next] instead of the current effect, leaving any playlist
   /// or bedtime. When idle it is only selected; while playing or paused
   /// the lights cross-fade to it without being put back in between, and
@@ -677,6 +688,19 @@ class PlaybackController extends ChangeNotifier {
     _notify();
   }
 
+  /// When the one-shot effect playing reaches its end, the lights fade out
+  /// and switch off instead of going back to how they were.
+  bool _offAtEnd = false;
+
+  /// Ends the one-shot effect now playing (a lullaby) by fading the
+  /// lights out and switching them off; any other effect started since
+  /// ends as usual.
+  void switchOffAtEnd() {
+    if (!_effect.isLooping) {
+      _offAtEnd = true;
+    }
+  }
+
   /// A one-shot effect (a timer, a game) stops by itself at its end and
   /// puts the lights back; looping effects play until stopped.
   void _watchEnd() {
@@ -696,6 +720,13 @@ class PlaybackController extends ChangeNotifier {
         _endWatch?.cancel();
         _endWatch = null;
         final name = _effect.name;
+        if (_offAtEnd && _status == PlaybackStatus.playing) {
+          // Hold the last instant while it fades, then switch off.
+          _offAtEnd = false;
+          _cancelSleepTimer();
+          _onSleepElapsed();
+          return;
+        }
         unawaited(stop());
         _notice(PlaybackNotice(PlaybackNoticeKind.finished, name: name));
       }
@@ -713,7 +744,7 @@ class PlaybackController extends ChangeNotifier {
     _bedtimeTimer?.cancel();
     _bedtimeTimer = null;
     _controls = bedtime.controls;
-    _player?.controls = bedtime.controls;
+    _player?.controls = _playerControls(bedtime.controls);
     _sleepAfter = bedtime.sleepAfter;
     if (_status == PlaybackStatus.playing || _status == PlaybackStatus.paused) {
       // The user's own timer again, from now (or none).
@@ -732,6 +763,8 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     _effect = next;
+    _offAtEnd = false;
+    _player?.controls = _playerControls(_controls);
     final player = _player;
     if (player == null || _status == PlaybackStatus.starting) {
       _notify();
@@ -999,7 +1032,7 @@ class PlaybackController extends ChangeNotifier {
         lightIds: lightIds,
         output: output,
         seed: DateTime.now().millisecondsSinceEpoch & 0x7FFFFFFF,
-        controls: _controls,
+        controls: _playerControls(_controls),
         tick: tick,
         // Read on every tick, so a later switch to (or from) a Music Sync
         // effect is picked up.
@@ -1052,6 +1085,7 @@ class PlaybackController extends ChangeNotifier {
     if (_soundPlaying) {
       unawaited(_sound.pause());
     }
+    unawaited(_sound.stopCues());
     _setStatus(PlaybackStatus.paused);
     // No reason to keep the microphone open or the screen on while paused.
     unawaited(_screenWake.keepOn(false));
@@ -1086,11 +1120,14 @@ class PlaybackController extends ChangeNotifier {
   /// Stops playback and, unless [restore] is false, puts the lights back.
   Future<void> stop({bool restore = true}) {
     _generation++;
+    _offAtEnd = false;
     _endWatch?.cancel();
     _endWatch = null;
     _cancelSleepTimer();
     _endPlaylist();
     _stopSound();
+    // A piano note or a clap of thunder still ringing stops with the rest.
+    unawaited(_sound.stopCues());
     final player = _player;
     final commands = _restore;
     _player = null;
@@ -1179,7 +1216,7 @@ class PlaybackController extends ChangeNotifier {
 
   void setControls(EffectControls controls) {
     _controls = controls;
-    _player?.controls = controls;
+    _player?.controls = _playerControls(controls);
     _notify();
   }
 
@@ -1442,6 +1479,10 @@ class PlaybackController extends ChangeNotifier {
 
   /// Sound switched on or off, or its volume changed, while playing.
   void _applySoundPreferences() {
+    if (!_preferences.soundOn) {
+      // Even with no soundscape playing (the piano's notes).
+      unawaited(_sound.stopCues());
+    }
     final player = _player;
     if (player == null || _status == PlaybackStatus.starting) {
       return;
@@ -1484,6 +1525,7 @@ class PlaybackController extends ChangeNotifier {
     _endWatch?.cancel();
     _endPlaylist();
     _stopSound();
+    unawaited(_sound.stopCues());
     _bridge.removeListener(_onBridgeChanged);
     _preferences.removeListener(_onPreferencesChanged);
     final music = _music;
@@ -1623,6 +1665,9 @@ LightOutput hueRestOutput(
 ) {
   final segments = <String, Map<String, LightFrame>>{};
   final limited = RateLimitedLightOutput(
+    // A slow command still on its way when the effect stops is waited for
+    // until it has landed or failed, so it never undoes the restore.
+    closeTimeout: HueBridgeClient.requestTimeout + const Duration(seconds: 1),
     send: (lightId, frame, transition) {
       final parts = segments[lightId] ?? {lightId: frame};
       final command = lightCommands(lights, parts, transition: transition);
@@ -1663,11 +1708,13 @@ class GradientLightOutput implements LightOutput {
   /// A frame that changes whenever any segment changes noticeably: the
   /// segments' colours side by side would be ideal, but one frame is all
   /// the limiter compares, so it gets their sum (and the peak brightness).
+  /// Each colour counts as much as its segment is bright, so one segment
+  /// dimming under a brighter one still registers.
   static LightFrame _summary(List<LightFrame> parts) {
     var r = 0.0, g = 0.0, b = 0.0, peak = 0.0;
     for (final (i, frame) in parts.indexed) {
       // Weighted by position, so colours trading places still register.
-      final weight = (i + 1) / parts.length;
+      final weight = (i + 1) / parts.length * frame.brightness;
       r += frame.color.r * weight;
       g += frame.color.g * weight;
       b += frame.color.b * weight;

@@ -36,6 +36,7 @@ class RateLimitedLightOutput implements LightOutput {
     this.commandsPerSecond = 10,
     this.burst = 2,
     this.maxInFlight = 4,
+    this.closeTimeout = const Duration(seconds: 3),
     DateTime Function()? clock,
   }) : _clock = clock ?? DateTime.now;
 
@@ -47,6 +48,10 @@ class RateLimitedLightOutput implements LightOutput {
   final double commandsPerSecond;
   final double burst;
   final int maxInFlight;
+
+  /// The longest [close] waits for commands on their way: set beyond what
+  /// [send] itself may take, a command can never land after the restore.
+  final Duration closeTimeout;
   final DateTime Function() _clock;
 
   final _lastSent = <String, LightFrame>{};
@@ -126,7 +131,7 @@ class RateLimitedLightOutput implements LightOutput {
     _closed = true;
     if (_pending.isNotEmpty) {
       await Future.wait(_pending.toList())
-          .timeout(const Duration(seconds: 3), onTimeout: () => const []);
+          .timeout(closeTimeout, onTimeout: () => const []);
     }
   }
 

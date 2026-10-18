@@ -189,6 +189,28 @@ void main() {
       expect(off['localtime'], 'W003/T00:30:00A00:30:00');
     });
 
+    test('a room pushed past midnight goes off on the right day', () async {
+      final bridge = _Bridge();
+      await bridge.client.createAwayMode(
+        const HueAwayModeDraft(
+          name: 'Monday',
+          groupIds: ['1', '4'],
+          onHour: 23,
+          onMinute: 50,
+          offHour: 23,
+          offMinute: 45,
+          days: [0],
+        ),
+        now: evening,
+      );
+      final [on1, off1, on2, off2] = bridge.posted('/api/key/schedules');
+      expect(on1['localtime'], 'W064/T23:50:00A00:30:00', reason: 'Monday');
+      expect(off1['localtime'], 'W032/T23:45:00A00:30:00', reason: 'Tuesday');
+      expect(on2['localtime'], 'W032/T00:05:00A00:30:00', reason: 'Tuesday');
+      expect(off2['localtime'], 'W016/T00:00:00A00:30:00',
+          reason: 'Wednesday, after it came on, not Tuesday before');
+    });
+
     test('nothing is left behind when the bridge refuses', () async {
       final bridge = _Bridge();
       await bridge.client.createAwayMode(

@@ -53,6 +53,9 @@ class PreferencesController extends ChangeNotifier {
   PreferencesController({required KeyValueStore store}) : _store = store;
 
   static const _key = 'lumifx.preferences.v1';
+
+  /// Where the preferences are kept in the [KeyValueStore].
+  static const storageKey = _key;
   static const maxRecents = 8;
 
   final KeyValueStore _store;
@@ -117,9 +120,14 @@ class PreferencesController extends ChangeNotifier {
 
   bool isFavorite(String effectId) => _favorites.contains(effectId);
 
-  /// Set once the user changes anything, so a slow [load] cannot overwrite
-  /// it with the stale snapshot from disk.
+  /// Set once anything changes.
   bool _dirty = false;
+
+  /// True while [load] reads: a change made meanwhile is not written (it
+  /// would replace everything saved with a snapshot of mostly empty
+  /// fields) but saved once loading is done, on top of what was read.
+  bool _loading = false;
+  bool _changedWhileLoading = false;
   Future<void> _writes = Future.value();
 
   bool _loaded = false;
@@ -669,15 +677,15 @@ class PreferencesController extends ChangeNotifier {
   }
 
   Future<void> load() async {
+    _loading = true;
     try {
       final raw = await _store.read(_key);
       if (raw == null) {
         _firstRun = !_dirty;
         return;
       }
-      if (_dirty) {
-        return;
-      }
+      // What was saved wins over anything changed before it was read: the
+      // saved scenes, stories, profiles and stars must never be lost.
       final json = (jsonDecode(raw) as Map).cast<String, Object?>();
       _favorites = _strings(json['favorites']);
       _recents = _strings(json['recents']);
@@ -831,8 +839,13 @@ class PreferencesController extends ChangeNotifier {
     } on Object {
       // Unreadable preferences are not worth failing over; start fresh.
     } finally {
+      _loading = false;
       _loaded = true;
       notifyListeners();
+      if (_changedWhileLoading) {
+        _changedWhileLoading = false;
+        unawaited(_changed());
+      }
     }
   }
 
@@ -1011,6 +1024,10 @@ class PreferencesController extends ChangeNotifier {
   Future<void> _changed() {
     _dirty = true;
     notifyListeners();
+    if (_loading) {
+      _changedWhileLoading = true;
+      return Future.value();
+    }
     final snapshot = jsonEncode({
       'favorites': _favorites,
       'recents': _recents,

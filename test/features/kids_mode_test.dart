@@ -45,6 +45,23 @@ void main() {
         reason: 'flashing effects never, even if listed');
   });
 
+  test('locked, bedtime starts only with its story and glow chosen', () async {
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final library = EffectLibrary(preferences);
+    final story = library.byId(preferences.bedtimeStory)!;
+    expect(kidsModeAllowsBedtime(preferences, library, story), isTrue,
+        reason: 'not in kids mode');
+    await preferences.setKidsLocked(true);
+    await preferences.setKidsEffects(['ocean']);
+    expect(kidsModeAllowsBedtime(preferences, library, story), isFalse);
+    await preferences.setKidsEffects(['ocean', story.id]);
+    expect(kidsModeAllowsBedtime(preferences, library, story), isFalse,
+        reason: 'the goodnight glow follows the story');
+    await preferences.setKidsEffects(['ocean', story.id, 'goodnight_glow']);
+    expect(kidsModeAllowsBedtime(preferences, library, story),
+        kidsSafe(story) && kidsSafe(library.byId('goodnight_glow')!));
+  });
+
   test('the choice and the lock are kept', () async {
     final store = InMemoryKeyValueStore();
     final preferences = PreferencesController(store: store);

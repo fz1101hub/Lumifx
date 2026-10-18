@@ -278,7 +278,7 @@ artifact, see RELEASE.md § 1b).
   "Voice or sound recordings".
 - Photos: "From a photo" (scene editor) uses the system photo picker or
   camera; the picture is read once on the device to take its colours and
-  is never stored or sent. Do **not** declare "Photos". Android needs no
+  is never stored or sent (the picker's temporary copy is deleted). Do **not** declare "Photos". Android needs no
   storage permission (the photo picker is used).
 - Camera: the app uses CAMERA for TV Sync but does not collect images.
   Do **not** declare "Photos" or "Videos"; frames are averaged ephemerally

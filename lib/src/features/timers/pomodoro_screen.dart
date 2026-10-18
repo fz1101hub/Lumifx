@@ -63,7 +63,7 @@ class PomodoroRunningScreen extends StatelessWidget {
             builder: (context, _) {
               final position = player.position;
               final index = pomodoro.phaseAt(position);
-              final speed = playback.controls.speed.clamp(0.05, 5.0);
+              final speed = playback.effectiveSpeed.clamp(0.05, 5.0);
               final String label;
               var seconds = 0;
               var done = 1.0;

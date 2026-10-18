@@ -46,13 +46,14 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
   /// playlist this effect belongs to, which this screen then follows).
   bool _isCurrent(PlaybackController c) => c.isShownBy(widget.effect.id);
 
+  /// This screen's effect, looked up again so an edited scene or story of
+  /// the user's shows (and plays) its edit.
+  LightingEffect get _latest =>
+      AppScope.of(context).library.byId(widget.effect.id) ?? widget.effect;
+
   /// The effect to show: this screen's, or the playlist's current one.
   LightingEffect _shown(PlaybackController c) =>
-      (c.playlist != null || c.inBedtime) && _isCurrent(c)
-          ? c.effect
-          // Looked up again, so an edited scene of the user's shows its edit.
-          : AppScope.of(context).library.byId(widget.effect.id) ??
-              widget.effect;
+      (c.playlist != null || c.inBedtime) && _isCurrent(c) ? c.effect : _latest;
 
   @override
   void didChangeDependencies() {
@@ -63,7 +64,7 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
       // frame, since listeners of the playback cannot rebuild mid-build.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && c.status == PlaybackStatus.idle) {
-          unawaited(c.switchEffect(widget.effect));
+          unawaited(c.switchEffect(_latest));
         }
       });
     }
@@ -243,14 +244,22 @@ class _EffectPlayerScreenState extends State<EffectPlayerScreen> {
     if (!mounted) {
       return;
     }
+    final latest = _latest;
     if (!current) {
-      await c.switchEffect(widget.effect);
+      await c.switchEffect(latest);
       if (c.status == PlaybackStatus.idle) {
         await c.start();
       } else if (c.status == PlaybackStatus.paused) {
         await c.resume();
       }
       return;
+    }
+    if (c.status == PlaybackStatus.idle &&
+        c.playlist == null &&
+        !c.inBedtime &&
+        !identical(c.effect, latest)) {
+      // Edited since it was chosen: the edit is what plays.
+      await c.switchEffect(latest);
     }
     await c.toggle();
   }

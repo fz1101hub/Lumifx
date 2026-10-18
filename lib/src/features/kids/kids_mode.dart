@@ -98,6 +98,22 @@ bool kidsModeAllows(
   return kidsSafe(effect) && ids.contains(effect.id);
 }
 
+/// Whether bedtime (its [story], then the goodnight glow) may start: in
+/// kids mode, only when both are among the effects a grown-up chose.
+bool kidsModeAllowsBedtime(
+  PreferencesController preferences,
+  EffectLibrary library,
+  LightingEffect story,
+) {
+  if (!preferences.kidsLocked) {
+    return true;
+  }
+  final glow = library.byId(PlaybackController.bedtimeGlowId);
+  return kidsModeAllows(preferences, library, story) &&
+      glow != null &&
+      kidsModeAllows(preferences, library, glow);
+}
+
 /// Opens kids mode, which stays on (even after a restart) until a grown-up
 /// answers the question to leave.
 Future<void> openKidsMode(NavigatorState navigator) => navigator.push(

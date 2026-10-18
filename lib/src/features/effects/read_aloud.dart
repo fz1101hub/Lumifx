@@ -76,7 +76,12 @@ class ReadAloud {
       return;
     }
     if (!identical(effect, _effect)) {
-      // A new story starts from its first words.
+      // A new story starts from its first words, the last one's cut off
+      // rather than queued before them.
+      if (_spoken != null) {
+        unawaited(speaker.stop());
+        unawaited(voicePlayer.stop());
+      }
       _effect = effect;
       _spoken = null;
       final l10n = lookupAppLocalizations(_supported(locale()));

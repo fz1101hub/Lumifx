@@ -31,13 +31,17 @@ class NotificationLightsSync {
     if (!platform.isSupported || !preferences.isLoaded) {
       return;
     }
+    final settings = preferences.notificationLights;
     // Paired but not connected yet (or the bridge is away): the service
-    // keeps what it has rather than losing the lights.
-    if (bridge.credentials != null && bridge.home == null) {
+    // keeps what it has rather than losing the lights; but switched off,
+    // or with no apps left, it must stop at once, bridge or not.
+    final off = !settings.enabled || settings.rules.isEmpty;
+    if (!off && bridge.credentials != null && bridge.home == null) {
       return;
     }
-    final config = notificationConfig(
-        preferences.notificationLights, bridge.credentials, bridge.home);
+    final config = off
+        ? null
+        : notificationConfig(settings, bridge.credentials, bridge.home);
     final encoded = config == null ? '' : jsonEncode(config);
     if (encoded == _sent) {
       return;

@@ -676,6 +676,35 @@ build before every store release.
       afterwards.
 - [ ] TalkBack / VoiceOver on a routine: double-tapping a step ticks it.
 
+## This round: audit fixes
+
+- [ ] Android 7 or 7.1 (API 24/25), paired: start an effect on a room with
+      the screen-off setting on: it plays and the notification shows, no
+      crash.
+- [ ] Notification lights on, bridge switched off: turn notification
+      lights off in the app: a notification no longer flashes anything.
+- [ ] Kids mode locked with Goodnight glow hidden: the bedtime link, "Hey
+      Siri/Google, bedtime" and a Hue button set to bedtime do nothing.
+- [ ] A lullaby with "Then fade out the lights": the whole tune plays,
+      then the lights fade and switch off. With the speed slider at 2x
+      the tune and its lights still end together.
+- [ ] Piano: hold a few notes and press Stop (or switch sounds off): the
+      notes stop at once.
+- [ ] Read aloud on: change story mid-sentence: the old sentence stops
+      and the new story's first one is read.
+- [ ] Gradient strip in a room (not an entertainment area), Spectrum on
+      music where only the bass stays: the strip's other segments dim.
+- [ ] Open your own scene, edit it without playing, save, press Play:
+      the edit plays.
+- [ ] Away mode, Monday only, two rooms, on 23:50, off 23:45: the second
+      room's off is on Wednesday 00:00 in the Hue app's schedules.
+- [ ] A playlist starting calm with Thunderstorm later, warning never
+      seen: its link asks about flashing lights, then the playlist plays.
+- [ ] iPhone: pair, delete the app, install it again: it asks to pair
+      with the bridge's button.
+- [ ] Scene from a photo, take a photo: nothing is left in the app's
+      cache folder afterwards.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

@@ -11,7 +11,10 @@ import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/screen_wake.dart';
+import 'package:lumifx/src/core/sound/melody.dart';
+import 'package:lumifx/src/core/sound/melodies.dart';
 import 'package:lumifx/src/core/effects/effect.dart';
+import 'package:lumifx/src/core/effects/effect_event.dart';
 import 'package:lumifx/src/features/effects/catalog/builtin_stories.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
@@ -19,6 +22,7 @@ import 'package:lumifx/src/features/effects/catalog/builtin_interactive.dart';
 import 'package:lumifx/src/features/effects/catalog/builtin_scenes.dart';
 import 'package:lumifx/src/features/effects/catalog/effect_catalog.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
+import 'package:lumifx/src/features/music_box/melody_lights.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/timers/light_timer.dart';
@@ -318,6 +322,65 @@ void main() {
     expect(last['color'], off);
     expect(last['white'], off);
     expect(last, isNot(contains('plug')));
+    controller.dispose();
+  });
+
+  test('a lullaby told to switch off fades out and switches off at its end',
+      () async {
+    const tune = LightingEffect(
+      id: 'gen:melody:test:1',
+      name: 'Tune',
+      kind: EffectKind.scene,
+      isLooping: false,
+      loopDuration: Duration(milliseconds: 600),
+      events: [
+        EffectEvent(
+          at: Duration.zero,
+          duration: Duration(milliseconds: 600),
+          type: EffectEventTypes.ambientPalette,
+          parameters: {
+            'palette': <String>['#FFD36B', '#FFB23F'],
+            'brightnessMin': 0.4,
+            'brightnessMax': 0.6,
+          },
+        ),
+      ],
+    );
+    final (controller, fake, _) = await _setUp(
+        effect: tune, sleepFade: const Duration(milliseconds: 200));
+    final notices = <PlaybackNotice>[];
+    controller.notices.listen(notices.add);
+    await controller.start();
+    controller.switchOffAtEnd();
+
+    await _wait(900);
+    expect(controller.isFadingOut || controller.status == PlaybackStatus.idle,
+        isTrue,
+        reason: 'the end hands over to the fade, not to a stop');
+    await _wait(600);
+    expect(controller.status, PlaybackStatus.idle);
+    expect(notices.map((n) => n.kind),
+        contains(PlaybackNoticeKind.sleepTimerDone));
+    await _wait(900);
+    final last = {for (final (id, body) in fake.puts) id: body};
+    expect(last['color'], {
+      'on': {'on': false},
+      'dynamics': {'duration': 2000},
+    });
+    controller.dispose();
+  });
+
+  test('a tune keeps its own pace whatever the speed set', () async {
+    final tune = melodyEffect(twinkle, times: 1, name: 'Twinkle');
+    final (controller, _, _) = await _setUp(effect: tune);
+    controller.setControls(controller.controls.copyWith(speed: 3));
+    await controller.start();
+    expect(controller.player!.controls.speed, 1);
+    expect(controller.effectiveSpeed, 1);
+    expect(controller.controls.speed, 3, reason: 'the setting is kept');
+    await controller.switchEffect(fireplace);
+    expect(controller.player!.controls.speed, 3);
+    await controller.stop(restore: false);
     controller.dispose();
   });
 
@@ -982,6 +1045,32 @@ void main() {
 
     await controller.stop();
     expect(sound.calls.last, 'stop');
+    controller.dispose();
+  });
+
+  test('notes and thunder on top stop with the effect or the sound', () async {
+    final sound = FakeSoundPlayer();
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final (controller, _, _) =
+        await _setUp(sound: sound, preferences: preferences);
+    await controller.changeTarget(null);
+    await controller.start();
+    await controller.note(60, Instrument.musicBox);
+    expect(sound.calls.last, 'note 60');
+    var stops = sound.cueStops;
+    await controller.pause();
+    expect(sound.cueStops, greaterThan(stops),
+        reason: 'paused, nothing rings on');
+    await controller.resume();
+    stops = sound.cueStops;
+    await controller.stop();
+    expect(sound.cueStops, greaterThan(stops),
+        reason: 'stopped, nothing rings on');
+
+    // The piano plays no soundscape: switching sound off still silences it.
+    stops = sound.cueStops;
+    await preferences.setSoundOn(false);
+    expect(sound.cueStops, greaterThan(stops));
     controller.dispose();
   });
 

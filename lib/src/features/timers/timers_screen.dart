@@ -255,7 +255,7 @@ class TimerRunningScreen extends StatelessWidget {
           return StreamBuilder<List<LightFrame>>(
             stream: player.frames,
             builder: (context, _) {
-              final speed = playback.controls.speed.clamp(0.05, 5.0);
+              final speed = playback.effectiveSpeed.clamp(0.05, 5.0);
               final left = length - player.position;
               final seconds = left.isNegative
                   ? 0

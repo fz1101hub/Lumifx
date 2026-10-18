@@ -140,11 +140,19 @@ extension HueHouseRoutines on HueBridgeClient {
           on,
           on >= 24 * 60 ? stopDays(draft.days, nextDay: true) : draft.days,
         );
+        // Past midnight once for the window itself and once more for the
+        // stagger: both can add up, two days after the evening chosen.
+        var offDays = draft.days;
+        for (var shift = (offPastMidnight ? 1 : 0) + off ~/ (24 * 60);
+            shift > 0;
+            shift--) {
+          offDays = stopDays(offDays, nextDay: true);
+        }
         await add(
           'away-off',
           {'on': false, 'transitiontime': 20},
           off,
-          stopDays(draft.days, nextDay: offPastMidnight || off >= 24 * 60),
+          offDays,
         );
       }
     } on Object {

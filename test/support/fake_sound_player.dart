@@ -7,6 +7,9 @@ class FakeSoundPlayer implements SoundPlayer {
   Soundscape? playing;
   double? volume;
 
+  /// How many times the cues on top were stopped.
+  int cueStops = 0;
+
   @override
   Future<void> play(Soundscape soundscape, {required double volume}) async {
     playing = soundscape;
@@ -28,6 +31,9 @@ class FakeSoundPlayer implements SoundPlayer {
 
   @override
   Future<void> setVolume(double volume) async => this.volume = volume;
+
+  @override
+  Future<void> stopCues() async => cueStops++;
 
   @override
   Future<void> thunder({required double volume}) async => calls.add('thunder');
