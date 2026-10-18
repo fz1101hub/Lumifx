@@ -14,6 +14,8 @@ import '../fun/light_games.dart';
 import '../fun/simon_screen.dart';
 import '../paths/path_story.dart';
 import '../paths/path_story_screen.dart';
+import '../routines/kid_routine.dart';
+import '../routines/routines_screen.dart';
 import '../timers/light_timer.dart';
 import '../timers/pomodoro.dart';
 import '../timers/pomodoro_screen.dart';
@@ -49,6 +51,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const AdventScreen();
   } else if (Countdown.sleepsOf(effect) != null) {
     screen = const CountdownsScreen();
+  } else if (KidRoutine.of(effect) != null) {
+    screen = const RoutinesScreen();
   } else if (id.startsWith('${LightingEffect.generatedPrefix}simon')) {
     screen = const SimonScreen();
   } else if (id.startsWith('${LightingEffect.generatedPrefix}weather:')) {

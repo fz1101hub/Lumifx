@@ -35,6 +35,7 @@ import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/routines/routines_screen.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
 import 'package:lumifx/src/features/timers/timers_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
@@ -864,6 +865,56 @@ void main() {
         reason: 'the running game, not its rules');
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 2));
+  });
+
+  testWidgets('a picture routine fills the lamps and earns a star',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 10, 18, 7, 30));
+    await tester.scrollUntilVisible(find.text('Morning and evening'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Morning and evening'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Morning and evening'));
+    await tester.pumpAndSettle();
+    expect(find.text('No stars yet'), findsOneWidget);
+
+    // Only two steps, chosen by a grown-up.
+    await tester.tap(find.byTooltip('Choose the steps').first);
+    await tester.pumpAndSettle();
+    for (final step in [
+      'Wash your face',
+      'Get dressed',
+      'Breakfast',
+      'Shoes and backpack',
+    ]) {
+      await tester.tap(find.text(step));
+      await tester.pump();
+    }
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Start').first);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('0 of 2 done'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+
+    await tester.tap(find.bySemanticsLabel('Get up'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('1 of 2 done'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Brush your teeth'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Well done! You earned a star!'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pump(const Duration(seconds: 10));
+    await tester.pumpAndSettle();
+    expect(find.text('1 star'), findsOneWidget);
+    // Next to the morning routine, and in the week.
+    expect(find.byIcon(Icons.star), findsNWidgets(2));
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

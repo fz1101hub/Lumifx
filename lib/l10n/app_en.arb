@@ -3021,5 +3021,106 @@
   "homeYourHome": "Your home",
   "@homeYourHome": {
     "description": "Home section title: rooms and routines of the house"
+  },
+  "kidRoutines": "Morning and evening",
+  "@kidRoutines": {
+    "description": "Home entry: picture checklists for children's mornings and evenings"
+  },
+  "kidRoutinesSubtitle": "Picture checklists with stars",
+  "@kidRoutinesSubtitle": {
+    "description": "Subtitle of the picture checklists"
+  },
+  "kidRoutinesDescription": "Each picture is something to do. Tap it when it's done: the lamps fill up one after the other, and when everything is done there's a party of light and a star.",
+  "@kidRoutinesDescription": {
+    "description": "Explains the picture checklists"
+  },
+  "routineMorning": "Morning routine",
+  "@routineMorning": {
+    "description": "The morning checklist"
+  },
+  "routineEvening": "Evening routine",
+  "@routineEvening": {
+    "description": "The evening checklist"
+  },
+  "routineChooseSteps": "Choose the steps",
+  "@routineChooseSteps": {
+    "description": "Button: choose which steps a routine has"
+  },
+  "routineStarToday": "Star earned today",
+  "@routineStarToday": {
+    "description": "A star was earned today for this routine"
+  },
+  "routineStars": "{count, plural, =0{No stars yet} =1{1 star} other{{count} stars}}",
+  "@routineStars": {
+    "description": "How many stars were earned",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "routineProgress": "{done} of {total} done",
+  "@routineProgress": {
+    "description": "How many steps are done",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "routineDone": "Well done! You earned a star!",
+  "@routineDone": {
+    "description": "All steps done, star earned"
+  },
+  "routineDoneAgain": "Well done! Today's star is already yours.",
+  "@routineDoneAgain": {
+    "description": "All steps done again the same day"
+  },
+  "stepGetUp": "Get up",
+  "@stepGetUp": {
+    "description": "Routine step"
+  },
+  "stepWashFace": "Wash your face",
+  "@stepWashFace": {
+    "description": "Routine step"
+  },
+  "stepGetDressed": "Get dressed",
+  "@stepGetDressed": {
+    "description": "Routine step"
+  },
+  "stepBreakfast": "Breakfast",
+  "@stepBreakfast": {
+    "description": "Routine step"
+  },
+  "stepBrushTeeth": "Brush your teeth",
+  "@stepBrushTeeth": {
+    "description": "Routine step"
+  },
+  "stepShoesAndBag": "Shoes and backpack",
+  "@stepShoesAndBag": {
+    "description": "Routine step"
+  },
+  "stepBath": "Bath or wash",
+  "@stepBath": {
+    "description": "Routine step"
+  },
+  "stepPyjamas": "Pyjamas on",
+  "@stepPyjamas": {
+    "description": "Routine step"
+  },
+  "stepToilet": "Toilet",
+  "@stepToilet": {
+    "description": "Routine step"
+  },
+  "stepTidyToys": "Tidy the toys",
+  "@stepTidyToys": {
+    "description": "Routine step"
+  },
+  "stepStoryTime": "Story time",
+  "@stepStoryTime": {
+    "description": "Routine step"
   }
 }

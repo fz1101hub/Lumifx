@@ -18,6 +18,7 @@ import '../fun/fun_screen.dart';
 import '../house/house_screen.dart';
 import '../kids/kids_mode.dart';
 import '../rooms/rooms_screen.dart';
+import '../routines/routines_screen.dart';
 import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
 import '../timers/timers_screen.dart';
@@ -126,6 +127,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.breatheSubtitle, () => const BreathingScreen()),
                 _HomeEntry(Icons.timer_outlined, l10n.timers,
                     l10n.timersSubtitle, () => const TimersScreen()),
+                _HomeEntry(Icons.checklist, l10n.kidRoutines,
+                    l10n.kidRoutinesSubtitle, () => const RoutinesScreen()),
                 _HomeEntry(Icons.celebration_outlined, l10n.fun,
                     l10n.funSubtitle, () => const FunScreen()),
                 _HomeEntry(Icons.child_care, l10n.kidsMode,
