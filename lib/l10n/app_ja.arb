@@ -1050,5 +1050,9 @@
   "routineAddStep": "ステップを追加",
   "routineStepName": "やること",
   "storyMakerSave": "マイストーリーに保存",
-  "storyMakerSaved": "マイストーリーに保存しました"
+  "storyMakerSaved": "マイストーリーに保存しました",
+  "melodyAuClair": "月の光に",
+  "melodyMaryLamb": "メリーさんのひつじ",
+  "melodyHotCrossBuns": "ホット・クロス・バンズ",
+  "melodyOdeToJoy": "よろこびの歌"
 }

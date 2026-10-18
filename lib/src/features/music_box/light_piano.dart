@@ -49,7 +49,15 @@ int? pianoKeyFor(int midi) {
 /// The tunes a child can learn on the piano (every note has a key), the
 /// easiest first.
 List<Melody> get pianoSongs => [
-      for (final melody in {twinkle, frereJacques, ...lullabies, ...carols})
+      for (final melody in {
+        hotCrossBuns,
+        twinkle,
+        maryLamb,
+        frereJacques,
+        odeToJoy,
+        ...lullabies,
+        ...carols,
+      })
         if (melody.notes.every((n) => pianoKeyFor(n.midi) != null)) melody,
     ];
 

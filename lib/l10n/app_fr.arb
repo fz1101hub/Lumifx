@@ -1050,5 +1050,9 @@
   "routineAddStep": "Ajouter une étape",
   "routineStepName": "Quoi faire",
   "storyMakerSave": "Garder dans Mes histoires",
-  "storyMakerSaved": "Gardée dans Mes histoires"
+  "storyMakerSaved": "Gardée dans Mes histoires",
+  "melodyAuClair": "Au clair de la lune",
+  "melodyMaryLamb": "Marie avait un petit agneau",
+  "melodyHotCrossBuns": "Hot Cross Buns",
+  "melodyOdeToJoy": "Hymne à la joie"
 }

@@ -1050,5 +1050,9 @@
   "routineAddStep": "Añadir un paso",
   "routineStepName": "Qué hacer",
   "storyMakerSave": "Guardar en Mis cuentos",
-  "storyMakerSaved": "Guardado en Mis cuentos"
+  "storyMakerSaved": "Guardado en Mis cuentos",
+  "melodyAuClair": "A la luz de la luna",
+  "melodyMaryLamb": "María tenía un corderito",
+  "melodyHotCrossBuns": "Hot Cross Buns",
+  "melodyOdeToJoy": "Himno de la alegría"
 }

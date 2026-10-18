@@ -124,8 +124,78 @@ const merryChristmas = Melody(
   ],
 );
 
-const lullabies = [brahms, twinkle, frereJacques];
+/// "Au clair de la lune" (18th century).
+const auClairDeLaLune = Melody(
+  id: 'au_clair',
+  bpm: 92,
+  notes: [
+    Note(60, 1), Note(60, 1), Note(60, 1), Note(62, 1), //
+    Note(64, 2), Note(62, 2),
+    Note(60, 1), Note(64, 1), Note(62, 1), Note(62, 1), Note(60, 4),
+    Note(60, 1), Note(60, 1), Note(60, 1), Note(62, 1),
+    Note(64, 2), Note(62, 2),
+    Note(60, 1), Note(64, 1), Note(62, 1), Note(62, 1), Note(60, 4),
+    Note(62, 1), Note(62, 1), Note(62, 1), Note(62, 1),
+    Note(57, 2), Note(57, 2),
+    Note(62, 1), Note(60, 1), Note(59, 1), Note(57, 1), Note(55, 4),
+    Note(60, 1), Note(60, 1), Note(60, 1), Note(62, 1),
+    Note(64, 2), Note(62, 2),
+    Note(60, 1), Note(64, 1), Note(62, 1), Note(62, 1), Note(60, 4),
+  ],
+);
+
+/// "Mary Had a Little Lamb" (Lowell Mason, 1830).
+const maryLamb = Melody(
+  id: 'mary_lamb',
+  bpm: 112,
+  notes: [
+    Note(64, 1), Note(62, 1), Note(60, 1), Note(62, 1), //
+    Note(64, 1), Note(64, 1), Note(64, 2),
+    Note(62, 1), Note(62, 1), Note(62, 2),
+    Note(64, 1), Note(67, 1), Note(67, 2),
+    Note(64, 1), Note(62, 1), Note(60, 1), Note(62, 1),
+    Note(64, 1), Note(64, 1), Note(64, 1), Note(64, 1),
+    Note(62, 1), Note(62, 1), Note(64, 1), Note(62, 1),
+    Note(60, 4),
+  ],
+);
+
+/// "Hot Cross Buns" (an old street cry): three notes, the first tune to
+/// play.
+const hotCrossBuns = Melody(
+  id: 'hot_cross_buns',
+  bpm: 100,
+  notes: [
+    Note(64, 1), Note(62, 1), Note(60, 2), //
+    Note(64, 1), Note(62, 1), Note(60, 2),
+    Note(60, 0.5), Note(60, 0.5), Note(60, 0.5), Note(60, 0.5),
+    Note(62, 0.5), Note(62, 0.5), Note(62, 0.5), Note(62, 0.5),
+    Note(64, 1), Note(62, 1), Note(60, 2),
+  ],
+);
+
+/// "Ode to Joy" (Beethoven, Ninth Symphony, 1824), its first lines.
+const odeToJoy = Melody(
+  id: 'ode_to_joy',
+  bpm: 108,
+  notes: [
+    Note(64, 1), Note(64, 1), Note(65, 1), Note(67, 1), //
+    Note(67, 1), Note(65, 1), Note(64, 1), Note(62, 1),
+    Note(60, 1), Note(60, 1), Note(62, 1), Note(64, 1),
+    Note(64, 1.5), Note(62, 0.5), Note(62, 2),
+    Note(64, 1), Note(64, 1), Note(65, 1), Note(67, 1),
+    Note(67, 1), Note(65, 1), Note(64, 1), Note(62, 1),
+    Note(60, 1), Note(60, 1), Note(62, 1), Note(64, 1),
+    Note(62, 1.5), Note(60, 0.5), Note(60, 2),
+  ],
+);
+
+const lullabies = [brahms, twinkle, frereJacques, auClairDeLaLune];
 const carols = [jingleBells, silentNight, merryChristmas];
 
-Melody? melodyById(String id) =>
-    [...lullabies, ...carols].where((m) => m.id == id).firstOrNull;
+/// Simple tunes to learn on the light piano, besides the lullabies.
+const pianoTunes = [hotCrossBuns, maryLamb, odeToJoy];
+
+Melody? melodyById(String id) => [...lullabies, ...carols, ...pianoTunes]
+    .where((m) => m.id == id)
+    .firstOrNull;

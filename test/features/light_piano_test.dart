@@ -14,7 +14,9 @@ void main() {
 
   test('the tunes to learn have a key for every note', () {
     final ids = [for (final song in pianoSongs) song.id];
-    expect(ids.take(2), ['twinkle', 'frere_jacques'], reason: 'easiest first');
+    expect(ids.take(3), ['hot_cross_buns', 'twinkle', 'mary_lamb'],
+        reason: 'easiest first');
+    expect(ids, containsAll(['frere_jacques', 'ode_to_joy', 'au_clair']));
     for (final song in pianoSongs) {
       expect(PianoLesson(song).keys, everyElement(inInclusiveRange(0, 7)));
     }

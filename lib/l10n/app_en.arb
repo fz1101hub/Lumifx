@@ -4187,5 +4187,21 @@
   "storyMakerSaved": "Saved in My stories",
   "@storyMakerSaved": {
     "description": "The made-up story was saved"
+  },
+  "melodyAuClair": "Au Clair de la Lune",
+  "@melodyAuClair": {
+    "description": "Melody: Au clair de la lune"
+  },
+  "melodyMaryLamb": "Mary Had a Little Lamb",
+  "@melodyMaryLamb": {
+    "description": "Melody: Mary Had a Little Lamb"
+  },
+  "melodyHotCrossBuns": "Hot Cross Buns",
+  "@melodyHotCrossBuns": {
+    "description": "Melody: Hot Cross Buns (a three-note tune)"
+  },
+  "melodyOdeToJoy": "Ode to Joy",
+  "@melodyOdeToJoy": {
+    "description": "Melody: Beethoven's Ode to Joy"
   }
 }
