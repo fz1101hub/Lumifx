@@ -19,6 +19,8 @@ import '../paths/path_story.dart';
 import '../paths/path_story_screen.dart';
 import '../routines/kid_routine.dart';
 import '../routines/routines_screen.dart';
+import '../tales/tale.dart';
+import '../tales/tale_maker_screen.dart';
 import '../timers/light_timer.dart';
 import '../timers/pomodoro.dart';
 import '../timers/pomodoro_screen.dart';
@@ -50,6 +52,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = BirthdayScreen(playing: effect);
   } else if (PathStory.of(effect) case (final story, _)) {
     screen = PathStoryScreen(story: story, playing: effect);
+  } else if (Tale.of(effect) != null) {
+    screen = TaleMakerScreen(playing: effect);
   } else if (Advent.dayOf(effect) != null) {
     screen = const AdventScreen();
   } else if (Countdown.sleepsOf(effect) != null) {

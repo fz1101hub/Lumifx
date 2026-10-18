@@ -34,6 +34,7 @@ import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/features/music_box/music_box_screen.dart';
+import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
@@ -946,6 +947,54 @@ void main() {
     await tester.tap(find.byTooltip('Stop'));
     await tester.pump(const Duration(seconds: 2));
     expect(playback.isPlaying, isFalse);
+  });
+
+  testWidgets('the story maker tells the story the child chose',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Story maker'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Story maker'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Story maker'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Owl'));
+    await tester.pump();
+    expect(find.widgetWithText(TextField, 'Momo'), findsOneWidget,
+        reason: 'the hero brings its own name');
+    await tester.enterText(find.byType(TextField), 'Sofia');
+    await tester.tap(find.text('Kitten'));
+    await tester.pump();
+    expect(find.widgetWithText(TextField, 'Sofia'), findsOneWidget,
+        reason: 'a name the child typed stays');
+    for (final choice in ['Cloud castle', 'A treasure map', 'Tell the story']) {
+      await tester.scrollUntilVisible(find.text(choice), 200,
+          scrollable: find.byType(Scrollable).first);
+      await tester.ensureVisible(find.text(choice));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(choice));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(TaleMakerScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+    expect(playback.effect.name, 'The story of Sofia');
+    expect(find.textContaining('Once upon a time there was Sofia, a curious'),
+        findsOneWidget);
+    playback.player!.advance(const Duration(seconds: 31));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.textContaining('Sofia follows the map'), findsOneWidget);
+    playback.player!.advance(const Duration(seconds: 30));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('The end'), findsOneWidget);
+    await tester.tap(find.text('Another story'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(playback.isPlaying, isTrue);
+    expect(playback.effect.name, 'The story of Sofia');
+    await playback.stop();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

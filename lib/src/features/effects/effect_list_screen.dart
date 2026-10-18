@@ -7,6 +7,7 @@ import '../paths/path_story_screen.dart';
 import '../library/scene_editor.dart';
 import '../library/story_editor.dart';
 import '../search/effect_search.dart';
+import '../tales/tale_maker_screen.dart';
 import '../common/layout.dart';
 import 'effect_palette.dart';
 import 'player_route.dart';
@@ -146,9 +147,11 @@ class _EffectGrid extends StatelessWidget {
   }
 }
 
-/// Above the stories: the way to the choose-your-path stories.
-Widget? _header(EffectKind kind) =>
-    kind == EffectKind.story ? const _PathStoriesCard() : null;
+/// Above the stories: the ways to the choose-your-path stories and to
+/// the story maker.
+Widget? _header(EffectKind kind) => kind == EffectKind.story
+    ? const Column(children: [_PathStoriesCard(), _StoryMakerCard()])
+    : null;
 
 class _PathStoriesCard extends StatelessWidget {
   const _PathStoriesCard();
@@ -168,6 +171,30 @@ class _PathStoriesCard extends StatelessWidget {
         trailing: const Icon(Icons.chevron_right),
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (_) => const PathStoriesScreen()),
+        ),
+      ),
+    );
+  }
+}
+
+class _StoryMakerCard extends StatelessWidget {
+  const _StoryMakerCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    return Card(
+      color: theme.colorScheme.tertiaryContainer,
+      child: ListTile(
+        minVerticalPadding: 16,
+        leading: Icon(Icons.auto_stories_outlined,
+            color: theme.colorScheme.onTertiaryContainer),
+        title: Text(l10n.storyMaker),
+        subtitle: Text(l10n.storyMakerSubtitle),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const TaleMakerScreen()),
         ),
       ),
     );

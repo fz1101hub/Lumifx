@@ -3200,5 +3200,298 @@
   "christmasShowDescription": "Classic carols play on little bells while every note lights a lamp in red, green and gold, like a house dressed for Christmas.",
   "@christmasShowDescription": {
     "description": "Explains the Christmas light show"
+  },
+  "storyMaker": "Story maker",
+  "@storyMaker": {
+    "description": "Home entry: make up a bedtime story from a hero, a place and an adventure"
+  },
+  "storyMakerSubtitle": "Pick a hero, a place and an adventure: a new story every night",
+  "@storyMakerSubtitle": {
+    "description": "Subtitle of the story maker"
+  },
+  "storyMakerDescription": "Choose who the story is about, where it goes and what happens, or let the app surprise you. The story is told with the lights, and can be read aloud.",
+  "@storyMakerDescription": {
+    "description": "Explains the story maker"
+  },
+  "storyMakerHero": "Who is the hero?",
+  "@storyMakerHero": {
+    "description": "Story maker: choose the hero"
+  },
+  "storyMakerPlace": "Where does it happen?",
+  "@storyMakerPlace": {
+    "description": "Story maker: choose the place"
+  },
+  "storyMakerQuest": "What happens?",
+  "@storyMakerQuest": {
+    "description": "Story maker: choose the adventure"
+  },
+  "storyMakerName": "The hero's name",
+  "@storyMakerName": {
+    "description": "Story maker: text field for the hero's name"
+  },
+  "storyMakerSurprise": "Surprise me",
+  "@storyMakerSurprise": {
+    "description": "Story maker: pick everything at random"
+  },
+  "storyMakerTell": "Tell the story",
+  "@storyMakerTell": {
+    "description": "Story maker: start telling the story"
+  },
+  "storyMakerAnother": "Another story",
+  "@storyMakerAnother": {
+    "description": "Story maker: make up another story"
+  },
+  "taleFox": "Fox",
+  "@taleFox": {
+    "description": "Story hero: a fox"
+  },
+  "taleRobot": "Robot",
+  "@taleRobot": {
+    "description": "Story hero: a robot"
+  },
+  "taleDragon": "Dragon",
+  "@taleDragon": {
+    "description": "Story hero: a dragon"
+  },
+  "taleUnicorn": "Unicorn",
+  "@taleUnicorn": {
+    "description": "Story hero: a unicorn"
+  },
+  "taleOwl": "Owl",
+  "@taleOwl": {
+    "description": "Story hero: an owl"
+  },
+  "taleKitten": "Kitten",
+  "@taleKitten": {
+    "description": "Story hero: a kitten"
+  },
+  "taleFoxIntro": "a little fox with a fluffy red tail",
+  "@taleFoxIntro": {
+    "description": "Story: describes the hero after its name (apposition); must not depend on the hero's gender"
+  },
+  "taleRobotIntro": "a small robot with a blue light blinking on its head",
+  "@taleRobotIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleDragonIntro": "a baby dragon who sneezes green sparks instead of fire",
+  "@taleDragonIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleUnicornIntro": "a unicorn with a mane of every colour",
+  "@taleUnicornIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleOwlIntro": "a wise owl with big golden eyes",
+  "@taleOwlIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleKittenIntro": "a curious kitten with soft white paws",
+  "@taleKittenIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleForest": "Enchanted forest",
+  "@taleForest": {
+    "description": "Story place: an enchanted forest"
+  },
+  "taleSea": "Under the sea",
+  "@taleSea": {
+    "description": "Story place: under the sea"
+  },
+  "taleSpace": "Among the stars",
+  "@taleSpace": {
+    "description": "Story place: among the stars"
+  },
+  "taleCastle": "Cloud castle",
+  "@taleCastle": {
+    "description": "Story place: a castle in the clouds"
+  },
+  "taleMountain": "Snowy mountain",
+  "@taleMountain": {
+    "description": "Story place: a snowy mountain"
+  },
+  "taleForestLine": "One evening {name} walks into the enchanted forest, where fireflies dance between the trees.",
+  "@taleForestLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleSeaLine": "One evening {name} dives under the sea, among shining fish and swaying seaweed.",
+  "@taleSeaLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleSpaceLine": "One evening {name} flies up among the stars, riding a silver comet.",
+  "@taleSpaceLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleCastleLine": "One evening {name} climbs a rainbow staircase up to a castle in the clouds.",
+  "@taleCastleLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleMountainLine": "One evening {name} reaches the top of a snowy mountain, where the snow sparkles like sugar.",
+  "@taleMountainLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleStar": "A lost star",
+  "@taleStar": {
+    "description": "Story adventure: a lost star"
+  },
+  "taleRainbow": "The faded rainbow",
+  "@taleRainbow": {
+    "description": "Story adventure: a rainbow that lost its colours"
+  },
+  "taleTreasure": "A treasure map",
+  "@taleTreasure": {
+    "description": "Story adventure: a treasure map"
+  },
+  "taleFirefly": "A firefly without light",
+  "@taleFirefly": {
+    "description": "Story adventure: a firefly that lost its light"
+  },
+  "taleDark": "Afraid of the dark",
+  "@taleDark": {
+    "description": "Story adventure: afraid of the dark"
+  },
+  "taleStar1": "Suddenly {name} sees a little fallen star, crying because it cannot find its way home.",
+  "@taleStar1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleStar2": "{name} picks it up gently and carries it back up to the sky, where it shines brighter than ever.",
+  "@taleStar2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleRainbow1": "But there {name} finds a rainbow that has lost its colours, and everything has turned grey.",
+  "@taleRainbow1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleRainbow2": "{name} gathers the colours back one by one: red, orange, yellow, green, blue and violet, and the rainbow shines again.",
+  "@taleRainbow2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTreasure1": "There {name} finds an old map with a big X drawn on it.",
+  "@taleTreasure1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTreasure2": "{name} follows the map step by step and discovers a chest full of golden light.",
+  "@taleTreasure2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleFirefly1": "There {name} meets a tiny firefly who has lost its light and cannot find its friends in the dark.",
+  "@taleFirefly1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleFirefly2": "{name} shares a little bit of glow, and the firefly lights up again and calls all its friends.",
+  "@taleFirefly2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleDark1": "Then night falls, everything goes dark, and {name} feels a little bit scared.",
+  "@taleDark1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleDark2": "{name} takes a deep breath, and one by one soft little lights appear all around: the dark is full of friends.",
+  "@taleDark2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleIntro": "Once upon a time there was {name}, {hero}.",
+  "@taleIntro": {
+    "description": "Story line: the opening, with the hero's name and its description (taleFoxIntro...)",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "hero": {
+        "type": "String"
+      }
+    }
+  },
+  "taleEnding": "At last {name} goes home, gives a big yawn and falls asleep under a warm blanket. Goodnight, {name}.",
+  "@taleEnding": {
+    "description": "Story line: the ending, going to sleep; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTitle": "The story of {name}",
+  "@taleTitle": {
+    "description": "The title of a made-up story",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }

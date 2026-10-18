@@ -22,6 +22,7 @@ import '../rooms/rooms_screen.dart';
 import '../routines/routines_screen.dart';
 import '../search/effect_search.dart';
 import '../settings/settings_screen.dart';
+import '../tales/tale_maker_screen.dart';
 import '../timers/timers_screen.dart';
 import '../weather/weather_screen.dart';
 import 'seasons.dart';
@@ -129,6 +130,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.lullabies,
                     l10n.lullabiesSubtitle,
                     () => const MusicBoxScreen(festive: false)),
+                _HomeEntry(Icons.auto_stories_outlined, l10n.storyMaker,
+                    l10n.storyMakerSubtitle, () => const TaleMakerScreen()),
                 _HomeEntry(Icons.spa_outlined, l10n.breathe,
                     l10n.breatheSubtitle, () => const BreathingScreen()),
                 _HomeEntry(Icons.timer_outlined, l10n.timers,
