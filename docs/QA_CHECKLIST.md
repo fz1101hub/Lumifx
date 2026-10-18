@@ -625,6 +625,13 @@ build before every store release.
       "Smell the flower… / Blow out the candle…" read along; then the
       story. Unticking Calm breathing skips it. The home subtitle names
       the breathing step.
+- [ ] Play a lullaby with "Switch off" on, then start a 20 min nap
+      light: the lamps stay amber past the lullaby's length and turn
+      green at 20 minutes. Same with the noise light: it keeps going.
+- [ ] Noise light while listening: lock the phone or switch apps: the
+      microphone indicator goes away and the lamps go back; start an
+      effect with a Hue button: the noise light stops listening. No
+      mini-player shows on the noise light screen.
 - [ ] Light piano › Repeat after me: "Listen…", three notes play with
       their key glowing and lamp flashing; keys tapped meanwhile do
       nothing; "Your turn!": play them back: "Bravo! One more note", then

@@ -685,8 +685,11 @@ iOS lists the languages in `CFBundleLocalizations`.
   settle. The zone (`NoiseZone`: calm, loud, too loud, by `NoiseLimit`)
   rises after 0.6 s of louder noise and falls after 2 s of calmer, so a
   clap or a breath changes nothing. Each zone is a `gen:noise:<zone>`
-  ambient; the screen switches effects only when the zone changes, and
-  stops the microphone (and the lamps) when it closes.
+  ambient; the screen switches effects only when the zone changes
+  (clearing any leftover sleep timer), and stops the microphone (and the
+  lamps) when it closes, when LumiFX goes to the background, when the
+  stream ends, or when something else takes the lamps. The mini-player
+  hides while a noise effect plays.
 
 ### Timer tunes and festivals
 
