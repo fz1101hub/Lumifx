@@ -23,6 +23,8 @@ import '../fun/haunted_party_screen.dart';
 import '../fun/hot_cold.dart';
 import '../fun/hot_cold_screen.dart';
 import '../fun/light_games.dart';
+import '../fun/noise_light.dart';
+import '../fun/noise_light_screen.dart';
 import '../fun/simon_screen.dart';
 import '../learn/colour_mixing.dart';
 import '../learn/colour_mixing_screen.dart';
@@ -92,6 +94,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const LightPianoScreen();
   } else if (HauntedParty.isParty(effect)) {
     screen = const HauntedPartyScreen();
+  } else if (NoiseZone.of(effect) != null) {
+    screen = const NoiseLightScreen();
   } else if (HotCold.isHotCold(effect)) {
     screen = const HotColdScreen();
   } else if (CountingGame.isCounting(effect)) {

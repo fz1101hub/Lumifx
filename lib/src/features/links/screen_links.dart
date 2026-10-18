@@ -8,6 +8,7 @@ import '../cinema/cinema_screen.dart';
 import '../fun/fun_screen.dart';
 import '../fun/haunted_party_screen.dart';
 import '../fun/hot_cold_screen.dart';
+import '../fun/noise_light_screen.dart';
 import '../fun/simon_screen.dart';
 import '../learn/colour_mixing_screen.dart';
 import '../learn/colour_words_screen.dart';
@@ -42,6 +43,7 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.hotCold => const HotColdScreen(),
       AppScreen.halloween => const HauntedPartyScreen(),
       AppScreen.nap => const NapLightScreen(),
+      AppScreen.noise => const NoiseLightScreen(),
     };
 
 /// The route name of [screen], to tell when it is on top already.

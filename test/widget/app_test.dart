@@ -28,6 +28,8 @@ import 'package:lumifx/src/features/fun/birthday_screen.dart';
 import 'package:lumifx/src/features/fun/countdowns_screen.dart';
 import 'package:lumifx/src/features/fun/game_screen.dart';
 import 'package:lumifx/src/features/fun/light_games.dart';
+import 'package:lumifx/src/features/fun/noise_light.dart';
+import 'package:lumifx/src/features/fun/noise_light_screen.dart';
 import 'package:lumifx/src/features/kids/kids_mode.dart';
 import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
@@ -1364,6 +1366,53 @@ void main() {
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 2));
     expect(find.text('Start the nap'), findsOneWidget);
+  });
+
+  testWidgets('the noise light turns red when it gets too loud',
+      (tester) async {
+    // Two seconds of shouting next to the phone.
+    const rate = 44100;
+    final loud = ByteData(rate * 4);
+    for (var i = 0; i < rate * 2; i++) {
+      loud.setInt16(
+          i * 2,
+          (0.5 * 32767 * math.sin(2 * math.pi * 440 * i / rate)).round(),
+          Endian.little);
+    }
+    final microphone = FakeAudioInput(pcm: loud.buffer.asUint8List());
+    await _pumpApp(tester, audioInput: microphone);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const NoiseLightScreen())));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(NoiseLightScreen))).playback;
+
+    await tester.tap(find.text('Start listening'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(microphone.started, isTrue);
+    expect(NoiseZone.of(playback.effect), NoiseZone.tooLoud);
+    expect(find.text('Too loud!'), findsOneWidget);
+    expect(find.text('Too loud once'), findsOneWidget);
+
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(microphone.stopped, isTrue);
+    expect(playback.isPlaying, isFalse);
+    expect(find.text('Start listening'), findsOneWidget);
+
+    // Leaving the screen stops listening, and the lamps.
+    await tester.tap(find.text('Start listening'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(microphone.startCount, 2);
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.byType(NoiseLightScreen), findsNothing);
+    expect(microphone.stopped, isTrue);
+    expect(playback.isPlaying, isFalse);
+    await tester.pumpAndSettle();
   });
 
   testWidgets('the monster spray chases them away and leaves a guardian light',

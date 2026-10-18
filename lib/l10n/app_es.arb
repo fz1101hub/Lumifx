@@ -1084,5 +1084,17 @@
   "napStart": "Empezar la siesta",
   "napResting": "Descansa hasta que la luz se ponga verde",
   "napOver": "¡Verde: hora de levantarse!",
-  "napGreenIn": "{minutes, plural, =1{Verde en un minuto} other{Verde en {minutes} minutos}}"
+  "napGreenIn": "{minutes, plural, =1{Verde en un minuto} other{Verde en {minutes} minutos}}",
+  "noiseLight": "Semáforo del ruido",
+  "noiseLightSubtitle": "Verde si hay calma, rojo si hay demasiado ruido",
+  "noiseDescription": "Las lámparas siguen verdes mientras hay calma, se ponen ámbar cuando sube el ruido y rojas cuando hay demasiado. El micrófono solo mide el volumen: no se graba ni se envía nada. Solo escucha mientras esta pantalla está abierta.",
+  "noiseQuiet": "Silencio",
+  "noiseNormal": "Voz baja",
+  "noiseLively": "Juego",
+  "noiseStart": "Empezar a escuchar",
+  "noiseCalm": "Qué tranquilidad",
+  "noiseLoud": "Hay mucho ruido…",
+  "noiseTooLoud": "¡Demasiado ruido!",
+  "noiseTooLoudTimes": "{count, plural, =0{Aún sin demasiado ruido} =1{Demasiado ruido una vez} other{Demasiado ruido {count} veces}}",
+  "noiseMicDenied": "LumiFX necesita el micrófono para oír cuánto ruido hay. Permítelo en los ajustes del teléfono."
 }

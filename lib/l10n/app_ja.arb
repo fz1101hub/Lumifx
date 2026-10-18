@@ -1084,5 +1084,17 @@
   "napStart": "おひるねスタート",
   "napResting": "ライトが緑になるまでおやすみ",
   "napOver": "緑になったよ。起きる時間！",
-  "napGreenIn": "{minutes, plural, other{あと{minutes}分で緑}}"
+  "napGreenIn": "{minutes, plural, other{あと{minutes}分で緑}}",
+  "noiseLight": "おとの信号",
+  "noiseLightSubtitle": "しずかなら緑、うるさすぎたら赤",
+  "noiseDescription": "部屋がしずかな間はライトが緑、にぎやかになると黄色、うるさすぎると赤になります。マイクは音の大きさをはかるだけで、録音や送信はしません。この画面を開いている間だけ聞いています。",
+  "noiseQuiet": "しずかに",
+  "noiseNormal": "ふつうの声",
+  "noiseLively": "あそびの時間",
+  "noiseStart": "聞きはじめる",
+  "noiseCalm": "しずかでいいね",
+  "noiseLoud": "ちょっとにぎやか…",
+  "noiseTooLoud": "うるさすぎ！",
+  "noiseTooLoudTimes": "{count, plural, other{うるさすぎ：{count}回}}",
+  "noiseMicDenied": "音の大きさを聞くにはマイクが必要です。スマートフォンの設定で許可してください。"
 }

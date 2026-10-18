@@ -1084,5 +1084,17 @@
   "napStart": "Mittagsschlaf beginnen",
   "napResting": "Ausruhen, bis das Licht grün wird",
   "napOver": "Grün: Zeit zum Aufstehen!",
-  "napGreenIn": "{minutes, plural, =1{Grün in einer Minute} other{Grün in {minutes} Minuten}}"
+  "napGreenIn": "{minutes, plural, =1{Grün in einer Minute} other{Grün in {minutes} Minuten}}",
+  "noiseLight": "Lärmampel",
+  "noiseLightSubtitle": "Grün bei Ruhe, rot, wenn es zu laut wird",
+  "noiseDescription": "Die Lampen bleiben grün, solange es im Raum ruhig ist, werden gelb, wenn es laut wird, und rot, wenn es zu laut ist. Das Mikrofon misst nur, wie laut es ist: Nichts wird aufgenommen oder gesendet. Es hört nur zu, solange dieser Bildschirm geöffnet ist.",
+  "noiseQuiet": "Leise",
+  "noiseNormal": "Zimmerlautstärke",
+  "noiseLively": "Spielzeit",
+  "noiseStart": "Zuhören starten",
+  "noiseCalm": "Schön ruhig",
+  "noiseLoud": "Es wird laut …",
+  "noiseTooLoud": "Zu laut!",
+  "noiseTooLoudTimes": "{count, plural, =0{Noch nie zu laut} =1{Einmal zu laut} other{{count}-mal zu laut}}",
+  "noiseMicDenied": "LumiFX braucht das Mikrofon, um zu hören, wie laut es ist. Erlaube es in den Einstellungen des Telefons."
 }

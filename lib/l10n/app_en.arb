@@ -4366,5 +4366,58 @@
         "type": "int"
       }
     }
+  },
+  "noiseLight": "Noise light",
+  "@noiseLight": {
+    "description": "Title of the noise light: lamps green when calm, amber when loud, red when too loud"
+  },
+  "noiseLightSubtitle": "Green when calm, red when it gets too loud",
+  "@noiseLightSubtitle": {
+    "description": "Subtitle of the noise light in the games list"
+  },
+  "noiseDescription": "The lamps stay green while the room is calm, turn amber when it gets loud and red when it is too loud. The microphone only measures how loud it is: nothing is recorded or sent. It listens only while this screen is open.",
+  "@noiseDescription": {
+    "description": "Noise light: how it works and what the microphone is used for"
+  },
+  "noiseQuiet": "Quiet",
+  "@noiseQuiet": {
+    "description": "Noise light: strictest limit, for quiet time or reading"
+  },
+  "noiseNormal": "Indoor voices",
+  "@noiseNormal": {
+    "description": "Noise light: normal limit, indoor voices"
+  },
+  "noiseLively": "Playtime",
+  "@noiseLively": {
+    "description": "Noise light: most lenient limit, for play time"
+  },
+  "noiseStart": "Start listening",
+  "@noiseStart": {
+    "description": "Noise light: button to start listening"
+  },
+  "noiseCalm": "Nice and calm",
+  "@noiseCalm": {
+    "description": "Noise light: the room is calm (green)"
+  },
+  "noiseLoud": "Getting loud…",
+  "@noiseLoud": {
+    "description": "Noise light: the room is getting loud (amber)"
+  },
+  "noiseTooLoud": "Too loud!",
+  "@noiseTooLoud": {
+    "description": "Noise light: the room is too loud (red)"
+  },
+  "noiseTooLoudTimes": "{count, plural, =0{Not too loud yet} =1{Too loud once} other{Too loud {count} times}}",
+  "@noiseTooLoudTimes": {
+    "description": "Noise light: how many times the lamps turned red since listening started",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noiseMicDenied": "LumiFX needs the microphone to hear how loud it is. Allow it in the phone's settings.",
+  "@noiseMicDenied": {
+    "description": "Noise light: the microphone cannot be used"
   }
 }

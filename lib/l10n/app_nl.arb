@@ -1084,5 +1084,17 @@
   "napStart": "Dutje beginnen",
   "napResting": "Rust tot het licht groen wordt",
   "napOver": "Groen: tijd om op te staan!",
-  "napGreenIn": "{minutes, plural, =1{Groen over een minuut} other{Groen over {minutes} minuten}}"
+  "napGreenIn": "{minutes, plural, =1{Groen over een minuut} other{Groen over {minutes} minuten}}",
+  "noiseLight": "Geluidsstoplicht",
+  "noiseLightSubtitle": "Groen als het rustig is, rood als het te luid wordt",
+  "noiseDescription": "De lampen blijven groen zolang het rustig is in de kamer, worden oranje als het luider wordt en rood als het te luid is. De microfoon meet alleen hoe luid het is: er wordt niets opgenomen of verstuurd. Hij luistert alleen zolang dit scherm open is.",
+  "noiseQuiet": "Stil",
+  "noiseNormal": "Binnenstem",
+  "noiseLively": "Speeltijd",
+  "noiseStart": "Begin met luisteren",
+  "noiseCalm": "Lekker rustig",
+  "noiseLoud": "Het wordt luid…",
+  "noiseTooLoud": "Te luid!",
+  "noiseTooLoudTimes": "{count, plural, =0{Nog niet te luid geweest} =1{Eén keer te luid} other{{count} keer te luid}}",
+  "noiseMicDenied": "LumiFX heeft de microfoon nodig om te horen hoe luid het is. Sta het toe in de instellingen van de telefoon."
 }

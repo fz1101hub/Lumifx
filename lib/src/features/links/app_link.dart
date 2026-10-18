@@ -112,7 +112,8 @@ enum AppScreen {
   morse('morse'),
   hotCold('hot-and-cold'),
   halloween('halloween'),
-  nap('nap');
+  nap('nap'),
+  noise('noise');
 
   const AppScreen(this.slug);
 

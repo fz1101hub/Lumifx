@@ -1084,5 +1084,17 @@
   "napStart": "Commencer la sieste",
   "napResting": "Repose-toi jusqu'à ce que la lumière devienne verte",
   "napOver": "Vert : c'est l'heure de se lever !",
-  "napGreenIn": "{minutes, plural, =1{Vert dans une minute} other{Vert dans {minutes} minutes}}"
+  "napGreenIn": "{minutes, plural, =1{Vert dans une minute} other{Vert dans {minutes} minutes}}",
+  "noiseLight": "Feu du bruit",
+  "noiseLightSubtitle": "Vert quand c'est calme, rouge quand c'est trop bruyant",
+  "noiseDescription": "Les lampes restent vertes tant que la pièce est calme, passent à l'orange quand ça devient bruyant et au rouge quand c'est trop fort. Le micro mesure seulement le volume : rien n'est enregistré ni envoyé. Il n'écoute que lorsque cet écran est ouvert.",
+  "noiseQuiet": "Calme",
+  "noiseNormal": "Voix douces",
+  "noiseLively": "Jeux",
+  "noiseStart": "Commencer à écouter",
+  "noiseCalm": "Bien calme",
+  "noiseLoud": "Ça devient bruyant…",
+  "noiseTooLoud": "Trop fort !",
+  "noiseTooLoudTimes": "{count, plural, =0{Jamais trop fort pour l'instant} =1{Trop fort une fois} other{Trop fort {count} fois}}",
+  "noiseMicDenied": "LumiFX a besoin du micro pour entendre le volume. Autorise-le dans les réglages du téléphone."
 }
