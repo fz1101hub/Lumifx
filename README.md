@@ -137,8 +137,8 @@ Also done ahead of schedule:
 - **Kids mode**: big buttons for chosen gentle effects, locked behind a
   grown-up's sum, even after a restart; links, voice and Hue buttons
   start only those effects meanwhile. It can also offer the light piano,
-  counting, colour words and colour mixing games, as a grown-up chooses;
-  nothing on them leads out of kids mode.
+  counting, colour words, colour mixing, light memory and calm breathing,
+  as a grown-up chooses; nothing on them leads out of kids mode.
 - **Your own voice**: record the lines of your stories; they play in time
   with the lights.
 - **Around the house** (on the bridge, phone off): away mode with
@@ -202,9 +202,11 @@ Also done ahead of schedule:
 - **Light piano**: eight keys from middle C, each a music-box note made
   on the phone and a flash of its rainbow colour on one lamp along the
   room; "Learn a song" makes the next key glow (Hot Cross Buns, Mary Had
-  a Little Lamb, Ode to Joy and more, easiest first), and a tune played can
-  be recorded and played back with its lights. Notes are named as
-  children learn them (do re mi, ドレミ, or letters with H in German).
+  a Little Lamb, Ode to Joy and more, easiest first), a tune played can
+  be recorded and played back with its lights, and "Repeat after me"
+  plays a short tune for the child to play back, one note longer each
+  time. Notes are named as children learn them (do re mi, ドレミ, or
+  letters with H in German).
 - **Steps of your own** in the routines ("feed the cat"), with a
   picture and a colour, alongside the built-in ones.
 - **A profile for each child** (up to six): their own routine steps and
@@ -214,8 +216,9 @@ Also done ahead of schedule:
   stars; the child spends the stars of their routines, a grown-up
   confirms and the lamps throw a gold party. Kept on the phone only.
 - **Bedtime ritual** in one tap: the evening routine, the monster spray,
-  a story made up for tonight with the child as hero, a lullaby and the
-  guardian light, one after the other, with the steps a grown-up keeps.
+  a minute of calm breathing, a story made up for tonight with the child
+  as hero, a lullaby and the guardian light, one after the other, with
+  the steps a grown-up keeps.
 - **Halloween party**: a purple and green room; when someone walks past
   a Hue motion sensor (or a grown-up taps Scare now) the lamps flash,
   the phone thunders and red eyes glow on one lamp, with 15 s of rest

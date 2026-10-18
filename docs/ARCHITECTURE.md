@@ -697,3 +697,20 @@ iOS lists the languages in `CFBundleLocalizations`.
   Diwali, Hanukkah and Lunar New Year dates (to 2035) with a window
   around each; the home shows the festival's shelf above the season's,
   as both can fall together (Diwali in Halloween, Hanukkah at Christmas).
+
+### Round 5 notes
+
+- `PreferencesController` keeps `napMinutes`, `noiseLimit` (a
+  `NoiseLimit` name) and `teethTune` (on unless switched off); the
+  screens read them when nothing was chosen on them yet.
+- `KidsActivity` also offers `simon` and `breathing`; the games row in
+  kids mode scrolls sideways.
+- `RitualStep.breathing` (between the monster spray and the story)
+  plays `BreathingPattern.flowerCandle` for one minute, captioned with
+  its calls; the finished notice moves the ritual on, as for the story
+  and the lullaby. Saved rituals without it keep their own steps.
+- `PianoEcho` (`light_piano.dart`) makes tunes of key indices moving by
+  at most two keys, never one note three times running, from 3 to 12
+  notes; the screen plays them with `_press(replay: true)` and ignores
+  the keys until it has finished.
+
