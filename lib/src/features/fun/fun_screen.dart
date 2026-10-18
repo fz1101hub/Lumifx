@@ -15,6 +15,7 @@ import 'game_screen.dart';
 import 'haunted_party_screen.dart';
 import 'hot_cold_screen.dart';
 import 'light_games.dart';
+import 'noise_light_screen.dart';
 import 'simon_screen.dart';
 
 /// Parties and games played with the lights.
@@ -75,6 +76,8 @@ class FunScreen extends StatelessWidget {
               () => const LightPianoScreen()),
           entry(Icons.thermostat, l10n.hotCold, l10n.hotColdSubtitle,
               () => const HotColdScreen()),
+          entry(Icons.traffic_outlined, l10n.noiseLight,
+              l10n.noiseLightSubtitle, () => const NoiseLightScreen()),
           entry(Icons.psychology_outlined, l10n.gameSimon,
               l10n.gameSimonSubtitle, () => const SimonScreen()),
           entry(Icons.filter_9_plus_outlined, l10n.countLights,

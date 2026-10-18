@@ -33,6 +33,11 @@ app only measures how loud the sound is, on your phone; nothing is
 recorded, stored or transmitted, and the microphone is switched off as soon
 as the candles are out or you leave the party.
 
+**Microphone (noise light).** The noise light turns the lamps green, amber
+or red by how loud the room is. The app only measures the loudness, on
+your phone; nothing is recorded, stored or transmitted, and the
+microphone is switched off when you tap Stop or leave the noise light.
+
 **Your voice (stories of your own).** In the story editor you can record
 yourself reading the lines of a story you made. The recordings are saved
 as sound files on your phone only, play when that story plays, are never

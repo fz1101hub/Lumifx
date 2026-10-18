@@ -64,6 +64,66 @@ DateTime easterSunday(int year) {
   return DateTime(year, month, day);
 }
 
+/// Festivals whose date follows a lunar calendar, shown on the home in
+/// their days alongside the season, if any.
+enum Festival { diwali, hanukkah, lunarNewYear }
+
+/// Diwali (Lakshmi Puja), the first evening of Hanukkah and Lunar New
+/// Year, from published calendars (Hebcal for Hanukkah); later years have
+/// no shelf until the table grows.
+const _festivalDays = {
+  Festival.diwali: [
+    (2025, 10, 20), (2026, 11, 8), (2027, 10, 29), (2028, 10, 17), //
+    (2029, 11, 5), (2030, 10, 26), (2031, 11, 14), (2032, 11, 2),
+    (2033, 10, 22), (2034, 11, 10), (2035, 10, 31),
+  ],
+  Festival.hanukkah: [
+    (2025, 12, 14), (2026, 12, 4), (2027, 12, 24), (2028, 12, 12), //
+    (2029, 12, 1), (2030, 12, 20), (2031, 12, 9), (2032, 11, 27),
+    (2033, 12, 16), (2034, 12, 6), (2035, 12, 25),
+  ],
+  Festival.lunarNewYear: [
+    (2025, 1, 29), (2026, 2, 17), (2027, 2, 6), (2028, 1, 26), //
+    (2029, 2, 13), (2030, 2, 3), (2031, 1, 23), (2032, 2, 11),
+    (2033, 1, 31), (2034, 2, 19), (2035, 2, 8),
+  ],
+};
+
+/// The festival [now] falls in, if any: Diwali from two days before to
+/// two days after, Hanukkah from the day before its first evening to its
+/// eighth day, and Lunar New Year from three days before to the seventh
+/// day. Festivals never overlap one another.
+Festival? festivalOf(DateTime now) {
+  final today = DateTime(now.year, now.month, now.day);
+  for (final MapEntry(key: festival, value: days) in _festivalDays.entries) {
+    final (before, after) = switch (festival) {
+      Festival.diwali => (2, 2),
+      Festival.hanukkah => (1, 8),
+      Festival.lunarNewYear => (3, 6),
+    };
+    for (final (year, month, day) in days) {
+      if (!today.isBefore(DateTime(year, month, day - before)) &&
+          !today.isAfter(DateTime(year, month, day + after))) {
+        return festival;
+      }
+    }
+  }
+  return null;
+}
+
+/// The built-in effects of [festival].
+List<LightingEffect> effectsOfFestival(Festival festival) {
+  final collection = switch (festival) {
+    Festival.diwali => 'Diwali',
+    Festival.hanukkah => 'Hanukkah',
+    Festival.lunarNewYear => 'Lunar New Year',
+  };
+  return [
+    for (final effect in effectCatalog)
+      if (effect.collection == collection) effect,
+  ];
+}
+
 /// The built-in effects of [season], seasonal collection first.
 List<LightingEffect> effectsOfSeason(Season season) {
   final collections = switch (season) {

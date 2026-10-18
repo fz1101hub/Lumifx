@@ -50,9 +50,9 @@ artifact, see RELEASE.md § 1b).
 > the forest, a sleeping dragon, a haunted manor on a stormy night, a
 > treasure hunt, a kraken under the ship, a meteor shower, dinosaurs
 > approaching, the deep sea at night. Halloween brings a pumpkin patch, a
-> witch's cauldron, a vampire's castle and trick-or-treaters; Christmas
-> brings Santa's workshop, a silent snowfall and a candlelight carol.
-> Every pass of a story is a little different.
+> witch's cauldron, a vampire's castle and trick-or-treaters; Christmas,
+> Diwali, Hanukkah and Lunar New Year have stories of their own. Every
+> pass of a story is a little different.
 >
 > MAKE IT YOURS
 > Colour variants for every scene (Aurora in rose and gold, a blue
@@ -128,7 +128,7 @@ artifact, see RELEASE.md § 1b).
 
 **What's new (1.0.0)**
 
-> First release: 7 scenes with colour variants, 23 stories including
+> First release: 7 scenes with colour variants, 26 stories including
 > Halloween, Christmas and holidays, 4 Music Sync effects, Entertainment
 > streaming with an area editor, your own scenes, playlists, Hue scenes,
 > links, NFC stickers and quick settings tiles, family time (a bedtime
@@ -162,8 +162,8 @@ artifact, see RELEASE.md § 1b).
 > caccia al tesoro, un kraken sotto la nave, una pioggia di meteore,
 > dinosauri in avvicinamento, gli abissi di notte. Halloween porta
 > un campo di zucche, il calderone della strega, il castello del vampiro e
-> dolcetto o scherzetto; il Natale la bottega di Babbo Natale, una nevicata
-> silenziosa e un canto a lume di candela.
+> dolcetto o scherzetto; anche Natale, Diwali, Hanukkah e il Capodanno
+> lunare hanno le loro storie.
 >
 > FALLA TUA
 > Varianti di colore per ogni scena, un timer di spegnimento che attenua le
@@ -237,7 +237,7 @@ artifact, see RELEASE.md § 1b).
 
 **Novità (1.0.0)**
 
-> Prima versione: 7 scene con varianti di colore, 23 storie (Halloween,
+> Prima versione: 7 scene con varianti di colore, 26 storie (Halloween,
 > Natale, feste), 4 effetti Music Sync, streaming Entertainment ed editor
 > delle aree, scene tue, playlist, link, adesivi NFC e riquadri delle
 > impostazioni rapide, in famiglia (rituale della nanna, storie inventate,
@@ -419,7 +419,9 @@ Paste this in "Notes for review":
 > the scene editor, to take the colours of one photo on the device. At a
 > birthday party (Parties and games › Birthday party) the microphone is
 > used only after tapping "Blow on the phone", to hear the candles being
-> blown out; nothing is recorded. Weather lights (home › Weather lights)
+> blown out; nothing is recorded. The noise light (Parties and games ›
+> Noise light) uses the microphone only after tapping "Start listening",
+> to measure how loud the room is; nothing is recorded. Weather lights (home › Weather lights)
 > send the city the user types to Open-Meteo (open-meteo.com) to show the
 > weather; the device location is never requested.
 >
@@ -508,7 +510,8 @@ preview mode works for the player shots):
 > Kraken unter dem Schiff, ein Sternschnuppenregen, Dinosaurier, die näher
 > kommen, die Tiefsee bei Nacht. Zu Halloween: Kürbisfeld, Hexenkessel,
 > Vampirschloss und Süßes oder Saures; zu Weihnachten: die Werkstatt des
-> Weihnachtsmanns, stiller Schneefall und ein Lied im Kerzenschein. Jeder
+> Weihnachtsmanns, stiller Schneefall und ein Lied im Kerzenschein. Auch
+> Diwali, Chanukka und das Mondneujahr haben ihre eigene Geschichte. Jeder
 > Durchlauf ist ein bisschen anders.
 >
 > EIGENE SZENEN UND PLAYLISTS
@@ -602,8 +605,8 @@ preview mode works for the player shots):
 > d'orage, une chasse au trésor, un kraken sous le navire, une pluie
 > d'étoiles filantes, des dinosaures qui approchent, les abysses la nuit.
 > Pour Halloween : un champ de citrouilles, le chaudron de la sorcière, le
-> château du vampire et « des bonbons ou un sort » ; pour Noël : l'atelier du
-> Père Noël, une neige silencieuse et un chant à la bougie.
+> château du vampire et « des bonbons ou un sort » ; Noël, Diwali, Hanoukka
+> et le Nouvel An lunaire ont aussi leurs histoires.
 >
 > VOS SCÈNES ET VOS PLAYLISTS
 > Choisissez de deux à cinq couleurs et un mouvement pour créer votre
@@ -698,8 +701,9 @@ preview mode works for the player shots):
 > lluvia de meteoros, dinosaurios que se acercan, las profundidades de
 > noche. En Halloween: un campo de calabazas, el caldero de la bruja, el
 > castillo del vampiro y truco o trato; en Navidad: el taller de Papá Noel,
-> una nevada silenciosa y un villancico a la luz de las velas. Cada pasada de
-> una historia es un poco distinta.
+> una nevada silenciosa y un villancico a la luz de las velas. Diwali, Janucá
+> y el Año Nuevo lunar también tienen su historia. Cada pasada de una
+> historia es un poco distinta.
 >
 > TUS ESCENAS Y LISTAS
 > Elige de dos a cinco colores y un movimiento para crear tu propia escena.
@@ -791,8 +795,9 @@ preview mode works for the player shots):
 > kraken onder het schip, een meteorenregen, naderende dinosaurussen, de
 > diepzee bij nacht. Met Halloween: een pompoenveld, de heksenketel, het
 > kasteel van de vampier en trick or treat; met Kerst: de werkplaats van de
-> Kerstman, stille sneeuwval en een kerstlied bij kaarslicht. Elke ronde van
-> een verhaal is net even anders.
+> Kerstman, stille sneeuwval en een kerstlied bij kaarslicht. Ook Diwali,
+> Chanoeka en Maannieuwjaar hebben hun eigen verhaal. Elke ronde van een
+> verhaal is net even anders.
 >
 > EIGEN SCÈNES EN AFSPEELLIJSTEN
 > Kies twee tot vijf kleuren en een beweging voor je eigen scène. Zet
@@ -885,7 +890,8 @@ preview mode works for the player shots):
 > dinossauros se aproximando, o fundo do mar à noite. O Halloween traz uma
 > plantação de abóboras, o caldeirão da bruxa, o castelo do vampiro e
 > doces ou travessuras; o Natal traz a oficina do Papai Noel, uma neve
-> silenciosa e uma canção à luz de velas.
+> silenciosa e uma canção à luz de velas. Diwali, Hanukkah e o Ano-Novo
+> Lunar também têm sua história.
 >
 > DO SEU JEITO
 > Crie cenas suas com duas a cinco cores e um movimento. Monte playlists
@@ -942,7 +948,7 @@ preview mode works for the player shots):
 
 **Novidades (1.0.0)**
 
-> Primeira versão: 7 cenas com variações de cor, 23 histórias, 4 efeitos
+> Primeira versão: 7 cenas com variações de cor, 26 histórias, 4 efeitos
 > Music Sync, streaming Entertainment, cenas suas, playlists, links para
 > automações, adesivos NFC e blocos de configurações rápidas, momentos em
 > família (ritual da hora de dormir, histórias inventadas, canções de
@@ -974,6 +980,7 @@ preview mode works for the player shots):
 > の幽霊屋敷、宝探し、船の下のクラーケン、流星群、近づいてくる恐竜、夜の深海。
 > ハロウィンにはかぼちゃ畑、魔女の大釜、吸血鬼の城、トリック・オア・トリート。
 > クリスマスにはサンタの工房、静かな雪、キャンドルのキャロル。
+> ディワリ、ハヌカ、旧正月のストーリーもあります。
 >
 > 自分だけの演出
 > 2〜5色と動きを選んでオリジナルのシーンを作成。演出を並べたプレイリストで、
@@ -1024,7 +1031,7 @@ preview mode works for the player shots):
 
 **新機能（1.0.0）**
 
-> 最初のリリース：色のバリエーション付きシーン 7 種、ストーリー 23 種、Music Sync
+> 最初のリリース：色のバリエーション付きシーン 7 種、ストーリー 26 種、Music Sync
 > 演出 4 種、エンターテインメント ストリーミング、オリジナルシーン、プレイリスト、
 > オートメーション用リンクと NFC シール、Android のクイック設定タイル、家族で楽しむ
 > 機能（おやすみモードとおやすみの儀式、おはなしづくり、子守歌、子どもごとの星がも

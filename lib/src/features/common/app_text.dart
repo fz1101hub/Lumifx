@@ -134,6 +134,9 @@ extension EffectText on AppLocalizations {
         'valentines_glow' => effectNameValentinesGlow,
         'carnival_parade' => effectNameCarnivalParade,
         'easter_egg_hunt' => effectNameEasterEggHunt,
+        'festival_of_lights' => effectNameFestivalOfLights,
+        'eight_little_lights' => effectNameEightLittleLights,
+        'lunar_new_year' => effectNameLunarNewYear,
         _ => effect.name,
       };
 
@@ -173,6 +176,9 @@ extension EffectText on AppLocalizations {
         'valentines_glow' => effectDescriptionValentinesGlow,
         'carnival_parade' => effectDescriptionCarnivalParade,
         'easter_egg_hunt' => effectDescriptionEasterEggHunt,
+        'festival_of_lights' => effectDescriptionFestivalOfLights,
+        'eight_little_lights' => effectDescriptionEightLittleLights,
+        'lunar_new_year' => effectDescriptionLunarNewYear,
         _ => effect.description,
       };
 
@@ -211,6 +217,9 @@ extension EffectText on AppLocalizations {
         'Valentine' => collectionValentine,
         'Carnival' => collectionCarnival,
         'Easter' => collectionEaster,
+        'Diwali' => collectionDiwali,
+        'Hanukkah' => collectionHanukkah,
+        'Lunar New Year' => collectionLunarNewYear,
         final other => other,
       };
 }

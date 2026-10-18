@@ -587,6 +587,32 @@ build before every store release.
       an NFC sticker; in kids mode they do nothing.
 
 
+## This round: noise light, a tune for teeth, festivals, search
+
+- [ ] Noise light (Parties and games) on a room, Indoor voices, Start
+      listening: allow the microphone; the lamps turn green. Talk
+      normally: green; shout for a second or two: amber, then red ("Too
+      loud!", "Too loud once"); quiet for a few seconds: back to green.
+      One clap alone changes nothing. Quiet turns amber sooner, Playtime
+      later.
+- [ ] Noise light: Stop, or leave the screen: the microphone indicator
+      (iOS orange dot / Android green chip) goes away and the lamps go
+      back. Deny the microphone: a message says how to allow it.
+- [ ] Light timers › Brush your teeth with "A tune while brushing" on and
+      sounds on: Twinkle Twinkle plays on the music box for the two
+      minutes while the lights count down; switched off: silent.
+- [ ] Set the phone's date to 6 November 2026: the home shows "Happy
+      Diwali" with Festival of Lights. 5 December 2026: "Happy Hanukkah"
+      with Eight Little Lights above "Christmas time". 15 February 2026:
+      "Happy Lunar New Year" above "Valentine's Day". Each story reads
+      along and aloud in Italian and Japanese and flashes nothing fast.
+- [ ] Siri: "Play Eight Little Lights in LumiFX" (and the Italian name in
+      Italian) starts it.
+- [ ] Search: type "storm": Thunderstorm shows right under the filters;
+      the collections scroll sideways in one row.
+
+## Links and widget
+
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it
       into Safari / Chrome: LumiFX opens and plays it. Same from a Siri
       Shortcut (iOS, "Open URL") and an Android routine or Tasker.

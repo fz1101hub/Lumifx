@@ -246,8 +246,9 @@ last upload. For a build made by hand, pass `--build-number` to
   searches for a bridge. If the reviewer denies it, discovery finds
   nothing; the manual IP entry still works and the preview mode needs no
   bridge at all. This is explained in the review notes.
-- **Microphone.** Only requested when a Music Sync effect starts, or when
-  "Blow on the phone" is tapped at a birthday party. Both
+- **Microphone.** Only requested when a Music Sync effect starts, when
+  "Blow on the phone" is tapped at a birthday party, or when the noise
+  light starts listening. Both
   stores accept this as long as the purpose string explains it (it does).
 - **Camera.** Only requested when TV Sync starts; the purpose string
   (`NSCameraUsageDescription`) explains it. On Android the camera is

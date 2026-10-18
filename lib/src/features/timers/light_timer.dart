@@ -1,5 +1,6 @@
 import '../../core/effects/effect.dart';
 import '../../core/effects/effect_event.dart';
+import '../../core/sound/soundscape.dart';
 
 /// Timers shown by the lights: they change colour as time passes, then
 /// end with a little party of light (for children) or a gentle signal.
@@ -27,11 +28,17 @@ enum LightTimer {
   static const ending = Duration(seconds: 6);
 
   /// The effect that counts [length] down under [name]; it plays once and
-  /// the player stops it at its end.
-  LightingEffect effect({required String name, Duration? length}) {
+  /// the player stops it at its end. With [tune], a music box plays
+  /// through the time (see `soundscapeOf`).
+  LightingEffect effect({
+    required String name,
+    Duration? length,
+    bool tune = false,
+  }) {
     final time = length ?? Duration(minutes: minutes);
     return LightingEffect(
-      id: '${LightingEffect.generatedPrefix}timer:${this.name}',
+      id: '${LightingEffect.generatedPrefix}timer:${this.name}'
+          '${tune ? timerTuneSuffix : ''}',
       name: name,
       kind: EffectKind.interactive,
       isLooping: false,

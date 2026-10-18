@@ -7,6 +7,7 @@ import 'package:lumifx/src/core/sound/melody.dart';
 import 'package:lumifx/src/core/sound/soundscape.dart';
 import 'package:lumifx/src/core/sound/synth.dart';
 import 'package:lumifx/src/features/music_box/melody_lights.dart';
+import 'package:lumifx/src/features/timers/light_timer.dart';
 
 void main() {
   test('ten tunes, each findable, each within a comfortable range', () {
@@ -85,5 +86,19 @@ void main() {
     final first = frames.first;
     expect(last.brightness, greaterThan(first.brightness));
     expect(last.color, isNot(LightColor.fromHex('#141A4A')));
+  });
+
+  test('the teeth timer can play Twinkle through the two minutes', () {
+    final effect = LightTimer.teeth.effect(name: 'Teeth', tune: true);
+    final scape = soundscapeOf(effect);
+    expect(scape.melody, same(twinkle));
+    expect(twinkle.length * scape.melodyTimes,
+        greaterThanOrEqualTo(const Duration(minutes: 2)));
+    expect(twinkle.length * (scape.melodyTimes - 1),
+        lessThan(const Duration(minutes: 2)));
+    expect(
+        soundscapeOf(LightTimer.teeth.effect(name: 'Teeth')).isSilent, isTrue);
+    expect(
+        soundscapeOf(LightTimer.focus.effect(name: 'Focus')).isSilent, isTrue);
   });
 }

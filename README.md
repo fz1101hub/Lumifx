@@ -109,11 +109,13 @@ Also done ahead of schedule:
   Actions ("Open Fireplace in LumiFX"), through `lumifx://` links.
 - **Holiday stories** for New Year, Valentine's Day, Carnival and Easter,
   first on the home in their season (Carnival and Easter follow Easter's
-  date each year).
+  date each year); Diwali, Hanukkah and Lunar New Year have a shelf of
+  their own in their days (dates from published calendars up to 2035).
 - **Ok-to-wake light**: a dim amber glow at night that turns green when
   children may get up, stored on the bridge.
 - **Light timers**: teeth, tidying up, homework, focus and cooking; the
-  lights change colour as time passes and end with a little party.
+  lights change colour as time passes and end with a little party; the
+  teeth timer can play Twinkle Twinkle on the music box meanwhile.
 - **Read aloud**: the phone's voice reads each line of a story (and the
   game calls) as the lights reach it, in the app's language.
 - **Scene from a photo**: the scene editor takes the main colours of a
@@ -178,8 +180,8 @@ Also done ahead of schedule:
   automation opens the link. `lumifx://app/go/ritual` (and the routines,
   star shop, story maker, lullabies, monster spray, piano, games,
   cinema, timers, breathing, simon, counting, colour-words,
-  colour-mixing, morse, hot-and-cold, halloween, nap) opens a family
-  screen, e.g. from a sticker by the bed.
+  colour-mixing, morse, hot-and-cold, halloween, nap, noise) opens a
+  family screen, e.g. from a sticker by the bed.
 - **Notification lights** (Android): chosen apps flash the lights of a
   room in their own colour when they post a notification, even with
   LumiFX closed; only the app's name is seen, never what it says; quiet
@@ -218,6 +220,10 @@ Also done ahead of schedule:
   a Hue motion sensor (or a grown-up taps Scare now) the lamps flash,
   the phone thunders and red eyes glow on one lamp, with 15 s of rest
   between sensor scares and nothing that flashes fast.
+- **Noise light**: the lamps stay green while the room is calm, turn
+  amber when it gets loud and red when it is too loud (quiet, indoor
+  voices or playtime); the microphone only measures loudness, while the
+  screen is open, and nothing is recorded.
 - **Nap light**: a daytime ok-to-wake; a faint amber glow for a rest of
   20 minutes to two hours, then the lamps slowly turn green and stay
   green for 20 minutes before going back to how they were.
