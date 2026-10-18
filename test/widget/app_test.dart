@@ -71,6 +71,7 @@ import 'package:lumifx/src/features/music_box/music_box_screen.dart';
 import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
+import 'package:lumifx/src/features/routines/kid_routine.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
 import 'package:lumifx/src/features/routines/star_shop_screen.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
@@ -1097,6 +1098,37 @@ void main() {
     expect(find.text('1 star'), findsOneWidget);
     // Next to the morning routine, and in the week.
     expect(find.byIcon(Icons.star), findsNWidgets(2));
+  });
+
+  testWidgets('brushing teeth in a routine runs the two-minute timer',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const RoutineScreen(routine: KidRoutine.morning))));
+    await tester.pumpAndSettle();
+    expect(find.text('0 of 6 done'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+
+    await tester.tap(find.byTooltip('Two-minute timer'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(TimerRunningScreen), findsOneWidget);
+    expect(sound.playing?.melody?.id, 'twinkle');
+
+    // The time is up: the step is done.
+    playback.player!.advance(playback.effect.cycleLength);
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text("Time's up!"), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.text('1 of 6 done'), findsOneWidget);
+    expect(find.byTooltip('Two-minute timer'), findsNothing);
+    await playback.stop();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('a lullaby plays its tune and then fades the lights out',

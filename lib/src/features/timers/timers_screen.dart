@@ -18,6 +18,16 @@ class TimersScreen extends StatefulWidget {
 
   static const cookingChoices = [5, 10, 15, 20, 30, 45, 60];
 
+  /// The timer's name in the app's language.
+  static String nameOf(AppLocalizations l10n, LightTimer timer) =>
+      switch (timer) {
+        LightTimer.teeth => l10n.timerTeeth,
+        LightTimer.tidyUp => l10n.timerTidyUp,
+        LightTimer.homework => l10n.timerHomework,
+        LightTimer.focus => l10n.timerFocus,
+        LightTimer.cooking => l10n.timerCooking,
+      };
+
   @override
   State<TimersScreen> createState() => _TimersScreenState();
 }
@@ -45,15 +55,6 @@ class _TimersScreenState extends State<TimersScreen> {
     ));
   }
 
-  static String nameOf(AppLocalizations l10n, LightTimer timer) =>
-      switch (timer) {
-        LightTimer.teeth => l10n.timerTeeth,
-        LightTimer.tidyUp => l10n.timerTidyUp,
-        LightTimer.homework => l10n.timerHomework,
-        LightTimer.focus => l10n.timerFocus,
-        LightTimer.cooking => l10n.timerCooking,
-      };
-
   static IconData _iconOf(LightTimer timer) => switch (timer) {
         LightTimer.teeth => Icons.clean_hands_outlined,
         LightTimer.tidyUp => Icons.toys_outlined,
@@ -69,7 +70,7 @@ class _TimersScreenState extends State<TimersScreen> {
       minutes: timer == LightTimer.cooking ? _cookingMinutes : timer.minutes,
     );
     final effect = timer.effect(
-      name: nameOf(l10n, timer),
+      name: TimersScreen.nameOf(l10n, timer),
       length: length,
       tune: timer == LightTimer.teeth &&
           AppScope.of(context).preferences.teethTune,
@@ -113,7 +114,7 @@ class _TimersScreenState extends State<TimersScreen> {
                         foregroundColor: Colors.black87,
                         child: Icon(_iconOf(timer)),
                       ),
-                      title: Text(nameOf(l10n, timer)),
+                      title: Text(TimersScreen.nameOf(l10n, timer)),
                       subtitle: Text(l10n.sleepTimerMinutes(
                         timer == LightTimer.cooking
                             ? _cookingMinutes

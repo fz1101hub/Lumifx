@@ -4552,5 +4552,9 @@
   "noiseStopped": "The microphone stopped. Tap Start listening to go on.",
   "@noiseStopped": {
     "description": "Noise light: the microphone stopped on its own (an error, another app took it)"
+  },
+  "routineTeethTimer": "Two-minute timer",
+  "@routineTeethTimer": {
+    "description": "Routine: button on the brush-teeth step that starts the two-minute light timer"
   }
 }

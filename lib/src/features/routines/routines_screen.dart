@@ -11,6 +11,8 @@ import '../common/layout.dart';
 import '../effects/light_color_ui.dart';
 import '../effects/playback_controller.dart';
 import '../library/preferences_controller.dart';
+import '../timers/light_timer.dart';
+import '../timers/timers_screen.dart';
 import 'child_picker.dart';
 import 'custom_step.dart';
 import 'kid_routine.dart';
@@ -448,6 +450,49 @@ class _RoutineScreenState extends State<RoutineScreen> {
     await _show();
   }
 
+  /// Brushing teeth with the two-minute light timer (and its tune): the
+  /// step is done when the time is up.
+  Future<void> _teethTimer(RoutineItem step) async {
+    final scope = AppScope.of(context);
+    final l10n = context.l10n;
+    final playback = scope.playback;
+    final effect = LightTimer.teeth.effect(
+      name: TimersScreen.nameOf(l10n, LightTimer.teeth),
+      tune: scope.preferences.teethTune,
+    );
+    var finished = false;
+    final notices = playback.notices.listen((notice) {
+      if (notice.kind == PlaybackNoticeKind.finished &&
+          notice.name == effect.name) {
+        finished = true;
+      }
+    });
+    try {
+      playback.setSleepTimer(null);
+      await _play(playback, effect);
+      if (!mounted) {
+        return;
+      }
+      await Navigator.of(context).push(MaterialPageRoute<void>(
+        builder: (_) => TimerRunningScreen(
+          effect: effect,
+          length: Duration(minutes: LightTimer.teeth.minutes),
+        ),
+      ));
+    } finally {
+      // Not awaited: a broadcast subscription may take its time to go.
+      unawaited(notices.cancel());
+    }
+    if (!mounted) {
+      return;
+    }
+    if (finished && !_done.contains(step)) {
+      await _tap(step);
+    } else {
+      await _show();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -489,6 +534,10 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       step: step,
                       done: _done.contains(step),
                       onTap: () => _tap(step),
+                      onTimer: step == RoutineStep.brushTeeth &&
+                              !_done.contains(step)
+                          ? () => _teethTimer(step)
+                          : null,
                     ),
                 ],
               ),
@@ -520,18 +569,22 @@ class _StepTile extends StatelessWidget {
     required this.step,
     required this.done,
     required this.onTap,
+    this.onTimer,
   });
 
   final RoutineItem step;
   final bool done;
   final VoidCallback onTap;
 
+  /// Starts a light timer for the step, if it has one.
+  final VoidCallback? onTimer;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = LightColor.fromHex(step.color).toColor();
     final label = step.label(context.l10n);
-    return Semantics(
+    final tile = Semantics(
       button: true,
       checked: done,
       label: label,
@@ -564,6 +617,24 @@ class _StepTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+    final timer = onTimer;
+    if (timer == null) {
+      return tile;
+    }
+    return Stack(
+      children: [
+        Positioned.fill(child: tile),
+        Positioned(
+          top: 4,
+          right: 4,
+          child: IconButton.filledTonal(
+            tooltip: context.l10n.routineTeethTimer,
+            onPressed: timer,
+            icon: const Icon(Icons.timer_outlined),
+          ),
+        ),
+      ],
     );
   }
 }
