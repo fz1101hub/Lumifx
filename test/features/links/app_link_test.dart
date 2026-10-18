@@ -65,5 +65,11 @@ void main() {
         AppScreen.starShop);
     expect(AppLink.parse('lumifx://app/go/nowhere'), isNull);
     expect(AppLink.go(AppScreen.ritual), 'lumifx://app/go/ritual');
+    expect(
+        (AppLink.parse('lumifx://app/go/colour-mixing')! as ScreenLink).screen,
+        AppScreen.colourMixing);
+    expect(AppScreen.values.map((s) => s.slug).toSet(),
+        hasLength(AppScreen.values.length),
+        reason: 'every slug its own');
   });
 }

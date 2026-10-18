@@ -1840,6 +1840,12 @@ void main() {
     expect(find.byType(BedtimeRitualScreen), findsNothing,
         reason: 'it was opened only once');
 
+    await openLink('lumifx://app/go/colour-mixing');
+    await tester.pumpAndSettle();
+    expect(find.byType(ColourMixingScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
     final preferences =
         AppScope.of(tester.element(find.byType(HomeScreen))).preferences;
     await preferences.setKidsLocked(true);
