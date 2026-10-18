@@ -75,6 +75,7 @@ import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/routines/kid_routine.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
 import 'package:lumifx/src/features/routines/star_shop_screen.dart';
+import 'package:lumifx/src/features/timers/light_timer.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
 import 'package:lumifx/src/features/timers/timers_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
@@ -1128,6 +1129,33 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('1 of 6 done'), findsOneWidget);
     expect(find.byTooltip('Two-minute timer'), findsNothing);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('tidying up in a routine runs the ten-minute timer',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const RoutineScreen(routine: KidRoutine.evening))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+    await tester.scrollUntilVisible(
+        find.byTooltip('Ten-minute tidy-up timer'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.byTooltip('Ten-minute tidy-up timer'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(TimerRunningScreen), findsOneWidget);
+    expect(playback.effect.id, LightTimer.tidyUp.effect(name: 'x').id);
+    playback.player!.advance(playback.effect.cycleLength);
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.text('1 of 6 done'), findsOneWidget);
     await playback.stop();
     await tester.pumpAndSettle();
   });

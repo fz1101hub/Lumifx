@@ -1133,5 +1133,6 @@
   "ritualGoodnightName": "Welterusten, {name}!",
   "pianoEchoBest": "Record: {count} noten",
   "routineMakeStory": "Verzin een verhaal",
-  "pianoListenFirst": "Eerst luisteren"
+  "pianoListenFirst": "Eerst luisteren",
+  "routineTidyTimer": "Opruimtimer van tien minuten"
 }

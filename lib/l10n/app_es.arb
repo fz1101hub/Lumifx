@@ -1133,5 +1133,6 @@
   "ritualGoodnightName": "¡Buenas noches, {name}!",
   "pianoEchoBest": "Récord: {count} notas",
   "routineMakeStory": "Inventar un cuento",
-  "pianoListenFirst": "Escuchar primero"
+  "pianoListenFirst": "Escuchar primero",
+  "routineTidyTimer": "Temporizador de recoger de diez minutos"
 }

@@ -489,20 +489,20 @@ class _RoutineScreenState extends State<RoutineScreen> {
     }
   }
 
-  /// Brushing teeth with the two-minute light timer (and its tune): the
-  /// step is done when the time is up.
-  Future<void> _teethTimer(RoutineItem step) {
+  /// A step done with a light timer (brushing teeth with its tune, tidying
+  /// up): the step is done when the time is up.
+  Future<void> _timed(RoutineItem step, LightTimer timer) {
     final scope = AppScope.of(context);
     final playback = scope.playback;
-    final effect = LightTimer.teeth.effect(
-      name: TimersScreen.nameOf(context.l10n, LightTimer.teeth),
-      tune: scope.preferences.teethTune,
+    final effect = timer.effect(
+      name: TimersScreen.nameOf(context.l10n, timer),
+      tune: timer == LightTimer.teeth && scope.preferences.teethTune,
     );
     return _doWith(
       step,
       TimerRunningScreen(
         effect: effect,
-        length: Duration(minutes: LightTimer.teeth.minutes),
+        length: Duration(minutes: timer.minutes),
       ),
       (playing) => playing.id == effect.id,
       before: () async {
@@ -530,7 +530,12 @@ class _RoutineScreenState extends State<RoutineScreen> {
       RoutineStep.brushTeeth => (
           icon: Icons.timer_outlined,
           tooltip: l10n.routineTeethTimer,
-          onPressed: () => _teethTimer(step),
+          onPressed: () => _timed(step, LightTimer.teeth),
+        ),
+      RoutineStep.tidyToys => (
+          icon: Icons.timer_outlined,
+          tooltip: l10n.routineTidyTimer,
+          onPressed: () => _timed(step, LightTimer.tidyUp),
         ),
       RoutineStep.storyTime => (
           icon: Icons.auto_stories_outlined,

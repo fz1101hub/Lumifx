@@ -4582,5 +4582,9 @@
   "pianoListenFirst": "Listen first",
   "@pianoListenFirst": {
     "description": "Light piano, learning a song: plays the whole song first, the keys glowing"
+  },
+  "routineTidyTimer": "Ten-minute tidy-up timer",
+  "@routineTidyTimer": {
+    "description": "Routine: button on the tidy-toys step that starts the ten-minute tidy-up light timer"
   }
 }
