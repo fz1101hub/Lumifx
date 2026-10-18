@@ -374,6 +374,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       voices: _voices,
       voiceRecorder: widget.voiceRecorder,
       voicePlayer: widget.voicePlayer,
+      speaker: widget.speaker,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

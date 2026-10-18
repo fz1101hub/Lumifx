@@ -3493,5 +3493,99 @@
         "type": "String"
       }
     }
+  },
+  "countLights": "Count the lights",
+  "@countLights": {
+    "description": "Game: count how many times the lamps blink"
+  },
+  "countLightsSubtitle": "How many times do the lamps blink?",
+  "@countLightsSubtitle": {
+    "description": "Subtitle of the counting game"
+  },
+  "countLightsRules": "The lamps blink a few times, each in a colour: count them aloud, then tap the right number. The numbers grow as you get better. The lamp on the screen blinks too.",
+  "@countLightsRules": {
+    "description": "Rules of the counting game"
+  },
+  "countWatch": "Watch and count…",
+  "@countWatch": {
+    "description": "Counting game: the lamps are blinking"
+  },
+  "countHowMany": "How many?",
+  "@countHowMany": {
+    "description": "Counting game: tap the number of blinks"
+  },
+  "countRight": "Yes, {count}!",
+  "@countRight": {
+    "description": "Counting game: the right answer",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "countWrong": "Not quite: let's count again",
+  "@countWrong": {
+    "description": "Counting game: a wrong answer, the lamps blink again"
+  },
+  "countAgain": "Show me again",
+  "@countAgain": {
+    "description": "Counting game: blink the same number again"
+  },
+  "countScore": "{count, plural, =1{One right answer} other{{count} right answers}}",
+  "@countScore": {
+    "description": "Counting game: right answers so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "colourWords": "Colours in another language",
+  "@colourWords": {
+    "description": "Game: learn the names of colours in another language"
+  },
+  "colourWordsSubtitle": "The room turns a colour and a voice says its name",
+  "@colourWordsSubtitle": {
+    "description": "Subtitle of the colours game"
+  },
+  "colourWordsRules": "Choose a language: each colour lights up the room and is said aloud in that language. Then try the quiz: hear a word and tap its colour.",
+  "@colourWordsRules": {
+    "description": "Rules of the colours game"
+  },
+  "colourWordsLanguage": "Language to learn",
+  "@colourWordsLanguage": {
+    "description": "Colours game: the language to learn"
+  },
+  "colourWordsLearn": "Learn",
+  "@colourWordsLearn": {
+    "description": "Colours game mode: learn the words"
+  },
+  "colourWordsQuiz": "Quiz",
+  "@colourWordsQuiz": {
+    "description": "Colours game mode: quiz"
+  },
+  "colourWordsNext": "Next colour",
+  "@colourWordsNext": {
+    "description": "Colours game: show the next colour"
+  },
+  "colourWordsSayAgain": "Say it again",
+  "@colourWordsSayAgain": {
+    "description": "Colours game: say the word again"
+  },
+  "colourWordsWhich": "Which colour is it?",
+  "@colourWordsWhich": {
+    "description": "Colours game quiz: tap the colour you heard"
+  },
+  "colourWordsRight": "Well done!",
+  "@colourWordsRight": {
+    "description": "Colours game quiz: right answer"
+  },
+  "colourWordsTryAgain": "Try again",
+  "@colourWordsTryAgain": {
+    "description": "Colours game quiz: wrong answer"
+  },
+  "colourWordsSoundOff": "Sounds are off: turn them on to hear the words",
+  "@colourWordsSoundOff": {
+    "description": "Sounds are switched off; switch to turn them on"
   }
 }

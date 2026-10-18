@@ -14,6 +14,10 @@ import '../fun/countdowns_screen.dart';
 import '../fun/game_screen.dart';
 import '../fun/light_games.dart';
 import '../fun/simon_screen.dart';
+import '../learn/colour_words.dart';
+import '../learn/colour_words_screen.dart';
+import '../learn/counting.dart';
+import '../learn/counting_screen.dart';
 import '../music_box/music_box_screen.dart';
 import '../paths/path_story.dart';
 import '../paths/path_story_screen.dart';
@@ -60,6 +64,10 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const CountdownsScreen();
   } else if (soundscapeOf(effect).melody case final melody?) {
     screen = MusicBoxScreen(festive: melody.instrument == Instrument.bells);
+  } else if (CountingGame.isCounting(effect)) {
+    screen = const CountingScreen();
+  } else if (LearnColour.of(effect) != null) {
+    screen = ColourWordsScreen(playing: effect);
   } else if (KidRoutine.of(effect) != null) {
     screen = const RoutinesScreen();
   } else if (id.startsWith('${LightingEffect.generatedPrefix}simon')) {

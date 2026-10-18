@@ -33,6 +33,11 @@ import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/core/speech/speaker.dart';
+import 'package:lumifx/src/features/learn/colour_words.dart';
+import 'package:lumifx/src/features/learn/colour_words_screen.dart';
+import 'package:lumifx/src/features/learn/counting.dart';
+import 'package:lumifx/src/features/learn/counting_screen.dart';
 import 'package:lumifx/src/features/music_box/music_box_screen.dart';
 import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
@@ -50,6 +55,17 @@ import '../support/fake_background_playback.dart';
 import '../support/fake_home_widgets.dart';
 import '../support/fake_shortcuts.dart';
 import '../support/phone_window.dart';
+
+class _RecordingSpeaker implements Speaker {
+  final spoken = <(String, String)>[];
+
+  @override
+  Future<void> speak(String text, String language) async =>
+      spoken.add((text, language));
+
+  @override
+  Future<void> stop() async {}
+}
 
 class _FakeDiscovery implements BridgeDiscovery {
   @override
@@ -124,6 +140,7 @@ Future<void> _pumpApp(
   AudioInput? audioInput,
   WeatherService weather = const NoWeatherService(),
   DateTime Function()? clock,
+  Speaker speaker = const NoSpeaker(),
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -142,6 +159,7 @@ Future<void> _pumpApp(
       photos: photos,
       weather: weather,
       clock: clock ?? DateTime.now,
+      speaker: speaker,
     ),
   );
 }
@@ -993,6 +1011,100 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expect(playback.isPlaying, isTrue);
     expect(playback.effect.name, 'The story of Sofia');
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('counting the lights: the blinks, the number, the voice',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('Parties and games'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Parties and games'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+        find.text('Colours in another language'), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('Count the lights'), findsOneWidget);
+
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const CountingScreen(seed: 7))));
+    await tester.pumpAndSettle();
+    final target = (CountingGame(math.Random(7))..next()).target;
+    await tester.tap(find.text('Start'));
+    await tester.pump();
+    expect(find.text('Watch and count…'), findsOneWidget);
+    // The answers wait until the blinks are over.
+    await tester.tap(find.text('1'));
+    await tester.pump(const Duration(seconds: 8));
+    expect(find.text('How many?'), findsOneWidget);
+    final wrong = target == 1 ? 2 : 1;
+    await tester.tap(find.text('$wrong'));
+    await tester.pump();
+    expect(find.text("Not quite: let's count again"), findsOneWidget);
+    await tester.pump(const Duration(seconds: 8));
+    await tester.tap(find.text('$target'));
+    await tester.pump();
+    expect(find.text('Yes, $target!'), findsOneWidget);
+    expect(find.text('One right answer'), findsOneWidget);
+    expect(speaker.spoken.last, ('$target', 'en-US'));
+    final playback =
+        AppScope.of(tester.element(find.byType(CountingScreen))).playback;
+    await tester.pageBack();
+    await tester.pump(const Duration(seconds: 2));
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the colours are said in the language to learn', (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const ColourWordsScreen(seed: 3))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(ColourWordsScreen))).playback;
+    // English speakers start with Spanish.
+    expect(find.text('rojo'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Next colour'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Next colour'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('naranja'), findsOneWidget);
+    expect(speaker.spoken.last, ('naranja', 'es-ES'));
+    expect(LearnColour.of(playback.effect), LearnColour.orange);
+
+    await tester.scrollUntilVisible(find.text('Italiano'), -200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Italiano'));
+    await tester.pump();
+    expect(find.text('arancione'), findsOneWidget);
+    expect(speaker.spoken.last, ('arancione', 'it-IT'));
+
+    await tester.tap(find.text('Quiz'));
+    await tester.pump();
+    final quiz = ColourQuiz(math.Random(3))..next();
+    expect(speaker.spoken.last, (quiz.target.word('it'), 'it-IT'));
+    expect(find.text('Which colour is it?'), findsOneWidget);
+    final wrong = quiz.choices.firstWhere((c) => c != quiz.target);
+    await tester.scrollUntilVisible(
+        find.bySemanticsLabel(wrong.word('en')), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.bySemanticsLabel(wrong.word('en')));
+    await tester.pump();
+    expect(find.text('Try again'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel(quiz.target.word('en')));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Well done!'), findsOneWidget);
+    expect(LearnColour.of(playback.effect), quiz.target);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Which colour is it?'), findsOneWidget,
+        reason: 'then the next word');
     await playback.stop();
     await tester.pumpAndSettle();
   });

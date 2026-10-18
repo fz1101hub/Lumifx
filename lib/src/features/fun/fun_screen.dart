@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../common/app_text.dart';
 import '../common/layout.dart';
+import '../learn/colour_words_screen.dart';
+import '../learn/counting_screen.dart';
 import 'advent_screen.dart';
 import '../music_box/music_box_screen.dart';
 import 'birthday_screen.dart';
@@ -64,6 +66,10 @@ class FunScreen extends StatelessWidget {
             ),
           entry(Icons.psychology_outlined, l10n.gameSimon,
               l10n.gameSimonSubtitle, () => const SimonScreen()),
+          entry(Icons.filter_9_plus_outlined, l10n.countLights,
+              l10n.countLightsSubtitle, () => const CountingScreen()),
+          entry(Icons.translate, l10n.colourWords, l10n.colourWordsSubtitle,
+              () => const ColourWordsScreen()),
         ],
       ),
     );
