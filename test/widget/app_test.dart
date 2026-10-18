@@ -2621,9 +2621,16 @@ void main() {
     expect(find.text('Christmas time'), findsOneWidget);
     expect(find.text('Halloween is coming'), findsNothing);
 
+    await launch(DateTime(2026, 12, 6));
+    expect(find.text('Happy Hanukkah'), findsOneWidget);
+    expect(find.text('Eight Little Lights'), findsWidgets);
+    expect(find.text('Christmas time'), findsOneWidget,
+        reason: 'the festival joins the season');
+
     await launch(DateTime(2026, 6, 15));
     expect(find.text('Halloween is coming'), findsNothing);
     expect(find.text('Christmas time'), findsNothing);
+    expect(find.text('Happy Hanukkah'), findsNothing);
   });
 
   testWidgets('effects can be searched and filtered', (tester) async {

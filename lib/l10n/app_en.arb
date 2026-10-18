@@ -4423,5 +4423,101 @@
   "timerTune": "A tune while brushing",
   "@timerTune": {
     "description": "Teeth timer: switch to play a music-box tune while brushing"
+  },
+  "effectNameFestivalOfLights": "Festival of Lights",
+  "@effectNameFestivalOfLights": {
+    "description": "Name of the Diwali story"
+  },
+  "effectDescriptionFestivalOfLights": "Little lamps lit one by one, rangoli colours and sparklers.",
+  "@effectDescriptionFestivalOfLights": {
+    "description": "Description of the Diwali story"
+  },
+  "effectNameEightLittleLights": "Eight Little Lights",
+  "@effectNameEightLittleLights": {
+    "description": "Name of the Hanukkah story"
+  },
+  "effectDescriptionEightLittleLights": "One more candle each night until eight shine, and a dreidel.",
+  "@effectDescriptionEightLittleLights": {
+    "description": "Description of the Hanukkah story"
+  },
+  "effectNameLunarNewYear": "Lunar New Year",
+  "@effectNameLunarNewYear": {
+    "description": "Name of the Lunar New Year story"
+  },
+  "effectDescriptionLunarNewYear": "Red lanterns, a dancing dragon and fireworks in red and gold.",
+  "@effectDescriptionLunarNewYear": {
+    "description": "Description of the Lunar New Year story"
+  },
+  "collectionDiwali": "Diwali",
+  "@collectionDiwali": {
+    "description": "Collection of the Diwali stories"
+  },
+  "collectionHanukkah": "Hanukkah",
+  "@collectionHanukkah": {
+    "description": "Collection of the Hanukkah stories"
+  },
+  "collectionLunarNewYear": "Lunar New Year",
+  "@collectionLunarNewYear": {
+    "description": "Collection of the Lunar New Year stories"
+  },
+  "festivalDiwali": "Happy Diwali",
+  "@festivalDiwali": {
+    "description": "Home shelf title in the days of Diwali"
+  },
+  "festivalHanukkah": "Happy Hanukkah",
+  "@festivalHanukkah": {
+    "description": "Home shelf title in the days of Hanukkah"
+  },
+  "festivalLunarNewYear": "Happy Lunar New Year",
+  "@festivalLunarNewYear": {
+    "description": "Home shelf title in the days of Lunar New Year"
+  },
+  "narrationFestivalOfLights1": "Evening falls, and the family gets ready for Diwali, the festival of lights.",
+  "@narrationFestivalOfLights1": {
+    "description": "Read-along line of the Diwali story"
+  },
+  "narrationFestivalOfLights2": "One by one, little clay lamps called diyas are lit in every window.",
+  "@narrationFestivalOfLights2": {
+    "description": "Read-along line of the Diwali story"
+  },
+  "narrationFestivalOfLights3": "Soon the whole house glows warm and golden, and bright colours bloom like rangoli on the floor.",
+  "@narrationFestivalOfLights3": {
+    "description": "Read-along line of the Diwali story"
+  },
+  "narrationFestivalOfLights4": "Sparklers twinkle outside: light wins over darkness, and everyone shares sweets.",
+  "@narrationFestivalOfLights4": {
+    "description": "Read-along line of the Diwali story"
+  },
+  "narrationEightLittleLights1": "On a cold winter evening, the family gathers around the menorah.",
+  "@narrationEightLittleLights1": {
+    "description": "Read-along line of the Hanukkah story"
+  },
+  "narrationEightLittleLights2": "The helper candle lights the others, one more each night, until eight little lights shine.",
+  "@narrationEightLittleLights2": {
+    "description": "Read-along line of the Hanukkah story"
+  },
+  "narrationEightLittleLights3": "Blue and white and gold, the whole room glows, like the little oil that lasted eight days.",
+  "@narrationEightLittleLights3": {
+    "description": "Read-along line of the Hanukkah story"
+  },
+  "narrationEightLittleLights4": "A dreidel spins and spins, and golden coins gleam as everyone laughs together.",
+  "@narrationEightLittleLights4": {
+    "description": "Read-along line of the Hanukkah story"
+  },
+  "narrationLunarNewYear1": "Red lanterns glow all along the street: it is Lunar New Year.",
+  "@narrationLunarNewYear1": {
+    "description": "Read-along line of the Lunar New Year story"
+  },
+  "narrationLunarNewYear2": "Here comes the dragon! It dances from house to house, golden and proud.",
+  "@narrationLunarNewYear2": {
+    "description": "Read-along line of the Lunar New Year story"
+  },
+  "narrationLunarNewYear3": "Bong! The gong sounds, and red envelopes bring wishes of luck for the year ahead.",
+  "@narrationLunarNewYear3": {
+    "description": "Read-along line of the Lunar New Year story"
+  },
+  "narrationLunarNewYear4": "Fireworks bloom in red and gold, and everyone cheers: Happy New Year!",
+  "@narrationLunarNewYear4": {
+    "description": "Read-along line of the Lunar New Year story"
   }
 }

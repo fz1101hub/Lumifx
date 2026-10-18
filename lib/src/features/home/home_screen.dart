@@ -81,6 +81,15 @@ class HomeScreen extends StatelessWidget {
           padding: context.pageInsets(maxWidth: 1000),
           children: [
             _BridgeBanner(controller: bridge),
+            if (festivalOf(AppScope.of(context).clock()) case final festival?)
+              _EffectShelf(
+                title: switch (festival) {
+                  Festival.diwali => l10n.festivalDiwali,
+                  Festival.hanukkah => l10n.festivalHanukkah,
+                  Festival.lunarNewYear => l10n.festivalLunarNewYear,
+                },
+                effectIds: [for (final e in effectsOfFestival(festival)) e.id],
+              ),
             if (seasonOf(AppScope.of(context).clock()) case final season?)
               _EffectShelf(
                 title: switch (season) {

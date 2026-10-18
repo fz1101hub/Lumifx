@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lumifx/src/core/effects/effect.dart';
 import 'package:lumifx/src/features/home/seasons.dart';
 
 void main() {
@@ -60,6 +61,48 @@ void main() {
     ]) {
       final own = effectsOfSeason(season).first;
       expect(own.hasRapidFlashes, isFalse, reason: own.id);
+    }
+  });
+
+  test('festivals follow their own calendars', () {
+    // Diwali 2026 is on 8 November.
+    expect(festivalOf(DateTime(2026, 11, 5)), isNull);
+    expect(festivalOf(DateTime(2026, 11, 6)), Festival.diwali);
+    expect(festivalOf(DateTime(2026, 11, 10)), Festival.diwali);
+    expect(festivalOf(DateTime(2026, 11, 11)), isNull);
+    // Hanukkah 2026: first candle the evening of 4 December, eighth day
+    // the 12th.
+    expect(festivalOf(DateTime(2026, 12, 2)), isNull);
+    expect(festivalOf(DateTime(2026, 12, 3)), Festival.hanukkah);
+    expect(festivalOf(DateTime(2026, 12, 12)), Festival.hanukkah);
+    expect(festivalOf(DateTime(2026, 12, 13)), isNull);
+    // Over New Year's Eve in 2027.
+    expect(festivalOf(DateTime(2028, 1, 1)), Festival.hanukkah);
+    // Lunar New Year 2026 is on 17 February.
+    expect(festivalOf(DateTime(2026, 2, 13)), isNull);
+    expect(festivalOf(DateTime(2026, 2, 14)), Festival.lunarNewYear);
+    expect(festivalOf(DateTime(2026, 2, 23)), Festival.lunarNewYear);
+    expect(festivalOf(DateTime(2026, 2, 24)), isNull);
+    // Beyond the table: no shelf rather than a wrong one.
+    expect(festivalOf(DateTime(2040, 11, 5)), isNull);
+  });
+
+  test('a festival and a season can share the home', () {
+    final day = DateTime(2026, 2, 14);
+    expect(festivalOf(day), Festival.lunarNewYear);
+    expect(seasonOf(day), Season.valentine);
+    expect(festivalOf(DateTime(2027, 10, 29)), Festival.diwali);
+    expect(seasonOf(DateTime(2027, 10, 29)), Season.halloween);
+  });
+
+  test('every festival has its own gentle story', () {
+    for (final festival in Festival.values) {
+      final stories = effectsOfFestival(festival);
+      expect(stories, isNotEmpty, reason: '$festival');
+      for (final story in stories) {
+        expect(story.kind, EffectKind.story);
+        expect(story.hasRapidFlashes, isFalse, reason: story.id);
+      }
     }
   });
 }
