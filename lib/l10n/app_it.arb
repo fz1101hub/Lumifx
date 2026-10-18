@@ -1076,5 +1076,13 @@
   "colourMixingMix": "Mescola",
   "colourMixingPick": "Scegli un colore",
   "colourMixingPickAnother": "Ora scegline uno da mescolare",
-  "colourMixingWhich": "Cosa formano {first} e {second}?"
+  "colourMixingWhich": "Cosa formano {first} e {second}?",
+  "napLight": "Luce del riposino",
+  "napLightSubtitle": "Ambra durante il riposo, verde quando è finito",
+  "napDescription": "Una luce ambra tenue mentre il bambino riposa. Allo scadere del tempo le lampade diventano piano piano verdi e restano verdi per 20 minuti, poi tornano come prima. Tieni LumiFX aperta durante il riposino.",
+  "napHowLong": "Quanto dura il riposo?",
+  "napStart": "Inizia il riposino",
+  "napResting": "Riposa finché la luce non diventa verde",
+  "napOver": "Verde: è ora di alzarsi!",
+  "napGreenIn": "{minutes, plural, =1{Verde tra un minuto} other{Verde tra {minutes} minuti}}"
 }

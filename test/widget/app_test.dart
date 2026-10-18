@@ -44,6 +44,8 @@ import 'package:lumifx/src/features/bedtime/monster_spray.dart';
 import 'package:lumifx/src/features/cinema/cinema.dart';
 import 'package:lumifx/src/features/cinema/cinema_screen.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
+import 'package:lumifx/src/features/bedtime/nap_light.dart';
+import 'package:lumifx/src/features/bedtime/nap_light_screen.dart';
 import 'package:lumifx/src/features/bedtime/ritual_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
 import 'package:lumifx/src/features/links/nfc_stickers_screen.dart';
@@ -1328,6 +1330,40 @@ void main() {
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('the nap light glows amber, then green when the rest is over',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Nap light'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Nap light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Nap light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('20 min'));
+    await tester.pump();
+    await tester.tap(find.text('Start the nap'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(NapLightScreen))).playback;
+    expect(NapLight.restOf(playback.effect), const Duration(minutes: 20));
+    expect(find.text('Rest until the light turns green'), findsOneWidget);
+    expect(find.text('Green in 20 minutes'), findsOneWidget);
+
+    playback.player!.advance(const Duration(minutes: 20, seconds: 30));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Green: time to get up!'), findsOneWidget);
+
+    // The mini-player leads back here.
+    expect(
+        (routeForPlaying(playback.effect) as MaterialPageRoute<void>)
+            .builder(tester.element(find.byType(NapLightScreen))),
+        isA<NapLightScreen>());
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Start the nap'), findsOneWidget);
   });
 
   testWidgets('the monster spray chases them away and leaves a guardian light',

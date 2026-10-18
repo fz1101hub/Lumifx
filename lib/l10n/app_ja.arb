@@ -1076,5 +1076,13 @@
   "colourMixingMix": "まぜる",
   "colourMixingPick": "絵の具をえらんでね",
   "colourMixingPickAnother": "まぜるもう1つをえらんでね",
-  "colourMixingWhich": "{first}と{second}をまぜると何色？"
+  "colourMixingWhich": "{first}と{second}をまぜると何色？",
+  "napLight": "おひるねライト",
+  "napLightSubtitle": "おやすみ中はオレンジ、おひるねが終わったら緑",
+  "napDescription": "お子さまが休んでいる間は、ほのかなオレンジ色に光ります。時間になるとライトがゆっくり緑に変わり、20分間緑のまま光ってから元に戻ります。おひるねの間はLumiFXを開いたままにしてください。",
+  "napHowLong": "おやすみの時間は？",
+  "napStart": "おひるねスタート",
+  "napResting": "ライトが緑になるまでおやすみ",
+  "napOver": "緑になったよ。起きる時間！",
+  "napGreenIn": "{minutes, plural, other{あと{minutes}分で緑}}"
 }

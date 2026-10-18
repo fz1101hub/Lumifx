@@ -5,6 +5,8 @@ import '../../core/sound/melody.dart';
 import '../../core/sound/soundscape.dart';
 import '../bedtime/monster_spray.dart';
 import '../bedtime/monster_spray_screen.dart';
+import '../bedtime/nap_light.dart';
+import '../bedtime/nap_light_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
 import '../cinema/cinema.dart';
@@ -82,6 +84,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = MusicBoxScreen(festive: melody.instrument == Instrument.bells);
   } else if (MonsterHunt.isHunting(effect) || MonsterHunt.isGuardian(effect)) {
     screen = MonsterSprayScreen(playing: effect);
+  } else if (NapLight.restOf(effect) != null) {
+    screen = const NapLightScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

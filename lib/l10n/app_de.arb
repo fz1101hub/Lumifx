@@ -1076,5 +1076,13 @@
   "colourMixingMix": "Mischen",
   "colourMixingPick": "Wähle eine Farbe",
   "colourMixingPickAnother": "Jetzt wähle eine zum Mischen",
-  "colourMixingWhich": "Was ergeben {first} und {second}?"
+  "colourMixingWhich": "Was ergeben {first} und {second}?",
+  "napLight": "Mittagsschlaf-Licht",
+  "napLightSubtitle": "Bernstein beim Ausruhen, grün, wenn der Mittagsschlaf vorbei ist",
+  "napDescription": "Ein schwaches bernsteinfarbenes Leuchten, während dein Kind ruht. Wenn die Zeit um ist, werden die Lampen langsam grün, bleiben 20 Minuten grün und kehren dann zum vorherigen Zustand zurück. Lass LumiFX während des Mittagsschlafs geöffnet.",
+  "napHowLong": "Wie lange dauert die Ruhe?",
+  "napStart": "Mittagsschlaf beginnen",
+  "napResting": "Ausruhen, bis das Licht grün wird",
+  "napOver": "Grün: Zeit zum Aufstehen!",
+  "napGreenIn": "{minutes, plural, =1{Grün in einer Minute} other{Grün in {minutes} Minuten}}"
 }

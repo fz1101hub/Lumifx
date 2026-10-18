@@ -111,7 +111,8 @@ enum AppScreen {
   colourMixing('colour-mixing'),
   morse('morse'),
   hotCold('hot-and-cold'),
-  halloween('halloween');
+  halloween('halloween'),
+  nap('nap');
 
   const AppScreen(this.slug);
 

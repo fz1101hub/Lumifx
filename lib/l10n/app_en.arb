@@ -4329,5 +4329,42 @@
         "type": "String"
       }
     }
+  },
+  "napLight": "Nap light",
+  "@napLight": {
+    "description": "Title of the nap light: amber while a child naps, green when it is time to get up"
+  },
+  "napLightSubtitle": "Amber while resting, green when the nap is over",
+  "@napLightSubtitle": {
+    "description": "Subtitle of the nap light on the home screen"
+  },
+  "napDescription": "A faint amber glow while your child rests. When the time is up, the lamps slowly turn green and stay green for 20 minutes, then go back to how they were. Keep LumiFX open during the nap.",
+  "@napDescription": {
+    "description": "Nap light: how it works"
+  },
+  "napHowLong": "How long is the rest?",
+  "@napHowLong": {
+    "description": "Nap light: label above the rest length choices"
+  },
+  "napStart": "Start the nap",
+  "@napStart": {
+    "description": "Nap light: button to start the nap"
+  },
+  "napResting": "Rest until the light turns green",
+  "@napResting": {
+    "description": "Nap light: shown while the child should stay in bed"
+  },
+  "napOver": "Green: time to get up!",
+  "@napOver": {
+    "description": "Nap light: shown when the rest is over"
+  },
+  "napGreenIn": "{minutes, plural, =1{Green in one minute} other{Green in {minutes} minutes}}",
+  "@napGreenIn": {
+    "description": "Nap light: minutes left before the light turns green",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

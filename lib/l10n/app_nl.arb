@@ -1076,5 +1076,13 @@
   "colourMixingMix": "Mengen",
   "colourMixingPick": "Kies een verf",
   "colourMixingPickAnother": "Kies nu er een om mee te mengen",
-  "colourMixingWhich": "Wat krijg je als je {first} en {second} mengt?"
+  "colourMixingWhich": "Wat krijg je als je {first} en {second} mengt?",
+  "napLight": "Middagdutjeslicht",
+  "napLightSubtitle": "Amber tijdens het rusten, groen als het dutje voorbij is",
+  "napDescription": "Een zwakke ambergloed terwijl je kind rust. Als de tijd om is, worden de lampen langzaam groen, blijven ze 20 minuten groen en gaan ze daarna terug naar hoe ze waren. Houd LumiFX open tijdens het dutje.",
+  "napHowLong": "Hoe lang duurt het rusten?",
+  "napStart": "Dutje beginnen",
+  "napResting": "Rust tot het licht groen wordt",
+  "napOver": "Groen: tijd om op te staan!",
+  "napGreenIn": "{minutes, plural, =1{Groen over een minuut} other{Groen over {minutes} minuten}}"
 }

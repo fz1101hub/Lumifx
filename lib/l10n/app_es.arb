@@ -1076,5 +1076,13 @@
   "colourMixingMix": "Mezclar",
   "colourMixingPick": "Elige una pintura",
   "colourMixingPickAnother": "Ahora elige otra para mezclar",
-  "colourMixingWhich": "¿Qué sale al mezclar {first} y {second}?"
+  "colourMixingWhich": "¿Qué sale al mezclar {first} y {second}?",
+  "napLight": "Luz de la siesta",
+  "napLightSubtitle": "Ámbar mientras descansa, verde cuando acaba la siesta",
+  "napDescription": "Un brillo ámbar tenue mientras tu hijo descansa. Cuando se acaba el tiempo, las lámparas se vuelven verdes poco a poco, siguen verdes 20 minutos y luego vuelven a como estaban. Mantén LumiFX abierta durante la siesta.",
+  "napHowLong": "¿Cuánto dura el descanso?",
+  "napStart": "Empezar la siesta",
+  "napResting": "Descansa hasta que la luz se ponga verde",
+  "napOver": "¡Verde: hora de levantarse!",
+  "napGreenIn": "{minutes, plural, =1{Verde en un minuto} other{Verde en {minutes} minutos}}"
 }

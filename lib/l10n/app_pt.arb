@@ -1076,5 +1076,13 @@
   "colourMixingMix": "Misturar",
   "colourMixingPick": "Escolha uma tinta",
   "colourMixingPickAnother": "Agora escolha outra para misturar",
-  "colourMixingWhich": "O que dá misturar {first} e {second}?"
+  "colourMixingWhich": "O que dá misturar {first} e {second}?",
+  "napLight": "Luz da soneca",
+  "napLightSubtitle": "Âmbar durante o descanso, verde quando a soneca acaba",
+  "napDescription": "Um brilho âmbar suave enquanto a criança descansa. Quando o tempo acaba, as lâmpadas ficam verdes devagar, continuam verdes por 20 minutos e depois voltam a como estavam. Mantenha o LumiFX aberto durante a soneca.",
+  "napHowLong": "Quanto tempo dura o descanso?",
+  "napStart": "Começar a soneca",
+  "napResting": "Descanse até a luz ficar verde",
+  "napOver": "Verde: hora de levantar!",
+  "napGreenIn": "{minutes, plural, =1{Verde em um minuto} other{Verde em {minutes} minutos}}"
 }

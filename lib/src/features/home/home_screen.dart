@@ -5,6 +5,7 @@ import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
+import '../bedtime/nap_light_screen.dart';
 import '../bedtime/ritual_screen.dart';
 import '../cinema/cinema_screen.dart';
 import '../bridge/bridge_controller.dart';
@@ -132,6 +133,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.ritualSubtitle, () => const BedtimeRitualScreen()),
                 _HomeEntry(Icons.bedtime_outlined, l10n.bedtime,
                     l10n.bedtimeSubtitle, () => const BedtimeScreen()),
+                _HomeEntry(Icons.wb_twilight, l10n.napLight,
+                    l10n.napLightSubtitle, () => const NapLightScreen()),
                 _HomeEntry(
                     Icons.sanitizer_outlined,
                     l10n.monsterSpray,
