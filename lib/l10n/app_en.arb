@@ -4171,5 +4171,13 @@
   "morseWhichLetter": "Which letter was it?",
   "@morseWhichLetter": {
     "description": "Question: which letter did the lamps flash"
+  },
+  "routineAddStep": "Add a step",
+  "@routineAddStep": {
+    "description": "Button/dialog: a grown-up makes a new routine step"
+  },
+  "routineStepName": "What to do",
+  "@routineStepName": {
+    "description": "Field: what the child does in the new step"
   }
 }

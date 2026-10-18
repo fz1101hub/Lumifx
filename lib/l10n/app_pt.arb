@@ -1046,5 +1046,7 @@
   "morseGuessRules": "As lâmpadas piscam uma letra em Morse: qual é? O alfabeto abaixo ajuda.",
   "morseFlashLetter": "Piscar uma letra",
   "morseFlashAgain": "Piscar de novo",
-  "morseWhichLetter": "Que letra era?"
+  "morseWhichLetter": "Que letra era?",
+  "routineAddStep": "Adicionar um passo",
+  "routineStepName": "O que fazer"
 }

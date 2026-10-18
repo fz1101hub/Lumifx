@@ -1,4 +1,6 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lumifx/l10n/generated/app_localizations.dart';
 import 'package:lumifx/src/core/color/light_color.dart';
 import 'package:lumifx/src/core/effects/engine/effect_renderer.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
@@ -53,5 +55,31 @@ void main() {
     await again.load();
     expect(again.stars, hasLength(2));
     expect(again.routineSteps('morning'), ['getUp', 'brushTeeth']);
+  });
+
+  test('a grown-up makes steps of their own, kept per routine', () async {
+    final store = InMemoryKeyValueStore();
+    final preferences = PreferencesController(store: store);
+    final cat =
+        (await preferences.addCustomStep('  Feed the cat ', 0, '#FFB347'))!;
+    expect(cat.name, 'Feed the cat');
+    expect(await preferences.addCustomStep('   ', 0, '#FFB347'), isNull);
+    expect(
+        stepsOf(preferences, KidRoutine.evening), KidRoutine.evening.allSteps,
+        reason: 'not kept until ticked');
+    await preferences.setRoutineSteps('evening', ['bath', cat.key]);
+    expect(stepsOf(preferences, KidRoutine.evening), [RoutineStep.bath, cat]);
+
+    final again = PreferencesController(store: store);
+    await again.load();
+    expect(again.customSteps.single.name, 'Feed the cat');
+    expect(
+        stepsOf(again, KidRoutine.evening)
+            .last
+            .label(lookupAppLocalizations(const Locale('en'))),
+        'Feed the cat');
+    await again.removeCustomStep(cat.id);
+    expect(again.customSteps, isEmpty);
+    expect(again.routineSteps('evening'), ['bath']);
   });
 }

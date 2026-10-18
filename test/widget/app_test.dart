@@ -1771,6 +1771,49 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('a grown-up adds a step of their own to a routine',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const RoutinesScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Choose the steps').last);
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Add a step'), 100,
+        scrollable: find
+            .descendant(
+                of: find.byType(AlertDialog), matching: find.byType(Scrollable))
+            .first);
+    await tester.tap(find.text('Add a step'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog).last,
+            matching: find.byType(TextField)),
+        'Feed the cat');
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('Feed the cat'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Start').last, 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Start').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start').last);
+    await tester.pumpAndSettle();
+    expect(find.byType(RoutineScreen), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Feed the cat'), 200,
+        scrollable: find.byType(Scrollable).last);
+    expect(find.text('Feed the cat'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));

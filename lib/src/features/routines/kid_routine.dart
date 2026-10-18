@@ -4,8 +4,19 @@ import '../../core/effects/effect.dart';
 import '../../core/effects/effect_event.dart';
 import '../common/app_text.dart';
 
+/// Something to do in a routine: a built-in step or one a grown-up made.
+abstract interface class RoutineItem {
+  /// How the routine's kept steps name it.
+  String get key;
+  IconData get icon;
+
+  /// As `#RRGGBB`.
+  String get color;
+  String label(AppLocalizations l10n);
+}
+
 /// One thing to do in a routine, with its picture and colour.
-enum RoutineStep {
+enum RoutineStep implements RoutineItem {
   getUp(Icons.wb_sunny_outlined, '#FFD36B'),
   washFace(Icons.wash_outlined, '#7FD3FF'),
   getDressed(Icons.checkroom, '#FF8FAB'),
@@ -20,9 +31,15 @@ enum RoutineStep {
 
   const RoutineStep(this.icon, this.color);
 
+  @override
   final IconData icon;
+  @override
   final String color;
 
+  @override
+  String get key => name;
+
+  @override
   String label(AppLocalizations l10n) => switch (this) {
         getUp => l10n.stepGetUp,
         washFace => l10n.stepWashFace,

@@ -12,16 +12,23 @@ import '../effects/light_color_ui.dart';
 import '../effects/playback_controller.dart';
 import '../library/preferences_controller.dart';
 import 'child_picker.dart';
+import 'custom_step.dart';
 import 'kid_routine.dart';
 import 'star_shop_screen.dart';
 
-/// The steps of [routine] a grown-up kept, in order.
-List<RoutineStep> stepsOf(
+/// The steps of [routine] a grown-up kept, in order: the built-in ones,
+/// then those the grown-up made.
+List<RoutineItem> stepsOf(
     PreferencesController preferences, KidRoutine routine) {
   final kept = preferences.routineSteps(routine.name);
+  if (kept == null) {
+    return routine.allSteps;
+  }
   return [
     for (final step in routine.allSteps)
-      if (kept == null || kept.contains(step.name)) step,
+      if (kept.contains(step.key)) step,
+    for (final step in preferences.customSteps)
+      if (kept.contains(step.key)) step,
   ];
 }
 
@@ -189,25 +196,72 @@ class _StepsDialog extends StatelessWidget {
         listenable: preferences,
         builder: (context, _) {
           final kept = stepsOf(preferences, routine).toSet();
+          final all = <RoutineItem>[
+            ...routine.allSteps,
+            ...preferences.customSteps,
+          ];
+          void keep(RoutineItem step, bool on) {
+            final next = [
+              for (final s in all)
+                if (s == step ? on : kept.contains(s)) s.key,
+            ];
+            if (next.isNotEmpty) {
+              preferences.setRoutineSteps(routine.name, next);
+            }
+          }
+
           return SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                for (final step in routine.allSteps)
+                for (final step in all)
                   CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
-                    secondary: Icon(step.icon),
-                    title: Text(step.label(l10n)),
+                    secondary: step is CustomStep
+                        ? IconButton(
+                            tooltip: l10n.delete,
+                            icon: const Icon(Icons.delete_outline),
+                            onPressed: () =>
+                                preferences.removeCustomStep(step.id),
+                          )
+                        : Icon(step.icon),
+                    title: Row(
+                      children: [
+                        if (step is CustomStep) ...[
+                          Icon(step.icon, size: 20),
+                          const SizedBox(width: 8),
+                        ],
+                        Expanded(child: Text(step.label(l10n))),
+                      ],
+                    ),
                     value: kept.contains(step),
-                    onChanged: (on) {
-                      final next = [
-                        for (final s in routine.allSteps)
-                          if (s == step ? on == true : kept.contains(s)) s.name,
-                      ];
-                      if (next.isNotEmpty) {
-                        preferences.setRoutineSteps(routine.name, next);
-                      }
-                    },
+                    onChanged: (on) => keep(step, on == true),
+                  ),
+                if (preferences.customSteps.length < CustomStep.maxSteps)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        final step = await showDialog<CustomStep>(
+                          context: context,
+                          builder: (_) => const _NewStepDialog(),
+                        );
+                        if (step == null) {
+                          return;
+                        }
+                        final made = await preferences.addCustomStep(
+                            step.name, step.iconIndex, step.color);
+                        if (made != null) {
+                          await preferences.setRoutineSteps(routine.name, [
+                            for (final s in stepsOf(preferences, routine))
+                              s.key,
+                            made.key,
+                          ]);
+                        }
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Text(l10n.routineAddStep),
+                    ),
                   ),
               ],
             ),
@@ -218,6 +272,101 @@ class _StepsDialog extends StatelessWidget {
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(l10n.close),
+        ),
+      ],
+    );
+  }
+}
+
+/// A new step: what to do, its picture and colour.
+class _NewStepDialog extends StatefulWidget {
+  const _NewStepDialog();
+
+  @override
+  State<_NewStepDialog> createState() => _NewStepDialogState();
+}
+
+class _NewStepDialogState extends State<_NewStepDialog> {
+  final _name = TextEditingController();
+  var _icon = 0;
+  var _color = customStepColors.first;
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.routineAddStep),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _name,
+              autofocus: true,
+              maxLength: CustomStep.maxName,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(labelText: l10n.routineStepName),
+              onChanged: (_) => setState(() {}),
+            ),
+            Wrap(
+              spacing: 4,
+              children: [
+                for (final (i, icon) in customStepIcons.indexed)
+                  IconButton(
+                    isSelected: _icon == i,
+                    icon: Icon(icon),
+                    onPressed: () => setState(() => _icon = i),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: [
+                for (final hex in customStepColors)
+                  InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: () => setState(() => _color = hex),
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: LightColor.fromHex(hex).toColor(),
+                        shape: BoxShape.circle,
+                        border: _color == hex
+                            ? Border.all(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                width: 3)
+                            : null,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: _name.text.trim().isEmpty
+              ? null
+              : () => Navigator.of(context).pop(CustomStep(
+                    id: '',
+                    name: _name.text,
+                    iconIndex: _icon,
+                    color: _color,
+                  )),
+          child: Text(l10n.save),
         ),
       ],
     );
@@ -236,8 +385,8 @@ class RoutineScreen extends StatefulWidget {
 }
 
 class _RoutineScreenState extends State<RoutineScreen> {
-  final _done = <RoutineStep>{};
-  late List<RoutineStep> _steps;
+  final _done = <RoutineItem>{};
+  late List<RoutineItem> _steps;
   bool _started = false;
   bool? _newStar;
 
@@ -277,7 +426,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
     );
   }
 
-  Future<void> _tap(RoutineStep step) async {
+  Future<void> _tap(RoutineItem step) async {
     final scope = AppScope.of(context);
     final l10n = context.l10n;
     unawaited(HapticFeedback.selectionClick());
@@ -373,7 +522,7 @@ class _StepTile extends StatelessWidget {
     required this.onTap,
   });
 
-  final RoutineStep step;
+  final RoutineItem step;
   final bool done;
   final VoidCallback onTap;
 

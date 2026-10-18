@@ -1046,5 +1046,7 @@
   "morseGuessRules": "Die Lampen blinken einen Buchstaben im Morsecode: Welcher ist es? Das Alphabet unten hilft.",
   "morseFlashLetter": "Einen Buchstaben blinken",
   "morseFlashAgain": "Noch mal blinken",
-  "morseWhichLetter": "Welcher Buchstabe war es?"
+  "morseWhichLetter": "Welcher Buchstabe war es?",
+  "routineAddStep": "Schritt hinzufügen",
+  "routineStepName": "Was zu tun ist"
 }

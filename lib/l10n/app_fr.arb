@@ -1046,5 +1046,7 @@
   "morseGuessRules": "Les lampes clignotent une lettre en morse : laquelle est-ce ? L'alphabet ci-dessous aide.",
   "morseFlashLetter": "Faire clignoter une lettre",
   "morseFlashAgain": "Recommencer",
-  "morseWhichLetter": "C'était quelle lettre ?"
+  "morseWhichLetter": "C'était quelle lettre ?",
+  "routineAddStep": "Ajouter une étape",
+  "routineStepName": "Quoi faire"
 }

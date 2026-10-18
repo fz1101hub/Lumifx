@@ -12,6 +12,7 @@ import '../fun/countdown.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
 import '../routines/child.dart';
+import '../routines/custom_step.dart';
 import '../routines/star_shop.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
@@ -260,6 +261,45 @@ class PreferencesController extends ChangeNotifier {
 
   static bool _belongsTo(String key, String child) =>
       child.isEmpty ? !key.contains('|') : key.startsWith('$child|');
+
+  var _customSteps = <CustomStep>[];
+
+  /// The steps a grown-up made, for any routine.
+  List<CustomStep> get customSteps => List.unmodifiable(_customSteps);
+
+  /// Makes a step; null when there are too many or the name is empty.
+  Future<CustomStep?> addCustomStep(
+      String name, int iconIndex, String color) async {
+    final step = CustomStep.fromJson({
+      'id': '${DateTime.now().microsecondsSinceEpoch}',
+      'name': name,
+      'icon': iconIndex,
+      'color': color,
+    });
+    if (step == null || _customSteps.length >= CustomStep.maxSteps) {
+      return null;
+    }
+    _customSteps = [..._customSteps, step];
+    await _changed();
+    return step;
+  }
+
+  /// Removes a step a grown-up made, from every routine too.
+  Future<void> removeCustomStep(String id) {
+    final key = 'custom:$id';
+    _customSteps = [
+      for (final s in _customSteps)
+        if (s.id != id) s
+    ];
+    _routineSteps = {
+      for (final MapEntry(key: routine, value: steps) in _routineSteps.entries)
+        routine: [
+          for (final s in steps)
+            if (s != key) s
+        ],
+    };
+    return _changed();
+  }
 
   var _routineSteps = <String, List<String>>{};
 
@@ -621,6 +661,12 @@ class PreferencesController extends ChangeNotifier {
       final active = json['activeChild'];
       _activeChild = active is String ? active : '';
       _ritual = RitualSettings.fromJson(json['ritual']);
+      final custom = json['customSteps'];
+      _customSteps = [
+        if (custom is List)
+          for (final item in custom.take(CustomStep.maxSteps))
+            if (CustomStep.fromJson(item) case final step?) step,
+      ];
       final rewards = json['rewards'];
       _rewards = [
         if (rewards is List)
@@ -926,6 +972,7 @@ class PreferencesController extends ChangeNotifier {
       'starsSpent': _starsSpent,
       'rewards': [for (final r in _rewards) r.toJson()],
       'ritual': _ritual.toJson(),
+      'customSteps': [for (final s in _customSteps) s.toJson()],
       'notificationLights': _notificationLights.toJson(),
       'kidsLocked': _kidsLocked,
       'adventOpened': _adventOpened,

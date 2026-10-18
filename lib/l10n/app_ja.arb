@@ -1046,5 +1046,7 @@
   "morseGuessRules": "ランプがモールス信号で文字を光らせます。どの文字かな？下の表がヒントです。",
   "morseFlashLetter": "文字を光らせる",
   "morseFlashAgain": "もういちど光らせる",
-  "morseWhichLetter": "どの文字だった？"
+  "morseWhichLetter": "どの文字だった？",
+  "routineAddStep": "ステップを追加",
+  "routineStepName": "やること"
 }

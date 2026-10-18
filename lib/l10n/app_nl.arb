@@ -1046,5 +1046,7 @@
   "morseGuessRules": "De lampen knipperen een letter in morse: welke is het? Het alfabet hieronder helpt.",
   "morseFlashLetter": "Een letter laten knipperen",
   "morseFlashAgain": "Nog een keer",
-  "morseWhichLetter": "Welke letter was het?"
+  "morseWhichLetter": "Welke letter was het?",
+  "routineAddStep": "Stap toevoegen",
+  "routineStepName": "Wat te doen"
 }
