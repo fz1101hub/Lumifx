@@ -9,9 +9,9 @@ import 'package:lumifx/src/core/sound/synth.dart';
 import 'package:lumifx/src/features/music_box/melody_lights.dart';
 
 void main() {
-  test('six tunes, each findable, each within a comfortable range', () {
-    final all = [...lullabies, ...carols];
-    expect({for (final m in all) m.id}, hasLength(6));
+  test('ten tunes, each findable, each within a comfortable range', () {
+    final all = [...lullabies, ...carols, ...pianoTunes];
+    expect({for (final m in all) m.id}, hasLength(10));
     for (final melody in all) {
       expect(melodyById(melody.id), same(melody));
       final (low, high) = melody.range;

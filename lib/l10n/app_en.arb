@@ -4187,5 +4187,184 @@
   "storyMakerSaved": "Saved in My stories",
   "@storyMakerSaved": {
     "description": "The made-up story was saved"
+  },
+  "melodyAuClair": "Au Clair de la Lune",
+  "@melodyAuClair": {
+    "description": "Melody: Au clair de la lune"
+  },
+  "melodyMaryLamb": "Mary Had a Little Lamb",
+  "@melodyMaryLamb": {
+    "description": "Melody: Mary Had a Little Lamb"
+  },
+  "melodyHotCrossBuns": "Hot Cross Buns",
+  "@melodyHotCrossBuns": {
+    "description": "Melody: Hot Cross Buns (a three-note tune)"
+  },
+  "melodyOdeToJoy": "Ode to Joy",
+  "@melodyOdeToJoy": {
+    "description": "Melody: Beethoven's Ode to Joy"
+  },
+  "talePenguin": "Penguin",
+  "@talePenguin": {
+    "description": "Story hero: a penguin"
+  },
+  "taleTurtle": "Turtle",
+  "@taleTurtle": {
+    "description": "Story hero: a turtle"
+  },
+  "talePenguinIntro": "a little penguin who loves to slide on its tummy",
+  "@talePenguinIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleTurtleIntro": "a slow, kind turtle with a shell full of shiny spots",
+  "@taleTurtleIntro": {
+    "description": "Story: describes the hero after its name (apposition)"
+  },
+  "taleJungle": "Jungle",
+  "@taleJungle": {
+    "description": "Story place: a jungle"
+  },
+  "taleIsland": "Little island",
+  "@taleIsland": {
+    "description": "Story place: a little island"
+  },
+  "taleJungleLine": "One evening {name} explores the jungle, where parrots chatter and leaves as big as umbrellas sway.",
+  "@taleJungleLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleIslandLine": "One evening {name} sails to a little island, where the waves whisper and the sand is warm.",
+  "@taleIslandLine": {
+    "description": "Story line: the hero arrives in the place; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTeddy": "A lost teddy",
+  "@taleTeddy": {
+    "description": "Story adventure: a lost teddy bear"
+  },
+  "taleMoon": "The sleepy moon",
+  "@taleMoon": {
+    "description": "Story adventure: the moon overslept"
+  },
+  "taleTeddy1": "There {name} hears a tiny voice: a teddy bear has lost the child who hugs it every night.",
+  "@taleTeddy1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleTeddy2": "{name} follows the lights of the windows one by one and brings the teddy home, right into a warm hug.",
+  "@taleTeddy2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleMoon1": "But tonight the moon has overslept, and without its silver light the whole sky is dark around {name}.",
+  "@taleMoon1": {
+    "description": "Story line: the problem; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "taleMoon2": "{name} hums a soft song until the moon opens one eye, then the other, and shines on everyone.",
+  "@taleMoon2": {
+    "description": "Story line: the hero mends it; must not depend on the hero's gender",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kidsModeActivities": "Also offer these games",
+  "@kidsModeActivities": {
+    "description": "Kids mode setup: heading of the games offered besides the effects"
+  },
+  "colourMixing": "Colour mixing",
+  "@colourMixing": {
+    "description": "Title of the colour mixing game: mix two paints, the lamps show the result"
+  },
+  "colourMixingSubtitle": "Mix two paints and see the new colour on the lamps",
+  "@colourMixingSubtitle": {
+    "description": "Subtitle of the colour mixing game in the games list"
+  },
+  "colourMixingRules": "Choose two paints to mix: the lamps glow in both colours, then in the colour they make together. Then try the quiz: guess what two paints make.",
+  "@colourMixingRules": {
+    "description": "Colour mixing: how it works"
+  },
+  "colourMixingMix": "Mix",
+  "@colourMixingMix": {
+    "description": "Colour mixing: the mode where the child mixes paints freely"
+  },
+  "colourMixingPick": "Pick a paint",
+  "@colourMixingPick": {
+    "description": "Colour mixing: asks the child to tap a first paint"
+  },
+  "colourMixingPickAnother": "Now pick one to mix it with",
+  "@colourMixingPickAnother": {
+    "description": "Colour mixing: asks the child to tap a second paint to mix with the first"
+  },
+  "colourMixingWhich": "What do {first} and {second} make?",
+  "@colourMixingWhich": {
+    "description": "Colour mixing quiz question; first and second are colour names, as written alone in the app's language",
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "napLight": "Nap light",
+  "@napLight": {
+    "description": "Title of the nap light: amber while a child naps, green when it is time to get up"
+  },
+  "napLightSubtitle": "Amber while resting, green when the nap is over",
+  "@napLightSubtitle": {
+    "description": "Subtitle of the nap light on the home screen"
+  },
+  "napDescription": "A faint amber glow while your child rests. When the time is up, the lamps slowly turn green and stay green for 20 minutes, then go back to how they were. Keep LumiFX open during the nap.",
+  "@napDescription": {
+    "description": "Nap light: how it works"
+  },
+  "napHowLong": "How long is the rest?",
+  "@napHowLong": {
+    "description": "Nap light: label above the rest length choices"
+  },
+  "napStart": "Start the nap",
+  "@napStart": {
+    "description": "Nap light: button to start the nap"
+  },
+  "napResting": "Rest until the light turns green",
+  "@napResting": {
+    "description": "Nap light: shown while the child should stay in bed"
+  },
+  "napOver": "Green: time to get up!",
+  "@napOver": {
+    "description": "Nap light: shown when the rest is over"
+  },
+  "napGreenIn": "{minutes, plural, =1{Green in one minute} other{Green in {minutes} minutes}}",
+  "@napGreenIn": {
+    "description": "Nap light: minutes left before the light turns green",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

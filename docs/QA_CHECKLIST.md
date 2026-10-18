@@ -554,7 +554,38 @@ build before every store release.
       the Halloween party in turn and go back to the home: the
       mini-player opens each one's own screen.
 
-## Links and widget
+## This round: kids mode games, colour mixing, nap light, more tunes and tales, links
+
+- [ ] Kids mode setup › "Also offer these games": all four ticked at
+      first; untick Counting. Start kids mode: big buttons for the light
+      piano, colour words and colour mixing above the effects, no
+      Counting. Open the piano, play a few keys: no mini-player appears;
+      back returns to kids mode, and back again does nothing.
+- [ ] Colour mixing (Fun › Colour mixing) on a room: tap yellow; white
+      fades (it makes no colour with yellow); tap blue: the lamps glow
+      yellow and blue, go dark for a moment, then shine green, over and
+      over; "yellow + blue = green" on a green card and the phone says
+      "green" (sounds on). In Italian the words are in Italian.
+- [ ] Colour mixing quiz: "What do red and white make?" with three
+      colours; a wrong one says Try again, the right one plays the mix
+      and a new pair comes after a few seconds. Back to the home: the
+      mini-player opens Colour mixing.
+- [ ] Nap light (For the family): 20 min, Start the nap: the lamps glow
+      a faint amber; the screen shows "Green in 20 minutes" counting
+      down. After 20 minutes the lamps turn slowly green (about 20 s, no
+      flash) and the screen says "Green: time to get up!"; 20 minutes
+      later the lamps go back to how they were. Stop ends it at any time.
+- [ ] Lullabies: Au clair de la lune is in the list and plays with its
+      lights. Light piano › Learn a song: Hot Cross Buns first, then
+      Twinkle, Mary Had a Little Lamb, Frère Jacques, Ode to Joy.
+- [ ] Story maker: the penguin, the turtle, the jungle, the little
+      island, the lost teddy and the sleepy moon are offered; a story with
+      each reads well in Italian and Japanese, never depending on the
+      hero's gender.
+- [ ] Links: `lumifx://app/go/colour-mixing`, `/go/nap`, `/go/morse`,
+      `/go/timers` (and the others in the README) open their screens from
+      an NFC sticker; in kids mode they do nothing.
+
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it
       into Safari / Chrome: LumiFX opens and plays it. Same from a Siri

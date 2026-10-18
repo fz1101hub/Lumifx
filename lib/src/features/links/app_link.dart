@@ -102,7 +102,17 @@ enum AppScreen {
   monsterSpray('monster-spray'),
   piano('piano'),
   games('games'),
-  cinema('cinema');
+  cinema('cinema'),
+  timers('timers'),
+  breathing('breathing'),
+  simon('simon'),
+  counting('counting'),
+  colourWords('colour-words'),
+  colourMixing('colour-mixing'),
+  morse('morse'),
+  hotCold('hot-and-cold'),
+  halloween('halloween'),
+  nap('nap');
 
   const AppScreen(this.slug);
 

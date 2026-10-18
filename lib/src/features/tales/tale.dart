@@ -15,7 +15,9 @@ enum TaleHero {
   dragon('Zuzu', '#5CFF7A', Icons.local_fire_department_outlined),
   unicorn('Luma', '#FF8AD8', Icons.auto_awesome_outlined),
   owl('Momo', '#FFC94D', Icons.visibility_outlined),
-  kitten('Kiki', '#F4F1E8', Icons.cruelty_free_outlined);
+  kitten('Kiki', '#F4F1E8', Icons.cruelty_free_outlined),
+  penguin('Ollie', '#9FD8FF', Icons.ac_unit),
+  turtle('Toto', '#7CFF6B', Icons.eco_outlined);
 
   const TaleHero(this.defaultName, this.color, this.icon);
 
@@ -33,6 +35,8 @@ enum TaleHero {
         unicorn => l10n.taleUnicorn,
         owl => l10n.taleOwl,
         kitten => l10n.taleKitten,
+        penguin => l10n.talePenguin,
+        turtle => l10n.taleTurtle,
       };
 
   /// "a little fox with a fluffy red tail", after the hero's name.
@@ -43,6 +47,8 @@ enum TaleHero {
         unicorn => l10n.taleUnicornIntro,
         owl => l10n.taleOwlIntro,
         kitten => l10n.taleKittenIntro,
+        penguin => l10n.talePenguinIntro,
+        turtle => l10n.taleTurtleIntro,
       };
 }
 
@@ -52,7 +58,9 @@ enum TalePlace {
   sea(['#04223A', '#0B3C5D', '#1E6F9F'], Icons.water_outlined),
   space(['#05081F', '#14195A', '#3B2C7A'], Icons.rocket_launch_outlined),
   castle(['#F6C6EA', '#C9B6F2', '#FFE7F5'], Icons.castle_outlined),
-  mountain(['#7FA7D1', '#BFD9F2', '#E8F1FA'], Icons.landscape_outlined);
+  mountain(['#7FA7D1', '#BFD9F2', '#E8F1FA'], Icons.landscape_outlined),
+  jungle(['#0E3B1E', '#2E7D32', '#7CB342'], Icons.forest_outlined),
+  island(['#0B3C5D', '#1E6F9F', '#F4D58D'], Icons.beach_access_outlined);
 
   const TalePlace(this.palette, this.icon);
 
@@ -65,6 +73,8 @@ enum TalePlace {
         space => l10n.taleSpace,
         castle => l10n.taleCastle,
         mountain => l10n.taleMountain,
+        jungle => l10n.taleJungle,
+        island => l10n.taleIsland,
       };
 
   String line(AppLocalizations l10n, String name) => switch (this) {
@@ -73,6 +83,8 @@ enum TalePlace {
         space => l10n.taleSpaceLine(name),
         castle => l10n.taleCastleLine(name),
         mountain => l10n.taleMountainLine(name),
+        jungle => l10n.taleJungleLine(name),
+        island => l10n.taleIslandLine(name),
       };
 }
 
@@ -82,7 +94,9 @@ enum TaleQuest {
   rainbow(Icons.looks_outlined),
   treasure(Icons.map_outlined),
   firefly(Icons.flare),
-  dark(Icons.nightlight_outlined);
+  dark(Icons.nightlight_outlined),
+  teddy(Icons.toys_outlined),
+  moon(Icons.nightlight_round);
 
   const TaleQuest(this.icon);
 
@@ -94,6 +108,8 @@ enum TaleQuest {
         treasure => l10n.taleTreasure,
         firefly => l10n.taleFirefly,
         dark => l10n.taleDark,
+        teddy => l10n.taleTeddy,
+        moon => l10n.taleMoon,
       };
 
   String problem(AppLocalizations l10n, String name) => switch (this) {
@@ -102,6 +118,8 @@ enum TaleQuest {
         treasure => l10n.taleTreasure1(name),
         firefly => l10n.taleFirefly1(name),
         dark => l10n.taleDark1(name),
+        teddy => l10n.taleTeddy1(name),
+        moon => l10n.taleMoon1(name),
       };
 
   String solution(AppLocalizations l10n, String name) => switch (this) {
@@ -110,6 +128,8 @@ enum TaleQuest {
         treasure => l10n.taleTreasure2(name),
         firefly => l10n.taleFirefly2(name),
         dark => l10n.taleDark2(name),
+        teddy => l10n.taleTeddy2(name),
+        moon => l10n.taleMoon2(name),
       };
 }
 
@@ -256,6 +276,8 @@ class Tale {
             _flash(at + i, color, position: i / (_rainbow.length - 1)),
         ],
       TalePlace.mountain => [_surprise(at, 8, '#FFFFFF', count: 6)],
+      TalePlace.jungle => [_travel(at, 7, '#FF7A1A', pattern: 'ping_pong')],
+      TalePlace.island => [_surprise(at, 8, '#9FE3FF', count: 5)],
     };
   }
 
@@ -305,6 +327,24 @@ class Tale {
           for (var i = 0; i < 4; i++)
             _flash(s + 1 + 2 * i, '#FFD27F', position: i / 3, ms: 2500),
           _ambient(s + 10, end - s - 10, _fire, low: 0.3, high: 0.5),
+        ],
+      TaleQuest.teddy => [
+          _ambient(p, s - p, place.palette, low: 0.08, high: 0.2),
+          for (final at in [p + 2, p + 6])
+            _flash(at, '#FFB37A', target: 'random_light', ms: 900, bright: 0.4),
+          _ambient(s, end - s, const ['#FF9F43', '#FFB37A', '#FFD27F'],
+              low: 0.3, high: 0.55),
+          _travel(s + 1, 6, '#FFD27F'),
+          _flash(s + 7, '#FFB37A', ms: 2500),
+        ],
+      TaleQuest.moon => [
+          _ramp(p, 6, 0.25, 0.03, color: '#14195A'),
+          _ambient(p + 6, s - p - 6, const ['#05081F', '#0B1033'],
+              low: 0.02, high: 0.06),
+          _ramp(s, 8, 0.03, 0.45, color: '#0B1033', toColor: '#E8EEFF'),
+          _ambient(s + 8, end - s - 8, const ['#9FB4FF', '#E8EEFF', '#14195A'],
+              low: 0.25, high: 0.45),
+          _surprise(s + 8, end - s - 8, '#FFFFFF', count: 5),
         ],
     };
   }

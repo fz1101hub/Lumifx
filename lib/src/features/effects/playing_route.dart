@@ -5,6 +5,8 @@ import '../../core/sound/melody.dart';
 import '../../core/sound/soundscape.dart';
 import '../bedtime/monster_spray.dart';
 import '../bedtime/monster_spray_screen.dart';
+import '../bedtime/nap_light.dart';
+import '../bedtime/nap_light_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
 import '../cinema/cinema.dart';
@@ -22,6 +24,8 @@ import '../fun/hot_cold.dart';
 import '../fun/hot_cold_screen.dart';
 import '../fun/light_games.dart';
 import '../fun/simon_screen.dart';
+import '../learn/colour_mixing.dart';
+import '../learn/colour_mixing_screen.dart';
 import '../learn/colour_words.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting.dart';
@@ -80,6 +84,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = MusicBoxScreen(festive: melody.instrument == Instrument.bells);
   } else if (MonsterHunt.isHunting(effect) || MonsterHunt.isGuardian(effect)) {
     screen = MonsterSprayScreen(playing: effect);
+  } else if (NapLight.restOf(effect) != null) {
+    screen = const NapLightScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {
@@ -92,6 +98,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const CountingScreen();
   } else if (MorseMessage.of(effect) != null) {
     screen = MorseScreen(playing: effect);
+  } else if (ColourMix.of(effect) != null) {
+    screen = ColourMixingScreen(playing: effect);
   } else if (LearnColour.of(effect) != null) {
     screen = ColourWordsScreen(playing: effect);
   } else if (isRewardParty(effect)) {

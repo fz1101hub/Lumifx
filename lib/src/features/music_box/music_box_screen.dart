@@ -25,6 +25,10 @@ class MusicBoxScreen extends StatefulWidget {
         'frere_jacques' => l10n.melodyFrereJacques,
         'jingle_bells' => l10n.melodyJingleBells,
         'silent_night' => l10n.melodySilentNight,
+        'au_clair' => l10n.melodyAuClair,
+        'mary_lamb' => l10n.melodyMaryLamb,
+        'hot_cross_buns' => l10n.melodyHotCrossBuns,
+        'ode_to_joy' => l10n.melodyOdeToJoy,
         _ => l10n.melodyMerryChristmas,
       };
 

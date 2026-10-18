@@ -44,10 +44,15 @@ import 'package:lumifx/src/features/bedtime/monster_spray.dart';
 import 'package:lumifx/src/features/cinema/cinema.dart';
 import 'package:lumifx/src/features/cinema/cinema_screen.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
+import 'package:lumifx/src/features/bedtime/nap_light.dart';
+import 'package:lumifx/src/features/bedtime/nap_light_screen.dart';
 import 'package:lumifx/src/features/bedtime/ritual_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
 import 'package:lumifx/src/features/links/nfc_stickers_screen.dart';
 import 'package:lumifx/src/features/notifications/notification_lights_screen.dart';
+import 'package:lumifx/src/features/effects/playing_route.dart';
+import 'package:lumifx/src/features/learn/colour_mixing.dart';
+import 'package:lumifx/src/features/learn/colour_mixing_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
 import 'package:lumifx/src/features/learn/counting_screen.dart';
@@ -881,16 +886,22 @@ void main() {
     await tester.tap(find.text('Kids mode'));
     await tester.pumpAndSettle();
     // Flashing effects cannot be chosen.
-    await tester.scrollUntilVisible(
-        find.text('Has flashes: not offered').first, 300,
-        scrollable: find.byType(Scrollable).first);
+    for (var i = 0;
+        i < 20 && find.text('Has flashes: not offered').evaluate().isEmpty;
+        i++) {
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
+      await tester.pumpAndSettle();
+    }
+    expect(find.text('Has flashes: not offered'), findsWidgets);
     await tester.scrollUntilVisible(find.text('Start kids mode'), -300,
         scrollable: find.byType(Scrollable).first);
     await tester.tap(find.text('Start kids mode'));
     await tester.pumpAndSettle();
     expect(find.byType(KidsModeScreen), findsOneWidget);
 
-    await tester.tap(find.byType(InkWell).first);
+    await tester.tap(find
+        .descendant(of: find.byType(GridView), matching: find.byType(InkWell))
+        .first);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
     final playback =
@@ -935,6 +946,41 @@ void main() {
     ));
     await tester.pumpAndSettle();
     expect(find.byType(KidsModeScreen), findsOneWidget);
+  });
+
+  testWidgets('kids mode offers the games a grown-up kept', (tester) async {
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setOnboardingDone();
+    await preferences.setKidsLocked(true);
+    await preferences.load();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Count the lights'), findsOneWidget);
+    expect(find.text('Colours in another language'), findsOneWidget);
+
+    await tester.tap(find.text('Light piano'));
+    await tester.pumpAndSettle();
+    expect(find.byType(LightPianoScreen), findsOneWidget);
+    await tester.tap(find.text('E'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(MiniPlayer), findsNothing,
+        reason: 'no way to the player from a kids mode game');
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.byType(KidsModeScreen), findsOneWidget);
+
+    await preferences.setKidsActivities(['counting']);
+    await tester.pumpAndSettle();
+    expect(find.text('Count the lights'), findsOneWidget);
+    expect(find.text('Light piano'), findsNothing);
   });
 
   testWidgets('the mini-player leads back to a timer or a game screen',
@@ -1233,6 +1279,91 @@ void main() {
         reason: 'then the next word');
     await playback.stop();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('two paints mix on the lamps, then the quiz', (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const ColourMixingScreen(seed: 5))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(ColourMixingScreen))).playback;
+    expect(find.text('Pick a paint'), findsOneWidget);
+    await tester.tap(find.text('yellow'));
+    await tester.pump();
+    expect(find.text('Now pick one to mix it with'), findsOneWidget);
+    // White makes no colour with yellow.
+    await tester.tap(find.text('white'));
+    await tester.pump();
+    expect(find.text('Now pick one to mix it with'), findsOneWidget);
+    await tester.tap(find.text('blue'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('yellow + blue = green'), findsOneWidget);
+    expect(
+        ColourMix.of(playback.effect), (LearnColour.yellow, LearnColour.blue));
+    await tester.pump(const Duration(seconds: 4));
+    expect(speaker.spoken.last, ('green', 'en-US'));
+
+    // The mini-player leads back here.
+    expect(
+        (routeForPlaying(playback.effect) as MaterialPageRoute<void>)
+            .builder(tester.element(find.byType(ColourMixingScreen))),
+        isA<ColourMixingScreen>());
+
+    await tester.tap(find.text('Quiz'));
+    await tester.pump();
+    final quiz = MixQuiz(math.Random(5))..next();
+    final (a, b) = quiz.paints;
+    expect(find.text('What do ${a.word('en')} and ${b.word('en')} make?'),
+        findsOneWidget);
+    final wrong = quiz.choices.firstWhere((c) => c != quiz.target);
+    await tester.tap(find.text(wrong.word('en')));
+    await tester.pump();
+    expect(find.text('Try again'), findsOneWidget);
+    await tester.tap(find.text(quiz.target.word('en')));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Well done!'), findsOneWidget);
+    expect(ColourMix.of(playback.effect), (a, b));
+    await tester.pump(const Duration(seconds: 6));
+    expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the nap light glows amber, then green when the rest is over',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Nap light'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Nap light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Nap light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('20 min'));
+    await tester.pump();
+    await tester.tap(find.text('Start the nap'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(NapLightScreen))).playback;
+    expect(NapLight.restOf(playback.effect), const Duration(minutes: 20));
+    expect(find.text('Rest until the light turns green'), findsOneWidget);
+    expect(find.text('Green in 20 minutes'), findsOneWidget);
+
+    playback.player!.advance(const Duration(minutes: 20, seconds: 30));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Green: time to get up!'), findsOneWidget);
+
+    // The mini-player leads back here.
+    expect(
+        (routeForPlaying(playback.effect) as MaterialPageRoute<void>)
+            .builder(tester.element(find.byType(NapLightScreen))),
+        isA<NapLightScreen>());
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Start the nap'), findsOneWidget);
   });
 
   testWidgets('the monster spray chases them away and leaves a guardian light',
@@ -1744,6 +1875,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(BedtimeRitualScreen), findsNothing,
         reason: 'it was opened only once');
+
+    await openLink('lumifx://app/go/colour-mixing');
+    await tester.pumpAndSettle();
+    expect(find.byType(ColourMixingScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
 
     final preferences =
         AppScope.of(tester.element(find.byType(HomeScreen))).preferences;

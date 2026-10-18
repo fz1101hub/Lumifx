@@ -148,7 +148,7 @@ class PlaybackShell extends StatelessWidget {
         final shownId = playerEffectId(routes.topRouteName);
         // Kids mode has its own stop, and no way out to the player.
         final visible = controller.status != PlaybackStatus.idle &&
-            routes.topRouteName != kidsModeRouteName &&
+            !isKidsModeRoute(routes.topRouteName) &&
             (shownId == null || !controller.isShownBy(shownId));
         return Column(
           children: [
