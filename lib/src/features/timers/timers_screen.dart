@@ -24,9 +24,6 @@ class TimersScreen extends StatefulWidget {
 
 class _TimersScreenState extends State<TimersScreen> {
   int _cookingMinutes = LightTimer.cooking.minutes;
-
-  /// Whether the teeth timer plays a tune.
-  var _tune = true;
   int _pomodoroRounds = 4;
 
   Future<void> _startPomodoro() async {
@@ -74,7 +71,8 @@ class _TimersScreenState extends State<TimersScreen> {
     final effect = timer.effect(
       name: nameOf(l10n, timer),
       length: length,
-      tune: timer == LightTimer.teeth && _tune,
+      tune: timer == LightTimer.teeth &&
+          AppScope.of(context).preferences.teethTune,
     );
     await playback.switchEffect(effect);
     if (playback.status == PlaybackStatus.idle) {
@@ -144,11 +142,17 @@ class _TimersScreenState extends State<TimersScreen> {
                         ),
                       ),
                     if (timer == LightTimer.teeth)
-                      SwitchListTile(
-                        secondary: const Icon(Icons.music_note_outlined),
-                        title: Text(l10n.timerTune),
-                        value: _tune,
-                        onChanged: (on) => setState(() => _tune = on),
+                      ListenableBuilder(
+                        listenable: AppScope.of(context).preferences,
+                        builder: (context, _) {
+                          final preferences = AppScope.of(context).preferences;
+                          return SwitchListTile(
+                            secondary: const Icon(Icons.music_note_outlined),
+                            title: Text(l10n.timerTune),
+                            value: preferences.teethTune,
+                            onChanged: preferences.setTeethTune,
+                          );
+                        },
                       ),
                   ],
                 ),

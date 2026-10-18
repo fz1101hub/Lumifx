@@ -489,6 +489,36 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  int? _napMinutes;
+
+  /// The rest chosen last for the nap light.
+  int? get napMinutes => _napMinutes;
+
+  Future<void> setNapMinutes(int minutes) {
+    _napMinutes = minutes;
+    return _changed();
+  }
+
+  String? _noiseLimit;
+
+  /// The noise light's limit chosen last (a `NoiseLimit` name).
+  String? get noiseLimit => _noiseLimit;
+
+  Future<void> setNoiseLimit(String name) {
+    _noiseLimit = name;
+    return _changed();
+  }
+
+  bool _teethTune = true;
+
+  /// Whether the teeth timer plays a tune.
+  bool get teethTune => _teethTune;
+
+  Future<void> setTeethTune(bool on) {
+    _teethTune = on;
+    return _changed();
+  }
+
   int _simonBest = 0;
 
   /// The longest sequence repeated in the memory game.
@@ -707,6 +737,11 @@ class PreferencesController extends ChangeNotifier {
           counting is int && counting > 0 && counting < 10000 ? counting : 0;
       final learn = json['learnLanguage'];
       _learnLanguage = learn is String && learn.length <= 5 ? learn : null;
+      final nap = json['napMinutes'];
+      _napMinutes = nap is int && nap > 0 && nap <= 240 ? nap : null;
+      final noise = json['noiseLimit'];
+      _noiseLimit = noise is String && noise.length <= 20 ? noise : null;
+      _teethTune = json['teethTune'] != false;
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
       final buttons = json['buttonActions'];
@@ -977,6 +1012,9 @@ class PreferencesController extends ChangeNotifier {
       'simonBest': _simonBest,
       'countingBest': _countingBest,
       'learnLanguage': _learnLanguage,
+      'napMinutes': _napMinutes,
+      'noiseLimit': _noiseLimit,
+      'teethTune': _teethTune,
       'naturalLights': _naturalLights,
       'kidsEffects': _kidsEffects,
       'kidsActivities': _kidsActivities,

@@ -25,7 +25,7 @@ class NoiseLightScreen extends StatefulWidget {
 class _NoiseLightScreenState extends State<NoiseLightScreen> {
   late AudioInput _microphone;
   late PlaybackController _playback;
-  var _limit = NoiseLimit.normal;
+  NoiseLimit? _chosen;
   NoiseWatch? _watch;
   StreamSubscription<Uint8List>? _listening;
   var _starting = false;
@@ -39,6 +39,13 @@ class _NoiseLightScreenState extends State<NoiseLightScreen> {
     _microphone = scope.audioInput;
     _playback = scope.playback;
   }
+
+  /// The limit chosen here, else last time, else indoor voices.
+  NoiseLimit get _limit =>
+      _chosen ??
+      NoiseLimit.values
+          .asNameMap()[AppScope.of(context).preferences.noiseLimit] ??
+      NoiseLimit.normal;
 
   @override
   void dispose() {
@@ -161,10 +168,15 @@ class _NoiseLightScreenState extends State<NoiseLightScreen> {
               ),
             ],
             selected: {_limit},
-            onSelectionChanged: (selected) => setState(() {
-              _limit = selected.first;
-              _watch?.limit = _limit;
-            }),
+            onSelectionChanged: (selected) {
+              final limit = selected.first;
+              setState(() {
+                _chosen = limit;
+                _watch?.limit = limit;
+              });
+              unawaited(
+                  AppScope.of(context).preferences.setNoiseLimit(limit.name));
+            },
           ),
           const SizedBox(height: 24),
           if (watch != null) ...[

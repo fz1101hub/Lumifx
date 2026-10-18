@@ -95,12 +95,20 @@ void main() {
     await first.setLearnLanguage('fr');
     expect(first.kidsActivities, isNull);
     await first.setKidsActivities(['piano']);
+    expect(first.napMinutes, isNull);
+    expect(first.teethTune, isTrue);
+    await first.setNapMinutes(90);
+    await first.setNoiseLimit('quiet');
+    await first.setTeethTune(false);
 
     final second = PreferencesController(store: store);
     await second.load();
     expect(second.countingBest, 4);
     expect(second.learnLanguage, 'fr');
     expect(second.kidsActivities, ['piano']);
+    expect(second.napMinutes, 90);
+    expect(second.noiseLimit, 'quiet');
+    expect(second.teethTune, isFalse);
   });
 
   test('corrupt data is ignored', () async {

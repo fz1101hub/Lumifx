@@ -1369,6 +1369,17 @@ void main() {
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 2));
     expect(find.text('Start the nap'), findsOneWidget);
+
+    // The rest chosen comes back next time.
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Nap light'));
+    await tester.pumpAndSettle();
+    expect(
+        tester
+            .widget<ChoiceChip>(find.widgetWithText(ChoiceChip, '20 min'))
+            .selected,
+        isTrue);
   });
 
   testWidgets('the noise light turns red when it gets too loud',
