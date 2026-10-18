@@ -1021,7 +1021,7 @@
   "grownUpQuestion": "Typ om door te gaan de uitkomst van {a} + {b}.",
   "grownUpConfirm": "Bevestigen",
   "ritual": "Slaapritueel",
-  "ritualSubtitle": "Routine, monsterspray, een verhaal, een slaapliedje en een wachtlicht met één tik",
+  "ritualSubtitle": "Routine, monsterspray, rustig ademen, een verhaal, een slaapliedje en een wachtlicht met één tik",
   "ritualDescription": "Elke avond dezelfde rustige stappen na elkaar: kies de stappen die jullie gezin fijn vindt, het slaapliedje en hoe lang het wachtlicht aan blijft. Het verhaal van vanavond wordt verzonnen met het kind als held.",
   "ritualStory": "Het verhaal van vanavond",
   "ritualStepOf": "Stap {step} van {total}",

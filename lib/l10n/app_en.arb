@@ -4055,7 +4055,7 @@
   "@ritual": {
     "description": "Home entry: the bedtime ritual, several bedtime steps one after the other"
   },
-  "ritualSubtitle": "Routine, monster spray, a story, a lullaby and a guardian light in one tap",
+  "ritualSubtitle": "Routine, monster spray, calm breathing, a story, a lullaby and a guardian light in one tap",
   "@ritualSubtitle": {
     "description": "Subtitle of the bedtime ritual"
   },
