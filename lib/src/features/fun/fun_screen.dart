@@ -10,6 +10,7 @@ import '../music_box/music_box_screen.dart';
 import 'birthday_screen.dart';
 import 'countdowns_screen.dart';
 import 'game_screen.dart';
+import 'hot_cold_screen.dart';
 import 'light_games.dart';
 import 'simon_screen.dart';
 
@@ -65,6 +66,8 @@ class FunScreen extends StatelessWidget {
               },
               () => GameScreen(game: game),
             ),
+          entry(Icons.thermostat, l10n.hotCold, l10n.hotColdSubtitle,
+              () => const HotColdScreen()),
           entry(Icons.psychology_outlined, l10n.gameSimon,
               l10n.gameSimonSubtitle, () => const SimonScreen()),
           entry(Icons.filter_9_plus_outlined, l10n.countLights,

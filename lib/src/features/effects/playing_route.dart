@@ -16,6 +16,8 @@ import '../fun/birthday_screen.dart';
 import '../fun/countdown.dart';
 import '../fun/countdowns_screen.dart';
 import '../fun/game_screen.dart';
+import '../fun/hot_cold.dart';
+import '../fun/hot_cold_screen.dart';
 import '../fun/light_games.dart';
 import '../fun/simon_screen.dart';
 import '../learn/colour_words.dart';
@@ -74,6 +76,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = MonsterSprayScreen(playing: effect);
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
+  } else if (HotCold.isHotCold(effect)) {
+    screen = const HotColdScreen();
   } else if (CountingGame.isCounting(effect)) {
     screen = const CountingScreen();
   } else if (MorseMessage.of(effect) != null) {

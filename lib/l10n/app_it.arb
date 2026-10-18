@@ -983,5 +983,16 @@
   "morseMessage": "Il tuo messaggio",
   "morseOnlyLetters": "Vengono inviate le lettere dalla A alla Z e i numeri; gli altri caratteri sono saltati",
   "morseSend": "Invia con le luci",
-  "morseAlphabet": "L'alfabeto Morse"
+  "morseAlphabet": "L'alfabeto Morse",
+  "hotCold": "Acqua o fuoco",
+  "hotColdSubtitle": "Nascondi qualcosa: le luci si scaldano man mano che il bambino si avvicina",
+  "hotColdRules": "Nascondi qualcosa nella stanza. Mentre il bambino lo cerca, tocca Più caldo quando si avvicina e Più freddo quando si allontana: le luci passano dal blu ghiaccio al rosso fuoco e il telefono dice quanto scotta. Tocca Trovato! quando lo trova.",
+  "hotColdWarmer": "Più caldo",
+  "hotColdColder": "Più freddo",
+  "hotColdFound": "Trovato!",
+  "hotColdFreezing": "Acqua gelata!",
+  "hotColdCold": "Acqua",
+  "hotColdWarm": "Fuochino",
+  "hotColdHot": "Fuoco!",
+  "hotColdBoiling": "Fuoco fuoco!"
 }

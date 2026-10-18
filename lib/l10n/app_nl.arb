@@ -983,5 +983,16 @@
   "morseMessage": "Je bericht",
   "morseOnlyLetters": "De letters A tot Z en cijfers worden verstuurd; andere tekens worden overgeslagen",
   "morseSend": "Versturen met het licht",
-  "morseAlphabet": "Het morsealfabet"
+  "morseAlphabet": "Het morsealfabet",
+  "hotCold": "Warm of koud",
+  "hotColdSubtitle": "Verstop iets: het licht wordt warmer naarmate het kind dichterbij komt",
+  "hotColdRules": "Verstop iets in de kamer. Terwijl het kind zoekt, tik je op Warmer als het dichterbij komt en op Kouder als het verder weg gaat: het licht gaat van ijsblauw naar vuurrood en de telefoon zegt hoe warm het is. Tik op Gevonden! als het gevonden is.",
+  "hotColdWarmer": "Warmer",
+  "hotColdColder": "Kouder",
+  "hotColdFound": "Gevonden!",
+  "hotColdFreezing": "IJskoud!",
+  "hotColdCold": "Koud",
+  "hotColdWarm": "Lauw",
+  "hotColdHot": "Warm!",
+  "hotColdBoiling": "Gloeiend heet!"
 }

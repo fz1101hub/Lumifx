@@ -3870,5 +3870,49 @@
   "morseAlphabet": "The Morse alphabet",
   "@morseAlphabet": {
     "description": "Header of the Morse alphabet table"
+  },
+  "hotCold": "Hot and cold",
+  "@hotCold": {
+    "description": "Game: hot and cold, the lights guide a child to a hidden thing"
+  },
+  "hotColdSubtitle": "Hide something: the lights turn warmer as the child gets closer",
+  "@hotColdSubtitle": {
+    "description": "Subtitle of hot and cold"
+  },
+  "hotColdRules": "Hide something in the room. While the child looks for it, tap Warmer when they get closer and Colder when they move away: the lights go from icy blue to fiery red and the phone says how hot it is. Tap Found it! when they find it.",
+  "@hotColdRules": {
+    "description": "Rules of hot and cold"
+  },
+  "hotColdWarmer": "Warmer",
+  "@hotColdWarmer": {
+    "description": "Button: the child is getting closer"
+  },
+  "hotColdColder": "Colder",
+  "@hotColdColder": {
+    "description": "Button: the child is moving away"
+  },
+  "hotColdFound": "Found it!",
+  "@hotColdFound": {
+    "description": "Button and cheer: the hidden thing was found"
+  },
+  "hotColdFreezing": "Freezing!",
+  "@hotColdFreezing": {
+    "description": "Hot and cold: very far (said aloud)"
+  },
+  "hotColdCold": "Cold",
+  "@hotColdCold": {
+    "description": "Hot and cold: far (said aloud)"
+  },
+  "hotColdWarm": "Warm",
+  "@hotColdWarm": {
+    "description": "Hot and cold: getting close (said aloud)"
+  },
+  "hotColdHot": "Hot!",
+  "@hotColdHot": {
+    "description": "Hot and cold: close (said aloud)"
+  },
+  "hotColdBoiling": "Boiling!",
+  "@hotColdBoiling": {
+    "description": "Hot and cold: very close (said aloud)"
   }
 }

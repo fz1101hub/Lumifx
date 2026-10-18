@@ -983,5 +983,16 @@
   "morseMessage": "メッセージ",
   "morseOnlyLetters": "送れるのはA〜Zの文字と数字です。ほかの文字は飛ばされます",
   "morseSend": "明かりで送る",
-  "morseAlphabet": "モールス信号表"
+  "morseAlphabet": "モールス信号表",
+  "hotCold": "あったか・つめたい",
+  "hotColdSubtitle": "何かをかくして、近づくほど明かりがあたたかい色に",
+  "hotColdRules": "部屋に何かをかくします。子どもがさがしている間、近づいたら「あったかい」、はなれたら「つめたい」をタップ。明かりが氷の青から炎の赤にかわり、スマートフォンが温度を教えます。見つけたら「見つけた！」をタップ。",
+  "hotColdWarmer": "あったかい",
+  "hotColdColder": "つめたい",
+  "hotColdFound": "見つけた！",
+  "hotColdFreezing": "こおってる！",
+  "hotColdCold": "つめたい",
+  "hotColdWarm": "あったかい",
+  "hotColdHot": "あつい！",
+  "hotColdBoiling": "あっちっち！"
 }

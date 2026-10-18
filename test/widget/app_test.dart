@@ -47,6 +47,8 @@ import 'package:lumifx/src/features/notifications/notification_lights_screen.dar
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
 import 'package:lumifx/src/features/learn/counting_screen.dart';
+import 'package:lumifx/src/features/fun/hot_cold.dart';
+import 'package:lumifx/src/features/fun/hot_cold_screen.dart';
 import 'package:lumifx/src/features/learn/morse.dart';
 import 'package:lumifx/src/features/learn/morse_screen.dart';
 import 'package:lumifx/src/features/music_box/music_box_screen.dart';
@@ -1423,6 +1425,39 @@ void main() {
     await playback.stop();
     await tester.pumpAndSettle();
     expect(find.text('.... ..'), findsOneWidget, reason: 'the whole code');
+  });
+
+  testWidgets('hot and cold: warmer, colder and found it', (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const HotColdScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(HotColdScreen))).playback;
+    expect(find.text('Cold'), findsOneWidget);
+    expect(playback.effect.id, HotCold.effect(HotCold.start, 'x').id);
+    for (var i = 0; i < 3; i++) {
+      await tester.tap(find.text('Warmer'));
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    expect(find.text('Warm'), findsOneWidget);
+    expect(speaker.spoken.last, ('Warm', 'en-US'));
+    await tester.tap(find.text('Colder'));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(playback.effect.id, HotCold.effect(4, 'x').id);
+    await tester.tap(find.text('Found it!'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(playback.effect.id, HotCold.found('x').id);
+    expect(speaker.spoken.last.$1, 'Found it!');
+    await tester.tap(find.text('Play again'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Cold'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {
