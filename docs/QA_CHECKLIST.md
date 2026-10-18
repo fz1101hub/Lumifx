@@ -664,6 +664,18 @@ build before every store release.
       pace, each key glowing and its lamp flashing; keys tapped meanwhile
       do nothing; then the lesson starts from the first note.
 
+## This round: what fits now, review fixes
+
+- [ ] At 7:30 the home starts with "Good morning! Ready for the morning
+      routine?"; at 19:45 with "It's nearly bedtime: start the ritual?";
+      at noon with neither. Each opens its screen.
+- [ ] Routine with the bridge unplugged: tap the teeth timer: no timer
+      screen claiming the time is up. Tap the timer button twice fast:
+      one timer only. With a 30 min sleep timer set in the player, run
+      the teeth timer: it is not cut short, and the sleep timer is back
+      afterwards.
+- [ ] TalkBack / VoiceOver on a routine: double-tapping a step ticks it.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

@@ -737,3 +737,13 @@ iOS lists the languages in `CFBundleLocalizations`.
 - The light piano's Listen first plays the lesson's melody through
   `_press(replay: true)`, which never advances the lesson.
 
+### Round 8 notes
+
+- `_nowEntry` (home) picks the morning routine (6:00–10:00) or the
+  bedtime ritual (18:30–22:00) from `AppScope.clock`; the widget tests
+  give every app a fixed clock, so none depends on the time they run.
+- `RoutineScreen._doWith` runs one helper at a time (`_helperOpen` hides
+  the step buttons and makes tiles wait), opens the helper only when
+  `before` says it is ready (a timer that did not start is not shown),
+  and keeps a sleep timer aside meanwhile, putting it back afterwards.
+
