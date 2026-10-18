@@ -658,7 +658,7 @@ build before every store release.
 - [ ] Evening routine: "Story time" has a book button: it opens the story
       maker; tell a story to the end, go back: the step is ticked. Go back
       before the end instead: the step waits.
-- [ ] Evening routine: "Tidy up" has a timer button: the ten-minute tidy-up
+- [ ] Evening routine: "Tidy the toys" has a timer button: the ten-minute tidy-up
       timer runs; at the end the step is ticked.
 - [ ] Light piano › Learn a song › Listen first: the song plays at its own
       pace, each key glowing and its lamp flashing; keys tapped meanwhile

@@ -147,7 +147,7 @@ Also done ahead of schedule:
 - **Morning and evening routines**: picture checklists with the steps a
   grown-up chooses; the lamps fill up step by step, then a party and a
   star, with a chart of the last seven days. "Brush your teeth" and
-  "Tidy up" have their light timer, and story time opens the story
+  "Tidy the toys" have their light timer, and story time opens the story
   maker; each ticks its step when the time is up or the story is told.
 - **Lullabies on a music box**: Brahms's Lullaby, Twinkle Twinkle,
   Frère Jacques and Au clair de la lune, made on the phone; each note lights a lamp by its pitch
