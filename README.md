@@ -156,9 +156,10 @@ Also done ahead of schedule:
   on the phone from written lines (no AI, no network), worded so it
   never depends on the hero's gender.
 - **Learning games**: Count the lights (the lamps blink, tap how many;
-  the numbers grow up to 9) and Colours in another language (the room
-  turns a colour and the phone says its name in any of the eight
-  languages, then a quiz).
+  the numbers grow up to 9; the best score is kept) and Colours in
+  another language (the room turns a colour and the phone says its name
+  in any of the eight languages, then a quiz; the language chosen last
+  comes back).
 - **Monster spray**: five funny monsters hide in a dim purple room; each
   spray flashes the lamps and chases one away; then a warm guardian
   light for 15, 30 or 60 minutes that fades out.
@@ -175,6 +176,32 @@ Also done ahead of schedule:
 - **Lock screen on iPhone** (iOS 16.1+): the effect playing, its room,
   colours and a Stop on the lock screen and in the Dynamic Island;
   effects with sounds or a tune keep playing with the iPhone locked.
+- **Quick Settings tiles** (Android): "Stop effect" and "Bedtime", added
+  from the quick settings edit panel; on a locked phone they act after
+  unlocking.
+- **Secret messages in Morse**: type up to 30 characters and the lamps
+  flash the letters and digits slowly in Morse, in a chosen colour, with
+  the letter being sent lit up on screen and the alphabet to decode it.
+- **Hot and cold**: a grown-up taps Warmer or Colder while a child looks
+  for something hidden; the room goes from icy blue to fiery red, the
+  phone says how hot it is, and Found it! ends in confetti of light.
+- **Light piano**: eight keys from middle C, each a music-box note made
+  on the phone and a flash of its rainbow colour on one lamp along the
+  room; "Learn a song" makes the next key glow. Notes are named as
+  children learn them (do re mi, ドレミ, or letters with H in German).
+- **A profile for each child** (up to six): their own routine steps and
+  stars (the stars earned before stay with the first child); the story
+  maker offers their names for the hero.
+- **Star shop**: a grown-up sets rewards with a picture and a cost in
+  stars; the child spends the stars of their routines, a grown-up
+  confirms and the lamps throw a gold party. Kept on the phone only.
+- **Bedtime ritual** in one tap: the evening routine, the monster spray,
+  a story made up for tonight with the child as hero, a lullaby and the
+  guardian light, one after the other, with the steps a grown-up keeps.
+- **Halloween party**: a purple and green room; when someone walks past
+  a Hue motion sensor (or a grown-up taps Scare now) the lamps flash,
+  the phone thunders and red eyes glow on one lamp, with 15 s of rest
+  between sensor scares and nothing that flashes fast.
 
 ## Development
 

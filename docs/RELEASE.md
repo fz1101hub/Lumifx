@@ -162,10 +162,10 @@ needs attention; the Android half is independent.
    playback service with the answers and the demo videos described in
    `docs/STORE_LISTING.md` (Play blocks the release until this is done,
    because the app targets Android 14+ and declares those service types).
-6. The notification listener (Notification lights) and NFC need no
-   declaration form: answer the data safety form and paste the review
-   notes from `docs/STORE_LISTING.md`, which explain the notification
-   access. `QUERY_ALL_PACKAGES` is not used.
+6. The notification listener (Notification lights), NFC and the two
+   Quick Settings tiles need no declaration form: answer the data safety
+   form and paste the review notes from `docs/STORE_LISTING.md`, which
+   explain the notification access. `QUERY_ALL_PACKAGES` is not used.
 
 ## 3. Android: every release
 
@@ -278,6 +278,10 @@ last upload. For a build made by hand, pass `--build-number` to
   not required, so phones without NFC can install the app; used only to
   write a sticker when the user asks. On iPhone the Shortcuts app reads
   the stickers: no NFC entitlement.
+- **Quick Settings tiles (Android).** Two `TileService`s ("Stop effect",
+  "Bedtime") protected by `BIND_QUICK_SETTINGS_TILE`, which only the
+  system holds; they open `lumifx://` links and ask for no permission.
+  No Play declaration.
 - **Background audio and Live Activities (iOS).** `UIBackgroundModes`
   has `audio`, so effects with sounds or a lullaby go on with the iPhone
   locked; App Review checks that the app really plays audible sound in
