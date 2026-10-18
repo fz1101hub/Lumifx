@@ -11,6 +11,8 @@ import '../common/layout.dart';
 import '../effects/light_color_ui.dart';
 import '../effects/playback_controller.dart';
 import '../library/preferences_controller.dart';
+import '../tales/tale.dart';
+import '../tales/tale_maker_screen.dart';
 import '../timers/light_timer.dart';
 import '../timers/timers_screen.dart';
 import 'child_picker.dart';
@@ -450,35 +452,29 @@ class _RoutineScreenState extends State<RoutineScreen> {
     await _show();
   }
 
-  /// Brushing teeth with the two-minute light timer (and its tune): the
-  /// step is done when the time is up.
-  Future<void> _teethTimer(RoutineItem step) async {
-    final scope = AppScope.of(context);
-    final l10n = context.l10n;
-    final playback = scope.playback;
-    final effect = LightTimer.teeth.effect(
-      name: TimersScreen.nameOf(l10n, LightTimer.teeth),
-      tune: scope.preferences.teethTune,
-    );
+  /// Opens [screen] for [step], after [before]; the step is done when an
+  /// effect that [counts] plays to its end meanwhile.
+  Future<void> _doWith(
+    RoutineItem step,
+    Widget screen,
+    bool Function(LightingEffect) counts, {
+    Future<void> Function()? before,
+  }) async {
+    final playback = AppScope.of(context).playback;
     var finished = false;
     final notices = playback.notices.listen((notice) {
       if (notice.kind == PlaybackNoticeKind.finished &&
-          notice.name == effect.name) {
+          counts(playback.effect)) {
         finished = true;
       }
     });
     try {
-      playback.setSleepTimer(null);
-      await _play(playback, effect);
+      await before?.call();
       if (!mounted) {
         return;
       }
-      await Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (_) => TimerRunningScreen(
-          effect: effect,
-          length: Duration(minutes: LightTimer.teeth.minutes),
-        ),
-      ));
+      await Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => screen));
     } finally {
       // Not awaited: a broadcast subscription may take its time to go.
       unawaited(notices.cancel());
@@ -491,6 +487,63 @@ class _RoutineScreenState extends State<RoutineScreen> {
     } else {
       await _show();
     }
+  }
+
+  /// A step done with a light timer (brushing teeth with its tune, tidying
+  /// up): the step is done when the time is up.
+  Future<void> _timed(RoutineItem step, LightTimer timer) {
+    final scope = AppScope.of(context);
+    final playback = scope.playback;
+    final effect = timer.effect(
+      name: TimersScreen.nameOf(context.l10n, timer),
+      tune: timer == LightTimer.teeth && scope.preferences.teethTune,
+    );
+    return _doWith(
+      step,
+      TimerRunningScreen(
+        effect: effect,
+        length: Duration(minutes: timer.minutes),
+      ),
+      (playing) => playing.id == effect.id,
+      before: () async {
+        playback.setSleepTimer(null);
+        await _play(playback, effect);
+      },
+    );
+  }
+
+  /// Story time with a story made up in the story maker: the step is done
+  /// when a story has been told to its end.
+  Future<void> _storyTime(RoutineItem step) => _doWith(
+        step,
+        const TaleMakerScreen(),
+        (playing) => Tale.of(playing) != null,
+      );
+
+  /// The button a step's tile offers, if any.
+  _StepAction? _actionOf(RoutineItem step) {
+    if (_done.contains(step)) {
+      return null;
+    }
+    final l10n = context.l10n;
+    return switch (step) {
+      RoutineStep.brushTeeth => (
+          icon: Icons.timer_outlined,
+          tooltip: l10n.routineTeethTimer,
+          onPressed: () => _timed(step, LightTimer.teeth),
+        ),
+      RoutineStep.tidyToys => (
+          icon: Icons.timer_outlined,
+          tooltip: l10n.routineTidyTimer,
+          onPressed: () => _timed(step, LightTimer.tidyUp),
+        ),
+      RoutineStep.storyTime => (
+          icon: Icons.auto_stories_outlined,
+          tooltip: l10n.routineMakeStory,
+          onPressed: () => _storyTime(step),
+        ),
+      _ => null,
+    };
   }
 
   @override
@@ -534,10 +587,7 @@ class _RoutineScreenState extends State<RoutineScreen> {
                       step: step,
                       done: _done.contains(step),
                       onTap: () => _tap(step),
-                      onTimer: step == RoutineStep.brushTeeth &&
-                              !_done.contains(step)
-                          ? () => _teethTimer(step)
-                          : null,
+                      action: _actionOf(step),
                     ),
                 ],
               ),
@@ -564,20 +614,27 @@ class _RoutineScreenState extends State<RoutineScreen> {
   }
 }
 
+/// A button on a step's tile.
+typedef _StepAction = ({
+  IconData icon,
+  String tooltip,
+  VoidCallback onPressed,
+});
+
 class _StepTile extends StatelessWidget {
   const _StepTile({
     required this.step,
     required this.done,
     required this.onTap,
-    this.onTimer,
+    this.action,
   });
 
   final RoutineItem step;
   final bool done;
   final VoidCallback onTap;
 
-  /// Starts a light timer for the step, if it has one.
-  final VoidCallback? onTimer;
+  /// A button for what helps with the step (a timer, the story maker).
+  final _StepAction? action;
 
   @override
   Widget build(BuildContext context) {
@@ -618,8 +675,8 @@ class _StepTile extends StatelessWidget {
         ),
       ),
     );
-    final timer = onTimer;
-    if (timer == null) {
+    final action = this.action;
+    if (action == null) {
       return tile;
     }
     return Stack(
@@ -629,9 +686,9 @@ class _StepTile extends StatelessWidget {
           top: 4,
           right: 4,
           child: IconButton.filledTonal(
-            tooltip: context.l10n.routineTeethTimer,
-            onPressed: timer,
-            icon: const Icon(Icons.timer_outlined),
+            tooltip: action.tooltip,
+            onPressed: action.onPressed,
+            icon: Icon(action.icon),
           ),
         ),
       ],

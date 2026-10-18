@@ -4574,5 +4574,17 @@
         "type": "int"
       }
     }
+  },
+  "routineMakeStory": "Make up a story",
+  "@routineMakeStory": {
+    "description": "Routine: button on the story-time step that opens the story maker"
+  },
+  "pianoListenFirst": "Listen first",
+  "@pianoListenFirst": {
+    "description": "Light piano, learning a song: plays the whole song first, the keys glowing"
+  },
+  "routineTidyTimer": "Ten-minute tidy-up timer",
+  "@routineTidyTimer": {
+    "description": "Routine: button on the tidy-toys step that starts the ten-minute tidy-up light timer"
   }
 }

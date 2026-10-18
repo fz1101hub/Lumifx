@@ -1131,5 +1131,8 @@
   "noiseStopped": "Il microfono si è fermato. Tocca Inizia ad ascoltare per continuare.",
   "routineTeethTimer": "Timer di due minuti",
   "ritualGoodnightName": "Buonanotte, {name}!",
-  "pianoEchoBest": "Record: {count} note"
+  "pianoEchoBest": "Record: {count} note",
+  "routineMakeStory": "Inventa una storia",
+  "pianoListenFirst": "Prima ascolta",
+  "routineTidyTimer": "Timer del riordino di dieci minuti"
 }

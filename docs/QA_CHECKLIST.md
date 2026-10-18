@@ -653,6 +653,17 @@ build before every store release.
       notes" shows next to the length, and stays after leaving and coming
       back.
 
+## This round: story time and tidying up in the routines, Listen first
+
+- [ ] Evening routine: "Story time" has a book button: it opens the story
+      maker; tell a story to the end, go back: the step is ticked. Go back
+      before the end instead: the step waits.
+- [ ] Evening routine: "Tidy the toys" has a timer button: the ten-minute tidy-up
+      timer runs; at the end the step is ticked.
+- [ ] Light piano › Learn a song › Listen first: the song plays at its own
+      pace, each key glowing and its lamp flashing; keys tapped meanwhile
+      do nothing; then the lesson starts from the first note.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

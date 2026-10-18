@@ -68,12 +68,14 @@ import 'package:lumifx/src/features/learn/morse_screen.dart';
 import 'package:lumifx/src/features/music_box/light_piano.dart';
 import 'package:lumifx/src/features/music_box/light_piano_screen.dart';
 import 'package:lumifx/src/features/music_box/music_box_screen.dart';
+import 'package:lumifx/src/features/tales/tale.dart';
 import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/routines/kid_routine.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
 import 'package:lumifx/src/features/routines/star_shop_screen.dart';
+import 'package:lumifx/src/features/timers/light_timer.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
 import 'package:lumifx/src/features/timers/timers_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
@@ -1131,6 +1133,66 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('tidying up in a routine runs the ten-minute timer',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const RoutineScreen(routine: KidRoutine.evening))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+    await tester.scrollUntilVisible(
+        find.byTooltip('Ten-minute tidy-up timer'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.byTooltip('Ten-minute tidy-up timer'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(TimerRunningScreen), findsOneWidget);
+    expect(playback.effect.id, LightTimer.tidyUp.effect(name: 'x').id);
+    playback.player!.advance(playback.effect.cycleLength);
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(seconds: 2));
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.text('1 of 6 done'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('story time in a routine ticks when the story is told',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const RoutineScreen(routine: KidRoutine.evening))));
+    await tester.pumpAndSettle();
+    expect(find.text('0 of 6 done'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+
+    await tester.scrollUntilVisible(find.byTooltip('Make up a story'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.byTooltip('Make up a story'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TaleMakerScreen), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Tell the story'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Tell the story'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Tale.of(playback.effect), isNotNull);
+    playback.player!.advance(playback.effect.cycleLength);
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('The end'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('1 of 6 done'), findsOneWidget);
+    expect(find.byTooltip('Make up a story'), findsNothing);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('a lullaby plays its tune and then fades the lights out',
       (tester) async {
     await _pumpApp(tester);
@@ -1829,6 +1891,34 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
     expect(find.text('A tune of 4 notes · Best: 3 notes'), findsOneWidget);
     await tester.pump(const Duration(seconds: 4));
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light piano plays a song first, then teaches it',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const LightPianoScreen())));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
+    await tester.tap(find.text('Learn a song'));
+    await tester.pump();
+    final song = pianoSongs.first;
+    await tester.tap(find.text('Listen first'));
+    await tester.pump();
+    // Keys tapped meanwhile do not count.
+    await tester.tap(find.bySemanticsLabel('D'));
+    await tester.pump(song.length + const Duration(seconds: 1));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(sound.calls.where((c) => c.startsWith('note')), [
+      for (final (_, _, midi) in song.timeline())
+        'note ${pianoKeys[pianoKeyFor(midi)!].midi}',
+    ]);
+    expect(find.textContaining('0 of ${song.notes.length}'), findsOneWidget,
+        reason: 'listening teaches nothing yet');
     await playback.stop();
     await tester.pumpAndSettle();
   });
