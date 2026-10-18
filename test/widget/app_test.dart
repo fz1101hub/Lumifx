@@ -35,6 +35,8 @@ import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/core/speech/speaker.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray.dart';
+import 'package:lumifx/src/features/cinema/cinema.dart';
+import 'package:lumifx/src/features/cinema/cinema_screen.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
@@ -1142,6 +1144,43 @@ void main() {
     expect(playback.sleepTimer, const Duration(minutes: 15));
     await playback.stop();
     playback.setSleepTimer(null);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('cinema mode dims for the film and brings the lights back',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Cinema mode'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Cinema mode'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cinema mode'));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(CinemaScreen))).playback;
+    await tester.tap(find.text('Start the film'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Cinema.phaseOf(playback.effect), CinemaPhase.film);
+    expect(playback.effect.id, endsWith(':glow'));
+    expect(find.text('Enjoy the film'), findsOneWidget);
+    await tester.tap(find.text('Soft glow during the film'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(playback.effect.id, endsWith(':dark'));
+
+    await tester.tap(find.text('Intermission'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Cinema.phaseOf(playback.effect), CinemaPhase.intermission);
+    expect(find.text('Back to the film'), findsOneWidget);
+
+    await tester.tap(find.text('End of the film'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Cinema.phaseOf(playback.effect), CinemaPhase.end);
+    expect(find.text('The lights are coming back'), findsOneWidget);
+    playback.player!.advance(Cinema.end('x').cycleLength);
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    expect(playback.status, PlaybackStatus.idle,
+        reason: 'then the room goes back to how it was');
     await tester.pumpAndSettle();
   });
 

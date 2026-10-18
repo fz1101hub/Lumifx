@@ -5,6 +5,7 @@ import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
+import '../cinema/cinema_screen.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
@@ -157,6 +158,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.playlistsSubtitle, () => const PlaylistsScreen()),
                 _HomeEntry(Icons.wb_sunny_outlined, l10n.weather,
                     l10n.weatherSubtitle, () => const WeatherScreen()),
+                _HomeEntry(Icons.movie_outlined, l10n.cinema,
+                    l10n.cinemaSubtitle, () => const CinemaScreen()),
               ],
             ),
             if (bridge.isConnected)

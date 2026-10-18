@@ -7,6 +7,8 @@ import '../bedtime/monster_spray.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
+import '../cinema/cinema.dart';
+import '../cinema/cinema_screen.dart';
 import '../fun/advent.dart';
 import '../fun/advent_screen.dart';
 import '../fun/birthday.dart';
@@ -68,6 +70,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = MusicBoxScreen(festive: melody.instrument == Instrument.bells);
   } else if (MonsterHunt.isHunting(effect) || MonsterHunt.isGuardian(effect)) {
     screen = MonsterSprayScreen(playing: effect);
+  } else if (Cinema.phaseOf(effect) != null) {
+    screen = const CinemaScreen();
   } else if (CountingGame.isCounting(effect)) {
     screen = const CountingScreen();
   } else if (LearnColour.of(effect) != null) {

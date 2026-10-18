@@ -3632,5 +3632,53 @@
   "monsterSprayAgain": "Spray again",
   "@monsterSprayAgain": {
     "description": "Monster spray: play again"
+  },
+  "cinema": "Cinema mode",
+  "@cinema": {
+    "description": "Home entry: lights for watching a film"
+  },
+  "cinemaSubtitle": "The lights dim for the film and come back at the end",
+  "@cinemaSubtitle": {
+    "description": "Subtitle of cinema mode"
+  },
+  "cinemaDescription": "Start the film and the lights dim slowly, like at the cinema. At the intermission they rise gently; at the end they come back little by little, then return to how they were.",
+  "@cinemaDescription": {
+    "description": "Explains cinema mode"
+  },
+  "cinemaGlow": "Soft glow during the film",
+  "@cinemaGlow": {
+    "description": "Cinema mode switch: a faint light during the film instead of dark"
+  },
+  "cinemaGlowSubtitle": "A faint cool light, easier on the eyes than total darkness",
+  "@cinemaGlowSubtitle": {
+    "description": "Explains the soft glow"
+  },
+  "cinemaStart": "Start the film",
+  "@cinemaStart": {
+    "description": "Cinema mode: the film starts"
+  },
+  "cinemaResume": "Back to the film",
+  "@cinemaResume": {
+    "description": "Cinema mode: back to the film after the intermission"
+  },
+  "cinemaIntermission": "Intermission",
+  "@cinemaIntermission": {
+    "description": "Cinema mode: the intermission"
+  },
+  "cinemaEnd": "End of the film",
+  "@cinemaEnd": {
+    "description": "Cinema mode: the film is over"
+  },
+  "cinemaNowFilm": "Enjoy the film",
+  "@cinemaNowFilm": {
+    "description": "Cinema mode status: the film is on"
+  },
+  "cinemaNowIntermission": "Intermission: time to stretch your legs",
+  "@cinemaNowIntermission": {
+    "description": "Cinema mode status: intermission"
+  },
+  "cinemaNowEnd": "The lights are coming back",
+  "@cinemaNowEnd": {
+    "description": "Cinema mode status: the lights are coming back"
   }
 }

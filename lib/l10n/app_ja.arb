@@ -926,5 +926,17 @@
   "guardianLight": "見守りライト",
   "guardianLightDescription": "あたたかく小さな見守りライトがついて、そのあと自然に消えていきます。",
   "guardianLightFor": "つけておく時間",
-  "monsterSprayAgain": "もういちど"
+  "monsterSprayAgain": "もういちど",
+  "cinema": "シアターモード",
+  "cinemaSubtitle": "映画が始まると暗くなり、終わると明るさがもどります",
+  "cinemaDescription": "映画を始めると、映画館のように明かりがゆっくり暗くなります。休憩ではやさしく明るくなり、最後は少しずつもどって、元の明かりにかえります。",
+  "cinemaGlow": "映画中はほんのり明かりをつける",
+  "cinemaGlowSubtitle": "真っ暗よりも目にやさしい、かすかな白い光",
+  "cinemaStart": "映画を始める",
+  "cinemaResume": "映画にもどる",
+  "cinemaIntermission": "休憩",
+  "cinemaEnd": "映画のおわり",
+  "cinemaNowFilm": "映画をたのしんでね",
+  "cinemaNowIntermission": "休憩：ちょっと体をのばそう",
+  "cinemaNowEnd": "明かりがもどってきます"
 }

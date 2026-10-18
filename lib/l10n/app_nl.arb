@@ -926,5 +926,17 @@
   "guardianLight": "Wachtlicht",
   "guardianLightDescription": "Een warm, zacht wachtlicht blijft aan en dooft daarna vanzelf.",
   "guardianLightFor": "Blijft aan voor",
-  "monsterSprayAgain": "Nog een keer sprayen"
+  "monsterSprayAgain": "Nog een keer sprayen",
+  "cinema": "Bioscoopmodus",
+  "cinemaSubtitle": "Het licht dimt voor de film en komt aan het eind terug",
+  "cinemaDescription": "Start de film en het licht dimt langzaam, zoals in de bioscoop. In de pauze wordt het zacht lichter; aan het eind komt het beetje bij beetje terug en daarna zoals het was.",
+  "cinemaGlow": "Zacht licht tijdens de film",
+  "cinemaGlowSubtitle": "Een zwak koel licht, prettiger voor de ogen dan volledig donker",
+  "cinemaStart": "De film begint",
+  "cinemaResume": "Verder met de film",
+  "cinemaIntermission": "Pauze",
+  "cinemaEnd": "Einde van de film",
+  "cinemaNowFilm": "Veel kijkplezier",
+  "cinemaNowIntermission": "Pauze: tijd om de benen te strekken",
+  "cinemaNowEnd": "Het licht komt terug"
 }

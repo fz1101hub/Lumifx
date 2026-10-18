@@ -926,5 +926,17 @@
   "guardianLight": "Luz guardiã",
   "guardianLightDescription": "Uma luz guardiã quentinha e fraca fica acesa e depois se apaga sozinha devagar.",
   "guardianLightFor": "Fica acesa por",
-  "monsterSprayAgain": "Borrifar de novo"
+  "monsterSprayAgain": "Borrifar de novo",
+  "cinema": "Modo cinema",
+  "cinemaSubtitle": "As luzes diminuem para o filme e voltam no final",
+  "cinemaDescription": "Comece o filme e as luzes diminuem devagar, como no cinema. No intervalo elas sobem suavemente; no final voltam aos poucos e depois ficam como estavam.",
+  "cinemaGlow": "Luz suave durante o filme",
+  "cinemaGlowSubtitle": "Uma luz fria e fraca, mais confortável para os olhos que a escuridão total",
+  "cinemaStart": "Começar o filme",
+  "cinemaResume": "Voltar ao filme",
+  "cinemaIntermission": "Intervalo",
+  "cinemaEnd": "Fim do filme",
+  "cinemaNowFilm": "Bom filme",
+  "cinemaNowIntermission": "Intervalo: hora de esticar as pernas",
+  "cinemaNowEnd": "As luzes estão voltando"
 }

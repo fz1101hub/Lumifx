@@ -926,5 +926,17 @@
   "guardianLight": "Wächterlicht",
   "guardianLightDescription": "Ein warmes, sanftes Wächterlicht bleibt an und geht dann von selbst langsam aus.",
   "guardianLightFor": "Bleibt an für",
-  "monsterSprayAgain": "Noch mal sprühen"
+  "monsterSprayAgain": "Noch mal sprühen",
+  "cinema": "Kinomodus",
+  "cinemaSubtitle": "Das Licht wird für den Film gedimmt und kommt am Ende zurück",
+  "cinemaDescription": "Starte den Film und das Licht wird langsam dunkler, wie im Kino. In der Pause wird es sanft heller; am Ende kommt es nach und nach zurück und dann wieder so, wie es vorher war.",
+  "cinemaGlow": "Sanftes Licht während des Films",
+  "cinemaGlowSubtitle": "Ein schwaches kühles Licht, angenehmer für die Augen als völlige Dunkelheit",
+  "cinemaStart": "Film beginnt",
+  "cinemaResume": "Weiter mit dem Film",
+  "cinemaIntermission": "Pause",
+  "cinemaEnd": "Ende des Films",
+  "cinemaNowFilm": "Viel Spaß beim Film",
+  "cinemaNowIntermission": "Pause: Zeit, die Beine zu vertreten",
+  "cinemaNowEnd": "Das Licht kommt zurück"
 }

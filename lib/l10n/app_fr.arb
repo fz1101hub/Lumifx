@@ -926,5 +926,17 @@
   "guardianLight": "Lumière gardienne",
   "guardianLightDescription": "Une lumière gardienne douce et chaude reste allumée, puis s'éteint toute seule.",
   "guardianLightFor": "Reste allumée pendant",
-  "monsterSprayAgain": "Recommencer"
+  "monsterSprayAgain": "Recommencer",
+  "cinema": "Mode cinéma",
+  "cinemaSubtitle": "Les lumières baissent pour le film et reviennent à la fin",
+  "cinemaDescription": "Lance le film et les lumières baissent doucement, comme au cinéma. À l'entracte, elles remontent en douceur ; à la fin, elles reviennent peu à peu, puis comme avant.",
+  "cinemaGlow": "Douce lueur pendant le film",
+  "cinemaGlowSubtitle": "Une faible lumière froide, plus reposante pour les yeux que le noir complet",
+  "cinemaStart": "Début du film",
+  "cinemaResume": "Reprise du film",
+  "cinemaIntermission": "Entracte",
+  "cinemaEnd": "Fin du film",
+  "cinemaNowFilm": "Bon film",
+  "cinemaNowIntermission": "Entracte : le moment de se dégourdir les jambes",
+  "cinemaNowEnd": "Les lumières reviennent"
 }
