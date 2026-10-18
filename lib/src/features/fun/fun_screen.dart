@@ -6,6 +6,7 @@ import '../learn/colour_words_screen.dart';
 import '../learn/counting_screen.dart';
 import '../learn/morse_screen.dart';
 import 'advent_screen.dart';
+import '../music_box/light_piano_screen.dart';
 import '../music_box/music_box_screen.dart';
 import 'birthday_screen.dart';
 import 'countdowns_screen.dart';
@@ -66,6 +67,8 @@ class FunScreen extends StatelessWidget {
               },
               () => GameScreen(game: game),
             ),
+          entry(Icons.piano_outlined, l10n.piano, l10n.pianoSubtitle,
+              () => const LightPianoScreen()),
           entry(Icons.thermostat, l10n.hotCold, l10n.hotColdSubtitle,
               () => const HotColdScreen()),
           entry(Icons.psychology_outlined, l10n.gameSimon,

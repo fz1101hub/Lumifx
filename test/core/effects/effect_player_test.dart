@@ -66,6 +66,25 @@ void main() {
       expect(player.currentFrames, ocean0.currentFrames);
     });
 
+    test('a flash can light just one lamp along the room', () {
+      final player = EffectPlayer(
+        effect: ocean,
+        lightIds: const ['a', 'b', 'c'],
+        output: _RecordingOutput(),
+      );
+      player.advance(const Duration(seconds: 1));
+      const red = LightColor(1, 0, 0);
+      player.flashNow(red, at: 1);
+      player.advance(const Duration(milliseconds: 100));
+      expect(player.currentFrames[2].color, red);
+      expect(player.currentFrames[0].color, isNot(red));
+      expect(player.currentFrames[1].color, isNot(red));
+      player.flashNow(red, at: 0.5);
+      player.advance(const Duration(milliseconds: 100));
+      expect(player.currentFrames[1].color, red);
+      expect(player.currentFrames[2].color, isNot(red));
+    });
+
     test('maps frames to light ids in order', () {
       final output = _RecordingOutput();
       final player = EffectPlayer(

@@ -994,5 +994,12 @@
   "hotColdCold": "つめたい",
   "hotColdWarm": "あったかい",
   "hotColdHot": "あつい！",
-  "hotColdBoiling": "あっちっち！"
+  "hotColdBoiling": "あっちっち！",
+  "piano": "ひかりのピアノ",
+  "pianoSubtitle": "けんばんごとに音が鳴り、その色でランプが光ります",
+  "pianoFree": "じゆうにひく",
+  "pianoLearn": "曲をおぼえる",
+  "pianoNext": "光っているけんばんをひいてね",
+  "pianoProgress": "{done}/{total}",
+  "pianoBravo": "すごい！さいごまでひけたね"
 }

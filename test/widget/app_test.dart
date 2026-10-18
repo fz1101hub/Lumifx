@@ -51,6 +51,8 @@ import 'package:lumifx/src/features/fun/hot_cold.dart';
 import 'package:lumifx/src/features/fun/hot_cold_screen.dart';
 import 'package:lumifx/src/features/learn/morse.dart';
 import 'package:lumifx/src/features/learn/morse_screen.dart';
+import 'package:lumifx/src/features/music_box/light_piano.dart';
+import 'package:lumifx/src/features/music_box/light_piano_screen.dart';
 import 'package:lumifx/src/features/music_box/music_box_screen.dart';
 import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
@@ -1456,6 +1458,39 @@ void main() {
     await tester.tap(find.text('Play again'));
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Cold'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light piano plays notes and teaches a tune', (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const LightPianoScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('E'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
+    expect(isPianoEffect(playback.effect), isTrue);
+    expect(playback.isPlaying, isTrue);
+
+    await tester.tap(find.text('Learn a song'));
+    await tester.pump();
+    expect(find.textContaining('0 of'), findsOneWidget);
+    // The first tune offered, and its first key.
+    final first = PianoLesson(pianoSongs.first).next!;
+    Finder key(int index) {
+      final label = pianoNoteName('en', index);
+      // Two keys are C: the low one first.
+      return find.bySemanticsLabel(label).at(index == 7 ? 1 : 0);
+    }
+
+    await tester.tap(key(first == 3 ? 4 : 3));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('0 of'), findsOneWidget, reason: 'not yet');
+    await tester.tap(key(first));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('1 of'), findsOneWidget);
     await playback.stop();
     await tester.pumpAndSettle();
   });

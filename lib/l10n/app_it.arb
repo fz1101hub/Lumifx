@@ -994,5 +994,12 @@
   "hotColdCold": "Acqua",
   "hotColdWarm": "Fuochino",
   "hotColdHot": "Fuoco!",
-  "hotColdBoiling": "Fuoco fuoco!"
+  "hotColdBoiling": "Fuoco fuoco!",
+  "piano": "Pianoforte luminoso",
+  "pianoSubtitle": "Ogni tasto suona una nota e accende una lampada del suo colore",
+  "pianoFree": "Suona libero",
+  "pianoLearn": "Impara una canzone",
+  "pianoNext": "Suona il tasto che brilla",
+  "pianoProgress": "{done} di {total}",
+  "pianoBravo": "Bravo! Hai suonato tutta la canzone"
 }

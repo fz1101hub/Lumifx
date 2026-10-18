@@ -3914,5 +3914,41 @@
   "hotColdBoiling": "Boiling!",
   "@hotColdBoiling": {
     "description": "Hot and cold: very close (said aloud)"
+  },
+  "piano": "Light piano",
+  "@piano": {
+    "description": "Light piano: each key plays a note and lights a lamp"
+  },
+  "pianoSubtitle": "Each key plays a note and lights a lamp in its colour",
+  "@pianoSubtitle": {
+    "description": "Subtitle of the light piano"
+  },
+  "pianoFree": "Free play",
+  "@pianoFree": {
+    "description": "Light piano mode: play freely"
+  },
+  "pianoLearn": "Learn a song",
+  "@pianoLearn": {
+    "description": "Light piano mode: learn a tune"
+  },
+  "pianoNext": "Play the glowing key",
+  "@pianoNext": {
+    "description": "Light piano lesson: press the key that glows"
+  },
+  "pianoProgress": "{done} of {total}",
+  "@pianoProgress": {
+    "description": "Light piano lesson: notes played of the tune",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "pianoBravo": "Bravo! You played the whole song",
+  "@pianoBravo": {
+    "description": "Light piano lesson: the whole tune was played"
   }
 }

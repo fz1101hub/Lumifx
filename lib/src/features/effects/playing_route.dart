@@ -26,6 +26,8 @@ import '../learn/counting.dart';
 import '../learn/counting_screen.dart';
 import '../learn/morse.dart';
 import '../learn/morse_screen.dart';
+import '../music_box/light_piano.dart';
+import '../music_box/light_piano_screen.dart';
 import '../music_box/music_box_screen.dart';
 import '../paths/path_story.dart';
 import '../paths/path_story_screen.dart';
@@ -76,6 +78,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = MonsterSprayScreen(playing: effect);
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
+  } else if (isPianoEffect(effect)) {
+    screen = const LightPianoScreen();
   } else if (HotCold.isHotCold(effect)) {
     screen = const HotColdScreen();
   } else if (CountingGame.isCounting(effect)) {

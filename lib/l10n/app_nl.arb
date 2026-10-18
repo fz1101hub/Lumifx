@@ -994,5 +994,12 @@
   "hotColdCold": "Koud",
   "hotColdWarm": "Lauw",
   "hotColdHot": "Warm!",
-  "hotColdBoiling": "Gloeiend heet!"
+  "hotColdBoiling": "Gloeiend heet!",
+  "piano": "Lichtpiano",
+  "pianoSubtitle": "Elke toets speelt een noot en laat een lamp in zijn kleur oplichten",
+  "pianoFree": "Vrij spelen",
+  "pianoLearn": "Leer een liedje",
+  "pianoNext": "Speel de toets die oplicht",
+  "pianoProgress": "{done} van {total}",
+  "pianoBravo": "Bravo! Je hebt het hele liedje gespeeld"
 }

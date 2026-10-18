@@ -994,5 +994,12 @@
   "hotColdCold": "Kalt",
   "hotColdWarm": "Warm",
   "hotColdHot": "Heiß!",
-  "hotColdBoiling": "Kochend heiß!"
+  "hotColdBoiling": "Kochend heiß!",
+  "piano": "Lichtklavier",
+  "pianoSubtitle": "Jede Taste spielt einen Ton und lässt eine Lampe in ihrer Farbe leuchten",
+  "pianoFree": "Frei spielen",
+  "pianoLearn": "Ein Lied lernen",
+  "pianoNext": "Spiel die leuchtende Taste",
+  "pianoProgress": "{done} von {total}",
+  "pianoBravo": "Bravo! Du hast das ganze Lied gespielt"
 }

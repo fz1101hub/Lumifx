@@ -1,3 +1,4 @@
+import 'package:lumifx/src/core/sound/melody.dart';
 import 'package:lumifx/src/core/sound/sound_player.dart';
 import 'package:lumifx/src/core/sound/soundscape.dart';
 
@@ -30,4 +31,9 @@ class FakeSoundPlayer implements SoundPlayer {
 
   @override
   Future<void> thunder({required double volume}) async => calls.add('thunder');
+
+  @override
+  Future<void> note(int midi, Instrument instrument,
+          {required double volume}) async =>
+      calls.add('note $midi');
 }

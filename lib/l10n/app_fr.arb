@@ -994,5 +994,12 @@
   "hotColdCold": "Froid",
   "hotColdWarm": "Tiède",
   "hotColdHot": "Chaud !",
-  "hotColdBoiling": "Ça brûle !"
+  "hotColdBoiling": "Ça brûle !",
+  "piano": "Piano lumineux",
+  "pianoSubtitle": "Chaque touche joue une note et allume une lampe de sa couleur",
+  "pianoFree": "Jeu libre",
+  "pianoLearn": "Apprendre une chanson",
+  "pianoNext": "Joue la touche qui brille",
+  "pianoProgress": "{done} sur {total}",
+  "pianoBravo": "Bravo ! Tu as joué toute la chanson"
 }
