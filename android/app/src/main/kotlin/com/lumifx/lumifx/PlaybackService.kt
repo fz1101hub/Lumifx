@@ -67,13 +67,17 @@ class PlaybackService : Service() {
     /** Shows or updates the notification and holds the locks. */
     fun show(title: String, text: String, stopLabel: String, wantsMicrophone: Boolean) {
         val manager = getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(
-            NotificationChannel(
-                CHANNEL_ID,
-                getString(R.string.playback_channel),
-                NotificationManager.IMPORTANCE_LOW,
+        // Channels exist from Android 8; before, NotificationCompat ignores
+        // the channel id (creating one there would crash the app).
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(
+                NotificationChannel(
+                    CHANNEL_ID,
+                    getString(R.string.playback_channel),
+                    NotificationManager.IMPORTANCE_LOW,
+                )
             )
-        )
+        }
         val open = PendingIntent.getActivity(
             this,
             0,
