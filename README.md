@@ -154,7 +154,8 @@ Also done ahead of schedule:
   "Surprise me") make a five-line bedtime story with its own lights,
   read along and aloud, ending in a warm glow that fades. Put together
   on the phone from written lines (no AI, no network), worded so it
-  never depends on the hero's gender.
+  never depends on the hero's gender; a story can be kept among My
+  stories.
 - **Learning games**: Count the lights (the lamps blink, tap how many;
   the numbers grow up to 9; the best score is kept) and Colours in
   another language (the room turns a colour and the phone says its name
@@ -168,7 +169,9 @@ Also done ahead of schedule:
 - **NFC stickers**: on Android LumiFX writes a `lumifx://` link (a
   favourite, a playlist, bedtime, stop) on a sticker, and touching it
   with the unlocked phone starts it; on iPhone the Shortcuts app's NFC
-  automation opens the link.
+  automation opens the link. `lumifx://app/go/ritual` (and the routines,
+  star shop, story maker, lullabies, monster spray, piano, games,
+  cinema) opens a family screen, e.g. from a sticker by the bed.
 - **Notification lights** (Android): chosen apps flash the lights of a
   room in their own colour when they post a notification, even with
   LumiFX closed; only the app's name is seen, never what it says; quiet
@@ -181,14 +184,18 @@ Also done ahead of schedule:
   unlocking.
 - **Secret messages in Morse**: type up to 30 characters and the lamps
   flash the letters and digits slowly in Morse, in a chosen colour, with
-  the letter being sent lit up on screen and the alphabet to decode it.
+  the letter being sent lit up on screen and the alphabet to decode it;
+  or guess the letter the lamps flash, among four.
 - **Hot and cold**: a grown-up taps Warmer or Colder while a child looks
   for something hidden; the room goes from icy blue to fiery red, the
   phone says how hot it is, and Found it! ends in confetti of light.
 - **Light piano**: eight keys from middle C, each a music-box note made
   on the phone and a flash of its rainbow colour on one lamp along the
-  room; "Learn a song" makes the next key glow. Notes are named as
+  room; "Learn a song" makes the next key glow, and a tune played can
+  be recorded and played back with its lights. Notes are named as
   children learn them (do re mi, ドレミ, or letters with H in German).
+- **Steps of your own** in the routines ("feed the cat"), with a
+  picture and a colour, alongside the built-in ones.
 - **A profile for each child** (up to six): their own routine steps and
   stars (the stars earned before stay with the first child); the story
   maker offers their names for the hero.

@@ -463,6 +463,15 @@ and plays recordings even with Read aloud off.
 - `test/core/live_activity_test.dart` covers the channel and the app
   tests when it is shown; the lock screen needs a device.
 
+### Links to screens (`lib/src/features/links/screen_links.dart`)
+
+- `lumifx://app/go/<slug>` parses to a `ScreenLink` of an `AppScreen`
+  (ritual, routines, star-shop, story-maker, lullabies, monster-spray,
+  piano, games, cinema). `LinkHandler` pushes `screenOf(screen)` under
+  the route name `/go/<slug>`, unless that route is on top already or
+  kids mode is locked. The ready-made links (and so NFC stickers) offer
+  the ritual and the routines.
+
 ### Secret messages in Morse (`lib/src/features/learn/morse*.dart`)
 
 - `MorseMessage` folds the typed text with `foldForSearch` (lower case,
@@ -495,7 +504,16 @@ and plays recordings even with Read aloud off.
   confetti (`surprise`) for 8 s. Tested in
   `test/features/hot_cold_test.dart`.
 
+- Guess mode: `MorseQuiz` draws a letter (never the same twice in a
+  row) and three others; the lamps flash the letter as a one-letter
+  `MorseMessage`, as often as asked, until the right one is tapped.
+
 ### Light piano (`lib/src/features/music_box/light_piano*.dart`)
+
+- Recording keeps `(Duration, key)` pairs from a `Stopwatch` (at most
+  400); play-back replays them with the same gaps through the same
+  press path (sound and one-lamp flash), stopped by a generation
+  counter when the screen closes or the mode changes.
 
 - `pianoKeys` are the eight white keys from middle C (MIDI 60) to the
   next C (72), each with a rainbow colour. A press calls
@@ -516,6 +534,16 @@ and plays recordings even with Read aloud off.
   or by letter (H for B in German). Tested in
   `test/features/light_piano_test.dart` and
   `test/core/effects/effect_player_test.dart`.
+
+### Steps of your own and kept tales
+
+- Routine steps are `RoutineItem`s: the built-in `RoutineStep` enum and
+  `CustomStep` (id, name, picture index, colour; up to 12, stored in
+  `customSteps`). A routine's kept steps are keys: the enum name, or
+  `custom:<id>`; removing a custom step drops its key from every routine.
+- `Tale.toUserStory` turns a made-up story into a `UserStory` (the
+  place's palette, calm motion, 60 s, one moment per line with its
+  words), saved with `saveUserStory` like any story of the user's own.
 
 ### Child profiles and the star shop (`lib/src/features/routines/child*.dart`, `star_shop*.dart`)
 

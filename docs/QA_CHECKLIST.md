@@ -449,6 +449,24 @@ build before every store release.
 
 ## This round: Morse, hot and cold, piano, profiles, star shop, ritual, Halloween, quick tiles
 
+- [ ] Links to screens: write `lumifx://app/go/ritual` on an NFC sticker
+      (NFC stickers › Open the bedtime ritual); touching it opens the
+      ritual once (touching again does not stack a second one); in kids
+      mode nothing opens. Also `/go/piano`, `/go/star-shop` from an
+      automation app.
+- [ ] Piano: Record, play five notes with pauses, Stop recording, Play
+      it back: the same notes and the same pauses, the same lamps flash.
+      Learn a song cancels a recording.
+- [ ] Morse › Guess: Flash a letter (the lamps flash one letter), a wrong
+      choice says Try again, Flash it again repeats the same letter, the
+      right one shows Well done with the code; a new letter each time.
+- [ ] Routines › Choose the steps › Add a step "Feed the cat" with a
+      picture and colour: it is ticked for that routine, shows in the
+      routine with its picture and fills a lamp; untick it; delete it:
+      gone from every routine.
+- [ ] Story maker › at the end, Save to My stories: it appears under
+      Stories › My stories with the same words read along and plays
+      again; editable in the story editor.
 - [ ] Home: For the family starts with Bedtime ritual; Parties and games
       lists Secret messages, Hot and cold, Light piano and Halloween
       party.
