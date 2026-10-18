@@ -3825,5 +3825,9 @@
   "notificationLightsTo": "To",
   "@notificationLightsTo": {
     "description": "End of the quiet hours"
+  },
+  "keepPlayingScreenOffIos": "Effects with sounds go on when the iPhone locks, shown on the lock screen with a Stop button. Effects without sounds stop, as iOS requires.",
+  "@keepPlayingScreenOffIos": {
+    "description": "iPhone: explains the screen-off setting (effects with sounds keep playing, with lock screen controls)"
   }
 }

@@ -973,5 +973,6 @@
   "notificationLightsQuiet": "Heures calmes",
   "notificationLightsQuietSubtitle": "Rien ne clignote pendant ces heures",
   "notificationLightsFrom": "De",
-  "notificationLightsTo": "À"
+  "notificationLightsTo": "À",
+  "keepPlayingScreenOffIos": "Les effets avec des sons continuent quand l'iPhone se verrouille, affichés sur l'écran verrouillé avec un bouton Stop. Les effets sans son s'arrêtent, comme l'exige iOS."
 }

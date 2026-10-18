@@ -973,5 +973,6 @@
   "notificationLightsQuiet": "Ruhezeit",
   "notificationLightsQuietSubtitle": "In dieser Zeit blinkt nichts",
   "notificationLightsFrom": "Von",
-  "notificationLightsTo": "Bis"
+  "notificationLightsTo": "Bis",
+  "keepPlayingScreenOffIos": "Effekte mit Tönen laufen weiter, wenn das iPhone sperrt, und erscheinen auf dem Sperrbildschirm mit einer Stopp-Taste. Effekte ohne Töne halten an, wie iOS es verlangt."
 }

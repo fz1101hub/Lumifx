@@ -6,6 +6,7 @@ import 'src/core/audio/phone_audio_input.dart';
 import 'src/core/background_playback.dart';
 import 'src/core/sound/sound_player.dart';
 import 'src/features/tv/plugin_camera_input.dart';
+import 'src/core/live_activity.dart';
 import 'src/core/nfc/nfc_writer.dart';
 import 'src/core/notification_lights_platform.dart';
 import 'src/core/photos/photo_picker.dart';
@@ -54,6 +55,7 @@ Future<void> main() async {
       voicePlayer: AudioplayersVoicePlayer(),
       nfc: ChannelNfcWriter(),
       notificationLights: ChannelNotificationLights(),
+      liveActivity: ChannelLiveActivity(),
     ),
   );
 }

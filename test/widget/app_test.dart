@@ -33,6 +33,7 @@ import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/core/live_activity.dart';
 import 'package:lumifx/src/core/nfc/nfc_writer.dart';
 import 'package:lumifx/src/core/notification_lights_platform.dart';
 import 'package:lumifx/src/core/speech/speaker.dart';
@@ -131,6 +132,17 @@ class _FakeNotificationLights implements NotificationLightsPlatform {
   Future<bool> test(Map<String, double> xy) async => true;
 }
 
+class _FakeLiveActivity implements LiveActivity {
+  @override
+  bool get isSupported => true;
+
+  @override
+  Future<bool> update(LiveActivityState state) async => true;
+
+  @override
+  Future<void> end() async {}
+}
+
 class _FakeDiscovery implements BridgeDiscovery {
   @override
   Stream<HueBridgeInfo> discover({Duration timeout = Duration.zero}) =>
@@ -207,6 +219,7 @@ Future<void> _pumpApp(
   Speaker speaker = const NoSpeaker(),
   NfcWriter nfc = const NoNfcWriter(),
   NotificationLightsPlatform notificationLights = const NoNotificationLights(),
+  LiveActivity liveActivity = const NoLiveActivity(),
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -228,6 +241,7 @@ Future<void> _pumpApp(
       speaker: speaker,
       nfc: nfc,
       notificationLights: notificationLights,
+      liveActivity: liveActivity,
     ),
   );
 }
@@ -1357,6 +1371,18 @@ void main() {
     await tester.tap(find.byTooltip('Remove'));
     await tester.pumpAndSettle();
     expect(preferences.notificationLights.rules, isEmpty);
+  });
+
+  testWidgets('on iPhone the screen-off setting tells what iOS allows',
+      (tester) async {
+    await _pumpApp(tester, liveActivity: _FakeLiveActivity());
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+        find.text('Keep playing with the screen off'), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.textContaining('Effects with sounds go on when the iPhone'),
+        findsOneWidget);
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

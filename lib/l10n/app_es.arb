@@ -973,5 +973,6 @@
   "notificationLightsQuiet": "Horas de silencio",
   "notificationLightsQuietSubtitle": "Durante estas horas no parpadea nada",
   "notificationLightsFrom": "Desde",
-  "notificationLightsTo": "Hasta"
+  "notificationLightsTo": "Hasta",
+  "keepPlayingScreenOffIos": "Los efectos con sonido siguen cuando el iPhone se bloquea, en la pantalla de bloqueo con un botón para detenerlos. Los efectos sin sonido se detienen, como exige iOS."
 }

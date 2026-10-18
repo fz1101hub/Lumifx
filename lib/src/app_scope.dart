@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
+import 'core/live_activity.dart';
 import 'core/nfc/nfc_writer.dart';
 import 'core/notification_lights_platform.dart';
 import 'core/photos/photo_picker.dart';
@@ -34,6 +35,7 @@ class AppScope extends InheritedWidget {
     this.speaker = const NoSpeaker(),
     this.nfc = const NoNfcWriter(),
     this.notificationLights = const NoNotificationLights(),
+    this.liveActivity = const NoLiveActivity(),
     required super.child,
     super.key,
   });
@@ -82,6 +84,9 @@ class AppScope extends InheritedWidget {
   /// Flashes the lights for chosen apps' notifications (Android).
   final NotificationLightsPlatform notificationLights;
 
+  /// The effect playing on the iPhone's lock screen.
+  final LiveActivity liveActivity;
+
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
     assert(scope != null, 'No AppScope found in context');
@@ -105,5 +110,6 @@ class AppScope extends InheritedWidget {
       voicePlayer != oldWidget.voicePlayer ||
       speaker != oldWidget.speaker ||
       nfc != oldWidget.nfc ||
-      notificationLights != oldWidget.notificationLights;
+      notificationLights != oldWidget.notificationLights ||
+      liveActivity != oldWidget.liveActivity;
 }

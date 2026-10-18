@@ -973,5 +973,6 @@
   "notificationLightsQuiet": "Horário silencioso",
   "notificationLightsQuietSubtitle": "Nada pisca nesse horário",
   "notificationLightsFrom": "Das",
-  "notificationLightsTo": "Às"
+  "notificationLightsTo": "Às",
+  "keepPlayingScreenOffIos": "Efeitos com som continuam quando o iPhone bloqueia, na tela bloqueada com um botão Parar. Efeitos sem som param, como o iOS exige."
 }

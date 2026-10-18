@@ -42,7 +42,10 @@ class NoSoundPlayer implements SoundPlayer {
 /// Plays generated WAV files with the audioplayers plugin. The files are
 /// made once (in a background isolate) and kept in the temporary folder.
 /// Other apps' music keeps playing (no audio focus on Android, a mixing
-/// session that respects the silent switch on iOS).
+/// session on iOS). On iOS the session is of the playback kind: a lullaby
+/// is heard with the silent switch on, and an effect with sounds goes on
+/// with the phone locked (the app may run in the background while it
+/// plays audio).
 class AudioplayersSoundPlayer implements SoundPlayer {
   AudioplayersSoundPlayer();
 
@@ -60,7 +63,10 @@ class AudioplayersSoundPlayer implements SoundPlayer {
       usageType: AndroidUsageType.media,
       contentType: AndroidContentType.sonification,
     ),
-    iOS: AudioContextIOS(category: AVAudioSessionCategory.ambient),
+    iOS: AudioContextIOS(
+      category: AVAudioSessionCategory.playback,
+      options: const {AVAudioSessionOptions.mixWithOthers},
+    ),
   );
 
   static final _files = <String, Future<String>>{};

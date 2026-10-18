@@ -973,5 +973,6 @@
   "notificationLightsQuiet": "おやすみ時間",
   "notificationLightsQuietSubtitle": "この時間は光りません",
   "notificationLightsFrom": "開始",
-  "notificationLightsTo": "終了"
+  "notificationLightsTo": "終了",
+  "keepPlayingScreenOffIos": "サウンド付きのエフェクトはiPhoneをロックしても続き、ロック画面に停止ボタン付きで表示されます。サウンドのないエフェクトは、iOSの決まりにより止まります。"
 }

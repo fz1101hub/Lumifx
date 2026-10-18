@@ -87,10 +87,13 @@ class SettingsScreen extends StatelessWidget {
                     ? null
                     : preferences.setSoftFlashes,
               ),
-              if (scope.background.isSupported)
+              if (scope.background.isSupported ||
+                  scope.liveActivity.isSupported)
                 SwitchListTile(
                   title: Text(l10n.keepPlayingScreenOff),
-                  subtitle: Text(l10n.keepPlayingScreenOffDescription),
+                  subtitle: Text(scope.background.isSupported
+                      ? l10n.keepPlayingScreenOffDescription
+                      : l10n.keepPlayingScreenOffIos),
                   value: preferences.keepPlayingScreenOff,
                   onChanged: preferences.setKeepPlayingScreenOff,
                 ),
