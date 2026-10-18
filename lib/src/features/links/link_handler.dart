@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/effects/effect.dart';
 import '../bridge/bridge_controller.dart';
+import '../effects/effect_player_screen.dart';
 import '../effects/playback_controller.dart';
 import '../effects/player_route.dart';
 import '../kids/kids_mode.dart';
@@ -116,9 +117,14 @@ class LinkHandler {
     }
     if (effects.any((e) => e.hasRapidFlashes) &&
         !preferences.flashWarningShown) {
-      // Shown from the playlist's first effect, whose Play warns first.
-      _showPlayer(effects.first.id, () => playerRoute(effects.first));
-      return true;
+      // Warned here, for the whole playlist, before any of it plays: the
+      // player of its first effect would only warn for that one.
+      final context = navigatorKey.currentContext;
+      if (context == null ||
+          !context.mounted ||
+          !await confirmFlashingLights(context)) {
+        return false;
+      }
     }
     await playback.playPlaylist(playlist);
     _showPlayer(playback.effect.id, () => playerRoute(playback.effect));

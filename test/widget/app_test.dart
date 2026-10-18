@@ -2441,6 +2441,36 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('a playlist link with flashes warns, then plays it all',
+      (tester) async {
+    await _pumpApp(tester);
+    final scope = AppScope.of(tester.element(find.byType(Scaffold).first));
+    await tester.runAsync(() => scope.preferences.savePlaylist(const Playlist(
+          id: 'storm-night',
+          name: 'Storm night',
+          effectIds: ['ocean', 'thunderstorm'],
+        )));
+    final message = const JSONMethodCodec().encodeMethodCall(
+      MethodCall('pushRouteInformation',
+          {'location': 'lumifx://app/playlist/Storm%20night'}),
+    );
+    await tester.binding.defaultBinaryMessenger
+        .handlePlatformMessage(SystemChannels.navigation.name, message, (_) {});
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Flashing lights'), findsOneWidget,
+        reason: 'the first effect is calm, but the playlist is not');
+    expect(scope.playback.status, PlaybackStatus.idle);
+    await tester.tap(find.text('Continue'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(scope.playback.playlist?.id, 'storm-night',
+        reason: 'the playlist plays, not only its first effect');
+    expect(scope.playback.status, PlaybackStatus.playing);
+    await scope.playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('voice commands play, start bedtime and stop in any language',
       (tester) async {
     await _pumpApp(tester);
