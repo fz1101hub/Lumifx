@@ -147,18 +147,24 @@ class _EffectSearchScreenState extends State<EffectSearchScreen> {
                 ],
               ),
               const SizedBox(height: 4),
-              Wrap(
-                spacing: 6,
-                runSpacing: 4,
-                children: [
-                  for (final collection in collections)
-                    FilterChip(
-                      label: Text(collection),
-                      selected: _collection == collection,
-                      onSelected: (on) =>
-                          setState(() => _collection = on ? collection : null),
-                    ),
-                ],
+              // One scrolling row: with every collection, wrapped chips
+              // would push the results off the screen.
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (final collection in collections)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 6),
+                        child: FilterChip(
+                          label: Text(collection),
+                          selected: _collection == collection,
+                          onSelected: (on) => setState(
+                              () => _collection = on ? collection : null),
+                        ),
+                      ),
+                  ],
+                ),
               ),
               const SizedBox(height: 12),
               if (results.isEmpty)
