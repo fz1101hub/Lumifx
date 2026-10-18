@@ -639,6 +639,20 @@ build before every store release.
       tune plays again. On a phone the keys stay big in every mode; the
       songs to learn scroll sideways.
 
+## This round: teeth timer in the routines, goodnight by name, best tune
+
+- [ ] Morning and evening › Start the morning routine: "Brush your teeth"
+      has a timer button; tap it: the two-minute light timer runs (with
+      Twinkle if the teeth tune is on). Let it finish and close: the step
+      is ticked and the timer button is gone. Stop it early instead: the
+      routine's lamps come back and the step is not ticked.
+- [ ] Bedtime ritual with a child "Mia" chosen and read aloud on: at the
+      guardian light the screen says "Goodnight, Mia!" and the phone says
+      it; with no child: "Goodnight!"; read aloud off: nothing is said.
+- [ ] Light piano › Repeat after me: after a tune of 3 notes, "Best: 3
+      notes" shows next to the length, and stays after leaving and coming
+      back.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it
