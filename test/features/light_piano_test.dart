@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lumifx/src/core/sound/melodies.dart';
 import 'package:lumifx/src/features/music_box/light_piano.dart';
@@ -43,5 +45,46 @@ void main() {
     expect(pianoNoteName('de', 6), 'H');
     expect(pianoNoteName('en', 6), 'B');
     expect(pianoNoteName('ja', 2), 'ミ');
+  });
+
+  test('Repeat after me grows by one note each time it is right', () {
+    final echo = PianoEcho(math.Random(3))..start();
+    expect(echo.keys, hasLength(PianoEcho.firstLength));
+    for (final (i, key) in echo.keys.indexed) {
+      expect(key, inInclusiveRange(0, pianoKeys.length - 1));
+      if (i > 0) {
+        expect((key - echo.keys[i - 1]).abs(), lessThanOrEqualTo(2),
+            reason: 'small steps');
+      }
+    }
+    final tune = echo.keys;
+    for (final key in tune.take(tune.length - 1)) {
+      expect(echo.press(key), EchoPress.right);
+    }
+    expect(echo.press(tune.last), EchoPress.done);
+    expect(echo.best, PianoEcho.firstLength);
+    echo.grow();
+    expect(echo.keys, hasLength(PianoEcho.firstLength + 1));
+    expect(echo.keys.take(tune.length), tune, reason: 'the same tune, longer');
+
+    // A wrong key starts the same tune again.
+    expect(echo.press(echo.keys.first), EchoPress.right);
+    final wrong = (echo.keys[1] + 1) % pianoKeys.length;
+    expect(echo.press(wrong), EchoPress.wrong);
+    expect(echo.played, 0);
+    expect(echo.keys, hasLength(PianoEcho.firstLength + 1));
+  });
+
+  test('a tune never repeats a note three times or grows past the limit', () {
+    final echo = PianoEcho(math.Random(8))..start();
+    for (var i = 0; i < 30; i++) {
+      echo.grow();
+    }
+    expect(echo.keys, hasLength(PianoEcho.maxLength));
+    for (var i = 2; i < echo.keys.length; i++) {
+      expect(
+          echo.keys[i] == echo.keys[i - 1] && echo.keys[i] == echo.keys[i - 2],
+          isFalse);
+    }
   });
 }

@@ -18,6 +18,7 @@ import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/core/weather/weather.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
+import 'package:lumifx/src/features/calm/breathing.dart';
 import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
@@ -969,6 +970,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Count the lights'), findsOneWidget);
     expect(find.text('Colours in another language'), findsOneWidget);
+    expect(find.text('Light memory'), findsOneWidget);
+    expect(find.text('Calm breathing'), findsOneWidget);
 
     await tester.tap(find.text('Light piano'));
     await tester.pumpAndSettle();
@@ -1323,6 +1326,15 @@ void main() {
     final (a, b) = quiz.paints;
     expect(find.text('What do ${a.word('en')} and ${b.word('en')} make?'),
         findsOneWidget);
+    // The two paints are shown, not faded as if they could not be used.
+    expect(
+        tester
+            .widget<Opacity>(find
+                .ancestor(
+                    of: find.text(a.word('en')), matching: find.byType(Opacity))
+                .first)
+            .opacity,
+        1);
     final wrong = quiz.choices.firstWhere((c) => c != quiz.target);
     await tester.tap(find.text(wrong.word('en')));
     await tester.pump();
@@ -1348,12 +1360,15 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('20 min'));
     await tester.pump();
+    final playback =
+        AppScope.of(tester.element(find.byType(NapLightScreen))).playback;
+    // Left by a lullaby earlier: it must not switch the nap light off.
+    playback.setSleepTimer(const Duration(minutes: 3));
     await tester.tap(find.text('Start the nap'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
-    final playback =
-        AppScope.of(tester.element(find.byType(NapLightScreen))).playback;
     expect(NapLight.restOf(playback.effect), const Duration(minutes: 20));
+    expect(playback.sleepTimer, isNull);
     expect(find.text('Rest until the light turns green'), findsOneWidget);
     expect(find.text('Green in 20 minutes'), findsOneWidget);
 
@@ -1369,6 +1384,17 @@ void main() {
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 2));
     expect(find.text('Start the nap'), findsOneWidget);
+
+    // The rest chosen comes back next time.
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Nap light'));
+    await tester.pumpAndSettle();
+    expect(
+        tester
+            .widget<ChoiceChip>(find.widgetWithText(ChoiceChip, '20 min'))
+            .selected,
+        isTrue);
   });
 
   testWidgets('the noise light turns red when it gets too loud',
@@ -1397,6 +1423,8 @@ void main() {
     expect(NoiseZone.of(playback.effect), NoiseZone.tooLoud);
     expect(find.text('Too loud!'), findsOneWidget);
     expect(find.text('Too loud once'), findsOneWidget);
+    expect(find.byType(MiniPlayer), findsNothing,
+        reason: 'the noise light plays only on its own screen');
 
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 2));
@@ -1404,10 +1432,30 @@ void main() {
     expect(playback.isPlaying, isFalse);
     expect(find.text('Start listening'), findsOneWidget);
 
-    // Leaving the screen stops listening, and the lamps.
+    // Something else stopping the lamps stops the listening too.
     await tester.tap(find.text('Start listening'));
     await tester.pump(const Duration(milliseconds: 500));
     expect(microphone.startCount, 2);
+    await playback.stop();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(microphone.stopped, isTrue);
+    expect(find.text('Start listening'), findsOneWidget);
+
+    // So does LumiFX going to the background.
+    await tester.tap(find.text('Start listening'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(microphone.startCount, 3);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await tester.pump(const Duration(seconds: 1));
+    expect(microphone.stopped, isTrue);
+    expect(playback.isPlaying, isFalse);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+
+    // Leaving the screen stops listening, and the lamps.
+    await tester.tap(find.text('Start listening'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(microphone.startCount, 4);
     await tester.pageBack();
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
@@ -1704,6 +1752,55 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets(
+      'the light piano plays a tune to repeat, one note longer each time',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const LightPianoScreen(seed: 4))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
+    final tune = (PianoEcho(math.Random(4))..start()).keys;
+    Finder key(int index) => find
+        .bySemanticsLabel(pianoNoteName('en', index))
+        .at(index == 7 ? 1 : 0);
+
+    await tester.tap(find.text('Repeat after me'));
+    await tester.pump();
+    expect(find.text('Listen…'), findsOneWidget);
+    expect(find.text('A tune of 3 notes'), findsOneWidget);
+    // Keys tapped while the piano plays count for nothing.
+    await tester.tap(key(tune.first));
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('Your turn!'), findsOneWidget);
+    expect(sound.calls.where((c) => c.startsWith('note')),
+        [for (final k in tune) 'note ${pianoKeys[k].midi}']);
+
+    for (final k in tune) {
+      await tester.tap(key(k));
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    expect(find.text('Bravo! One more note'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('A tune of 4 notes'), findsOneWidget);
+    expect(find.text('Listen…'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 4));
+    expect(find.text('Your turn!'), findsOneWidget);
+
+    // A wrong key: the same tune again.
+    await tester.tap(key((tune.first + 1) % pianoKeys.length));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Oops! Listen again'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('A tune of 4 notes'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 4));
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('the light piano records a tune and plays it back',
       (tester) async {
     final sound = FakeSoundPlayer();
@@ -1847,8 +1944,6 @@ void main() {
     expect(find.byType(MonsterSprayScreen), findsOneWidget);
     await tester.pageBack();
     await tester.pump(const Duration(milliseconds: 500));
-    expect(playback.effect.name, 'The story of Mia');
-    expect(find.text('Step 3 of 5'), findsOneWidget);
 
     Future<void> finish() async {
       playback.player!.advance(playback.effect.cycleLength);
@@ -1857,9 +1952,18 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
     }
 
+    // A minute of calm breathing.
+    expect(BreathingPattern.of(playback.effect),
+        (BreathingPattern.flowerCandle, 1));
+    expect(find.text('Step 3 of 6'), findsOneWidget);
+    expect(find.text('Smell the flower…'), findsOneWidget);
+    await finish();
+    expect(playback.effect.name, 'The story of Mia');
+    expect(find.text('Step 4 of 6'), findsOneWidget);
+
     await finish();
     expect(playback.effect.name, "Brahms's Lullaby");
-    expect(find.text('Step 4 of 5'), findsOneWidget);
+    expect(find.text('Step 5 of 6'), findsOneWidget);
     await finish();
     expect(MonsterHunt.isGuardian(playback.effect), isTrue);
     expect(playback.sleepTimer, const Duration(minutes: 30));

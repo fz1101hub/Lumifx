@@ -1021,7 +1021,7 @@
   "grownUpQuestion": "Para continuar, escribe el resultado de {a} + {b}.",
   "grownUpConfirm": "Confirmar",
   "ritual": "Ritual de buenas noches",
-  "ritualSubtitle": "Rutina, espray antimonstruos, un cuento, una canción de cuna y la luz guardiana en un toque",
+  "ritualSubtitle": "Rutina, espray antimonstruos, respiración tranquila, un cuento, una canción de cuna y la luz guardiana en un toque",
   "ritualDescription": "Cada noche los mismos pasos tranquilos, uno tras otro: elige los que le gustan a tu familia, la canción de cuna y cuánto se queda encendida la luz guardiana. El cuento de esta noche se inventa con el niño como protagonista.",
   "ritualStory": "El cuento de esta noche",
   "ritualStepOf": "Paso {step} de {total}",
@@ -1121,5 +1121,12 @@
   "narrationLunarNewYear1": "Farolillos rojos brillan a lo largo de la calle: es el Año Nuevo lunar.",
   "narrationLunarNewYear2": "¡Aquí llega el dragón! Baila de casa en casa, dorado y orgulloso.",
   "narrationLunarNewYear3": "¡Bong! Suena el gong, y los sobres rojos traen deseos de suerte para el año que empieza.",
-  "narrationLunarNewYear4": "Los fuegos artificiales florecen en rojo y dorado, y todos gritan: ¡feliz año nuevo!"
+  "narrationLunarNewYear4": "Los fuegos artificiales florecen en rojo y dorado, y todos gritan: ¡feliz año nuevo!",
+  "pianoEcho": "Repite después de mí",
+  "pianoEchoListen": "Escucha…",
+  "pianoEchoYourTurn": "¡Te toca!",
+  "pianoEchoBravo": "¡Bravo! Una nota más",
+  "pianoEchoOops": "¡Uy! Escucha otra vez",
+  "pianoEchoNotes": "Una melodía de {count} notas",
+  "noiseStopped": "El micrófono se ha detenido. Toca Empezar a escuchar para seguir."
 }

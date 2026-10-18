@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../app_scope.dart';
@@ -18,10 +20,19 @@ class NapLightScreen extends StatefulWidget {
 }
 
 class _NapLightScreenState extends State<NapLightScreen> {
-  var _minutes = 60;
+  int? _chosen;
+
+  /// The rest chosen here, else last time, else an hour.
+  int get _minutes {
+    final saved = AppScope.of(context).preferences.napMinutes;
+    return _chosen ?? (NapLight.choices.contains(saved) ? saved! : 60);
+  }
 
   Future<void> _start() async {
     final playback = AppScope.of(context).playback;
+    // A sleep timer left by a lullaby would switch the lamps off before
+    // they turn green.
+    playback.setSleepTimer(null);
     await playback.switchEffect(
         NapLight.effect(context.l10n.napLight, Duration(minutes: _minutes)));
     if (playback.status == PlaybackStatus.idle) {
@@ -66,7 +77,12 @@ class _NapLightScreenState extends State<NapLightScreen> {
                     ChoiceChip(
                       label: Text(l10n.sleepTimerMinutes(minutes)),
                       selected: _minutes == minutes,
-                      onSelected: (_) => setState(() => _minutes = minutes),
+                      onSelected: (_) {
+                        setState(() => _chosen = minutes);
+                        unawaited(AppScope.of(context)
+                            .preferences
+                            .setNapMinutes(minutes));
+                      },
                     ),
                 ],
               ),

@@ -13,6 +13,9 @@ enum RitualStep {
   /// The monster spray, on its own screen.
   monsterSpray(Icons.sanitizer_outlined),
 
+  /// A minute of calm breathing: smell the flower, blow out the candle.
+  breathing(Icons.spa_outlined),
+
   /// A story made up for tonight, the child its hero.
   story(Icons.auto_stories_outlined),
 
@@ -32,6 +35,7 @@ enum RitualStep {
   String title(AppLocalizations l10n) => switch (this) {
         routine => KidRoutine.evening.title(l10n),
         monsterSpray => l10n.monsterSpray,
+        breathing => l10n.breathe,
         story => l10n.ritualStory,
         lullaby => l10n.lullabies,
         guardian => l10n.guardianLight,

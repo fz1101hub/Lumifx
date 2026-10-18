@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../common/app_text.dart';
+import '../fun/noise_light.dart';
 import '../kids/kids_mode.dart';
 import 'effect_palette.dart';
 import 'playback_controller.dart';
@@ -146,9 +147,11 @@ class PlaybackShell extends StatelessWidget {
       listenable: Listenable.merge([controller, routes]),
       builder: (context, page) {
         final shownId = playerEffectId(routes.topRouteName);
-        // Kids mode has its own stop, and no way out to the player.
+        // Kids mode has its own stop, and no way out to the player; the
+        // noise light plays only while its own screen is open.
         final visible = controller.status != PlaybackStatus.idle &&
             !isKidsModeRoute(routes.topRouteName) &&
+            NoiseZone.of(controller.effect) == null &&
             (shownId == null || !controller.isShownBy(shownId));
         return Column(
           children: [

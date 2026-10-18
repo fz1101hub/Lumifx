@@ -1021,7 +1021,7 @@
   "grownUpQuestion": "Typ om door te gaan de uitkomst van {a} + {b}.",
   "grownUpConfirm": "Bevestigen",
   "ritual": "Slaapritueel",
-  "ritualSubtitle": "Routine, monsterspray, een verhaal, een slaapliedje en een wachtlicht met één tik",
+  "ritualSubtitle": "Routine, monsterspray, rustig ademen, een verhaal, een slaapliedje en een wachtlicht met één tik",
   "ritualDescription": "Elke avond dezelfde rustige stappen na elkaar: kies de stappen die jullie gezin fijn vindt, het slaapliedje en hoe lang het wachtlicht aan blijft. Het verhaal van vanavond wordt verzonnen met het kind als held.",
   "ritualStory": "Het verhaal van vanavond",
   "ritualStepOf": "Stap {step} van {total}",
@@ -1121,5 +1121,12 @@
   "narrationLunarNewYear1": "Rode lampionnen gloeien de hele straat langs: het is Maannieuwjaar.",
   "narrationLunarNewYear2": "Daar komt de draak! Hij danst van huis tot huis, goudkleurig en trots.",
   "narrationLunarNewYear3": "Bong! De gong klinkt, en rode enveloppen brengen geluk voor het nieuwe jaar.",
-  "narrationLunarNewYear4": "Vuurwerk bloeit op in rood en goud, en iedereen juicht: gelukkig nieuwjaar!"
+  "narrationLunarNewYear4": "Vuurwerk bloeit op in rood en goud, en iedereen juicht: gelukkig nieuwjaar!",
+  "pianoEcho": "Speel het na",
+  "pianoEchoListen": "Luister…",
+  "pianoEchoYourTurn": "Jouw beurt!",
+  "pianoEchoBravo": "Bravo! Nog een noot erbij",
+  "pianoEchoOops": "Oeps! Luister nog eens",
+  "pianoEchoNotes": "Een melodie van {count} noten",
+  "noiseStopped": "De microfoon is gestopt. Tik op Begin met luisteren om verder te gaan."
 }

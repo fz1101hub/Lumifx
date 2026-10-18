@@ -1021,7 +1021,7 @@
   "grownUpQuestion": "Para continuar, digite o resultado de {a} + {b}.",
   "grownUpConfirm": "Confirmar",
   "ritual": "Ritual da hora de dormir",
-  "ritualSubtitle": "Rotina, spray antimonstros, uma história, uma canção de ninar e a luz guardiã num toque",
+  "ritualSubtitle": "Rotina, spray antimonstros, respiração calma, uma história, uma canção de ninar e a luz guardiã num toque",
   "ritualDescription": "Toda noite os mesmos passos tranquilos, um depois do outro: escolha os que sua família gosta, a canção de ninar e quanto tempo a luz guardiã fica acesa. A história desta noite é inventada com a criança como protagonista.",
   "ritualStory": "A história desta noite",
   "ritualStepOf": "Passo {step} de {total}",
@@ -1121,5 +1121,12 @@
   "narrationLunarNewYear1": "Lanternas vermelhas brilham por toda a rua: é o Ano-Novo Lunar.",
   "narrationLunarNewYear2": "Lá vem o dragão! Ele dança de casa em casa, dourado e orgulhoso.",
   "narrationLunarNewYear3": "Bong! O gongo soa, e envelopes vermelhos trazem votos de sorte para o ano que chega.",
-  "narrationLunarNewYear4": "Fogos de artifício florescem em vermelho e dourado, e todos comemoram: feliz ano-novo!"
+  "narrationLunarNewYear4": "Fogos de artifício florescem em vermelho e dourado, e todos comemoram: feliz ano-novo!",
+  "pianoEcho": "Repita depois de mim",
+  "pianoEchoListen": "Escute…",
+  "pianoEchoYourTurn": "Sua vez!",
+  "pianoEchoBravo": "Bravo! Mais uma nota",
+  "pianoEchoOops": "Ops! Escute de novo",
+  "pianoEchoNotes": "Uma melodia de {count} notas",
+  "noiseStopped": "O microfone parou. Toque em Começar a ouvir para continuar."
 }

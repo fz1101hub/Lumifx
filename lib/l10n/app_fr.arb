@@ -1021,7 +1021,7 @@
   "grownUpQuestion": "Pour continuer, tape le résultat de {a} + {b}.",
   "grownUpConfirm": "Confirmer",
   "ritual": "Rituel du coucher",
-  "ritualSubtitle": "Routine, spray anti-monstres, une histoire, une berceuse et la lumière gardienne en un geste",
+  "ritualSubtitle": "Routine, spray anti-monstres, respiration calme, une histoire, une berceuse et la lumière gardienne en un geste",
   "ritualDescription": "Chaque soir les mêmes étapes calmes, l'une après l'autre : choisis celles que ta famille aime, la berceuse et combien de temps la lumière gardienne reste allumée. L'histoire du soir est inventée avec l'enfant pour héros.",
   "ritualStory": "L'histoire du soir",
   "ritualStepOf": "Étape {step} sur {total}",
@@ -1121,5 +1121,12 @@
   "narrationLunarNewYear1": "Des lanternes rouges brillent tout le long de la rue : c'est le Nouvel An lunaire.",
   "narrationLunarNewYear2": "Voici le dragon ! Il danse de maison en maison, doré et fier.",
   "narrationLunarNewYear3": "Bong ! Le gong résonne, et les enveloppes rouges apportent des vœux de chance pour l'année à venir.",
-  "narrationLunarNewYear4": "Des feux d'artifice éclosent en rouge et or, et tout le monde s'écrie : bonne année !"
+  "narrationLunarNewYear4": "Des feux d'artifice éclosent en rouge et or, et tout le monde s'écrie : bonne année !",
+  "pianoEcho": "Répète après moi",
+  "pianoEchoListen": "Écoute…",
+  "pianoEchoYourTurn": "À toi !",
+  "pianoEchoBravo": "Bravo ! Une note de plus",
+  "pianoEchoOops": "Oups ! Écoute encore",
+  "pianoEchoNotes": "Un air de {count} notes",
+  "noiseStopped": "Le micro s'est arrêté. Touche Commencer à écouter pour continuer."
 }

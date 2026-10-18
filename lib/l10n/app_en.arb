@@ -4055,7 +4055,7 @@
   "@ritual": {
     "description": "Home entry: the bedtime ritual, several bedtime steps one after the other"
   },
-  "ritualSubtitle": "Routine, monster spray, a story, a lullaby and a guardian light in one tap",
+  "ritualSubtitle": "Routine, monster spray, calm breathing, a story, a lullaby and a guardian light in one tap",
   "@ritualSubtitle": {
     "description": "Subtitle of the bedtime ritual"
   },
@@ -4519,5 +4519,38 @@
   "narrationLunarNewYear4": "Fireworks bloom in red and gold, and everyone cheers: Happy New Year!",
   "@narrationLunarNewYear4": {
     "description": "Read-along line of the Lunar New Year story"
+  },
+  "pianoEcho": "Repeat after me",
+  "@pianoEcho": {
+    "description": "Light piano mode: the piano plays a few notes and the child plays them back"
+  },
+  "pianoEchoListen": "Listen…",
+  "@pianoEchoListen": {
+    "description": "Repeat after me: the piano is playing the tune to repeat"
+  },
+  "pianoEchoYourTurn": "Your turn!",
+  "@pianoEchoYourTurn": {
+    "description": "Repeat after me: the child plays the tune back now"
+  },
+  "pianoEchoBravo": "Bravo! One more note",
+  "@pianoEchoBravo": {
+    "description": "Repeat after me: the tune was right; the next one has one more note"
+  },
+  "pianoEchoOops": "Oops! Listen again",
+  "@pianoEchoOops": {
+    "description": "Repeat after me: a wrong key; the tune plays again"
+  },
+  "pianoEchoNotes": "A tune of {count} notes",
+  "@pianoEchoNotes": {
+    "description": "Repeat after me: how long the tune to repeat is",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noiseStopped": "The microphone stopped. Tap Start listening to go on.",
+  "@noiseStopped": {
+    "description": "Noise light: the microphone stopped on its own (an error, another app took it)"
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,16 +18,29 @@ import 'music_box_screen.dart';
 /// lights a lamp in its colour; or learn a tune by following the glowing
 /// key.
 class LightPianoScreen extends StatefulWidget {
-  const LightPianoScreen({super.key});
+  const LightPianoScreen({this.seed, super.key});
+
+  /// Fixes the tunes of Repeat after me (tests).
+  final int? seed;
 
   @override
   State<LightPianoScreen> createState() => _LightPianoScreenState();
 }
 
+enum _Mode { free, learn, echo }
+
+/// Where Repeat after me is.
+enum _Echo { listen, yourTurn, bravo, oops }
+
 class _LightPianoScreenState extends State<LightPianoScreen> {
+  var _mode = _Mode.free;
   PianoLesson? _lesson;
   int? _pressed;
   var _missed = false;
+
+  late final _echo =
+      PianoEcho(widget.seed == null ? null : math.Random(widget.seed));
+  var _echoing = _Echo.listen;
 
   /// What was played while recording: when, and which key.
   final _recorded = <(Duration, int)>[];
@@ -85,7 +99,70 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
     }
   }
 
+  /// Plays the tune of Repeat after me, then lets the child play it back.
+  Future<void> _playEcho() async {
+    final generation = ++_generation;
+    setState(() => _echoing = _Echo.listen);
+    await Future<void>.delayed(const Duration(milliseconds: 700));
+    for (final key in _echo.keys) {
+      if (!mounted || generation != _generation) {
+        return;
+      }
+      unawaited(_press(key, replay: true));
+      await Future<void>.delayed(const Duration(milliseconds: 650));
+    }
+    if (mounted && generation == _generation) {
+      setState(() => _echoing = _Echo.yourTurn);
+    }
+  }
+
+  /// A key played back in Repeat after me.
+  Future<void> _echoPress(int index) async {
+    if (_echoing != _Echo.yourTurn) {
+      return;
+    }
+    final result = _echo.press(index);
+    unawaited(_press(index, replay: true));
+    if (result == EchoPress.right) {
+      return;
+    }
+    final generation = ++_generation;
+    setState(
+        () => _echoing = result == EchoPress.done ? _Echo.bravo : _Echo.oops);
+    unawaited(result == EchoPress.done
+        ? HapticFeedback.heavyImpact()
+        : HapticFeedback.mediumImpact());
+    await Future<void>.delayed(const Duration(milliseconds: 1400));
+    if (!mounted || generation != _generation || _mode != _Mode.echo) {
+      return;
+    }
+    if (result == EchoPress.done) {
+      _echo.grow();
+    } else {
+      _echo.again();
+    }
+    await _playEcho();
+  }
+
+  void _setMode(_Mode mode) {
+    setState(() {
+      _mode = mode;
+      _missed = false;
+      _recording = null;
+      _generation++;
+      _playingBack = false;
+      _lesson = mode == _Mode.learn ? PianoLesson(pianoSongs.first) : null;
+    });
+    if (mode == _Mode.echo) {
+      _echo.start();
+      unawaited(_playEcho());
+    }
+  }
+
   Future<void> _press(int index, {bool replay = false}) async {
+    if (_mode == _Mode.echo && !replay) {
+      return _echoPress(index);
+    }
     final playback = AppScope.of(context).playback;
     final key = pianoKeys[index];
     final recording = _recording;
@@ -141,31 +218,47 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
                       onChanged: preferences.setSoundOn,
                     ),
                   ),
-                SegmentedButton<bool>(
-                  segments: [
-                    ButtonSegment(
-                      value: false,
-                      icon: const Icon(Icons.piano_outlined),
-                      label: Text(l10n.pianoFree),
-                    ),
-                    ButtonSegment(
-                      value: true,
-                      icon: const Icon(Icons.school_outlined),
-                      label: Text(l10n.pianoLearn),
-                    ),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: [
+                    for (final (mode, icon, label) in [
+                      (_Mode.free, Icons.piano_outlined, l10n.pianoFree),
+                      (_Mode.learn, Icons.school_outlined, l10n.pianoLearn),
+                      (_Mode.echo, Icons.hearing_outlined, l10n.pianoEcho),
+                    ])
+                      ChoiceChip(
+                        avatar: Icon(icon),
+                        label: Text(label),
+                        selected: _mode == mode,
+                        onSelected: (_) => _setMode(mode),
+                      ),
                   ],
-                  selected: {lesson != null},
-                  onSelectionChanged: (learn) => setState(() {
-                    _missed = false;
-                    _recording = null;
-                    _generation++;
-                    _playingBack = false;
-                    _lesson =
-                        learn.first ? PianoLesson(pianoSongs.first) : null;
-                  }),
                 ),
                 const SizedBox(height: 12),
-                if (lesson == null)
+                if (_mode == _Mode.echo) ...[
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      switch (_echoing) {
+                        _Echo.listen => l10n.pianoEchoListen,
+                        _Echo.yourTurn => l10n.pianoEchoYourTurn,
+                        _Echo.bravo => l10n.pianoEchoBravo,
+                        _Echo.oops => l10n.pianoEchoOops,
+                      },
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleMedium,
+                    ),
+                  ),
+                  Text(
+                    l10n.pianoEchoNotes(_echo.keys.length),
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 8),
+                ],
+                if (_mode == _Mode.free)
                   Wrap(
                     alignment: WrapAlignment.center,
                     spacing: 12,
@@ -193,11 +286,11 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
                       ),
                     ],
                   ),
-                if (lesson == null) const SizedBox(height: 12),
+                if (_mode == _Mode.free) const SizedBox(height: 12),
                 if (lesson != null) ...[
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                  // One row that scrolls sideways, so the keys keep the
+                  // screen.
+                  _ChipRow(
                     children: [
                       for (final song in pianoSongs)
                         ChoiceChip(
@@ -245,7 +338,10 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
                               color: LightColor.fromHex(key.color).toColor(),
                               label: pianoNoteName(language, i),
                               pressed: _pressed == i,
-                              glowing: lesson?.next == i,
+                              glowing: lesson?.next == i ||
+                                  (_mode == _Mode.echo &&
+                                      _echoing == _Echo.listen &&
+                                      _pressed == i),
                               onTap: () => _press(i),
                             ),
                           ),
@@ -260,6 +356,24 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
       ),
     );
   }
+}
+
+/// Chips in one row that scrolls sideways.
+class _ChipRow extends StatelessWidget {
+  const _ChipRow({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (final child in children)
+              Padding(padding: const EdgeInsets.only(right: 8), child: child),
+          ],
+        ),
+      );
 }
 
 class _Key extends StatelessWidget {

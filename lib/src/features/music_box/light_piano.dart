@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../../core/effects/effect.dart';
 import '../../core/effects/effect_event.dart';
 import '../../core/sound/melodies.dart';
@@ -87,6 +89,93 @@ class PianoLesson {
     }
     _done++;
     return true;
+  }
+}
+
+/// What a key played in Repeat after me did.
+enum EchoPress {
+  /// Right so far; more notes to play.
+  right,
+
+  /// The last note of the tune: well done.
+  done,
+
+  /// A wrong key: listen again.
+  wrong,
+}
+
+/// Repeat after me: the piano plays a few notes and the child plays them
+/// back; each time it is right, the tune grows by one note. Notes move by
+/// small steps, like a tune a child can sing.
+class PianoEcho {
+  PianoEcho([math.Random? random]) : _random = random ?? math.Random();
+
+  final math.Random _random;
+  final _keys = <int>[];
+  var _played = 0;
+
+  /// How many notes a tune starts with, and the most it grows to.
+  static const firstLength = 3;
+  static const maxLength = 12;
+
+  /// The tune to repeat, as key indices.
+  List<int> get keys => List.unmodifiable(_keys);
+
+  /// The notes of the tune played back so far.
+  int get played => _played;
+
+  /// The longest tune repeated in this game.
+  int get best => _best;
+  var _best = 0;
+
+  /// A new tune of [firstLength] notes.
+  void start() {
+    _keys.clear();
+    for (var i = 0; i < firstLength; i++) {
+      _keys.add(_nextKey());
+    }
+    _played = 0;
+  }
+
+  /// One more note on the same tune, up to [maxLength].
+  void grow() {
+    if (_keys.length < maxLength) {
+      _keys.add(_nextKey());
+    }
+    _played = 0;
+  }
+
+  /// Back to the start of the same tune, to hear it again.
+  void again() => _played = 0;
+
+  EchoPress press(int key) {
+    if (_played >= _keys.length || key != _keys[_played]) {
+      _played = 0;
+      return EchoPress.wrong;
+    }
+    _played++;
+    if (_played < _keys.length) {
+      return EchoPress.right;
+    }
+    _best = math.max(_best, _keys.length);
+    return EchoPress.done;
+  }
+
+  /// Up to two keys away from the last note, never the same note three
+  /// times running.
+  int _nextKey() {
+    if (_keys.isEmpty) {
+      return _random.nextInt(5);
+    }
+    final last = _keys.last;
+    final twice = _keys.length >= 2 && _keys[_keys.length - 2] == last;
+    while (true) {
+      final key =
+          (last + _random.nextInt(5) - 2).clamp(0, pianoKeys.length - 1);
+      if (!(twice && key == last)) {
+        return key;
+      }
+    }
   }
 }
 

@@ -1021,7 +1021,7 @@
   "grownUpQuestion": "続けるには、{a} + {b} の答えを入力してください。",
   "grownUpConfirm": "確認",
   "ritual": "おやすみの儀式",
-  "ritualSubtitle": "したく、モンスターよけ、おはなし、子守歌、見守りライトをワンタップで",
+  "ritualSubtitle": "したく、モンスターよけ、しずかな呼吸、おはなし、子守歌、見守りライトをワンタップで",
   "ritualDescription": "毎晩おなじおだやかなステップを順番に。家族にあったステップ、子守歌、見守りライトの時間をえらびます。今夜のおはなしは、子どもが主人公の作りたてです。",
   "ritualStory": "今夜のおはなし",
   "ritualStepOf": "ステップ {step}/{total}",
@@ -1121,5 +1121,12 @@
   "narrationLunarNewYear1": "通りじゅうに赤いちょうちんが光ります。旧正月です。",
   "narrationLunarNewYear2": "龍がやってきた！金色にかがやき、むねをはって家から家へとおどります。",
   "narrationLunarNewYear3": "ボーン！どらが鳴り、赤いふくろが新しい年の幸運をとどけます。",
-  "narrationLunarNewYear4": "赤と金の花火が咲き、みんなが声をそろえます。「あけましておめでとう！」"
+  "narrationLunarNewYear4": "赤と金の花火が咲き、みんなが声をそろえます。「あけましておめでとう！」",
+  "pianoEcho": "まねしてひく",
+  "pianoEchoListen": "きいてね…",
+  "pianoEchoYourTurn": "きみの番！",
+  "pianoEchoBravo": "すごい！ひとつふえるよ",
+  "pianoEchoOops": "あれれ？もういちどきいてね",
+  "pianoEchoNotes": "{count}音のメロディ",
+  "noiseStopped": "マイクが止まりました。「聞きはじめる」をタップすると続けられます。"
 }

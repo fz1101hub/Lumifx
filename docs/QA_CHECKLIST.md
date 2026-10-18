@@ -611,6 +611,34 @@ build before every store release.
 - [ ] Search: type "storm": Thunderstorm shows right under the filters;
       the collections scroll sideways in one row.
 
+## This round: remembered choices, more kids games, breathing at bedtime, Repeat after me
+
+- [ ] Nap light: choose 90 min, go back, open it again: 90 min is
+      chosen. Noise light: choose Quiet, leave, come back: Quiet. Light
+      timers: switch the teeth tune off, leave, come back: still off.
+- [ ] Kids mode setup offers six games (piano, counting, colour words,
+      colour mixing, light memory, calm breathing); in kids mode they sit
+      in one row that scrolls sideways above the effects; each opens and
+      leads only back to kids mode.
+- [ ] Bedtime ritual with every step: after the monster spray, "Calm
+      breathing" (step 3 of 6): the lamps rise and fall for a minute with
+      "Smell the flower… / Blow out the candle…" read along; then the
+      story. Unticking Calm breathing skips it. The home subtitle names
+      the breathing step.
+- [ ] Play a lullaby with "Switch off" on, then start a 20 min nap
+      light: the lamps stay amber past the lullaby's length and turn
+      green at 20 minutes. Same with the noise light: it keeps going.
+- [ ] Noise light while listening: lock the phone or switch apps: the
+      microphone indicator goes away and the lamps go back; start an
+      effect with a Hue button: the noise light stops listening. No
+      mini-player shows on the noise light screen.
+- [ ] Light piano › Repeat after me: "Listen…", three notes play with
+      their key glowing and lamp flashing; keys tapped meanwhile do
+      nothing; "Your turn!": play them back: "Bravo! One more note", then
+      a tune of 4 notes; a wrong key: "Oops! Listen again" and the same
+      tune plays again. On a phone the keys stay big in every mode; the
+      songs to learn scroll sideways.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it
