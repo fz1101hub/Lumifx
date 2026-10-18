@@ -1006,5 +1006,18 @@
   "childName": "名前",
   "childrenEdit": "子どもたち",
   "childRename": "名前を変更",
-  "childRemoveConfirm": "{name}を、したくリストと星ごと削除しますか？"
+  "childRemoveConfirm": "{name}を、したくリストと星ごと削除しますか？",
+  "starShop": "星のおみせ",
+  "starShopBalance": "{count, plural, other{使える星 {count}こ}}",
+  "starShopEmpty": "ごほうびはおとなが追加します。アイス、おはなしもう1つ、公園へのおでかけ…",
+  "starShopAdd": "ごほうびを追加",
+  "starShopRewardName": "ごほうび",
+  "starShopCost": "ひつような星",
+  "starShopGet": "もらう",
+  "starShopEnjoy": "たのしんでね：{reward}！",
+  "starShopGrownUp": "おとなが確認します",
+  "starShopNeedMore": "{count, plural, other{あと{count}こ}}",
+  "starShopRemoveHint": "ごほうびを長押しすると削除できます（おとなが確認します）。",
+  "grownUpQuestion": "続けるには、{a} + {b} の答えを入力してください。",
+  "grownUpConfirm": "確認"
 }

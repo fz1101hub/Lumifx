@@ -57,4 +57,21 @@ void main() {
     await preferences.renameChild(preferences.children.first.id, 'Mia');
     expect(preferences.children.first.name, 'Mia');
   });
+
+  test('rewards are kept, checked and removed', () async {
+    final store = InMemoryKeyValueStore();
+    final preferences = PreferencesController(store: store);
+    await preferences.addReward('  Ice cream ', 5, 0);
+    await preferences.addReward('', 3, 0);
+    await preferences.addReward('Park', 0, 3);
+    await preferences.addReward('Film', 8, 99);
+    expect(
+        [for (final r in preferences.rewards) r.name], ['Ice cream', 'Film']);
+    expect(preferences.rewards.last.icon, 0, reason: 'unknown picture');
+    final again = PreferencesController(store: store);
+    await again.load();
+    expect(again.rewards.first.cost, 5);
+    await again.removeReward(again.rewards.first.id);
+    expect([for (final r in again.rewards) r.name], ['Film']);
+  });
 }

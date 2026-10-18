@@ -1006,5 +1006,18 @@
   "childName": "Naam",
   "childrenEdit": "Kinderen",
   "childRename": "Naam wijzigen",
-  "childRemoveConfirm": "{name} verwijderen met routines en sterren?"
+  "childRemoveConfirm": "{name} verwijderen met routines en sterren?",
+  "starShop": "Sterrenwinkel",
+  "starShopBalance": "{count, plural, =0{Nog geen sterren om uit te geven} =1{Eén ster om uit te geven} other{{count} sterren om uit te geven}}",
+  "starShopEmpty": "Een volwassene zet hier de beloningen: een ijsje, nog een verhaal, een uitje naar het park…",
+  "starShopAdd": "Beloning toevoegen",
+  "starShopRewardName": "Beloning",
+  "starShopCost": "Kost zoveel sterren",
+  "starShopGet": "Nemen",
+  "starShopEnjoy": "Geniet ervan: {reward}!",
+  "starShopGrownUp": "Een volwassene bevestigt",
+  "starShopNeedMore": "{count, plural, =1{nog één ster} other{nog {count} sterren}}",
+  "starShopRemoveHint": "Lang drukken op een beloning verwijdert hem (een volwassene bevestigt).",
+  "grownUpQuestion": "Typ om door te gaan de uitkomst van {a} + {b}.",
+  "grownUpConfirm": "Bevestigen"
 }

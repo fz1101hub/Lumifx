@@ -33,6 +33,8 @@ import '../paths/path_story.dart';
 import '../paths/path_story_screen.dart';
 import '../routines/kid_routine.dart';
 import '../routines/routines_screen.dart';
+import '../routines/star_shop.dart';
+import '../routines/star_shop_screen.dart';
 import '../tales/tale.dart';
 import '../tales/tale_maker_screen.dart';
 import '../timers/light_timer.dart';
@@ -88,6 +90,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = MorseScreen(playing: effect);
   } else if (LearnColour.of(effect) != null) {
     screen = ColourWordsScreen(playing: effect);
+  } else if (isRewardParty(effect)) {
+    screen = const StarShopScreen();
   } else if (KidRoutine.of(effect) != null) {
     screen = const RoutinesScreen();
   } else if (id.startsWith('${LightingEffect.generatedPrefix}simon')) {

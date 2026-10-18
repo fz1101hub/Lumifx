@@ -1006,5 +1006,18 @@
   "childName": "Nombre",
   "childrenEdit": "Niños",
   "childRename": "Cambiar el nombre",
-  "childRemoveConfirm": "¿Quitar a {name} con sus rutinas y estrellas?"
+  "childRemoveConfirm": "¿Quitar a {name} con sus rutinas y estrellas?",
+  "starShop": "Tienda de estrellas",
+  "starShopBalance": "{count, plural, =0{Todavía no hay estrellas para gastar} =1{Una estrella para gastar} other{{count} estrellas para gastar}}",
+  "starShopEmpty": "Un adulto añade aquí los premios: un helado, un cuento más, una salida al parque…",
+  "starShopAdd": "Añadir un premio",
+  "starShopRewardName": "Premio",
+  "starShopCost": "Estrellas que cuesta",
+  "starShopGet": "Conseguir",
+  "starShopEnjoy": "¡A disfrutar: {reward}!",
+  "starShopGrownUp": "Un adulto confirma",
+  "starShopNeedMore": "{count, plural, =1{falta una estrella} other{faltan {count} estrellas}}",
+  "starShopRemoveHint": "Una pulsación larga en un premio lo quita (confirma un adulto).",
+  "grownUpQuestion": "Para continuar, escribe el resultado de {a} + {b}.",
+  "grownUpConfirm": "Confirmar"
 }

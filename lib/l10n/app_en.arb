@@ -3975,5 +3975,80 @@
         "type": "String"
       }
     }
+  },
+  "starShop": "Star shop",
+  "@starShop": {
+    "description": "The star shop: stars earned buy rewards set by a grown-up"
+  },
+  "starShopBalance": "{count, plural, =0{No stars to spend yet} =1{One star to spend} other{{count} stars to spend}}",
+  "@starShopBalance": {
+    "description": "Star shop: stars the child can spend",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "starShopEmpty": "A grown-up adds the rewards here: an ice cream, one more story, a trip to the park…",
+  "@starShopEmpty": {
+    "description": "Star shop without rewards"
+  },
+  "starShopAdd": "Add a reward",
+  "@starShopAdd": {
+    "description": "Button: add a reward"
+  },
+  "starShopRewardName": "Reward",
+  "@starShopRewardName": {
+    "description": "Field: the reward"
+  },
+  "starShopCost": "Stars it costs",
+  "@starShopCost": {
+    "description": "Label: how many stars the reward costs"
+  },
+  "starShopGet": "Get it",
+  "@starShopGet": {
+    "description": "Button: get this reward with stars"
+  },
+  "starShopEnjoy": "Enjoy: {reward}!",
+  "@starShopEnjoy": {
+    "description": "A reward was bought",
+    "placeholders": {
+      "reward": {
+        "type": "String"
+      }
+    }
+  },
+  "starShopGrownUp": "A grown-up confirms",
+  "@starShopGrownUp": {
+    "description": "Title of the grown-up question in the star shop"
+  },
+  "starShopNeedMore": "{count, plural, =1{one more star} other{{count} more stars}}",
+  "@starShopNeedMore": {
+    "description": "Star shop: stars still missing for a reward",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "starShopRemoveHint": "A long press on a reward removes it (a grown-up confirms).",
+  "@starShopRemoveHint": {
+    "description": "How to remove a reward"
+  },
+  "grownUpQuestion": "To go on, type the result of {a} + {b}.",
+  "@grownUpQuestion": {
+    "description": "Grown-up check: type the result of a sum",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "grownUpConfirm": "Confirm",
+  "@grownUpConfirm": {
+    "description": "Button: a grown-up confirms"
   }
 }

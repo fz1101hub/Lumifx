@@ -1006,5 +1006,18 @@
   "childName": "Prénom",
   "childrenEdit": "Enfants",
   "childRename": "Changer le prénom",
-  "childRemoveConfirm": "Retirer {name} avec ses routines et ses étoiles ?"
+  "childRemoveConfirm": "Retirer {name} avec ses routines et ses étoiles ?",
+  "starShop": "Boutique des étoiles",
+  "starShopBalance": "{count, plural, =0{Pas encore d'étoiles à dépenser} =1{Une étoile à dépenser} other{{count} étoiles à dépenser}}",
+  "starShopEmpty": "Un adulte ajoute ici les récompenses : une glace, une histoire de plus, une sortie au parc…",
+  "starShopAdd": "Ajouter une récompense",
+  "starShopRewardName": "Récompense",
+  "starShopCost": "Prix en étoiles",
+  "starShopGet": "Prendre",
+  "starShopEnjoy": "Profite bien : {reward} !",
+  "starShopGrownUp": "Un adulte confirme",
+  "starShopNeedMore": "{count, plural, =1{encore une étoile} other{encore {count} étoiles}}",
+  "starShopRemoveHint": "Un appui long sur une récompense la retire (un adulte confirme).",
+  "grownUpQuestion": "Pour continuer, tape le résultat de {a} + {b}.",
+  "grownUpConfirm": "Confirmer"
 }

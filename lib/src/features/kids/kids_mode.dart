@@ -144,7 +144,7 @@ class KidsModeScreen extends StatelessWidget {
     final navigator = Navigator.of(context);
     final allowed = await showDialog<bool>(
       context: context,
-      builder: (_) => const _GrownUpGate(),
+      builder: (_) => const GrownUpGate(),
     );
     if (allowed == true) {
       await preferences.setKidsLocked(false);
@@ -286,15 +286,26 @@ class _KidsTile extends StatelessWidget {
   }
 }
 
-/// A sum too hard for small children, to let a grown-up out.
-class _GrownUpGate extends StatefulWidget {
-  const _GrownUpGate();
+/// A sum too hard for small children, to let a grown-up out (or confirm
+/// something only a grown-up may do, under [title]).
+class GrownUpGate extends StatefulWidget {
+  const GrownUpGate({this.title, super.key});
+
+  final String? title;
+
+  /// Whether a grown-up answered.
+  static Future<bool> ask(BuildContext context, {String? title}) async =>
+      await showDialog<bool>(
+        context: context,
+        builder: (_) => GrownUpGate(title: title),
+      ) ==
+      true;
 
   @override
-  State<_GrownUpGate> createState() => _GrownUpGateState();
+  State<GrownUpGate> createState() => _GrownUpGateState();
 }
 
-class _GrownUpGateState extends State<_GrownUpGate> {
+class _GrownUpGateState extends State<GrownUpGate> {
   final _random = math.Random();
   late final int _a = 11 + _random.nextInt(9);
   late final int _b = 6 + _random.nextInt(9);
@@ -319,11 +330,13 @@ class _GrownUpGateState extends State<_GrownUpGate> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return AlertDialog(
-      title: Text(l10n.kidsModeExit),
+      title: Text(widget.title ?? l10n.kidsModeExit),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(l10n.kidsGateQuestion(_a, _b)),
+          Text(widget.title == null
+              ? l10n.kidsGateQuestion(_a, _b)
+              : l10n.grownUpQuestion(_a, _b)),
           TextField(
             controller: _answer,
             autofocus: true,
@@ -341,7 +354,11 @@ class _GrownUpGateState extends State<_GrownUpGate> {
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(l10n.cancel),
         ),
-        FilledButton(onPressed: _check, child: Text(l10n.kidsGateOk)),
+        FilledButton(
+          onPressed: _check,
+          child: Text(
+              widget.title == null ? l10n.kidsGateOk : l10n.grownUpConfirm),
+        ),
       ],
     );
   }

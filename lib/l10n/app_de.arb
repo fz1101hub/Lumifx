@@ -1006,5 +1006,18 @@
   "childName": "Name",
   "childrenEdit": "Kinder",
   "childRename": "Namen ändern",
-  "childRemoveConfirm": "{name} mit Routinen und Sternen entfernen?"
+  "childRemoveConfirm": "{name} mit Routinen und Sternen entfernen?",
+  "starShop": "Sternenladen",
+  "starShopBalance": "{count, plural, =0{Noch keine Sterne zum Ausgeben} =1{Ein Stern zum Ausgeben} other{{count} Sterne zum Ausgeben}}",
+  "starShopEmpty": "Ein Erwachsener fügt hier die Belohnungen hinzu: ein Eis, eine Geschichte mehr, ein Ausflug in den Park…",
+  "starShopAdd": "Belohnung hinzufügen",
+  "starShopRewardName": "Belohnung",
+  "starShopCost": "Kostet so viele Sterne",
+  "starShopGet": "Holen",
+  "starShopEnjoy": "Viel Spaß: {reward}!",
+  "starShopGrownUp": "Ein Erwachsener bestätigt",
+  "starShopNeedMore": "{count, plural, =1{noch ein Stern} other{noch {count} Sterne}}",
+  "starShopRemoveHint": "Langes Drücken auf eine Belohnung entfernt sie (ein Erwachsener bestätigt).",
+  "grownUpQuestion": "Gib zum Fortfahren das Ergebnis von {a} + {b} ein.",
+  "grownUpConfirm": "Bestätigen"
 }

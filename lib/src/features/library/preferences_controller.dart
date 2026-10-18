@@ -11,6 +11,7 @@ import '../fun/countdown.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
 import '../routines/child.dart';
+import '../routines/star_shop.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
 
@@ -316,6 +317,33 @@ class PreferencesController extends ChangeNotifier {
 
   static const _maxStars = 800 * Child.maxChildren;
 
+  var _rewards = <Reward>[];
+
+  /// The star shop's rewards, the same for every child.
+  List<Reward> get rewards => List.unmodifiable(_rewards);
+
+  Future<void> addReward(String name, int cost, int icon) {
+    final reward = Reward.fromJson({
+      'id': 'r${DateTime.now().microsecondsSinceEpoch}',
+      'name': name,
+      'cost': cost,
+      'icon': icon,
+    });
+    if (reward == null || _rewards.length >= Reward.maxRewards) {
+      return Future.value();
+    }
+    _rewards = [..._rewards, reward];
+    return _changed();
+  }
+
+  Future<void> removeReward(String id) {
+    _rewards = [
+      for (final r in _rewards)
+        if (r.id != id) r
+    ];
+    return _changed();
+  }
+
   var _starsSpent = <String, int>{};
 
   /// Stars [child] spent in the star shop.
@@ -581,6 +609,12 @@ class PreferencesController extends ChangeNotifier {
       ];
       final active = json['activeChild'];
       _activeChild = active is String ? active : '';
+      final rewards = json['rewards'];
+      _rewards = [
+        if (rewards is List)
+          for (final item in rewards.take(Reward.maxRewards))
+            if (Reward.fromJson(item) case final reward?) reward,
+      ];
       final spent = json['starsSpent'];
       _starsSpent = {
         if (spent is Map)
@@ -878,6 +912,7 @@ class PreferencesController extends ChangeNotifier {
       'children': [for (final c in _children) c.toJson()],
       'activeChild': _activeChild,
       'starsSpent': _starsSpent,
+      'rewards': [for (final r in _rewards) r.toJson()],
       'notificationLights': _notificationLights.toJson(),
       'kidsLocked': _kidsLocked,
       'adventOpened': _adventOpened,

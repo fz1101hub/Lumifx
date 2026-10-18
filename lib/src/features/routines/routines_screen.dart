@@ -13,6 +13,7 @@ import '../effects/playback_controller.dart';
 import '../library/preferences_controller.dart';
 import 'child_picker.dart';
 import 'kid_routine.dart';
+import 'star_shop_screen.dart';
 
 /// The steps of [routine] a grown-up kept, in order.
 List<RoutineStep> stepsOf(
@@ -105,8 +106,22 @@ class RoutinesScreen extends StatelessWidget {
                   ),
                 ),
               const SizedBox(height: 16),
-              Text(l10n.routineStars(stars.length),
-                  style: theme.textTheme.titleMedium),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(l10n.routineStars(stars.length),
+                        style: theme.textTheme.titleMedium),
+                  ),
+                  TextButton.icon(
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (_) => const StarShopScreen()),
+                    ),
+                    icon: const Icon(Icons.storefront_outlined),
+                    label: Text(l10n.starShop),
+                  ),
+                ],
+              ),
               const SizedBox(height: 8),
               _Week(today: today, stars: stars),
             ],

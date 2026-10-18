@@ -58,6 +58,7 @@ import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
+import 'package:lumifx/src/features/routines/star_shop_screen.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
 import 'package:lumifx/src/features/timers/timers_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
@@ -1529,6 +1530,61 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
     await tester.pumpAndSettle();
     expect([for (final c in preferences.children) c.name], ['Anna']);
+  });
+
+  testWidgets('the star shop: a grown-up adds a reward, stars buy it',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const StarShopScreen())));
+    await tester.pumpAndSettle();
+    final scope = AppScope.of(tester.element(find.byType(StarShopScreen)));
+    final preferences = scope.preferences;
+    Future<void> grownUp() async {
+      final question = tester
+          .widgetList<Text>(find.byType(Text))
+          .map((t) => t.data ?? '')
+          .firstWhere((t) => t.contains(' + '));
+      expect(question, startsWith('To go on'));
+      final match = RegExp(r'(\d+) \+ (\d+)').firstMatch(question)!;
+      await tester.enterText(
+          find.descendant(
+              of: find.byType(AlertDialog), matching: find.byType(TextField)),
+          '${int.parse(match[1]!) + int.parse(match[2]!)}');
+      await tester.tap(find.widgetWithText(FilledButton, 'Confirm'));
+      await tester.pumpAndSettle();
+    }
+
+    expect(find.text('No stars to spend yet'), findsOneWidget);
+    await tester.tap(find.text('Add a reward'));
+    await tester.pumpAndSettle();
+    await grownUp();
+    await tester.enterText(find.byType(TextField), 'Ice cream');
+    await tester.pump();
+    for (var i = 0; i < 3; i++) {
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pump();
+    }
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(preferences.rewards.single.cost, 2);
+    expect(find.textContaining('2 more stars'), findsOneWidget);
+
+    preferences.earnStar('2026-10-17:morning');
+    preferences.earnStar('2026-10-17:evening');
+    preferences.earnStar('2026-10-18:morning');
+    await tester.pumpAndSettle();
+    expect(find.text('3 stars to spend'), findsOneWidget);
+    await tester.tap(find.text('Get it'));
+    await tester.pumpAndSettle();
+    await grownUp();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Enjoy: Ice cream!'), findsOneWidget);
+    expect(find.text('One star to spend'), findsOneWidget);
+    expect(scope.playback.isPlaying, isTrue, reason: 'a party of light');
+    await scope.playback.stop();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {
