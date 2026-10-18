@@ -33,8 +33,10 @@ Future<void> main() async {
     store: SecureCredentialStore(),
     discovery: discovery,
   )..initialize();
-  final preferences = PreferencesController(store: SharedPreferencesStore())
-    ..load();
+  // Loaded before the first frame: nothing can be changed (and saved over
+  // the stored scenes, profiles and stars) before they are read.
+  final preferences = PreferencesController(store: SharedPreferencesStore());
+  await preferences.load();
   runApp(
     LumiFxApp(
       bridge: bridge,

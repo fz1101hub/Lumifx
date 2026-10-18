@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/effects/engine/effect_renderer.dart';
@@ -121,4 +123,44 @@ void main() {
     await preferences.load();
     expect(preferences.favorites, isEmpty);
   });
+
+  test('a change while loading never wipes what was saved', () async {
+    final store = _SlowStore();
+    final first = PreferencesController(store: store);
+    await first.load();
+    await first.toggleFavorite('ocean');
+    await first.addChild('Mia');
+    await first.setKidsLocked(true);
+
+    // The next start: the read is slow and something changes meanwhile.
+    final second = PreferencesController(store: store);
+    store.hold();
+    final loading = second.load();
+    await second.toggleFavorite('fireplace');
+    expect(store.values.values.single, contains('ocean'),
+        reason: 'nothing written while loading');
+    store.release();
+    await loading;
+    await Future<void>.delayed(Duration.zero);
+
+    final third = PreferencesController(store: store);
+    await third.load();
+    expect(third.favorites, contains('ocean'));
+    expect(third.children.map((c) => c.name), contains('Mia'));
+    expect(third.kidsLocked, isTrue);
+  });
+}
+
+class _SlowStore extends InMemoryKeyValueStore {
+  Completer<void>? _gate;
+
+  void hold() => _gate = Completer<void>();
+  void release() => _gate?.complete();
+
+  @override
+  Future<String?> read(String key) async {
+    final value = values[key];
+    await _gate?.future;
+    return value;
+  }
 }
