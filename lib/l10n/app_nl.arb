@@ -916,5 +916,15 @@
   "colourWordsWhich": "Welke kleur is het?",
   "colourWordsRight": "Goed zo!",
   "colourWordsTryAgain": "Probeer het nog eens",
-  "colourWordsSoundOff": "Geluid staat uit: zet het aan om de woorden te horen"
+  "colourWordsSoundOff": "Geluid staat uit: zet het aan om de woorden te horen",
+  "monsterSpray": "Monsterspray",
+  "monsterSpraySubtitle": "Jaag de monsters weg voor het slapen, daarna een wachtlicht",
+  "monsterSprayDescription": "Er verstoppen zich een paar grappige monstertjes in de kamer. Tik op de spray om ze een voor een weg te jagen: bij elke spuit lichten de lampen op. Als ze allemaal weg zijn, waakt een warm wachtlicht over de nacht.",
+  "monsterSprayButton": "Sprayen!",
+  "monstersLeft": "{count, plural, =1{Nog één monster} other{Nog {count} monsters}}",
+  "monstersGone": "Allemaal weg! De kamer is veilig.",
+  "guardianLight": "Wachtlicht",
+  "guardianLightDescription": "Een warm, zacht wachtlicht blijft aan en dooft daarna vanzelf.",
+  "guardianLightFor": "Blijft aan voor",
+  "monsterSprayAgain": "Nog een keer sprayen"
 }

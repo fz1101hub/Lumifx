@@ -916,5 +916,15 @@
   "colourWordsWhich": "¿Qué color es?",
   "colourWordsRight": "¡Muy bien!",
   "colourWordsTryAgain": "Inténtalo otra vez",
-  "colourWordsSoundOff": "Los sonidos están desactivados: actívalos para oír las palabras"
+  "colourWordsSoundOff": "Los sonidos están desactivados: actívalos para oír las palabras",
+  "monsterSpray": "Espray antimonstruos",
+  "monsterSpraySubtitle": "Ahuyenta a los monstruos antes de dormir y luego una luz guardiana",
+  "monsterSprayDescription": "Unos monstruitos divertidos se esconden en la habitación. Toca el espray para ahuyentarlos uno a uno: las lámparas se iluminan con cada rociada. Cuando se hayan ido todos, una luz guardiana cálida vela por la noche.",
+  "monsterSprayButton": "¡Rocía!",
+  "monstersLeft": "{count, plural, =1{Queda un monstruo} other{Quedan {count} monstruos}}",
+  "monstersGone": "¡Se fueron todos! La habitación está a salvo.",
+  "guardianLight": "Luz guardiana",
+  "guardianLightDescription": "Una luz guardiana cálida y suave se queda encendida y luego se apaga sola poco a poco.",
+  "guardianLightFor": "Se queda encendida",
+  "monsterSprayAgain": "Rociar otra vez"
 }

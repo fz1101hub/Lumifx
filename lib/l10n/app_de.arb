@@ -916,5 +916,15 @@
   "colourWordsWhich": "Welche Farbe ist das?",
   "colourWordsRight": "Super gemacht!",
   "colourWordsTryAgain": "Versuch es noch mal",
-  "colourWordsSoundOff": "Töne sind aus: einschalten, um die Wörter zu hören"
+  "colourWordsSoundOff": "Töne sind aus: einschalten, um die Wörter zu hören",
+  "monsterSpray": "Monsterspray",
+  "monsterSpraySubtitle": "Vor dem Schlafen die Monster verjagen, dann ein Wächterlicht",
+  "monsterSprayDescription": "Ein paar lustige kleine Monster verstecken sich im Zimmer. Tippe auf das Spray, um sie eins nach dem anderen zu verjagen: Bei jedem Sprühstoß leuchten die Lampen auf. Wenn alle weg sind, wacht ein warmes Wächterlicht über die Nacht.",
+  "monsterSprayButton": "Sprühen!",
+  "monstersLeft": "{count, plural, =1{Noch ein Monster} other{Noch {count} Monster}}",
+  "monstersGone": "Alle weg! Das Zimmer ist sicher.",
+  "guardianLight": "Wächterlicht",
+  "guardianLightDescription": "Ein warmes, sanftes Wächterlicht bleibt an und geht dann von selbst langsam aus.",
+  "guardianLightFor": "Bleibt an für",
+  "monsterSprayAgain": "Noch mal sprühen"
 }

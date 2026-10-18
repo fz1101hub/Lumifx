@@ -916,5 +916,15 @@
   "colourWordsWhich": "C'est quelle couleur ?",
   "colourWordsRight": "Bravo !",
   "colourWordsTryAgain": "Essaie encore",
-  "colourWordsSoundOff": "Les sons sont coupés : active-les pour entendre les mots"
+  "colourWordsSoundOff": "Les sons sont coupés : active-les pour entendre les mots",
+  "monsterSpray": "Spray anti-monstres",
+  "monsterSpraySubtitle": "Chasse les monstres avant de dormir, puis une lumière gardienne",
+  "monsterSprayDescription": "De drôles de petits monstres se cachent dans la chambre. Touche le spray pour les chasser un par un : les lampes s'illuminent à chaque pschitt. Quand ils sont tous partis, une douce lumière gardienne veille sur la nuit.",
+  "monsterSprayButton": "Pschitt !",
+  "monstersLeft": "{count, plural, =1{Plus qu'un monstre} other{Encore {count} monstres}}",
+  "monstersGone": "Tous partis ! La chambre est sûre.",
+  "guardianLight": "Lumière gardienne",
+  "guardianLightDescription": "Une lumière gardienne douce et chaude reste allumée, puis s'éteint toute seule.",
+  "guardianLightFor": "Reste allumée pendant",
+  "monsterSprayAgain": "Recommencer"
 }

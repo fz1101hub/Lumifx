@@ -916,5 +916,15 @@
   "colourWordsWhich": "どの色かな？",
   "colourWordsRight": "よくできました！",
   "colourWordsTryAgain": "もういちど",
-  "colourWordsSoundOff": "サウンドがオフです。言葉を聞くにはオンにしてください"
+  "colourWordsSoundOff": "サウンドがオフです。言葉を聞くにはオンにしてください",
+  "monsterSpray": "モンスターよけスプレー",
+  "monsterSpraySubtitle": "ねる前にモンスターを追いはらって、見守りライトを",
+  "monsterSprayDescription": "お部屋に、おもしろい小さなモンスターがかくれています。スプレーをタップして、1ぴきずつ追いはらおう。シュッとするたびにランプが光ります。みんないなくなったら、あたたかい見守りライトが夜を守ります。",
+  "monsterSprayButton": "シュッ！",
+  "monstersLeft": "{count, plural, other{のこり{count}ひき}}",
+  "monstersGone": "みんないなくなった！お部屋はあんしん。",
+  "guardianLight": "見守りライト",
+  "guardianLightDescription": "あたたかく小さな見守りライトがついて、そのあと自然に消えていきます。",
+  "guardianLightFor": "つけておく時間",
+  "monsterSprayAgain": "もういちど"
 }

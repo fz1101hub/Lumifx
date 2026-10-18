@@ -34,6 +34,8 @@ import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/core/speech/speaker.dart';
+import 'package:lumifx/src/features/bedtime/monster_spray.dart';
+import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
@@ -1106,6 +1108,40 @@ void main() {
     expect(find.text('Which colour is it?'), findsOneWidget,
         reason: 'then the next word');
     await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the monster spray chases them away and leaves a guardian light',
+      (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Monster spray'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Monster spray'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Monster spray'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MonsterSprayScreen))).playback;
+    expect(MonsterHunt.isHunting(playback.effect), isTrue);
+    expect(find.text('5 monsters left'), findsOneWidget);
+    for (var i = 0; i < 4; i++) {
+      await tester.tap(find.text('Spray!'));
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(find.text('One monster left'), findsOneWidget);
+    await tester.tap(find.text('Spray!'));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('All gone! The room is safe.'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 2));
+    expect(MonsterHunt.isGuardian(playback.effect), isTrue);
+    expect(playback.sleepTimer, const Duration(minutes: 30));
+    await tester.tap(find.text('15 min'));
+    await tester.pump();
+    expect(playback.sleepTimer, const Duration(minutes: 15));
+    await playback.stop();
+    playback.setSleepTimer(null);
     await tester.pumpAndSettle();
   });
 

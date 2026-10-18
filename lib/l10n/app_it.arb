@@ -916,5 +916,15 @@
   "colourWordsWhich": "Quale colore è?",
   "colourWordsRight": "Bravo!",
   "colourWordsTryAgain": "Riprova",
-  "colourWordsSoundOff": "I suoni sono spenti: attivali per sentire le parole"
+  "colourWordsSoundOff": "I suoni sono spenti: attivali per sentire le parole",
+  "monsterSpray": "Spray anti-mostri",
+  "monsterSpraySubtitle": "Scaccia i mostri prima di dormire, poi una luce guardiana",
+  "monsterSprayDescription": "Alcuni buffi mostriciattoli si nascondono nella stanza. Tocca lo spray per scacciarli uno alla volta: a ogni spruzzo le lampade fanno una nuvoletta di luce. Quando sono spariti tutti, una calda luce guardiana veglia sulla notte.",
+  "monsterSprayButton": "Spruzza!",
+  "monstersLeft": "{count, plural, =1{Resta un mostro} other{Restano {count} mostri}}",
+  "monstersGone": "Spariti tutti! La stanza è al sicuro.",
+  "guardianLight": "Luce guardiana",
+  "guardianLightDescription": "Una luce guardiana calda e bassa resta accesa, poi si spegne piano da sola.",
+  "guardianLightFor": "Resta accesa per",
+  "monsterSprayAgain": "Spruzza ancora"
 }

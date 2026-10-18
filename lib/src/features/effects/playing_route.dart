@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../core/effects/effect.dart';
 import '../../core/sound/melody.dart';
 import '../../core/sound/soundscape.dart';
+import '../bedtime/monster_spray.dart';
+import '../bedtime/monster_spray_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
 import '../fun/advent.dart';
@@ -64,6 +66,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const CountdownsScreen();
   } else if (soundscapeOf(effect).melody case final melody?) {
     screen = MusicBoxScreen(festive: melody.instrument == Instrument.bells);
+  } else if (MonsterHunt.isHunting(effect) || MonsterHunt.isGuardian(effect)) {
+    screen = MonsterSprayScreen(playing: effect);
   } else if (CountingGame.isCounting(effect)) {
     screen = const CountingScreen();
   } else if (LearnColour.of(effect) != null) {

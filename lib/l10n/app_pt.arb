@@ -916,5 +916,15 @@
   "colourWordsWhich": "Que cor é essa?",
   "colourWordsRight": "Muito bem!",
   "colourWordsTryAgain": "Tente de novo",
-  "colourWordsSoundOff": "Os sons estão desligados: ative para ouvir as palavras"
+  "colourWordsSoundOff": "Os sons estão desligados: ative para ouvir as palavras",
+  "monsterSpray": "Spray antimonstros",
+  "monsterSpraySubtitle": "Espante os monstros antes de dormir e depois uma luz guardiã",
+  "monsterSprayDescription": "Alguns monstrinhos engraçados estão escondidos no quarto. Toque no spray para espantá-los um por um: as lâmpadas brilham a cada borrifada. Quando todos forem embora, uma luz guardiã quentinha cuida da noite.",
+  "monsterSprayButton": "Borrife!",
+  "monstersLeft": "{count, plural, =1{Falta um monstro} other{Faltam {count} monstros}}",
+  "monstersGone": "Foram todos embora! O quarto está seguro.",
+  "guardianLight": "Luz guardiã",
+  "guardianLightDescription": "Uma luz guardiã quentinha e fraca fica acesa e depois se apaga sozinha devagar.",
+  "guardianLightFor": "Fica acesa por",
+  "monsterSprayAgain": "Borrifar de novo"
 }

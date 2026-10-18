@@ -3587,5 +3587,50 @@
   "colourWordsSoundOff": "Sounds are off: turn them on to hear the words",
   "@colourWordsSoundOff": {
     "description": "Sounds are switched off; switch to turn them on"
+  },
+  "monsterSpray": "Monster spray",
+  "@monsterSpray": {
+    "description": "Bedtime game: a pretend spray that chases monsters out of the room"
+  },
+  "monsterSpraySubtitle": "Chase the monsters away before sleep, then a guardian light",
+  "@monsterSpraySubtitle": {
+    "description": "Subtitle of the monster spray"
+  },
+  "monsterSprayDescription": "Some funny little monsters are hiding in the room. Tap the spray to chase them away one by one: the lamps puff with every spray. When they have all gone, a warm guardian light watches over the night.",
+  "@monsterSprayDescription": {
+    "description": "Explains the monster spray"
+  },
+  "monsterSprayButton": "Spray!",
+  "@monsterSprayButton": {
+    "description": "The big spray button"
+  },
+  "monstersLeft": "{count, plural, =1{One monster left} other{{count} monsters left}}",
+  "@monstersLeft": {
+    "description": "Monster spray: monsters still hiding",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monstersGone": "All gone! The room is safe.",
+  "@monstersGone": {
+    "description": "Monster spray: all the monsters have gone"
+  },
+  "guardianLight": "Guardian light",
+  "@guardianLight": {
+    "description": "A warm low light left on for the night after the monster spray"
+  },
+  "guardianLightDescription": "A warm, low guardian light stays on, then fades out by itself.",
+  "@guardianLightDescription": {
+    "description": "Explains the guardian light"
+  },
+  "guardianLightFor": "Stays on for",
+  "@guardianLightFor": {
+    "description": "Label above the minutes the guardian light stays on"
+  },
+  "monsterSprayAgain": "Spray again",
+  "@monsterSprayAgain": {
+    "description": "Monster spray: play again"
   }
 }
