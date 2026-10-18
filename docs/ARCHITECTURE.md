@@ -222,7 +222,8 @@ from its id by `narrationOf` so its words are read along and aloud.
 `KidRoutine` (`lib/src/features/routines`) shows its steps with the
 `progress` event (a still bar across the lights, `value` of them lit, one
 after the other); its stars are day keys (`yyyy-mm-dd:routine`) in the
-preferences. `MonsterHunt` (`lib/src/features/bedtime/monster_spray.dart`)
+preferences, one set per child (see Child profiles below).
+`MonsterHunt` (`lib/src/features/bedtime/monster_spray.dart`)
 answers each spray with a live flash (below) and ends in a guardian
 scene under the sleep timer, which fades it out and switches the lights
 off. `Cinema` (`lib/src/features/cinema`) phases are non-looping ramps
@@ -233,7 +234,10 @@ mini-player opens the feature's own screen.
 
 `EffectPlayer.flashNow` (and `PlaybackController.flash`) overlays one
 colour on every light at once, for a set time, over whatever the effect
-renders: the memory game answers taps with it.
+renders: the memory game answers taps with it. With `at` (0 the first
+slot, 1 the last, like the renderer's `position` target) it lights only
+the slot nearest that place along the room: the light piano's keys and
+the Halloween party's red eyes.
 
 ### Around the house (`lib/src/core/hue/hue_house*.dart`)
 
@@ -259,8 +263,11 @@ already created.
 `KidsModeScreen` is a route named `/kids` under a `PopScope` that cannot
 pop; `PlaybackShell` hides the mini-player under it and `LinkHandler`
 neither opens screens nor imports while `preferences.kidsLocked`. The
-app reopens it at start while locked. Leaving takes a sum of two
-two-digit numbers.
+app reopens it at start while locked. Leaving takes a sum (11–19 plus
+6–14) in `GrownUpGate`; `GrownUpGate.ask(context, title:)` puts the same
+sum in front of grown-up actions elsewhere (the star shop), asked there
+in neutral words ("To go on, type the result of a + b.") rather than
+the kids mode ones.
 
 ### Voices (`lib/src/core/speech/voice_recordings.dart`)
 
@@ -348,6 +355,9 @@ and plays recordings even with Read aloud off.
   `ColourQuiz` picks a colour (never twice in a row) and three others, in
   any order. Speech follows the Sounds setting and uses the phone's own
   text-to-speech, as Read aloud does.
+- The preferences keep Count the lights' best score (`countingBest`, the
+  most right answers in one game) and the language chosen last in
+  Colours in another language (`learnLanguage`).
 - Tested in `test/features/learn_test.dart`.
 
 ### NFC stickers (`lib/src/core/nfc`, `android/.../NfcChannel.kt`)
@@ -413,6 +423,9 @@ and plays recordings even with Read aloud off.
   service flashes with LumiFX closed, without the Flutter engine. "Try
   it" runs the same flash with the stored config.
 - iOS has no equivalent: no app may see other apps' notifications.
+- The colour dots on the screen are named for screen readers in the
+  app's language: `NotificationLightsSettings.colorNames` maps each
+  colour offered to a `LearnColour`.
 - `test/features/notification_lights_test.dart` covers the settings, the
   config and the sync; the service needs a device.
 
@@ -450,6 +463,162 @@ and plays recordings even with Read aloud off.
 - `test/core/live_activity_test.dart` covers the channel and the app
   tests when it is shown; the lock screen needs a device.
 
+### Links to screens (`lib/src/features/links/screen_links.dart`)
+
+- `lumifx://app/go/<slug>` parses to a `ScreenLink` of an `AppScreen`
+  (ritual, routines, star-shop, story-maker, lullabies, monster-spray,
+  piano, games, cinema). `LinkHandler` pushes `screenOf(screen)` under
+  the route name `/go/<slug>`, unless that route is on top already or
+  kids mode is locked. The ready-made links (and so NFC stickers) offer
+  the ritual and the routines.
+
+### Secret messages in Morse (`lib/src/features/learn/morse*.dart`)
+
+- `MorseMessage` folds the typed text with `foldForSearch` (lower case,
+  accents removed), keeps the letters A–Z and digits of `morseCode` and
+  skips anything else; at most 30 characters are typed.
+- Timing is counted in units of 350 ms: a dot is one unit of light, a
+  dash three, with one dark unit between the signals of a letter, three
+  between letters and seven between words. The fastest it gets (dots)
+  is under 1.5 flashes a second, so the effect needs no flashing
+  warning.
+- `effect` is a generated, non-looping effect
+  (`gen:morse:<RRGGBB>:<text>`, the text URI-encoded) with a dim navy
+  `ambient_palette`, a one-second lead, then one `magic_flash` on every
+  light per signal in the chosen colour. `letterAt(position)` gives the
+  letter being sent at the player's position, which the screen lights
+  up with its code; `MorseMessage.of` parses the id back for the
+  mini-player. Tested in `test/features/morse_test.dart`.
+
+### Hot and cold (`lib/src/features/fun/hot_cold*.dart`)
+
+- Eleven levels, 0 (freezing) to 10 (boiling), starting at 2. Each level
+  is a looping one-colour scene (`gen:hotcold:<level>`) whose colour is
+  interpolated along six stops from icy blue to fiery red, with
+  brightness and speed rising with the heat; Warmer and Colder switch
+  between them with `switchEffect`, so the lights cross-fade.
+- `wordOf` puts the levels into five words (freezing, cold, warm, hot,
+  boiling); the `Speaker` says the word in the app's language only when
+  it changes and Sounds are on. Found it! plays
+  `gen:hotcold:found` once: a bright four-colour palette with white
+  confetti (`surprise`) for 8 s. Tested in
+  `test/features/hot_cold_test.dart`.
+
+- Guess mode: `MorseQuiz` draws a letter (never the same twice in a
+  row) and three others; the lamps flash the letter as a one-letter
+  `MorseMessage`, as often as asked, until the right one is tapped.
+
+### Light piano (`lib/src/features/music_box/light_piano*.dart`)
+
+- Recording keeps `(Duration, key)` pairs from a `Stopwatch` (at most
+  400); play-back replays them with the same gaps through the same
+  press path (sound and one-lamp flash), stopped by a generation
+  counter when the screen closes or the mode changes.
+
+- `pianoKeys` are the eight white keys from middle C (MIDI 60) to the
+  next C (72), each with a rainbow colour. A press calls
+  `PlaybackController.note` and `PlaybackController.flash` with `at`
+  set to the key's place (`index / 7`) for 900 ms, over the dim
+  `gen:piano` background, which starts with the first press.
+- `SoundPlayer.note` is single-note playback: `AudioplayersSoundPlayer`
+  synthesises one music-box note with `synthesizeMelody`, writes it once
+  as a WAV (`v1_note_<instrument>_<midi>`) and plays it on up to four
+  low-latency players (`PlayerMode.lowLatency`) taking turns, so quick
+  notes ring on together. It stays silent when Sounds are off.
+- Learn a song: `pianoKeyFor` folds a note to the key of the same pitch
+  class (the high C only for notes from 72 up), and `pianoSongs` keeps
+  Twinkle Twinkle and Frère Jacques first, then the lullabies and carols
+  whose notes all have a key. `PianoLesson` lights the next key and
+  moves on only on the right one. `pianoNoteName` names the keys do re
+  mi (Italian, Spanish, Portuguese, French with Ré), ドレミ (Japanese)
+  or by letter (H for B in German). Tested in
+  `test/features/light_piano_test.dart` and
+  `test/core/effects/effect_player_test.dart`.
+
+### Steps of your own and kept tales
+
+- Routine steps are `RoutineItem`s: the built-in `RoutineStep` enum and
+  `CustomStep` (id, name, picture index, colour; up to 12, stored in
+  `customSteps`). A routine's kept steps are keys: the enum name, or
+  `custom:<id>`; removing a custom step drops its key from every routine.
+- `Tale.toUserStory` turns a made-up story into a `UserStory` (the
+  place's palette, calm motion, 60 s, one moment per line with its
+  words), saved with `saveUserStory` like any story of the user's own.
+
+### Child profiles and the star shop (`lib/src/features/routines/child*.dart`, `star_shop*.dart`)
+
+- A `Child` is an id and a name (at most 30 characters); the preferences
+  keep up to six (`children`) and the active one (`activeChild`). There
+  are none until a grown-up adds one.
+- Per-child data is keyed `childId|key`: the routine steps
+  (`routineSteps`) and the stars (`yyyy-mm-dd:routine`). The first child
+  has an empty id and keeps bare keys, so the stars and steps saved
+  before profiles existed become theirs without a migration; the others
+  get `c<microseconds>` (an id never contains `|`). Removing a child
+  drops their keys and their spent stars. Up to 800 stars per possible
+  child (4,800) are kept in all, the oldest dropped first.
+- `starsSpent` counts what each child spent; the balance is the stars
+  earned minus those. The rewards (at most 20; a name, one of eight
+  pictures, a cost of 1–99) are the same for every child. Adding,
+  buying and removing a reward each go through `GrownUpGate.ask`; a
+  purchase spends the active child's stars and plays `gen:starshop`
+  once, a gold palette with confetti for 6 s.
+- The story maker offers the children's names as chips for the hero.
+  Tested in `test/features/children_test.dart`.
+
+### Bedtime ritual (`lib/src/features/bedtime/ritual*.dart`)
+
+- `RitualSettings` (in the preferences as `ritual`) holds the steps kept,
+  always in the ritual's order and at least one, the lullaby and the
+  guardian light's minutes (15, 30 or 60, as for the monster spray).
+- `BedtimeRitualScreen` runs the steps in turn and clears the sleep
+  timer at each one (a guardian timer left by the monster spray would
+  otherwise cut the story short). The routine and the monster spray are
+  pushed as their own screens and the ritual moves on when their route
+  pops. The story (`Tale.random` with the active child's name) and the
+  lullaby (`melodyEffect`, once) do not loop: the screen listens to
+  `PlaybackController.notices` and moves on at the `finished` notice for
+  the effect it started. The guardian light is
+  `MonsterHunt.guardian` under a sleep timer, which fades it out and
+  switches the lights off. Next step skips to the following one. Tested
+  in `test/features/ritual_test.dart`.
+
+### Halloween party and motion events (`lib/src/features/fun/haunted_party*.dart`, `lib/src/core/hue/hue_buttons.dart`)
+
+- `HueBridgeClient` reads the `data:` lines of the bridge's event stream
+  (`/eventstream/clip/v2`) once, for both `buttonEvents()` and the new
+  `motionEvents()`. `motionEventsOf` picks the `motion` resources, reads
+  `motion_report.motion` (newer firmware) or `motion.motion`, and names
+  the sensor by the last part of its `id_v1` (`/sensors/<id>`): the
+  older-API id that `fetchMotionSensors` lists (`HueMotionSensor`, as
+  for the night path).
+- `HauntedPartyScreen` listens only while the party is started and the
+  screen is open; when the stream fails or ends it listens again after
+  5 s. Motion from the chosen sensor scares unless the last scare was
+  less than 15 s ago (`HauntedParty.rest`); Scare now ignores the rest.
+- A scare is a white flash (400 ms), a green one (1.6 s) and red eyes
+  (1.2 s) on one random lamp through `flash(at:)`, with
+  `PlaybackController.thunder()` on the phone (silent when Sounds are
+  off). The room (`gen:haunted`) is a slow purple, green, midnight blue
+  and ember palette at 8–22 % with a faint 900 ms green glint on a random
+  light now and then: nothing flashes fast. Nothing is stored. Tested in
+  `test/features/haunted_party_test.dart`.
+
+### Quick Settings tiles, Android (`android/.../QuickTiles.kt`)
+
+- `LinkTileService` is a `TileService` that opens a `lumifx://` link in
+  `MainActivity` with `startActivityAndCollapse` (a `PendingIntent` on
+  Android 14+, an `Intent` before); on a locked phone it waits for
+  `unlockAndRun`. `StopTileService` opens `lumifx://app/stop` and
+  `BedtimeTileService` `lumifx://app/bedtime`, which `LinkHandler` takes
+  like any link (kids mode lets both through).
+- The manifest declares both services exported, protected by
+  `android.permission.BIND_QUICK_SETTINGS_TILE`, with the `QS_TILE`
+  action, an icon (`ic_tile_stop`, `ic_tile_bedtime`) and a label
+  (`tile_stop`, `tile_bedtime`) translated in `res/values-*/strings.xml`.
+  The user adds them from the quick settings edit panel; the app asks for
+  no permission and has no Dart side for them.
+
 ## Content policy
 
 Effects and visual assets should be original. Inspiration can come from broad themes and genres, but proprietary names, artwork, audio and authored sequences from third-party apps should not be copied.
@@ -457,7 +626,8 @@ Effects and visual assets should be original. Inspiration can come from broad th
 ### Localisation (`lib/l10n`)
 
 Strings are ARB files (`app_en.arb` is the template; Italian, German,
-French, Spanish and Dutch translations sit next to it) compiled by
+French, Spanish, Dutch, Brazilian Portuguese and Japanese translations sit
+next to it) compiled by
 `flutter gen-l10n` on every `flutter pub get` into `lib/l10n/generated/`
 (git-ignored, excluded from analysis and formatting).
 `test/l10n_completeness_test.dart` fails when a file misses a key or a

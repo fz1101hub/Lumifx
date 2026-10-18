@@ -114,3 +114,51 @@ String? _eventOf(Object? button) {
   final last = button['last_event'];
   return last is String ? last : null;
 }
+
+/// Motion seen (or no longer seen) by a motion sensor, by the sensor's
+/// older-API id (the one [HueMotionSensor] carries).
+class HueMotionEvent {
+  const HueMotionEvent({required this.sensorId, required this.motion});
+
+  final String sensorId;
+  final bool motion;
+}
+
+/// The motion reports in one `data:` line of the event stream.
+List<HueMotionEvent> motionEventsOf(String data) {
+  final Object? messages;
+  try {
+    messages = jsonDecode(data);
+  } on FormatException {
+    return const [];
+  }
+  if (messages is! List) {
+    return const [];
+  }
+  return [
+    for (final message in messages)
+      if (message is Map && message['data'] is List)
+        for (final resource in message['data'] as List)
+          if (resource is Map &&
+              resource['type'] == 'motion' &&
+              resource['id_v1'] is String)
+            if (_motionOf(resource['motion']) case final bool motion)
+              HueMotionEvent(
+                sensorId: (resource['id_v1'] as String).split('/').last,
+                motion: motion,
+              ),
+  ];
+}
+
+bool? _motionOf(Object? motion) {
+  if (motion is! Map) {
+    return null;
+  }
+  // Newer firmware reports `motion_report`, older `motion`.
+  final report = motion['motion_report'];
+  if (report is Map && report['motion'] is bool) {
+    return report['motion'] as bool;
+  }
+  final value = motion['motion'];
+  return value is bool ? value : null;
+}

@@ -447,6 +447,113 @@ build before every store release.
       learning game in turn, go back to the home: the mini-player opens
       that feature's own screen, where it is, not the player.
 
+## This round: Morse, hot and cold, piano, profiles, star shop, ritual, Halloween, quick tiles
+
+- [ ] Links to screens: write `lumifx://app/go/ritual` on an NFC sticker
+      (NFC stickers › Open the bedtime ritual); touching it opens the
+      ritual once (touching again does not stack a second one); in kids
+      mode nothing opens. Also `/go/piano`, `/go/star-shop` from an
+      automation app.
+- [ ] Piano: Record, play five notes with pauses, Stop recording, Play
+      it back: the same notes and the same pauses, the same lamps flash.
+      Learn a song cancels a recording.
+- [ ] Morse › Guess: Flash a letter (the lamps flash one letter), a wrong
+      choice says Try again, Flash it again repeats the same letter, the
+      right one shows Well done with the code; a new letter each time.
+- [ ] Routines › Choose the steps › Add a step "Feed the cat" with a
+      picture and colour: it is ticked for that routine, shows in the
+      routine with its picture and fills a lamp; untick it; delete it:
+      gone from every routine.
+- [ ] Story maker › at the end, Save to My stories: it appears under
+      Stories › My stories with the same words read along and plays
+      again; editable in the story editor.
+- [ ] Home: For the family starts with Bedtime ritual; Parties and games
+      lists Secret messages, Hot and cold, Light piano and Halloween
+      party.
+- [ ] Count the lights: answer four right: the score shows "New
+      record!"; leave and reopen (and once after restarting the app):
+      "Best: 4"; a worse game leaves it. Colours in another language
+      (phone not in Dutch): choose Nederlands, leave, restart the app:
+      Nederlands is chosen.
+- [ ] Notification lights with TalkBack: each colour dot is read by its
+      name in the phone's language ("green", "verde"…) and as selected.
+- [ ] Quick Settings tiles (Android): open the quick settings panel ›
+      edit (pencil), drag "Stop effect" and "Bedtime" in; with the phone
+      in Italian they read "Ferma effetto" and "Nanna", in Japanese
+      "エフェクト停止" and "おやすみ". Play Ocean on a room, unlocked:
+      Stop effect closes the panel, opens LumiFX, stops it and puts the
+      lights back. Bedtime starts bedtime with the last choices. Both with
+      LumiFX swiped away from the recent apps too.
+- [ ] Tiles on a locked phone (PIN or fingerprint set): tapping one asks
+      to unlock first, then acts; cancelling the unlock does nothing. Try
+      Android 14+ and an older version (the tile opens the app in two
+      different ways). In kids mode both tiles still work.
+- [ ] Secret messages (Parties and games) on a room, "SOS" in white:
+      after a breath the lamps flash three short, three long, three
+      short; a dash (~1 s) is clearly longer than a dot (~0.35 s), and
+      the pauses between letters and words are visible. The letter being
+      sent is lit up on screen with its code. Someone who did not see the
+      typing decodes "HI MUM" from the lamps with the alphabet table.
+      Note whether short gaps blur on a room (REST) compared with an
+      entertainment area. "Café!" sends CAFE; the field stops at 30
+      characters; red and blue work as colours.
+- [ ] Hot and cold on a room: it starts cold (light blue); eight taps
+      on Warmer go through pale blue and yellow to orange and red, each
+      step brighter and livelier; the phone speaks only when the word
+      changes (Warm, Hot!, Boiling!), not on every tap; Colder down to
+      deep blue says "Freezing!". In Italian: "Acqua", "Fuochino",
+      "Fuoco!". Settings › Sounds off: no voice, the lights still change.
+      Found it! says so and throws confetti of light for ~8 s.
+- [ ] Light piano on a room: each key's note sounds at once on the phone
+      (note any delay you can hear) and only one lamp flashes, in the
+      key's colour: the low C at one end of the room, the high C at the
+      other. Quick taps ring on together. Compare the lamp's lag on a
+      room (REST) with an entertainment area. Sounds off: no notes, the
+      screen offers to turn sounds on, the lamps still flash.
+- [ ] Piano › Learn a song › Twinkle Twinkle: the key to play glows; a
+      wrong key does not move on; the last note shows "Bravo!". Key names:
+      Italian, Spanish and Portuguese Do Re Mi, French Ré, Japanese ドレミ,
+      German C D E F G A H C, English and Dutch letters.
+- [ ] Child profiles, on a phone updated from the previous build with
+      stars and chosen routine steps: Morning and evening still shows
+      those stars and only "Add a child". Add "Sam": Sam has the old
+      stars and steps. Add "Alex": no stars, all steps; earn a star and
+      untick a step for Alex; back to Sam: unchanged. Restart the app:
+      the chosen child is still selected. The pencil renames; removing
+      Alex asks first and Alex's stars and steps are gone. At six children
+      Add disappears. The story maker shows the names as chips; a tap
+      fills the hero's name.
+- [ ] Star shop (Morning and evening › Star shop): Add a reward asks
+      "To go on, type the result of a + b." (not the kids mode words); a
+      wrong sum is refused. Add "Ice cream" with a picture, 3 stars. With
+      fewer stars the reward says how many more; with enough, Get it asks
+      the sum, then the lamps throw a short gold party and only the
+      active child's balance drops by 3. A long press removes a reward
+      after the sum. Leaving kids mode still asks with its own words.
+- [ ] Bedtime ritual, all five steps, Brahms, 15 minutes, a child
+      chosen: Start opens the evening routine; finishing it or going back
+      continues with the monster spray; closing that plays tonight's
+      story with the child's name as hero; when it ends the lullaby plays
+      once, then the guardian light fades out over 15 minutes and the
+      lights switch off. The monster spray's own guardian timer does not
+      cut the story short. Next step skips any step. With only one step
+      kept, it cannot be unticked; the choices come back next time.
+- [ ] Halloween party with a real Hue motion sensor (set to do nothing
+      in the Hue app for the test): the sensor is listed; Start the party
+      turns the room dim purple, green and midnight blue with a faint
+      green glint now and then. Walk past: within a second or two the
+      lamps flash white then green, the phone thunders (sounds on) and
+      red eyes glow on one lamp. Walk past again at once: nothing; after
+      15 s: another scare. Scare now works at any time.
+- [ ] Halloween party edge cases: unplug the bridge for 30 s, plug it
+      back: scares on motion come back by themselves. Leave the screen:
+      walking past does nothing. Without a motion sensor: the screen says
+      none was found and Scare now still works. Nothing flashes fast and
+      no flashing warning appears.
+- [ ] Mini-player: start Secret messages, Hot and cold, the piano and
+      the Halloween party in turn and go back to the home: the
+      mini-player opens each one's own screen.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

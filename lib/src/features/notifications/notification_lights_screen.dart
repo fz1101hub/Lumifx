@@ -361,6 +361,18 @@ class _ColorDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final name = NotificationLightsSettings.colorNames[hex]
+        ?.word(Localizations.localeOf(context).languageCode);
+    return Semantics(
+      button: onTap != null,
+      selected: selected,
+      label: name ?? hex,
+      excludeSemantics: true,
+      child: _dot(theme),
+    );
+  }
+
+  Widget _dot(ThemeData theme) {
     return Material(
       color: LightColor.fromHex(hex).toColor(),
       shape: CircleBorder(

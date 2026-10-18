@@ -120,16 +120,20 @@ class EffectPlayer {
   LightFrame? _flash;
   Duration _flashLength = Duration.zero;
   Duration _flashElapsed = Duration.zero;
+  double? _flashAt;
 
-  /// Every light shows [color] at once, over whatever the effect shows,
+  /// Every light shows [color] at once (or only the one [at] along the
+  /// room, 0 the first and 1 the last), over whatever the effect shows,
   /// for [length] of wall time (the last third fading out): a light that
   /// answers a tap. A new flash replaces the one showing.
   void flashNow(
     LightColor color, {
     double brightness = 1,
     Duration length = const Duration(milliseconds: 600),
+    double? at,
   }) {
     _flash = LightFrame(color, brightness.clamp(0.0, 1.0));
+    _flashAt = at?.clamp(0.0, 1.0);
     _flashLength = length;
     _flashElapsed = Duration.zero;
     if (_state == PlaybackState.playing) {
@@ -217,7 +221,12 @@ class EffectPlayer {
         _flash = null;
       } else {
         final alpha = t < 2 / 3 ? 1.0 : (1 - t) * 3;
-        rendered = [for (final frame in rendered) frame.blend(flash, alpha)];
+        final at = _flashAt;
+        final only = at == null ? null : (at * (rendered.length - 1)).round();
+        rendered = [
+          for (final (i, frame) in rendered.indexed)
+            only == null || i == only ? frame.blend(flash, alpha) : frame,
+        ];
       }
     }
     final step = wallTime == Duration.zero ? tick : wallTime;

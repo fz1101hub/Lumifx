@@ -33,6 +33,7 @@ class _CountingScreenState extends State<CountingScreen> {
   var _stage = _Stage.intro;
   String? _lit;
   var _missed = false;
+  var _newBest = false;
 
   /// Bumped to abandon blinks being shown.
   var _generation = 0;
@@ -52,8 +53,10 @@ class _CountingScreenState extends State<CountingScreen> {
   Future<void> _start() async {
     final l10n = context.l10n;
     final seed = widget.seed;
-    setState(
-        () => _game = CountingGame(seed == null ? null : math.Random(seed)));
+    setState(() {
+      _game = CountingGame(seed == null ? null : math.Random(seed));
+      _newBest = false;
+    });
     final background = CountingGame.background(l10n.countLights);
     if (_playback.effect.id != background.id ||
         _playback.status == PlaybackStatus.idle) {
@@ -116,7 +119,11 @@ class _CountingScreenState extends State<CountingScreen> {
     }
     unawaited(HapticFeedback.selectionClick());
     final generation = ++_generation;
-    setState(() => _stage = _Stage.right);
+    final best = scope.preferences.recordCountingScore(game.score);
+    setState(() {
+      _stage = _Stage.right;
+      _newBest = _newBest || best;
+    });
     _playback.flash(const LightColor(1, 0.85, 0.4),
         length: const Duration(milliseconds: 1200));
     if (scope.preferences.soundOn) {
@@ -143,6 +150,13 @@ class _CountingScreenState extends State<CountingScreen> {
                     size: 72, color: theme.colorScheme.primary),
                 const SizedBox(height: 16),
                 Text(l10n.countLightsRules, style: theme.textTheme.bodyLarge),
+                if (AppScope.of(context).preferences.countingBest > 0) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                      l10n.countBest(
+                          AppScope.of(context).preferences.countingBest),
+                      style: theme.textTheme.titleMedium),
+                ],
                 const SizedBox(height: 24),
                 FilledButton.icon(
                   style: FilledButton.styleFrom(
@@ -171,7 +185,9 @@ class _CountingScreenState extends State<CountingScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    l10n.countScore(game.score),
+                    _newBest
+                        ? '${l10n.countScore(game.score)} · ${l10n.countNewBest}'
+                        : l10n.countScore(game.score),
                     textAlign: TextAlign.center,
                     style: theme.textTheme.titleMedium,
                   ),

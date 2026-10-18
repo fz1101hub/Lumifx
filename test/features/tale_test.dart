@@ -122,4 +122,21 @@ void main() {
     };
     expect(kinds.length, greaterThan(10));
   });
+
+  test("a tale kept among the user's own stories keeps its words", () {
+    const tale = Tale(
+      hero: TaleHero.unicorn,
+      place: TalePlace.sea,
+      quest: TaleQuest.firefly,
+      name: 'Ada',
+    );
+    final story = tale.toUserStory(english);
+    expect(story.id, startsWith('story:'));
+    expect(story.name, 'The story of Ada');
+    expect(story.colors, TalePlace.sea.palette);
+    expect(story.moments, hasLength(5));
+    expect([for (final (_, words) in story.narration) words],
+        [for (final (_, words) in tale.narration(english)) words]);
+    expect(story.toEffect().cycleLength, const Duration(seconds: 60));
+  });
 }

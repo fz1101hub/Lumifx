@@ -20,6 +20,9 @@ abstract interface class SoundPlayer {
 
   /// One clap of thunder on top.
   Future<void> thunder({required double volume});
+
+  /// One note of [instrument] on top (the light piano).
+  Future<void> note(int midi, Instrument instrument, {required double volume});
 }
 
 class NoSoundPlayer implements SoundPlayer {
@@ -37,6 +40,9 @@ class NoSoundPlayer implements SoundPlayer {
   Future<void> setVolume(double volume) async {}
   @override
   Future<void> thunder({required double volume}) async {}
+  @override
+  Future<void> note(int midi, Instrument instrument,
+      {required double volume}) async {}
 }
 
 /// Plays generated WAV files with the audioplayers plugin. The files are
@@ -51,6 +57,10 @@ class AudioplayersSoundPlayer implements SoundPlayer {
 
   final _loops = <AudioPlayer>[];
   AudioPlayer? _thunder;
+
+  /// A few players taking turns, so quick notes ring on together.
+  final _notes = <AudioPlayer>[];
+  var _nextNote = 0;
   int _generation = 0;
   double _volume = 0.6;
 
@@ -218,6 +228,37 @@ class AudioplayersSoundPlayer implements SoundPlayer {
     final player = _thunder ??= AudioPlayer();
     try {
       await player.setAudioContext(_context);
+      await player.stop();
+      await player.play(DeviceFileSource(path), volume: volume);
+    } on Object catch (error) {
+      debugPrint('Sound: $error');
+    }
+  }
+
+  @override
+  Future<void> note(int midi, Instrument instrument,
+      {required double volume}) async {
+    final path = await _file(
+        'v1_note_${instrument.name}_$midi',
+        () => wavOf(synthesizeMelody(Melody(
+              id: 'note',
+              bpm: 120,
+              notes: [Note(midi, 1)],
+              instrument: instrument,
+            ))));
+    if (_notes.length < 4) {
+      final player = AudioPlayer();
+      _notes.add(player);
+      try {
+        await player.setPlayerMode(PlayerMode.lowLatency);
+        await player.setAudioContext(_context);
+        await player.setReleaseMode(ReleaseMode.stop);
+      } on Object catch (error) {
+        debugPrint('Sound: $error');
+      }
+    }
+    final player = _notes[_nextNote++ % _notes.length];
+    try {
       await player.stop();
       await player.play(DeviceFileSource(path), volume: volume);
     } on Object catch (error) {

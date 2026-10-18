@@ -7,9 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/weather/weather.dart';
+import '../bedtime/ritual.dart';
 import '../fun/countdown.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
+import '../routines/child.dart';
+import '../routines/custom_step.dart';
+import '../routines/star_shop.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
 
@@ -187,13 +191,129 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  var _children = <Child>[];
+  var _activeChild = '';
+
+  /// The children with a profile; none until a grown-up adds one.
+  List<Child> get children => List.unmodifiable(_children);
+
+  /// The child whose routines and stars show; null without profiles.
+  Child? get activeChild =>
+      _children.where((c) => c.id == _activeChild).firstOrNull ??
+      _children.firstOrNull;
+
+  /// The active child's id, empty without profiles (or for the first).
+  String get activeChildId => activeChild?.id ?? '';
+
+  /// Adds a child, who becomes the active one, and gives back their id.
+  Future<String> addChild(String name) async {
+    final id =
+        _children.isEmpty ? '' : 'c${DateTime.now().microsecondsSinceEpoch}';
+    final child = Child.fromJson({'id': id, 'name': name});
+    if (child == null || _children.length >= Child.maxChildren) {
+      return activeChildId;
+    }
+    _children = [..._children, child];
+    _activeChild = id;
+    await _changed();
+    return id;
+  }
+
+  Future<void> renameChild(String id, String name) {
+    final renamed = Child.fromJson({'id': id, 'name': name});
+    if (renamed == null) {
+      return Future.value();
+    }
+    _children = [for (final c in _children) c.id == id ? renamed : c];
+    return _changed();
+  }
+
+  /// Removes a child with their stars, routine steps and spent stars.
+  Future<void> removeChild(String id) {
+    _children = [
+      for (final c in _children)
+        if (c.id != id) c
+    ];
+    _stars = [
+      for (final key in _stars)
+        if (!_belongsTo(key, id)) key
+    ];
+    _routineSteps = {
+      for (final MapEntry(:key, :value) in _routineSteps.entries)
+        if (!_belongsTo(key, id)) key: value,
+    };
+    _starsSpent = {..._starsSpent}..remove(id);
+    if (_activeChild == id) {
+      _activeChild = _children.firstOrNull?.id ?? '';
+    }
+    return _changed();
+  }
+
+  Future<void> setActiveChild(String id) {
+    _activeChild = id;
+    return _changed();
+  }
+
+  /// [key] of [child]: as it is for the first child (or without
+  /// profiles), with the child's id in front for the others.
+  static String _ofChild(String child, String key) =>
+      child.isEmpty ? key : '$child|$key';
+
+  static bool _belongsTo(String key, String child) =>
+      child.isEmpty ? !key.contains('|') : key.startsWith('$child|');
+
+  var _customSteps = <CustomStep>[];
+
+  /// The steps a grown-up made, for any routine.
+  List<CustomStep> get customSteps => List.unmodifiable(_customSteps);
+
+  /// Makes a step; null when there are too many or the name is empty.
+  Future<CustomStep?> addCustomStep(
+      String name, int iconIndex, String color) async {
+    final step = CustomStep.fromJson({
+      'id': '${DateTime.now().microsecondsSinceEpoch}',
+      'name': name,
+      'icon': iconIndex,
+      'color': color,
+    });
+    if (step == null || _customSteps.length >= CustomStep.maxSteps) {
+      return null;
+    }
+    _customSteps = [..._customSteps, step];
+    await _changed();
+    return step;
+  }
+
+  /// Removes a step a grown-up made, from every routine too.
+  Future<void> removeCustomStep(String id) {
+    final key = 'custom:$id';
+    _customSteps = [
+      for (final s in _customSteps)
+        if (s.id != id) s
+    ];
+    _routineSteps = {
+      for (final MapEntry(key: routine, value: steps) in _routineSteps.entries)
+        routine: [
+          for (final s in steps)
+            if (s != key) s
+        ],
+    };
+    return _changed();
+  }
+
   var _routineSteps = <String, List<String>>{};
 
-  /// The steps a grown-up kept in [routine] (by name); null: all of them.
-  List<String>? routineSteps(String routine) => _routineSteps[routine];
+  /// The steps a grown-up kept in [routine] (by name) for [child] (the
+  /// active one by default); null: all of them.
+  List<String>? routineSteps(String routine, {String? child}) =>
+      _routineSteps[_ofChild(child ?? activeChildId, routine)];
 
-  Future<void> setRoutineSteps(String routine, List<String> steps) {
-    _routineSteps = {..._routineSteps, routine: steps.take(20).toList()};
+  Future<void> setRoutineSteps(String routine, List<String> steps,
+      {String? child}) {
+    _routineSteps = {
+      ..._routineSteps,
+      _ofChild(child ?? activeChildId, routine): steps.take(20).toList(),
+    };
     return _changed();
   }
 
@@ -209,19 +329,87 @@ class PreferencesController extends ChangeNotifier {
 
   var _stars = <String>[];
 
-  /// The stars earned, one per routine and day (`yyyy-mm-dd:routine`).
-  Set<String> get stars => _stars.toSet();
+  /// The stars the active child earned, one per routine and day
+  /// (`yyyy-mm-dd:routine`).
+  Set<String> get stars => starsOf(activeChildId);
 
-  /// Gives the star of [key] unless it was given already; true if new.
-  bool earnStar(String key) {
-    if (_stars.contains(key)) {
+  /// The stars [child] earned.
+  Set<String> starsOf(String child) => {
+        for (final key in _stars)
+          if (_belongsTo(key, child))
+            child.isEmpty ? key : key.substring(child.length + 1),
+      };
+
+  /// Gives the active child (or [child]) the star of [key] unless it was
+  /// given already; true if new.
+  bool earnStar(String key, {String? child}) {
+    final stored = _ofChild(child ?? activeChildId, key);
+    if (_stars.contains(stored)) {
       return false;
     }
-    // A year of stars is plenty to keep.
-    _stars = [..._stars, key];
-    if (_stars.length > 800) {
-      _stars = _stars.sublist(_stars.length - 800);
+    // A year of stars for each child is plenty to keep.
+    _stars = [..._stars, stored];
+    if (_stars.length > _maxStars) {
+      _stars = _stars.sublist(_stars.length - _maxStars);
     }
+    unawaited(_changed());
+    return true;
+  }
+
+  static const _maxStars = 800 * Child.maxChildren;
+
+  var _ritual = const RitualSettings();
+
+  /// How the bedtime ritual goes.
+  RitualSettings get ritual => _ritual;
+
+  Future<void> setRitual(RitualSettings settings) {
+    _ritual = settings;
+    return _changed();
+  }
+
+  var _rewards = <Reward>[];
+
+  /// The star shop's rewards, the same for every child.
+  List<Reward> get rewards => List.unmodifiable(_rewards);
+
+  Future<void> addReward(String name, int cost, int icon) {
+    final reward = Reward.fromJson({
+      'id': 'r${DateTime.now().microsecondsSinceEpoch}',
+      'name': name,
+      'cost': cost,
+      'icon': icon,
+    });
+    if (reward == null || _rewards.length >= Reward.maxRewards) {
+      return Future.value();
+    }
+    _rewards = [..._rewards, reward];
+    return _changed();
+  }
+
+  Future<void> removeReward(String id) {
+    _rewards = [
+      for (final r in _rewards)
+        if (r.id != id) r
+    ];
+    return _changed();
+  }
+
+  var _starsSpent = <String, int>{};
+
+  /// Stars [child] spent in the star shop.
+  int starsSpent(String child) => _starsSpent[child] ?? 0;
+
+  /// The stars [child] can still spend.
+  int starBalance(String child) =>
+      (starsOf(child).length - starsSpent(child)).clamp(0, 1 << 30);
+
+  /// Spends [cost] of [child]'s stars; false when there are not enough.
+  bool spendStars(String child, int cost) {
+    if (cost <= 0 || starBalance(child) < cost) {
+      return false;
+    }
+    _starsSpent = {..._starsSpent, child: starsSpent(child) + cost};
     unawaited(_changed());
     return true;
   }
@@ -262,6 +450,31 @@ class PreferencesController extends ChangeNotifier {
 
   Future<void> removeNaturalLight(String id) {
     _naturalLights = [..._naturalLights.where((i) => i != id)];
+    return _changed();
+  }
+
+  int _countingBest = 0;
+
+  /// The most right answers in one game of Count the lights.
+  int get countingBest => _countingBest;
+
+  /// Keeps [score] if it beats the best; true when it does.
+  bool recordCountingScore(int score) {
+    if (score <= _countingBest) {
+      return false;
+    }
+    _countingBest = score;
+    unawaited(_changed());
+    return true;
+  }
+
+  String? _learnLanguage;
+
+  /// The language chosen last in Colours in another language.
+  String? get learnLanguage => _learnLanguage;
+
+  Future<void> setLearnLanguage(String code) {
+    _learnLanguage = code;
     return _changed();
   }
 
@@ -435,10 +648,37 @@ class PreferencesController extends ChangeNotifier {
       _routineSteps = {
         if (routines is Map)
           for (final MapEntry(:key, :value) in routines.entries)
-            if (key is String && value is List && key.length <= 20)
+            if (key is String && value is List && key.length <= 60)
               key: _strings(value).take(20).toList(),
       };
-      _stars = _strings(json['stars']).take(800).toList();
+      _stars = _strings(json['stars']).take(_maxStars).toList();
+      final children = json['children'];
+      _children = [
+        if (children is List)
+          for (final item in children.take(Child.maxChildren))
+            if (Child.fromJson(item) case final child?) child,
+      ];
+      final active = json['activeChild'];
+      _activeChild = active is String ? active : '';
+      _ritual = RitualSettings.fromJson(json['ritual']);
+      final custom = json['customSteps'];
+      _customSteps = [
+        if (custom is List)
+          for (final item in custom.take(CustomStep.maxSteps))
+            if (CustomStep.fromJson(item) case final step?) step,
+      ];
+      final rewards = json['rewards'];
+      _rewards = [
+        if (rewards is List)
+          for (final item in rewards.take(Reward.maxRewards))
+            if (Reward.fromJson(item) case final reward?) reward,
+      ];
+      final spent = json['starsSpent'];
+      _starsSpent = {
+        if (spent is Map)
+          for (final MapEntry(:key, :value) in spent.entries)
+            if (key is String && value is int && value >= 0) key: value,
+      };
       _notificationLights =
           NotificationLightsSettings.fromJson(json['notificationLights']);
       final kids = json['kidsEffects'];
@@ -448,6 +688,11 @@ class PreferencesController extends ChangeNotifier {
           .where((id) => id.length <= 80)
           .take(20)
           .toList();
+      final counting = json['countingBest'];
+      _countingBest =
+          counting is int && counting > 0 && counting < 10000 ? counting : 0;
+      final learn = json['learnLanguage'];
+      _learnLanguage = learn is String && learn.length <= 5 ? learn : null;
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
       final buttons = json['buttonActions'];
@@ -716,10 +961,18 @@ class PreferencesController extends ChangeNotifier {
       'readAloud': _readAloud,
       'weatherPlace': _weatherPlace?.toJson(),
       'simonBest': _simonBest,
+      'countingBest': _countingBest,
+      'learnLanguage': _learnLanguage,
       'naturalLights': _naturalLights,
       'kidsEffects': _kidsEffects,
       'routineSteps': _routineSteps,
       'stars': _stars,
+      'children': [for (final c in _children) c.toJson()],
+      'activeChild': _activeChild,
+      'starsSpent': _starsSpent,
+      'rewards': [for (final r in _rewards) r.toJson()],
+      'ritual': _ritual.toJson(),
+      'customSteps': [for (final s in _customSteps) s.toJson()],
       'notificationLights': _notificationLights.toJson(),
       'kidsLocked': _kidsLocked,
       'adventOpened': _adventOpened,

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../../core/effects/effect.dart';
 import '../../core/effects/effect_event.dart';
 import '../common/app_text.dart';
+import '../library/user_scene.dart';
+import '../library/user_story.dart';
 
 /// Who a made-up story is about.
 enum TaleHero {
@@ -177,6 +179,37 @@ class Tale {
   }
 
   String title(AppLocalizations l10n) => l10n.taleTitle(name);
+
+  /// The tale kept among the user's own stories, to play again: the
+  /// place's colours, the same words, a light for each line.
+  UserStory toUserStory(AppLocalizations l10n) {
+    final lines = narration(l10n);
+    final kinds = [
+      (StoryMomentKind.wander, hero.color),
+      (StoryMomentKind.sparkles, place.palette.last),
+      (StoryMomentKind.darkness, null),
+      (StoryMomentKind.spell, '#FFE7A3'),
+      (StoryMomentKind.wordsOnly, null),
+    ];
+    return UserStory(
+      id: UserStory.newId(),
+      name: UserStory.clip(title(l10n), UserStory.maxName),
+      colors: place.palette,
+      motion: SceneMotion.calm,
+      length: UserStory.defaultLength,
+      moments: [
+        for (final ((at, words), (kind, color)) in [
+          for (var i = 0; i < lines.length; i++) (lines[i], kinds[i]),
+        ])
+          StoryMoment(
+            at: at,
+            kind: kind,
+            color: color,
+            words: UserStory.clip(words, UserStory.maxWords),
+          ),
+      ],
+    );
+  }
 
   /// The words, with the second each line starts.
   List<(int, String)> narration(AppLocalizations l10n) => [

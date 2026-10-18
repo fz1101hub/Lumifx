@@ -1,6 +1,7 @@
 import '../../core/color/light_color.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_models.dart';
+import '../learn/colour_words.dart';
 
 /// An app whose notifications flash the lights, and in which colour.
 class NotificationRule {
@@ -79,6 +80,18 @@ class NotificationLightsSettings {
     '#25D366', '#0A84FF', '#FF3B30', '#FFD60A', '#AF52DE', '#FF9500', //
     '#FF6FB5', '#FFFFFF',
   ];
+
+  /// The name of each of [colors], for screen readers.
+  static const colorNames = {
+    '#25D366': LearnColour.green,
+    '#0A84FF': LearnColour.blue,
+    '#FF3B30': LearnColour.red,
+    '#FFD60A': LearnColour.yellow,
+    '#AF52DE': LearnColour.purple,
+    '#FF9500': LearnColour.orange,
+    '#FF6FB5': LearnColour.pink,
+    '#FFFFFF': LearnColour.white,
+  };
 
   NotificationLightsSettings copyWith({
     bool? enabled,

@@ -17,6 +17,7 @@ import '../../core/hue/hue_models.dart';
 import '../../core/hue/hue_exceptions.dart';
 import '../../core/hue/hue_schedules.dart';
 import '../../core/screen_wake.dart';
+import '../../core/sound/melody.dart';
 import '../../core/sound/sound_player.dart';
 import '../../core/sound/soundscape.dart';
 import '../bridge/bridge_controller.dart';
@@ -508,15 +509,35 @@ class PlaybackController extends ChangeNotifier {
   bool get isBusy => _status == PlaybackStatus.starting;
   EffectPlayer? get player => _player;
 
-  /// Every light shows [color] at once for [length], over the effect: a
-  /// game's answer to a tap. Nothing happens unless an effect plays.
+  /// Every light (or only the one [at] along the room, 0 to 1) shows
+  /// [color] at once for [length], over the effect: a game's answer to a
+  /// tap. Nothing happens unless an effect plays.
   void flash(
     LightColor color, {
     Duration length = const Duration(milliseconds: 600),
+    double? at,
   }) {
     if (_status == PlaybackStatus.playing) {
-      _player?.flashNow(color, length: length);
+      _player?.flashNow(color, length: length, at: at);
     }
+  }
+
+  /// A clap of thunder on the phone (a scare at a Halloween party). Silent
+  /// when sounds are off.
+  Future<void> thunder() async {
+    if (!_preferences.soundOn) {
+      return;
+    }
+    await _sound.thunder(volume: _preferences.soundVolume);
+  }
+
+  /// One note of [instrument] on the phone, on top of the effect's sounds
+  /// (the light piano). Silent when sounds are off.
+  Future<void> note(int midi, Instrument instrument) async {
+    if (!_preferences.soundOn) {
+      return;
+    }
+    await _sound.note(midi, instrument, volume: _preferences.soundVolume);
   }
 
   MusicSyncController? get music => _music;

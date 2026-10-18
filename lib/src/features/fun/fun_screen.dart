@@ -4,11 +4,15 @@ import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting_screen.dart';
+import '../learn/morse_screen.dart';
 import 'advent_screen.dart';
+import '../music_box/light_piano_screen.dart';
 import '../music_box/music_box_screen.dart';
 import 'birthday_screen.dart';
 import 'countdowns_screen.dart';
 import 'game_screen.dart';
+import 'haunted_party_screen.dart';
+import 'hot_cold_screen.dart';
 import 'light_games.dart';
 import 'simon_screen.dart';
 
@@ -48,6 +52,8 @@ class FunScreen extends StatelessWidget {
               l10n.countdownsSubtitle, () => const CountdownsScreen()),
           entry(Icons.calendar_month_outlined, l10n.advent, l10n.adventSubtitle,
               () => const AdventScreen()),
+          entry(Icons.nightlife, l10n.haunted, l10n.hauntedSubtitle,
+              () => const HauntedPartyScreen()),
           entry(
               Icons.celebration_outlined,
               l10n.christmasShow,
@@ -64,12 +70,18 @@ class FunScreen extends StatelessWidget {
               },
               () => GameScreen(game: game),
             ),
+          entry(Icons.piano_outlined, l10n.piano, l10n.pianoSubtitle,
+              () => const LightPianoScreen()),
+          entry(Icons.thermostat, l10n.hotCold, l10n.hotColdSubtitle,
+              () => const HotColdScreen()),
           entry(Icons.psychology_outlined, l10n.gameSimon,
               l10n.gameSimonSubtitle, () => const SimonScreen()),
           entry(Icons.filter_9_plus_outlined, l10n.countLights,
               l10n.countLightsSubtitle, () => const CountingScreen()),
           entry(Icons.translate, l10n.colourWords, l10n.colourWordsSubtitle,
               () => const ColourWordsScreen()),
+          entry(Icons.more_horiz, l10n.morse, l10n.morseSubtitle,
+              () => const MorseScreen()),
         ],
       ),
     );

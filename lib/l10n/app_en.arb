@@ -3829,5 +3829,363 @@
   "keepPlayingScreenOffIos": "Effects with sounds go on when the iPhone locks, shown on the lock screen with a Stop button. Effects without sounds stop, as iOS requires.",
   "@keepPlayingScreenOffIos": {
     "description": "iPhone: explains the screen-off setting (effects with sounds keep playing, with lock screen controls)"
+  },
+  "countBest": "Best: {count}",
+  "@countBest": {
+    "description": "Counting game: the best score so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "countNewBest": "New record!",
+  "@countNewBest": {
+    "description": "Counting game: a new best score"
+  },
+  "morse": "Secret messages",
+  "@morse": {
+    "description": "Game: secret messages flashed by the lamps in Morse code"
+  },
+  "morseSubtitle": "Type a word and the lamps flash it in Morse code",
+  "@morseSubtitle": {
+    "description": "Subtitle of secret messages"
+  },
+  "morseDescription": "A short light is a dot, a long one a dash. Send a word with the lamps and let someone read it: the alphabet below helps to decode it.",
+  "@morseDescription": {
+    "description": "Explains secret messages"
+  },
+  "morseMessage": "Your message",
+  "@morseMessage": {
+    "description": "Field: the message to send"
+  },
+  "morseOnlyLetters": "Letters A to Z and numbers are sent; other characters are skipped",
+  "@morseOnlyLetters": {
+    "description": "Which characters are sent in Morse"
+  },
+  "morseSend": "Send with the lights",
+  "@morseSend": {
+    "description": "Button: send the message with the lights"
+  },
+  "morseAlphabet": "The Morse alphabet",
+  "@morseAlphabet": {
+    "description": "Header of the Morse alphabet table"
+  },
+  "hotCold": "Hot and cold",
+  "@hotCold": {
+    "description": "Game: hot and cold, the lights guide a child to a hidden thing"
+  },
+  "hotColdSubtitle": "Hide something: the lights turn warmer as the child gets closer",
+  "@hotColdSubtitle": {
+    "description": "Subtitle of hot and cold"
+  },
+  "hotColdRules": "Hide something in the room. While the child looks for it, tap Warmer when they get closer and Colder when they move away: the lights go from icy blue to fiery red and the phone says how hot it is. Tap Found it! when they find it.",
+  "@hotColdRules": {
+    "description": "Rules of hot and cold"
+  },
+  "hotColdWarmer": "Warmer",
+  "@hotColdWarmer": {
+    "description": "Button: the child is getting closer"
+  },
+  "hotColdColder": "Colder",
+  "@hotColdColder": {
+    "description": "Button: the child is moving away"
+  },
+  "hotColdFound": "Found it!",
+  "@hotColdFound": {
+    "description": "Button and cheer: the hidden thing was found"
+  },
+  "hotColdFreezing": "Freezing!",
+  "@hotColdFreezing": {
+    "description": "Hot and cold: very far (said aloud)"
+  },
+  "hotColdCold": "Cold",
+  "@hotColdCold": {
+    "description": "Hot and cold: far (said aloud)"
+  },
+  "hotColdWarm": "Warm",
+  "@hotColdWarm": {
+    "description": "Hot and cold: getting close (said aloud)"
+  },
+  "hotColdHot": "Hot!",
+  "@hotColdHot": {
+    "description": "Hot and cold: close (said aloud)"
+  },
+  "hotColdBoiling": "Boiling!",
+  "@hotColdBoiling": {
+    "description": "Hot and cold: very close (said aloud)"
+  },
+  "piano": "Light piano",
+  "@piano": {
+    "description": "Light piano: each key plays a note and lights a lamp"
+  },
+  "pianoSubtitle": "Each key plays a note and lights a lamp in its colour",
+  "@pianoSubtitle": {
+    "description": "Subtitle of the light piano"
+  },
+  "pianoFree": "Free play",
+  "@pianoFree": {
+    "description": "Light piano mode: play freely"
+  },
+  "pianoLearn": "Learn a song",
+  "@pianoLearn": {
+    "description": "Light piano mode: learn a tune"
+  },
+  "pianoNext": "Play the glowing key",
+  "@pianoNext": {
+    "description": "Light piano lesson: press the key that glows"
+  },
+  "pianoProgress": "{done} of {total}",
+  "@pianoProgress": {
+    "description": "Light piano lesson: notes played of the tune",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "pianoBravo": "Bravo! You played the whole song",
+  "@pianoBravo": {
+    "description": "Light piano lesson: the whole tune was played"
+  },
+  "childAdd": "Add a child",
+  "@childAdd": {
+    "description": "Chip: add a child's profile"
+  },
+  "childName": "Name",
+  "@childName": {
+    "description": "Field: the child's name"
+  },
+  "childrenEdit": "Children",
+  "@childrenEdit": {
+    "description": "Button/dialog: rename or remove children"
+  },
+  "childRename": "Change the name",
+  "@childRename": {
+    "description": "Dialog: rename a child"
+  },
+  "childRemoveConfirm": "Remove {name} with their routines and stars?",
+  "@childRemoveConfirm": {
+    "description": "Confirm removing a child's profile",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "starShop": "Star shop",
+  "@starShop": {
+    "description": "The star shop: stars earned buy rewards set by a grown-up"
+  },
+  "starShopBalance": "{count, plural, =0{No stars to spend yet} =1{One star to spend} other{{count} stars to spend}}",
+  "@starShopBalance": {
+    "description": "Star shop: stars the child can spend",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "starShopEmpty": "A grown-up adds the rewards here: an ice cream, one more story, a trip to the park…",
+  "@starShopEmpty": {
+    "description": "Star shop without rewards"
+  },
+  "starShopAdd": "Add a reward",
+  "@starShopAdd": {
+    "description": "Button: add a reward"
+  },
+  "starShopRewardName": "Reward",
+  "@starShopRewardName": {
+    "description": "Field: the reward"
+  },
+  "starShopCost": "Stars it costs",
+  "@starShopCost": {
+    "description": "Label: how many stars the reward costs"
+  },
+  "starShopGet": "Get it",
+  "@starShopGet": {
+    "description": "Button: get this reward with stars"
+  },
+  "starShopEnjoy": "Enjoy: {reward}!",
+  "@starShopEnjoy": {
+    "description": "A reward was bought",
+    "placeholders": {
+      "reward": {
+        "type": "String"
+      }
+    }
+  },
+  "starShopGrownUp": "A grown-up confirms",
+  "@starShopGrownUp": {
+    "description": "Title of the grown-up question in the star shop"
+  },
+  "starShopNeedMore": "{count, plural, =1{one more star} other{{count} more stars}}",
+  "@starShopNeedMore": {
+    "description": "Star shop: stars still missing for a reward",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "starShopRemoveHint": "A long press on a reward removes it (a grown-up confirms).",
+  "@starShopRemoveHint": {
+    "description": "How to remove a reward"
+  },
+  "grownUpQuestion": "To go on, type the result of {a} + {b}.",
+  "@grownUpQuestion": {
+    "description": "Grown-up check: type the result of a sum",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "grownUpConfirm": "Confirm",
+  "@grownUpConfirm": {
+    "description": "Button: a grown-up confirms"
+  },
+  "ritual": "Bedtime ritual",
+  "@ritual": {
+    "description": "Home entry: the bedtime ritual, several bedtime steps one after the other"
+  },
+  "ritualSubtitle": "Routine, monster spray, a story, a lullaby and a guardian light in one tap",
+  "@ritualSubtitle": {
+    "description": "Subtitle of the bedtime ritual"
+  },
+  "ritualDescription": "Every evening the same calm steps, one after the other: choose the ones your family likes, the lullaby and how long the guardian light stays on. Tonight's story is made up with the child as its hero.",
+  "@ritualDescription": {
+    "description": "Explains the bedtime ritual"
+  },
+  "ritualStory": "Tonight's story",
+  "@ritualStory": {
+    "description": "Bedtime ritual step: a story made up for tonight"
+  },
+  "ritualStepOf": "Step {step} of {total}",
+  "@ritualStepOf": {
+    "description": "Bedtime ritual progress",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "ritualNext": "Next step",
+  "@ritualNext": {
+    "description": "Bedtime ritual: go to the next step"
+  },
+  "ritualGoodnight": "Goodnight!",
+  "@ritualGoodnight": {
+    "description": "Bedtime ritual: the end"
+  },
+  "haunted": "Halloween party",
+  "@haunted": {
+    "description": "Game: a Halloween party with scares when someone passes the motion sensor"
+  },
+  "hauntedSubtitle": "A spooky room, and a scare when someone walks past the motion sensor",
+  "@hauntedSubtitle": {
+    "description": "Subtitle of the Halloween party"
+  },
+  "hauntedDescription": "The room glows purple and green. When someone walks past the Hue motion sensor, or when you tap Scare now, the lamps flash, the phone thunders and red eyes appear in a corner. Spooky, but nothing flashes fast. Keep LumiFX open during the party.",
+  "@hauntedDescription": {
+    "description": "Explains the Halloween party"
+  },
+  "hauntedSensor": "Motion sensor",
+  "@hauntedSensor": {
+    "description": "Field: the motion sensor that triggers scares"
+  },
+  "hauntedNoSensor": "No Hue motion sensor found: the Scare now button still works.",
+  "@hauntedNoSensor": {
+    "description": "No Hue motion sensor found"
+  },
+  "hauntedArm": "Start the party",
+  "@hauntedArm": {
+    "description": "Button: start the Halloween party"
+  },
+  "hauntedArmed": "Waiting for someone to walk past…",
+  "@hauntedArmed": {
+    "description": "Halloween party: waiting for motion"
+  },
+  "hauntedScare": "Scare now",
+  "@hauntedScare": {
+    "description": "Button: scare now"
+  },
+  "hauntedScares": "{count, plural, =0{No scares yet} =1{One scare} other{{count} scares}}",
+  "@hauntedScares": {
+    "description": "Halloween party: scares so far",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "linkRitual": "Open the bedtime ritual",
+  "@linkRitual": {
+    "description": "A ready-made link that opens the bedtime ritual"
+  },
+  "linkRoutines": "Open the routines",
+  "@linkRoutines": {
+    "description": "A ready-made link that opens the picture routines"
+  },
+  "pianoRecord": "Record",
+  "@pianoRecord": {
+    "description": "Light piano: start recording what is played"
+  },
+  "pianoStopRecording": "Stop recording",
+  "@pianoStopRecording": {
+    "description": "Light piano: stop recording"
+  },
+  "pianoPlayBack": "Play it back",
+  "@pianoPlayBack": {
+    "description": "Light piano: play back what was recorded"
+  },
+  "morseSendMode": "Send",
+  "@morseSendMode": {
+    "description": "Secret messages mode: send a message"
+  },
+  "morseGuessMode": "Guess",
+  "@morseGuessMode": {
+    "description": "Secret messages mode: guess the letter"
+  },
+  "morseGuessRules": "The lamps flash a letter in Morse: which one is it? The alphabet below helps.",
+  "@morseGuessRules": {
+    "description": "Rules of guessing Morse letters"
+  },
+  "morseFlashLetter": "Flash a letter",
+  "@morseFlashLetter": {
+    "description": "Button: flash a new letter to guess"
+  },
+  "morseFlashAgain": "Flash it again",
+  "@morseFlashAgain": {
+    "description": "Button: flash the same letter again"
+  },
+  "morseWhichLetter": "Which letter was it?",
+  "@morseWhichLetter": {
+    "description": "Question: which letter did the lamps flash"
+  },
+  "routineAddStep": "Add a step",
+  "@routineAddStep": {
+    "description": "Button/dialog: a grown-up makes a new routine step"
+  },
+  "routineStepName": "What to do",
+  "@routineStepName": {
+    "description": "Field: what the child does in the new step"
+  },
+  "storyMakerSave": "Save to My stories",
+  "@storyMakerSave": {
+    "description": "Button: keep the made-up story among the user's own stories"
+  },
+  "storyMakerSaved": "Saved in My stories",
+  "@storyMakerSaved": {
+    "description": "The made-up story was saved"
   }
 }

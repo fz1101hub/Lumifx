@@ -30,8 +30,8 @@ The project is intentionally built around an original effects engine and origina
 2. ✅ Read rooms, zones and lights
 3. ✅ Basic light controls (room/zone on/off and brightness)
 4. ✅ Shared effect engine (renderer, player, rate-limited Hue output)
-5. ✅ First set of animated scenes and narrative Stories (6 scenes, 19 stories
-   including Halloween and Christmas collections, colour variants for scenes)
+5. ✅ First set of animated scenes and narrative Stories (7 scenes, 23 stories
+   including Halloween, Christmas and holiday collections, colour variants for scenes)
 6. ✅ Favorites, recently played and playback defaults
 
 Also done ahead of schedule:
@@ -154,11 +154,13 @@ Also done ahead of schedule:
   "Surprise me") make a five-line bedtime story with its own lights,
   read along and aloud, ending in a warm glow that fades. Put together
   on the phone from written lines (no AI, no network), worded so it
-  never depends on the hero's gender.
+  never depends on the hero's gender; a story can be kept among My
+  stories.
 - **Learning games**: Count the lights (the lamps blink, tap how many;
-  the numbers grow up to 9) and Colours in another language (the room
-  turns a colour and the phone says its name in any of the eight
-  languages, then a quiz).
+  the numbers grow up to 9; the best score is kept) and Colours in
+  another language (the room turns a colour and the phone says its name
+  in any of the eight languages, then a quiz; the language chosen last
+  comes back).
 - **Monster spray**: five funny monsters hide in a dim purple room; each
   spray flashes the lamps and chases one away; then a warm guardian
   light for 15, 30 or 60 minutes that fades out.
@@ -167,7 +169,9 @@ Also done ahead of schedule:
 - **NFC stickers**: on Android LumiFX writes a `lumifx://` link (a
   favourite, a playlist, bedtime, stop) on a sticker, and touching it
   with the unlocked phone starts it; on iPhone the Shortcuts app's NFC
-  automation opens the link.
+  automation opens the link. `lumifx://app/go/ritual` (and the routines,
+  star shop, story maker, lullabies, monster spray, piano, games,
+  cinema) opens a family screen, e.g. from a sticker by the bed.
 - **Notification lights** (Android): chosen apps flash the lights of a
   room in their own colour when they post a notification, even with
   LumiFX closed; only the app's name is seen, never what it says; quiet
@@ -175,6 +179,36 @@ Also done ahead of schedule:
 - **Lock screen on iPhone** (iOS 16.1+): the effect playing, its room,
   colours and a Stop on the lock screen and in the Dynamic Island;
   effects with sounds or a tune keep playing with the iPhone locked.
+- **Quick Settings tiles** (Android): "Stop effect" and "Bedtime", added
+  from the quick settings edit panel; on a locked phone they act after
+  unlocking.
+- **Secret messages in Morse**: type up to 30 characters and the lamps
+  flash the letters and digits slowly in Morse, in a chosen colour, with
+  the letter being sent lit up on screen and the alphabet to decode it;
+  or guess the letter the lamps flash, among four.
+- **Hot and cold**: a grown-up taps Warmer or Colder while a child looks
+  for something hidden; the room goes from icy blue to fiery red, the
+  phone says how hot it is, and Found it! ends in confetti of light.
+- **Light piano**: eight keys from middle C, each a music-box note made
+  on the phone and a flash of its rainbow colour on one lamp along the
+  room; "Learn a song" makes the next key glow, and a tune played can
+  be recorded and played back with its lights. Notes are named as
+  children learn them (do re mi, ドレミ, or letters with H in German).
+- **Steps of your own** in the routines ("feed the cat"), with a
+  picture and a colour, alongside the built-in ones.
+- **A profile for each child** (up to six): their own routine steps and
+  stars (the stars earned before stay with the first child); the story
+  maker offers their names for the hero.
+- **Star shop**: a grown-up sets rewards with a picture and a cost in
+  stars; the child spends the stars of their routines, a grown-up
+  confirms and the lamps throw a gold party. Kept on the phone only.
+- **Bedtime ritual** in one tap: the evening routine, the monster spray,
+  a story made up for tonight with the child as hero, a lullaby and the
+  guardian light, one after the other, with the steps a grown-up keeps.
+- **Halloween party**: a purple and green room; when someone walks past
+  a Hue motion sensor (or a grown-up taps Scare now) the lamps flash,
+  the phone thunders and red eyes glow on one lamp, with 15 s of rest
+  between sensor scares and nothing that flashes fast.
 
 ## Development
 
@@ -190,7 +224,8 @@ flutter run            # on a device or simulator on the same Wi-Fi as the bridg
 Effects can be previewed without a bridge: the player shows virtual lamps
 when no room or zone is selected.
 
-The app is in English, Italian, German, French, Spanish and Dutch. Every
+The app is in English, Italian, German, French, Spanish, Dutch, Brazilian
+Portuguese and Japanese. Every
 user-facing string lives in `lib/l10n/app_en.arb` (the template) and one
 `app_<code>.arb` per language; the Dart classes are generated into
 `lib/l10n/generated/` by `flutter pub get` and are not committed. To add a

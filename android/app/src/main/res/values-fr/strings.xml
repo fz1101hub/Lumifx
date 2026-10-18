@@ -7,4 +7,7 @@
     <string name="widget_empty">Ajoutez des effets en favoris dans LumiFX pour les voir ici.</string>
     <string name="widget_description">Vos effets LumiFX favoris, à portée de doigt.</string>
     <string name="playback_channel">Lecture</string>
+    <!-- Quick settings tiles. -->
+    <string name="tile_stop">Arrêter l\'effet</string>
+    <string name="tile_bedtime">Coucher</string>
 </resources>

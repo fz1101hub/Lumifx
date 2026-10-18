@@ -33,25 +33,38 @@ import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
+import 'package:lumifx/src/core/hue/hue_buttons.dart';
+import 'package:lumifx/src/core/hue/hue_house.dart';
 import 'package:lumifx/src/core/live_activity.dart';
 import 'package:lumifx/src/core/nfc/nfc_writer.dart';
 import 'package:lumifx/src/core/notification_lights_platform.dart';
+import 'package:lumifx/src/core/sound/sound_player.dart';
 import 'package:lumifx/src/core/speech/speaker.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray.dart';
 import 'package:lumifx/src/features/cinema/cinema.dart';
 import 'package:lumifx/src/features/cinema/cinema_screen.dart';
 import 'package:lumifx/src/features/bedtime/monster_spray_screen.dart';
+import 'package:lumifx/src/features/bedtime/ritual_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words.dart';
 import 'package:lumifx/src/features/links/nfc_stickers_screen.dart';
 import 'package:lumifx/src/features/notifications/notification_lights_screen.dart';
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
 import 'package:lumifx/src/features/learn/counting_screen.dart';
+import 'package:lumifx/src/features/fun/haunted_party.dart';
+import 'package:lumifx/src/features/fun/haunted_party_screen.dart';
+import 'package:lumifx/src/features/fun/hot_cold.dart';
+import 'package:lumifx/src/features/fun/hot_cold_screen.dart';
+import 'package:lumifx/src/features/learn/morse.dart';
+import 'package:lumifx/src/features/learn/morse_screen.dart';
+import 'package:lumifx/src/features/music_box/light_piano.dart';
+import 'package:lumifx/src/features/music_box/light_piano_screen.dart';
 import 'package:lumifx/src/features/music_box/music_box_screen.dart';
 import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
+import 'package:lumifx/src/features/routines/star_shop_screen.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
 import 'package:lumifx/src/features/timers/timers_screen.dart';
 import 'package:lumifx/src/features/weather/weather_screen.dart';
@@ -60,6 +73,7 @@ import 'package:lumifx/src/features/library/sharing.dart';
 import 'package:lumifx/src/features/library/story_editor.dart';
 
 import '../support/fake_audio_input.dart';
+import '../support/fake_sound_player.dart';
 import '../support/fake_background_playback.dart';
 import '../support/fake_home_widgets.dart';
 import '../support/fake_shortcuts.dart';
@@ -220,6 +234,7 @@ Future<void> _pumpApp(
   NfcWriter nfc = const NoNfcWriter(),
   NotificationLightsPlatform notificationLights = const NoNotificationLights(),
   LiveActivity liveActivity = const NoLiveActivity(),
+  SoundPlayer? sound,
 }) async {
   final bridge = BridgeController(store: InMemoryCredentialStore());
   await tester.runAsync(bridge.initialize);
@@ -242,6 +257,7 @@ Future<void> _pumpApp(
       nfc: nfc,
       notificationLights: notificationLights,
       liveActivity: liveActivity,
+      sound: sound ?? const NoSoundPlayer(),
     ),
   );
 }
@@ -343,6 +359,8 @@ void main() {
       200,
       scrollable: find.byType(Scrollable).first,
     );
+    await tester.ensureVisible(find.text('Bedtime'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Bedtime'));
     await tester.pumpAndSettle();
     expect(find.text('Sleeping Dragon'), findsOneWidget);
@@ -489,6 +507,10 @@ void main() {
     await _pumpApp(tester);
     await openBirthday(tester);
     await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Red light, green light'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Red light, green light'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Red light, green light'));
     await tester.pumpAndSettle();
@@ -1089,6 +1111,16 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
     await tester.pump(const Duration(seconds: 1));
     expect(find.text('The end'), findsOneWidget);
+    await tester.tap(find.text('Save to My stories'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Saved in My stories'), findsOneWidget);
+    final saved = AppScope.of(tester.element(find.byType(TaleMakerScreen)))
+        .preferences
+        .userStories
+        .single;
+    expect(saved.name, 'The story of Sofia');
+    expect(saved.narration.first.$2, startsWith('Once upon a time'));
     await tester.tap(find.text('Another story'));
     await tester.pump(const Duration(milliseconds: 500));
     expect(playback.isPlaying, isTrue);
@@ -1132,7 +1164,13 @@ void main() {
     await tester.tap(find.text('$target'));
     await tester.pump();
     expect(find.text('Yes, $target!'), findsOneWidget);
-    expect(find.text('One right answer'), findsOneWidget);
+    expect(find.textContaining('One right answer'), findsOneWidget);
+    expect(find.textContaining('New record!'), findsOneWidget);
+    expect(
+        AppScope.of(tester.element(find.byType(CountingScreen)))
+            .preferences
+            .countingBest,
+        1);
     expect(speaker.spoken.last, ('$target', 'en-US'));
     final playback =
         AppScope.of(tester.element(find.byType(CountingScreen))).playback;
@@ -1167,6 +1205,12 @@ void main() {
     await tester.pump();
     expect(find.text('arancione'), findsOneWidget);
     expect(speaker.spoken.last, ('arancione', 'it-IT'));
+    expect(
+        AppScope.of(tester.element(find.byType(ColourWordsScreen)))
+            .preferences
+            .learnLanguage,
+        'it',
+        reason: 'chosen again next time');
 
     await tester.tap(find.text('Quiz'));
     await tester.pump();
@@ -1383,6 +1427,401 @@ void main() {
         scrollable: find.byType(Scrollable).first);
     expect(find.textContaining('Effects with sounds go on when the iPhone'),
         findsOneWidget);
+  });
+
+  testWidgets('a secret message is flashed in Morse, letter by letter',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const MorseScreen())));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'hi');
+    await tester.pump();
+    await tester.tap(find.text('Send with the lights'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MorseScreen))).playback;
+    expect(MorseMessage.of(playback.effect)?.$1.text, 'HI');
+    playback.player!.advance(const Duration(milliseconds: 1100));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('H  ....'), findsOneWidget);
+    // H takes seven units, then three dark: I starts 3.5 s after H.
+    playback.player!.advance(const Duration(milliseconds: 3500));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('I  ..'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+    expect(find.text('.... ..'), findsOneWidget, reason: 'the whole code');
+  });
+
+  testWidgets('hot and cold: warmer, colder and found it', (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const HotColdScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(HotColdScreen))).playback;
+    expect(find.text('Cold'), findsOneWidget);
+    expect(playback.effect.id, HotCold.effect(HotCold.start, 'x').id);
+    for (var i = 0; i < 3; i++) {
+      await tester.tap(find.text('Warmer'));
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    expect(find.text('Warm'), findsOneWidget);
+    expect(speaker.spoken.last, ('Warm', 'en-US'));
+    await tester.tap(find.text('Colder'));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(playback.effect.id, HotCold.effect(4, 'x').id);
+    await tester.tap(find.text('Found it!'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(playback.effect.id, HotCold.found('x').id);
+    expect(speaker.spoken.last.$1, 'Found it!');
+    await tester.tap(find.text('Play again'));
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Cold'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light piano plays notes and teaches a tune', (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const LightPianoScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('E'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
+    expect(isPianoEffect(playback.effect), isTrue);
+    expect(playback.isPlaying, isTrue);
+
+    await tester.tap(find.text('Learn a song'));
+    await tester.pump();
+    expect(find.textContaining('0 of'), findsOneWidget);
+    // The first tune offered, and its first key.
+    final first = PianoLesson(pianoSongs.first).next!;
+    Finder key(int index) {
+      final label = pianoNoteName('en', index);
+      // Two keys are C: the low one first.
+      return find.bySemanticsLabel(label).at(index == 7 ? 1 : 0);
+    }
+
+    await tester.tap(key(first == 3 ? 4 : 3));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('0 of'), findsOneWidget, reason: 'not yet');
+    await tester.tap(key(first));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('1 of'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light piano records a tune and plays it back',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const LightPianoScreen())));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
+    await tester.tap(find.text('Record'));
+    await tester.pump();
+    for (final note in ['E', 'G']) {
+      await tester.tap(find.bySemanticsLabel(note));
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+    await tester.tap(find.text('Stop recording'));
+    await tester.pump();
+    expect(
+        sound.calls.where((c) => c.startsWith('note')), ['note 64', 'note 67']);
+    await tester.tap(find.text('Play it back'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(sound.calls.where((c) => c.startsWith('note')),
+        ['note 64', 'note 67', 'note 64', 'note 67']);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('each child has a profile with their own stars', (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const RoutinesScreen())));
+    await tester.pumpAndSettle();
+    final preferences =
+        AppScope.of(tester.element(find.byType(RoutinesScreen))).preferences;
+    for (final name in ['Anna', 'Leo']) {
+      await tester.tap(find.text('Add a child'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), name);
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+    }
+    expect(find.widgetWithText(ChoiceChip, 'Anna'), findsOneWidget);
+    expect(preferences.activeChild?.name, 'Leo');
+    preferences.earnStar('2026-10-18:morning');
+    await tester.pump();
+    expect(find.text('1 star'), findsOneWidget);
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Anna'));
+    await tester.pumpAndSettle();
+    expect(preferences.activeChild?.name, 'Anna');
+    expect(find.text('No stars yet'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Children'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Delete').last);
+    await tester.pumpAndSettle();
+    expect(
+        find.text('Remove Leo with their routines and stars?'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+    await tester.pumpAndSettle();
+    expect([for (final c in preferences.children) c.name], ['Anna']);
+  });
+
+  testWidgets('the star shop: a grown-up adds a reward, stars buy it',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const StarShopScreen())));
+    await tester.pumpAndSettle();
+    final scope = AppScope.of(tester.element(find.byType(StarShopScreen)));
+    final preferences = scope.preferences;
+    Future<void> grownUp() async {
+      final question = tester
+          .widgetList<Text>(find.byType(Text))
+          .map((t) => t.data ?? '')
+          .firstWhere((t) => t.contains(' + '));
+      expect(question, startsWith('To go on'));
+      final match = RegExp(r'(\d+) \+ (\d+)').firstMatch(question)!;
+      await tester.enterText(
+          find.descendant(
+              of: find.byType(AlertDialog), matching: find.byType(TextField)),
+          '${int.parse(match[1]!) + int.parse(match[2]!)}');
+      await tester.tap(find.widgetWithText(FilledButton, 'Confirm'));
+      await tester.pumpAndSettle();
+    }
+
+    expect(find.text('No stars to spend yet'), findsOneWidget);
+    await tester.tap(find.text('Add a reward'));
+    await tester.pumpAndSettle();
+    await grownUp();
+    await tester.enterText(find.byType(TextField), 'Ice cream');
+    await tester.pump();
+    for (var i = 0; i < 3; i++) {
+      await tester.tap(find.byIcon(Icons.remove));
+      await tester.pump();
+    }
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(preferences.rewards.single.cost, 2);
+    expect(find.textContaining('2 more stars'), findsOneWidget);
+
+    preferences.earnStar('2026-10-17:morning');
+    preferences.earnStar('2026-10-17:evening');
+    preferences.earnStar('2026-10-18:morning');
+    await tester.pumpAndSettle();
+    expect(find.text('3 stars to spend'), findsOneWidget);
+    await tester.tap(find.text('Get it'));
+    await tester.pumpAndSettle();
+    await grownUp();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Enjoy: Ice cream!'), findsOneWidget);
+    expect(find.text('One star to spend'), findsOneWidget);
+    expect(scope.playback.isPlaying, isTrue, reason: 'a party of light');
+    await scope.playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the bedtime ritual goes from step to step', (tester) async {
+    await _pumpApp(tester);
+    await tester.scrollUntilVisible(find.text('Bedtime ritual'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Bedtime ritual'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Bedtime ritual'));
+    await tester.pumpAndSettle();
+    final scope = AppScope.of(tester.element(find.byType(BedtimeRitualScreen)));
+    final playback = scope.playback;
+    await scope.preferences.addChild('Mia');
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Start'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Start'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start'));
+    await tester.pumpAndSettle();
+    // The evening routine, then the monster spray, on their own screens.
+    expect(find.byType(RoutineScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.byType(MonsterSprayScreen), findsOneWidget);
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(playback.effect.name, 'The story of Mia');
+    expect(find.text('Step 3 of 5'), findsOneWidget);
+
+    Future<void> finish() async {
+      playback.player!.advance(playback.effect.cycleLength);
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    await finish();
+    expect(playback.effect.name, "Brahms's Lullaby");
+    expect(find.text('Step 4 of 5'), findsOneWidget);
+    await finish();
+    expect(MonsterHunt.isGuardian(playback.effect), isTrue);
+    expect(playback.sleepTimer, const Duration(minutes: 30));
+    expect(find.text('Goodnight!'), findsOneWidget);
+    await playback.stop();
+    playback.setSleepTimer(null);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the Halloween party scares whoever walks past the sensor',
+      (tester) async {
+    await _pumpApp(tester);
+    final motion = StreamController<HueMotionEvent>.broadcast();
+    addTearDown(motion.close);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(
+            builder: (_) => HauntedPartyScreen(
+                  motion: () => motion.stream,
+                  sensors: const [HueMotionSensor(id: '5', name: 'Hallway')],
+                ))));
+    await tester.pumpAndSettle();
+    expect(find.text('Hallway'), findsOneWidget);
+    await tester.tap(find.text('Start the party'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(HauntedPartyScreen))).playback;
+    expect(HauntedParty.isParty(playback.effect), isTrue);
+    expect(find.text('Waiting for someone to walk past…'), findsOneWidget);
+
+    motion.add(const HueMotionEvent(sensorId: '9', motion: true));
+    await tester.pump();
+    expect(find.text('No scares yet'), findsOneWidget, reason: 'another one');
+    motion.add(const HueMotionEvent(sensorId: '5', motion: true));
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('One scare'), findsOneWidget);
+    motion.add(const HueMotionEvent(sensorId: '5', motion: true));
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('One scare'), findsOneWidget, reason: 'a rest between');
+    await tester.tap(find.text('Scare now'));
+    await tester.pump(const Duration(seconds: 3));
+    expect(find.text('2 scares'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+    expect(playback.status, PlaybackStatus.idle);
+  });
+
+  testWidgets('a link opens the bedtime ritual, once, not in kids mode',
+      (tester) async {
+    await _pumpApp(tester);
+    Future<void> openLink(String location) async {
+      final message = const JSONMethodCodec().encodeMethodCall(
+        MethodCall('pushRouteInformation', {'location': location}),
+      );
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+          SystemChannels.navigation.name, message, (_) {});
+    }
+
+    await openLink('lumifx://app/go/ritual');
+    await tester.pumpAndSettle();
+    expect(find.byType(BedtimeRitualScreen), findsOneWidget);
+    await openLink('lumifx://app/go/ritual');
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.byType(BedtimeRitualScreen), findsNothing,
+        reason: 'it was opened only once');
+
+    final preferences =
+        AppScope.of(tester.element(find.byType(HomeScreen))).preferences;
+    await preferences.setKidsLocked(true);
+    await tester.pumpAndSettle();
+    await openLink('lumifx://app/go/piano');
+    await tester.pumpAndSettle();
+    expect(find.byType(LightPianoScreen), findsNothing);
+    await preferences.setKidsLocked(false);
+  });
+
+  testWidgets('guess the letter the lamps flash in Morse', (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const MorseScreen(seed: 2))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Guess'));
+    await tester.pump();
+    await tester.tap(find.text('Flash a letter'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MorseScreen))).playback;
+    final quiz = MorseQuiz(math.Random(2))..next();
+    expect(MorseMessage.of(playback.effect)?.$1.text, quiz.target);
+    expect(find.text('Which letter was it?'), findsOneWidget);
+    final wrong = quiz.choices.firstWhere((l) => l != quiz.target);
+    await tester.tap(find.widgetWithText(FilledButton, wrong));
+    await tester.pump();
+    expect(find.text('Try again'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, quiz.target));
+    await tester.pump();
+    expect(find.textContaining('Well done!'), findsOneWidget);
+    expect(find.text('One right answer'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a grown-up adds a step of their own to a routine',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const RoutinesScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Choose the steps').last);
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Add a step'), 100,
+        scrollable: find
+            .descendant(
+                of: find.byType(AlertDialog), matching: find.byType(Scrollable))
+            .first);
+    await tester.tap(find.text('Add a step'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog).last,
+            matching: find.byType(TextField)),
+        'Feed the cat');
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('Feed the cat'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Start').last, 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Start').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start').last);
+    await tester.pumpAndSettle();
+    expect(find.byType(RoutineScreen), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Feed the cat'), 200,
+        scrollable: find.byType(Scrollable).last);
+    expect(find.text('Feed the cat'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(RoutineScreen))).playback;
+    await playback.stop();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {

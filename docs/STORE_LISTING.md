@@ -74,19 +74,22 @@ artifact, see RELEASE.md § 1b).
 > and never recorded.
 >
 > FAMILY TIME
-> Bedtime in one tap, stories read aloud as the lights tell them (or in
-> your own recorded voice), a story maker with a new bedtime story every
-> night, lullabies on a music box that light the lamps note by note, a
-> monster spray before sleep, stories where the children choose the way,
-> morning and evening picture routines with stars, an ok-to-wake light
-> that turns green in the morning, light timers for brushing teeth or
-> tidying up, calm breathing, a birthday party where the candles glow on
-> your lamps until you blow them out, games led by the lights (red light,
-> green light; statues; colour hunt; light memory), learning games (count
-> the lights, colours in another language), a Christmas light show with
-> carols, an advent calendar and countdowns to big days, a locked kids
-> mode with big buttons, the weather outside in light, and scenes made
-> from your own photos.
+> Bedtime in one tap, or the whole bedtime ritual (evening routine,
+> monster spray, a story starring your child, a lullaby, a guardian
+> light), stories read aloud as the lights tell them (or in your own
+> recorded voice), a story maker with a new story every night, lullabies
+> on a music box that light the lamps note by note, stories where the
+> children choose the way, picture routines with stars for each child to
+> spend in a star shop, an ok-to-wake light, light timers for brushing
+> teeth, calm breathing, a birthday party where the candles glow on your
+> lamps until you blow them out, games led by the lights (red light,
+> green light; statues; colour hunt; light memory; hot and cold), a light
+> piano that teaches songs, secret messages in Morse, a Halloween party
+> set off by a Hue motion sensor, learning games (count the lights,
+> colours in another language), a Christmas light show with carols, an
+> advent calendar and countdowns to big days, a locked kids mode with big
+> buttons, the weather outside in light, and scenes made from your own
+> photos.
 >
 > AROUND THE HOUSE
 > An away mode that makes the house look lived-in, a night path on a Hue
@@ -96,9 +99,10 @@ artifact, see RELEASE.md § 1b).
 > EVERY DAY
 > A cinema mode that dims the lights for the film and brings them back at
 > the end; NFC stickers that start an effect or bedtime with a touch of
-> the phone; on Android, lights that flash in an app's colour when it
-> notifies you, even with LumiFX closed; on iPhone, the effect playing and
-> a Stop button on the lock screen.
+> the phone; on Android, Quick Settings tiles to stop the effect or start
+> bedtime, and lights that flash in an app's colour when it notifies you,
+> even with LumiFX closed; on iPhone, the effect playing and a Stop
+> button on the lock screen.
 >
 > MADE FOR HUE
 > • Finds and pairs with your Hue Bridge on your Wi-Fi, no account needed.
@@ -124,13 +128,13 @@ artifact, see RELEASE.md § 1b).
 
 **What's new (1.0.0)**
 
-> First release: 6 scenes with colour variants, 19 stories including
-> Halloween and Christmas collections, 4 Music Sync effects, Entertainment
-> streaming with an area editor, your own scenes, playlists, saving as
-> Hue scenes, links for automations and NFC stickers, a sleep timer,
-> family time (bedtime, a story maker, lullabies, routines with stars,
-> games and learning games, kids mode), cinema mode, notification lights
-> on Android, the lock screen on iPhone, and eight languages.
+> First release: 7 scenes with colour variants, 23 stories including
+> Halloween, Christmas and holidays, 4 Music Sync effects, Entertainment
+> streaming with an area editor, your own scenes, playlists, Hue scenes,
+> links, NFC stickers and quick settings tiles, family time (a bedtime
+> ritual, a story maker, lullabies, a profile and stars for each child, a
+> star shop, games, a light piano, kids mode), cinema mode, notification
+> lights on Android, the lock screen on iPhone, and eight languages.
 
 ## Italiano
 
@@ -153,28 +157,26 @@ artifact, see RELEASE.md § 1b).
 > continuano a muoversi finché vuoi.
 >
 > STORIE
-> Brevi racconti di luce che si svolgono intorno alla stanza: un folletto
-> nascosto nel bosco, un drago addormentato, una villa stregata in una notte
-> di tempesta, una caccia al tesoro, un kraken sotto la nave, una pioggia di
-> meteore, dinosauri in avvicinamento, gli abissi di notte. Halloween porta
+> Racconti di luce intorno alla stanza: un folletto nascosto nel bosco, un
+> drago addormentato, una villa stregata in una notte di tempesta, una
+> caccia al tesoro, un kraken sotto la nave, una pioggia di meteore,
+> dinosauri in avvicinamento, gli abissi di notte. Halloween porta
 > un campo di zucche, il calderone della strega, il castello del vampiro e
 > dolcetto o scherzetto; il Natale la bottega di Babbo Natale, una nevicata
-> silenziosa e un canto a lume di candela. Ogni ripetizione di una storia è
-> un po' diversa.
+> silenziosa e un canto a lume di candela.
 >
 > FALLA TUA
-> Varianti di colore per ogni scena (Aurora in rosa e oro, un camino blu,
-> disco al neon), un timer di spegnimento che attenua le luci e le spegne,
-> le tue scene Hue a un tocco, e una modalità "attenua i lampi" per chi è
-> sensibile alle luci lampeggianti.
+> Varianti di colore per ogni scena, un timer di spegnimento che attenua le
+> luci e le spegne, le tue scene Hue a un tocco, e una modalità "attenua i
+> lampi" per chi è sensibile alle luci lampeggianti.
 >
 > LE TUE SCENE E LE PLAYLIST
 > Scegli da due a cinque colori e un movimento per creare una scena tua.
 > Metti in fila gli effetti in una playlist per tutta la serata, in ordine
 > o a caso, con le luci che sfumano da uno all'altro. Gli effetti
-> continuano mentre navighi, con un mini-player su ogni schermata. Salva
-> ciò che mostrano le luci come scena Hue e avvia gli effetti dai Comandi
-> rapidi di Siri o dalle automazioni Android con i link lumifx://.
+> continuano mentre navighi. Salva ciò che mostrano le luci come scena Hue
+> e avvia gli effetti dai Comandi rapidi di Siri o dalle automazioni
+> Android con i link lumifx://.
 >
 > MUSIC SYNC
 > Beat Pulse, Party Chase, Spectrum e Mood Glow ascoltano la musica nella
@@ -182,20 +184,22 @@ artifact, see RELEASE.md § 1b).
 > viene mai registrato.
 >
 > IN FAMIGLIA
-> La nanna con un tocco, storie lette ad alta voce mentre le luci le
-> raccontano (o con la tua voce registrata), una storia nuova inventata
-> ogni sera, ninne nanne su un carillon che accendono le lampade nota per
-> nota, uno spray anti-mostri per la nanna, storie in cui i bambini
-> scelgono la strada, routine illustrate con le stelline, un semaforo
-> della sveglia che diventa verde al mattino, timer di luce per lavarsi i
-> denti o riordinare, respiro calmo, una festa di compleanno con le
-> candeline accese sulle lampade finché non le spegni con un soffio,
-> giochi guidati dalle luci (semaforo, statue, caccia al colore, memoria
-> di luce), giochi per imparare (contare le luci, i colori in un'altra
-> lingua), uno spettacolo di luci di Natale con i canti, il calendario
-> dell'Avvento e il conto alla rovescia per i giorni speciali, una
-> modalità bambini bloccata con pulsanti grandi, il meteo di fuori in luce
-> e scene create dalle tue foto.
+> La nanna con un tocco, o il rituale della nanna (routine della sera,
+> spray anti-mostri, una storia con il bambino come eroe, una ninna nanna,
+> una luce guardiana), storie lette ad alta voce (anche con la tua voce
+> registrata), una storia nuova inventata ogni sera, ninne nanne su un
+> carillon che accendono le lampade nota per nota, storie in cui i bambini
+> scelgono la strada, routine illustrate con le stelline di ogni bambino da
+> spendere nel negozio delle stelle, un semaforo della sveglia, timer di
+> luce per lavarsi i denti, respiro calmo, una festa di compleanno con le
+> candeline sulle lampade da spegnere con un soffio, giochi guidati dalle
+> luci (semaforo, statue, caccia al colore, memoria di luce, acqua o
+> fuoco), un pianoforte luminoso che insegna le canzoni, messaggi segreti
+> in Morse, una festa di Halloween col sensore di movimento Hue, giochi
+> per imparare (contare le luci, i colori in un'altra lingua), uno
+> spettacolo di luci di Natale con i canti, il calendario dell'Avvento e i
+> conti alla rovescia, una modalità bambini bloccata con pulsanti grandi,
+> il meteo di fuori in luce e scene create dalle tue foto.
 >
 > PER LA CASA
 > Una modalità vacanza che fa sembrare la casa abitata, un percorso
@@ -205,20 +209,20 @@ artifact, see RELEASE.md § 1b).
 > OGNI GIORNO
 > Una modalità cinema che abbassa le luci per il film e le riporta alla
 > fine; adesivi NFC che avviano un effetto o la nanna con un tocco; su
-> Android, le luci lampeggiano nel colore dell'app che ti notifica, anche
-> a LumiFX chiusa; su iPhone, l'effetto in corso e lo Stop nella
-> schermata di blocco.
+> Android, i riquadri delle impostazioni rapide per fermare l'effetto o
+> avviare la nanna, e le luci che lampeggiano nel colore dell'app che ti
+> notifica, anche a LumiFX chiusa; su iPhone, l'effetto in corso e lo
+> Stop nella schermata di blocco.
 >
 > FATTA PER HUE
 > • Trova e collega il tuo Bridge Hue sul Wi-Fi, senza account.
 > • Funziona su qualsiasi stanza o zona e invia gli effetti veloci alle
 >   aree Entertainment (50 aggiornamenti al secondo).
-> • Crea e modifica le aree Entertainment nell'app, posizionando le luci su
->   una mappa della stanza.
+> • Crea e modifica le aree Entertainment su una mappa della stanza.
 > • Regola luminosità, intensità e velocità mentre l'effetto è in corso.
 > • Preferiti, riprodotti di recente, e le luci tornano com'erano quando
 >   l'effetto si ferma.
-> • Anteprima di ogni effetto sullo schermo prima di usarlo sulle luci vere.
+> • Anteprima di ogni effetto sullo schermo.
 >
 > Richiede un Bridge Philips Hue (modello quadrato) e luci Hue a colori o
 > white ambiance sulla stessa rete Wi-Fi. Le aree Entertainment richiedono
@@ -233,13 +237,13 @@ artifact, see RELEASE.md § 1b).
 
 **Novità (1.0.0)**
 
-> Prima versione: 6 scene con varianti di colore, 19 storie con le
-> raccolte di Halloween e Natale, 4 effetti Music Sync, streaming
-> Entertainment ed editor delle aree, scene tue, playlist, salvataggio come
-> scena Hue, link per le automazioni e adesivi NFC, timer di spegnimento,
-> in famiglia (nanna, storie inventate, ninne nanne, routine con le
-> stelline, giochi, modalità bambini), modalità cinema, luci per le
-> notifiche su Android, la schermata di blocco su iPhone e otto lingue.
+> Prima versione: 7 scene con varianti di colore, 23 storie (Halloween,
+> Natale, feste), 4 effetti Music Sync, streaming Entertainment ed editor
+> delle aree, scene tue, playlist, link, adesivi NFC e riquadri delle
+> impostazioni rapide, in famiglia (rituale della nanna, storie inventate,
+> ninne nanne, profili dei bambini con le stelline, negozio delle stelle,
+> giochi, pianoforte luminoso, modalità bambini), modalità cinema, luci per
+> le notifiche su Android, schermata di blocco su iPhone, otto lingue.
 
 ## Google Play: Data safety form
 
@@ -521,23 +525,30 @@ preview mode works for the player shots):
 > nie aufgenommen.
 >
 > FÜR DIE FAMILIE
-> Schlafenszeit mit einem Tipp, Geschichten, die vorgelesen werden, während
-> das Licht sie erzählt, ein Geschichtenerfinder mit einer neuen
-> Gutenachtgeschichte für jeden Abend, Schlaflieder auf einer Spieluhr, die
-> die Lampen Ton für Ton aufleuchten lassen, ein Monsterspray vor dem
-> Einschlafen, Bilder-Checklisten für morgens und abends mit Sternen, ein
-> Aufwachlicht, das morgens grün wird, Licht-Timer fürs Zähneputzen, eine
-> Geburtstagsparty mit Kerzen auf den Lampen, Spiele mit Licht, Lernspiele
-> (Lichter zählen, Farben in einer anderen Sprache), eine weihnachtliche
-> Lichtshow mit Liedern und ein gesperrter Kindermodus mit großen Tasten.
+> Schlafenszeit mit einem Tipp oder das ganze Gute-Nacht-Ritual
+> (Abendroutine, Monsterspray, eine Geschichte, in der dein Kind die
+> Hauptrolle spielt, ein Schlaflied und ein Wächterlicht), Geschichten, die
+> vorgelesen werden, während das Licht sie erzählt, ein Geschichtenerfinder
+> mit einer neuen Gutenachtgeschichte für jeden Abend, Schlaflieder auf
+> einer Spieluhr, die die Lampen Ton für Ton aufleuchten lassen,
+> Bilder-Checklisten für morgens und abends mit Sternen für jedes Kind, die
+> es im Sternenladen gegen Belohnungen eintauscht, ein Aufwachlicht, das
+> morgens grün wird, Licht-Timer fürs Zähneputzen, eine Geburtstagsparty
+> mit Kerzen auf den Lampen, Spiele mit Licht (auch Heiß oder kalt), ein
+> Lichtklavier, das Lieder beibringt, Geheimbotschaften im Morsecode, eine
+> Halloween-Party, bei der ein Hue-Bewegungsmelder die Schreckmomente
+> auslöst, Lernspiele (Lichter zählen, Farben in einer anderen Sprache),
+> eine weihnachtliche Lichtshow mit Liedern und ein gesperrter Kindermodus
+> mit großen Tasten.
 >
 > JEDEN TAG
 > Ein Kinomodus, der das Licht für den Film dimmt und am Ende zurückbringt;
 > NFC-Sticker, die mit einer Berührung des Telefons einen Effekt oder die
-> Schlafenszeit starten; unter Android blinkt das Licht in der Farbe einer
-> App, wenn sie dich benachrichtigt, auch wenn LumiFX geschlossen ist; auf
-> dem iPhone der laufende Effekt und eine Stopp-Taste auf dem
-> Sperrbildschirm.
+> Schlafenszeit starten; unter Android Kacheln in den Schnelleinstellungen,
+> die den Effekt stoppen oder die Schlafenszeit starten, und Licht, das in
+> der Farbe einer App blinkt, wenn sie dich benachrichtigt, auch wenn
+> LumiFX geschlossen ist; auf dem iPhone der laufende Effekt und eine
+> Stopp-Taste auf dem Sperrbildschirm.
 >
 > FÜR HUE GEMACHT
 > • Findet und koppelt deine Hue Bridge im WLAN, ohne Konto.
@@ -592,8 +603,7 @@ preview mode works for the player shots):
 > d'étoiles filantes, des dinosaures qui approchent, les abysses la nuit.
 > Pour Halloween : un champ de citrouilles, le chaudron de la sorcière, le
 > château du vampire et « des bonbons ou un sort » ; pour Noël : l'atelier du
-> Père Noël, une neige silencieuse et un chant à la bougie. Chaque passage
-> d'une histoire est un peu différent.
+> Père Noël, une neige silencieuse et un chant à la bougie.
 >
 > VOS SCÈNES ET VOS PLAYLISTS
 > Choisissez de deux à cinq couleurs et un mouvement pour créer votre
@@ -610,22 +620,28 @@ preview mode works for the player shots):
 > téléphone et jamais enregistré.
 >
 > POUR LA FAMILLE
-> L'heure du dodo en un geste, des histoires lues à voix haute pendant que
-> les lumières les racontent, une nouvelle histoire inventée chaque soir
-> avec l'app, des berceuses sur une boîte à musique qui allument les lampes
-> note après note, un spray anti-monstres avant de dormir, des listes en
-> images du matin et du soir avec des étoiles, une lumière qui passe au
-> vert quand on peut se lever, des minuteurs lumineux pour se brosser les
-> dents, une fête d'anniversaire avec les bougies sur les lampes, des jeux
-> de lumière, des jeux pour apprendre (compter les lumières, les couleurs
+> L'heure du dodo en un geste, ou tout le rituel du coucher (routine du
+> soir, spray anti-monstres, une histoire où votre enfant a le premier
+> rôle, une berceuse, une lumière gardienne), des histoires lues à voix
+> haute pendant que les lumières les racontent, une nouvelle histoire
+> inventée chaque soir avec l'app, des berceuses sur une boîte à musique
+> qui allument les lampes note après note, des listes en images du matin et
+> du soir avec des étoiles pour chaque enfant, à dépenser dans la boutique
+> des étoiles, une lumière qui passe au vert quand on peut se lever, des
+> minuteurs lumineux pour se brosser les dents, une fête d'anniversaire
+> avec les bougies sur les lampes, des jeux de lumière (dont chaud ou
+> froid), un piano lumineux qui apprend des chansons, des messages secrets
+> en morse, une fête d'Halloween où un détecteur de mouvement Hue déclenche
+> les frayeurs, des jeux pour apprendre (compter les lumières, les couleurs
 > dans une autre langue), un spectacle de lumières de Noël avec des chants
 > et un mode enfants verrouillé aux gros boutons.
 >
 > AU QUOTIDIEN
 > Un mode cinéma qui baisse les lumières pour le film et les rallume à la
 > fin ; des autocollants NFC qui lancent un effet ou le coucher d'un simple
-> contact du téléphone ; sur Android, les lumières clignotent dans la
-> couleur d'une app quand elle vous envoie une notification, même quand
+> contact du téléphone ; sur Android, des tuiles de réglages rapides pour
+> arrêter l'effet ou lancer le coucher, et des lumières qui clignotent dans
+> la couleur d'une app quand elle vous envoie une notification, même quand
 > LumiFX est fermée ; sur iPhone, l'effet en cours et un bouton Stop sur
 > l'écran verrouillé.
 >
@@ -641,8 +657,7 @@ preview mode works for the player shots):
 >   la fin de chaque effet.
 > • Un mode « adoucir les flashs » pour les personnes sensibles aux lumières
 >   clignotantes.
-> • Un aperçu de chaque effet à l'écran avant de le jouer sur de vraies
->   lampes.
+> • Un aperçu de chaque effet à l'écran.
 >
 > Nécessite un Philips Hue Bridge (modèle carré) et des lampes Hue couleur
 > ou White Ambiance sur le même réseau Wi-Fi. Les zones Entertainment
@@ -700,13 +715,18 @@ preview mode works for the player shots):
 > y nunca se graba.
 >
 > PARA LA FAMILIA
-> La hora de dormir con un toque, historias leídas en voz alta mientras las
-> luces las cuentan, un cuento nuevo cada noche inventado con la app,
-> canciones de cuna en una caja de música que encienden las lámparas nota a
-> nota, un espray antimonstruos antes de dormir, listas con dibujos de
-> mañana y noche con estrellas, una luz que se pone verde cuando ya es hora
-> de levantarse, temporizadores de luz para lavarse los dientes, una fiesta
-> de cumpleaños con las velas en las lámparas, juegos de luz, juegos para
+> La hora de dormir con un toque, o todo el ritual de buenas noches (rutina
+> de la noche, espray antimonstruos, un cuento protagonizado por tu peque,
+> una canción de cuna, una luz guardiana), historias leídas en voz alta
+> mientras las luces las cuentan, un cuento nuevo cada noche inventado con
+> la app, canciones de cuna en una caja de música que encienden las
+> lámparas nota a nota, listas con dibujos de mañana y noche con estrellas
+> para cada niño, que se canjean en la tienda de estrellas, una luz que se
+> pone verde cuando ya es hora de levantarse, temporizadores de luz para
+> lavarse los dientes, una fiesta de cumpleaños con las velas en las
+> lámparas, juegos de luz (como frío o caliente), un piano de luz que
+> enseña canciones, mensajes secretos en morse, una fiesta de Halloween en
+> la que un sensor de movimiento Hue dispara los sustos, juegos para
 > aprender (contar las luces, los colores en otro idioma), un espectáculo
 > de luces navideño con villancicos y un modo niños bloqueado con botones
 > grandes.
@@ -714,9 +734,10 @@ preview mode works for the player shots):
 > CADA DÍA
 > Un modo cine que baja las luces para la película y las devuelve al final;
 > pegatinas NFC que inician un efecto o la hora de dormir con solo acercar
-> el teléfono; en Android, las luces parpadean con el color de una app
-> cuando te avisa, incluso con LumiFX cerrada; en iPhone, el efecto en
-> curso y un botón Detener en la pantalla de bloqueo.
+> el teléfono; en Android, botones de Ajustes rápidos para detener el
+> efecto o iniciar la hora de dormir, y luces que parpadean con el color
+> de una app cuando te avisa, incluso con LumiFX cerrada; en iPhone, el
+> efecto en curso y un botón Detener en la pantalla de bloqueo.
 >
 > HECHA PARA HUE
 > • Encuentra y vincula tu Hue Bridge en tu Wi-Fi, sin cuenta.
@@ -787,22 +808,29 @@ preview mode works for the player shots):
 > geanalyseerd en nooit opgenomen.
 >
 > VOOR HET GEZIN
-> Bedtijd met één tik, verhalen die worden voorgelezen terwijl het licht ze
+> Bedtijd met één tik, of het hele slaapritueel (avondroutine,
+> monsterspray, een verhaal met je kind in de hoofdrol, een slaapliedje,
+> een wachtlicht), verhalen die worden voorgelezen terwijl het licht ze
 > vertelt, een verhalenmaker met elke avond een nieuw slaapverhaal,
 > slaapliedjes op een speeldoos die de lampen noot voor noot laten
-> oplichten, monsterspray voor het slapengaan, plaatjeslijstjes voor
-> 's ochtends en 's avonds met sterren, een wekkerlicht dat groen wordt als
-> je op mag staan, lichttimers voor het tandenpoetsen, een verjaardagsfeest
-> met kaarsjes op de lampen, lichtspelletjes, leerspelletjes (tel de
-> lichtjes, kleuren in een andere taal), een kerstlichtshow met
-> kerstliedjes en een vergrendelde kindermodus met grote knoppen.
+> oplichten, plaatjeslijstjes voor 's ochtends en 's avonds met sterren
+> voor elk kind, in te wisselen in de sterrenwinkel, een wekkerlicht dat
+> groen wordt als je op mag staan, lichttimers voor het tandenpoetsen, een
+> verjaardagsfeest met kaarsjes op de lampen, lichtspelletjes (zoals warm
+> of koud), een lichtpiano die liedjes aanleert, geheime berichten in
+> morse, een halloweenfeest waarbij een Hue-bewegingssensor voor de
+> schrikmomenten zorgt, leerspelletjes (tel de lichtjes, kleuren in een
+> andere taal), een kerstlichtshow met kerstliedjes en een vergrendelde
+> kindermodus met grote knoppen.
 >
 > ELKE DAG
 > Een bioscoopmodus die het licht dimt voor de film en aan het eind
 > terugbrengt; NFC-stickers die met één aanraking van de telefoon een
-> effect of bedtijd starten; op Android knipperen de lampen in de kleur van
-> een app als die je een melding stuurt, ook als LumiFX dicht is; op de
-> iPhone het effect dat speelt en een stopknop op het vergrendelscherm.
+> effect of bedtijd starten; op Android tegels in Snelle instellingen om
+> het effect te stoppen of bedtijd te starten, en lampen die knipperen in
+> de kleur van een app als die je een melding stuurt, ook als LumiFX dicht
+> is; op de iPhone het effect dat speelt en een stopknop op het
+> vergrendelscherm.
 >
 > GEMAAKT VOOR HUE
 > • Vindt en koppelt je Hue Bridge op je wifi, zonder account.
@@ -873,22 +901,27 @@ preview mode works for the player shots):
 > as luzes junto. O som é analisado no celular e nunca é gravado.
 >
 > PARA A FAMÍLIA
-> Hora de dormir com um toque, histórias lidas em voz alta enquanto as
-> luzes as contam, uma história nova toda noite inventada com o app,
-> canções de ninar numa caixinha de música que acendem as lâmpadas nota
-> por nota, um spray antimonstros antes de dormir, listas com figuras de
-> manhã e de noite com estrelinhas, timers de luz para escovar os dentes,
-> uma festa de aniversário com as velinhas nas lâmpadas, jogos de luz,
-> jogos para aprender (contar as luzes, as cores em outra língua), um show
-> de luzes de Natal com canções e um modo infantil bloqueado com botões
-> grandes.
+> Hora de dormir com um toque, ou todo o ritual da hora de dormir (rotina
+> da noite, spray antimonstros, uma história com a criança como
+> protagonista, uma canção de ninar, uma luz guardiã), histórias lidas em
+> voz alta enquanto as luzes as contam, uma história nova toda noite
+> inventada com o app, canções de ninar numa caixinha de música que acendem
+> as lâmpadas nota por nota, listas com figuras de manhã e de noite com
+> estrelinhas para cada criança trocar na loja de estrelas, timers de luz
+> para escovar os dentes, uma festa de aniversário com as velinhas nas
+> lâmpadas, jogos de luz (como quente ou frio), um piano de luz que ensina
+> músicas, mensagens secretas em código Morse, uma festa de Halloween em
+> que um sensor de movimento Hue dispara os sustos, jogos para aprender
+> (contar as luzes, as cores em outra língua), um show de luzes de Natal
+> com canções e um modo infantil bloqueado com botões grandes.
 >
 > NO DIA A DIA
 > Um modo cinema que diminui as luzes para o filme e as traz de volta no
 > fim; adesivos NFC que começam um efeito ou a hora de dormir com um toque
-> do celular; no Android, as luzes piscam na cor de um app quando ele te
-> notifica, mesmo com o LumiFX fechado; no iPhone, o efeito tocando e um
-> botão Parar na tela de bloqueio.
+> do celular; no Android, blocos de configurações rápidas para parar o
+> efeito ou começar a hora de dormir, e luzes que piscam na cor de um app
+> quando ele te notifica, mesmo com o LumiFX fechado; no iPhone, o efeito
+> tocando e um botão Parar na tela de bloqueio.
 >
 > FEITO PARA HUE
 > • Encontra e pareia com a sua Hue Bridge no Wi-Fi, sem conta.
@@ -909,12 +942,13 @@ preview mode works for the player shots):
 
 **Novidades (1.0.0)**
 
-> Primeira versão: 6 cenas com variações de cor, 19 histórias, 4 efeitos
+> Primeira versão: 7 cenas com variações de cor, 23 histórias, 4 efeitos
 > Music Sync, streaming Entertainment, cenas suas, playlists, links para
-> automações e adesivos NFC, momentos em família (hora de dormir,
-> histórias inventadas, canções de ninar, rotinas com estrelinhas, jogos e
-> jogos para aprender, modo infantil), modo cinema, luzes de notificação
-> no Android, a tela de bloqueio no iPhone e oito idiomas.
+> automações, adesivos NFC e blocos de configurações rápidas, momentos em
+> família (ritual da hora de dormir, histórias inventadas, canções de
+> ninar, perfis e estrelinhas para cada criança, loja de estrelas, jogos,
+> piano de luz, modo infantil), modo cinema, luzes de notificação no
+> Android, a tela de bloqueio no iPhone e oito idiomas.
 
 ## 日本語
 
@@ -954,18 +988,22 @@ preview mode works for the player shots):
 > スマートフォン上で解析され、録音されることはありません。
 >
 > 家族で
-> ワンタップのおやすみモード、光に合わせて読み上げるストーリー、毎晩新しいお話が
-> できるおはなしづくり、音符ごとにランプが灯るオルゴールの子守歌、寝る前のモン
-> スターよけスプレー、星がもらえる朝と夜のしたくの絵チェックリスト、歯みがき用の
-> ライトタイマー、ランプにろうそくがともる誕生日パーティー、光のゲーム、学べる
-> ゲーム（光をかぞえよう、ほかの言葉で色をおぼえよう）、歌に合わせたクリスマスの
-> ライトショー、大きなボタンのロック付きキッズモード。
+> ワンタップのおやすみモードと、夜のしたく、モンスターよけスプレー、お子さんが主人
+> 公の今夜のお話、子守歌、見守りライトを順に進めるおやすみの儀式、光に合わせて読み
+> 上げるストーリー、毎晩新しいお話ができるおはなしづくり、音符ごとにランプが灯るオ
+> ルゴールの子守歌、子どもごとに星がもらえる朝と夜のしたくの絵チェックリストと、星
+> をごほうびと交換できる星のおみせ、歯みがき用のライトタイマー、ランプにろうそくが
+> ともる誕生日パーティー、光のゲーム（あったか・つめたい など）、曲をおぼえられる
+> ひかりのピアノ、モールス信号のひみつのメッセージ、人感センサーでおどかすハロウィ
+> ンパーティー、学べるゲーム（光をかぞえよう、ほかの言葉で色をおぼえよう）、歌に合
+> わせたクリスマスのライトショー、大きなボタンのロック付きキッズモード。
 >
 > 毎日
 > 映画に合わせて照明を落とし、終わると元に戻すシアターモード。スマートフォンを
-> かざすだけで演出やおやすみモードを始める NFC シール。Android では、アプリから
-> 通知が届くとそのアプリの色で照明が点滅します（LumiFX を閉じていても）。iPhone
-> では、再生中の演出と停止ボタンをロック画面に表示します。
+> かざすだけで演出やおやすみモードを始める NFC シール。Android では、クイック設定
+> タイルから演出の停止やおやすみモードの開始ができ、アプリから通知が届くとそのア
+> プリの色で照明が点滅します（LumiFX を閉じていても）。iPhone では、再生中の演出
+> と停止ボタンをロック画面に表示します。
 >
 > HUE のために
 > • アカウント不要。Wi-Fi 上の Hue ブリッジを見つけてペアリングします。
@@ -986,8 +1024,9 @@ preview mode works for the player shots):
 
 **新機能（1.0.0）**
 
-> 最初のリリース：色のバリエーション付きシーン 6 種、ストーリー 19 種、Music Sync
+> 最初のリリース：色のバリエーション付きシーン 7 種、ストーリー 23 種、Music Sync
 > 演出 4 種、エンターテインメント ストリーミング、オリジナルシーン、プレイリスト、
-> オートメーション用リンクと NFC シール、家族で楽しむ機能（おやすみモード、おはなし
-> づくり、子守歌、星がもらえるしたくリスト、ゲームと学べるゲーム、キッズモード）、
-> シアターモード、Android の通知ライト、iPhone のロック画面表示、8 言語に対応。
+> オートメーション用リンクと NFC シール、Android のクイック設定タイル、家族で楽しむ
+> 機能（おやすみモードとおやすみの儀式、おはなしづくり、子守歌、子どもごとの星がも
+> らえるしたくリストと星のおみせ、ゲームと学べるゲーム、ひかりのピアノ、キッズモー
+> ド）、シアターモード、Android の通知ライト、iPhone のロック画面表示、8 言語に対応。

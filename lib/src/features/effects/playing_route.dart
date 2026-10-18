@@ -16,17 +16,27 @@ import '../fun/birthday_screen.dart';
 import '../fun/countdown.dart';
 import '../fun/countdowns_screen.dart';
 import '../fun/game_screen.dart';
+import '../fun/haunted_party.dart';
+import '../fun/haunted_party_screen.dart';
+import '../fun/hot_cold.dart';
+import '../fun/hot_cold_screen.dart';
 import '../fun/light_games.dart';
 import '../fun/simon_screen.dart';
 import '../learn/colour_words.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting.dart';
 import '../learn/counting_screen.dart';
+import '../learn/morse.dart';
+import '../learn/morse_screen.dart';
+import '../music_box/light_piano.dart';
+import '../music_box/light_piano_screen.dart';
 import '../music_box/music_box_screen.dart';
 import '../paths/path_story.dart';
 import '../paths/path_story_screen.dart';
 import '../routines/kid_routine.dart';
 import '../routines/routines_screen.dart';
+import '../routines/star_shop.dart';
+import '../routines/star_shop_screen.dart';
 import '../tales/tale.dart';
 import '../tales/tale_maker_screen.dart';
 import '../timers/light_timer.dart';
@@ -72,10 +82,20 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = MonsterSprayScreen(playing: effect);
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
+  } else if (isPianoEffect(effect)) {
+    screen = const LightPianoScreen();
+  } else if (HauntedParty.isParty(effect)) {
+    screen = const HauntedPartyScreen();
+  } else if (HotCold.isHotCold(effect)) {
+    screen = const HotColdScreen();
   } else if (CountingGame.isCounting(effect)) {
     screen = const CountingScreen();
+  } else if (MorseMessage.of(effect) != null) {
+    screen = MorseScreen(playing: effect);
   } else if (LearnColour.of(effect) != null) {
     screen = ColourWordsScreen(playing: effect);
+  } else if (isRewardParty(effect)) {
+    screen = const StarShopScreen();
   } else if (KidRoutine.of(effect) != null) {
     screen = const RoutinesScreen();
   } else if (id.startsWith('${LightingEffect.generatedPrefix}simon')) {

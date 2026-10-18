@@ -110,6 +110,27 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Quick settings tiles: stop the effect, start bedtime. -->
+        <service
+            android:name=".StopTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_stop"
+            android:label="@string/tile_stop"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".BedtimeTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_bedtime"
+            android:label="@string/tile_bedtime"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
         <!-- Notification lights: sees which chosen app posted a
              notification (never what it says) and flashes the lights
              through the bridge. Off until the user allows notification

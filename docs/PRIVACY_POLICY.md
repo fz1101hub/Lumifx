@@ -50,13 +50,33 @@ stories and game calls are read by your phone's own text-to-speech voice.
 LumiFX sends them nowhere (depending on your phone's settings, its speech
 engine may use an online voice).
 
-**Story maker and learning games.** The story maker puts each story
-together on your phone from sentences written into the app; it uses no
-AI and no internet connection, and the hero's name you type is used only
-in that story and is not saved. Count the lights and Colours in another
-language also run entirely on your phone. The numbers, the colour words
-and, with "Read aloud" on, the lines of the story are spoken by your
-phone's own text-to-speech voice, as described above.
+**Story maker, learning games and party games.** The story maker puts
+each story together on your phone from sentences written into the app;
+it uses no AI and no internet connection, and the hero's name you type
+is used only in that story and is not saved (you can also pick one of
+the children's names described under "Children's profiles and the star
+shop"). Count the lights, Colours in another language, Secret messages,
+Hot and cold and the Light piano also run entirely on your phone. The
+numbers, the colour words, the calls of Hot and cold and, with "Read
+aloud" on, the lines of the story are spoken by your phone's own
+text-to-speech voice, as described above.
+
+**Children's profiles and the star shop.** If you add children to the
+morning and evening routines, their names (as you type them), their
+routine steps, the stars they earn and spend, and the rewards and costs
+you set in the star shop are stored on your phone only, with the other
+preferences, and are never sent anywhere. On iPhone, like other app
+data, they may be part of your own iCloud device backup. Removing a
+child deletes their stars and steps; uninstalling the app deletes
+everything. The bedtime ritual puts the chosen child's name in
+tonight's story, on your phone.
+
+**Motion sensor (Halloween party).** At a Halloween party you can choose
+one of your Hue motion sensors. While the party screen is open, LumiFX
+listens to your Hue Bridge's event stream on your local network to know
+when that sensor sees someone, and answers with a scare on your lights.
+It uses only the motion reports; nothing is recorded, stored or sent
+anywhere else, and it stops listening when you leave the party screen.
 
 **Weather lights.** If you use Weather lights, the city name you type in
 the search is sent to Open-Meteo (open-meteo.com) to find matching places,
@@ -139,14 +159,16 @@ made; LumiFX sends it nowhere.
 scenes are stored on your own Hue Bridge, like those made in the Hue app.
 
 **Preferences.** Favourites, recently played effects, playback settings,
-the stars and steps of the morning and evening routines, and the scenes
-and stories you make are stored on your phone only.
+the stars and steps of the morning and evening routines, the children's
+names, the star shop's rewards, the bedtime ritual's choices, and the
+scenes and stories you make are stored on your phone only.
 
 ## Network connections
 
 - **Your Hue Bridge** on your local Wi-Fi network (HTTPS and, for fast
   effects, an encrypted DTLS stream). Notification lights send their
-  flash commands to it over HTTPS too.
+  flash commands to it over HTTPS too, and the Halloween party listens
+  to its event stream for motion.
 - **discovery.meethue.com**, a service operated by Signify (Philips Hue),
   which helps find bridges on your network. The request contains no
   personal data beyond what any web request contains (your public IP
@@ -161,6 +183,7 @@ advertising, no crash reporting and no tracking of any kind.
 ## Children
 
 LumiFX does not collect personal data from anyone, including children.
+The children's names you add to the routines stay on your phone.
 Weather lights send only a place name and its coordinates to Open-Meteo,
 never anything that identifies a person.
 
@@ -227,14 +250,36 @@ storie e i comandi dei giochi sono letti dalla voce di sintesi del telefono.
 LumiFX non le invia da nessuna parte (a seconda delle impostazioni del
 telefono, il motore vocale potrebbe usare una voce online).
 
-**Inventa una storia e giochi per imparare.** "Inventa una storia" compone
-ogni storia sul telefono con frasi scritte nell'app; non usa
-intelligenza artificiale né connessione a internet, e il nome dell'eroe
-che scrivi è usato solo in quella storia e non viene salvato. Anche
-"Conta le luci" e "I colori in un'altra lingua" funzionano interamente
-sul telefono. I numeri, i nomi dei colori e, con "Leggi ad alta voce"
-attivo, le frasi della storia sono pronunciati dalla voce di sintesi del
-telefono, come descritto sopra.
+**Inventa una storia, giochi per imparare e giochi di festa.** "Inventa
+una storia" compone ogni storia sul telefono con frasi scritte nell'app;
+non usa intelligenza artificiale né connessione a internet, e il nome
+dell'eroe che scrivi è usato solo in quella storia e non viene salvato
+(puoi anche sceglierlo tra i nomi dei bambini descritti sotto "Profili
+dei bambini e negozio delle stelle"). Anche "Conta le luci", "I colori
+in un'altra lingua", "Messaggi segreti", "Acqua o fuoco" e il
+"Pianoforte luminoso" funzionano interamente sul telefono. I numeri, i
+nomi dei colori, le parole di "Acqua o fuoco" e, con "Leggi ad alta
+voce" attivo, le frasi della storia sono pronunciati dalla voce di
+sintesi del telefono, come descritto sopra.
+
+**Profili dei bambini e negozio delle stelle.** Se aggiungi dei bambini
+alle routine del mattino e della sera, i loro nomi (come li scrivi), i
+passi delle loro routine, le stelline che guadagnano e spendono e i
+premi e i costi che imposti nel negozio delle stelle sono salvati solo
+sul telefono, insieme alle altre preferenze, e non vengono mai inviati
+da nessuna parte. Su iPhone, come gli altri dati delle app, possono far
+parte del tuo backup iCloud del dispositivo. Rimuovere un bambino ne
+elimina le stelline e i passi; disinstallare l'app elimina tutto. Il
+rituale della nanna mette il nome del bambino scelto nella storia della
+sera, sul telefono.
+
+**Sensore di movimento (festa di Halloween).** Alla festa di Halloween
+puoi scegliere uno dei tuoi sensori di movimento Hue. Mentre la
+schermata della festa è aperta, LumiFX ascolta il flusso di eventi del
+tuo Hue Bridge sulla rete locale per sapere quando quel sensore vede
+qualcuno, e risponde con uno spavento sulle luci. Usa solo le
+segnalazioni di movimento; nulla viene registrato, salvato o inviato
+altrove, e smette di ascoltare quando lasci la schermata della festa.
 
 **Meteo in luce.** Se usi Meteo in luce, il nome della città che scrivi
 nella ricerca viene inviato a Open-Meteo (open-meteo.com) per trovare i
@@ -313,15 +358,17 @@ da nessuna parte.
 **Routine e scene Hue.** Le routine di sveglia e buonanotte e le scene Hue
 salvate sono memorizzate sul tuo Hue Bridge, come quelle create nell'app Hue.
 
-**Preferenze.** Preferiti, effetti recenti, impostazioni di riproduzione e
-le stelline e i passi delle routine del mattino e della sera sono salvati
-solo sul telefono.
+**Preferenze.** Preferiti, effetti recenti, impostazioni di riproduzione,
+le stelline e i passi delle routine del mattino e della sera, i nomi dei
+bambini, i premi del negozio delle stelle, le scelte del rituale della
+nanna e le scene e storie che crei sono salvati solo sul telefono.
 
 ## Connessioni di rete
 
 - **Il tuo Bridge Hue** sulla rete Wi-Fi locale (HTTPS e, per gli effetti
   veloci, uno stream DTLS cifrato). Anche le luci per le notifiche gli
-  inviano i comandi di lampeggio in HTTPS.
+  inviano i comandi di lampeggio in HTTPS, e la festa di Halloween ne
+  ascolta il flusso di eventi per i movimenti.
 - **discovery.meethue.com**, un servizio di Signify (Philips Hue) che aiuta
   a trovare i Bridge sulla rete. La richiesta non contiene dati personali
   oltre a quelli di qualsiasi richiesta web (l'indirizzo IP pubblico). Puoi
@@ -335,7 +382,8 @@ segnalazione di crash né alcuna forma di tracciamento.
 
 ## Minori
 
-LumiFX non raccoglie dati personali da nessuno, minori compresi. Meteo in
+LumiFX non raccoglie dati personali da nessuno, minori compresi. I nomi
+dei bambini che aggiungi alle routine restano sul telefono. Meteo in
 luce invia a Open-Meteo solo il nome di un luogo e le sue coordinate, mai
 qualcosa che identifichi una persona.
 

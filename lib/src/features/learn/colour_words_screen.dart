@@ -49,8 +49,13 @@ class _ColourWordsScreenState extends State<ColourWordsScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // English to start with, or Spanish for whoever speaks it already.
-    _language ??= _own == 'en' ? 'es' : 'en';
+    // The language chosen last time; else English to start with, or
+    // Spanish for whoever speaks it already.
+    final saved = AppScope.of(context).preferences.learnLanguage;
+    _language ??=
+        saved != null && saved != _own && learnLanguages.containsKey(saved)
+            ? saved
+            : (_own == 'en' ? 'es' : 'en');
   }
 
   @override
@@ -148,6 +153,9 @@ class _ColourWordsScreenState extends State<ColourWordsScreen> {
                       selected: _language == code,
                       onSelected: (_) {
                         setState(() => _language = code);
+                        unawaited(AppScope.of(context)
+                            .preferences
+                            .setLearnLanguage(code));
                         _say(_mode == _Mode.quiz && _quiz.choices.isNotEmpty
                             ? _quiz.target
                             : _colour);
