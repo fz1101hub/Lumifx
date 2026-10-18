@@ -11,6 +11,7 @@ import '../common/layout.dart';
 import '../effects/light_color_ui.dart';
 import '../effects/playback_controller.dart';
 import '../library/preferences_controller.dart';
+import 'child_picker.dart';
 import 'kid_routine.dart';
 
 /// The steps of [routine] a grown-up kept, in order.
@@ -45,7 +46,9 @@ class RoutinesScreen extends StatelessWidget {
             children: [
               Text(l10n.kidRoutinesDescription,
                   style: theme.textTheme.bodyMedium),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+              const ChildPicker(),
+              const SizedBox(height: 12),
               for (final routine in KidRoutine.values)
                 Card(
                   child: Padding(

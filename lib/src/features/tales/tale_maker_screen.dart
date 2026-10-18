@@ -168,6 +168,20 @@ class _TaleMakerScreenState extends State<TaleMakerScreen> {
             border: const OutlineInputBorder(),
           ),
         ),
+        // The children's names, to make them the heroes.
+        if (preferences.children.isNotEmpty)
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final child in preferences.children)
+                ActionChip(
+                  avatar: const Icon(Icons.child_care),
+                  label: Text(child.name),
+                  onPressed: () => setState(() => _name.text = child.name),
+                ),
+            ],
+          ),
         section(l10n.storyMakerPlace, [
           for (final place in TalePlace.values)
             ChoiceChip(

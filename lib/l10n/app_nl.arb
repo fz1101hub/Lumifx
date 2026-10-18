@@ -1001,5 +1001,10 @@
   "pianoLearn": "Leer een liedje",
   "pianoNext": "Speel de toets die oplicht",
   "pianoProgress": "{done} van {total}",
-  "pianoBravo": "Bravo! Je hebt het hele liedje gespeeld"
+  "pianoBravo": "Bravo! Je hebt het hele liedje gespeeld",
+  "childAdd": "Kind toevoegen",
+  "childName": "Naam",
+  "childrenEdit": "Kinderen",
+  "childRename": "Naam wijzigen",
+  "childRemoveConfirm": "{name} verwijderen met routines en sterren?"
 }

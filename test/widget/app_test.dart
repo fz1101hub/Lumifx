@@ -1495,6 +1495,42 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('each child has a profile with their own stars', (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const RoutinesScreen())));
+    await tester.pumpAndSettle();
+    final preferences =
+        AppScope.of(tester.element(find.byType(RoutinesScreen))).preferences;
+    for (final name in ['Anna', 'Leo']) {
+      await tester.tap(find.text('Add a child'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), name);
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+    }
+    expect(find.widgetWithText(ChoiceChip, 'Anna'), findsOneWidget);
+    expect(preferences.activeChild?.name, 'Leo');
+    preferences.earnStar('2026-10-18:morning');
+    await tester.pump();
+    expect(find.text('1 star'), findsOneWidget);
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Anna'));
+    await tester.pumpAndSettle();
+    expect(preferences.activeChild?.name, 'Anna');
+    expect(find.text('No stars yet'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Children'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Delete').last);
+    await tester.pumpAndSettle();
+    expect(
+        find.text('Remove Leo with their routines and stars?'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+    await tester.pumpAndSettle();
+    expect([for (final c in preferences.children) c.name], ['Anna']);
+  });
+
   testWidgets('bridge setup lists discovered bridges', (tester) async {
     await _pumpApp(tester);
     await tester.tap(find.text('Connect your Hue Bridge'));

@@ -3950,5 +3950,30 @@
   "pianoBravo": "Bravo! You played the whole song",
   "@pianoBravo": {
     "description": "Light piano lesson: the whole tune was played"
+  },
+  "childAdd": "Add a child",
+  "@childAdd": {
+    "description": "Chip: add a child's profile"
+  },
+  "childName": "Name",
+  "@childName": {
+    "description": "Field: the child's name"
+  },
+  "childrenEdit": "Children",
+  "@childrenEdit": {
+    "description": "Button/dialog: rename or remove children"
+  },
+  "childRename": "Change the name",
+  "@childRename": {
+    "description": "Dialog: rename a child"
+  },
+  "childRemoveConfirm": "Remove {name} with their routines and stars?",
+  "@childRemoveConfirm": {
+    "description": "Confirm removing a child's profile",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }

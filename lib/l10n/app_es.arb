@@ -1001,5 +1001,10 @@
   "pianoLearn": "Aprende una canción",
   "pianoNext": "Toca la tecla que brilla",
   "pianoProgress": "{done} de {total}",
-  "pianoBravo": "¡Bravo! Has tocado toda la canción"
+  "pianoBravo": "¡Bravo! Has tocado toda la canción",
+  "childAdd": "Añadir un niño",
+  "childName": "Nombre",
+  "childrenEdit": "Niños",
+  "childRename": "Cambiar el nombre",
+  "childRemoveConfirm": "¿Quitar a {name} con sus rutinas y estrellas?"
 }

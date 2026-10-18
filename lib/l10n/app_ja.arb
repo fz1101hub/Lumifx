@@ -1001,5 +1001,10 @@
   "pianoLearn": "曲をおぼえる",
   "pianoNext": "光っているけんばんをひいてね",
   "pianoProgress": "{done}/{total}",
-  "pianoBravo": "すごい！さいごまでひけたね"
+  "pianoBravo": "すごい！さいごまでひけたね",
+  "childAdd": "子どもを追加",
+  "childName": "名前",
+  "childrenEdit": "子どもたち",
+  "childRename": "名前を変更",
+  "childRemoveConfirm": "{name}を、したくリストと星ごと削除しますか？"
 }
