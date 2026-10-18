@@ -106,7 +106,7 @@ class _NapLightScreenState extends State<NapLightScreen> {
     final theme = Theme.of(context);
     final playback = AppScope.of(context).playback;
     final player = playback.player!;
-    final speed = playback.controls.speed.clamp(0.05, 5.0);
+    final speed = playback.effectiveSpeed.clamp(0.05, 5.0);
     final left = rest - player.position;
     final over = left <= Duration.zero;
     final minutes = over ? 0 : (left.inSeconds / 60 / speed).ceil();

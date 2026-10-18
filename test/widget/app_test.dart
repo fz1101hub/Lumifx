@@ -1259,9 +1259,12 @@ void main() {
     expect(playback.isPlaying, isTrue);
     expect(playback.soundscape.melody?.id, 'brahms');
     expect(playback.soundscape.melodyTimes, 1);
-    expect(playback.sleepTimer, isNotNull, reason: 'then the lights fade');
     expect(find.byTooltip('Stop'), findsOneWidget);
-    await tester.tap(find.byTooltip('Stop'));
+    // At the end of the tune the lights fade out, then switch off.
+    playback.player!.advance(playback.effect.cycleLength);
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(playback.isFadingOut, isTrue);
+    await tester.pump(const Duration(seconds: 21));
     await tester.pump(const Duration(seconds: 2));
     expect(playback.isPlaying, isFalse);
   });

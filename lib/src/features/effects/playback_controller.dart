@@ -609,6 +609,17 @@ class PlaybackController extends ChangeNotifier {
   /// The effect with the chosen colour variant applied.
   LightingEffect get effectToPlay => effect.withVariant(variantId);
 
+  /// The controls the lights run with: an effect with a tune keeps the
+  /// tune's own pace whatever the speed set, so the lights stay with the
+  /// music (and the music is not cut off when the lights end early).
+  EffectControls _playerControls(EffectControls controls) =>
+      controls.speed != 1 && soundscapeOf(effectToPlay).melody != null
+          ? controls.copyWith(speed: 1)
+          : controls;
+
+  /// How fast the lights' time runs now (see [_playerControls]).
+  double get effectiveSpeed => _playerControls(_controls).speed;
+
   /// Plays [next] instead of the current effect, leaving any playlist
   /// or bedtime. When idle it is only selected; while playing or paused
   /// the lights cross-fade to it without being put back in between, and
@@ -677,6 +688,19 @@ class PlaybackController extends ChangeNotifier {
     _notify();
   }
 
+  /// When the one-shot effect playing reaches its end, the lights fade out
+  /// and switch off instead of going back to how they were.
+  bool _offAtEnd = false;
+
+  /// Ends the one-shot effect now playing (a lullaby) by fading the
+  /// lights out and switching them off; any other effect started since
+  /// ends as usual.
+  void switchOffAtEnd() {
+    if (!_effect.isLooping) {
+      _offAtEnd = true;
+    }
+  }
+
   /// A one-shot effect (a timer, a game) stops by itself at its end and
   /// puts the lights back; looping effects play until stopped.
   void _watchEnd() {
@@ -696,6 +720,13 @@ class PlaybackController extends ChangeNotifier {
         _endWatch?.cancel();
         _endWatch = null;
         final name = _effect.name;
+        if (_offAtEnd && _status == PlaybackStatus.playing) {
+          // Hold the last instant while it fades, then switch off.
+          _offAtEnd = false;
+          _cancelSleepTimer();
+          _onSleepElapsed();
+          return;
+        }
         unawaited(stop());
         _notice(PlaybackNotice(PlaybackNoticeKind.finished, name: name));
       }
@@ -713,7 +744,7 @@ class PlaybackController extends ChangeNotifier {
     _bedtimeTimer?.cancel();
     _bedtimeTimer = null;
     _controls = bedtime.controls;
-    _player?.controls = bedtime.controls;
+    _player?.controls = _playerControls(bedtime.controls);
     _sleepAfter = bedtime.sleepAfter;
     if (_status == PlaybackStatus.playing || _status == PlaybackStatus.paused) {
       // The user's own timer again, from now (or none).
@@ -732,6 +763,8 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     _effect = next;
+    _offAtEnd = false;
+    _player?.controls = _playerControls(_controls);
     final player = _player;
     if (player == null || _status == PlaybackStatus.starting) {
       _notify();
@@ -999,7 +1032,7 @@ class PlaybackController extends ChangeNotifier {
         lightIds: lightIds,
         output: output,
         seed: DateTime.now().millisecondsSinceEpoch & 0x7FFFFFFF,
-        controls: _controls,
+        controls: _playerControls(_controls),
         tick: tick,
         // Read on every tick, so a later switch to (or from) a Music Sync
         // effect is picked up.
@@ -1086,6 +1119,7 @@ class PlaybackController extends ChangeNotifier {
   /// Stops playback and, unless [restore] is false, puts the lights back.
   Future<void> stop({bool restore = true}) {
     _generation++;
+    _offAtEnd = false;
     _endWatch?.cancel();
     _endWatch = null;
     _cancelSleepTimer();
@@ -1179,7 +1213,7 @@ class PlaybackController extends ChangeNotifier {
 
   void setControls(EffectControls controls) {
     _controls = controls;
-    _player?.controls = controls;
+    _player?.controls = _playerControls(controls);
     _notify();
   }
 

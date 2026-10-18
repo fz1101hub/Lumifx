@@ -56,7 +56,7 @@ class _MusicBoxScreenState extends State<MusicBoxScreen> {
     }
     // A lullaby ends with the lights fading out and switching off.
     if (!widget.festive && _switchOff) {
-      playback.setSleepTimer(effect.cycleLength);
+      playback.switchOffAtEnd();
     }
   }
 
