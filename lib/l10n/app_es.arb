@@ -976,5 +976,12 @@
   "notificationLightsTo": "Hasta",
   "keepPlayingScreenOffIos": "Los efectos con sonido siguen cuando el iPhone se bloquea, en la pantalla de bloqueo con un botón para detenerlos. Los efectos sin sonido se detienen, como exige iOS.",
   "countBest": "Récord: {count}",
-  "countNewBest": "¡Nuevo récord!"
+  "countNewBest": "¡Nuevo récord!",
+  "morse": "Mensajes secretos",
+  "morseSubtitle": "Escribe una palabra y las lámparas la parpadean en morse",
+  "morseDescription": "Una luz corta es un punto y una larga una raya. Envía una palabra con las lámparas y que alguien la adivine: el alfabeto de abajo ayuda a descifrarla.",
+  "morseMessage": "Tu mensaje",
+  "morseOnlyLetters": "Se envían las letras de la A a la Z y los números; los demás caracteres se omiten",
+  "morseSend": "Enviar con las luces",
+  "morseAlphabet": "El alfabeto morse"
 }

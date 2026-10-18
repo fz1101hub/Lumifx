@@ -976,5 +976,12 @@
   "notificationLightsTo": "Tot",
   "keepPlayingScreenOffIos": "Effecten met geluid gaan door als de iPhone vergrendelt, op het toegangsscherm met een stopknop. Effecten zonder geluid stoppen, zoals iOS vereist.",
   "countBest": "Record: {count}",
-  "countNewBest": "Nieuw record!"
+  "countNewBest": "Nieuw record!",
+  "morse": "Geheime berichten",
+  "morseSubtitle": "Typ een woord en de lampen knipperen het in morse",
+  "morseDescription": "Een kort licht is een punt, een lang een streep. Stuur een woord met de lampen en laat iemand het raden: het alfabet hieronder helpt bij het ontcijferen.",
+  "morseMessage": "Je bericht",
+  "morseOnlyLetters": "De letters A tot Z en cijfers worden verstuurd; andere tekens worden overgeslagen",
+  "morseSend": "Versturen met het licht",
+  "morseAlphabet": "Het morsealfabet"
 }

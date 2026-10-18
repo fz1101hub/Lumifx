@@ -976,5 +976,12 @@
   "notificationLightsTo": "À",
   "keepPlayingScreenOffIos": "Les effets avec des sons continuent quand l'iPhone se verrouille, affichés sur l'écran verrouillé avec un bouton Stop. Les effets sans son s'arrêtent, comme l'exige iOS.",
   "countBest": "Record : {count}",
-  "countNewBest": "Nouveau record !"
+  "countNewBest": "Nouveau record !",
+  "morse": "Messages secrets",
+  "morseSubtitle": "Écris un mot et les lampes le clignotent en morse",
+  "morseDescription": "Une lumière courte est un point, une longue un trait. Envoie un mot avec les lampes et fais-le deviner : l'alphabet ci-dessous aide à le décoder.",
+  "morseMessage": "Ton message",
+  "morseOnlyLetters": "Les lettres de A à Z et les chiffres sont envoyés ; les autres caractères sont ignorés",
+  "morseSend": "Envoyer avec les lumières",
+  "morseAlphabet": "L'alphabet morse"
 }

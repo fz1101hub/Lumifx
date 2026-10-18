@@ -976,5 +976,12 @@
   "notificationLightsTo": "Bis",
   "keepPlayingScreenOffIos": "Effekte mit Tönen laufen weiter, wenn das iPhone sperrt, und erscheinen auf dem Sperrbildschirm mit einer Stopp-Taste. Effekte ohne Töne halten an, wie iOS es verlangt.",
   "countBest": "Bestwert: {count}",
-  "countNewBest": "Neuer Rekord!"
+  "countNewBest": "Neuer Rekord!",
+  "morse": "Geheimbotschaften",
+  "morseSubtitle": "Tippe ein Wort und die Lampen blinken es im Morsecode",
+  "morseDescription": "Ein kurzes Licht ist ein Punkt, ein langes ein Strich. Sende ein Wort mit den Lampen und lass jemanden raten: Das Alphabet unten hilft beim Entschlüsseln.",
+  "morseMessage": "Deine Botschaft",
+  "morseOnlyLetters": "Gesendet werden die Buchstaben A bis Z und Zahlen; andere Zeichen werden übersprungen",
+  "morseSend": "Mit dem Licht senden",
+  "morseAlphabet": "Das Morsealphabet"
 }

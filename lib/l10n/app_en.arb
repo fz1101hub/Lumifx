@@ -3842,5 +3842,33 @@
   "countNewBest": "New record!",
   "@countNewBest": {
     "description": "Counting game: a new best score"
+  },
+  "morse": "Secret messages",
+  "@morse": {
+    "description": "Game: secret messages flashed by the lamps in Morse code"
+  },
+  "morseSubtitle": "Type a word and the lamps flash it in Morse code",
+  "@morseSubtitle": {
+    "description": "Subtitle of secret messages"
+  },
+  "morseDescription": "A short light is a dot, a long one a dash. Send a word with the lamps and let someone read it: the alphabet below helps to decode it.",
+  "@morseDescription": {
+    "description": "Explains secret messages"
+  },
+  "morseMessage": "Your message",
+  "@morseMessage": {
+    "description": "Field: the message to send"
+  },
+  "morseOnlyLetters": "Letters A to Z and numbers are sent; other characters are skipped",
+  "@morseOnlyLetters": {
+    "description": "Which characters are sent in Morse"
+  },
+  "morseSend": "Send with the lights",
+  "@morseSend": {
+    "description": "Button: send the message with the lights"
+  },
+  "morseAlphabet": "The Morse alphabet",
+  "@morseAlphabet": {
+    "description": "Header of the Morse alphabet table"
   }
 }

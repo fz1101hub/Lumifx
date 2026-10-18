@@ -976,5 +976,12 @@
   "notificationLightsTo": "終了",
   "keepPlayingScreenOffIos": "サウンド付きのエフェクトはiPhoneをロックしても続き、ロック画面に停止ボタン付きで表示されます。サウンドのないエフェクトは、iOSの決まりにより止まります。",
   "countBest": "ベスト：{count}",
-  "countNewBest": "新記録！"
+  "countNewBest": "新記録！",
+  "morse": "ひみつのメッセージ",
+  "morseSubtitle": "言葉を入力すると、ランプがモールス信号で光ります",
+  "morseDescription": "短い光は点、長い光は線。ランプで言葉を送って、だれかに当ててもらおう。下のアルファベット表が解読の手助けになります。",
+  "morseMessage": "メッセージ",
+  "morseOnlyLetters": "送れるのはA〜Zの文字と数字です。ほかの文字は飛ばされます",
+  "morseSend": "明かりで送る",
+  "morseAlphabet": "モールス信号表"
 }

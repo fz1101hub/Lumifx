@@ -47,6 +47,8 @@ import 'package:lumifx/src/features/notifications/notification_lights_screen.dar
 import 'package:lumifx/src/features/learn/colour_words_screen.dart';
 import 'package:lumifx/src/features/learn/counting.dart';
 import 'package:lumifx/src/features/learn/counting_screen.dart';
+import 'package:lumifx/src/features/learn/morse.dart';
+import 'package:lumifx/src/features/learn/morse_screen.dart';
 import 'package:lumifx/src/features/music_box/music_box_screen.dart';
 import 'package:lumifx/src/features/tales/tale_maker_screen.dart';
 import 'package:lumifx/src/features/paths/path_story_screen.dart';
@@ -1395,6 +1397,32 @@ void main() {
         scrollable: find.byType(Scrollable).first);
     expect(find.textContaining('Effects with sounds go on when the iPhone'),
         findsOneWidget);
+  });
+
+  testWidgets('a secret message is flashed in Morse, letter by letter',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const MorseScreen())));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'hi');
+    await tester.pump();
+    await tester.tap(find.text('Send with the lights'));
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MorseScreen))).playback;
+    expect(MorseMessage.of(playback.effect)?.$1.text, 'HI');
+    playback.player!.advance(const Duration(milliseconds: 1100));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('H  ....'), findsOneWidget);
+    // H takes seven units, then three dark: I starts 3.5 s after H.
+    playback.player!.advance(const Duration(milliseconds: 3500));
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('I  ..'), findsOneWidget);
+    await playback.stop();
+    await tester.pumpAndSettle();
+    expect(find.text('.... ..'), findsOneWidget, reason: 'the whole code');
   });
 
   testWidgets('bridge setup lists discovered bridges', (tester) async {
