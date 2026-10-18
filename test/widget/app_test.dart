@@ -21,6 +21,8 @@ import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/calm/breathing_screen.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
+import 'package:lumifx/src/features/effects/playback_controller.dart';
+import 'package:lumifx/src/features/home/home_screen.dart';
 import 'package:lumifx/src/features/fun/advent_screen.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
 import 'package:lumifx/src/features/fun/countdowns_screen.dart';
@@ -975,6 +977,38 @@ void main() {
     await say('Stop');
     expect(find.text('Play'), findsOneWidget);
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('in kids mode, the voice plays only the chosen effects',
+      (tester) async {
+    await _pumpApp(tester);
+    final preferences =
+        AppScope.of(tester.element(find.byType(HomeScreen))).preferences;
+    await preferences.setKidsEffects(['ocean']);
+    await preferences.setKidsLocked(true);
+    Future<void> say(String words) async {
+      final message = const JSONMethodCodec().encodeMethodCall(
+        MethodCall('pushRouteInformation',
+            {'location': 'lumifx://app/voice/${Uri.encodeComponent(words)}'}),
+      );
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+          SystemChannels.navigation.name, message, (_) {});
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
+
+    final playback =
+        AppScope.of(tester.element(find.byType(HomeScreen))).playback;
+    await say('Fireplace');
+    expect(playback.status, PlaybackStatus.idle, reason: 'not chosen');
+    await say('Ocean');
+    expect(playback.effect.id, 'ocean');
+    expect(playback.isPlaying, isTrue);
+    expect(find.text('Pause'), findsNothing,
+        reason: 'no player opens over kids mode');
+    await say('stop');
+    expect(playback.isPlaying, isFalse);
+    await tester.pump(const Duration(seconds: 2));
   });
 
   testWidgets('a link on a cold start waits for the saved scenes to load',

@@ -28,6 +28,23 @@ void main() {
     }
   });
 
+  test('locked, only the chosen gentle effects may start', () async {
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final library = EffectLibrary(preferences);
+    final ocean = library.byId('ocean')!;
+    final storm = library.byId('thunderstorm')!;
+    expect(kidsModeAllows(preferences, library, storm), isTrue,
+        reason: 'not in kids mode');
+    await preferences.setKidsLocked(true);
+    expect(kidsModeAllows(preferences, library, storm), isFalse);
+    expect(kidsModeAllows(preferences, library, ocean),
+        defaultKidsEffects(library).contains('ocean'));
+    await preferences.setKidsEffects(['ocean', 'thunderstorm']);
+    expect(kidsModeAllows(preferences, library, ocean), isTrue);
+    expect(kidsModeAllows(preferences, library, storm), isFalse,
+        reason: 'flashing effects never, even if listed');
+  });
+
   test('the choice and the lock are kept', () async {
     final store = InMemoryKeyValueStore();
     final preferences = PreferencesController(store: store);

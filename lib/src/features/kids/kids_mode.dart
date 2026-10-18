@@ -11,6 +11,7 @@ import '../common/layout.dart';
 import '../effects/effect_palette.dart';
 import '../effects/playback_controller.dart';
 import '../library/effect_library.dart';
+import '../library/preferences_controller.dart';
 
 /// The route name of kids mode: the mini-player stays away from it.
 const kidsModeRouteName = '/kids';
@@ -28,6 +29,21 @@ List<String> defaultKidsEffects(EffectLibrary library) => [
         for (final effect in library.ofKind(kind))
           if (kidsSafe(effect) && !effect.isGenerated) effect.id,
     ].take(8).toList();
+
+/// Whether [effect] may start now, from a link, the voice or a Hue
+/// button: anything outside kids mode; in kids mode only the gentle
+/// effects a grown-up chose.
+bool kidsModeAllows(
+  PreferencesController preferences,
+  EffectLibrary library,
+  LightingEffect effect,
+) {
+  if (!preferences.kidsLocked) {
+    return true;
+  }
+  final ids = preferences.kidsEffects ?? defaultKidsEffects(library);
+  return kidsSafe(effect) && ids.contains(effect.id);
+}
 
 /// Opens kids mode, which stays on (even after a restart) until a grown-up
 /// answers the question to leave.

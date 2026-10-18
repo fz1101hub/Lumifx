@@ -5,6 +5,7 @@ import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_buttons.dart';
 import '../bridge/bridge_controller.dart';
 import '../effects/playback_controller.dart';
+import '../kids/kids_mode.dart';
 import '../library/effect_library.dart';
 import '../library/preferences_controller.dart';
 
@@ -160,7 +161,8 @@ class HueButtonListener {
         final effect = library.byId(action);
         // A flashing effect waits until the warning was seen in the app.
         if (effect == null ||
-            (effect.hasRapidFlashes && !preferences.flashWarningShown)) {
+            (effect.hasRapidFlashes && !preferences.flashWarningShown) ||
+            !kidsModeAllows(preferences, library, effect)) {
           return;
         }
         if (playback.effect.id == effect.id &&
