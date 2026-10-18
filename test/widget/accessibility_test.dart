@@ -73,6 +73,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('Playlists'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Playlists'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Playlists'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('New playlist'));

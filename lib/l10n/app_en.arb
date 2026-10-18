@@ -3009,5 +3009,17 @@
   "recordingDenied": "LumiFX needs the microphone to record your voice. You can allow it in your phone settings.",
   "@recordingDenied": {
     "description": "The microphone cannot be used to record"
+  },
+  "homeFamily": "For the family",
+  "@homeFamily": {
+    "description": "Home section title: features for the family"
+  },
+  "homeMore": "More",
+  "@homeMore": {
+    "description": "Home section title: more features"
+  },
+  "homeYourHome": "Your home",
+  "@homeYourHome": {
+    "description": "Home section title: rooms and routines of the house"
   }
 }

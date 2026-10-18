@@ -803,5 +803,8 @@
   "deleteRecording": "Supprimer l'enregistrement",
   "recorded": "Enregistrée",
   "recordingNoWords": "Ajoute des mots aux moments de ton histoire pour les enregistrer.",
-  "recordingDenied": "LumiFX a besoin du micro pour enregistrer ta voix. Tu peux l'autoriser dans les réglages du téléphone."
+  "recordingDenied": "LumiFX a besoin du micro pour enregistrer ta voix. Tu peux l'autoriser dans les réglages du téléphone.",
+  "homeFamily": "Pour la famille",
+  "homeMore": "Plus",
+  "homeYourHome": "Ta maison"
 }

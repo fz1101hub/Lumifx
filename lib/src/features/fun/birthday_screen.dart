@@ -74,10 +74,17 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     // Unlit candles make no sense without this screen; the party may
     // finish on its own.
     final candles = _candles;
+    final playback = _playback;
     if (_stage == _Stage.candles &&
         candles != null &&
-        _playback.effect.id == candles.id) {
-      unawaited(_playback.stop());
+        playback.effect.id == candles.id) {
+      // Not while the screen is being taken down: stopping redraws
+      // whatever listens to the player.
+      unawaited(Future.microtask(() {
+        if (playback.effect.id == candles.id) {
+          return playback.stop();
+        }
+      }));
     }
     _name.dispose();
     _age.dispose();

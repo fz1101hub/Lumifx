@@ -803,5 +803,8 @@
   "deleteRecording": "Aufnahme löschen",
   "recorded": "Aufgenommen",
   "recordingNoWords": "Füge den Momenten deiner Geschichte Worte hinzu, um sie aufzunehmen.",
-  "recordingDenied": "LumiFX braucht das Mikrofon, um deine Stimme aufzunehmen. Du kannst es in den Telefoneinstellungen erlauben."
+  "recordingDenied": "LumiFX braucht das Mikrofon, um deine Stimme aufzunehmen. Du kannst es in den Telefoneinstellungen erlauben.",
+  "homeFamily": "Für die Familie",
+  "homeMore": "Mehr",
+  "homeYourHome": "Dein Zuhause"
 }

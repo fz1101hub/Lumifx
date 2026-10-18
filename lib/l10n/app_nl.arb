@@ -803,5 +803,8 @@
   "deleteRecording": "Opname verwijderen",
   "recorded": "Opgenomen",
   "recordingNoWords": "Voeg woorden toe aan de momenten van je verhaal om ze op te nemen.",
-  "recordingDenied": "LumiFX heeft de microfoon nodig om je stem op te nemen. Je kunt dit toestaan in de instellingen van je telefoon."
+  "recordingDenied": "LumiFX heeft de microfoon nodig om je stem op te nemen. Je kunt dit toestaan in de instellingen van je telefoon.",
+  "homeFamily": "Voor het gezin",
+  "homeMore": "Meer",
+  "homeYourHome": "Jouw huis"
 }

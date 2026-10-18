@@ -803,5 +803,8 @@
   "deleteRecording": "録音を削除",
   "recorded": "録音済み",
   "recordingNoWords": "録音するには、お話の場面にことばを追加してください。",
-  "recordingDenied": "声を録音するにはマイクが必要です。スマートフォンの設定で許可できます。"
+  "recordingDenied": "声を録音するにはマイクが必要です。スマートフォンの設定で許可できます。",
+  "homeFamily": "家族で",
+  "homeMore": "その他",
+  "homeYourHome": "あなたの家"
 }

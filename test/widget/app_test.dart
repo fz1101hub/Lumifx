@@ -341,6 +341,22 @@ void main() {
     expect(find.text('Birthday party'), findsOneWidget);
   });
 
+  testWidgets('leaving with the candles lit puts them out', (tester) async {
+    await _pumpApp(tester);
+    await openBirthday(tester);
+    await tester.tap(find.text('Light the candles'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(BirthdayScreen))).playback;
+    expect(playback.isPlaying, isTrue);
+    await tester.pageBack();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 2));
+    expect(tester.takeException(), isNull);
+    expect(playback.status, PlaybackStatus.idle);
+  });
+
   testWidgets('blowing on the phone blows the candles out', (tester) async {
     final random = math.Random(3);
     final blow = Uint8List(44100 * 2);
@@ -933,6 +949,8 @@ void main() {
     await _pumpApp(tester);
     await tester.scrollUntilVisible(find.text('Playlists'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Playlists'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Playlists'));
     await tester.pumpAndSettle();
     expect(find.text('No playlists yet.'), findsOneWidget);
@@ -1402,6 +1420,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('Playlists'), 200,
         scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Playlists'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Playlists'));
     await tester.pumpAndSettle();
     expect(find.text('Their playlist'), findsOneWidget);
