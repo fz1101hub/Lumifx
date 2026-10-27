@@ -1225,5 +1225,20 @@
   "moonTonight": "今夜の月は、{phase}です。",
   "moonLit": "{percent}%光っています",
   "moonFullIn": "{days, plural, =0{今夜は満月！} other{満月まであと{days}日}}",
-  "moonShow": "ライトで見せる"
+  "moonShow": "ライトで見せる",
+  "intervals": "インターバルトレーニング",
+  "intervalsSubtitle": "運動・休憩・のこり数秒をライトで",
+  "intervalsDescription": "じゅんびはきいろ、運動中はあざやかなみどり、休憩中はおだやかなあお、最後の3秒はゆっくり3回光ります。スマホを見なくてもだいじょうぶ。",
+  "workoutHiit": "HIIT",
+  "workoutTabata": "タバタ",
+  "workoutStretching": "ストレッチ",
+  "workoutWorkRest": "運動{work}秒・休憩{rest}秒",
+  "intervalsRounds": "セット数",
+  "intervalsStart": "トレーニング開始",
+  "intervalReady": "じゅんび",
+  "intervalWork": "がんばれ！",
+  "intervalRest": "休憩",
+  "intervalDone": "よくがんばったね！",
+  "intervalLastRound": "ラストセット！",
+  "intervalRound": "{rounds}セット中{round}セット目"
 }

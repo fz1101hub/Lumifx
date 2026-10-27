@@ -1225,5 +1225,20 @@
   "moonTonight": "Vannacht is de maan: {phase}.",
   "moonLit": "Voor {percent}% verlicht",
   "moonFullIn": "{days, plural, =0{Vannacht is het volle maan!} =1{Morgen volle maan} other{Volle maan over {days} dagen}}",
-  "moonShow": "Laat hem zien met de lampen"
+  "moonShow": "Laat hem zien met de lampen",
+  "intervals": "Intervaltraining",
+  "intervalsSubtitle": "Werken, rusten en de laatste seconden in licht",
+  "intervalsDescription": "Geel om je klaar te maken, felgroen tijdens het werken, rustig blauw tijdens de rust en drie langzame pulsen in de laatste drie seconden. Je hoeft niet naar je telefoon te kijken.",
+  "workoutHiit": "HIIT",
+  "workoutTabata": "Tabata",
+  "workoutStretching": "Stretchen",
+  "workoutWorkRest": "{work} s werken · {rest} s rust",
+  "intervalsRounds": "Rondes",
+  "intervalsStart": "Training starten",
+  "intervalReady": "Maak je klaar",
+  "intervalWork": "Gaan!",
+  "intervalRest": "Rust",
+  "intervalDone": "Goed gedaan!",
+  "intervalLastRound": "Laatste ronde!",
+  "intervalRound": "Ronde {round} van {rounds}"
 }

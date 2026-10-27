@@ -7,6 +7,7 @@ import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light_screen.dart';
+import '../timers/interval_training_screen.dart';
 import '../timers/light_clock_screen.dart';
 import '../calm/feelings_screen.dart';
 import '../bedtime/ritual_screen.dart';
@@ -187,6 +188,11 @@ class HomeScreen extends StatelessWidget {
                     l10n.playlistsSubtitle, () => const PlaylistsScreen()),
                 _HomeEntry(Icons.wb_sunny_outlined, l10n.weather,
                     l10n.weatherSubtitle, () => const WeatherScreen()),
+                _HomeEntry(
+                    Icons.fitness_center,
+                    l10n.intervals,
+                    l10n.intervalsSubtitle,
+                    () => const IntervalTrainingScreen()),
                 _HomeEntry(Icons.movie_outlined, l10n.cinema,
                     l10n.cinemaSubtitle, () => const CinemaScreen()),
                 _HomeEntry(Icons.nfc, l10n.nfcStickers,

@@ -1225,5 +1225,20 @@
   "moonTonight": "Stasera la luna è: {phase}.",
   "moonLit": "Illuminata al {percent}%",
   "moonFullIn": "{days, plural, =0{Stanotte c'è la luna piena!} =1{Luna piena domani} other{Luna piena tra {days} giorni}}",
-  "moonShow": "Mostrala con le luci"
+  "moonShow": "Mostrala con le luci",
+  "intervals": "Allenamento a intervalli",
+  "intervalsSubtitle": "Lavoro, recupero e ultimi secondi con la luce",
+  "intervalsDescription": "Giallo per prepararti, verde acceso mentre lavori, blu tranquillo mentre recuperi e tre impulsi lenti negli ultimi tre secondi. Non serve guardare il telefono.",
+  "workoutHiit": "HIIT",
+  "workoutTabata": "Tabata",
+  "workoutStretching": "Stretching",
+  "workoutWorkRest": "{work} s lavoro · {rest} s recupero",
+  "intervalsRounds": "Giri",
+  "intervalsStart": "Inizia l'allenamento",
+  "intervalReady": "Preparati",
+  "intervalWork": "Vai!",
+  "intervalRest": "Recupero",
+  "intervalDone": "Ben fatto!",
+  "intervalLastRound": "Ultimo giro!",
+  "intervalRound": "Giro {round} di {rounds}"
 }

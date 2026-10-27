@@ -9,6 +9,8 @@ import '../bedtime/moon.dart';
 import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light.dart';
 import '../bedtime/nap_light_screen.dart';
+import '../timers/interval_training.dart';
+import '../timers/interval_training_screen.dart';
 import '../timers/light_clock.dart';
 import '../timers/light_clock_screen.dart';
 import '../calm/breathing.dart';
@@ -100,6 +102,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const FeelingsScreen();
   } else if (Moon.of(effect) != null) {
     screen = const MoonScreen();
+  } else if (IntervalWorkout.of(effect) != null) {
+    screen = const IntervalTrainingScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

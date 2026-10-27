@@ -5022,5 +5022,81 @@
   "moonShow": "Show it on the lights",
   "@moonShow": {
     "description": "Moon: show it on the lamps"
+  },
+  "intervals": "Interval training",
+  "@intervals": {
+    "description": "Home entry and title: interval training"
+  },
+  "intervalsSubtitle": "Work, rest and the last seconds in light",
+  "@intervalsSubtitle": {
+    "description": "Under the interval training entry"
+  },
+  "intervalsDescription": "Yellow to get ready, bright green while you work, calm blue while you rest, and three slow pulses in the last three seconds. No need to look at the phone.",
+  "@intervalsDescription": {
+    "description": "Top of the interval training screen"
+  },
+  "workoutHiit": "HIIT",
+  "@workoutHiit": {
+    "description": "Workout preset"
+  },
+  "workoutTabata": "Tabata",
+  "@workoutTabata": {
+    "description": "Workout preset"
+  },
+  "workoutStretching": "Stretching",
+  "@workoutStretching": {
+    "description": "Workout preset"
+  },
+  "workoutWorkRest": "{work} s work · {rest} s rest",
+  "@workoutWorkRest": {
+    "description": "Workout preset: seconds of work and rest",
+    "placeholders": {
+      "work": {
+        "type": "int"
+      },
+      "rest": {
+        "type": "int"
+      }
+    }
+  },
+  "intervalsRounds": "Rounds",
+  "@intervalsRounds": {
+    "description": "Interval training: heading over the rounds"
+  },
+  "intervalsStart": "Start training",
+  "@intervalsStart": {
+    "description": "Interval training: start button"
+  },
+  "intervalReady": "Get ready",
+  "@intervalReady": {
+    "description": "Interval part: get ready"
+  },
+  "intervalWork": "Work!",
+  "@intervalWork": {
+    "description": "Interval part: work"
+  },
+  "intervalRest": "Rest",
+  "@intervalRest": {
+    "description": "Interval part: rest"
+  },
+  "intervalDone": "Well done!",
+  "@intervalDone": {
+    "description": "Interval training finished / said at the end"
+  },
+  "intervalLastRound": "Last round!",
+  "@intervalLastRound": {
+    "description": "Said as the last round starts"
+  },
+  "intervalRound": "Round {round} of {rounds}",
+  "@intervalRound": {
+    "description": "Interval training running: the round",
+    "placeholders": {
+      "round": {
+        "type": "int"
+      },
+      "rounds": {
+        "type": "int"
+      }
+    }
   }
 }

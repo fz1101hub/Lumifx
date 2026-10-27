@@ -25,6 +25,8 @@ import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/effect_player_screen.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
+import 'package:lumifx/src/features/timers/interval_training.dart';
+import 'package:lumifx/src/features/timers/interval_training_screen.dart';
 import 'package:lumifx/src/features/timers/light_clock.dart';
 import 'package:lumifx/src/features/calm/feelings.dart';
 import 'package:lumifx/src/features/bedtime/moon.dart';
@@ -1511,6 +1513,45 @@ void main() {
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('interval training leads the workout in light and voice',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('Interval training'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Interval training'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Interval training'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tabata'));
+    await tester.pump();
+    await tester.tap(find.widgetWithText(ChoiceChip, '4'));
+    await tester.pump();
+    await tester.tap(find.text('Start training'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    final playback =
+        AppScope.of(tester.element(find.byType(IntervalTrainingScreen)))
+            .playback;
+    final workout = IntervalWorkout.of(playback.effect)!;
+    expect((workout.work.inSeconds, workout.rest.inSeconds, workout.rounds),
+        (20, 10, 4));
+    expect(find.text('Get ready'), findsOneWidget);
+
+    // Just before the first work: the voice calls it, a moment early.
+    playback.player!.advance(const Duration(milliseconds: 9800));
+    await tester.pump();
+    await tester.pump();
+    expect(speaker.spoken.last.$1, 'Work!');
+    playback.player!.advance(const Duration(seconds: 1));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Round 1 of 4'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Start training'), findsOneWidget);
   });
 
   testWidgets('tonight\'s moon is named, drawn and shown by the lamps',

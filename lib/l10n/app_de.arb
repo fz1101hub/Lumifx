@@ -1225,5 +1225,20 @@
   "moonTonight": "Heute Nacht ist der Mond: {phase}.",
   "moonLit": "Zu {percent} % beleuchtet",
   "moonFullIn": "{days, plural, =0{Heute Nacht ist Vollmond!} =1{Morgen ist Vollmond} other{Vollmond in {days} Tagen}}",
-  "moonShow": "Mit den Lampen zeigen"
+  "moonShow": "Mit den Lampen zeigen",
+  "intervals": "Intervalltraining",
+  "intervalsSubtitle": "Arbeit, Pause und die letzten Sekunden im Licht",
+  "intervalsDescription": "Gelb zum Bereitmachen, hellgrün während der Arbeit, ruhiges Blau in der Pause und drei langsame Impulse in den letzten drei Sekunden. Kein Blick aufs Telefon nötig.",
+  "workoutHiit": "HIIT",
+  "workoutTabata": "Tabata",
+  "workoutStretching": "Dehnen",
+  "workoutWorkRest": "{work} s Arbeit · {rest} s Pause",
+  "intervalsRounds": "Runden",
+  "intervalsStart": "Training starten",
+  "intervalReady": "Mach dich bereit",
+  "intervalWork": "Los!",
+  "intervalRest": "Pause",
+  "intervalDone": "Gut gemacht!",
+  "intervalLastRound": "Letzte Runde!",
+  "intervalRound": "Runde {round} von {rounds}"
 }
