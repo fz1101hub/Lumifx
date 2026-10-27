@@ -29,6 +29,8 @@ import 'package:lumifx/src/features/timers/interval_training.dart';
 import 'package:lumifx/src/features/timers/interval_training_screen.dart';
 import 'package:lumifx/src/features/timers/light_clock.dart';
 import 'package:lumifx/src/features/calm/feelings.dart';
+import 'package:lumifx/src/features/fun/board_game.dart';
+import 'package:lumifx/src/features/fun/board_game_screen.dart';
 import 'package:lumifx/src/features/fun/goal.dart';
 import 'package:lumifx/src/features/fun/goal_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon.dart';
@@ -1549,6 +1551,40 @@ void main() {
     expect(scope.preferences.toothFairy, isNull);
     expect(scope.playback.effect.id, ToothFairy.id);
     await scope.playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the referee shows whose turn it is and rolls a light die',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => BoardGameScreen(random: math.Random(1)))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ChoiceChip, '3'));
+    await tester.pump();
+    await tester.tap(find.text('Start the game'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(BoardGameScreen))).playback;
+    expect(BoardGame.of(playback.effect)?.player, 0);
+    expect(find.text("Red's turn!"), findsOneWidget);
+    expect(speaker.spoken.last.$1, "Red's turn!");
+
+    await tester.tap(find.text('Next turn'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(BoardGame.of(playback.effect)?.player, 1);
+    expect(speaker.spoken.last.$1, "Blue's turn!");
+
+    await tester.tap(find.text('Roll the die'));
+    await tester.pump();
+    final rolled = int.parse(speaker.spoken.last.$1);
+    expect(rolled, inInclusiveRange(1, 6));
+    await tester.pump(const Duration(seconds: 4));
+    await tester.tap(find.text('Stop'));
     await tester.pumpAndSettle();
   });
 

@@ -1280,5 +1280,17 @@
   "effectNameAperitivo": "Borrel",
   "effectDescriptionAperitivo": "Een oranje-roze zonsondergang voor een drankje met vrienden.",
   "effectNameGuestsArriving": "Gasten over 10 minuten",
-  "effectDescriptionGuestsArriving": "De kamer wordt langzaam lichter voor een warm welkom."
+  "effectDescriptionGuestsArriving": "De kamer wordt langzaam lichter voor een warm welkom.",
+  "boardGame": "Bordspel-scheidsrechter",
+  "boardGameSubtitle": "Wie er aan de beurt is, een lichtdobbelsteen en een beurttimer",
+  "boardGameDescription": "Elke speler heeft een kleur en de kamer laat zien wie er aan de beurt is. Gooi de dobbelsteen en de lampen knipperen het getal; met een beurttimer wordt de kleur langzaam rood als de tijd bijna op is.",
+  "boardPlayers": "Spelers",
+  "boardTimer": "Beurttimer",
+  "boardTimerOff": "Geen",
+  "boardTimerSeconds": "{seconds} s",
+  "boardStart": "Spel starten",
+  "boardTurn": "{player} is aan de beurt!",
+  "boardNext": "Volgende beurt",
+  "boardRoll": "Gooi de dobbelsteen",
+  "boardTimeUp": "De tijd is om!"
 }

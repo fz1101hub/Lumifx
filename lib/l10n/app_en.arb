@@ -5268,5 +5268,63 @@
   "effectDescriptionGuestsArriving": "The room brightens slowly to a warm welcome.",
   "@effectDescriptionGuestsArriving": {
     "description": "Scene description"
+  },
+  "boardGame": "Board game referee",
+  "@boardGame": {
+    "description": "Fun entry and title: the board game referee"
+  },
+  "boardGameSubtitle": "Whose turn, a light die and a turn timer",
+  "@boardGameSubtitle": {
+    "description": "Under the referee entry"
+  },
+  "boardGameDescription": "Each player has a colour and the room shows whose turn it is. Roll the die and the lamps blink the number; with a turn timer the colour slowly turns red as time runs out.",
+  "@boardGameDescription": {
+    "description": "Top of the referee screen"
+  },
+  "boardPlayers": "Players",
+  "@boardPlayers": {
+    "description": "Referee: heading over the number of players"
+  },
+  "boardTimer": "Turn timer",
+  "@boardTimer": {
+    "description": "Referee: heading over the turn timer"
+  },
+  "boardTimerOff": "None",
+  "@boardTimerOff": {
+    "description": "Referee: no turn timer"
+  },
+  "boardTimerSeconds": "{seconds} s",
+  "@boardTimerSeconds": {
+    "description": "Referee: a turn timer in seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "boardStart": "Start the game",
+  "@boardStart": {
+    "description": "Referee: start the game"
+  },
+  "boardTurn": "{player}'s turn!",
+  "@boardTurn": {
+    "description": "Referee: whose turn it is, by colour; also said aloud",
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "boardNext": "Next turn",
+  "@boardNext": {
+    "description": "Referee: next player's turn"
+  },
+  "boardRoll": "Roll the die",
+  "@boardRoll": {
+    "description": "Referee: roll the light die"
+  },
+  "boardTimeUp": "Time's up!",
+  "@boardTimeUp": {
+    "description": "Referee: the turn's time is up; also said aloud"
   }
 }

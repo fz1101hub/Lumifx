@@ -10,6 +10,7 @@ import 'advent_screen.dart';
 import '../music_box/light_piano_screen.dart';
 import '../music_box/music_box_screen.dart';
 import 'birthday_screen.dart';
+import 'board_game_screen.dart';
 import 'countdowns_screen.dart';
 import 'game_screen.dart';
 import 'goal_screen.dart';
@@ -53,6 +54,8 @@ class FunScreen extends StatelessWidget {
               () => const BirthdayScreen()),
           entry(Icons.sports_soccer, l10n.goal, l10n.goalSubtitle,
               () => const GoalScreen()),
+          entry(Icons.casino_outlined, l10n.boardGame, l10n.boardGameSubtitle,
+              () => const BoardGameScreen()),
           entry(Icons.hourglass_bottom, l10n.countdowns,
               l10n.countdownsSubtitle, () => const CountdownsScreen()),
           entry(Icons.calendar_month_outlined, l10n.advent, l10n.adventSubtitle,

@@ -1280,5 +1280,17 @@
   "effectNameAperitivo": "Happy hour",
   "effectDescriptionAperitivo": "Um pôr do sol laranja e rosa para um drinque com amigos.",
   "effectNameGuestsArriving": "Visitas em 10 minutos",
-  "effectDescriptionGuestsArriving": "O cômodo clareia aos poucos até uma recepção calorosa."
+  "effectDescriptionGuestsArriving": "O cômodo clareia aos poucos até uma recepção calorosa.",
+  "boardGame": "Juiz de jogos de tabuleiro",
+  "boardGameSubtitle": "De quem é a vez, um dado de luz e um timer",
+  "boardGameDescription": "Cada jogador tem uma cor e o cômodo mostra de quem é a vez. Jogue o dado e as luzes piscam o número; com o timer, a cor fica vermelha aos poucos quando o tempo está acabando.",
+  "boardPlayers": "Jogadores",
+  "boardTimer": "Timer da vez",
+  "boardTimerOff": "Nenhum",
+  "boardTimerSeconds": "{seconds} s",
+  "boardStart": "Começar a partida",
+  "boardTurn": "Vez do {player}!",
+  "boardNext": "Próxima vez",
+  "boardRoll": "Jogar o dado",
+  "boardTimeUp": "Acabou o tempo!"
 }

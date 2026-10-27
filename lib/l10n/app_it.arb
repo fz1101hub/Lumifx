@@ -1280,5 +1280,17 @@
   "effectNameAperitivo": "Aperitivo",
   "effectDescriptionAperitivo": "Un tramonto arancio e rosa per un drink con gli amici.",
   "effectNameGuestsArriving": "Ospiti tra 10 minuti",
-  "effectDescriptionGuestsArriving": "La stanza si illumina piano fino a un caldo benvenuto."
+  "effectDescriptionGuestsArriving": "La stanza si illumina piano fino a un caldo benvenuto.",
+  "boardGame": "Arbitro dei giochi da tavolo",
+  "boardGameSubtitle": "Di chi è il turno, un dado di luce e un timer",
+  "boardGameDescription": "Ogni giocatore ha un colore e la stanza mostra di chi è il turno. Tira il dado e le luci lampeggiano il numero; con il timer il colore diventa piano rosso quando il tempo sta per finire.",
+  "boardPlayers": "Giocatori",
+  "boardTimer": "Timer del turno",
+  "boardTimerOff": "Nessuno",
+  "boardTimerSeconds": "{seconds} s",
+  "boardStart": "Inizia la partita",
+  "boardTurn": "Tocca al {player}!",
+  "boardNext": "Turno successivo",
+  "boardRoll": "Tira il dado",
+  "boardTimeUp": "Tempo scaduto!"
 }

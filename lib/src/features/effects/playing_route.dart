@@ -18,6 +18,8 @@ import '../timers/light_clock_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
 import '../calm/feelings.dart';
+import '../fun/board_game.dart';
+import '../fun/board_game_screen.dart';
 import '../fun/goal.dart';
 import '../fun/goal_screen.dart';
 import '../calm/feelings_screen.dart';
@@ -112,6 +114,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const GoalScreen();
   } else if (effect.id == ToothFairy.id) {
     screen = const ToothFairyScreen();
+  } else if (BoardGame.of(effect) != null) {
+    screen = const BoardGameScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

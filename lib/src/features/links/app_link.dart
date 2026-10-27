@@ -128,7 +128,8 @@ enum AppScreen {
   moon('moon'),
   intervals('intervals'),
   goal('goal-party'),
-  toothFairy('tooth-fairy');
+  toothFairy('tooth-fairy'),
+  boardGame('board-game');
 
   const AppScreen(this.slug);
 

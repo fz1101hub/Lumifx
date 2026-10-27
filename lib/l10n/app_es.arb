@@ -1280,5 +1280,17 @@
   "effectNameAperitivo": "Aperitivo",
   "effectDescriptionAperitivo": "Un atardecer naranja y rosa para tomar algo con amigos.",
   "effectNameGuestsArriving": "Invitados en 10 minutos",
-  "effectDescriptionGuestsArriving": "La habitación se ilumina poco a poco hasta una cálida bienvenida."
+  "effectDescriptionGuestsArriving": "La habitación se ilumina poco a poco hasta una cálida bienvenida.",
+  "boardGame": "Árbitro de juegos de mesa",
+  "boardGameSubtitle": "De quién es el turno, un dado de luz y un temporizador",
+  "boardGameDescription": "Cada jugador tiene un color y la habitación muestra de quién es el turno. Tira el dado y las luces parpadean el número; con el temporizador, el color se vuelve rojo poco a poco cuando se acaba el tiempo.",
+  "boardPlayers": "Jugadores",
+  "boardTimer": "Temporizador del turno",
+  "boardTimerOff": "Ninguno",
+  "boardTimerSeconds": "{seconds} s",
+  "boardStart": "Empezar la partida",
+  "boardTurn": "¡Le toca al {player}!",
+  "boardNext": "Siguiente turno",
+  "boardRoll": "Tirar el dado",
+  "boardTimeUp": "¡Se acabó el tiempo!"
 }

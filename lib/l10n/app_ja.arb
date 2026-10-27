@@ -1280,5 +1280,17 @@
   "effectNameAperitivo": "アペリティーボ",
   "effectDescriptionAperitivo": "友だちと一杯たのしむ、オレンジとピンクの夕焼け。",
   "effectNameGuestsArriving": "10分後にお客さま",
-  "effectDescriptionGuestsArriving": "へやがゆっくり明るくなり、温かくおむかえします。"
+  "effectDescriptionGuestsArriving": "へやがゆっくり明るくなり、温かくおむかえします。",
+  "boardGame": "ボードゲームの審判",
+  "boardGameSubtitle": "だれの番か、ひかりのサイコロ、タイマー",
+  "boardGameDescription": "プレイヤーごとに色があり、へやがだれの番かを見せます。サイコロをふると、ライトが数だけ光ります。タイマーを使うと、時間がなくなるにつれて色がゆっくりあかに。",
+  "boardPlayers": "人数",
+  "boardTimer": "1回の時間",
+  "boardTimerOff": "なし",
+  "boardTimerSeconds": "{seconds}秒",
+  "boardStart": "ゲーム開始",
+  "boardTurn": "{player}の番！",
+  "boardNext": "次の番",
+  "boardRoll": "サイコロをふる",
+  "boardTimeUp": "時間切れ！"
 }

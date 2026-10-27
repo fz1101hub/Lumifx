@@ -1280,5 +1280,17 @@
   "effectNameAperitivo": "Apéritif",
   "effectDescriptionAperitivo": "Un coucher de soleil orange et rose pour un verre entre amis.",
   "effectNameGuestsArriving": "Invités dans 10 minutes",
-  "effectDescriptionGuestsArriving": "La pièce s'éclaire doucement pour un accueil chaleureux."
+  "effectDescriptionGuestsArriving": "La pièce s'éclaire doucement pour un accueil chaleureux.",
+  "boardGame": "Arbitre des jeux de société",
+  "boardGameSubtitle": "À qui le tour, un dé lumineux et un minuteur",
+  "boardGameDescription": "Chaque joueur a une couleur et la pièce montre à qui c'est le tour. Lance le dé et les lampes clignotent le nombre ; avec le minuteur, la couleur vire doucement au rouge quand le temps s'écoule.",
+  "boardPlayers": "Joueurs",
+  "boardTimer": "Minuteur du tour",
+  "boardTimerOff": "Aucun",
+  "boardTimerSeconds": "{seconds} s",
+  "boardStart": "Commencer la partie",
+  "boardTurn": "Au tour du {player} !",
+  "boardNext": "Tour suivant",
+  "boardRoll": "Lancer le dé",
+  "boardTimeUp": "Temps écoulé !"
 }
