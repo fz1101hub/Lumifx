@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../bedtime/monster_spray_screen.dart';
+import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light_screen.dart';
 import '../timers/light_clock_screen.dart';
 import '../bedtime/ritual_screen.dart';
@@ -47,6 +48,7 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.nap => const NapLightScreen(),
       AppScreen.lightClock => const LightClockScreen(),
       AppScreen.feelings => const FeelingsScreen(),
+      AppScreen.moon => const MoonScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

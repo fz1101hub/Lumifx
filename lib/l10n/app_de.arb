@@ -1210,5 +1210,20 @@
   "feelingSayTired": "Du bist müde. Ein gedämpftes, gemütliches Licht zum Ausruhen.",
   "feelingBreathe": "Zusammen atmen",
   "feelingStory": "Eine kuschelige Geschichte",
-  "feelingRest": "Ein bisschen ausruhen"
+  "feelingRest": "Ein bisschen ausruhen",
+  "moon": "Der Mond heute Nacht",
+  "moonSubtitle": "Der echte Mond, von den Lampen gezeigt, vor dem Schlafen",
+  "moonDescription": "Auf diesem Telefon für heute Nacht berechnet: Die Lampen leuchten nachtblau, und der beleuchtete Teil des Mondes scheint durch den Raum, auf der Seite, von der er beleuchtet ist.",
+  "moonNew": "Neumond",
+  "moonWaxingCrescent": "Zunehmende Sichel",
+  "moonFirstQuarter": "Erstes Viertel",
+  "moonWaxingGibbous": "Zunehmender Mond",
+  "moonFull": "Vollmond",
+  "moonWaningGibbous": "Abnehmender Mond",
+  "moonLastQuarter": "Letztes Viertel",
+  "moonWaningCrescent": "Abnehmende Sichel",
+  "moonTonight": "Heute Nacht ist der Mond: {phase}.",
+  "moonLit": "Zu {percent} % beleuchtet",
+  "moonFullIn": "{days, plural, =0{Heute Nacht ist Vollmond!} =1{Morgen ist Vollmond} other{Vollmond in {days} Tagen}}",
+  "moonShow": "Mit den Lampen zeigen"
 }

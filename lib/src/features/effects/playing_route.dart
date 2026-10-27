@@ -5,6 +5,8 @@ import '../../core/sound/melody.dart';
 import '../../core/sound/soundscape.dart';
 import '../bedtime/monster_spray.dart';
 import '../bedtime/monster_spray_screen.dart';
+import '../bedtime/moon.dart';
+import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light.dart';
 import '../bedtime/nap_light_screen.dart';
 import '../timers/light_clock.dart';
@@ -96,6 +98,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const LightClockScreen();
   } else if (Feeling.of(effect) != null) {
     screen = const FeelingsScreen();
+  } else if (Moon.of(effect) != null) {
+    screen = const MoonScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

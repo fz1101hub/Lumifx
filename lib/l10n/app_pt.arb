@@ -1210,5 +1210,20 @@
   "feelingSayTired": "Você está cansado. Uma luz baixa e aconchegante para descansar.",
   "feelingBreathe": "Respirar juntos",
   "feelingStory": "Uma história aconchegante",
-  "feelingRest": "Descansar um pouco"
+  "feelingRest": "Descansar um pouco",
+  "moon": "A lua de hoje",
+  "moonSubtitle": "A lua de verdade, mostrada pelas luzes antes de dormir",
+  "moonDescription": "Calculada neste celular para hoje à noite: as luzes ficam azul-noite e a parte iluminada da lua brilha pelo cômodo, do lado em que está iluminada.",
+  "moonNew": "Lua nova",
+  "moonWaxingCrescent": "Lua crescente",
+  "moonFirstQuarter": "Quarto crescente",
+  "moonWaxingGibbous": "Gibosa crescente",
+  "moonFull": "Lua cheia",
+  "moonWaningGibbous": "Gibosa minguante",
+  "moonLastQuarter": "Quarto minguante",
+  "moonWaningCrescent": "Lua minguante",
+  "moonTonight": "Hoje a lua está: {phase}.",
+  "moonLit": "{percent}% iluminada",
+  "moonFullIn": "{days, plural, =0{Lua cheia hoje!} =1{Lua cheia amanhã} other{Lua cheia em {days} dias}}",
+  "moonShow": "Mostrar com as luzes"
 }

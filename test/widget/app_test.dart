@@ -27,6 +27,8 @@ import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
 import 'package:lumifx/src/features/timers/light_clock.dart';
 import 'package:lumifx/src/features/calm/feelings.dart';
+import 'package:lumifx/src/features/bedtime/moon.dart';
+import 'package:lumifx/src/features/bedtime/moon_screen.dart';
 import 'package:lumifx/src/features/calm/feelings_screen.dart';
 import 'package:lumifx/src/features/timers/light_clock_screen.dart';
 import 'package:lumifx/src/features/home/home_screen.dart';
@@ -1508,6 +1510,30 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('tonight\'s moon is named, drawn and shown by the lamps',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    // 15 June 2026: a new moon.
+    await _pumpApp(tester, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('Tonight\'s moon'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Tonight\'s moon'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tonight\'s moon'));
+    await tester.pumpAndSettle();
+    expect(find.text('New moon'), findsOneWidget);
+    expect(find.text('0% lit · Full moon in 14 days'), findsOneWidget);
+    await tester.tap(find.text('Show it on the lights'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MoonScreen))).playback;
+    expect(Moon.of(playback.effect), MoonPhase.newMoon);
+    expect(speaker.spoken.last.$1, 'Tonight the moon is: New moon.');
+    await playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 

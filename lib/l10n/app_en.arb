@@ -4947,5 +4947,80 @@
   "feelingRest": "Rest a while",
   "@feelingRest": {
     "description": "Feelings: open the nap light"
+  },
+  "moon": "Tonight's moon",
+  "@moon": {
+    "description": "Home entry and title: tonight's moon"
+  },
+  "moonSubtitle": "The real moon, shown by the lamps before bed",
+  "@moonSubtitle": {
+    "description": "Under the moon entry"
+  },
+  "moonDescription": "Worked out on this phone for tonight: the lamps glow night blue and the lit part of the moon shines across the room, on the side it is lit from.",
+  "@moonDescription": {
+    "description": "Top of the moon screen"
+  },
+  "moonNew": "New moon",
+  "@moonNew": {
+    "description": "Moon phase"
+  },
+  "moonWaxingCrescent": "Waxing crescent",
+  "@moonWaxingCrescent": {
+    "description": "Moon phase"
+  },
+  "moonFirstQuarter": "First quarter",
+  "@moonFirstQuarter": {
+    "description": "Moon phase"
+  },
+  "moonWaxingGibbous": "Waxing gibbous",
+  "@moonWaxingGibbous": {
+    "description": "Moon phase"
+  },
+  "moonFull": "Full moon",
+  "@moonFull": {
+    "description": "Moon phase"
+  },
+  "moonWaningGibbous": "Waning gibbous",
+  "@moonWaningGibbous": {
+    "description": "Moon phase"
+  },
+  "moonLastQuarter": "Last quarter",
+  "@moonLastQuarter": {
+    "description": "Moon phase"
+  },
+  "moonWaningCrescent": "Waning crescent",
+  "@moonWaningCrescent": {
+    "description": "Moon phase"
+  },
+  "moonTonight": "Tonight the moon is: {phase}.",
+  "@moonTonight": {
+    "description": "Said aloud when the moon is shown",
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "moonLit": "{percent}% lit",
+  "@moonLit": {
+    "description": "How much of the moon is lit",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "moonFullIn": "{days, plural, =0{Full moon tonight!} =1{Full moon tomorrow} other{Full moon in {days} days}}",
+  "@moonFullIn": {
+    "description": "Days until the next full moon",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "moonShow": "Show it on the lights",
+  "@moonShow": {
+    "description": "Moon: show it on the lamps"
   }
 }

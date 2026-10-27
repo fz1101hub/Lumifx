@@ -115,7 +115,8 @@ enum AppScreen {
   nap('nap'),
   noise('noise'),
   lightClock('light-clock'),
-  feelings('feelings');
+  feelings('feelings'),
+  moon('moon');
 
   const AppScreen(this.slug);
 

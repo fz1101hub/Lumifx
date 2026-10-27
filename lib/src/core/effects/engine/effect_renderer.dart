@@ -447,11 +447,14 @@ class EffectRenderer {
     final from = _color(p, 'from', const LightColor(0.2, 0.2, 0.4));
     final to = _color(p, 'to', const LightColor(1, 0.8, 0.3));
     final brightness = _number(p, 'brightness', 0.85);
+    // `fromEnd`: filled from the last light (the right of the room).
+    final fromEnd = p['fromEnd'] == true;
     final seconds = context.local.inMicroseconds / 1e6;
     final breath = 1 + 0.06 * math.sin(2 * math.pi * seconds / 3);
     for (var slot = 0; slot < slotCount; slot++) {
+      final index = fromEnd ? slotCount - 1 - slot : slot;
       final lit =
-          slotCount == 1 ? value : (value * slotCount - slot).clamp(0.0, 1.0);
+          slotCount == 1 ? value : (value * slotCount - index).clamp(0.0, 1.0);
       frames[slot] = LightFrame(
         LightColor.lerp(from, to, lit),
         ((0.15 + (brightness - 0.15) * lit) * breath).clamp(0.0, 1.0),

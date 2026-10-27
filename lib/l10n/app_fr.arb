@@ -1210,5 +1210,20 @@
   "feelingSayTired": "Tu es fatigué. Une lumière douce et tamisée pour te reposer.",
   "feelingBreathe": "Respirer ensemble",
   "feelingStory": "Une histoire câline",
-  "feelingRest": "Se reposer un peu"
+  "feelingRest": "Se reposer un peu",
+  "moon": "La lune de ce soir",
+  "moonSubtitle": "La vraie lune, montrée par les lampes avant de dormir",
+  "moonDescription": "Calculée sur ce téléphone pour ce soir : les lampes deviennent bleu nuit et la partie éclairée de la lune brille dans la pièce, du côté où elle est éclairée.",
+  "moonNew": "Nouvelle lune",
+  "moonWaxingCrescent": "Premier croissant",
+  "moonFirstQuarter": "Premier quartier",
+  "moonWaxingGibbous": "Gibbeuse croissante",
+  "moonFull": "Pleine lune",
+  "moonWaningGibbous": "Gibbeuse décroissante",
+  "moonLastQuarter": "Dernier quartier",
+  "moonWaningCrescent": "Dernier croissant",
+  "moonTonight": "Ce soir, la lune est : {phase}.",
+  "moonLit": "Éclairée à {percent} %",
+  "moonFullIn": "{days, plural, =0{Pleine lune ce soir !} =1{Pleine lune demain} other{Pleine lune dans {days} jours}}",
+  "moonShow": "La montrer avec les lampes"
 }

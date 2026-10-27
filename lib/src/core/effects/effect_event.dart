@@ -63,6 +63,7 @@ abstract final class EffectEventTypes {
   static const ramp = 'ramp';
 
   /// A still progress bar across the lights: `value` (0..1) of them lit
-  /// in `to`, one after the other, the rest dim in `from`.
+  /// in `to`, one after the other (from the last with `fromEnd`), the rest
+  /// dim in `from`.
   static const progress = 'progress';
 }

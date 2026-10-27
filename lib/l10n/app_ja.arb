@@ -1210,5 +1210,20 @@
   "feelingSayTired": "つかれたんだね。うすぐらい、ほっとする光でやすもう。",
   "feelingBreathe": "いっしょに深呼吸",
   "feelingStory": "ほっとするおはなし",
-  "feelingRest": "すこしやすむ"
+  "feelingRest": "すこしやすむ",
+  "moon": "今夜のおつきさま",
+  "moonSubtitle": "ほんとうの月を、ねる前にライトで",
+  "moonDescription": "このスマホで今夜の月を計算します。ライトは夜の青になり、月の光っている部分が、光っている側からへやに広がります。",
+  "moonNew": "新月",
+  "moonWaxingCrescent": "三日月",
+  "moonFirstQuarter": "上弦の月",
+  "moonWaxingGibbous": "十三夜月",
+  "moonFull": "満月",
+  "moonWaningGibbous": "寝待月",
+  "moonLastQuarter": "下弦の月",
+  "moonWaningCrescent": "有明月",
+  "moonTonight": "今夜の月は、{phase}です。",
+  "moonLit": "{percent}%光っています",
+  "moonFullIn": "{days, plural, =0{今夜は満月！} other{満月まであと{days}日}}",
+  "moonShow": "ライトで見せる"
 }

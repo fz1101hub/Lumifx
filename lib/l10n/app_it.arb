@@ -1210,5 +1210,20 @@
   "feelingSayTired": "Ti senti stanco. Una luce bassa e accogliente per riposare.",
   "feelingBreathe": "Respiriamo insieme",
   "feelingStory": "Una storia tenera",
-  "feelingRest": "Riposa un po'"
+  "feelingRest": "Riposa un po'",
+  "moon": "La luna di stasera",
+  "moonSubtitle": "La luna vera, mostrata dalle luci prima della nanna",
+  "moonDescription": "Calcolata su questo telefono per stasera: le luci diventano blu notte e la parte illuminata della luna brilla nella stanza, dal lato da cui è illuminata.",
+  "moonNew": "Luna nuova",
+  "moonWaxingCrescent": "Luna crescente",
+  "moonFirstQuarter": "Primo quarto",
+  "moonWaxingGibbous": "Gibbosa crescente",
+  "moonFull": "Luna piena",
+  "moonWaningGibbous": "Gibbosa calante",
+  "moonLastQuarter": "Ultimo quarto",
+  "moonWaningCrescent": "Luna calante",
+  "moonTonight": "Stasera la luna è: {phase}.",
+  "moonLit": "Illuminata al {percent}%",
+  "moonFullIn": "{days, plural, =0{Stanotte c'è la luna piena!} =1{Luna piena domani} other{Luna piena tra {days} giorni}}",
+  "moonShow": "Mostrala con le luci"
 }

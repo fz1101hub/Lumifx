@@ -1210,5 +1210,20 @@
   "feelingSayTired": "Je bent moe. Een zacht, gezellig licht om uit te rusten.",
   "feelingBreathe": "Samen ademen",
   "feelingStory": "Een knus verhaal",
-  "feelingRest": "Even rusten"
+  "feelingRest": "Even rusten",
+  "moon": "De maan van vannacht",
+  "moonSubtitle": "De echte maan, getoond door de lampen voor het slapen",
+  "moonDescription": "Op deze telefoon berekend voor vannacht: de lampen worden nachtblauw en het verlichte deel van de maan schijnt door de kamer, aan de kant waar hij verlicht is.",
+  "moonNew": "Nieuwe maan",
+  "moonWaxingCrescent": "Wassende sikkel",
+  "moonFirstQuarter": "Eerste kwartier",
+  "moonWaxingGibbous": "Wassende maan",
+  "moonFull": "Volle maan",
+  "moonWaningGibbous": "Afnemende maan",
+  "moonLastQuarter": "Laatste kwartier",
+  "moonWaningCrescent": "Afnemende sikkel",
+  "moonTonight": "Vannacht is de maan: {phase}.",
+  "moonLit": "Voor {percent}% verlicht",
+  "moonFullIn": "{days, plural, =0{Vannacht is het volle maan!} =1{Morgen volle maan} other{Volle maan over {days} dagen}}",
+  "moonShow": "Laat hem zien met de lampen"
 }
