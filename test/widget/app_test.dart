@@ -1989,6 +1989,8 @@ void main() {
         MaterialPageRoute<void>(
             builder: (_) => const LightPianoScreen(seed: 4))));
     await tester.pumpAndSettle();
+    expect(sound.prepared, [for (final k in pianoKeys) 'note ${k.midi}'],
+        reason: 'made ahead, so the first key sounds with its light');
     final playback =
         AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
     final tune = (PianoEcho(math.Random(4))..start()).keys;

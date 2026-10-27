@@ -30,6 +30,14 @@ abstract interface class SoundPlayer {
 
   /// One note of [instrument] on top (the light piano).
   Future<void> note(int midi, Instrument instrument, {required double volume});
+
+  /// Gets [midis] of [instrument] and the thunder ready ahead, so the
+  /// first tap or strike sounds at once instead of after the sound is made.
+  Future<void> prepare({
+    Iterable<int> midis = const [],
+    Instrument instrument = Instrument.musicBox,
+    bool thunder = false,
+  });
 }
 
 class NoSoundPlayer implements SoundPlayer {
@@ -52,6 +60,12 @@ class NoSoundPlayer implements SoundPlayer {
   @override
   Future<void> note(int midi, Instrument instrument,
       {required double volume}) async {}
+  @override
+  Future<void> prepare({
+    Iterable<int> midis = const [],
+    Instrument instrument = Instrument.musicBox,
+    bool thunder = false,
+  }) async {}
 }
 
 /// Plays generated WAV files with the audioplayers plugin. The files are
@@ -245,12 +259,59 @@ class AudioplayersSoundPlayer implements SoundPlayer {
     }
   }
 
+  static Future<String> _thunderFile(int variant) => _file(
+      'v1_thunder_$variant',
+      () => wavOf(synthesizeCue(SoundCue.thunder, seed: variant + 1)));
+
+  static Future<String> _noteFile(int midi, Instrument instrument) => _file(
+      'v1_note_${instrument.name}_$midi',
+      () => wavOf(synthesizeMelody(Melody(
+            id: 'note',
+            bpm: 120,
+            notes: [Note(midi, 1)],
+            instrument: instrument,
+          ))));
+
+  @override
+  Future<void> prepare({
+    Iterable<int> midis = const [],
+    Instrument instrument = Instrument.musicBox,
+    bool thunder = false,
+  }) async {
+    try {
+      await Future.wait([
+        for (final midi in midis) _noteFile(midi, instrument),
+        if (thunder)
+          for (var variant = 0; variant < 3; variant++) _thunderFile(variant),
+      ]);
+      if (midis.isNotEmpty) {
+        await _notePlayers();
+      }
+    } on Object catch (error) {
+      debugPrint('Sound: $error');
+    }
+  }
+
+  /// The players taking turns for notes, made (in low-latency mode) once.
+  Future<void> _notePlayers() async {
+    while (_notes.length < 4) {
+      final player = AudioPlayer();
+      _notes.add(player);
+      try {
+        await player.setPlayerMode(PlayerMode.lowLatency);
+        await player.setAudioContext(_context);
+        await player.setReleaseMode(ReleaseMode.stop);
+      } on Object catch (error) {
+        debugPrint('Sound: $error');
+      }
+    }
+  }
+
   @override
   Future<void> thunder({required double volume}) async {
     final generation = _cueGeneration;
     final variant = DateTime.now().millisecond % 3;
-    final path = await _file('v1_thunder_$variant',
-        () => wavOf(synthesizeCue(SoundCue.thunder, seed: variant + 1)));
+    final path = await _thunderFile(variant);
     if (generation != _cueGeneration) {
       return;
     }
@@ -268,25 +329,8 @@ class AudioplayersSoundPlayer implements SoundPlayer {
   Future<void> note(int midi, Instrument instrument,
       {required double volume}) async {
     final generation = _cueGeneration;
-    final path = await _file(
-        'v1_note_${instrument.name}_$midi',
-        () => wavOf(synthesizeMelody(Melody(
-              id: 'note',
-              bpm: 120,
-              notes: [Note(midi, 1)],
-              instrument: instrument,
-            ))));
-    if (_notes.length < 4) {
-      final player = AudioPlayer();
-      _notes.add(player);
-      try {
-        await player.setPlayerMode(PlayerMode.lowLatency);
-        await player.setAudioContext(_context);
-        await player.setReleaseMode(ReleaseMode.stop);
-      } on Object catch (error) {
-        debugPrint('Sound: $error');
-      }
-    }
+    final path = await _noteFile(midi, instrument);
+    await _notePlayers();
     if (generation != _cueGeneration) {
       return;
     }

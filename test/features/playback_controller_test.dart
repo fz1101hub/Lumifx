@@ -1028,6 +1028,8 @@ void main() {
     await controller.start();
     expect(sound.calls.last, 'play rain');
     expect(sound.playing!.thunder, isTrue);
+    expect(sound.prepared, ['thunder'],
+        reason: 'ready before the first strike');
     await controller.pause();
     expect(sound.calls.last, 'pause');
     await controller.resume();

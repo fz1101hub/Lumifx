@@ -35,6 +35,18 @@ class FakeSoundPlayer implements SoundPlayer {
   @override
   Future<void> stopCues() async => cueStops++;
 
+  /// What was got ready ahead.
+  final prepared = <String>[];
+
+  @override
+  Future<void> prepare({
+    Iterable<int> midis = const [],
+    Instrument instrument = Instrument.musicBox,
+    bool thunder = false,
+  }) async =>
+      prepared
+          .addAll([for (final m in midis) 'note $m', if (thunder) 'thunder']);
+
   @override
   Future<void> thunder({required double volume}) async => calls.add('thunder');
 

@@ -43,7 +43,11 @@ class _HauntedPartyScreenState extends State<HauntedPartyScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadSensors());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSensors();
+      // The scare's thunder made ahead, so it strikes with the flash.
+      unawaited(AppScope.of(context).playback.prepareSounds(thunder: true));
+    });
   }
 
   @override
