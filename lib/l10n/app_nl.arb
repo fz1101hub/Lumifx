@@ -1522,5 +1522,6 @@
   "homeAwayDenied": "LumiFX heeft je locatie nodig, ook met de app dicht ('Altijd'), om te weten wanneer je weggaat en thuiskomt. Je kunt het toestaan in de instellingen van je telefoon.",
   "homeAwayNoLocation": "Kon niet vinden waar de telefoon is. Probeer het zo opnieuw, met locatie en wifi aan.",
   "homeAwayStop": "Stoppen met bewaken",
-  "homeAwayIsSet": "Thuis is ingesteld: de telefoon bewaakt."
+  "homeAwayIsSet": "Thuis is ingesteld: de telefoon bewaakt.",
+  "watchNextFavourite": "Volgende favoriet"
 }

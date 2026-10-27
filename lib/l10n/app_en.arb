@@ -6428,5 +6428,9 @@
   "homeAwayIsSet": "Home is set: the phone is watching.",
   "@homeAwayIsSet": {
     "description": "Leaving and coming home: home is set and watched"
+  },
+  "watchNextFavourite": "Next favourite",
+  "@watchNextFavourite": {
+    "description": "Playback notification (also on the watch): play the next favourite"
   }
 }

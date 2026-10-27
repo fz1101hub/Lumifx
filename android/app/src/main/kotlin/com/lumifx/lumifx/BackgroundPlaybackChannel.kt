@@ -42,6 +42,8 @@ class BackgroundPlaybackChannel(
                         call.argument<String>("text") ?: "",
                         call.argument<String>("stop") ?: "Stop",
                         call.argument<Boolean>("microphone") ?: false,
+                        call.argument<String>("favourite"),
+                        call.argument<String>("bedtime"),
                     )
                     result.success(true)
                 } catch (e: Exception) {
@@ -75,6 +77,10 @@ class BackgroundPlaybackChannel(
 
     override fun onStopRequested() {
         main.post { channel.invokeMethod("stop", null) }
+    }
+
+    override fun onActionRequested(action: String) {
+        main.post { channel.invokeMethod("action", action) }
     }
 
     fun dispose() {

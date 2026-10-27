@@ -1522,5 +1522,6 @@
   "homeAwayDenied": "O LumiFX precisa da localização, mesmo com o app fechado (\"Sempre\"), para saber quando você sai e volta. Você pode permitir nas configurações do celular.",
   "homeAwayNoLocation": "Não foi possível encontrar onde o celular está. Tente de novo em instantes, com localização e Wi-Fi ligados.",
   "homeAwayStop": "Parar de vigiar",
-  "homeAwayIsSet": "Casa definida: o celular está vigiando."
+  "homeAwayIsSet": "Casa definida: o celular está vigiando.",
+  "watchNextFavourite": "Próximo favorito"
 }

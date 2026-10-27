@@ -1522,5 +1522,6 @@
   "homeAwayDenied": "LumiFX ha bisogno della posizione, anche con l'app chiusa (\"Sempre\"), per sapere quando esci e rientri. Puoi consentirlo nelle impostazioni del telefono.",
   "homeAwayNoLocation": "Impossibile trovare dove si trova il telefono. Riprova tra poco, con posizione e Wi-Fi attivi.",
   "homeAwayStop": "Smetti di sorvegliare",
-  "homeAwayIsSet": "Casa impostata: il telefono sta sorvegliando."
+  "homeAwayIsSet": "Casa impostata: il telefono sta sorvegliando.",
+  "watchNextFavourite": "Prossimo preferito"
 }

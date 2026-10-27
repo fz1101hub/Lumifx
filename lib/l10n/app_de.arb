@@ -1522,5 +1522,6 @@
   "homeAwayDenied": "LumiFX braucht den Standort, auch bei geschlossener App („Immer“), um zu wissen, wann du gehst und heimkommst. Du kannst es in den Einstellungen des Handys erlauben.",
   "homeAwayNoLocation": "Der Standort des Handys war nicht zu finden. Versuch es gleich noch einmal, mit Standort und WLAN an.",
   "homeAwayStop": "Nicht mehr überwachen",
-  "homeAwayIsSet": "Zuhause ist festgelegt: Das Handy überwacht."
+  "homeAwayIsSet": "Zuhause ist festgelegt: Das Handy überwacht.",
+  "watchNextFavourite": "Nächster Favorit"
 }

@@ -4724,16 +4724,25 @@ void streamingTests() {
     await tester.pump();
     expect(puts, contains('POST /clip/v2/resource/scene'));
     expect(find.textContaining('in Living room'), findsOneWidget);
-    await tester.tap(find.text('Stop'));
-    await tester.pump(const Duration(seconds: 1));
+    // A command may still be on its way to the bridge: stopping waits for
+    // it (up to RateLimitedLightOutput.closeTimeout).
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Stop'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump(const Duration(seconds: 8));
   });
 
   Future<FakeBackgroundPlayback> playOceanInLivingRoom(
     WidgetTester tester, {
     bool keepPlaying = true,
+    List<String> favorites = const [],
   }) async {
     final bridge = await _connectedBridge(tester);
     final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    for (final id in favorites.reversed) {
+      await preferences.toggleFavorite(id);
+    }
     await preferences.setLastTarget('group:r1');
     await preferences.setKeepPlayingScreenOff(keepPlaying);
     final background = FakeBackgroundPlayback();
@@ -4762,6 +4771,30 @@ void streamingTests() {
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
   }
+
+  testWidgets('the notification (and a Wear OS watch) plays the next favourite',
+      (tester) async {
+    final background =
+        await playOceanInLivingRoom(tester, favorites: ['ocean', 'aurora']);
+    expect(background.favouriteLabel, 'Next favourite');
+    expect(background.bedtimeLabel, 'Bedtime');
+    await tester.runAsync(() async {
+      background.press('favourite');
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    final playback =
+        AppScope.of(tester.element(find.byType(Navigator).first)).playback;
+    expect(playback.effect.id, 'aurora');
+    await tester.runAsync(() async {
+      background.press('favourite');
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    expect(playback.effect.id, 'ocean', reason: 'round and round');
+    await tester.runAsync(playback.stop);
+    await tester.pumpAndSettle();
+  });
 
   testWidgets('on Android an effect plays on with the screen off',
       (tester) async {

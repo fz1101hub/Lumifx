@@ -177,6 +177,8 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     unawaited(_voices.load());
     didChangeAccessibilityFeatures();
     widget.background.onStop = () => unawaited(_playback.stop());
+    widget.background.onAction =
+        (action) => unawaited(_backgroundAction(action));
     _playback.addListener(_syncBackground);
     widget.preferences.addListener(_syncBackground);
     widget.preferences.addListener(_maybeWelcome);
@@ -280,7 +282,10 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     final microphone = (playback.effect.usesMicrophone ||
             playback.playlistEffects.any((e) => e.usesMicrophone)) &&
         playback.musicSource == MusicSource.microphone;
-    final key = '$title|$text|$microphone|${l10n.stop}';
+    // Also on a paired Wear OS watch: the next favourite and bedtime.
+    final favourite =
+        preferences.favorites.isEmpty ? null : l10n.watchNextFavourite;
+    final key = '$title|$text|$microphone|${l10n.stop}|$favourite';
     if (key == _backgroundShown) {
       return;
     }
@@ -290,7 +295,33 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       text: text,
       stopLabel: l10n.stop,
       microphone: microphone,
+      favouriteLabel: favourite,
+      bedtimeLabel: l10n.bedtime,
     ));
+  }
+
+  /// The notification's (or the watch's) next favourite or bedtime.
+  Future<void> _backgroundAction(String action) async {
+    if (action == 'bedtime') {
+      await _links.handle(const BedtimeLink());
+      return;
+    }
+    if (action != 'favourite') {
+      return;
+    }
+    final favorites = [
+      for (final id in widget.preferences.favorites)
+        if (_library.byId(id) case final effect?)
+          if (kidsModeAllows(widget.preferences, _library, effect)) effect,
+    ];
+    if (favorites.isEmpty) {
+      return;
+    }
+    final at = favorites.indexWhere((e) => e.id == _playback.effect.id);
+    await _playback.switchEffect(favorites[(at + 1) % favorites.length]);
+    if (_playback.status == PlaybackStatus.idle) {
+      await _playback.start();
+    }
   }
 
   String? _liveShown;
@@ -434,6 +465,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     widget.preferences.removeListener(_syncBackground);
     _playback.removeListener(_syncBackground);
     widget.background.onStop = null;
+    widget.background.onAction = null;
     if (_backgroundShown != null) {
       unawaited(widget.background.hide());
     }
