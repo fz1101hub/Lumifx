@@ -1363,5 +1363,16 @@
   "singStart": "うたいはじめる",
   "singListening": "音をうたってね…",
   "singHold": "のばすと明るくなるよ！",
-  "singMicDenied": "声を聞くにはマイクが必要です。スマホの設定で許可してください。"
+  "singMicDenied": "声を聞くにはマイクが必要です。スマホの設定で許可してください。",
+  "weeklyReport": "今週のまとめ",
+  "weeklyReportSubtitle": "今週の星とおやすみの時間",
+  "weeklyReportDescription": "子どもごとの今週のようす：毎日もらった星と、おやすみを始めた時間。時間はおやすみ、またはおやすみの儀式の見守りライトが始まったときに記録されます。",
+  "reportStars": "{count, plural, =0{今週はまだ星がありません} other{今週の星：{count}こ}}",
+  "reportLastWeek": "先週：{count}",
+  "reportRoutines": "できたルーティン：{count}",
+  "reportBedtime": "おやすみ",
+  "reportBedtimeAverage": "平均 {time}",
+  "reportBedtimeRange": "{earliest}〜{latest}",
+  "reportBedtimeNights": "{count, plural, other{{count}晩記録}}",
+  "reportNoBedtimes": "今週はまだおやすみの記録がありません。"
 }

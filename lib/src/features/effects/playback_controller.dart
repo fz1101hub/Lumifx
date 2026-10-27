@@ -688,6 +688,7 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     final now = DateTime.now();
+    _preferences.recordBedtime(now);
     _bedtime = _Bedtime(
       storyId: story.id,
       glowAt: now.add(storyFor),

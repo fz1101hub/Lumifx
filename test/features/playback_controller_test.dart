@@ -764,8 +764,9 @@ void main() {
   });
 
   test('bedtime: the story, then the night glow, then lights off', () async {
-    final (controller, fake, _) =
-        await _setUp(sleepFade: const Duration(milliseconds: 100));
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final (controller, fake, _) = await _setUp(
+        sleepFade: const Duration(milliseconds: 100), preferences: preferences);
     final before = controller.controls;
     await controller.startBedtime(
       sleepingDragon,
@@ -779,6 +780,8 @@ void main() {
     expect(controller.controls.brightness, 0.4);
     expect(controller.sleepTimer, const Duration(milliseconds: 600));
     expect(controller.isShownBy('sleeping_dragon'), isTrue);
+    expect(preferences.bedtimesOf(''), hasLength(1),
+        reason: 'noted for the weekly report');
 
     await _wait(400);
     expect(controller.effect.id, PlaybackController.bedtimeGlowId);

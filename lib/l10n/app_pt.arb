@@ -1363,5 +1363,16 @@
   "singStart": "Começar a cantar",
   "singListening": "Cante uma nota…",
   "singHold": "Segure para ela brilhar mais!",
-  "singMicDenied": "O LumiFX precisa do microfone para ouvir sua voz. Permita nas configurações do celular."
+  "singMicDenied": "O LumiFX precisa do microfone para ouvir sua voz. Permita nas configurações do celular.",
+  "weeklyReport": "Resumo semanal",
+  "weeklyReportSubtitle": "Estrelas e horas de dormir da semana",
+  "weeklyReportDescription": "Como está indo esta semana para cada criança: as estrelas ganhas dia a dia e quando começou a hora de dormir. O horário é anotado quando começa a hora de dormir ou a luz guardiã do ritual.",
+  "reportStars": "{count, plural, =0{Ainda nenhuma estrela esta semana} =1{1 estrela esta semana} other{{count} estrelas esta semana}}",
+  "reportLastWeek": "Semana passada: {count}",
+  "reportRoutines": "Rotinas concluídas: {count}",
+  "reportBedtime": "Hora de dormir",
+  "reportBedtimeAverage": "Em média às {time}",
+  "reportBedtimeRange": "Entre {earliest} e {latest}",
+  "reportBedtimeNights": "{count, plural, =1{Anotada em 1 noite} other{Anotada em {count} noites}}",
+  "reportNoBedtimes": "Nenhuma hora de dormir anotada esta semana ainda."
 }

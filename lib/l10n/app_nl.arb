@@ -1363,5 +1363,16 @@
   "singStart": "Begin met zingen",
   "singListening": "Zing een noot…",
   "singHold": "Houd hem vast, dan wordt hij feller!",
-  "singMicDenied": "LumiFX heeft de microfoon nodig om je stem te horen. Sta het toe in de instellingen van je telefoon."
+  "singMicDenied": "LumiFX heeft de microfoon nodig om je stem te horen. Sta het toe in de instellingen van je telefoon.",
+  "weeklyReport": "Weekoverzicht",
+  "weeklyReportSubtitle": "Sterren en bedtijden van de week",
+  "weeklyReportDescription": "Hoe deze week gaat voor elk kind: de verdiende sterren per dag en wanneer bedtijd begon. De tijd wordt genoteerd als bedtijd of het wakerlicht van het ritueel start.",
+  "reportStars": "{count, plural, =0{Nog geen sterren deze week} =1{1 ster deze week} other{{count} sterren deze week}}",
+  "reportLastWeek": "Vorige week: {count}",
+  "reportRoutines": "Afgeronde routines: {count}",
+  "reportBedtime": "Bedtijd",
+  "reportBedtimeAverage": "Gemiddeld om {time}",
+  "reportBedtimeRange": "Tussen {earliest} en {latest}",
+  "reportBedtimeNights": "{count, plural, =1{Op 1 avond genoteerd} other{Op {count} avonden genoteerd}}",
+  "reportNoBedtimes": "Deze week nog geen bedtijd genoteerd."
 }

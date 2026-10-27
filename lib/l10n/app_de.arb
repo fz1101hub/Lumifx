@@ -1363,5 +1363,16 @@
   "singStart": "Singen starten",
   "singListening": "Sing einen Ton…",
   "singHold": "Halte ihn, damit er heller wird!",
-  "singMicDenied": "LumiFX braucht das Mikrofon, um deine Stimme zu hören. Erlaube es in den Telefoneinstellungen."
+  "singMicDenied": "LumiFX braucht das Mikrofon, um deine Stimme zu hören. Erlaube es in den Telefoneinstellungen.",
+  "weeklyReport": "Wochenbericht",
+  "weeklyReportSubtitle": "Sterne und Schlafenszeiten der Woche",
+  "weeklyReportDescription": "Wie die Woche für jedes Kind läuft: die verdienten Sterne Tag für Tag und wann die Schlafenszeit begann. Die Uhrzeit wird notiert, wenn die Schlafenszeit oder das Wächterlicht des Rituals startet.",
+  "reportStars": "{count, plural, =0{Diese Woche noch keine Sterne} =1{1 Stern diese Woche} other{{count} Sterne diese Woche}}",
+  "reportLastWeek": "Letzte Woche: {count}",
+  "reportRoutines": "Erledigte Abläufe: {count}",
+  "reportBedtime": "Schlafenszeit",
+  "reportBedtimeAverage": "Im Schnitt um {time}",
+  "reportBedtimeRange": "Zwischen {earliest} und {latest}",
+  "reportBedtimeNights": "{count, plural, =1{An 1 Abend notiert} other{An {count} Abenden notiert}}",
+  "reportNoBedtimes": "Diese Woche noch keine Schlafenszeit notiert."
 }

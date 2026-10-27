@@ -146,7 +146,8 @@ enum AppScreen {
   boardGame('board-game'),
   hideSeek('hide-and-seek'),
   farm('farm'),
-  sing('sing');
+  sing('sing'),
+  weeklyReport('weekly-report');
 
   const AppScreen(this.slug);
 

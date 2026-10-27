@@ -1363,5 +1363,16 @@
   "singStart": "Inizia a cantare",
   "singListening": "Canta una nota…",
   "singHold": "Tienila per farla brillare di più!",
-  "singMicDenied": "LumiFX ha bisogno del microfono per sentire la tua voce. Consentilo nelle impostazioni del telefono."
+  "singMicDenied": "LumiFX ha bisogno del microfono per sentire la tua voce. Consentilo nelle impostazioni del telefono.",
+  "weeklyReport": "Resoconto settimanale",
+  "weeklyReportSubtitle": "Stelle e ore della nanna della settimana",
+  "weeklyReportDescription": "Come va questa settimana per ogni bambino: le stelle guadagnate giorno per giorno e quando è iniziata la nanna. L'ora viene annotata quando parte la nanna o la luce guardiana del rituale.",
+  "reportStars": "{count, plural, =0{Ancora nessuna stella questa settimana} =1{1 stella questa settimana} other{{count} stelle questa settimana}}",
+  "reportLastWeek": "La settimana scorsa: {count}",
+  "reportRoutines": "Routine completate: {count}",
+  "reportBedtime": "Nanna",
+  "reportBedtimeAverage": "In media alle {time}",
+  "reportBedtimeRange": "Tra le {earliest} e le {latest}",
+  "reportBedtimeNights": "{count, plural, =1{Annotata 1 sera} other{Annotata {count} sere}}",
+  "reportNoBedtimes": "Nessuna nanna annotata ancora questa settimana."
 }

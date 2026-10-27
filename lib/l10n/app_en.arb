@@ -5633,5 +5633,82 @@
   "singMicDenied": "LumiFX needs the microphone to hear your voice. Allow it in the phone's settings.",
   "@singMicDenied": {
     "description": "Sing and colour: microphone refused"
+  },
+  "weeklyReport": "Weekly report",
+  "@weeklyReport": {
+    "description": "Home: the weekly report for parents"
+  },
+  "weeklyReportSubtitle": "Stars and bedtimes of the week",
+  "@weeklyReportSubtitle": {
+    "description": "Home: what the weekly report shows"
+  },
+  "weeklyReportDescription": "How this week is going for each child: the stars earned day by day, and when bedtime started. The time is noted when bedtime or the ritual's guardian light starts.",
+  "@weeklyReportDescription": {
+    "description": "Weekly report: what it shows and where bedtimes come from"
+  },
+  "reportStars": "{count, plural, =0{No stars yet this week} =1{1 star this week} other{{count} stars this week}}",
+  "@reportStars": {
+    "description": "Weekly report: stars earned this week",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reportLastWeek": "Last week: {count}",
+  "@reportLastWeek": {
+    "description": "Weekly report: stars of last week",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reportRoutines": "Routines finished: {count}",
+  "@reportRoutines": {
+    "description": "Weekly report: morning and evening routines finished this week",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reportBedtime": "Bedtime",
+  "@reportBedtime": {
+    "description": "Weekly report: heading of the bedtimes"
+  },
+  "reportBedtimeAverage": "On average at {time}",
+  "@reportBedtimeAverage": {
+    "description": "Weekly report: the average bedtime",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "reportBedtimeRange": "Between {earliest} and {latest}",
+  "@reportBedtimeRange": {
+    "description": "Weekly report: the earliest and latest bedtime",
+    "placeholders": {
+      "earliest": {
+        "type": "String"
+      },
+      "latest": {
+        "type": "String"
+      }
+    }
+  },
+  "reportBedtimeNights": "{count, plural, =1{Noted on 1 evening} other{Noted on {count} evenings}}",
+  "@reportBedtimeNights": {
+    "description": "Weekly report: on how many evenings bedtime was noted",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reportNoBedtimes": "No bedtime noted this week yet.",
+  "@reportNoBedtimes": {
+    "description": "Weekly report: no bedtime noted this week"
   }
 }

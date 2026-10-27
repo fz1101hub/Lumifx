@@ -96,6 +96,7 @@ import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/routines/kid_routine.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
+import 'package:lumifx/src/features/routines/weekly_report_screen.dart';
 import 'package:lumifx/src/features/routines/star_shop_screen.dart';
 import 'package:lumifx/src/features/timers/light_timer.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
@@ -1558,6 +1559,29 @@ void main() {
     expect(scope.playback.effect.id, ToothFairy.id);
     await scope.playback.stop(restore: false);
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('the weekly report shows the stars and bedtimes of the week',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 10, 28, 9));
+    final preferences =
+        AppScope.of(tester.element(find.byType(HomeScreen))).preferences;
+    preferences
+      ..earnStar('2026-10-26:morning')
+      ..earnStar('2026-10-27:evening')
+      ..earnStar('2026-10-28:morning')
+      ..earnStar('2026-10-20:evening')
+      ..recordBedtime(DateTime(2026, 10, 26, 21))
+      ..recordBedtime(DateTime(2026, 10, 27, 21, 30));
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const WeeklyReportScreen())));
+    await tester.pumpAndSettle();
+    expect(find.text('3 stars this week'), findsOneWidget);
+    expect(find.text('Last week: 1'), findsOneWidget);
+    expect(find.text('Routines finished: 3'), findsOneWidget);
+    expect(find.text('On average at 9:15 PM'), findsOneWidget);
+    expect(find.text('Between 9:00 PM and 9:30 PM'), findsOneWidget);
+    expect(find.text('Noted on 2 evenings'), findsOneWidget);
   });
 
   testWidgets('a tune played on the piano is kept, played back and shared',

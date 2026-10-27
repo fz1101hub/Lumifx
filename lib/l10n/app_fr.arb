@@ -1363,5 +1363,16 @@
   "singStart": "Commencer à chanter",
   "singListening": "Chante une note…",
   "singHold": "Tiens-la pour qu'elle brille plus !",
-  "singMicDenied": "LumiFX a besoin du micro pour entendre ta voix. Autorise-le dans les réglages du téléphone."
+  "singMicDenied": "LumiFX a besoin du micro pour entendre ta voix. Autorise-le dans les réglages du téléphone.",
+  "weeklyReport": "Bilan de la semaine",
+  "weeklyReportSubtitle": "Étoiles et heures du dodo de la semaine",
+  "weeklyReportDescription": "Comment se passe la semaine pour chaque enfant : les étoiles gagnées jour après jour et l'heure du dodo. L'heure est notée quand le dodo ou la lumière gardienne du rituel démarre.",
+  "reportStars": "{count, plural, =0{Pas encore d'étoile cette semaine} =1{1 étoile cette semaine} other{{count} étoiles cette semaine}}",
+  "reportLastWeek": "La semaine dernière : {count}",
+  "reportRoutines": "Routines terminées : {count}",
+  "reportBedtime": "Dodo",
+  "reportBedtimeAverage": "En moyenne à {time}",
+  "reportBedtimeRange": "Entre {earliest} et {latest}",
+  "reportBedtimeNights": "{count, plural, =1{Notée 1 soir} other{Notée {count} soirs}}",
+  "reportNoBedtimes": "Aucun dodo noté cette semaine pour l'instant."
 }
