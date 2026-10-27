@@ -142,7 +142,8 @@ object BridgeSignal {
         return any
     }
 
-    private fun pinnedContext(fingerprint: String, bridgeId: String): SSLContext {
+    /** Trusts only the bridge [bridgeId] with the pinned certificate. */
+    fun pinnedContext(fingerprint: String, bridgeId: String): SSLContext {
         val trust = object : X509TrustManager {
             override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
                 throw CertificateException("Not a server")

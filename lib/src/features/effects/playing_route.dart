@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../core/effects/effect.dart';
 import '../../core/sound/melody.dart';
 import '../../core/sound/soundscape.dart';
+import '../alerts/sound_alerts.dart';
+import '../alerts/sound_alerts_screen.dart';
 import '../bedtime/dream_diary.dart';
 import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/monster_spray.dart';
@@ -130,6 +132,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const BoardGameScreen();
   } else if (HideAndSeek.countOf(effect) != null) {
     screen = const HideAndSeekScreen();
+  } else if (SoundAlert.of(effect) != null) {
+    screen = const SoundAlertsScreen();
   } else if (Dream.isDream(effect)) {
     screen = const DreamDiaryScreen();
   } else if (FamilyQuiz.isQuiz(effect)) {

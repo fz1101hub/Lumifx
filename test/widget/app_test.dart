@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -11,11 +12,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/app.dart';
+import 'package:lumifx/src/features/family/family_sync_screen.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:lumifx/src/features/guests/guest_remote_screen.dart';
+import 'package:lumifx/src/features/alerts/sound_alerts_screen.dart';
+import 'package:lumifx/src/features/alerts/sound_alerts.dart';
 import 'package:lumifx/src/app_scope.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/calendar/calendar_source.dart';
+import 'package:lumifx/src/core/home_away_platform.dart';
+import 'package:lumifx/src/core/screen_wake.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/core/weather/weather.dart';
@@ -2013,6 +2021,88 @@ void main() {
     expect(find.text('Start singing'), findsOneWidget);
   });
 
+  testWidgets('a smoke alarm heard flashes the lights red', (tester) async {
+    // Three beeps of a smoke alarm, then quiet.
+    const rate = 44100;
+    final beeps = ByteData(rate * 9);
+    for (var i = 0; i < rate * 3; i++) {
+      final beeping = (i ~/ (rate ~/ 2)).isEven;
+      beeps.setInt16(
+          i * 2,
+          beeping
+              ? (0.5 * 32767 * math.sin(2 * math.pi * 3150 * i / rate)).round()
+              : 0,
+          Endian.little);
+    }
+    final microphone = FakeAudioInput(pcm: beeps.buffer.asUint8List());
+    await _pumpApp(tester, audioInput: microphone);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const SoundAlertsScreen(screenWake: _NoWake()))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(SoundAlertsScreen))).playback;
+    await tester.tap(find.text('Start listening'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(microphone.started, isTrue);
+    expect(SoundAlert.of(playback.effect), SoundAlert.smokeAlarm);
+    expect(find.textContaining('Smoke alarm at'), findsOneWidget);
+    await tester.ensureVisible(find.text('Stop the lights'));
+    await tester.pump();
+    await tester.tap(find.text('Stop the lights'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(playback.status, PlaybackStatus.idle);
+
+    await tester.scrollUntilVisible(find.text('Stop'), 200,
+        scrollable: find.byType(Scrollable).last);
+    expect(find.text('Listening… the lights will tell you.'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(microphone.stopped, isTrue);
+  });
+
+  testWidgets('the guest remote shows its code and QR on the home network',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) =>
+                GuestRemoteScreen(address: InternetAddress.loopbackIPv4))));
+    await tester.pump();
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 200)));
+    await tester.pump();
+    expect(find.byType(QrImageView), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^Code \d{6}$')), findsOneWidget);
+    expect(find.textContaining('127.0.0.1:'), findsOneWidget);
+    await tester.runAsync(() async {
+      await tester.pageBack();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('family sync shares its code on the home network',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) =>
+                FamilySyncScreen(address: InternetAddress.loopbackIPv4))));
+    await tester.pump();
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 200)));
+    await tester.pump();
+    expect(find.byType(QrImageView), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^Code \d{6}$')), findsOneWidget);
+    await tester.runAsync(() async {
+      await tester.pageBack();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('the noise light turns red when it gets too loud',
       (tester) async {
     // Two seconds of shouting next to the phone.
@@ -3908,6 +3998,31 @@ void main() {
   streamingTests();
 }
 
+class _FakeHomeAway implements HomeAwayPlatform {
+  final configs = <Map<String, Object?>?>[];
+
+  @override
+  bool get isSupported => true;
+
+  @override
+  Future<bool> requestAccess() async => true;
+
+  @override
+  Future<({double latitude, double longitude})?> currentLocation() async =>
+      (latitude: 45.07, longitude: 7.69);
+
+  @override
+  Future<void> configure(Map<String, Object?>? config) async =>
+      configs.add(config);
+}
+
+class _NoWake implements ScreenWake {
+  const _NoWake();
+
+  @override
+  Future<void> keepOn(bool on) async {}
+}
+
 class _FakeCalendar implements CalendarSource {
   _FakeCalendar(this.found);
 
@@ -3935,6 +4050,7 @@ Future<BridgeController> _connectedBridge(
   String? clientKey,
   List<String>? puts,
   List<HueCredentials> others = const [],
+  String? fingerprint,
 }) async {
   http.Response json(Object body) => http.Response(jsonEncode(body), 200);
   final store = InMemoryCredentialStore(
@@ -3942,6 +4058,7 @@ Future<BridgeController> _connectedBridge(
       bridge: const HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
       applicationKey: 'key',
       clientKey: clientKey,
+      certificateFingerprint: fingerprint,
     ),
   );
   await store.saveOthers(others);
@@ -4431,6 +4548,50 @@ void streamingTests() {
     expect(bridge.otherBridges.single.bridge.id, '001788fffe123456');
   });
 
+  testWidgets('home is set where the phone is and handed to the phone',
+      (tester) async {
+    final puts = <String>[];
+    final bridge =
+        await _connectedBridge(tester, puts: puts, fingerprint: 'ab' * 32);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setOnboardingDone();
+    await preferences.load();
+    final platform = _FakeHomeAway();
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      homeAway: platform,
+    ));
+    await tester.scrollUntilVisible(find.text('Leaving and coming home'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Leaving and coming home'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Set home here'));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+    });
+    for (var i = 0; i < 4; i++) {
+      await tester.pump();
+    }
+    expect(puts, contains('POST /api/key/sensors'));
+    final settings = preferences.homeAway!;
+    expect((settings.latitude, settings.longitude), (45.07, 7.69));
+    expect(platform.configs.last?['sensor'], settings.sensorId);
+    expect(platform.configs.last?['latitude'], 45.07);
+
+    final hall = find.widgetWithText(ChoiceChip, 'Living room');
+    await tester.ensureVisible(hall);
+    await tester.pump();
+    await tester.tap(hall);
+    await tester.pump();
+    expect(preferences.homeAway?.hallGroupId, '1');
+    expect(platform.configs.last?['hallGroup'], '1');
+  });
+
   testWidgets('rooms list the Hue scenes of each group and recall them',
       (tester) async {
     final puts = <String>[];
@@ -4563,16 +4724,25 @@ void streamingTests() {
     await tester.pump();
     expect(puts, contains('POST /clip/v2/resource/scene'));
     expect(find.textContaining('in Living room'), findsOneWidget);
-    await tester.tap(find.text('Stop'));
-    await tester.pump(const Duration(seconds: 1));
+    // A command may still be on its way to the bridge: stopping waits for
+    // it (up to RateLimitedLightOutput.closeTimeout).
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Stop'));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump(const Duration(seconds: 8));
   });
 
   Future<FakeBackgroundPlayback> playOceanInLivingRoom(
     WidgetTester tester, {
     bool keepPlaying = true,
+    List<String> favorites = const [],
   }) async {
     final bridge = await _connectedBridge(tester);
     final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    for (final id in favorites.reversed) {
+      await preferences.toggleFavorite(id);
+    }
     await preferences.setLastTarget('group:r1');
     await preferences.setKeepPlayingScreenOff(keepPlaying);
     final background = FakeBackgroundPlayback();
@@ -4601,6 +4771,30 @@ void streamingTests() {
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
   }
+
+  testWidgets('the notification (and a Wear OS watch) plays the next favourite',
+      (tester) async {
+    final background =
+        await playOceanInLivingRoom(tester, favorites: ['ocean', 'aurora']);
+    expect(background.favouriteLabel, 'Next favourite');
+    expect(background.bedtimeLabel, 'Bedtime');
+    await tester.runAsync(() async {
+      background.press('favourite');
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    final playback =
+        AppScope.of(tester.element(find.byType(Navigator).first)).playback;
+    expect(playback.effect.id, 'aurora');
+    await tester.runAsync(() async {
+      background.press('favourite');
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump();
+    expect(playback.effect.id, 'ocean', reason: 'round and round');
+    await tester.runAsync(playback.stop);
+    await tester.pumpAndSettle();
+  });
 
   testWidgets('on Android an effect plays on with the screen off',
       (tester) async {

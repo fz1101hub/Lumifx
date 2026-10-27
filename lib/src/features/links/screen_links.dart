@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../alerts/sound_alerts_screen.dart';
 import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
@@ -10,6 +11,7 @@ import '../timers/light_clock_screen.dart';
 import '../bedtime/ritual_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../calm/feelings_screen.dart';
+import '../family/family_sync_screen.dart';
 import '../fun/board_game_screen.dart';
 import '../fun/goal_screen.dart';
 import '../fun/hide_and_seek_screen.dart';
@@ -71,6 +73,8 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.treasureHunt => const TreasureHuntScreen(),
       AppScreen.familyQuiz => const FamilyQuizScreen(),
       AppScreen.dreamDiary => const DreamDiaryScreen(),
+      AppScreen.soundAlerts => const SoundAlertsScreen(),
+      AppScreen.familySync => const FamilySyncScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../core/effects/effect.dart';
 import '../bridge/bridge_controller.dart';
 import '../effects/effect_player_screen.dart';
+import '../family/family_sync_screen.dart';
 import '../fun/goal.dart';
 import '../fun/goal_screen.dart';
 import '../fun/treasure_hunt.dart';
@@ -54,6 +55,8 @@ class LinkHandler {
         return _bedtime();
       case GoalLink(:final team):
         return _goal(team);
+      case SyncLink(:final host, :final port, :final code):
+        return _sync(host, port, code);
       case TuneLink(:final name, :final data):
         return _tune(name, data);
       case VoiceLink(:final words):
@@ -154,6 +157,40 @@ class LinkHandler {
     }
     await _screen(AppScreen.piano);
     return true;
+  }
+
+  /// Another family phone's sync code: asks, then syncs both ways.
+  Future<bool> _sync(String host, int port, String code) async {
+    await _ready();
+    if (preferences.kidsLocked) {
+      return false;
+    }
+    final context = navigatorKey.currentContext;
+    if (context == null || !context.mounted) {
+      return false;
+    }
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.familySyncQuestion),
+        content: Text('$host:$port'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.familySyncJoin),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) {
+      return false;
+    }
+    return joinFamily(context, host, port, code);
   }
 
   Future<bool> _goal(String? team) async {

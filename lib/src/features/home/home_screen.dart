@@ -4,6 +4,7 @@ import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
 import '../board/light_board_screen.dart';
+import '../alerts/sound_alerts_screen.dart';
 import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
@@ -26,8 +27,11 @@ import '../effects/player_route.dart';
 import '../playlists/playlists_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
+import '../family/family_sync_screen.dart';
+import '../guests/guest_remote_screen.dart';
 import '../house/automations_calendar_screen.dart';
 import '../house/calendar_lights_screen.dart';
+import '../house/home_away_screen.dart';
 import '../house/house_screen.dart';
 import '../house/light_health_screen.dart';
 import '../kids/kids_mode.dart';
@@ -202,6 +206,12 @@ class HomeScreen extends StatelessWidget {
               entries: [
                 _HomeEntry(Icons.queue_music, l10n.playlists,
                     l10n.playlistsSubtitle, () => const PlaylistsScreen()),
+                _HomeEntry(Icons.devices_outlined, l10n.familySync,
+                    l10n.familySyncSubtitle, () => const FamilySyncScreen()),
+                _HomeEntry(Icons.qr_code_2, l10n.guestRemote,
+                    l10n.guestRemoteSubtitle, () => const GuestRemoteScreen()),
+                _HomeEntry(Icons.hearing_outlined, l10n.soundAlerts,
+                    l10n.soundAlertsSubtitle, () => const SoundAlertsScreen()),
                 _HomeEntry(Icons.wb_sunny_outlined, l10n.weather,
                     l10n.weatherSubtitle, () => const WeatherScreen()),
                 _HomeEntry(
@@ -223,6 +233,8 @@ class HomeScreen extends StatelessWidget {
                       l10n.roomsAndZonesSubtitle, () => const RoomsScreen()),
                   _HomeEntry(Icons.alarm, l10n.routines, l10n.routinesSubtitle,
                       () => const AutomationsScreen()),
+                  _HomeEntry(Icons.directions_walk, l10n.homeAway,
+                      l10n.homeAwaySubtitle, () => const HomeAwayScreen()),
                   _HomeEntry(
                       Icons.event_available_outlined,
                       l10n.calendarLights,

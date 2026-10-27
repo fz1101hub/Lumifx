@@ -9,19 +9,25 @@ import 'package:flutter/services.dart';
 abstract interface class BackgroundPlayback {
   bool get isSupported;
 
-  /// Shows (or updates) the notification and keeps the app running.
-  /// False when the platform refused.
+  /// Shows (or updates) the notification and keeps the app running; with
+  /// [favouriteLabel] and [bedtimeLabel] it also offers those (shown on a
+  /// paired Wear OS watch too). False when the platform refused.
   Future<bool> show({
     required String title,
     required String text,
     required String stopLabel,
     required bool microphone,
+    String? favouriteLabel,
+    String? bedtimeLabel,
   });
 
   Future<void> hide();
 
   /// Called when the notification's Stop is pressed.
   set onStop(VoidCallback? callback);
+
+  /// Called with `favourite` or `bedtime` when one of those is pressed.
+  set onAction(void Function(String action)? callback);
 }
 
 class ChannelBackgroundPlayback implements BackgroundPlayback {
@@ -30,6 +36,8 @@ class ChannelBackgroundPlayback implements BackgroundPlayback {
     _channel.setMethodCallHandler((call) async {
       if (call.method == 'stop') {
         _onStop?.call();
+      } else if (call.method == 'action' && call.arguments is String) {
+        _onAction?.call(call.arguments as String);
       }
     });
   }
@@ -40,9 +48,13 @@ class ChannelBackgroundPlayback implements BackgroundPlayback {
   final bool isSupported;
 
   VoidCallback? _onStop;
+  void Function(String action)? _onAction;
 
   @override
   set onStop(VoidCallback? callback) => _onStop = callback;
+
+  @override
+  set onAction(void Function(String action)? callback) => _onAction = callback;
 
   @override
   Future<bool> show({
@@ -50,6 +62,8 @@ class ChannelBackgroundPlayback implements BackgroundPlayback {
     required String text,
     required String stopLabel,
     required bool microphone,
+    String? favouriteLabel,
+    String? bedtimeLabel,
   }) async {
     if (!isSupported) {
       return false;
@@ -60,6 +74,8 @@ class ChannelBackgroundPlayback implements BackgroundPlayback {
             'text': text,
             'stop': stopLabel,
             'microphone': microphone,
+            'favourite': favouriteLabel,
+            'bedtime': bedtimeLabel,
           }) ??
           false;
     } on PlatformException {
@@ -96,6 +112,8 @@ class NoBackgroundPlayback implements BackgroundPlayback {
     required String text,
     required String stopLabel,
     required bool microphone,
+    String? favouriteLabel,
+    String? bedtimeLabel,
   }) async =>
       false;
 
@@ -104,4 +122,7 @@ class NoBackgroundPlayback implements BackgroundPlayback {
 
   @override
   set onStop(VoidCallback? callback) {}
+
+  @override
+  set onAction(void Function(String action)? callback) {}
 }

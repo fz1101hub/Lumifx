@@ -6212,5 +6212,225 @@
   "addAnotherBridgeSubtitle": "A second home or a large flat: switch between them like rooms",
   "@addAnotherBridgeSubtitle": {
     "description": "Settings: what adding another bridge is for"
+  },
+  "soundAlerts": "Light alerts for sounds",
+  "@soundAlerts": {
+    "description": "Home: lights that tell about sounds"
+  },
+  "soundAlertsSubtitle": "Smoke alarm, doorbell, baby crying",
+  "@soundAlertsSubtitle": {
+    "description": "Home: which sounds"
+  },
+  "soundAlertsDescription": "While this screen is open, the phone listens for the sounds chosen and the lights flash in their colour: red for a smoke alarm, blue for the doorbell, pink for a baby crying. Leave the phone nearby and plugged in. The sound is recognised on the phone and never recorded or sent. It helps, but it is not a certified alarm.",
+  "@soundAlertsDescription": {
+    "description": "Light alerts for sounds: how it works and its limits"
+  },
+  "alertSmokeAlarm": "Smoke alarm",
+  "@alertSmokeAlarm": {
+    "description": "Light alerts: a smoke alarm"
+  },
+  "alertDoorbell": "Doorbell",
+  "@alertDoorbell": {
+    "description": "Light alerts: the doorbell"
+  },
+  "alertBabyCrying": "Baby crying",
+  "@alertBabyCrying": {
+    "description": "Light alerts: a baby crying"
+  },
+  "soundAlertsStart": "Start listening",
+  "@soundAlertsStart": {
+    "description": "Light alerts: start listening"
+  },
+  "soundAlertsListening": "Listening… the lights will tell you.",
+  "@soundAlertsListening": {
+    "description": "Light alerts: listening now"
+  },
+  "soundAlertsHeard": "{sound} at {time}",
+  "@soundAlertsHeard": {
+    "description": "Light alerts: what was heard and when",
+    "placeholders": {
+      "sound": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "soundAlertsStopLights": "Stop the lights",
+  "@soundAlertsStopLights": {
+    "description": "Light alerts: stop the flashing"
+  },
+  "soundAlertsTry": "Try the lights",
+  "@soundAlertsTry": {
+    "description": "Light alerts: preview each alert on the lights"
+  },
+  "soundAlertsMicDenied": "LumiFX needs the microphone to hear these sounds. Allow it in the phone's settings.",
+  "@soundAlertsMicDenied": {
+    "description": "Light alerts: no microphone"
+  },
+  "guestRemote": "Remote for guests",
+  "@guestRemote": {
+    "description": "Home: a remote for guests on their own phones"
+  },
+  "guestRemoteSubtitle": "Guests pick a colour from their phone",
+  "@guestRemoteSubtitle": {
+    "description": "Home: what the guest remote is"
+  },
+  "guestRemoteDescription": "Guests on your home Wi-Fi scan the code with their camera and pick a colour or a calm effect. The page works only while this screen is open and with the code shown here; nothing goes over the internet.",
+  "@guestRemoteDescription": {
+    "description": "Guest remote: how it works and what is safe"
+  },
+  "guestRemoteNoWifi": "Connect this phone to the home Wi-Fi to share the remote.",
+  "@guestRemoteNoWifi": {
+    "description": "Guest remote: the phone is not on a home network"
+  },
+  "guestRemoteCode": "Code {code}",
+  "@guestRemoteCode": {
+    "description": "Guest remote: the code guests need",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "guestRemotePicked": "A guest chose {name}",
+  "@guestRemotePicked": {
+    "description": "Guest remote: what a guest chose",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "guestPageTitle": "Pick the lights",
+  "@guestPageTitle": {
+    "description": "Guest page: title"
+  },
+  "guestPageColours": "Colours",
+  "@guestPageColours": {
+    "description": "Guest page: heading of the colours"
+  },
+  "guestPageEffects": "Moods",
+  "@guestPageEffects": {
+    "description": "Guest page: heading of the effects"
+  },
+  "guestPageDone": "Done!",
+  "@guestPageDone": {
+    "description": "Guest page: the pick was sent"
+  },
+  "guestPageWrongCode": "This link no longer works. Scan the code on the host's phone again.",
+  "@guestPageWrongCode": {
+    "description": "Guest page: an old or wrong link"
+  },
+  "familySync": "Family in sync",
+  "@familySync": {
+    "description": "Home: keep the family's phones in sync"
+  },
+  "familySyncSubtitle": "Scenes, stories, favourites and profiles on every phone",
+  "@familySyncSubtitle": {
+    "description": "Home: what family sync keeps the same"
+  },
+  "familySyncDescription": "With both phones on the home Wi-Fi, scan this code with the other phone's camera: the two swap their scenes, stories, playlists, favourites and children's profiles and end up with the same. Nothing goes over the internet.",
+  "@familySyncDescription": {
+    "description": "Family sync: how it works"
+  },
+  "familySyncNoWifi": "Connect this phone to the home Wi-Fi to sync.",
+  "@familySyncNoWifi": {
+    "description": "Family sync: not on a home network"
+  },
+  "familySyncJoinTitle": "Or type what the other phone shows",
+  "@familySyncJoinTitle": {
+    "description": "Family sync: join by typing what the other phone shows"
+  },
+  "familySyncAddress": "Address",
+  "@familySyncAddress": {
+    "description": "Family sync: the other phone's address field"
+  },
+  "familySyncCodeField": "Code",
+  "@familySyncCodeField": {
+    "description": "Family sync: the code field"
+  },
+  "familySyncJoin": "Sync",
+  "@familySyncJoin": {
+    "description": "Family sync: sync now button"
+  },
+  "familySyncQuestion": "Sync with the other phone?",
+  "@familySyncQuestion": {
+    "description": "Family sync: confirm syncing with the phone that shared"
+  },
+  "familySyncDone": "{count, plural, =0{Already in sync} =1{In sync: 1 thing updated} other{In sync: {count} things updated}}",
+  "@familySyncDone": {
+    "description": "Family sync: how many things changed on this phone",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "familySyncFailed": "Couldn't reach the other phone. Are both on the home Wi-Fi, with its sync screen open?",
+  "@familySyncFailed": {
+    "description": "Family sync: the other phone could not be reached"
+  },
+  "homeAway": "Leaving and coming home",
+  "@homeAway": {
+    "description": "Home: leaving and coming home"
+  },
+  "homeAwaySubtitle": "Lights off when the last one leaves, the hall lit on coming home",
+  "@homeAwaySubtitle": {
+    "description": "Home: what leaving and coming home does"
+  },
+  "homeAwayDescription": "Set home where you are now. When the last one with LumiFX (or the Hue app's Home & Away) leaves, every light goes off; coming home after dark, the hall lights up. The phone watches a circle around home by itself, also with the app closed. Your location stays on the phone; only \"home\" or \"away\" reaches the bridge.",
+  "@homeAwayDescription": {
+    "description": "Leaving and coming home: how it works and what is shared"
+  },
+  "homeAwaySetHere": "Set home here",
+  "@homeAwaySetHere": {
+    "description": "Leaving and coming home: set home at the current location"
+  },
+  "homeAwayOffOnLeave": "The last one out switches every light off",
+  "@homeAwayOffOnLeave": {
+    "description": "Leaving and coming home: switch everything off when the last one leaves"
+  },
+  "homeAwayHall": "Lights up on coming home after dark",
+  "@homeAwayHall": {
+    "description": "Leaving and coming home: which room lights up on coming home after dark"
+  },
+  "homeAwayHallNone": "None",
+  "@homeAwayHallNone": {
+    "description": "Leaving and coming home: no room lights up"
+  },
+  "homeAwayRadius": "Circle around home",
+  "@homeAwayRadius": {
+    "description": "Leaving and coming home: size of the circle around home"
+  },
+  "homeAwayMeters": "{meters} m",
+  "@homeAwayMeters": {
+    "description": "Leaving and coming home: a radius in metres",
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "homeAwayDenied": "LumiFX needs the location, also when the app is closed (\"Always\"), to know when you leave and come home. You can allow it in your phone settings.",
+  "@homeAwayDenied": {
+    "description": "Leaving and coming home: no location access"
+  },
+  "homeAwayNoLocation": "Couldn't find where the phone is. Try again in a moment, with location and Wi-Fi on.",
+  "@homeAwayNoLocation": {
+    "description": "Leaving and coming home: the location could not be found"
+  },
+  "homeAwayStop": "Stop watching",
+  "@homeAwayStop": {
+    "description": "Leaving and coming home: stop watching"
+  },
+  "homeAwayIsSet": "Home is set: the phone is watching.",
+  "@homeAwayIsSet": {
+    "description": "Leaving and coming home: home is set and watched"
+  },
+  "watchNextFavourite": "Next favourite",
+  "@watchNextFavourite": {
+    "description": "Playback notification (also on the watch): play the next favourite"
   }
 }

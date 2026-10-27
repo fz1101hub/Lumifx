@@ -30,6 +30,9 @@ class PlaybackService : Service() {
     interface Listener {
         /** The notification's Stop was pressed. */
         fun onStopRequested()
+
+        /** Its next favourite or bedtime (also from a Wear OS watch). */
+        fun onActionRequested(action: String)
     }
 
     private var wakeLock: PowerManager.WakeLock? = null
@@ -48,11 +51,15 @@ class PlaybackService : Service() {
                     stopSelf()
                 }
             }
+            ACTION_FAVOURITE -> listener?.onActionRequested("favourite")
+            ACTION_BEDTIME -> listener?.onActionRequested("bedtime")
             ACTION_SHOW -> show(
                 intent.getStringExtra(EXTRA_TITLE) ?: "LumiFX",
                 intent.getStringExtra(EXTRA_TEXT) ?: "",
                 intent.getStringExtra(EXTRA_STOP) ?: "Stop",
                 intent.getBooleanExtra(EXTRA_MICROPHONE, false),
+                intent.getStringExtra(EXTRA_FAVOURITE),
+                intent.getStringExtra(EXTRA_BEDTIME),
             )
             else -> stopSelf()
         }
@@ -65,7 +72,14 @@ class PlaybackService : Service() {
     }
 
     /** Shows or updates the notification and holds the locks. */
-    fun show(title: String, text: String, stopLabel: String, wantsMicrophone: Boolean) {
+    fun show(
+        title: String,
+        text: String,
+        stopLabel: String,
+        wantsMicrophone: Boolean,
+        favouriteLabel: String? = null,
+        bedtimeLabel: String? = null,
+    ) {
         val manager = getSystemService(NotificationManager::class.java)
         // Channels exist from Android 8; before, NotificationCompat ignores
         // the channel id (creating one there would crash the app).
@@ -91,7 +105,14 @@ class PlaybackService : Service() {
             Intent(this, PlaybackService::class.java).setAction(ACTION_STOP),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        fun action(code: Int, name: String) = PendingIntent.getService(
+            this,
+            code,
+            Intent(this, PlaybackService::class.java).setAction(name),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
+        // The actions show on a paired Wear OS watch as well.
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(text)
@@ -100,7 +121,13 @@ class PlaybackService : Service() {
             .setOngoing(true)
             .setSilent(true)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
-            .build()
+        if (favouriteLabel != null) {
+            builder.addAction(0, favouriteLabel, action(2, ACTION_FAVOURITE))
+        }
+        if (bedtimeLabel != null) {
+            builder.addAction(0, bedtimeLabel, action(3, ACTION_BEDTIME))
+        }
+        val notification: Notification = builder.build()
         val microphone = wantsMicrophone &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
             PackageManager.PERMISSION_GRANTED
@@ -183,6 +210,10 @@ class PlaybackService : Service() {
         private const val NOTIFICATION_ID = 0x4C47
         private const val ACTION_SHOW = "com.lumifx.lumifx.PLAYBACK_SHOW"
         private const val ACTION_STOP = "com.lumifx.lumifx.PLAYBACK_STOP"
+        private const val ACTION_FAVOURITE = "com.lumifx.lumifx.PLAYBACK_FAVOURITE"
+        private const val ACTION_BEDTIME = "com.lumifx.lumifx.PLAYBACK_BEDTIME"
+        private const val EXTRA_FAVOURITE = "favourite"
+        private const val EXTRA_BEDTIME = "bedtime"
         private const val EXTRA_TITLE = "title"
         private const val EXTRA_TEXT = "text"
         private const val EXTRA_STOP = "stop"
@@ -197,12 +228,14 @@ class PlaybackService : Service() {
             text: String,
             stopLabel: String,
             microphone: Boolean,
+            favouriteLabel: String? = null,
+            bedtimeLabel: String? = null,
         ) {
             // Restarting a foreground service from the background is not
             // allowed on Android 12+, updating the running one is.
             val running = instance
             if (running != null) {
-                running.show(title, text, stopLabel, microphone)
+                running.show(title, text, stopLabel, microphone, favouriteLabel, bedtimeLabel)
                 return
             }
             val intent = Intent(context, PlaybackService::class.java)
@@ -211,6 +244,8 @@ class PlaybackService : Service() {
                 .putExtra(EXTRA_TEXT, text)
                 .putExtra(EXTRA_STOP, stopLabel)
                 .putExtra(EXTRA_MICROPHONE, microphone)
+                .putExtra(EXTRA_FAVOURITE, favouriteLabel)
+                .putExtra(EXTRA_BEDTIME, bedtimeLabel)
             ContextCompat.startForegroundService(context, intent)
         }
 

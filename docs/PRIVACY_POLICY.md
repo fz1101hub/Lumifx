@@ -47,6 +47,13 @@ voice is, moment by moment, on your phone; nothing is recorded, stored or
 transmitted, and the microphone is switched off when you tap Stop or
 leave the screen.
 
+**Microphone (light alerts for sounds).** While the light alerts screen
+is open and listening, the app looks at the sound in the room moment by
+moment, on your phone, for the pattern of a smoke alarm, a doorbell or a
+baby crying, and flashes the lights when it finds one. Nothing is
+recorded, stored or transmitted, and the microphone is switched off when
+you tap Stop, leave the screen or the app goes to the background.
+
 **Your voice (stories of your own).** In the story editor you can record
 yourself reading the lines of a story you made. The recordings are saved
 as sound files on your phone only, play when that story plays, are never
@@ -67,6 +74,16 @@ reads the start times of the appointments in the next day, on your phone.
 It hands your Hue Bridge only those times (as its own schedules named
 "LumiFX calendar"), never titles, places or people. Switching the feature
 off removes those schedules from the bridge.
+
+**Location (leaving and coming home).** If you switch on leaving and
+coming home, the app asks for your location, also when it is closed. It
+reads where you are once, on your phone, to set home; then your phone's
+own geofencing watches a circle around it. When you cross it, your phone
+tells your Hue Bridge only "home" or "away" (a presence sensor of its
+own, named "LumiFX phone"), switches the lights off if nobody else is
+home and, after dark, lights the room you chose. Your location never
+leaves your phone. "Stop watching" removes the presence sensor from the
+bridge and the circle from your phone.
 
 **Photos (scene from a photo).** In the scene editor, "From a photo" lets
 you choose a photo or take one. The app reads its main colours on your
@@ -206,6 +223,15 @@ scenes and stories you make are stored on your phone only.
 - **geocoding-api.open-meteo.com** and **api.open-meteo.com**, only when
   you use Weather lights: the city name you search for and the
   coordinates of the place you choose, as described above.
+- **Guests' phones on your Wi-Fi**, only while the remote for guests is
+  open: the app serves a small page at the phone's own address on the
+  local network, which works only with the code shown on your screen
+  and offers only colours and calm effects. Nothing it receives is kept
+  beyond the pick, and it stops when you leave that screen.
+- **Your family's other phone on your Wi-Fi**, only when you sync them:
+  the two phones swap your own scenes, stories, playlists, favourites and
+  the children's names directly over the local network, after the code
+  shown on the sharing phone; nothing goes over the internet.
 
 The app makes no other network connections. It contains no analytics, no
 advertising, no crash reporting and no tracking of any kind.
@@ -275,6 +301,13 @@ della nota cantata. L'app calcola solo quanto è alta e forte la voce,
 istante per istante, sul telefono; nulla viene registrato, salvato o
 trasmesso, e il microfono si spegne quando tocchi Stop o lasci la schermata.
 
+**Microfono (avvisi luminosi per i suoni).** Finché la schermata degli
+avvisi luminosi è aperta e in ascolto, l'app esamina il suono della stanza
+istante per istante, sul telefono, cercando l'andamento di un allarme fumo,
+di un campanello o del pianto di un bimbo, e fa lampeggiare le luci quando
+lo trova. Nulla viene registrato, salvato o trasmesso, e il microfono si
+spegne quando tocchi Stop, lasci la schermata o l'app va in background.
+
 **La tua voce (storie create da te).** Nell'editor delle storie puoi
 registrarti mentre leggi le frasi di una storia che hai creato. Le
 registrazioni sono salvate come file audio solo sul telefono, si sentono
@@ -296,6 +329,16 @@ legge, sul telefono, gli orari di inizio degli appuntamenti del giorno
 successivo. Al bridge Hue passa solo quegli orari (come sue programmazioni
 chiamate "LumiFX calendar"), mai titoli, luoghi o persone. Disattivando la
 funzione quelle programmazioni vengono tolte dal bridge.
+
+**Posizione (uscire e rientrare).** Se attivi "Uscire e rientrare",
+l'app chiede la tua posizione, anche quando è chiusa. Legge una volta, sul
+telefono, dove ti trovi per impostare casa; poi è il geofencing del
+telefono a sorvegliare un cerchio intorno a casa. Quando lo attraversi, il
+telefono comunica al bridge Hue solo "in casa" o "fuori" (con un suo
+sensore di presenza chiamato "LumiFX phone"), spegne le luci se non c'è
+nessun altro in casa e, col buio, accende la stanza che hai scelto. La tua
+posizione non lascia mai il telefono. "Smetti di sorvegliare" toglie il
+sensore dal bridge e il cerchio dal telefono.
 
 **Foto (scena da una foto).** Nell'editor delle scene, "Da una foto" ti fa
 scegliere o scattare una foto. L'app ne legge i colori principali sul
@@ -436,6 +479,16 @@ nanna e le scene e storie che crei sono salvati solo sul telefono.
 - **geocoding-api.open-meteo.com** e **api.open-meteo.com**, solo quando
   usi Meteo in luce: il nome della città cercata e le coordinate del luogo
   scelto, come descritto sopra.
+- **I telefoni degli ospiti sul tuo Wi-Fi**, solo mentre il telecomando
+  per gli ospiti è aperto: l'app serve una piccola pagina all'indirizzo del
+  telefono sulla rete locale, che funziona solo con il codice mostrato
+  sullo schermo e offre solo colori ed effetti tranquilli. Di ciò che
+  riceve non tiene nulla oltre alla scelta, e si ferma quando lasci quella
+  schermata.
+- **L'altro telefono della famiglia sul tuo Wi-Fi**, solo quando li
+  sincronizzi: i due telefoni si scambiano direttamente sulla rete locale
+  le tue scene, storie, playlist, preferiti e i nomi dei bambini, dopo il
+  codice mostrato dal telefono che condivide; niente passa da internet.
 
 L'app non effettua altre connessioni. Non contiene analytics, pubblicità,
 segnalazione di crash né alcuna forma di tracciamento.

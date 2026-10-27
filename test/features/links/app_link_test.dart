@@ -72,4 +72,14 @@ void main() {
         hasLength(AppScreen.values.length),
         reason: 'every slug its own');
   });
+
+  test('a family sync link carries the address and the code', () {
+    final link = AppLink.parse(AppLink.sync('192.168.1.20', 40123, '123456'));
+    expect(link, isA<SyncLink>());
+    final sync = link! as SyncLink;
+    expect(
+        (sync.host, sync.port, sync.code), ('192.168.1.20', 40123, '123456'));
+    expect(AppLink.parse('lumifx://app/sync?h=1.2.3.4&c=1'), isNull,
+        reason: 'no port');
+  });
 }

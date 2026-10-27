@@ -14,6 +14,7 @@ import 'hue_schedules.dart';
 
 part 'hue_health_client.dart';
 part 'hue_house_client.dart';
+part 'hue_presence_client.dart';
 part 'hue_reminders_client.dart';
 
 /// Everything LumiFX reads from a bridge in one snapshot.

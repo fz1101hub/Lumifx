@@ -299,6 +299,17 @@ Also done ahead of schedule:
   off; only the times reach the bridge.
 - **Several bridges**: a second home or a large flat, switched to from
   home like a room.
+- **Light alerts for sounds**: a smoke alarm, the doorbell or a baby
+  crying flashes the lights in its colour, recognised on the phone.
+- **Remote for guests**: a QR code opens a page on the home Wi-Fi where
+  guests pick a colour or a calm effect, behind a code.
+- **Family in sync**: two phones swap their scenes, stories, playlists,
+  favourites and profiles over the home Wi-Fi and end up alike.
+- **Leaving and coming home**: the last one out switches every light off,
+  coming home after dark lights the hall, with the app closed.
+- **On the watch**: Stop, the next favourite and bedtime from a Wear OS
+  watch; the effect playing in the Apple Watch's Smart Stack (see
+  `docs/WATCH.md`).
 
 ## Development
 

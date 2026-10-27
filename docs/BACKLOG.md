@@ -51,21 +51,21 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 21 | Treasure hunt across rooms: riddles read aloud, the right room lights up, confirmed by a motion sensor or NFC sticker | done (PR pending) |
-| 22 | Family quiz: questions read aloud, teams buzz in their colour, packs by age | done (PR pending) |
-| 23 | Dream diary: the dream told in the morning, recorded, its colours shown in the room | done (PR pending) |
-| 24 | Lights and calendar: a soft colour a few minutes before an appointment (calendar permission) | done (PR pending) |
-| 25 | Several bridges: a second home or a large flat, chosen like a room | done (PR pending) |
+| 21 | Treasure hunt across rooms: riddles read aloud, the right room lights up, confirmed by a motion sensor or NFC sticker | done (#27) |
+| 22 | Family quiz: questions read aloud, teams buzz in their colour, packs by age | done (#27) |
+| 23 | Dream diary: the dream told in the morning, recorded, its colours shown in the room | done (#27) |
+| 24 | Lights and calendar: a soft colour a few minutes before an appointment (calendar permission) | done (#27) |
+| 25 | Several bridges: a second home or a large flat, chosen like a room | done (#27) |
 
 ## Round 14: the big ones
 
 | # | Feature | Status |
 |---|---------|--------|
-| 26 | Light alerts for sounds: a baby crying, the doorbell, a smoke alarm make the lights flash, recognised on the phone | todo |
-| 27 | Remote for guests: a QR code opens a page on the home Wi-Fi to pick a colour or effect from a safe list | todo |
-| 28 | Family in sync through the bridge: scenes, stories, favourites and profiles the same on both parents' phones | todo |
-| 29 | Switch off when leaving: the last one out switches the lights off, the hall lights up on coming home in the evening | todo |
-| 30 | Watch: play, stop, favourites and bedtime from Wear OS and Apple Watch | todo |
+| 26 | Light alerts for sounds: a baby crying, the doorbell, a smoke alarm make the lights flash, recognised on the phone | done (PR pending) |
+| 27 | Remote for guests: a QR code opens a page on the home Wi-Fi to pick a colour or effect from a safe list | done (PR pending) |
+| 28 | Family in sync through the bridge: scenes, stories, favourites and profiles the same on both parents' phones | done (PR pending): over the home Wi-Fi, phone to phone, as the bridge has no room for app data |
+| 29 | Switch off when leaving: the last one out switches the lights off, the hall lights up on coming home in the evening | done (PR pending) |
+| 30 | Watch: play, stop, favourites and bedtime from Wear OS and Apple Watch | done (PR pending): Wear OS through the playback notification, Apple Watch through the Live Activity; native watch apps described in docs/WATCH.md |
 
 Notes for round 14: sound recognition runs on the phone (no audio leaves
 it); the guest page is served on the local network only, behind a code

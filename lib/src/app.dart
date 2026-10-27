@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'app_scope.dart';
 import 'core/calendar/calendar_source.dart';
+import 'core/home_away_platform.dart';
 import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
@@ -31,6 +32,7 @@ import 'features/effects/playing_route.dart';
 import 'features/home/home_screen.dart';
 import 'features/kids/kids_mode.dart';
 import 'features/house/calendar_lights.dart';
+import 'features/house/home_away.dart';
 import 'features/library/effect_library.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/links/app_link.dart';
@@ -65,6 +67,7 @@ class LumiFxApp extends StatefulWidget {
     this.notificationLights = const NoNotificationLights(),
     this.liveActivity = const NoLiveActivity(),
     this.calendar = const NoCalendar(),
+    this.homeAway = const NoHomeAway(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -122,6 +125,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// The phone's appointments, for the lights before them.
   final CalendarSource calendar;
+
+  /// The phone's own geofencing, for leaving and coming home.
+  final HomeAwayPlatform homeAway;
   final VoiceRecorder voiceRecorder;
   final VoicePlayer voicePlayer;
 
@@ -149,6 +155,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   late final ReadAloud _readAloud;
   late final NotificationLightsSync _notificationLights;
   late final CalendarLightsSync _calendarLights;
+  late final HomeAwaySync _homeAway;
   StreamSubscription<PlaybackNotice>? _notices;
 
   @override
@@ -170,6 +177,8 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     unawaited(_voices.load());
     didChangeAccessibilityFeatures();
     widget.background.onStop = () => unawaited(_playback.stop());
+    widget.background.onAction =
+        (action) => unawaited(_backgroundAction(action));
     _playback.addListener(_syncBackground);
     widget.preferences.addListener(_syncBackground);
     widget.preferences.addListener(_maybeWelcome);
@@ -208,6 +217,11 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     )..start();
     _notificationLights = NotificationLightsSync(
       platform: widget.notificationLights,
+      preferences: widget.preferences,
+      bridge: widget.bridge,
+    );
+    _homeAway = HomeAwaySync(
+      platform: widget.homeAway,
       preferences: widget.preferences,
       bridge: widget.bridge,
     );
@@ -268,7 +282,10 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     final microphone = (playback.effect.usesMicrophone ||
             playback.playlistEffects.any((e) => e.usesMicrophone)) &&
         playback.musicSource == MusicSource.microphone;
-    final key = '$title|$text|$microphone|${l10n.stop}';
+    // Also on a paired Wear OS watch: the next favourite and bedtime.
+    final favourite =
+        preferences.favorites.isEmpty ? null : l10n.watchNextFavourite;
+    final key = '$title|$text|$microphone|${l10n.stop}|$favourite';
     if (key == _backgroundShown) {
       return;
     }
@@ -278,7 +295,33 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       text: text,
       stopLabel: l10n.stop,
       microphone: microphone,
+      favouriteLabel: favourite,
+      bedtimeLabel: l10n.bedtime,
     ));
+  }
+
+  /// The notification's (or the watch's) next favourite or bedtime.
+  Future<void> _backgroundAction(String action) async {
+    if (action == 'bedtime') {
+      await _links.handle(const BedtimeLink());
+      return;
+    }
+    if (action != 'favourite') {
+      return;
+    }
+    final favorites = [
+      for (final id in widget.preferences.favorites)
+        if (_library.byId(id) case final effect?)
+          if (kidsModeAllows(widget.preferences, _library, effect)) effect,
+    ];
+    if (favorites.isEmpty) {
+      return;
+    }
+    final at = favorites.indexWhere((e) => e.id == _playback.effect.id);
+    await _playback.switchEffect(favorites[(at + 1) % favorites.length]);
+    if (_playback.status == PlaybackStatus.idle) {
+      await _playback.start();
+    }
   }
 
   String? _liveShown;
@@ -422,6 +465,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     widget.preferences.removeListener(_syncBackground);
     _playback.removeListener(_syncBackground);
     widget.background.onStop = null;
+    widget.background.onAction = null;
     if (_backgroundShown != null) {
       unawaited(widget.background.hide());
     }
@@ -434,6 +478,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     _readAloud.dispose();
     _notificationLights.dispose();
     _calendarLights.dispose();
+    _homeAway.dispose();
     _playback.dispose();
     _routes.dispose();
     super.dispose();
@@ -474,6 +519,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       liveActivity: widget.liveActivity,
       calendar: widget.calendar,
       calendarLights: _calendarLights,
+      homeAway: widget.homeAway,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

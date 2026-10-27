@@ -11,6 +11,7 @@ import '../bedtime/dream_diary.dart';
 import '../bedtime/ritual.dart';
 import '../fun/countdown.dart';
 import '../house/calendar_lights.dart';
+import '../house/home_away.dart';
 import '../music_box/my_tune.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
@@ -582,6 +583,16 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  String? _homeAway;
+
+  /// Leaving and coming home, or null when off.
+  HomeAwaySettings? get homeAway => HomeAwaySettings.decode(_homeAway);
+
+  Future<void> setHomeAway(HomeAwaySettings? settings) {
+    _homeAway = settings?.encode();
+    return _changed();
+  }
+
   String? _calendarLights;
 
   /// The lights before appointments, or null when off.
@@ -954,6 +965,9 @@ class PreferencesController extends ChangeNotifier {
             if (key is String && value is String)
               if (MyTune.decode(key, value) case final tune?) tune,
       ];
+      final homeAway = json['homeAway'];
+      _homeAway =
+          homeAway is String && homeAway.length <= 300 ? homeAway : null;
       final calendar = json['calendarLights'];
       _calendarLights =
           calendar is String && calendar.length <= 80 ? calendar : null;
@@ -1134,6 +1148,26 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  /// Takes the family's things as merged with another phone's: the
+  /// scenes, stories, playlists, favourites and children's profiles.
+  Future<void> replaceFamily({
+    required List<UserScene> scenes,
+    required List<UserStory> stories,
+    required List<Playlist> playlists,
+    required List<String> favorites,
+    required List<Child> children,
+  }) {
+    _userScenes = [...scenes];
+    _userStories = [...stories];
+    _playlists = [...playlists];
+    _favorites = [...favorites];
+    _children = [...children];
+    if (!_children.any((c) => c.id == _activeChild)) {
+      _activeChild = _children.firstOrNull?.id ?? '';
+    }
+    return _changed();
+  }
+
   /// Adds [story], or replaces the one with the same id.
   Future<void> saveUserStory(UserStory story) {
     final exists = _userStories.any((s) => s.id == story.id);
@@ -1268,6 +1302,7 @@ class PreferencesController extends ChangeNotifier {
       'bedtimes': _bedtimes,
       'dreams': [for (final d in _dreams) d.toJson()],
       'calendarLights': _calendarLights,
+      'homeAway': _homeAway,
       'myTunes': {for (final t in _myTunes) t.name: t.encoded},
       'noiseLimit': _noiseLimit,
       'teethTune': _teethTune,
