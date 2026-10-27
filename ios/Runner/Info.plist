@@ -14,6 +14,10 @@
 		<string>Music Sync listens to the music in the room so your lights can move with it, at a birthday party the microphone hears the candles being blown out, the noise light measures how loud the room is, sing and colour hears how high you sing, light alerts hear a smoke alarm, the doorbell or a baby crying, and you can record your own voice reading your stories or telling your dreams. Audio never leaves your phone.</string>
 		<key>NSCalendarsFullAccessUsageDescription</key>
 		<string>LumiFX can light a room softly a few minutes before your appointments. Only the times are handed to your Hue Bridge; titles stay on your phone.</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>LumiFX sets home where you are now, to switch the lights off when the last one leaves and light the hall when you come home in the evening. Your location stays on your phone.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>To switch the lights off when the last one leaves and light the hall when you come home in the evening, LumiFX lets your iPhone watch a circle around home, also when the app is closed. Your location stays on your phone; only "home" or "away" reaches your Hue Bridge.</string>
 		<key>NSCalendarsUsageDescription</key>
 		<string>LumiFX can light a room softly a few minutes before your appointments. Only the times are handed to your Hue Bridge; titles stay on your phone.</string>
 		<key>NSSupportsLiveActivities</key>

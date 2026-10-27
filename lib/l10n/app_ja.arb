@@ -1509,5 +1509,18 @@
   "familySyncJoin": "同期する",
   "familySyncQuestion": "もう1台のスマホと同期しますか？",
   "familySyncDone": "{count, plural, =0{すでに同期済み} other{同期しました：{count}件更新}}",
-  "familySyncFailed": "もう1台に接続できませんでした。2台とも家のWi-Fiにつながっていて、相手の同期画面が開いていますか？"
+  "familySyncFailed": "もう1台に接続できませんでした。2台とも家のWi-Fiにつながっていて、相手の同期画面が開いていますか？",
+  "homeAway": "外出と帰宅",
+  "homeAwaySubtitle": "最後の人が出たら消灯、帰宅時は玄関を点灯",
+  "homeAwayDescription": "いまいる場所を「家」に設定します。LumiFX（またはHueアプリの在宅/外出）を使う最後の人が出かけるとすべてのライトが消え、暗くなってから帰ると玄関が点きます。アプリを閉じていてもスマホが家の周りの円を見守ります。位置情報はスマホの中だけで、ブリッジに伝わるのは「在宅」か「外出」だけです。",
+  "homeAwaySetHere": "ここを家にする",
+  "homeAwayOffOnLeave": "最後の人が出たらすべて消灯",
+  "homeAwayHall": "暗くなってから帰宅したら点灯",
+  "homeAwayHallNone": "なし",
+  "homeAwayRadius": "家のまわりの円",
+  "homeAwayMeters": "{meters}m",
+  "homeAwayDenied": "外出と帰宅を知るために、アプリを閉じているときも位置情報（「常に」）が必要です。スマホの設定で許可できます。",
+  "homeAwayNoLocation": "スマホの場所がわかりませんでした。位置情報とWi-Fiをオンにして、少ししてからもう一度ためしてください。",
+  "homeAwayStop": "見守りをやめる",
+  "homeAwayIsSet": "家を設定しました。スマホが見守っています。"
 }

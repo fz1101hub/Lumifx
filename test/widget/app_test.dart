@@ -22,6 +22,7 @@ import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/calendar/calendar_source.dart';
+import 'package:lumifx/src/core/home_away_platform.dart';
 import 'package:lumifx/src/core/screen_wake.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
@@ -3997,6 +3998,24 @@ void main() {
   streamingTests();
 }
 
+class _FakeHomeAway implements HomeAwayPlatform {
+  final configs = <Map<String, Object?>?>[];
+
+  @override
+  bool get isSupported => true;
+
+  @override
+  Future<bool> requestAccess() async => true;
+
+  @override
+  Future<({double latitude, double longitude})?> currentLocation() async =>
+      (latitude: 45.07, longitude: 7.69);
+
+  @override
+  Future<void> configure(Map<String, Object?>? config) async =>
+      configs.add(config);
+}
+
 class _NoWake implements ScreenWake {
   const _NoWake();
 
@@ -4031,6 +4050,7 @@ Future<BridgeController> _connectedBridge(
   String? clientKey,
   List<String>? puts,
   List<HueCredentials> others = const [],
+  String? fingerprint,
 }) async {
   http.Response json(Object body) => http.Response(jsonEncode(body), 200);
   final store = InMemoryCredentialStore(
@@ -4038,6 +4058,7 @@ Future<BridgeController> _connectedBridge(
       bridge: const HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
       applicationKey: 'key',
       clientKey: clientKey,
+      certificateFingerprint: fingerprint,
     ),
   );
   await store.saveOthers(others);
@@ -4525,6 +4546,50 @@ void streamingTests() {
     expect(bridge.credentials?.bridge.name, 'Beach house');
     expect(find.text('Beach house'), findsOneWidget);
     expect(bridge.otherBridges.single.bridge.id, '001788fffe123456');
+  });
+
+  testWidgets('home is set where the phone is and handed to the phone',
+      (tester) async {
+    final puts = <String>[];
+    final bridge =
+        await _connectedBridge(tester, puts: puts, fingerprint: 'ab' * 32);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setOnboardingDone();
+    await preferences.load();
+    final platform = _FakeHomeAway();
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      homeAway: platform,
+    ));
+    await tester.scrollUntilVisible(find.text('Leaving and coming home'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Leaving and coming home'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Set home here'));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+    });
+    for (var i = 0; i < 4; i++) {
+      await tester.pump();
+    }
+    expect(puts, contains('POST /api/key/sensors'));
+    final settings = preferences.homeAway!;
+    expect((settings.latitude, settings.longitude), (45.07, 7.69));
+    expect(platform.configs.last?['sensor'], settings.sensorId);
+    expect(platform.configs.last?['latitude'], 45.07);
+
+    final hall = find.widgetWithText(ChoiceChip, 'Living room');
+    await tester.ensureVisible(hall);
+    await tester.pump();
+    await tester.tap(hall);
+    await tester.pump();
+    expect(preferences.homeAway?.hallGroupId, '1');
+    expect(platform.configs.last?['hallGroup'], '1');
   });
 
   testWidgets('rooms list the Hue scenes of each group and recall them',

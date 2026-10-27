@@ -6371,5 +6371,62 @@
   "familySyncFailed": "Couldn't reach the other phone. Are both on the home Wi-Fi, with its sync screen open?",
   "@familySyncFailed": {
     "description": "Family sync: the other phone could not be reached"
+  },
+  "homeAway": "Leaving and coming home",
+  "@homeAway": {
+    "description": "Home: leaving and coming home"
+  },
+  "homeAwaySubtitle": "Lights off when the last one leaves, the hall lit on coming home",
+  "@homeAwaySubtitle": {
+    "description": "Home: what leaving and coming home does"
+  },
+  "homeAwayDescription": "Set home where you are now. When the last one with LumiFX (or the Hue app's Home & Away) leaves, every light goes off; coming home after dark, the hall lights up. The phone watches a circle around home by itself, also with the app closed. Your location stays on the phone; only \"home\" or \"away\" reaches the bridge.",
+  "@homeAwayDescription": {
+    "description": "Leaving and coming home: how it works and what is shared"
+  },
+  "homeAwaySetHere": "Set home here",
+  "@homeAwaySetHere": {
+    "description": "Leaving and coming home: set home at the current location"
+  },
+  "homeAwayOffOnLeave": "The last one out switches every light off",
+  "@homeAwayOffOnLeave": {
+    "description": "Leaving and coming home: switch everything off when the last one leaves"
+  },
+  "homeAwayHall": "Lights up on coming home after dark",
+  "@homeAwayHall": {
+    "description": "Leaving and coming home: which room lights up on coming home after dark"
+  },
+  "homeAwayHallNone": "None",
+  "@homeAwayHallNone": {
+    "description": "Leaving and coming home: no room lights up"
+  },
+  "homeAwayRadius": "Circle around home",
+  "@homeAwayRadius": {
+    "description": "Leaving and coming home: size of the circle around home"
+  },
+  "homeAwayMeters": "{meters} m",
+  "@homeAwayMeters": {
+    "description": "Leaving and coming home: a radius in metres",
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "homeAwayDenied": "LumiFX needs the location, also when the app is closed (\"Always\"), to know when you leave and come home. You can allow it in your phone settings.",
+  "@homeAwayDenied": {
+    "description": "Leaving and coming home: no location access"
+  },
+  "homeAwayNoLocation": "Couldn't find where the phone is. Try again in a moment, with location and Wi-Fi on.",
+  "@homeAwayNoLocation": {
+    "description": "Leaving and coming home: the location could not be found"
+  },
+  "homeAwayStop": "Stop watching",
+  "@homeAwayStop": {
+    "description": "Leaving and coming home: stop watching"
+  },
+  "homeAwayIsSet": "Home is set: the phone is watching.",
+  "@homeAwayIsSet": {
+    "description": "Leaving and coming home: home is set and watched"
   }
 }

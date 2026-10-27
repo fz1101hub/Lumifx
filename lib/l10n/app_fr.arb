@@ -1509,5 +1509,18 @@
   "familySyncJoin": "Synchroniser",
   "familySyncQuestion": "Synchroniser avec l'autre téléphone ?",
   "familySyncDone": "{count, plural, =0{Déjà synchronisés} =1{Synchronisés : 1 élément mis à jour} other{Synchronisés : {count} éléments mis à jour}}",
-  "familySyncFailed": "Impossible de joindre l'autre téléphone. Sont-ils tous deux sur le Wi-Fi de la maison, avec son écran de synchronisation ouvert ?"
+  "familySyncFailed": "Impossible de joindre l'autre téléphone. Sont-ils tous deux sur le Wi-Fi de la maison, avec son écran de synchronisation ouvert ?",
+  "homeAway": "Partir et rentrer",
+  "homeAwaySubtitle": "Lumières éteintes au départ du dernier, l'entrée allumée au retour",
+  "homeAwayDescription": "Définissez la maison là où vous êtes. Quand le dernier avec LumiFX (ou avec « Domicile et absence » de l'app Hue) part, toutes les lumières s'éteignent ; en rentrant à la nuit tombée, l'entrée s'allume. Le téléphone surveille seul un cercle autour de la maison, même app fermée. Votre position reste sur le téléphone ; seul « à la maison » ou « absent » parvient au pont.",
+  "homeAwaySetHere": "La maison est ici",
+  "homeAwayOffOnLeave": "Le dernier qui part éteint toutes les lumières",
+  "homeAwayHall": "S'allume en rentrant à la nuit tombée",
+  "homeAwayHallNone": "Aucune",
+  "homeAwayRadius": "Cercle autour de la maison",
+  "homeAwayMeters": "{meters} m",
+  "homeAwayDenied": "LumiFX a besoin de la position, même app fermée (« Toujours »), pour savoir quand vous partez et rentrez. Vous pouvez l'autoriser dans les réglages du téléphone.",
+  "homeAwayNoLocation": "Impossible de trouver où est le téléphone. Réessayez dans un instant, avec la localisation et le Wi-Fi activés.",
+  "homeAwayStop": "Arrêter la surveillance",
+  "homeAwayIsSet": "La maison est définie : le téléphone surveille."
 }

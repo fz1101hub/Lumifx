@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'app_scope.dart';
 import 'core/calendar/calendar_source.dart';
+import 'core/home_away_platform.dart';
 import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
@@ -31,6 +32,7 @@ import 'features/effects/playing_route.dart';
 import 'features/home/home_screen.dart';
 import 'features/kids/kids_mode.dart';
 import 'features/house/calendar_lights.dart';
+import 'features/house/home_away.dart';
 import 'features/library/effect_library.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/links/app_link.dart';
@@ -65,6 +67,7 @@ class LumiFxApp extends StatefulWidget {
     this.notificationLights = const NoNotificationLights(),
     this.liveActivity = const NoLiveActivity(),
     this.calendar = const NoCalendar(),
+    this.homeAway = const NoHomeAway(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -122,6 +125,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// The phone's appointments, for the lights before them.
   final CalendarSource calendar;
+
+  /// The phone's own geofencing, for leaving and coming home.
+  final HomeAwayPlatform homeAway;
   final VoiceRecorder voiceRecorder;
   final VoicePlayer voicePlayer;
 
@@ -149,6 +155,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   late final ReadAloud _readAloud;
   late final NotificationLightsSync _notificationLights;
   late final CalendarLightsSync _calendarLights;
+  late final HomeAwaySync _homeAway;
   StreamSubscription<PlaybackNotice>? _notices;
 
   @override
@@ -208,6 +215,11 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     )..start();
     _notificationLights = NotificationLightsSync(
       platform: widget.notificationLights,
+      preferences: widget.preferences,
+      bridge: widget.bridge,
+    );
+    _homeAway = HomeAwaySync(
+      platform: widget.homeAway,
       preferences: widget.preferences,
       bridge: widget.bridge,
     );
@@ -434,6 +446,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     _readAloud.dispose();
     _notificationLights.dispose();
     _calendarLights.dispose();
+    _homeAway.dispose();
     _playback.dispose();
     _routes.dispose();
     super.dispose();
@@ -474,6 +487,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       liveActivity: widget.liveActivity,
       calendar: widget.calendar,
       calendarLights: _calendarLights,
+      homeAway: widget.homeAway,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

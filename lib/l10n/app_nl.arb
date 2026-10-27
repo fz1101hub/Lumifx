@@ -1509,5 +1509,18 @@
   "familySyncJoin": "Synchroniseren",
   "familySyncQuestion": "Synchroniseren met de andere telefoon?",
   "familySyncDone": "{count, plural, =0{Al in sync} =1{In sync: 1 item bijgewerkt} other{In sync: {count} items bijgewerkt}}",
-  "familySyncFailed": "De andere telefoon was niet bereikbaar. Zitten beide op de wifi thuis, met het synchronisatiescherm open?"
+  "familySyncFailed": "De andere telefoon was niet bereikbaar. Zitten beide op de wifi thuis, met het synchronisatiescherm open?",
+  "homeAway": "Weggaan en thuiskomen",
+  "homeAwaySubtitle": "Licht uit als de laatste weggaat, de gang aan bij thuiskomst",
+  "homeAwayDescription": "Stel je huis in waar je nu bent. Als de laatste met LumiFX (of met 'Thuis en weg' van de Hue-app) weggaat, gaan alle lampen uit; kom je in het donker thuis, dan gaat de gang aan. De telefoon bewaakt zelf een cirkel rond je huis, ook met de app dicht. Je locatie blijft op de telefoon; de bridge krijgt alleen 'thuis' of 'weg'.",
+  "homeAwaySetHere": "Hier is thuis",
+  "homeAwayOffOnLeave": "Wie als laatste weggaat, zet alle lampen uit",
+  "homeAwayHall": "Gaat aan bij thuiskomst in het donker",
+  "homeAwayHallNone": "Geen",
+  "homeAwayRadius": "Cirkel rond het huis",
+  "homeAwayMeters": "{meters} m",
+  "homeAwayDenied": "LumiFX heeft je locatie nodig, ook met de app dicht ('Altijd'), om te weten wanneer je weggaat en thuiskomt. Je kunt het toestaan in de instellingen van je telefoon.",
+  "homeAwayNoLocation": "Kon niet vinden waar de telefoon is. Probeer het zo opnieuw, met locatie en wifi aan.",
+  "homeAwayStop": "Stoppen met bewaken",
+  "homeAwayIsSet": "Thuis is ingesteld: de telefoon bewaakt."
 }

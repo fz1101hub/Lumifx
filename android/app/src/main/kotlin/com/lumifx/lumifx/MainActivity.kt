@@ -12,6 +12,7 @@ class MainActivity : FlutterActivity() {
     private var nfc: NfcChannel? = null
     private var notificationLights: NotificationLightsChannel? = null
     private var calendar: CalendarChannel? = null
+    private var homeAway: HomeAwayChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -21,6 +22,7 @@ class MainActivity : FlutterActivity() {
         notificationLights =
             NotificationLightsChannel(this, flutterEngine.dartExecutor.binaryMessenger)
         calendar = CalendarChannel(this, flutterEngine.dartExecutor.binaryMessenger)
+        homeAway = HomeAwayChannel(this, flutterEngine.dartExecutor.binaryMessenger)
         // The home-screen widget's content: stored, then every widget redrawn.
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.lumifx/widgets")
             .setMethodCallHandler { call, result ->
@@ -48,7 +50,9 @@ class MainActivity : FlutterActivity() {
         permissions: Array<out String>,
         grantResults: IntArray,
     ) {
-        if (calendar?.onRequestPermissionsResult(requestCode, grantResults) != true) {
+        if (calendar?.onRequestPermissionsResult(requestCode, grantResults) != true &&
+            homeAway?.onRequestPermissionsResult(requestCode, grantResults) != true
+        ) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
@@ -64,6 +68,8 @@ class MainActivity : FlutterActivity() {
         notificationLights = null
         calendar?.dispose()
         calendar = null
+        homeAway?.dispose()
+        homeAway = null
         super.onDestroy()
     }
 }

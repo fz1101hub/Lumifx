@@ -258,8 +258,13 @@ artifact, see RELEASE.md § 1b).
     request goes to a third-party service we do not control, so we
     cannot promise how long it keeps it. It is not "shared" in Play's
     sense: the
-    transfer is initiated by the user to get exactly that weather. The
-    app never requests the device's location permission.
+    transfer is initiated by the user to get exactly that weather.
+  - **Precise location for "Leaving and coming home" is not collected:**
+    the app reads the phone's location once, on the device, to set home,
+    and the system's own geofencing (a proximity alert on Android, region
+    monitoring on iOS) watches a circle around it; the location never
+    leaves the phone. Only "home" or "away" reaches the user's own Hue
+    Bridge on the local network.
   - If Play insists on a "shared" answer, declare it shared with purpose
     App functionality; nothing else changes.
 - Is all of the user data collected by your app encrypted in transit?
@@ -311,8 +316,15 @@ artifact, see RELEASE.md § 1b).
   Nothing to declare.
 - Advertising ID: not used.
 
-**Permissions declaration:** none of the sensitive permissions (SMS, call
-log, location, all files) are requested. RECORD_AUDIO and CAMERA need no
+**Permissions declaration:** ACCESS_BACKGROUND_LOCATION is requested only
+for "Leaving and coming home" (Home › Your home), which the user switches
+on: Play's background location declaration needs a short video of that
+flow and this text: "LumiFX switches the lights off when the last person
+leaves home and lights the hall when someone comes home after dark, also
+when the app is closed. It uses the system's geofencing around the home
+the user set; the location never leaves the device." The in-app
+description shown before the permission says the same. None of the
+other sensitive permissions (SMS, call log, all files) are requested. RECORD_AUDIO and CAMERA need no
 separate declaration form. The notification listener has no declaration
 form: the in-app disclosure and the review notes below cover it.
 `QUERY_ALL_PACKAGES` is not used (the apps to choose from come from a
@@ -444,7 +456,12 @@ Paste this in "Notes for review":
 > singing", to work out the pitch of the voice; nothing is recorded.
 > Weather lights (home › Weather lights)
 > send the city the user types to Open-Meteo (open-meteo.com) to show the
-> weather; the device location is never requested.
+> weather. The device location is requested only for "Leaving and coming
+> home" (home › Your home), switched on by the user: the location is read
+> once to set home, then iOS's region monitoring watches a circle around
+> it so the lights go off when the last one leaves and the hall lights up
+> on coming home after dark, also with the app closed; the location never
+> leaves the phone, only "home" or "away" reaches the Hue Bridge.
 >
 > Notification lights (Android only; home › Your home › Notification
 > lights, shown once a Hue Bridge is paired) are a core feature the user

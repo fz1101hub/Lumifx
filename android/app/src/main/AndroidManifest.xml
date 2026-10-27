@@ -38,6 +38,12 @@
     <uses-permission android:name="android.permission.NFC" />
     <!-- The lights before an appointment: the times only reach the bridge. -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <!-- Leaving and coming home: a circle around home, watched by the
+         system; the location never leaves the phone. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="false" />
@@ -145,6 +151,18 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+        <!-- Leaving and coming home: the proximity alert around home
+             (only the system's), and setting it again after a restart. -->
+        <receiver
+            android:name=".HomeAwayReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".HomeAwayBootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

@@ -75,6 +75,16 @@ It hands your Hue Bridge only those times (as its own schedules named
 "LumiFX calendar"), never titles, places or people. Switching the feature
 off removes those schedules from the bridge.
 
+**Location (leaving and coming home).** If you switch on leaving and
+coming home, the app asks for your location, also when it is closed. It
+reads where you are once, on your phone, to set home; then your phone's
+own geofencing watches a circle around it. When you cross it, your phone
+tells your Hue Bridge only "home" or "away" (a presence sensor of its
+own, named "LumiFX phone"), switches the lights off if nobody else is
+home and, after dark, lights the room you chose. Your location never
+leaves your phone. "Stop watching" removes the presence sensor from the
+bridge and the circle from your phone.
+
 **Photos (scene from a photo).** In the scene editor, "From a photo" lets
 you choose a photo or take one. The app reads its main colours on your
 phone; the photo is not kept or sent anywhere. The small copy the system
@@ -319,6 +329,16 @@ legge, sul telefono, gli orari di inizio degli appuntamenti del giorno
 successivo. Al bridge Hue passa solo quegli orari (come sue programmazioni
 chiamate "LumiFX calendar"), mai titoli, luoghi o persone. Disattivando la
 funzione quelle programmazioni vengono tolte dal bridge.
+
+**Posizione (uscire e rientrare).** Se attivi "Uscire e rientrare",
+l'app chiede la tua posizione, anche quando è chiusa. Legge una volta, sul
+telefono, dove ti trovi per impostare casa; poi è il geofencing del
+telefono a sorvegliare un cerchio intorno a casa. Quando lo attraversi, il
+telefono comunica al bridge Hue solo "in casa" o "fuori" (con un suo
+sensore di presenza chiamato "LumiFX phone"), spegne le luci se non c'è
+nessun altro in casa e, col buio, accende la stanza che hai scelto. La tua
+posizione non lascia mai il telefono. "Smetti di sorvegliare" toglie il
+sensore dal bridge e il cerchio dal telefono.
 
 **Foto (scena da una foto).** Nell'editor delle scene, "Da una foto" ti fa
 scegliere o scattare una foto. L'app ne legge i colori principali sul

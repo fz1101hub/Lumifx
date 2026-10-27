@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'core/calendar/calendar_source.dart';
+import 'core/home_away_platform.dart';
 import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
@@ -40,6 +41,7 @@ class AppScope extends InheritedWidget {
     this.liveActivity = const NoLiveActivity(),
     this.calendar = const NoCalendar(),
     this.calendarLights,
+    this.homeAway = const NoHomeAway(),
     required super.child,
     super.key,
   });
@@ -95,6 +97,9 @@ class AppScope extends InheritedWidget {
   final CalendarSource calendar;
   final CalendarLightsSync? calendarLights;
 
+  /// The phone's own geofencing, for leaving and coming home.
+  final HomeAwayPlatform homeAway;
+
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
     assert(scope != null, 'No AppScope found in context');
@@ -121,5 +126,6 @@ class AppScope extends InheritedWidget {
       notificationLights != oldWidget.notificationLights ||
       liveActivity != oldWidget.liveActivity ||
       calendar != oldWidget.calendar ||
-      calendarLights != oldWidget.calendarLights;
+      calendarLights != oldWidget.calendarLights ||
+      homeAway != oldWidget.homeAway;
 }
