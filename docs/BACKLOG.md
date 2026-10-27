@@ -61,11 +61,11 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 26 | Light alerts for sounds: a baby crying, the doorbell, a smoke alarm make the lights flash, recognised on the phone | done (PR pending) |
-| 27 | Remote for guests: a QR code opens a page on the home Wi-Fi to pick a colour or effect from a safe list | done (PR pending) |
-| 28 | Family in sync through the bridge: scenes, stories, favourites and profiles the same on both parents' phones | done (PR pending): over the home Wi-Fi, phone to phone, as the bridge has no room for app data |
-| 29 | Switch off when leaving: the last one out switches the lights off, the hall lights up on coming home in the evening | done (PR pending) |
-| 30 | Watch: play, stop, favourites and bedtime from Wear OS and Apple Watch | done (PR pending): Wear OS through the playback notification, Apple Watch through the Live Activity; native watch apps described in docs/WATCH.md |
+| 26 | Light alerts for sounds: a baby crying, the doorbell, a smoke alarm make the lights flash, recognised on the phone | done (#28) |
+| 27 | Remote for guests: a QR code opens a page on the home Wi-Fi to pick a colour or effect from a safe list | done (#28) |
+| 28 | Family in sync through the bridge: scenes, stories, favourites and profiles the same on both parents' phones | done (#28): over the home Wi-Fi, phone to phone, as the bridge has no room for app data |
+| 29 | Switch off when leaving: the last one out switches the lights off, the hall lights up on coming home in the evening | done (#28) |
+| 30 | Watch: play, stop, favourites and bedtime from Wear OS and Apple Watch | done (#28): Wear OS through the playback notification, Apple Watch through the Live Activity; native watch apps described in docs/WATCH.md |
 
 Notes for round 14: sound recognition runs on the phone (no audio leaves
 it); the guest page is served on the local network only, behind a code
