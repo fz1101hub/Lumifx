@@ -238,9 +238,10 @@ class EffectPlayer {
     _current = level == 1
         ? shown
         : [for (final f in shown) LightFrame(f.color, f.brightness * level)];
+    // No time passed for a flash: the output's budget must not grow.
     output.update(
       {for (var i = 0; i < lightIds.length; i++) lightIds[i]: _current[i]},
-      wallTime == Duration.zero ? tick : wallTime,
+      wallTime,
     );
     if (!_frames.isClosed) {
       _frames.add(_current);

@@ -25,6 +25,14 @@ import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/effect_player_screen.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
+import 'package:lumifx/src/features/timers/interval_training.dart';
+import 'package:lumifx/src/features/timers/interval_training_screen.dart';
+import 'package:lumifx/src/features/timers/light_clock.dart';
+import 'package:lumifx/src/features/calm/feelings.dart';
+import 'package:lumifx/src/features/bedtime/moon.dart';
+import 'package:lumifx/src/features/bedtime/moon_screen.dart';
+import 'package:lumifx/src/features/calm/feelings_screen.dart';
+import 'package:lumifx/src/features/timers/light_clock_screen.dart';
 import 'package:lumifx/src/features/home/home_screen.dart';
 import 'package:lumifx/src/features/fun/advent_screen.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
@@ -1507,6 +1515,135 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('interval training leads the workout in light and voice',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('Interval training'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Interval training'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Interval training'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tabata'));
+    await tester.pump();
+    await tester.tap(find.widgetWithText(ChoiceChip, '4'));
+    await tester.pump();
+    await tester.tap(find.text('Start training'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    final playback =
+        AppScope.of(tester.element(find.byType(IntervalTrainingScreen)))
+            .playback;
+    final workout = IntervalWorkout.of(playback.effect)!;
+    expect((workout.work.inSeconds, workout.rest.inSeconds, workout.rounds),
+        (20, 10, 4));
+    expect(find.text('Get ready'), findsOneWidget);
+
+    // Just before the first work: the voice calls it, a moment early.
+    playback.player!.advance(const Duration(milliseconds: 9800));
+    await tester.pump();
+    await tester.pump();
+    expect(speaker.spoken.last.$1, 'Work!');
+    playback.player!.advance(const Duration(seconds: 1));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Round 1 of 4'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Start training'), findsOneWidget);
+  });
+
+  testWidgets('tonight\'s moon is named, drawn and shown by the lamps',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    // 15 June 2026: a new moon.
+    await _pumpApp(tester, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('Tonight\'s moon'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Tonight\'s moon'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tonight\'s moon'));
+    await tester.pumpAndSettle();
+    expect(find.text('New moon'), findsOneWidget);
+    expect(find.text('0% lit · Full moon in 14 days'), findsOneWidget);
+    await tester.tap(find.text('Show it on the lights'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(MoonScreen))).playback;
+    expect(Moon.of(playback.effect), MoonPhase.newMoon);
+    expect(speaker.spoken.last.$1, 'Tonight the moon is: New moon.');
+    await playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a feeling colours the room, is said aloud and offers help',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('How do you feel?'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('How do you feel?'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('How do you feel?'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Angry'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(FeelingsScreen))).playback;
+    expect(Feeling.of(playback.effect), Feeling.angry);
+    expect(playback.status, PlaybackStatus.playing);
+    expect(speaker.spoken.last.$1, startsWith('You feel angry'));
+    expect(find.text('Breathe together'), findsOneWidget);
+    await tester.tap(find.text('Breathe together'));
+    await tester.pumpAndSettle();
+    expect(find.byType(BreathingScreen), findsOneWidget);
+    await playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light clock counts down in colour and says when to go',
+      (tester) async {
+    var now = DateTime(2026, 6, 15, 12);
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, clock: () => now, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('Light clock'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Light clock'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light clock'));
+    await tester.pumpAndSettle();
+    // Half an hour from now by default.
+    expect(find.text('At 12:30 PM'), findsOneWidget);
+    await tester.tap(find.text('Mealtime'));
+    await tester.pump();
+    await tester.tap(find.text('Start the light clock'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 2));
+    final playback =
+        AppScope.of(tester.element(find.byType(LightClockScreen))).playback;
+    expect(LightClock.of(playback.effect)!.at, DateTime(2026, 6, 15, 12, 30));
+    expect(find.text('Plenty of time'), findsOneWidget);
+    expect(find.text('30 minutes to go'), findsOneWidget);
+
+    now = DateTime(2026, 6, 15, 12, 22);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Nearly time: get ready!'), findsOneWidget);
+    expect(speaker.spoken.last.$1,
+        'We eat in 8 minutes: time to wash your hands!');
+
+    // The mini-player leads back here.
+    expect(
+        (routeForPlaying(playback.effect) as MaterialPageRoute<void>)
+            .builder(tester.element(find.byType(LightClockScreen))),
+        isA<LightClockScreen>());
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Start the light clock'), findsOneWidget);
+  });
+
   testWidgets('the nap light glows amber, then green when the rest is over',
       (tester) async {
     await _pumpApp(tester);
@@ -1919,6 +2056,8 @@ void main() {
         MaterialPageRoute<void>(
             builder: (_) => const LightPianoScreen(seed: 4))));
     await tester.pumpAndSettle();
+    expect(sound.prepared, [for (final k in pianoKeys) 'note ${k.midi}'],
+        reason: 'made ahead, so the first key sounds with its light');
     final playback =
         AppScope.of(tester.element(find.byType(LightPianoScreen))).playback;
     final tune = (PianoEcho(math.Random(4))..start()).keys;
@@ -3632,7 +3771,8 @@ void streamingTests() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('around the house: away mode, night path, natural light',
+  testWidgets(
+      'around the house: away mode, night path, natural light, reminders',
       (tester) async {
     final puts = <String>[];
     final bridge = await _connectedBridge(tester, puts: puts);
@@ -3681,6 +3821,29 @@ void streamingTests() {
     expect(puts, contains('/clip/v2/resource/smart_scene/s2'),
         reason: 'switched on at once');
     expect(preferences.naturalLightIds, {'s2'});
+
+    // A light reminder: a colour on Tuesdays, off half an hour later.
+    await tester.scrollUntilVisible(find.text('New light reminder'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('New light reminder'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Plastic out');
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Living room'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(puts.where((p) => p == 'POST /api/key/schedules'), hasLength(4));
+
+    // The night switch-off.
+    await tester.scrollUntilVisible(find.text('Set the night switch-off'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Set the night switch-off'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilterChip, 'Living room'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(puts.where((p) => p == 'POST /api/key/schedules'), hasLength(5));
   });
 
   testWidgets('a playing effect can be saved as a Hue scene', (tester) async {

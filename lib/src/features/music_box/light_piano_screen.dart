@@ -45,6 +45,20 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
   /// What was played while recording: when, and which key.
   final _recorded = <(Duration, int)>[];
   Stopwatch? _recording;
+
+  @override
+  void initState() {
+    super.initState();
+    // The keys' notes made ahead: the first press sounds with its light.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        unawaited(AppScope.of(context).playback.prepareSounds(
+          midis: [for (final key in pianoKeys) key.midi],
+        ));
+      }
+    });
+  }
+
   var _playingBack = false;
 
   /// Bumped to stop a play-back.

@@ -236,6 +236,25 @@ Also done ahead of schedule:
 - **Nap light**: a daytime ok-to-wake; a faint amber glow for a rest of
   20 minutes to two hours, then the lamps slowly turn green and stay
   green for 20 minutes before going back to how they were.
+- **Light clock**: for children who cannot read the time; the lamps stay
+  green, turn yellow 5 to 15 minutes before a set time (leaving, a meal,
+  bed), red for the last two minutes and glow red when it is time, and
+  the voice says when to get ready.
+- **Light reminders and night switch-off** (Around the house): a room
+  takes a colour at set times on chosen days (recycling, medicine,
+  plants), and every night the chosen rooms fade out in case a light was
+  left on; both are the bridge's own schedules, with the phone off.
+- **How do you feel?**: a child taps a feeling, the room takes its
+  colour and the voice says it is okay; anger and worry cool down to a
+  calm blue, with breathing, a gentle story or a rest offered.
+- **Tonight's moon**: the real phase, worked out on the phone, drawn on
+  screen and shown by the lamps, the lit part on its side of the room.
+- **Interval training**: HIIT, tabata or stretching led by the lights
+  (yellow, green, blue, slow pulses in the last three seconds) and
+  called by the voice.
+- **Words and lights in sync**: a flash, lightning or a key lands at
+  once, read-aloud lines start a moment early to meet their light, and
+  sounds are made ahead.
 
 ## Development
 

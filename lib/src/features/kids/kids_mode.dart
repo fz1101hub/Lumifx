@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../calm/breathing_screen.dart';
+import '../calm/feelings_screen.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../effects/effect_palette.dart';
@@ -27,7 +28,8 @@ enum KidsActivity {
   colours(Icons.translate),
   mixing(Icons.palette_outlined),
   simon(Icons.psychology_outlined),
-  breathing(Icons.spa_outlined);
+  breathing(Icons.spa_outlined),
+  feelings(Icons.mood);
 
   const KidsActivity(this.icon);
 
@@ -40,6 +42,7 @@ enum KidsActivity {
         mixing => l10n.colourMixing,
         simon => l10n.gameSimon,
         breathing => l10n.breathe,
+        feelings => l10n.feelings,
       };
 
   Widget screen() => switch (this) {
@@ -49,6 +52,7 @@ enum KidsActivity {
         mixing => const ColourMixingScreen(),
         simon => const SimonScreen(),
         breathing => const BreathingScreen(),
+        feelings => const FeelingsScreen(),
       };
 
   /// The games a grown-up kept (all of them until one chooses).

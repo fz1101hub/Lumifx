@@ -85,8 +85,9 @@ void main() {
     expect(speaker.said, [(italian.narrationEmeraldTrickster1, 'it-IT')]);
     expect(speaker.styles, [SpeechStyle.story], reason: 'told, not called');
 
-    // The golden spark at 8 s comes with the second line.
-    playback.player!.advance(const Duration(seconds: 8));
+    // The golden spark at 8 s comes with the second line, which starts a
+    // moment before so the voice is on time.
+    playback.player!.advance(const Duration(milliseconds: 7700));
     await _wait();
     expect(speaker.said.map((s) => s.$1), [
       italian.narrationEmeraldTrickster1,

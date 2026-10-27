@@ -705,6 +705,30 @@ build before every store release.
 - [ ] Scene from a photo, take a photo: nothing is left in the app's
       cache folder afterwards.
 
+## This round: everyday light (round 9)
+
+- [ ] Light clock, "Mealtime" at a time 12 minutes away, yellow from 10:
+      green, then yellow with "We eat in 10 minutes…" said, red for the
+      last two minutes, a red glow at the time; the speed slider at 2x
+      changes nothing.
+- [ ] Light reminder on a room in 2 minutes, today, off after 5 min: the
+      room breathes in its colour, stays, and switches off 5 minutes
+      later; it is in the Hue app's automations as a LumiFX schedule. It
+      still fires with the phone off.
+- [ ] Night switch-off a few minutes from now on a lit room, fading over
+      1 minute: the room dims and switches off; a room already off stays
+      off.
+- [ ] How do you feel? → Angry: the room goes red, the voice speaks at
+      once, and over 90 s the light cools to a calm blue; Breathe
+      together opens breathing. In kids mode the feelings tile is there.
+- [ ] Tonight's moon: phase and percentage match a moon calendar; Show it
+      on the lights lights the right side of the room for a waxing moon.
+- [ ] Interval training, tabata: "Work!" is heard as the lamps turn
+      green (not after), the last three seconds pulse slowly.
+- [ ] Sync, REST room: a story's spark and lightning land with the word
+      read aloud; piano keys light up and sound at once, from the first
+      press; thunder follows the lightning closely.
+
 ## This round: storyteller voice
 
 - [ ] iPhone with only the default Italian voice: Settings › Storyteller

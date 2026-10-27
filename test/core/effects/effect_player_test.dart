@@ -300,6 +300,34 @@ void main() {
       });
     });
 
+    test('a sudden change goes first and lands at once', () async {
+      final sent = <(String, Duration)>[];
+      var now = DateTime(2026);
+      final output = RateLimitedLightOutput(
+        send: (id, frame, transition) async => sent.add((id, transition)),
+        clock: () => now,
+      );
+      const dim = LightFrame(LightColor(1, 0.5, 0.2), 0.3);
+      output.update({'a': dim, 'b': dim}, Duration.zero);
+      expect(sent, hasLength(2), reason: 'the first frame goes out at once');
+      // A second later, 'a' drifts a little and 'b' flashes white.
+      now = now.add(const Duration(seconds: 1));
+      sent.clear();
+      output.update({
+        'a': const LightFrame(LightColor(1, 0.45, 0.2), 0.35),
+        'b': const LightFrame(LightColor.white, 1),
+      }, const Duration(milliseconds: 100));
+      expect(sent.first, ('b', Duration.zero));
+      // A gentle drift still glides.
+      now = now.add(const Duration(milliseconds: 500));
+      output.update({
+        'a': const LightFrame(LightColor(1, 0.4, 0.2), 0.4),
+        'b': const LightFrame(LightColor.white, 1),
+      }, const Duration(milliseconds: 500));
+      expect(sent.last.$1, 'a');
+      expect(sent.last.$2, greaterThan(Duration.zero));
+    });
+
     test('does not resend unchanged frames', () async {
       final sent = <String>[];
       final output = RateLimitedLightOutput(

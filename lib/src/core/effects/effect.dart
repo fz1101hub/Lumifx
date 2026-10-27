@@ -45,6 +45,12 @@ class LightingEffect {
   bool get isGenerated => id.startsWith(generatedPrefix);
   static const generatedPrefix = 'gen:';
 
+  /// Generated effects tied to the clock on the wall (the light clock,
+  /// interval training): they always run at their own pace, whatever the
+  /// speed set.
+  bool get keepsRealTime => id.startsWith(realTimePrefix);
+  static const realTimePrefix = '${generatedPrefix}rt:';
+
   final String name;
   final EffectKind kind;
   final List<EffectEvent> events;

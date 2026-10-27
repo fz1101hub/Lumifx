@@ -4655,5 +4655,448 @@
   "storytellerVoiceNone": "This phone has no voice for this language yet.",
   "@storytellerVoiceNone": {
     "description": "Voice list when the phone has no voice for the language"
+  },
+  "lightClock": "Light clock",
+  "@lightClock": {
+    "description": "Home entry: the light clock"
+  },
+  "lightClockSubtitle": "Green, yellow, red as a time nears",
+  "@lightClockSubtitle": {
+    "description": "Under the light clock entry"
+  },
+  "lightClockDescription": "For children who cannot read the time yet: the lamps stay green, turn yellow a few minutes before, red for the last two minutes, and glow red when it is time.",
+  "@lightClockDescription": {
+    "description": "Top of the light clock screen"
+  },
+  "lightClockWhat": "What for?",
+  "@lightClockWhat": {
+    "description": "Light clock: heading over the occasions"
+  },
+  "clockLeave": "Time to leave",
+  "@clockLeave": {
+    "description": "Light clock occasion"
+  },
+  "clockMeal": "Mealtime",
+  "@clockMeal": {
+    "description": "Light clock occasion"
+  },
+  "clockBed": "Bedtime",
+  "@clockBed": {
+    "description": "Light clock occasion"
+  },
+  "clockOther": "Something else",
+  "@clockOther": {
+    "description": "Light clock occasion"
+  },
+  "lightClockAt": "At {time}",
+  "@lightClockAt": {
+    "description": "Light clock: the time to count down to; tapping it changes it",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lightClockWarn": "Yellow from",
+  "@lightClockWarn": {
+    "description": "Light clock: heading over the minutes of warning"
+  },
+  "lightClockStart": "Start the light clock",
+  "@lightClockStart": {
+    "description": "Light clock: start button"
+  },
+  "clockPhaseGreen": "Plenty of time",
+  "@clockPhaseGreen": {
+    "description": "Light clock running: plenty of time"
+  },
+  "clockPhaseYellow": "Nearly time: get ready!",
+  "@clockPhaseYellow": {
+    "description": "Light clock running: nearly time"
+  },
+  "clockPhaseRed": "Last minutes!",
+  "@clockPhaseRed": {
+    "description": "Light clock running: last minutes"
+  },
+  "clockPhaseNow": "It's time!",
+  "@clockPhaseNow": {
+    "description": "Light clock running: it is time"
+  },
+  "clockMinutesLeft": "{minutes, plural, =1{1 minute to go} other{{minutes} minutes to go}}",
+  "@clockMinutesLeft": {
+    "description": "Light clock running: minutes to go",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "clockSayLeaveSoon": "We leave in {minutes} minutes: shoes and coat!",
+  "@clockSayLeaveSoon": {
+    "description": "Said aloud when the light clock turns yellow before leaving",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "clockSayLeaveNow": "Time to go!",
+  "@clockSayLeaveNow": {
+    "description": "Said aloud when it is time to leave"
+  },
+  "clockSayMealSoon": "We eat in {minutes} minutes: time to wash your hands!",
+  "@clockSayMealSoon": {
+    "description": "Said aloud when the light clock turns yellow before a meal",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "clockSayMealNow": "Time to eat!",
+  "@clockSayMealNow": {
+    "description": "Said aloud when it is time to eat"
+  },
+  "clockSayBedSoon": "Bedtime in {minutes} minutes: pyjamas on!",
+  "@clockSayBedSoon": {
+    "description": "Said aloud when the light clock turns yellow before bed",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "clockSayBedNow": "Time for bed!",
+  "@clockSayBedNow": {
+    "description": "Said aloud when it is bedtime"
+  },
+  "clockSayOtherSoon": "{minutes} minutes to go!",
+  "@clockSayOtherSoon": {
+    "description": "Said aloud when the light clock turns yellow",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "lightReminders": "Light reminders",
+  "@lightReminders": {
+    "description": "House: light reminders section"
+  },
+  "lightRemindersDescription": "A room takes a colour at set times, even with the phone off: yellow when the plastic goes out, purple for the medicine, green for the plants.",
+  "@lightRemindersDescription": {
+    "description": "House: under Light reminders"
+  },
+  "lightReminderNew": "New light reminder",
+  "@lightReminderNew": {
+    "description": "House: add a light reminder"
+  },
+  "lightReminderName": "What is it for?",
+  "@lightReminderName": {
+    "description": "Light reminder editor: what it is for"
+  },
+  "lightReminderNameHint": "Plastic out",
+  "@lightReminderNameHint": {
+    "description": "Light reminder editor: example of what it is for"
+  },
+  "lightReminderRoom": "Room",
+  "@lightReminderRoom": {
+    "description": "Light reminder editor: heading over the rooms"
+  },
+  "lightReminderColour": "Colour",
+  "@lightReminderColour": {
+    "description": "Light reminder editor: heading over the colours"
+  },
+  "lightReminderTime": "Time",
+  "@lightReminderTime": {
+    "description": "Light reminder editor: the time"
+  },
+  "lightReminderOffAfter": "Switch off after",
+  "@lightReminderOffAfter": {
+    "description": "Light reminder editor: heading over when the room switches off"
+  },
+  "lightReminderStays": "Stays on",
+  "@lightReminderStays": {
+    "description": "Light reminder editor: the room stays on"
+  },
+  "lightReminderSummary": "{room} · {time} · {days}",
+  "@lightReminderSummary": {
+    "description": "House: one light reminder, under its name",
+    "placeholders": {
+      "room": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "everyDay": "Every day",
+  "@everyDay": {
+    "description": "All seven days of the week"
+  },
+  "nightOff": "Night switch-off",
+  "@nightOff": {
+    "description": "House: night switch-off section"
+  },
+  "nightOffDescription": "In case a light was left on: every night at the set time the rooms chosen fade out and switch off, even with the phone off. Rooms already off stay off.",
+  "@nightOffDescription": {
+    "description": "House: under Night switch-off"
+  },
+  "nightOffSet": "Set the night switch-off",
+  "@nightOffSet": {
+    "description": "House: set up the night switch-off"
+  },
+  "nightOffSummary": "{rooms} · {time}, fading over {minutes} min",
+  "@nightOffSummary": {
+    "description": "House: the night switch-off set",
+    "placeholders": {
+      "rooms": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "nightOffAt": "Every night at",
+  "@nightOffAt": {
+    "description": "Night switch-off editor: the time"
+  },
+  "nightOffFade": "Fade out over",
+  "@nightOffFade": {
+    "description": "Night switch-off editor: heading over the fade lengths"
+  },
+  "nightOffRooms": "Rooms",
+  "@nightOffRooms": {
+    "description": "Night switch-off editor: heading over the rooms"
+  },
+  "feelings": "How do you feel?",
+  "@feelings": {
+    "description": "Home entry and title: the feelings thermometer"
+  },
+  "feelingsSubtitle": "Name a feeling, the room takes its colour",
+  "@feelingsSubtitle": {
+    "description": "Under the feelings entry"
+  },
+  "feelingsDescription": "Tap how you feel. Every feeling is okay: the room takes its colour, and when a feeling is big, the light helps it calm down.",
+  "@feelingsDescription": {
+    "description": "Top of the feelings screen"
+  },
+  "feelingHappy": "Happy",
+  "@feelingHappy": {
+    "description": "Feeling"
+  },
+  "feelingCalm": "Calm",
+  "@feelingCalm": {
+    "description": "Feeling"
+  },
+  "feelingSad": "Sad",
+  "@feelingSad": {
+    "description": "Feeling"
+  },
+  "feelingAngry": "Angry",
+  "@feelingAngry": {
+    "description": "Feeling"
+  },
+  "feelingWorried": "Worried",
+  "@feelingWorried": {
+    "description": "Feeling"
+  },
+  "feelingTired": "Tired",
+  "@feelingTired": {
+    "description": "Feeling"
+  },
+  "feelingSayHappy": "You feel happy! Let's keep this sunny light.",
+  "@feelingSayHappy": {
+    "description": "Said and shown after tapping Happy"
+  },
+  "feelingSayCalm": "You feel calm. A soft green light, nice and quiet.",
+  "@feelingSayCalm": {
+    "description": "Said and shown after tapping Calm"
+  },
+  "feelingSaySad": "You feel sad. That's okay. A gentle blue light, and maybe a cosy story?",
+  "@feelingSaySad": {
+    "description": "Said and shown after tapping Sad"
+  },
+  "feelingSayAngry": "You feel angry. That's okay. Let's breathe together while the light cools down.",
+  "@feelingSayAngry": {
+    "description": "Said and shown after tapping Angry"
+  },
+  "feelingSayWorried": "You feel worried. Let's take slow breaths together.",
+  "@feelingSayWorried": {
+    "description": "Said and shown after tapping Worried"
+  },
+  "feelingSayTired": "You feel tired. A dim, cosy light to rest.",
+  "@feelingSayTired": {
+    "description": "Said and shown after tapping Tired"
+  },
+  "feelingBreathe": "Breathe together",
+  "@feelingBreathe": {
+    "description": "Feelings: open calm breathing"
+  },
+  "feelingStory": "A cosy story",
+  "@feelingStory": {
+    "description": "Feelings: play a gentle story"
+  },
+  "feelingRest": "Rest a while",
+  "@feelingRest": {
+    "description": "Feelings: open the nap light"
+  },
+  "moon": "Tonight's moon",
+  "@moon": {
+    "description": "Home entry and title: tonight's moon"
+  },
+  "moonSubtitle": "The real moon, shown by the lamps before bed",
+  "@moonSubtitle": {
+    "description": "Under the moon entry"
+  },
+  "moonDescription": "Worked out on this phone for tonight: the lamps glow night blue and the lit part of the moon shines across the room, on the side it is lit from.",
+  "@moonDescription": {
+    "description": "Top of the moon screen"
+  },
+  "moonNew": "New moon",
+  "@moonNew": {
+    "description": "Moon phase"
+  },
+  "moonWaxingCrescent": "Waxing crescent",
+  "@moonWaxingCrescent": {
+    "description": "Moon phase"
+  },
+  "moonFirstQuarter": "First quarter",
+  "@moonFirstQuarter": {
+    "description": "Moon phase"
+  },
+  "moonWaxingGibbous": "Waxing gibbous",
+  "@moonWaxingGibbous": {
+    "description": "Moon phase"
+  },
+  "moonFull": "Full moon",
+  "@moonFull": {
+    "description": "Moon phase"
+  },
+  "moonWaningGibbous": "Waning gibbous",
+  "@moonWaningGibbous": {
+    "description": "Moon phase"
+  },
+  "moonLastQuarter": "Last quarter",
+  "@moonLastQuarter": {
+    "description": "Moon phase"
+  },
+  "moonWaningCrescent": "Waning crescent",
+  "@moonWaningCrescent": {
+    "description": "Moon phase"
+  },
+  "moonTonight": "Tonight the moon is: {phase}.",
+  "@moonTonight": {
+    "description": "Said aloud when the moon is shown",
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "moonLit": "{percent}% lit",
+  "@moonLit": {
+    "description": "How much of the moon is lit",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "moonFullIn": "{days, plural, =0{Full moon tonight!} =1{Full moon tomorrow} other{Full moon in {days} days}}",
+  "@moonFullIn": {
+    "description": "Days until the next full moon",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "moonShow": "Show it on the lights",
+  "@moonShow": {
+    "description": "Moon: show it on the lamps"
+  },
+  "intervals": "Interval training",
+  "@intervals": {
+    "description": "Home entry and title: interval training"
+  },
+  "intervalsSubtitle": "Work, rest and the last seconds in light",
+  "@intervalsSubtitle": {
+    "description": "Under the interval training entry"
+  },
+  "intervalsDescription": "Yellow to get ready, bright green while you work, calm blue while you rest, and three slow pulses in the last three seconds. No need to look at the phone.",
+  "@intervalsDescription": {
+    "description": "Top of the interval training screen"
+  },
+  "workoutHiit": "HIIT",
+  "@workoutHiit": {
+    "description": "Workout preset"
+  },
+  "workoutTabata": "Tabata",
+  "@workoutTabata": {
+    "description": "Workout preset"
+  },
+  "workoutStretching": "Stretching",
+  "@workoutStretching": {
+    "description": "Workout preset"
+  },
+  "workoutWorkRest": "{work} s work · {rest} s rest",
+  "@workoutWorkRest": {
+    "description": "Workout preset: seconds of work and rest",
+    "placeholders": {
+      "work": {
+        "type": "int"
+      },
+      "rest": {
+        "type": "int"
+      }
+    }
+  },
+  "intervalsRounds": "Rounds",
+  "@intervalsRounds": {
+    "description": "Interval training: heading over the rounds"
+  },
+  "intervalsStart": "Start training",
+  "@intervalsStart": {
+    "description": "Interval training: start button"
+  },
+  "intervalReady": "Get ready",
+  "@intervalReady": {
+    "description": "Interval part: get ready"
+  },
+  "intervalWork": "Work!",
+  "@intervalWork": {
+    "description": "Interval part: work"
+  },
+  "intervalRest": "Rest",
+  "@intervalRest": {
+    "description": "Interval part: rest"
+  },
+  "intervalDone": "Well done!",
+  "@intervalDone": {
+    "description": "Interval training finished / said at the end"
+  },
+  "intervalLastRound": "Last round!",
+  "@intervalLastRound": {
+    "description": "Said as the last round starts"
+  },
+  "intervalRound": "Round {round} of {rounds}",
+  "@intervalRound": {
+    "description": "Interval training running: the round",
+    "placeholders": {
+      "round": {
+        "type": "int"
+      },
+      "rounds": {
+        "type": "int"
+      }
+    }
   }
 }

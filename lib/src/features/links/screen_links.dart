@@ -1,9 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 import '../bedtime/monster_spray_screen.dart';
+import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light_screen.dart';
+import '../timers/interval_training_screen.dart';
+import '../timers/light_clock_screen.dart';
 import '../bedtime/ritual_screen.dart';
 import '../calm/breathing_screen.dart';
+import '../calm/feelings_screen.dart';
 import '../cinema/cinema_screen.dart';
 import '../fun/fun_screen.dart';
 import '../fun/haunted_party_screen.dart';
@@ -43,6 +47,10 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.hotCold => const HotColdScreen(),
       AppScreen.halloween => const HauntedPartyScreen(),
       AppScreen.nap => const NapLightScreen(),
+      AppScreen.lightClock => const LightClockScreen(),
+      AppScreen.feelings => const FeelingsScreen(),
+      AppScreen.moon => const MoonScreen(),
+      AppScreen.intervals => const IntervalTrainingScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

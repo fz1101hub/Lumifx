@@ -38,6 +38,10 @@ class ReadAloud {
   /// The app's language now.
   final Locale Function() locale;
 
+  /// A line starts this much before its moment in the story: the voice
+  /// takes a moment to begin, and the word should come with the light.
+  static const speechLead = Duration(milliseconds: 350);
+
   StreamSubscription<List<LightFrame>>? _frames;
   EffectPlayer? _player;
   LightingEffect? _effect;
@@ -105,7 +109,8 @@ class ReadAloud {
     if (effect == null) {
       return;
     }
-    final index = narrationIndexAt(effect, _lines, player.position);
+    final lead = speechLead * playback.effectiveSpeed;
+    final index = narrationIndexAt(effect, _lines, player.position + lead);
     if (index == null || index == _spoken) {
       return;
     }

@@ -7,6 +7,7 @@ import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_exceptions.dart';
 import 'package:lumifx/src/core/hue/hue_house.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
+import 'package:lumifx/src/core/hue/hue_reminders.dart';
 
 /// A bridge that keeps what it is sent: schedules and rules (older API),
 /// scenes and smart scenes (newer API), and lists two sensors.
@@ -456,6 +457,100 @@ void main() {
         throwsA(isA<HueException>()),
       );
       expect(bridge.scenes, isEmpty);
+    });
+  });
+
+  group('light reminders', () {
+    test('a colour at a time on the chosen days, switched off later', () async {
+      final bridge = _Bridge();
+      await bridge.client.createLightReminder(
+        const HueLightReminderDraft(
+          name: 'Plastic out',
+          groupId: '3',
+          hour: 23,
+          minute: 30,
+          days: [1],
+          color: '#FFD23F',
+          offAfterMinutes: 60,
+        ),
+        now: evening,
+      );
+      final [on, off] = bridge.posted('/api/key/schedules');
+      expect(on['localtime'], 'W032/T23:30:00', reason: 'Tuesdays');
+      final body = (on['command'] as Map)['body'] as Map;
+      expect(body['on'], isTrue);
+      expect(body['alert'], 'lselect');
+      expect(body['xy'], hasLength(2));
+      expect((on['command'] as Map)['address'], '/api/key/groups/3/action');
+      // An hour later is past midnight: Wednesday.
+      expect(off['localtime'], 'W016/T00:30:00');
+      expect(((off['command'] as Map)['body'] as Map)['on'], isFalse);
+
+      final reminders = await bridge.client.fetchLightReminders();
+      final reminder = reminders.single;
+      expect(reminder.name, 'Plastic out');
+      expect(reminder.groupId, '3');
+      expect((reminder.hour, reminder.minute), (23, 30));
+      expect(reminder.days, [1]);
+      expect(reminder.color, '#FFD23F');
+      expect(reminder.offAfterMinutes, 60);
+      expect(reminder.enabled, isTrue);
+      expect(await bridge.client.fetchAwayModes(), isEmpty,
+          reason: 'not taken for an away mode');
+
+      await bridge.client.deleteSchedules(reminder.scheduleIds);
+      expect(bridge.schedules, isEmpty);
+    });
+
+    test('one that stays on has a single schedule', () async {
+      final bridge = _Bridge();
+      await bridge.client.createLightReminder(
+        const HueLightReminderDraft(
+          name: 'Medicine',
+          groupId: '1',
+          hour: 21,
+          minute: 0,
+          days: [0, 1, 2, 3, 4, 5, 6],
+          color: '#B388FF',
+        ),
+        now: evening,
+      );
+      final reminder = (await bridge.client.fetchLightReminders()).single;
+      expect(reminder.offAfterMinutes, isNull);
+      expect(reminder.scheduleIds, hasLength(1));
+    });
+  });
+
+  group('night switch-off', () {
+    test('every night each room fades out, and a new one replaces it',
+        () async {
+      final bridge = _Bridge();
+      expect(await bridge.client.fetchNightOff(), isNull);
+      await bridge.client.setNightOff(
+        const HueNightOffDraft(
+            groupIds: ['1', '2'], hour: 1, minute: 0, fadeMinutes: 10),
+        now: evening,
+      );
+      final posts = bridge.posted('/api/key/schedules');
+      expect(posts, hasLength(2));
+      expect(posts.first['localtime'], 'W127/T01:00:00');
+      expect(((posts.first['command'] as Map)['body'] as Map),
+          {'on': false, 'transitiontime': 6000});
+      final first = (await bridge.client.fetchNightOff())!;
+      expect(first.groupIds, unorderedEquals(['1', '2']));
+      expect((first.hour, first.minute, first.fadeMinutes), (1, 0, 10));
+
+      await bridge.client.setNightOff(
+        const HueNightOffDraft(groupIds: ['4'], hour: 0, minute: 30),
+        replacing: first,
+        now: evening.add(const Duration(seconds: 1)),
+      );
+      final second = (await bridge.client.fetchNightOff())!;
+      expect(second.groupIds, ['4']);
+      expect(bridge.schedules, hasLength(1), reason: 'the old one is gone');
+
+      await bridge.client.setSchedulesEnabled(second.scheduleIds, false);
+      expect(bridge.requests.last.$3, {'status': 'disabled'});
     });
   });
 }

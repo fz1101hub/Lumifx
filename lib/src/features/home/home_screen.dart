@@ -5,7 +5,11 @@ import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
+import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light_screen.dart';
+import '../timers/interval_training_screen.dart';
+import '../timers/light_clock_screen.dart';
+import '../calm/feelings_screen.dart';
 import '../bedtime/ritual_screen.dart';
 import '../cinema/cinema_screen.dart';
 import '../bridge/bridge_controller.dart';
@@ -147,6 +151,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.bedtimeSubtitle, () => const BedtimeScreen()),
                 _HomeEntry(Icons.wb_twilight, l10n.napLight,
                     l10n.napLightSubtitle, () => const NapLightScreen()),
+                _HomeEntry(Icons.nightlight_round, l10n.moon, l10n.moonSubtitle,
+                    () => const MoonScreen()),
                 _HomeEntry(
                     Icons.sanitizer_outlined,
                     l10n.monsterSpray,
@@ -161,8 +167,12 @@ class HomeScreen extends StatelessWidget {
                     l10n.storyMakerSubtitle, () => const TaleMakerScreen()),
                 _HomeEntry(Icons.spa_outlined, l10n.breathe,
                     l10n.breatheSubtitle, () => const BreathingScreen()),
+                _HomeEntry(Icons.mood, l10n.feelings, l10n.feelingsSubtitle,
+                    () => const FeelingsScreen()),
                 _HomeEntry(Icons.timer_outlined, l10n.timers,
                     l10n.timersSubtitle, () => const TimersScreen()),
+                _HomeEntry(Icons.traffic_outlined, l10n.lightClock,
+                    l10n.lightClockSubtitle, () => const LightClockScreen()),
                 _HomeEntry(Icons.checklist, l10n.kidRoutines,
                     l10n.kidRoutinesSubtitle, () => const RoutinesScreen()),
                 _HomeEntry(Icons.celebration_outlined, l10n.fun,
@@ -178,6 +188,11 @@ class HomeScreen extends StatelessWidget {
                     l10n.playlistsSubtitle, () => const PlaylistsScreen()),
                 _HomeEntry(Icons.wb_sunny_outlined, l10n.weather,
                     l10n.weatherSubtitle, () => const WeatherScreen()),
+                _HomeEntry(
+                    Icons.fitness_center,
+                    l10n.intervals,
+                    l10n.intervalsSubtitle,
+                    () => const IntervalTrainingScreen()),
                 _HomeEntry(Icons.movie_outlined, l10n.cinema,
                     l10n.cinemaSubtitle, () => const CinemaScreen()),
                 _HomeEntry(Icons.nfc, l10n.nfcStickers,

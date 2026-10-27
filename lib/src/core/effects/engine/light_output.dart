@@ -29,7 +29,9 @@ class NullLightOutput implements LightOutput {
 /// Each tick, the lights whose desired state differs most from what was last
 /// sent (weighted by how long ago that was) get the available budget. Every
 /// command uses the time since that light's previous command as its
-/// transition, so lights glide between samples instead of stepping.
+/// transition, so lights glide between samples instead of stepping; a
+/// sudden change (a flash, lightning, a key pressed) goes first and lands
+/// at once, so the light answers when the word is said or the key tapped.
 class RateLimitedLightOutput implements LightOutput {
   RateLimitedLightOutput({
     required this.send,
@@ -57,7 +59,9 @@ class RateLimitedLightOutput implements LightOutput {
   final _lastSent = <String, LightFrame>{};
   final _lastSentAt = <String, DateTime>{};
   final _pending = <Future<void>>{};
-  double _tokens = 0;
+
+  /// A full burst to start with: the first frame goes out at once.
+  late double _tokens = burst;
   int _inFlight = 0;
   bool _closed = false;
 
@@ -66,6 +70,9 @@ class RateLimitedLightOutput implements LightOutput {
 
   /// Smallest change worth a command.
   static const _threshold = 0.01;
+
+  /// A change this big is sudden: sent first, with no transition.
+  static const _sudden = 0.3;
 
   @override
   void update(Map<String, LightFrame> frames, Duration tick) {
@@ -76,7 +83,7 @@ class RateLimitedLightOutput implements LightOutput {
         .clamp(0, burst);
     final now = _clock();
 
-    final candidates = <({String id, double score})>[];
+    final candidates = <({String id, double score, bool sudden})>[];
     frames.forEach((id, frame) {
       final previous = _lastSent[id];
       final difference = previous == null ? 1.0 : _difference(previous, frame);
@@ -86,7 +93,12 @@ class RateLimitedLightOutput implements LightOutput {
       final sentAt = _lastSentAt[id];
       final age =
           sentAt == null ? 10.0 : now.difference(sentAt).inMicroseconds / 1e6;
-      candidates.add((id: id, score: difference * (0.5 + age)));
+      final sudden = previous != null && difference >= _sudden;
+      candidates.add((
+        id: id,
+        score: difference * (0.5 + age) * (sudden ? 10 : 1),
+        sudden: sudden,
+      ));
     });
     candidates.sort((a, b) => b.score.compareTo(a.score));
 
@@ -97,9 +109,11 @@ class RateLimitedLightOutput implements LightOutput {
       _tokens -= 1;
       final frame = frames[candidate.id]!;
       final sentAt = _lastSentAt[candidate.id];
-      final transition = sentAt == null
-          ? const Duration(milliseconds: 400)
-          : _clampTransition(now.difference(sentAt));
+      final transition = candidate.sudden
+          ? Duration.zero
+          : sentAt == null
+              ? const Duration(milliseconds: 400)
+              : _clampTransition(now.difference(sentAt));
       _lastSent[candidate.id] = frame;
       _lastSentAt[candidate.id] = now;
       _inFlight++;

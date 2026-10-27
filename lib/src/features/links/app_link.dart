@@ -113,7 +113,11 @@ enum AppScreen {
   hotCold('hot-and-cold'),
   halloween('halloween'),
   nap('nap'),
-  noise('noise');
+  noise('noise'),
+  lightClock('light-clock'),
+  feelings('feelings'),
+  moon('moon'),
+  intervals('intervals');
 
   const AppScreen(this.slug);
 

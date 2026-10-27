@@ -233,6 +233,7 @@ class PlaybackController extends ChangeNotifier {
     _soundPlaying = true;
     unawaited(_sound.play(scape, volume: _preferences.soundVolume));
     if (scape.thunder) {
+      unawaited(_sound.prepare(thunder: true));
       double? previous;
       _lightningWatch = player.frames.listen((frames) {
         if (frames.isEmpty) {
@@ -257,8 +258,10 @@ class PlaybackController extends ChangeNotifier {
             DateTime.now().difference(last) < const Duration(seconds: 3))) {
       return;
     }
+    // Close behind the flash, as if the storm were near: a long, real
+    // delay reads as the sound lagging behind the light.
     _thunderTimer =
-        Timer(Duration(milliseconds: 400 + _random.nextInt(1600)), () {
+        Timer(Duration(milliseconds: 150 + _random.nextInt(450)), () {
       if (_status == PlaybackStatus.playing && _soundPlaying) {
         _lastThunder = DateTime.now();
         unawaited(_sound.thunder(volume: _preferences.soundVolume));
@@ -531,6 +534,15 @@ class PlaybackController extends ChangeNotifier {
     await _sound.thunder(volume: _preferences.soundVolume);
   }
 
+  /// Gets the notes [midis] of [instrument] (and the thunder) ready ahead,
+  /// so the first key or scare sounds at once.
+  Future<void> prepareSounds({
+    Iterable<int> midis = const [],
+    Instrument instrument = Instrument.musicBox,
+    bool thunder = false,
+  }) =>
+      _sound.prepare(midis: midis, instrument: instrument, thunder: thunder);
+
   /// One note of [instrument] on the phone, on top of the effect's sounds
   /// (the light piano). Silent when sounds are off.
   Future<void> note(int midi, Instrument instrument) async {
@@ -611,9 +623,12 @@ class PlaybackController extends ChangeNotifier {
 
   /// The controls the lights run with: an effect with a tune keeps the
   /// tune's own pace whatever the speed set, so the lights stay with the
-  /// music (and the music is not cut off when the lights end early).
+  /// music (and the music is not cut off when the lights end early); one
+  /// tied to the clock keeps to the clock.
   EffectControls _playerControls(EffectControls controls) =>
-      controls.speed != 1 && soundscapeOf(effectToPlay).melody != null
+      controls.speed != 1 &&
+              (effectToPlay.keepsRealTime ||
+                  soundscapeOf(effectToPlay).melody != null)
           ? controls.copyWith(speed: 1)
           : controls;
 

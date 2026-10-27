@@ -775,3 +775,44 @@ iOS lists the languages in `CFBundleLocalizations`.
   `before` says it is ready (a timer that did not start is not shown),
   and keeps a sleep timer aside meanwhile, putting it back afterwards.
 
+### Round 9 notes
+
+- `LightingEffect.keepsRealTime` (`gen:rt:` ids): effects tied to the
+  clock on the wall run at speed 1 whatever the speed set (as tunes do),
+  in `PlaybackController._playerControls`.
+- Light clock (`lib/src/features/timers/light_clock*.dart`): green until
+  the warning, a 15 s ramp to yellow, red for the last two minutes, a
+  slow red breath for three minutes after; the id keeps the occasion,
+  the time (minutes since the epoch) and the warning, so the screen and
+  the mini-player read it back. The screen checks the phase every second
+  and speaks on a change.
+- Light reminders and night switch-off (`lib/src/core/hue/hue_reminders*.dart`,
+  a part of `hue_bridge_client.dart`): older-API schedules tagged
+  `lumifx:<token>:remind-on:<RRGGBB>`, `…:remind-off` and `…:nightoff`.
+  A reminder puts the group on in its colour with `alert: lselect`
+  (breathing about 15 s) and optionally off N minutes later (moved to the
+  next day past midnight); the night switch-off is one weekly schedule
+  per room with `on: false` and a transition of N minutes. Edited in
+  `lib/src/features/house/reminder_editors.dart`.
+- Feelings (`lib/src/features/calm/feelings*.dart`): one 15-minute effect
+  per feeling; anger and worry ramp to `#8FD8FF` over 90 s. Also a kids
+  mode activity (`KidsActivity.feelings`); in kids mode only breathing is
+  offered as help.
+- Moon (`lib/src/features/bedtime/moon*.dart`): age from a known new moon
+  (2000-01-06 18:14 UTC) modulo the synodic month; lit fraction
+  (1 − cos)/2; eight phases. The lamps use the renderer's `progress`
+  event, which takes `fromEnd` to fill from the last light (waxing: lit
+  on the right, as seen from the northern hemisphere).
+- Interval training (`lib/src/features/timers/interval_training*.dart`):
+  10 s to get ready, work and rest in turn, a 500 ms white pulse in each
+  of the last three seconds (no rapid flashes), a party at the end; the
+  screen calls each part `ReadAloud.speechLead` early.
+- Sync: `RateLimitedLightOutput` starts with a full burst, sends a change
+  of 0.3 or more first (score × 10) with no transition, and a flash
+  (`EffectPlayer.flashNow`) passes no elapsed time to the budget.
+  `ReadAloud` speaks a line `speechLead` (350 ms × speed) before its
+  moment; the captions stay exact. `SoundPlayer.prepare` makes the
+  piano's notes (on opening the piano) and the thunder (on a storm, on
+  opening the Halloween party) ahead; thunder follows lightning by
+  150–600 ms.
+

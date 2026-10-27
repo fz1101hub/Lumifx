@@ -5,10 +5,18 @@ import '../../core/sound/melody.dart';
 import '../../core/sound/soundscape.dart';
 import '../bedtime/monster_spray.dart';
 import '../bedtime/monster_spray_screen.dart';
+import '../bedtime/moon.dart';
+import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light.dart';
 import '../bedtime/nap_light_screen.dart';
+import '../timers/interval_training.dart';
+import '../timers/interval_training_screen.dart';
+import '../timers/light_clock.dart';
+import '../timers/light_clock_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
+import '../calm/feelings.dart';
+import '../calm/feelings_screen.dart';
 import '../cinema/cinema.dart';
 import '../cinema/cinema_screen.dart';
 import '../fun/advent.dart';
@@ -88,6 +96,14 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = MonsterSprayScreen(playing: effect);
   } else if (NapLight.restOf(effect) != null) {
     screen = const NapLightScreen();
+  } else if (LightClock.of(effect) != null) {
+    screen = const LightClockScreen();
+  } else if (Feeling.of(effect) != null) {
+    screen = const FeelingsScreen();
+  } else if (Moon.of(effect) != null) {
+    screen = const MoonScreen();
+  } else if (IntervalWorkout.of(effect) != null) {
+    screen = const IntervalTrainingScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {
