@@ -8,6 +8,8 @@ import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon.dart';
 import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light.dart';
+import '../bedtime/tooth_fairy.dart';
+import '../bedtime/tooth_fairy_screen.dart';
 import '../bedtime/nap_light_screen.dart';
 import '../timers/interval_training.dart';
 import '../timers/interval_training_screen.dart';
@@ -16,6 +18,12 @@ import '../timers/light_clock_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
 import '../calm/feelings.dart';
+import '../fun/board_game.dart';
+import '../fun/board_game_screen.dart';
+import '../fun/goal.dart';
+import '../fun/hide_and_seek.dart';
+import '../fun/hide_and_seek_screen.dart';
+import '../fun/goal_screen.dart';
 import '../calm/feelings_screen.dart';
 import '../cinema/cinema.dart';
 import '../cinema/cinema_screen.dart';
@@ -104,6 +112,14 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const MoonScreen();
   } else if (IntervalWorkout.of(effect) != null) {
     screen = const IntervalTrainingScreen();
+  } else if (Goal.colorsOf(effect) != null) {
+    screen = const GoalScreen();
+  } else if (effect.id == ToothFairy.id) {
+    screen = const ToothFairyScreen();
+  } else if (BoardGame.of(effect) != null) {
+    screen = const BoardGameScreen();
+  } else if (HideAndSeek.countOf(effect) != null) {
+    screen = const HideAndSeekScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

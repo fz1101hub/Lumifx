@@ -277,6 +277,98 @@ final goodnightGlow = _ambientScene(
   },
 );
 
+/// Moods for occasions: candlelight for dinner, bright and lively for
+/// board games, a steady warm white to read by, an aperitivo sunset, and
+/// a welcome that brightens over ten minutes as guests arrive.
+final candlelitDinner = _ambientScene(
+  id: 'candlelit_dinner',
+  name: 'Candlelit dinner',
+  collection: 'Occasions',
+  description: 'Low, warm candlelight that flickers a little.',
+  parameters: {
+    'palette': <String>['#FF8C2E', '#FFA54A', '#E8702A'],
+    'brightnessMin': 0.18,
+    'brightnessMax': 0.35,
+    'speed': 0.06,
+    'flicker': 0.5,
+  },
+);
+
+final gameNight = _ambientScene(
+  id: 'game_night',
+  name: 'Game night',
+  collection: 'Occasions',
+  description: 'Bright, cheerful colours around the table.',
+  parameters: {
+    'palette': <String>['#FFF1D6', '#7FDBFF', '#FFD23F', '#B388FF'],
+    'brightnessMin': 0.7,
+    'brightnessMax': 0.9,
+    'speed': 0.03,
+  },
+);
+
+final readingLight = _ambientScene(
+  id: 'reading_light',
+  name: 'Reading light',
+  collection: 'Occasions',
+  description: 'A steady, warm white to read by.',
+  parameters: {
+    'palette': <String>['#FFE9C7', '#FFEED4'],
+    'brightnessMin': 0.82,
+    'brightnessMax': 0.85,
+    'speed': 0.005,
+  },
+);
+
+final aperitivo = _ambientScene(
+  id: 'aperitivo',
+  name: 'Aperitivo',
+  collection: 'Occasions',
+  description: 'An orange and pink sunset for a drink with friends.',
+  parameters: {
+    'palette': <String>['#FF7A3D', '#FF5E7E', '#FFB04A', '#C850C0'],
+    'brightnessMin': 0.45,
+    'brightnessMax': 0.7,
+    'speed': 0.04,
+  },
+);
+
+/// Guests in ten minutes: the room brightens slowly from a dim glow to a
+/// warm welcome, then stays.
+const guestsArriving = LightingEffect(
+  id: 'guests_arriving',
+  name: 'Guests in 10 minutes',
+  kind: EffectKind.scene,
+  collection: 'Occasions',
+  description: 'The room brightens slowly to a warm welcome.',
+  isLooping: false,
+  loopDuration: Duration(hours: 3),
+  events: [
+    EffectEvent(
+      at: Duration.zero,
+      duration: Duration(minutes: 10),
+      type: EffectEventTypes.ramp,
+      parameters: {
+        'color': '#FF9A4A',
+        'toColor': '#FFE2B8',
+        'from': 0.1,
+        'to': 0.8,
+      },
+    ),
+    EffectEvent(
+      at: Duration(minutes: 10),
+      duration: Duration(minutes: 170),
+      type: EffectEventTypes.ambientPalette,
+      parameters: {
+        'palette': <String>['#FFE2B8', '#FFD9A6'],
+        'brightnessMin': 0.75,
+        'brightnessMax': 0.82,
+        'speed': 0.01,
+      },
+    ),
+  ],
+);
+
 final builtinScenes = <LightingEffect>[
   fireplace,
   ocean,
@@ -285,4 +377,9 @@ final builtinScenes = <LightingEffect>[
   goodnightGlow,
   thunderstorm,
   disco,
+  candlelitDinner,
+  gameNight,
+  readingLight,
+  aperitivo,
+  guestsArriving,
 ];

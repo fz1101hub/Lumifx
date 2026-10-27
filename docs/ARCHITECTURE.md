@@ -816,3 +816,28 @@ iOS lists the languages in `CFBundleLocalizations`.
   opening the Halloween party) ahead; thunder follows lightning by
   150–600 ms.
 
+### Round 10 notes
+
+- Goal (`lib/src/features/fun/goal*.dart`): the effect id keeps the colours
+  (`gen:goal:RRGGBB-RRGGBB`); `GoalLink` (`lumifx://app/goal[/team]`) plays
+  it from a link or NFC sticker with the team kept in
+  `PreferencesController.goalTeam` (a `GoalTeam` name or `#RRGGBB,…`).
+  A white flash, `surprise` pops and `travel` sweeps, no rapid flashes.
+- Tooth fairy (`lib/src/features/bedtime/tooth_fairy*.dart`): two one-time
+  older-API schedules (`lumifx:<token>:fairy-on|fairy-off`, autodelete)
+  glow the room at `bri` 60 with `lselect` and switch it off 15 minutes
+  later; the visit is kept in `PreferencesController.toothFairy`
+  (`<child>|<minutes since the epoch>`), and reading the letter earns the
+  star `yyyy-mm-dd:toothfairy`.
+- Occasions: five scenes in `builtin_scenes.dart` (collection
+  `Occasions`); "guests in 10 minutes" is a 10-minute `ramp` then a warm
+  ambient, three hours long.
+- Board game referee (`lib/src/features/fun/board_game*.dart`): one effect
+  per turn (`gen:board:<player>:<seconds>:<turn>`), a `countdown` from the
+  player's colour to red when timed; the die is `playback.flash` once
+  every 600 ms.
+- Hide and seek (`lib/src/features/fun/hide_and_seek*.dart`): a `ramp` to
+  almost dark over the count, a flash, a dim blue search with a `travel`
+  every 7 s; the screen says each number `ReadAloud.speechLead` before its
+  second.
+

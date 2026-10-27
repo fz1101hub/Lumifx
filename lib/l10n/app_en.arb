@@ -5098,5 +5098,269 @@
         "type": "int"
       }
     }
+  },
+  "goal": "Goal!",
+  "@goal": {
+    "description": "Fun entry and title: the goal celebration"
+  },
+  "goalSubtitle": "The room bursts into your team's colours",
+  "@goalSubtitle": {
+    "description": "Under the goal entry"
+  },
+  "goalDescription": "Choose your team, then tap the big button when they score: a flash, colours popping across the lamps, then the team's colours for half a minute.",
+  "@goalDescription": {
+    "description": "Top of the goal screen"
+  },
+  "goalButton": "GOAL!",
+  "@goalButton": {
+    "description": "The big goal button"
+  },
+  "goalTeamItaly": "Italy",
+  "@goalTeamItaly": {
+    "description": "Team colours"
+  },
+  "goalTeamGermany": "Germany",
+  "@goalTeamGermany": {
+    "description": "Team colours"
+  },
+  "goalTeamFrance": "France",
+  "@goalTeamFrance": {
+    "description": "Team colours"
+  },
+  "goalTeamSpain": "Spain",
+  "@goalTeamSpain": {
+    "description": "Team colours"
+  },
+  "goalTeamNetherlands": "Netherlands",
+  "@goalTeamNetherlands": {
+    "description": "Team colours"
+  },
+  "goalTeamBrazil": "Brazil",
+  "@goalTeamBrazil": {
+    "description": "Team colours"
+  },
+  "goalTeamJapan": "Japan",
+  "@goalTeamJapan": {
+    "description": "Team colours"
+  },
+  "goalTeamEngland": "England",
+  "@goalTeamEngland": {
+    "description": "Team colours"
+  },
+  "goalOwnTeam": "Your team",
+  "@goalOwnTeam": {
+    "description": "Goal: a team of your own"
+  },
+  "goalOwnColours": "Your team's colours (up to three)",
+  "@goalOwnColours": {
+    "description": "Goal: heading over the colours of your own team"
+  },
+  "goalLinkHint": "Tip: put the link lumifx://app/goal on an NFC sticker or a shortcut to celebrate with one tap.",
+  "@goalLinkHint": {
+    "description": "Goal: tip about the link"
+  },
+  "toothFairy": "Tooth fairy",
+  "@toothFairy": {
+    "description": "Home entry and title: the tooth fairy's visit"
+  },
+  "toothFairySubtitle": "A magic glow at dawn, a message and a star",
+  "@toothFairySubtitle": {
+    "description": "Under the tooth fairy entry"
+  },
+  "toothFairyDescription": "The night after a tooth falls out: near dawn the room glows softly pink and violet for a while, never enough to wake anyone. In the morning, read the fairy's message together: she leaves a magic star.",
+  "@toothFairyDescription": {
+    "description": "Top of the tooth fairy screen"
+  },
+  "toothFairyFor": "For",
+  "@toothFairyFor": {
+    "description": "Tooth fairy: heading over the children"
+  },
+  "toothFairyRoom": "In the room",
+  "@toothFairyRoom": {
+    "description": "Tooth fairy: heading over the rooms"
+  },
+  "toothFairyTime": "She comes at",
+  "@toothFairyTime": {
+    "description": "Tooth fairy: when she comes"
+  },
+  "toothFairyPlan": "The fairy will come tonight",
+  "@toothFairyPlan": {
+    "description": "Tooth fairy: plan the visit"
+  },
+  "toothFairyComing": "The fairy is coming at {time}",
+  "@toothFairyComing": {
+    "description": "Tooth fairy: visit planned",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "toothFairyCancel": "Cancel the visit",
+  "@toothFairyCancel": {
+    "description": "Tooth fairy: cancel the visit"
+  },
+  "toothFairyCame": "The tooth fairy came!",
+  "@toothFairyCame": {
+    "description": "Tooth fairy: in the morning"
+  },
+  "toothFairyRead": "Read her message",
+  "@toothFairyRead": {
+    "description": "Tooth fairy: read her message"
+  },
+  "toothFairyMessage": "Dear {name}, thank you for your little tooth! I left you a magic star. Keep brushing every day. The Tooth Fairy",
+  "@toothFairyMessage": {
+    "description": "The fairy's message, read aloud and shown",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "toothFairyFriend": "friend",
+  "@toothFairyFriend": {
+    "description": "Used as the name in the fairy's message when there is no child profile"
+  },
+  "toothFairyMagic": "Fairy magic now",
+  "@toothFairyMagic": {
+    "description": "Tooth fairy: play the magic now"
+  },
+  "collectionOccasions": "Occasions",
+  "@collectionOccasions": {
+    "description": "Collection of scenes"
+  },
+  "effectNameCandlelitDinner": "Candlelit dinner",
+  "@effectNameCandlelitDinner": {
+    "description": "Scene name"
+  },
+  "effectDescriptionCandlelitDinner": "Low, warm candlelight that flickers a little.",
+  "@effectDescriptionCandlelitDinner": {
+    "description": "Scene description"
+  },
+  "effectNameGameNight": "Game night",
+  "@effectNameGameNight": {
+    "description": "Scene name"
+  },
+  "effectDescriptionGameNight": "Bright, cheerful colours around the table.",
+  "@effectDescriptionGameNight": {
+    "description": "Scene description"
+  },
+  "effectNameReadingLight": "Reading light",
+  "@effectNameReadingLight": {
+    "description": "Scene name"
+  },
+  "effectDescriptionReadingLight": "A steady, warm white to read by.",
+  "@effectDescriptionReadingLight": {
+    "description": "Scene description"
+  },
+  "effectNameAperitivo": "Aperitivo",
+  "@effectNameAperitivo": {
+    "description": "Scene name"
+  },
+  "effectDescriptionAperitivo": "An orange and pink sunset for a drink with friends.",
+  "@effectDescriptionAperitivo": {
+    "description": "Scene description"
+  },
+  "effectNameGuestsArriving": "Guests in 10 minutes",
+  "@effectNameGuestsArriving": {
+    "description": "Scene name"
+  },
+  "effectDescriptionGuestsArriving": "The room brightens slowly to a warm welcome.",
+  "@effectDescriptionGuestsArriving": {
+    "description": "Scene description"
+  },
+  "boardGame": "Board game referee",
+  "@boardGame": {
+    "description": "Fun entry and title: the board game referee"
+  },
+  "boardGameSubtitle": "Whose turn, a light die and a turn timer",
+  "@boardGameSubtitle": {
+    "description": "Under the referee entry"
+  },
+  "boardGameDescription": "Each player has a colour and the room shows whose turn it is. Roll the die and the lamps blink the number; with a turn timer the colour slowly turns red as time runs out.",
+  "@boardGameDescription": {
+    "description": "Top of the referee screen"
+  },
+  "boardPlayers": "Players",
+  "@boardPlayers": {
+    "description": "Referee: heading over the number of players"
+  },
+  "boardTimer": "Turn timer",
+  "@boardTimer": {
+    "description": "Referee: heading over the turn timer"
+  },
+  "boardTimerOff": "None",
+  "@boardTimerOff": {
+    "description": "Referee: no turn timer"
+  },
+  "boardTimerSeconds": "{seconds} s",
+  "@boardTimerSeconds": {
+    "description": "Referee: a turn timer in seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "boardStart": "Start the game",
+  "@boardStart": {
+    "description": "Referee: start the game"
+  },
+  "boardTurn": "{player}'s turn!",
+  "@boardTurn": {
+    "description": "Referee: whose turn it is, by colour; also said aloud",
+    "placeholders": {
+      "player": {
+        "type": "String"
+      }
+    }
+  },
+  "boardNext": "Next turn",
+  "@boardNext": {
+    "description": "Referee: next player's turn"
+  },
+  "boardRoll": "Roll the die",
+  "@boardRoll": {
+    "description": "Referee: roll the light die"
+  },
+  "boardTimeUp": "Time's up!",
+  "@boardTimeUp": {
+    "description": "Referee: the turn's time is up; also said aloud"
+  },
+  "hideSeek": "Hide and seek",
+  "@hideSeek": {
+    "description": "Fun entry and title: hide and seek"
+  },
+  "hideSeekSubtitle": "The lights dim while the seeker counts",
+  "@hideSeekSubtitle": {
+    "description": "Under the hide and seek entry"
+  },
+  "hideSeekDescription": "The voice counts out loud while the lamps dim to almost dark: time to hide! Then a flash, \"Ready or not, here I come!\", and a searchlight sweeps the dim room.",
+  "@hideSeekDescription": {
+    "description": "Top of the hide and seek screen"
+  },
+  "hideSeekCount": "Count to",
+  "@hideSeekCount": {
+    "description": "Hide and seek: heading over how long the count is"
+  },
+  "hideSeekStart": "Start counting",
+  "@hideSeekStart": {
+    "description": "Hide and seek: start counting"
+  },
+  "hideSeekCounting": "Hide! The seeker is counting…",
+  "@hideSeekCounting": {
+    "description": "Hide and seek: while counting"
+  },
+  "hideSeekReady": "Ready or not, here I come!",
+  "@hideSeekReady": {
+    "description": "Hide and seek: said aloud after the count"
+  },
+  "hideSeekFoundAll": "Found everyone!",
+  "@hideSeekFoundAll": {
+    "description": "Hide and seek: button when everyone is found"
+  },
+  "hideSeekWellDone": "Found you all! Well hidden, everyone!",
+  "@hideSeekWellDone": {
+    "description": "Hide and seek: said when everyone is found"
   }
 }

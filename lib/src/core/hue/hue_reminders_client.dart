@@ -241,6 +241,75 @@ extension HueReminderRoutines on HueBridgeClient {
     }
   }
 
+  /// The tooth fairy's visit: at the next [hour]:[minute] the room
+  /// glows soft pink and violet, breathing a little, and goes off a
+  /// quarter of an hour later. One-time schedules, deleted by the bridge
+  /// once done.
+  Future<void> createFairyVisit({
+    required String groupId,
+    required int hour,
+    required int minute,
+    DateTime? now,
+  }) async {
+    final at = now ?? DateTime.now();
+    final token = at.microsecondsSinceEpoch.toRadixString(36);
+    final xy = LightColor.fromHex('#E0A0FF').toXy();
+    final action = '/api/$applicationKey/groups/$groupId/action';
+    final end = hour * 60 + minute + 15;
+    final created = <String>[];
+    try {
+      created.add(await _postSchedule({
+        'name': 'LumiFX tooth fairy',
+        'description': '${HueEffectSchedule.tag}$token:fairy-on',
+        'command': {
+          'address': action,
+          'method': 'PUT',
+          'body': {
+            'on': true,
+            'bri': 60,
+            'xy': [
+              double.parse(xy.x.toStringAsFixed(4)),
+              double.parse(xy.y.toStringAsFixed(4)),
+            ],
+            'alert': 'lselect',
+            'transitiontime': 100,
+          },
+        },
+        'localtime': scheduleLocaltime(
+            hour: hour, minute: minute, days: const [], now: at),
+        'status': 'enabled',
+        'autodelete': true,
+      }));
+      created.add(await _postSchedule({
+        'name': 'LumiFX tooth fairy',
+        'description': '${HueEffectSchedule.tag}$token:fairy-off',
+        'command': {
+          'address': action,
+          'method': 'PUT',
+          'body': {'on': false, 'transitiontime': 300},
+        },
+        'localtime': scheduleLocaltime(
+            hour: end ~/ 60 % 24, minute: end % 60, days: const [], now: at),
+        'status': 'enabled',
+        'autodelete': true,
+      }));
+    } on Object {
+      for (final id in created) {
+        await _deleteV1('/schedules/$id').catchError((Object _) {});
+      }
+      rethrow;
+    }
+  }
+
+  /// Cancels the tooth fairy's visits not made yet.
+  Future<void> cancelFairyVisits() async {
+    final byToken = await _taggedSchedules((role) => role.startsWith('fairy'));
+    await deleteSchedules([
+      for (final parts in byToken.values)
+        for (final (_, id, _) in parts) id,
+    ]);
+  }
+
   /// Switches a reminder or the night switch-off on or off.
   Future<void> setSchedulesEnabled(List<String> ids, bool enabled) async {
     for (final id in ids) {

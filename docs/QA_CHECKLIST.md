@@ -705,6 +705,25 @@ build before every store release.
 - [ ] Scene from a photo, take a photo: nothing is left in the app's
       cache folder afterwards.
 
+## This round: fun and occasions (round 10)
+
+- [ ] Goal!: choose Brazil, tap GOAL!: a white flash, yellow, green and
+      blue popping and sweeping, then the colours for half a minute.
+      Write lumifx://app/goal on an NFC sticker: tapping it celebrates for
+      Brazil. A team of your own with two colours is remembered.
+- [ ] Tooth fairy: plan a visit a few minutes from now in a child's room:
+      the room glows softly pink and violet and goes off 15 minutes later
+      (phone off). After that time the screen says she came; Read her
+      message reads the letter with the child's name and adds a star.
+- [ ] Occasions: each scene looks right; "Guests in 10 minutes" goes from
+      dim to bright over ten minutes and stays.
+- [ ] Board game referee, 3 players, 30 s: the room is red, then blue on
+      Next turn, the colour reddens as the time runs out and "Time's up!"
+      is said; Roll the die blinks the lamps the number said.
+- [ ] Hide and seek, 10: the numbers are heard on the second as the lamps
+      dim; "Ready or not, here I come!" comes with the flash; the
+      searchlight sweeps the room.
+
 ## This round: everyday light (round 9)
 
 - [ ] Light clock, "Mealtime" at a time 12 minutes away, yellow from 10:

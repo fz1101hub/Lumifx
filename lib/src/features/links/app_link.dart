@@ -8,6 +8,9 @@
 ///   lumifx://app/playlist/Evening              play a playlist (name or id)
 ///   lumifx://app/stop                          stop and put the lights back
 ///   lumifx://app/bedtime                       start bedtime as last set
+///   lumifx://app/goal                          celebrate a goal in the
+///                                              team's colours (a team
+///                                              name may follow)
 ///   lumifx://app/voice/camino                  what someone said: an
 ///                                              effect, playlist, "stop"
 ///                                              or "bedtime", any language
@@ -57,6 +60,10 @@ sealed class AppLink {
         return const StopLink();
       case ['bedtime']:
         return const BedtimeLink();
+      case ['goal']:
+        return const GoalLink();
+      case ['goal', final team]:
+        return GoalLink(team.toLowerCase());
       case ['voice', final words] when words.trim().isNotEmpty:
         return VoiceLink(words.trim());
       case ['go', final name]:
@@ -85,6 +92,8 @@ sealed class AppLink {
   static String get stop => '$scheme://app/stop';
 
   static String get bedtime => '$scheme://app/bedtime';
+
+  static String get goal => '$scheme://app/goal';
 
   static String import(String data) => '$scheme://app/import?d=$data';
 
@@ -117,7 +126,11 @@ enum AppScreen {
   lightClock('light-clock'),
   feelings('feelings'),
   moon('moon'),
-  intervals('intervals');
+  intervals('intervals'),
+  goal('goal-party'),
+  toothFairy('tooth-fairy'),
+  boardGame('board-game'),
+  hideSeek('hide-and-seek');
 
   const AppScreen(this.slug);
 
@@ -178,4 +191,11 @@ class ImportLink extends AppLink {
   const ImportLink(this.data);
 
   final String data;
+}
+
+/// Celebrates a goal: the team named, else the one chosen last.
+class GoalLink extends AppLink {
+  const GoalLink([this.team]);
+
+  final String? team;
 }

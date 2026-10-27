@@ -553,4 +553,19 @@ void main() {
       expect(bridge.requests.last.$3, {'status': 'disabled'});
     });
   });
+
+  test('the tooth fairy glows once near dawn, and can be cancelled', () async {
+    final bridge = _Bridge();
+    await bridge.client
+        .createFairyVisit(groupId: '2', hour: 6, minute: 0, now: evening);
+    final [on, off] = bridge.posted('/api/key/schedules');
+    // Tomorrow morning, once.
+    expect(on['localtime'], '2026-10-17T06:00:00');
+    expect(on['autodelete'], isTrue);
+    final body = (on['command'] as Map)['body'] as Map;
+    expect(body['bri'], lessThanOrEqualTo(60), reason: 'not enough to wake');
+    expect(off['localtime'], '2026-10-17T06:15:00');
+    await bridge.client.cancelFairyVisits();
+    expect(bridge.schedules, isEmpty);
+  });
 }

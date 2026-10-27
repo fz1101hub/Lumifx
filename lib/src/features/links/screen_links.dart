@@ -3,11 +3,15 @@ import 'package:flutter/widgets.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light_screen.dart';
+import '../bedtime/tooth_fairy_screen.dart';
 import '../timers/interval_training_screen.dart';
 import '../timers/light_clock_screen.dart';
 import '../bedtime/ritual_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../calm/feelings_screen.dart';
+import '../fun/board_game_screen.dart';
+import '../fun/goal_screen.dart';
+import '../fun/hide_and_seek_screen.dart';
 import '../cinema/cinema_screen.dart';
 import '../fun/fun_screen.dart';
 import '../fun/haunted_party_screen.dart';
@@ -51,6 +55,10 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.feelings => const FeelingsScreen(),
       AppScreen.moon => const MoonScreen(),
       AppScreen.intervals => const IntervalTrainingScreen(),
+      AppScreen.goal => const GoalScreen(),
+      AppScreen.toothFairy => const ToothFairyScreen(),
+      AppScreen.boardGame => const BoardGameScreen(),
+      AppScreen.hideSeek => const HideAndSeekScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

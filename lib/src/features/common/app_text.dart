@@ -100,6 +100,11 @@ String describeSlot(AppLocalizations l10n, SlotLabel label) => switch (label) {
 extension EffectText on AppLocalizations {
   String effectName(LightingEffect effect) => switch (effect.id) {
         'fireplace' => effectNameFireplace,
+        'candlelit_dinner' => effectNameCandlelitDinner,
+        'game_night' => effectNameGameNight,
+        'reading_light' => effectNameReadingLight,
+        'aperitivo' => effectNameAperitivo,
+        'guests_arriving' => effectNameGuestsArriving,
         'ocean' => effectNameOcean,
         'aurora' => effectNameAurora,
         'sunset' => effectNameSunset,
@@ -142,6 +147,11 @@ extension EffectText on AppLocalizations {
 
   String effectDescription(LightingEffect effect) => switch (effect.id) {
         'fireplace' => effectDescriptionFireplace,
+        'candlelit_dinner' => effectDescriptionCandlelitDinner,
+        'game_night' => effectDescriptionGameNight,
+        'reading_light' => effectDescriptionReadingLight,
+        'aperitivo' => effectDescriptionAperitivo,
+        'guests_arriving' => effectDescriptionGuestsArriving,
         'ocean' => effectDescriptionOcean,
         'aurora' => effectDescriptionAurora,
         'sunset' => effectDescriptionSunset,
@@ -201,6 +211,7 @@ extension EffectText on AppLocalizations {
   String? collectionName(LightingEffect effect) => switch (effect.collection) {
         null => null,
         'Relax' => collectionRelax,
+        'Occasions' => collectionOccasions,
         'Nature' => collectionNature,
         'Party' => collectionParty,
         'Magic & Fantasy' => collectionMagicFantasy,

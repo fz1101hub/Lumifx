@@ -29,7 +29,15 @@ import 'package:lumifx/src/features/timers/interval_training.dart';
 import 'package:lumifx/src/features/timers/interval_training_screen.dart';
 import 'package:lumifx/src/features/timers/light_clock.dart';
 import 'package:lumifx/src/features/calm/feelings.dart';
+import 'package:lumifx/src/features/fun/board_game.dart';
+import 'package:lumifx/src/features/fun/board_game_screen.dart';
+import 'package:lumifx/src/features/fun/goal.dart';
+import 'package:lumifx/src/features/fun/hide_and_seek.dart';
+import 'package:lumifx/src/features/fun/hide_and_seek_screen.dart';
+import 'package:lumifx/src/features/fun/goal_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon.dart';
+import 'package:lumifx/src/features/bedtime/tooth_fairy.dart';
+import 'package:lumifx/src/features/bedtime/tooth_fairy_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon_screen.dart';
 import 'package:lumifx/src/features/calm/feelings_screen.dart';
 import 'package:lumifx/src/features/timers/light_clock_screen.dart';
@@ -1512,6 +1520,138 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the tooth fairy comes at dawn and leaves a magic star',
+      (tester) async {
+    var now = DateTime(2026, 6, 15, 20);
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, clock: () => now, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const ToothFairyScreen())));
+    await tester.pumpAndSettle();
+    final scope = AppScope.of(tester.element(find.byType(ToothFairyScreen)));
+    await tester.tap(find.text('The fairy will come tonight'));
+    await tester.pumpAndSettle();
+    expect(scope.preferences.toothFairy?.at, DateTime(2026, 6, 16, 6));
+    expect(find.text('The fairy is coming at 6:00 AM'), findsOneWidget);
+
+    // The next morning.
+    now = DateTime(2026, 6, 16, 7, 30);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const ToothFairyScreen())));
+    await tester.pumpAndSettle();
+    expect(find.text('The tooth fairy came!'), findsOneWidget);
+    await tester.tap(find.text('Read her message'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(speaker.spoken.last.$1, startsWith('Dear friend, thank you'));
+    expect(scope.preferences.stars, contains('2026-06-16:toothfairy'));
+    expect(scope.preferences.toothFairy, isNull);
+    expect(scope.playback.effect.id, ToothFairy.id);
+    await scope.playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('hide and seek counts aloud as the lamps dim, then searches',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const HideAndSeekScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ChoiceChip, '10'));
+    await tester.pump();
+    await tester.tap(find.text('Start counting'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    final playback =
+        AppScope.of(tester.element(find.byType(HideAndSeekScreen))).playback;
+    expect(HideAndSeek.countOf(playback.effect), 10);
+    expect(speaker.spoken.last.$1, '1');
+    playback.player!.advance(const Duration(seconds: 4));
+    await tester.pump();
+    await tester.pump();
+    expect(speaker.spoken.last.$1, '5');
+    playback.player!.advance(const Duration(seconds: 6));
+    await tester.pump();
+    await tester.pump();
+    expect(speaker.spoken.last.$1, 'Ready or not, here I come!');
+    await tester.tap(find.text('Found everyone!'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(speaker.spoken.last.$1, startsWith('Found you all'));
+    await playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the referee shows whose turn it is and rolls a light die',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => BoardGameScreen(random: math.Random(1)))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ChoiceChip, '3'));
+    await tester.pump();
+    await tester.tap(find.text('Start the game'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(BoardGameScreen))).playback;
+    expect(BoardGame.of(playback.effect)?.player, 0);
+    expect(find.text("Red's turn!"), findsOneWidget);
+    expect(speaker.spoken.last.$1, "Red's turn!");
+
+    await tester.tap(find.text('Next turn'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(BoardGame.of(playback.effect)?.player, 1);
+    expect(speaker.spoken.last.$1, "Blue's turn!");
+
+    await tester.tap(find.text('Roll the die'));
+    await tester.pump();
+    final rolled = int.parse(speaker.spoken.last.$1);
+    expect(rolled, inInclusiveRange(1, 6));
+    await tester.pump(const Duration(seconds: 4));
+    await tester.tap(find.text('Stop'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a goal bursts in the team chosen, also from a link',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const GoalScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Brazil'));
+    await tester.pump();
+    await tester.tap(find.text('GOAL!'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final scope = AppScope.of(tester.element(find.byType(GoalScreen)));
+    expect(Goal.colorsOf(scope.playback.effect), GoalTeam.brazil.colors);
+    expect(scope.preferences.goalTeam, 'brazil');
+    await scope.playback.stop(restore: false);
+    await tester.pump(const Duration(seconds: 1));
+
+    // From a link, as from an NFC sticker: the team chosen last.
+    final message = const JSONMethodCodec().encodeMethodCall(
+      const MethodCall(
+          'pushRouteInformation', {'location': 'lumifx://app/goal'}),
+    );
+    await tester.binding.defaultBinaryMessenger
+        .handlePlatformMessage(SystemChannels.navigation.name, message, (_) {});
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Goal.colorsOf(scope.playback.effect), GoalTeam.brazil.colors);
+    expect(scope.playback.status, PlaybackStatus.playing);
+    await scope.playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 

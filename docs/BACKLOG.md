@@ -10,23 +10,23 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 1 | Light clock: lamps turn green, yellow, red as a set time nears ("time to leave", "dinner in 10 minutes"), for children who cannot read the time | done (PR pending) |
-| 2 | Light reminders on the bridge: a room takes a colour at set times and days (recycling, medicine, plants), with the phone off | done (PR pending) |
-| 3 | Night safety switch-off on the bridge: at a set time, the chosen rooms fade out and switch off | done (PR pending) |
-| 4 | Feelings thermometer: a child taps how they feel, the room takes that colour and the voice suggests what helps | done (PR pending) |
-| 5 | Tonight's moon: the real moon phase, worked out on the phone, shown by the lamps with a sentence before bed | done (PR pending) |
-| 6 | Interval training: work, rest and the last seconds in light (HIIT, tabata, stretching) | done (PR pending) |
-| 6b | Words and lights in sync: narration, read-aloud and cause-and-effect games (piano, games) answer with as little delay as possible | done (PR pending) |
+| 1 | Light clock: lamps turn green, yellow, red as a set time nears ("time to leave", "dinner in 10 minutes"), for children who cannot read the time | done (#23) |
+| 2 | Light reminders on the bridge: a room takes a colour at set times and days (recycling, medicine, plants), with the phone off | done (#23) |
+| 3 | Night safety switch-off on the bridge: at a set time, the chosen rooms fade out and switch off | done (#23) |
+| 4 | Feelings thermometer: a child taps how they feel, the room takes that colour and the voice suggests what helps | done (#23) |
+| 5 | Tonight's moon: the real moon phase, worked out on the phone, shown by the lamps with a sentence before bed | done (#23) |
+| 6 | Interval training: work, rest and the last seconds in light (HIIT, tabata, stretching) | done (#23) |
+| 6b | Words and lights in sync: narration, read-aloud and cause-and-effect games (piano, games) answer with as little delay as possible | done (#23) |
 
 ## Round 10: fun and occasions
 
 | # | Feature | Status |
 |---|---------|--------|
-| 7 | Goal! A button (also a link, widget, NFC) bursts the room into a team's colours; ready-made teams and your own | todo |
-| 8 | The tooth fairy's visit: a soft magic glow near dawn, a message in the morning, a special star | todo |
-| 9 | Moods for occasions: candlelit dinner, game night, reading, aperitivo, "guests in 10 minutes" | todo |
-| 10 | Board game referee: whose turn it is in their colour, a light die, a turn timer | todo |
-| 11 | Hide and seek: the lights dim while the seeker counts, then "Ready or not, here I come!" | todo |
+| 7 | Goal! A button (also a link, widget, NFC) bursts the room into a team's colours; ready-made teams and your own | done (PR pending) |
+| 8 | The tooth fairy's visit: a soft magic glow near dawn, a message in the morning, a special star | done (PR pending) |
+| 9 | Moods for occasions: candlelit dinner, game night, reading, aperitivo, "guests in 10 minutes" | done (PR pending) |
+| 10 | Board game referee: whose turn it is in their colour, a light die, a turn timer | done (PR pending) |
+| 11 | Hide and seek: the lights dim while the seeker counts, then "Ready or not, here I come!" | done (PR pending) |
 
 ## Round 11: playing and learning
 
