@@ -1399,5 +1399,11 @@
   "sceneFromWordsTitle": "Beschreibe eine Szene",
   "sceneFromWordsHint": "Wald bei Sonnenuntergang",
   "sceneFromWordsMake": "Erstellen",
-  "sceneFromWordsUnknown": "Diese Wörter kenne ich noch nicht: Versuch es mit einem Ort, einer Tageszeit oder dem Wetter, etwa „Meer bei Nacht“."
+  "sceneFromWordsUnknown": "Diese Wörter kenne ich noch nicht: Versuch es mit einem Ort, einer Tageszeit oder dem Wetter, etwa „Meer bei Nacht“.",
+  "lightBoard": "Lichttafel",
+  "lightBoardSubtitle": "Male die Lampen des Raums mit dem Finger an",
+  "lightBoardDescription": "Wähle eine Farbe und fahre mit dem Finger über die Lampen: Jede nimmt die Farbe an, mit der sie bemalt wird. Die Lampen stehen dort, wo dein Entertainment-Bereich sie platziert hat, die anderen im Kreis.",
+  "lightBoardFill": "Alle anmalen",
+  "lightBoardOff": "Aus",
+  "lightBoardNoLights": "Dieser Raum hat keine Lampen."
 }

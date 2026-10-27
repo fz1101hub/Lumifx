@@ -5825,5 +5825,29 @@
   "sceneFromWordsUnknown": "I don't know those words yet: try a place, a time of day or the weather, like \"sea at night\".",
   "@sceneFromWordsUnknown": {
     "description": "Scene from words: no word was recognised"
+  },
+  "lightBoard": "Light board",
+  "@lightBoard": {
+    "description": "Home: paint the lamps of a room with a finger"
+  },
+  "lightBoardSubtitle": "Paint the room's lamps with a finger",
+  "@lightBoardSubtitle": {
+    "description": "Home: what the light board does"
+  },
+  "lightBoardDescription": "Pick a colour and run your finger over the lamps: each one takes the colour it is painted with. Lamps sit where your entertainment area put them, the others in a ring.",
+  "@lightBoardDescription": {
+    "description": "Light board: how it works"
+  },
+  "lightBoardFill": "Paint them all",
+  "@lightBoardFill": {
+    "description": "Light board: paint every lamp at once"
+  },
+  "lightBoardOff": "Off",
+  "@lightBoardOff": {
+    "description": "Light board: the colour that switches a lamp off"
+  },
+  "lightBoardNoLights": "This room has no lamps.",
+  "@lightBoardNoLights": {
+    "description": "Light board: the room has no lamps"
   }
 }

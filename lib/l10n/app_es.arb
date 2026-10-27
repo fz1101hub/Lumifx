@@ -1399,5 +1399,11 @@
   "sceneFromWordsTitle": "Describe una escena",
   "sceneFromWordsHint": "Bosque al atardecer",
   "sceneFromWordsMake": "Crear",
-  "sceneFromWordsUnknown": "Aún no conozco esas palabras: prueba con un lugar, un momento del día o el tiempo, como «mar de noche»."
+  "sceneFromWordsUnknown": "Aún no conozco esas palabras: prueba con un lugar, un momento del día o el tiempo, como «mar de noche».",
+  "lightBoard": "Pizarra de luz",
+  "lightBoardSubtitle": "Pinta las luces de la habitación con el dedo",
+  "lightBoardDescription": "Elige un color y pasa el dedo por las luces: cada una toma el color con el que la pintas. Las luces están donde las puso tu área de entretenimiento; las demás, en círculo.",
+  "lightBoardFill": "Pintarlas todas",
+  "lightBoardOff": "Apagada",
+  "lightBoardNoLights": "Esta habitación no tiene luces."
 }

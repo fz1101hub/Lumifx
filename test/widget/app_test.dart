@@ -4140,6 +4140,50 @@ void streamingTests() {
     expect(puts, contains('/clip/v2/resource/behavior_instance/w1'));
   });
 
+  testWidgets('the light board paints a lamp with a finger', (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Light board'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light board'));
+    await tester.pumpAndSettle();
+    expect(find.text('Living room'), findsOneWidget);
+    await tester.ensureVisible(find.bySemanticsLabel('Sofa'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.bySemanticsLabel('Sofa'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pump();
+    expect(puts.where((p) => p == '/clip/v2/resource/light/l1'), hasLength(1));
+
+    // The same paint again sends nothing; off does.
+    await tester.runAsync(() async {
+      await tester.tap(find.bySemanticsLabel('Sofa'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    expect(puts.where((p) => p == '/clip/v2/resource/light/l1'), hasLength(1));
+    await tester.ensureVisible(find.bySemanticsLabel('Off'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Off'));
+    await tester.pump();
+    await tester.ensureVisible(find.text('Paint them all'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Paint them all'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    expect(puts.where((p) => p == '/clip/v2/resource/light/l1'), hasLength(2));
+  });
+
   testWidgets('rooms list the Hue scenes of each group and recall them',
       (tester) async {
     final puts = <String>[];

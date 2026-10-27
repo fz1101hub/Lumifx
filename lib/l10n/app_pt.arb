@@ -1399,5 +1399,11 @@
   "sceneFromWordsTitle": "Descreva uma cena",
   "sceneFromWordsHint": "Floresta ao pôr do sol",
   "sceneFromWordsMake": "Criar",
-  "sceneFromWordsUnknown": "Ainda não conheço essas palavras: tente um lugar, uma hora do dia ou o tempo, como \"mar à noite\"."
+  "sceneFromWordsUnknown": "Ainda não conheço essas palavras: tente um lugar, uma hora do dia ou o tempo, como \"mar à noite\".",
+  "lightBoard": "Lousa de luz",
+  "lightBoardSubtitle": "Pinte as luzes do cômodo com o dedo",
+  "lightBoardDescription": "Escolha uma cor e passe o dedo pelas luzes: cada uma fica com a cor com que é pintada. As luzes ficam onde a sua área de entretenimento as colocou; as outras, em círculo.",
+  "lightBoardFill": "Pintar todas",
+  "lightBoardOff": "Apagada",
+  "lightBoardNoLights": "Este cômodo não tem luzes."
 }

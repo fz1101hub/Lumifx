@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
+import '../board/light_board_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
@@ -225,6 +226,8 @@ class HomeScreen extends StatelessWidget {
                       () => const AutomationsCalendarScreen()),
                   _HomeEntry(Icons.house_outlined, l10n.house,
                       l10n.houseSubtitle, () => const HouseScreen()),
+                  _HomeEntry(Icons.brush_outlined, l10n.lightBoard,
+                      l10n.lightBoardSubtitle, () => const LightBoardScreen()),
                   _HomeEntry(
                       Icons.health_and_safety_outlined,
                       l10n.lightHealth,

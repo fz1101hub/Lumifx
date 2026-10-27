@@ -1399,5 +1399,11 @@
   "sceneFromWordsTitle": "Descrivi una scena",
   "sceneFromWordsHint": "Bosco al tramonto",
   "sceneFromWordsMake": "Crea",
-  "sceneFromWordsUnknown": "Non conosco ancora queste parole: prova con un luogo, un momento del giorno o il tempo, come \"mare di notte\"."
+  "sceneFromWordsUnknown": "Non conosco ancora queste parole: prova con un luogo, un momento del giorno o il tempo, come \"mare di notte\".",
+  "lightBoard": "Lavagna luminosa",
+  "lightBoardSubtitle": "Dipingi le lampade della stanza con un dito",
+  "lightBoardDescription": "Scegli un colore e passa il dito sulle lampade: ognuna prende il colore con cui la dipingi. Le lampade stanno dove le ha messe la tua area di intrattenimento, le altre in cerchio.",
+  "lightBoardFill": "Dipingile tutte",
+  "lightBoardOff": "Spenta",
+  "lightBoardNoLights": "Questa stanza non ha lampade."
 }

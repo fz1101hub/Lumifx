@@ -1399,5 +1399,11 @@
   "sceneFromWordsTitle": "Beschrijf een scène",
   "sceneFromWordsHint": "Bos bij zonsondergang",
   "sceneFromWordsMake": "Maken",
-  "sceneFromWordsUnknown": "Die woorden ken ik nog niet: probeer een plek, een moment van de dag of het weer, zoals \"zee bij nacht\"."
+  "sceneFromWordsUnknown": "Die woorden ken ik nog niet: probeer een plek, een moment van de dag of het weer, zoals \"zee bij nacht\".",
+  "lightBoard": "Lichtbord",
+  "lightBoardSubtitle": "Schilder de lampen van de kamer met je vinger",
+  "lightBoardDescription": "Kies een kleur en ga met je vinger over de lampen: elke lamp krijgt de kleur waarmee je hem schildert. De lampen staan waar je entertainmentruimte ze zette, de andere in een kring.",
+  "lightBoardFill": "Allemaal schilderen",
+  "lightBoardOff": "Uit",
+  "lightBoardNoLights": "Deze kamer heeft geen lampen."
 }

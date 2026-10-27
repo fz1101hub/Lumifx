@@ -1399,5 +1399,11 @@
   "sceneFromWordsTitle": "Décrivez une scène",
   "sceneFromWordsHint": "Forêt au coucher du soleil",
   "sceneFromWordsMake": "Créer",
-  "sceneFromWordsUnknown": "Je ne connais pas encore ces mots : essayez un lieu, un moment de la journée ou la météo, comme « la mer la nuit »."
+  "sceneFromWordsUnknown": "Je ne connais pas encore ces mots : essayez un lieu, un moment de la journée ou la météo, comme « la mer la nuit ».",
+  "lightBoard": "Tableau lumineux",
+  "lightBoardSubtitle": "Peignez les lampes de la pièce du bout du doigt",
+  "lightBoardDescription": "Choisissez une couleur et passez le doigt sur les lampes : chacune prend la couleur dont elle est peinte. Les lampes sont placées comme dans votre zone de divertissement, les autres en cercle.",
+  "lightBoardFill": "Tout peindre",
+  "lightBoardOff": "Éteinte",
+  "lightBoardNoLights": "Cette pièce n'a pas de lampe."
 }

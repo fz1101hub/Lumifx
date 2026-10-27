@@ -1399,5 +1399,11 @@
   "sceneFromWordsTitle": "シーンをことばで",
   "sceneFromWordsHint": "夕焼けの森",
   "sceneFromWordsMake": "つくる",
-  "sceneFromWordsUnknown": "そのことばはまだわかりません。場所や時間、天気をためしてください（例：「夜の海」）。"
+  "sceneFromWordsUnknown": "そのことばはまだわかりません。場所や時間、天気をためしてください（例：「夜の海」）。",
+  "lightBoard": "ひかりのお絵かき",
+  "lightBoardSubtitle": "指で部屋のライトに色をぬろう",
+  "lightBoardDescription": "色をえらんで、ライトの上を指でなぞってね。なぞったライトがその色になります。エンタメエリアがあればその配置、ほかのライトは輪になってならびます。",
+  "lightBoardFill": "ぜんぶぬる",
+  "lightBoardOff": "けす",
+  "lightBoardNoLights": "この部屋にはライトがありません。"
 }
