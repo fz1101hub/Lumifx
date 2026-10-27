@@ -1374,5 +1374,19 @@
   "reportBedtimeAverage": "In media alle {time}",
   "reportBedtimeRange": "Tra le {earliest} e le {latest}",
   "reportBedtimeNights": "{count, plural, =1{Annotata 1 sera} other{Annotata {count} sere}}",
-  "reportNoBedtimes": "Nessuna nanna annotata ancora questa settimana."
+  "reportNoBedtimes": "Nessuna nanna annotata ancora questa settimana.",
+  "lightHealth": "Controllo luci",
+  "lightHealthSubtitle": "Lampade irraggiungibili, segnale debole, aggiornamenti",
+  "lightHealthDescription": "Cosa sa il bridge di ogni lampada e cosa fare quando qualcosa non va. Trascina in basso per ricontrollare.",
+  "lightHealthAllFine": "{count, plural, =1{La lampada sta bene} other{Tutte le {count} lampade stanno bene}}",
+  "lightHealthProblems": "{count, plural, =1{1 lampada da controllare} other{{count} lampade da controllare}}",
+  "lightHealthFine": "Tutto ok",
+  "lightIssueUnreachable": "Non raggiungibile",
+  "lightIssueUnreachableAdvice": "Controlla che sia accesa dall'interruttore a muro: spenta da lì non sente il bridge. Se è accesa, spegnila e riaccendila.",
+  "lightIssueWeakSignal": "Segnale debole",
+  "lightIssueWeakSignalAdvice": "È lontana dal bridge e dalle altre lampade: avvicina il bridge, o aggiungi una lampada o una presa smart Hue a metà strada.",
+  "lightIssueUpdate": "Aggiornamento pronto",
+  "lightIssueUpdateAdvice": "C'è un firmware più recente: installalo dall'app Hue, in Impostazioni › Aggiornamento software.",
+  "lightHealthBridgeUpdate": "Il bridge ha un aggiornamento pronto: installalo dall'app Hue, in Impostazioni › Aggiornamento software.",
+  "lightHealthFailed": "Impossibile controllare le lampade: {error}"
 }

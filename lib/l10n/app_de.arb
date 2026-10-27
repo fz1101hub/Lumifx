@@ -1374,5 +1374,19 @@
   "reportBedtimeAverage": "Im Schnitt um {time}",
   "reportBedtimeRange": "Zwischen {earliest} und {latest}",
   "reportBedtimeNights": "{count, plural, =1{An 1 Abend notiert} other{An {count} Abenden notiert}}",
-  "reportNoBedtimes": "Diese Woche noch keine Schlafenszeit notiert."
+  "reportNoBedtimes": "Diese Woche noch keine Schlafenszeit notiert.",
+  "lightHealth": "Lampen-Check",
+  "lightHealthSubtitle": "Unerreichbare Lampen, schwaches Signal, Updates",
+  "lightHealthDescription": "Was die Bridge über jede Lampe weiß und was zu tun ist, wenn etwas nicht stimmt. Zum erneuten Prüfen nach unten ziehen.",
+  "lightHealthAllFine": "{count, plural, =1{Die Lampe ist in Ordnung} other{Alle {count} Lampen sind in Ordnung}}",
+  "lightHealthProblems": "{count, plural, =1{1 Lampe braucht Aufmerksamkeit} other{{count} Lampen brauchen Aufmerksamkeit}}",
+  "lightHealthFine": "Alles gut",
+  "lightIssueUnreachable": "Nicht erreichbar",
+  "lightIssueUnreachableAdvice": "Prüfe, ob sie am Wandschalter eingeschaltet ist: Dort ausgeschaltet hört sie die Bridge nicht. Ist sie an, schalte sie aus und wieder ein.",
+  "lightIssueWeakSignal": "Schwaches Signal",
+  "lightIssueWeakSignalAdvice": "Sie ist weit von der Bridge und den anderen Lampen entfernt: Stelle die Bridge näher oder setze eine Hue-Lampe oder einen Smart Plug dazwischen.",
+  "lightIssueUpdate": "Update bereit",
+  "lightIssueUpdateAdvice": "Neuere Firmware ist bereit: Installiere sie in der Hue App unter Einstellungen › Software-Update.",
+  "lightHealthBridgeUpdate": "Für die Bridge ist ein Update bereit: Installiere es in der Hue App unter Einstellungen › Software-Update.",
+  "lightHealthFailed": "Die Lampen konnten nicht geprüft werden: {error}"
 }

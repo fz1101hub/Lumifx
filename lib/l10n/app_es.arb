@@ -1374,5 +1374,19 @@
   "reportBedtimeAverage": "De media a las {time}",
   "reportBedtimeRange": "Entre las {earliest} y las {latest}",
   "reportBedtimeNights": "{count, plural, =1{Anotada 1 noche} other{Anotada {count} noches}}",
-  "reportNoBedtimes": "Aún no hay horas de dormir anotadas esta semana."
+  "reportNoBedtimes": "Aún no hay horas de dormir anotadas esta semana.",
+  "lightHealth": "Revisión de luces",
+  "lightHealthSubtitle": "Luces inaccesibles, señal débil, actualizaciones",
+  "lightHealthDescription": "Lo que el puente sabe de cada luz y qué hacer cuando algo va mal. Desliza hacia abajo para volver a comprobar.",
+  "lightHealthAllFine": "{count, plural, =1{La luz está bien} other{Las {count} luces están bien}}",
+  "lightHealthProblems": "{count, plural, =1{1 luz necesita revisión} other{{count} luces necesitan revisión}}",
+  "lightHealthFine": "Todo bien",
+  "lightIssueUnreachable": "No se puede alcanzar",
+  "lightIssueUnreachableAdvice": "Comprueba que esté encendida en el interruptor de pared: apagada ahí no oye al puente. Si está encendida, apágala y vuelve a encenderla.",
+  "lightIssueWeakSignal": "Señal débil",
+  "lightIssueWeakSignalAdvice": "Está lejos del puente y de las otras luces: acerca el puente o añade una luz o un enchufe inteligente Hue a medio camino.",
+  "lightIssueUpdate": "Actualización lista",
+  "lightIssueUpdateAdvice": "Hay un firmware más reciente: instálalo desde la app Hue, en Ajustes › Actualización de software.",
+  "lightHealthBridgeUpdate": "El puente tiene una actualización lista: instálala desde la app Hue, en Ajustes › Actualización de software.",
+  "lightHealthFailed": "No se pudieron revisar las luces: {error}"
 }

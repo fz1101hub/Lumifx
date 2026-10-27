@@ -1374,5 +1374,19 @@
   "reportBedtimeAverage": "平均 {time}",
   "reportBedtimeRange": "{earliest}〜{latest}",
   "reportBedtimeNights": "{count, plural, other{{count}晩記録}}",
-  "reportNoBedtimes": "今週はまだおやすみの記録がありません。"
+  "reportNoBedtimes": "今週はまだおやすみの記録がありません。",
+  "lightHealth": "ライトの点検",
+  "lightHealthSubtitle": "つながらないライト、弱い電波、アップデート",
+  "lightHealthDescription": "ブリッジが知っている各ライトの状態と、問題があるときの対処法。下に引くと再確認します。",
+  "lightHealthAllFine": "{count, plural, other{{count}台のライトはすべて正常です}}",
+  "lightHealthProblems": "{count, plural, other{確認が必要なライト：{count}台}}",
+  "lightHealthFine": "正常",
+  "lightIssueUnreachable": "つながりません",
+  "lightIssueUnreachableAdvice": "壁のスイッチがオンか確認してください。そこで切れているとブリッジの声が届きません。オンなら、一度切ってもう一度入れてください。",
+  "lightIssueWeakSignal": "電波が弱い",
+  "lightIssueWeakSignalAdvice": "ブリッジやほかのライトから遠すぎます。ブリッジを近づけるか、間にHueのライトかスマートプラグを置いてください。",
+  "lightIssueUpdate": "アップデートあり",
+  "lightIssueUpdateAdvice": "新しいファームウェアがあります。Hueアプリの「設定 › ソフトウェアアップデート」からインストールしてください。",
+  "lightHealthBridgeUpdate": "ブリッジのアップデートがあります。Hueアプリの「設定 › ソフトウェアアップデート」からインストールしてください。",
+  "lightHealthFailed": "ライトを確認できませんでした：{error}"
 }

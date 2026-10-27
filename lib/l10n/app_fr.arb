@@ -1374,5 +1374,19 @@
   "reportBedtimeAverage": "En moyenne à {time}",
   "reportBedtimeRange": "Entre {earliest} et {latest}",
   "reportBedtimeNights": "{count, plural, =1{Notée 1 soir} other{Notée {count} soirs}}",
-  "reportNoBedtimes": "Aucun dodo noté cette semaine pour l'instant."
+  "reportNoBedtimes": "Aucun dodo noté cette semaine pour l'instant.",
+  "lightHealth": "Bilan des lampes",
+  "lightHealthSubtitle": "Lampes injoignables, signal faible, mises à jour",
+  "lightHealthDescription": "Ce que le pont sait de chaque lampe, et que faire quand quelque chose ne va pas. Tirez vers le bas pour vérifier à nouveau.",
+  "lightHealthAllFine": "{count, plural, =1{La lampe va bien} other{Les {count} lampes vont bien}}",
+  "lightHealthProblems": "{count, plural, =1{1 lampe à vérifier} other{{count} lampes à vérifier}}",
+  "lightHealthFine": "Tout va bien",
+  "lightIssueUnreachable": "Injoignable",
+  "lightIssueUnreachableAdvice": "Vérifiez qu'elle est allumée à l'interrupteur mural : éteinte là, elle n'entend pas le pont. Si elle est allumée, éteignez-la et rallumez-la.",
+  "lightIssueWeakSignal": "Signal faible",
+  "lightIssueWeakSignalAdvice": "Elle est loin du pont et des autres lampes : rapprochez le pont, ou ajoutez une lampe ou une prise connectée Hue entre les deux.",
+  "lightIssueUpdate": "Mise à jour prête",
+  "lightIssueUpdateAdvice": "Un micrologiciel plus récent est prêt : installez-le depuis l'app Hue, dans Réglages › Mise à jour du logiciel.",
+  "lightHealthBridgeUpdate": "Une mise à jour du pont est prête : installez-la depuis l'app Hue, dans Réglages › Mise à jour du logiciel.",
+  "lightHealthFailed": "Impossible de vérifier les lampes : {error}"
 }

@@ -1374,5 +1374,19 @@
   "reportBedtimeAverage": "Gemiddeld om {time}",
   "reportBedtimeRange": "Tussen {earliest} en {latest}",
   "reportBedtimeNights": "{count, plural, =1{Op 1 avond genoteerd} other{Op {count} avonden genoteerd}}",
-  "reportNoBedtimes": "Deze week nog geen bedtijd genoteerd."
+  "reportNoBedtimes": "Deze week nog geen bedtijd genoteerd.",
+  "lightHealth": "Lampencontrole",
+  "lightHealthSubtitle": "Onbereikbare lampen, zwak signaal, updates",
+  "lightHealthDescription": "Wat de bridge van elke lamp weet, en wat te doen als er iets mis is. Trek omlaag om opnieuw te controleren.",
+  "lightHealthAllFine": "{count, plural, =1{De lamp is in orde} other{Alle {count} lampen zijn in orde}}",
+  "lightHealthProblems": "{count, plural, =1{1 lamp vraagt aandacht} other{{count} lampen vragen aandacht}}",
+  "lightHealthFine": "Alles goed",
+  "lightIssueUnreachable": "Niet bereikbaar",
+  "lightIssueUnreachableAdvice": "Controleer of hij aan staat bij de wandschakelaar: daar uitgezet hoort hij de bridge niet. Staat hij aan, zet hem dan uit en weer aan.",
+  "lightIssueWeakSignal": "Zwak signaal",
+  "lightIssueWeakSignalAdvice": "Hij staat ver van de bridge en de andere lampen: zet de bridge dichterbij, of plaats een Hue-lamp of slimme stekker ertussen.",
+  "lightIssueUpdate": "Update klaar",
+  "lightIssueUpdateAdvice": "Nieuwere firmware staat klaar: installeer die in de Hue-app, bij Instellingen › Software-update.",
+  "lightHealthBridgeUpdate": "Er staat een update klaar voor de bridge: installeer die in de Hue-app, bij Instellingen › Software-update.",
+  "lightHealthFailed": "De lampen konden niet worden gecontroleerd: {error}"
 }

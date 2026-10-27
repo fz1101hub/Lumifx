@@ -3907,6 +3907,27 @@ Future<BridgeController> _connectedBridge(
                 'status': 'enabled',
               },
             });
+          case '/api/key/lights':
+            return json({
+              '1': {
+                'name': 'Sofa',
+                'productname': 'Hue color lamp',
+                'swversion': '1.104.2',
+                'uniqueid': '00:17:88:01:00:00:00:01-0b',
+                'state': {'on': true, 'reachable': true},
+                'swupdate': {'state': 'noupdates'},
+              },
+              '2': {
+                'name': 'Porch',
+                'uniqueid': '00:17:88:01:00:00:00:02-0b',
+                'state': {'on': false, 'reachable': false},
+                'swupdate': {'state': 'noupdates'},
+              },
+            });
+          case '/api/key/config':
+            return json({
+              'swupdate2': {'state': 'anyreadytoinstall'},
+            });
           case '/clip/v2/resource/behavior_script':
             return json({
               'data': [
@@ -4012,6 +4033,34 @@ Future<BridgeController> _connectedBridge(
 }
 
 void streamingTests() {
+  testWidgets('the light health check shows the lamps and what to do',
+      (tester) async {
+    final bridge = await _connectedBridge(tester);
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Light health check'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light health check'));
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)));
+    await tester.pumpAndSettle();
+    expect(find.text('1 lamp needs a look'), findsOneWidget);
+    expect(
+        find.textContaining('The bridge has an update ready'), findsOneWidget);
+    expect(find.text("Can't be reached"), findsOneWidget);
+    expect(find.textContaining('switched on at the wall'), findsOneWidget);
+    expect(find.text('Hue color lamp · 1.104.2'), findsOneWidget);
+    expect(tester.getTopLeft(find.text('Porch')).dy,
+        lessThan(tester.getTopLeft(find.text('Sofa')).dy),
+        reason: 'lamps with a problem first');
+  });
+
   testWidgets('rooms list the Hue scenes of each group and recall them',
       (tester) async {
     final puts = <String>[];
