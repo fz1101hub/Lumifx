@@ -15,6 +15,8 @@
 ///                                              effect, playlist, "stop"
 ///                                              or "bedtime", any language
 ///   lumifx://app/import?d=…                    add shared scenes/playlists
+///   lumifx://app/tune?n=…&d=…                  add a tune played on the
+///                                              light piano
 ///   lumifx://app/go/ritual                     open a screen (see
 ///                                              [AppScreen]): the bedtime
 ///                                              ritual, the routines…
@@ -74,6 +76,10 @@ sealed class AppLink {
       case ['import']:
         final data = param('d');
         return data == null ? null : ImportLink(data);
+      case ['tune']:
+        final name = param('n');
+        final data = param('d');
+        return name == null || data == null ? null : TuneLink(name, data);
     }
     return null;
   }
@@ -96,6 +102,14 @@ sealed class AppLink {
   static String get goal => '$scheme://app/goal';
 
   static String import(String data) => '$scheme://app/import?d=$data';
+
+  /// The link that shares a tune of the light piano.
+  static String tune(String name, String data) => Uri(
+        scheme: scheme,
+        host: 'app',
+        path: '/tune',
+        queryParameters: {'n': name, 'd': data},
+      ).toString();
 
   /// The link that opens [screen].
   static String go(AppScreen screen) => '$scheme://app/go/${screen.slug}';
@@ -130,7 +144,10 @@ enum AppScreen {
   goal('goal-party'),
   toothFairy('tooth-fairy'),
   boardGame('board-game'),
-  hideSeek('hide-and-seek');
+  hideSeek('hide-and-seek'),
+  farm('farm'),
+  sing('sing'),
+  weeklyReport('weekly-report');
 
   const AppScreen(this.slug);
 
@@ -198,4 +215,12 @@ class GoalLink extends AppLink {
   const GoalLink([this.team]);
 
   final String? team;
+}
+
+/// A tune played on the light piano, shared by someone.
+class TuneLink extends AppLink {
+  const TuneLink(this.name, this.data);
+
+  final String name;
+  final String data;
 }

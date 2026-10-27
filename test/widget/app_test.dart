@@ -33,6 +33,10 @@ import 'package:lumifx/src/features/fun/board_game.dart';
 import 'package:lumifx/src/features/fun/board_game_screen.dart';
 import 'package:lumifx/src/features/fun/goal.dart';
 import 'package:lumifx/src/features/fun/hide_and_seek.dart';
+import 'package:lumifx/src/features/learn/farm.dart';
+import 'package:lumifx/src/features/music/sing_colour.dart';
+import 'package:lumifx/src/features/music/sing_colour_screen.dart';
+import 'package:lumifx/src/features/learn/farm_screen.dart';
 import 'package:lumifx/src/features/fun/hide_and_seek_screen.dart';
 import 'package:lumifx/src/features/fun/goal_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon.dart';
@@ -92,6 +96,7 @@ import 'package:lumifx/src/features/paths/path_story_screen.dart';
 import 'package:lumifx/src/features/playlists/playlist.dart';
 import 'package:lumifx/src/features/routines/kid_routine.dart';
 import 'package:lumifx/src/features/routines/routines_screen.dart';
+import 'package:lumifx/src/features/routines/weekly_report_screen.dart';
 import 'package:lumifx/src/features/routines/star_shop_screen.dart';
 import 'package:lumifx/src/features/timers/light_timer.dart';
 import 'package:lumifx/src/features/timers/pomodoro_screen.dart';
@@ -1556,6 +1561,93 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('the weekly report shows the stars and bedtimes of the week',
+      (tester) async {
+    await _pumpApp(tester, clock: () => DateTime(2026, 10, 28, 9));
+    final preferences =
+        AppScope.of(tester.element(find.byType(HomeScreen))).preferences;
+    preferences
+      ..earnStar('2026-10-26:morning')
+      ..earnStar('2026-10-27:evening')
+      ..earnStar('2026-10-28:morning')
+      ..earnStar('2026-10-20:evening')
+      ..recordBedtime(DateTime(2026, 10, 26, 21))
+      ..recordBedtime(DateTime(2026, 10, 27, 21, 30));
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const WeeklyReportScreen())));
+    await tester.pumpAndSettle();
+    expect(find.text('3 stars this week'), findsOneWidget);
+    expect(find.text('Last week: 1'), findsOneWidget);
+    expect(find.text('Routines finished: 3'), findsOneWidget);
+    expect(find.text('On average at 9:15 PM'), findsOneWidget);
+    expect(find.text('Between 9:00 PM and 9:30 PM'), findsOneWidget);
+    expect(find.text('Noted on 2 evenings'), findsOneWidget);
+  });
+
+  testWidgets('a tune played on the piano is kept, played back and shared',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const LightPianoScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Record'));
+    await tester.pump();
+    for (final key in ['C', 'E', 'G']) {
+      await tester.tap(find.bySemanticsLabel(key).first);
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    await tester.tap(find.text('Stop recording'));
+    await tester.pump();
+    await tester.tap(find.text('Keep'));
+    await tester.pumpAndSettle();
+    expect(find.text('Name of your tune'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Keep'));
+    await tester.pumpAndSettle();
+    final scope = AppScope.of(tester.element(find.byType(LightPianoScreen)));
+    expect(scope.preferences.myTunes.single.name, 'My tune 1');
+    expect(scope.preferences.myTunes.single.notes, hasLength(3));
+    expect(find.text('My tunes'), findsOneWidget);
+
+    sound.calls.clear();
+    await tester.tap(find.text('My tune 1'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(sound.calls.where((c) => c.startsWith('note')), hasLength(3));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('My tune 1'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Share'));
+    await tester.pumpAndSettle();
+    expect(find.text('Copy link'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    await scope.playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light farm says each animal and asks who says it',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const FarmScreen(seed: 2))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Cow'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(FarmScreen))).playback;
+    expect(FarmAnimal.of(playback.effect), FarmAnimal.cow);
+    expect(speaker.spoken.last.$1, 'The cow says moo!');
+
+    await tester.tap(find.text('Quiz'));
+    await tester.pump();
+    expect(speaker.spoken.last.$1, startsWith('Who says'));
+    await playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('hide and seek counts aloud as the lamps dim, then searches',
       (tester) async {
     final speaker = _RecordingSpeaker();
@@ -1830,6 +1922,40 @@ void main() {
             .widget<ChoiceChip>(find.widgetWithText(ChoiceChip, '20 min'))
             .selected,
         isTrue);
+  });
+
+  testWidgets('a sung note lights the room in its colour', (tester) async {
+    // One second of a middle C.
+    const rate = 44100;
+    final sung = ByteData(rate * 2);
+    for (var i = 0; i < rate; i++) {
+      sung.setInt16(
+          i * 2,
+          (0.5 * 32767 * math.sin(2 * math.pi * 261.6 * i / rate)).round(),
+          Endian.little);
+    }
+    final microphone = FakeAudioInput(pcm: sung.buffer.asUint8List());
+    await _pumpApp(tester, audioInput: microphone);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const SingColourScreen())));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(SingColourScreen))).playback;
+    await tester.tap(find.text('Start singing'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(microphone.started, isTrue);
+    expect(PitchWatch.isSinging(playback.effect), isTrue);
+    expect(find.text('C'), findsOneWidget, reason: 'the note sung');
+    expect(find.text('Hold it to make it brighter!'), findsOneWidget);
+    // Middle C is halfway up: green, over the night blue.
+    final frame = playback.player!.currentFrames.first;
+    expect(frame.color.g, greaterThan(frame.color.r));
+
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(microphone.stopped, isTrue);
+    expect(find.text('Start singing'), findsOneWidget);
   });
 
   testWidgets('the noise light turns red when it gets too loud',

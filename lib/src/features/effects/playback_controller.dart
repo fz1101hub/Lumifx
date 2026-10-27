@@ -513,15 +513,16 @@ class PlaybackController extends ChangeNotifier {
   EffectPlayer? get player => _player;
 
   /// Every light (or only the one [at] along the room, 0 to 1) shows
-  /// [color] at once for [length], over the effect: a game's answer to a
-  /// tap. Nothing happens unless an effect plays.
+  /// [color] at once for [length] at [brightness], over the effect: a
+  /// game's answer to a tap. Nothing happens unless an effect plays.
   void flash(
     LightColor color, {
     Duration length = const Duration(milliseconds: 600),
     double? at,
+    double brightness = 1,
   }) {
     if (_status == PlaybackStatus.playing) {
-      _player?.flashNow(color, length: length, at: at);
+      _player?.flashNow(color, length: length, at: at, brightness: brightness);
     }
   }
 
@@ -687,6 +688,7 @@ class PlaybackController extends ChangeNotifier {
       return;
     }
     final now = DateTime.now();
+    _preferences.recordBedtime(now);
     _bedtime = _Bedtime(
       storyId: story.id,
       glowAt: now.add(storyFor),

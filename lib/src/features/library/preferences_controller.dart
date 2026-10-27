@@ -9,11 +9,13 @@ import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/weather/weather.dart';
 import '../bedtime/ritual.dart';
 import '../fun/countdown.dart';
+import '../music_box/my_tune.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
 import '../routines/child.dart';
 import '../routines/custom_step.dart';
 import '../routines/star_shop.dart';
+import '../routines/weekly_report.dart';
 import 'user_scene.dart';
 import 'user_story.dart';
 
@@ -236,7 +238,8 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
-  /// Removes a child with their stars, routine steps and spent stars.
+  /// Removes a child with their stars, routine steps, bedtimes and spent
+  /// stars.
   Future<void> removeChild(String id) {
     _children = [
       for (final c in _children)
@@ -250,6 +253,10 @@ class PreferencesController extends ChangeNotifier {
       for (final MapEntry(:key, :value) in _routineSteps.entries)
         if (!_belongsTo(key, id)) key: value,
     };
+    _bedtimes = [
+      for (final key in _bedtimes)
+        if (!_belongsTo(key, id)) key
+    ];
     _starsSpent = {..._starsSpent}..remove(id);
     if (_activeChild == id) {
       _activeChild = _children.firstOrNull?.id ?? '';
@@ -517,6 +524,33 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  var _myTunes = <MyTune>[];
+
+  /// The tunes kept from the light piano, newest last.
+  List<MyTune> get myTunes => List.unmodifiable(_myTunes);
+
+  /// Keeps [tune], replacing one of the same name; the oldest goes when
+  /// there are too many.
+  Future<void> saveTune(MyTune tune) {
+    _myTunes = [
+      for (final t in _myTunes)
+        if (t.name != tune.name) t,
+      tune,
+    ];
+    if (_myTunes.length > MyTune.maxTunes) {
+      _myTunes = _myTunes.sublist(_myTunes.length - MyTune.maxTunes);
+    }
+    return _changed();
+  }
+
+  Future<void> deleteTune(String name) {
+    _myTunes = [
+      for (final t in _myTunes)
+        if (t.name != name) t,
+    ];
+    return _changed();
+  }
+
   String? _toothFairy;
 
   /// The tooth fairy's visit planned: the child's id and the time, as
@@ -541,6 +575,46 @@ class PreferencesController extends ChangeNotifier {
             '${visit.at.millisecondsSinceEpoch ~/ Duration.millisecondsPerMinute}';
     return _changed();
   }
+
+  var _bedtimes = <String>[];
+
+  /// When bedtime started for [child] on the last evenings, oldest first
+  /// (one per evening, the last start).
+  List<DateTime> bedtimesOf(String child) => [
+        for (final key in _bedtimes)
+          if (_belongsTo(key, child))
+            if (int.tryParse(
+                    child.isEmpty ? key : key.substring(child.length + 1))
+                case final minutes?)
+              DateTime.fromMillisecondsSinceEpoch(
+                  minutes * Duration.millisecondsPerMinute),
+      ];
+
+  /// Notes that bedtime started at [at] for the active child (or [child]),
+  /// in place of an earlier start the same evening.
+  void recordBedtime(DateTime at, {String? child}) {
+    final id = child ?? activeChildId;
+    final evening = WeeklyReport.eveningOf(at);
+    final earlier = {
+      for (final t in bedtimesOf(id))
+        if (WeeklyReport.eveningOf(t) == evening)
+          _ofChild(id,
+              '${t.millisecondsSinceEpoch ~/ Duration.millisecondsPerMinute}'),
+    };
+    _bedtimes = [
+      for (final key in _bedtimes)
+        if (!earlier.contains(key)) key,
+      _ofChild(
+          id, '${at.millisecondsSinceEpoch ~/ Duration.millisecondsPerMinute}'),
+    ];
+    // Two months of evenings for each child.
+    if (_bedtimes.length > _maxBedtimes) {
+      _bedtimes = _bedtimes.sublist(_bedtimes.length - _maxBedtimes);
+    }
+    unawaited(_changed());
+  }
+
+  static const _maxBedtimes = 60 * Child.maxChildren;
 
   String? _goalTeam;
 
@@ -825,6 +899,20 @@ class PreferencesController extends ChangeNotifier {
       _pianoEchoBest = echo is int && echo > 0 && echo <= 100 ? echo : 0;
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
+      final tunes = json['myTunes'];
+      _myTunes = [
+        if (tunes is Map)
+          for (final MapEntry(:key, :value)
+              in tunes.entries.take(MyTune.maxTunes))
+            if (key is String && value is String)
+              if (MyTune.decode(key, value) case final tune?) tune,
+      ];
+      final bedtimes = json['bedtimes'];
+      _bedtimes = [
+        if (bedtimes is List)
+          for (final key in bedtimes.take(_maxBedtimes))
+            if (key is String && key.length <= 60) key,
+      ];
       final fairy = json['toothFairy'];
       _toothFairy = fairy is String && fairy.length <= 80 ? fairy : null;
       final goal = json['goalTeam'];
@@ -1121,6 +1209,8 @@ class PreferencesController extends ChangeNotifier {
       'speechVoices': _speechVoices,
       'goalTeam': _goalTeam,
       'toothFairy': _toothFairy,
+      'bedtimes': _bedtimes,
+      'myTunes': {for (final t in _myTunes) t.name: t.encoded},
       'noiseLimit': _noiseLimit,
       'teethTune': _teethTune,
       'naturalLights': _naturalLights,

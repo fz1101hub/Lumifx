@@ -5,6 +5,8 @@ import '../common/layout.dart';
 import '../learn/colour_mixing_screen.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting_screen.dart';
+import '../learn/farm_screen.dart';
+import '../music/sing_colour_screen.dart';
 import '../learn/morse_screen.dart';
 import 'advent_screen.dart';
 import '../music_box/light_piano_screen.dart';
@@ -85,6 +87,8 @@ class FunScreen extends StatelessWidget {
               () => const LightPianoScreen()),
           entry(Icons.thermostat, l10n.hotCold, l10n.hotColdSubtitle,
               () => const HotColdScreen()),
+          entry(Icons.mic_external_on_outlined, l10n.sing, l10n.singSubtitle,
+              () => const SingColourScreen()),
           entry(Icons.traffic_outlined, l10n.noiseLight,
               l10n.noiseLightSubtitle, () => const NoiseLightScreen()),
           entry(Icons.psychology_outlined, l10n.gameSimon,
@@ -93,6 +97,8 @@ class FunScreen extends StatelessWidget {
               l10n.countLightsSubtitle, () => const CountingScreen()),
           entry(Icons.translate, l10n.colourWords, l10n.colourWordsSubtitle,
               () => const ColourWordsScreen()),
+          entry(Icons.pets, l10n.farm, l10n.farmSubtitle,
+              () => const FarmScreen()),
           entry(Icons.palette_outlined, l10n.colourMixing,
               l10n.colourMixingSubtitle, () => const ColourMixingScreen()),
           entry(Icons.more_horiz, l10n.morse, l10n.morseSubtitle,

@@ -89,6 +89,25 @@ void main() {
     expect(second.defaultControls.speed, 2);
   });
 
+  test('bedtimes are kept per child, one per evening', () async {
+    final store = InMemoryKeyValueStore();
+    final first = PreferencesController(store: store);
+    first.recordBedtime(DateTime(2026, 10, 26, 20, 40));
+    first.recordBedtime(DateTime(2026, 10, 26, 21, 5));
+    first.recordBedtime(DateTime(2026, 10, 28, 0, 20));
+    first.recordBedtime(DateTime(2026, 10, 27, 20, 30), child: 'c2');
+    expect(first.bedtimesOf(''), [
+      DateTime(2026, 10, 26, 21, 5),
+      DateTime(2026, 10, 28, 0, 20),
+    ]);
+    await Future<void>.delayed(Duration.zero);
+
+    final second = PreferencesController(store: store);
+    await second.load();
+    expect(second.bedtimesOf('c2'), [DateTime(2026, 10, 27, 20, 30)]);
+    expect(second.bedtimesOf(''), hasLength(2));
+  });
+
   test('the games remember their best and the language chosen', () async {
     final store = InMemoryKeyValueStore();
     final first = PreferencesController(store: store);

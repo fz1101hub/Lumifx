@@ -421,7 +421,10 @@ Paste this in "Notes for review":
 > used only after tapping "Blow on the phone", to hear the candles being
 > blown out; nothing is recorded. The noise light (Parties and games ›
 > Noise light) uses the microphone only after tapping "Start listening",
-> to measure how loud the room is; nothing is recorded. Weather lights (home › Weather lights)
+> to measure how loud the room is; nothing is recorded. Sing and colour
+> (Parties and games › Sing and colour) uses it only after tapping "Start
+> singing", to work out the pitch of the voice; nothing is recorded.
+> Weather lights (home › Weather lights)
 > send the city the user types to Open-Meteo (open-meteo.com) to show the
 > weather; the device location is never requested.
 >

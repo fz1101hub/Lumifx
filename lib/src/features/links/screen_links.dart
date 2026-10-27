@@ -19,6 +19,8 @@ import '../fun/hot_cold_screen.dart';
 import '../fun/noise_light_screen.dart';
 import '../fun/simon_screen.dart';
 import '../learn/colour_mixing_screen.dart';
+import '../learn/farm_screen.dart';
+import '../music/sing_colour_screen.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting_screen.dart';
 import '../learn/morse_screen.dart';
@@ -26,6 +28,7 @@ import '../music_box/light_piano_screen.dart';
 import '../music_box/music_box_screen.dart';
 import '../routines/routines_screen.dart';
 import '../routines/star_shop_screen.dart';
+import '../routines/weekly_report_screen.dart';
 import '../tales/tale_maker_screen.dart';
 import '../timers/timers_screen.dart';
 import 'app_link.dart';
@@ -59,6 +62,9 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.toothFairy => const ToothFairyScreen(),
       AppScreen.boardGame => const BoardGameScreen(),
       AppScreen.hideSeek => const HideAndSeekScreen(),
+      AppScreen.farm => const FarmScreen(),
+      AppScreen.sing => const SingColourScreen(),
+      AppScreen.weeklyReport => const WeeklyReportScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

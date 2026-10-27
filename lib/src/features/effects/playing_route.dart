@@ -22,6 +22,10 @@ import '../fun/board_game.dart';
 import '../fun/board_game_screen.dart';
 import '../fun/goal.dart';
 import '../fun/hide_and_seek.dart';
+import '../learn/farm.dart';
+import '../music/sing_colour.dart';
+import '../music/sing_colour_screen.dart';
+import '../learn/farm_screen.dart';
 import '../fun/hide_and_seek_screen.dart';
 import '../fun/goal_screen.dart';
 import '../calm/feelings_screen.dart';
@@ -120,6 +124,10 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const BoardGameScreen();
   } else if (HideAndSeek.countOf(effect) != null) {
     screen = const HideAndSeekScreen();
+  } else if (FarmAnimal.of(effect) != null) {
+    screen = const FarmScreen();
+  } else if (PitchWatch.isSinging(effect)) {
+    screen = const SingColourScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

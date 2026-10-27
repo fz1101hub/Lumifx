@@ -148,6 +148,7 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
       case RitualStep.guardian:
         await _play(MonsterHunt.guardian(l10n.guardianLight));
         _playback.setSleepTimer(Duration(minutes: settings.guardianMinutes));
+        scope.preferences.recordBedtime(scope.clock());
         _sayGoodnight();
     }
   }

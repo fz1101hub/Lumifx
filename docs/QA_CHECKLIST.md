@@ -705,6 +705,24 @@ build before every store release.
 - [ ] Scene from a photo, take a photo: nothing is left in the app's
       cache folder afterwards.
 
+## This round: playing and learning (round 11)
+
+- [ ] Light farm: tap the cow: "The cow says moo" is heard as the room
+      turns its colour; in each language the sound is that language's.
+      Quiz: "Who says…?", a wrong animal says try again, the right one
+      lights the room and a new question follows.
+- [ ] Around the world: the four stories play and their fact is read
+      aloud with the lights; "Hey Siri, … northern lights" works on iOS.
+- [ ] My tune: record a few keys on the light piano, Keep, name it: it is
+      in My tunes, plays back with the lamps; Share shows a QR code that
+      another phone opens to add the tune.
+- [ ] Sing and colour: allow the microphone, sing low then high: the
+      lamps go from red to violet; hold a note: brighter. Leave the
+      screen or lock the phone: the microphone stops.
+- [ ] Weekly report: earn a routine star and start bedtime: the report
+      shows the star today and tonight's bedtime; with two children each
+      has their own.
+
 ## This round: fun and occasions (round 10)
 
 - [ ] Goal!: choose Brazil, tap GOAL!: a white flash, yellow, green and

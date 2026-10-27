@@ -49,6 +49,10 @@ enum LumiFXEffect: String, AppEnum {
   case readingLight = "reading_light"
   case aperitivo = "aperitivo"
   case guestsArriving = "guests_arriving"
+  case worldAurora = "world_aurora"
+  case worldCherry = "world_cherry"
+  case worldSahara = "world_sahara"
+  case worldAmazon = "world_amazon"
 
   static var typeDisplayRepresentation: TypeDisplayRepresentation = "Effect"
 
@@ -96,6 +100,10 @@ enum LumiFXEffect: String, AppEnum {
     .readingLight: "Reading light",
     .aperitivo: "Aperitivo",
     .guestsArriving: "Guests in 10 minutes",
+    .worldAurora: "Northern lights in Norway",
+    .worldCherry: "Cherry blossom in Japan",
+    .worldSahara: "The Sahara desert",
+    .worldAmazon: "The Amazon rainforest",
   ]
 }
 

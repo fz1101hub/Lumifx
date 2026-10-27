@@ -21,6 +21,30 @@ typedef NarrationLine = (int at, String Function(AppLocalizations) text);
 /// The words of every built-in story, timed to its events: the spark, the
 /// footsteps, the lightning arrive on screen with the line about them.
 final Map<String, List<NarrationLine>> storyNarration = {
+  'world_aurora': [
+    (0, (l) => l.narrationWorldAurora1),
+    (6, (l) => l.narrationWorldAurora2),
+    (12, (l) => l.narrationWorldAurora3),
+    (28, (l) => l.narrationWorldAurora4),
+  ],
+  'world_cherry': [
+    (0, (l) => l.narrationWorldCherry1),
+    (8, (l) => l.narrationWorldCherry2),
+    (16, (l) => l.narrationWorldCherry3),
+    (26, (l) => l.narrationWorldCherry4),
+  ],
+  'world_sahara': [
+    (0, (l) => l.narrationWorldSahara1),
+    (10, (l) => l.narrationWorldSahara2),
+    (20, (l) => l.narrationWorldSahara3),
+    (32, (l) => l.narrationWorldSahara4),
+  ],
+  'world_amazon': [
+    (0, (l) => l.narrationWorldAmazon1),
+    (8, (l) => l.narrationWorldAmazon2),
+    (16, (l) => l.narrationWorldAmazon3),
+    (27, (l) => l.narrationWorldAmazon4),
+  ],
   'emerald_trickster': [
     (0, (l) => l.narrationEmeraldTrickster1),
     (8, (l) => l.narrationEmeraldTrickster2),
