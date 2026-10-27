@@ -10,13 +10,13 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 1 | Light clock: lamps turn green, yellow, red as a set time nears ("time to leave", "dinner in 10 minutes"), for children who cannot read the time | todo |
-| 2 | Light reminders on the bridge: a room takes a colour at set times and days (recycling, medicine, plants), with the phone off | todo |
-| 3 | Night safety switch-off on the bridge: at a set time, the chosen rooms fade out and switch off | todo |
-| 4 | Feelings thermometer: a child taps how they feel, the room takes that colour and the voice suggests what helps | todo |
-| 5 | Tonight's moon: the real moon phase, worked out on the phone, shown by the lamps with a sentence before bed | todo |
-| 6 | Interval training: work, rest and the last seconds in light (HIIT, tabata, stretching) | todo |
-| 6b | Words and lights in sync: narration, read-aloud and cause-and-effect games (piano, games) answer with as little delay as possible | todo |
+| 1 | Light clock: lamps turn green, yellow, red as a set time nears ("time to leave", "dinner in 10 minutes"), for children who cannot read the time | done (PR pending) |
+| 2 | Light reminders on the bridge: a room takes a colour at set times and days (recycling, medicine, plants), with the phone off | done (PR pending) |
+| 3 | Night safety switch-off on the bridge: at a set time, the chosen rooms fade out and switch off | done (PR pending) |
+| 4 | Feelings thermometer: a child taps how they feel, the room takes that colour and the voice suggests what helps | done (PR pending) |
+| 5 | Tonight's moon: the real moon phase, worked out on the phone, shown by the lamps with a sentence before bed | done (PR pending) |
+| 6 | Interval training: work, rest and the last seconds in light (HIIT, tabata, stretching) | done (PR pending) |
+| 6b | Words and lights in sync: narration, read-aloud and cause-and-effect games (piano, games) answer with as little delay as possible | done (PR pending) |
 
 ## Round 10: fun and occasions
 
