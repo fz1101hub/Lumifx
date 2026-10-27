@@ -4777,5 +4777,103 @@
         "type": "int"
       }
     }
+  },
+  "lightReminders": "Light reminders",
+  "@lightReminders": {
+    "description": "House: light reminders section"
+  },
+  "lightRemindersDescription": "A room takes a colour at set times, even with the phone off: yellow when the plastic goes out, purple for the medicine, green for the plants.",
+  "@lightRemindersDescription": {
+    "description": "House: under Light reminders"
+  },
+  "lightReminderNew": "New light reminder",
+  "@lightReminderNew": {
+    "description": "House: add a light reminder"
+  },
+  "lightReminderName": "What is it for?",
+  "@lightReminderName": {
+    "description": "Light reminder editor: what it is for"
+  },
+  "lightReminderNameHint": "Plastic out",
+  "@lightReminderNameHint": {
+    "description": "Light reminder editor: example of what it is for"
+  },
+  "lightReminderRoom": "Room",
+  "@lightReminderRoom": {
+    "description": "Light reminder editor: heading over the rooms"
+  },
+  "lightReminderColour": "Colour",
+  "@lightReminderColour": {
+    "description": "Light reminder editor: heading over the colours"
+  },
+  "lightReminderTime": "Time",
+  "@lightReminderTime": {
+    "description": "Light reminder editor: the time"
+  },
+  "lightReminderOffAfter": "Switch off after",
+  "@lightReminderOffAfter": {
+    "description": "Light reminder editor: heading over when the room switches off"
+  },
+  "lightReminderStays": "Stays on",
+  "@lightReminderStays": {
+    "description": "Light reminder editor: the room stays on"
+  },
+  "lightReminderSummary": "{room} · {time} · {days}",
+  "@lightReminderSummary": {
+    "description": "House: one light reminder, under its name",
+    "placeholders": {
+      "room": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "everyDay": "Every day",
+  "@everyDay": {
+    "description": "All seven days of the week"
+  },
+  "nightOff": "Night switch-off",
+  "@nightOff": {
+    "description": "House: night switch-off section"
+  },
+  "nightOffDescription": "In case a light was left on: every night at the set time the rooms chosen fade out and switch off, even with the phone off. Rooms already off stay off.",
+  "@nightOffDescription": {
+    "description": "House: under Night switch-off"
+  },
+  "nightOffSet": "Set the night switch-off",
+  "@nightOffSet": {
+    "description": "House: set up the night switch-off"
+  },
+  "nightOffSummary": "{rooms} · {time}, fading over {minutes} min",
+  "@nightOffSummary": {
+    "description": "House: the night switch-off set",
+    "placeholders": {
+      "rooms": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "nightOffAt": "Every night at",
+  "@nightOffAt": {
+    "description": "Night switch-off editor: the time"
+  },
+  "nightOffFade": "Fade out over",
+  "@nightOffFade": {
+    "description": "Night switch-off editor: heading over the fade lengths"
+  },
+  "nightOffRooms": "Rooms",
+  "@nightOffRooms": {
+    "description": "Night switch-off editor: heading over the rooms"
   }
 }

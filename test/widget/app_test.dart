@@ -3674,7 +3674,8 @@ void streamingTests() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('around the house: away mode, night path, natural light',
+  testWidgets(
+      'around the house: away mode, night path, natural light, reminders',
       (tester) async {
     final puts = <String>[];
     final bridge = await _connectedBridge(tester, puts: puts);
@@ -3723,6 +3724,29 @@ void streamingTests() {
     expect(puts, contains('/clip/v2/resource/smart_scene/s2'),
         reason: 'switched on at once');
     expect(preferences.naturalLightIds, {'s2'});
+
+    // A light reminder: a colour on Tuesdays, off half an hour later.
+    await tester.scrollUntilVisible(find.text('New light reminder'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('New light reminder'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Plastic out');
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Living room'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(puts.where((p) => p == 'POST /api/key/schedules'), hasLength(4));
+
+    // The night switch-off.
+    await tester.scrollUntilVisible(find.text('Set the night switch-off'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Set the night switch-off'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilterChip, 'Living room'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(puts.where((p) => p == 'POST /api/key/schedules'), hasLength(5));
   });
 
   testWidgets('a playing effect can be saved as a Hue scene', (tester) async {

@@ -6,9 +6,13 @@ import '../../app_scope.dart';
 import '../../core/hue/hue_bridge_client.dart';
 import '../../core/hue/hue_house.dart';
 import '../../core/hue/hue_models.dart';
+import '../../core/hue/hue_reminders.dart';
+import '../../core/color/light_color.dart';
+import '../effects/light_color_ui.dart';
 import '../automations/automations_screen.dart';
 import '../common/app_text.dart';
 import '../common/layout.dart';
+import 'reminder_editors.dart';
 
 /// Routines for the house that the bridge runs by itself: the lights
 /// looking lived-in while away, a night path on a motion sensor, and
@@ -25,6 +29,8 @@ class _HouseScreenState extends State<HouseScreen> {
   List<HueNightPath>? _paths;
   List<HueMotionSensor> _sensors = const [];
   List<HueNaturalLight>? _natural;
+  List<HueLightReminder> _reminders = const [];
+  HueNightOff? _nightOff;
   bool _loading = false;
 
   @override
@@ -50,6 +56,12 @@ class _HouseScreenState extends State<HouseScreen> {
       client
           .fetchNaturalLights(ids)
           .catchError((Object _) => <HueNaturalLight>[]),
+      client
+          .fetchLightReminders()
+          .catchError((Object _) => <HueLightReminder>[]),
+      client.fetchNightOff().then<Object>(
+          (off) => <HueNightOff>[if (off != null) off],
+          onError: (Object _) => <HueNightOff>[]),
     ]);
     if (!mounted) {
       return;
@@ -59,6 +71,8 @@ class _HouseScreenState extends State<HouseScreen> {
       _paths = results[1] as List<HueNightPath>;
       _sensors = results[2] as List<HueMotionSensor>;
       _natural = results[3] as List<HueNaturalLight>;
+      _reminders = results[4] as List<HueLightReminder>;
+      _nightOff = (results[5] as List<HueNightOff>).firstOrNull;
       _loading = false;
     });
   }
@@ -314,6 +328,109 @@ class _HouseScreenState extends State<HouseScreen> {
                       onPressed: _newNaturalLight,
                       icon: const Icon(Icons.add),
                       label: Text(l10n.naturalLightNew),
+                    ),
+                  ),
+                  header(Icons.notifications_none, l10n.lightReminders,
+                      l10n.lightRemindersDescription),
+                  for (final reminder in _reminders)
+                    Card(
+                      child: SwitchListTile(
+                        title: Row(children: [
+                          Container(
+                            width: 16,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                                  LightColor.fromHex(reminder.color).toColor(),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text(reminder.name)),
+                        ]),
+                        subtitle: Text(l10n.lightReminderSummary(
+                          groups[reminder.groupId] ?? reminder.groupId,
+                          time(reminder.hour, reminder.minute),
+                          reminder.days.length == 7
+                              ? l10n.everyDay
+                              : [
+                                  for (final d in reminder.days)
+                                    weekdayName(context, d)
+                                ].join(', '),
+                        )),
+                        value: reminder.enabled,
+                        onChanged: (on) => _run(() => client
+                            .setSchedulesEnabled(reminder.scheduleIds, on)),
+                        secondary: IconButton(
+                          tooltip: l10n.delete,
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () async {
+                            if (await _confirmDelete(reminder.name)) {
+                              await _run(() =>
+                                  client.deleteSchedules(reminder.scheduleIds));
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        final saved = await Navigator.of(context).push<bool>(
+                          MaterialPageRoute(
+                              builder: (_) => const LightReminderEditor()),
+                        );
+                        if (saved == true) {
+                          await _load();
+                        }
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Text(l10n.lightReminderNew),
+                    ),
+                  ),
+                  header(Icons.nights_stay_outlined, l10n.nightOff,
+                      l10n.nightOffDescription),
+                  if (_nightOff case final off?)
+                    Card(
+                      child: SwitchListTile(
+                        title: Text(l10n.nightOff),
+                        subtitle: Text(l10n.nightOffSummary(
+                          [for (final g in off.groupIds) groups[g] ?? g]
+                              .join(', '),
+                          time(off.hour, off.minute),
+                          off.fadeMinutes,
+                        )),
+                        value: off.enabled,
+                        onChanged: (on) => _run(() =>
+                            client.setSchedulesEnabled(off.scheduleIds, on)),
+                        secondary: IconButton(
+                          tooltip: l10n.delete,
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () async {
+                            if (await _confirmDelete(l10n.nightOff)) {
+                              await _run(() =>
+                                  client.deleteSchedules(off.scheduleIds));
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        final saved = await Navigator.of(context).push<bool>(
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  NightOffEditor(current: _nightOff)),
+                        );
+                        if (saved == true) {
+                          await _load();
+                        }
+                      },
+                      icon: Icon(_nightOff == null ? Icons.add : Icons.edit),
+                      label: Text(l10n.nightOffSet),
                     ),
                   ),
                 ],
