@@ -1449,5 +1449,16 @@
   "quizMix": "Que cor {a} e {b} formam juntos?",
   "quizWinner": "A equipe {team} venceu!",
   "quizDraw": "Empate!",
-  "quizPlayAgain": "Jogar de novo"
+  "quizPlayAgain": "Jogar de novo",
+  "dreamDiary": "Diário dos sonhos",
+  "dreamDiarySubtitle": "Conte o sonho desta noite e veja suas cores",
+  "dreamDiaryDescription": "De manhã, conte o que você sonhou: escreva ou diga no microfone. As palavras escolhem as cores e o cômodo mostra o sonho. As gravações ficam no celular.",
+  "dreamNew": "Contar um sonho",
+  "dreamWords": "O que você sonhou?",
+  "dreamWordsHint": "Eu voava sobre o mar à noite…",
+  "dreamRecord": "Gravar minha voz",
+  "dreamListen": "Ouvir",
+  "dreamShow": "Mostrar no cômodo",
+  "dreamNone": "Ainda nenhum sonho. Conte o primeiro amanhã de manhã!",
+  "dreamDeleteQuestion": "Apagar este sonho?"
 }

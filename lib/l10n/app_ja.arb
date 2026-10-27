@@ -1449,5 +1449,16 @@
   "quizMix": "{a}と{b}をまぜると何色？",
   "quizWinner": "{team}チームのかち！",
   "quizDraw": "ひきわけ！",
-  "quizPlayAgain": "もういちど"
+  "quizPlayAgain": "もういちど",
+  "dreamDiary": "ゆめにっき",
+  "dreamDiarySubtitle": "ゆうべのゆめを話して、その色を見よう",
+  "dreamDiaryDescription": "朝、見たゆめを話してね。書いても、マイクに話してもいいよ。ことばが色をえらんで、部屋がゆめを見せてくれます。録音はスマホの中だけに保存されます。",
+  "dreamNew": "ゆめを話す",
+  "dreamWords": "どんなゆめを見た？",
+  "dreamWordsHint": "夜の海の上をとんでいたよ…",
+  "dreamRecord": "こえを録音",
+  "dreamListen": "きく",
+  "dreamShow": "部屋で見る",
+  "dreamNone": "まだゆめはありません。あしたの朝、さいしょのゆめを話してね！",
+  "dreamDeleteQuestion": "このゆめを消しますか？"
 }

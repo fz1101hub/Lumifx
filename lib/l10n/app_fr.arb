@@ -1449,5 +1449,16 @@
   "quizMix": "Quelle couleur donnent {a} et {b} ensemble ?",
   "quizWinner": "L'équipe {team} gagne !",
   "quizDraw": "Égalité !",
-  "quizPlayAgain": "Rejouer"
+  "quizPlayAgain": "Rejouer",
+  "dreamDiary": "Journal des rêves",
+  "dreamDiarySubtitle": "Raconte le rêve de cette nuit et vois ses couleurs",
+  "dreamDiaryDescription": "Le matin, raconte ce que tu as rêvé : écris-le ou dis-le au micro. Les mots choisissent les couleurs et la pièce montre le rêve. Les enregistrements restent sur le téléphone.",
+  "dreamNew": "Raconter un rêve",
+  "dreamWords": "Qu'as-tu rêvé ?",
+  "dreamWordsHint": "Je volais au-dessus de la mer la nuit…",
+  "dreamRecord": "Enregistrer ma voix",
+  "dreamListen": "Écouter",
+  "dreamShow": "Le montrer dans la pièce",
+  "dreamNone": "Pas encore de rêve. Raconte le premier demain matin !",
+  "dreamDeleteQuestion": "Supprimer ce rêve ?"
 }

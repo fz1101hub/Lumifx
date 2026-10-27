@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lumifx/src/features/bedtime/dream_diary.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/effects/engine/effect_renderer.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
@@ -87,6 +88,28 @@ void main() {
     expect(second.defaultControls.brightness, 0.4);
     expect(second.defaultControls.intensity, 0.6);
     expect(second.defaultControls.speed, 2);
+  });
+
+  test('dreams are kept per child, newest first, and read back', () async {
+    final store = InMemoryKeyValueStore();
+    final first = PreferencesController(store: store);
+    await first.saveDream(Dream.told(
+        id: 'd1', child: '', date: DateTime(2026, 10, 26, 7), words: 'snow'));
+    await first.saveDream(Dream.told(
+        id: 'd2', child: '', date: DateTime(2026, 10, 27, 7), words: 'qwerty'));
+    await first.saveDream(Dream.told(
+        id: 'd3', child: 'c2', date: DateTime(2026, 10, 27, 7), words: 'fire'));
+    expect([for (final d in first.dreamsOf('')) d.id], ['d2', 'd1']);
+    expect(first.dreamsOf('')[0].colors, Dream.dreamy,
+        reason: 'no known word: dreamy colours');
+
+    final second = PreferencesController(store: store);
+    await second.load();
+    expect(second.dreamsOf('c2').single.words, 'fire');
+    expect(second.dreamsOf('c2').single.motion, SceneMotion.flicker);
+    await second.deleteDream('d1');
+    expect([for (final d in second.dreamsOf('')) d.id], ['d2']);
+    expect(Dream.fromJson({'id': 'x'}), isNull);
   });
 
   test('bedtimes are kept per child, one per evening', () async {

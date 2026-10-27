@@ -6093,5 +6093,49 @@
   "quizPlayAgain": "Play again",
   "@quizPlayAgain": {
     "description": "Family quiz: play again"
+  },
+  "dreamDiary": "Dream diary",
+  "@dreamDiary": {
+    "description": "Home: the dream diary"
+  },
+  "dreamDiarySubtitle": "Tell last night's dream and see its colours",
+  "@dreamDiarySubtitle": {
+    "description": "Home: what the dream diary is"
+  },
+  "dreamDiaryDescription": "In the morning, tell what you dreamed: write it or say it into the microphone. The words choose the colours, and the room shows the dream. Recordings stay on the phone.",
+  "@dreamDiaryDescription": {
+    "description": "Dream diary: how it works"
+  },
+  "dreamNew": "Tell a dream",
+  "@dreamNew": {
+    "description": "Dream diary: tell a new dream"
+  },
+  "dreamWords": "What did you dream?",
+  "@dreamWords": {
+    "description": "Dream diary: the text field"
+  },
+  "dreamWordsHint": "I was flying over the sea at night…",
+  "@dreamWordsHint": {
+    "description": "Dream diary: example dream"
+  },
+  "dreamRecord": "Record my voice",
+  "@dreamRecord": {
+    "description": "Dream diary: record the child telling the dream"
+  },
+  "dreamListen": "Listen",
+  "@dreamListen": {
+    "description": "Dream diary: play the recorded voice"
+  },
+  "dreamShow": "Show it in the room",
+  "@dreamShow": {
+    "description": "Dream diary: show the dream in the room"
+  },
+  "dreamNone": "No dreams yet. Tell the first one tomorrow morning!",
+  "@dreamNone": {
+    "description": "Dream diary: no dream yet"
+  },
+  "dreamDeleteQuestion": "Delete this dream?",
+  "@dreamDeleteQuestion": {
+    "description": "Dream diary: confirm deleting a dream"
   }
 }

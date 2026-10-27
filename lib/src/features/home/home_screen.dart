@@ -4,6 +4,7 @@ import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
 import '../board/light_board_screen.dart';
+import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
@@ -158,6 +159,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.napLightSubtitle, () => const NapLightScreen()),
                 _HomeEntry(Icons.nightlight_round, l10n.moon, l10n.moonSubtitle,
                     () => const MoonScreen()),
+                _HomeEntry(Icons.cloud_outlined, l10n.dreamDiary,
+                    l10n.dreamDiarySubtitle, () => const DreamDiaryScreen()),
                 _HomeEntry(Icons.auto_awesome, l10n.toothFairy,
                     l10n.toothFairySubtitle, () => const ToothFairyScreen()),
                 _HomeEntry(

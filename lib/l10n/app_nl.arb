@@ -1449,5 +1449,16 @@
   "quizMix": "Welke kleur maken {a} en {b} samen?",
   "quizWinner": "Team {team} wint!",
   "quizDraw": "Gelijkspel!",
-  "quizPlayAgain": "Nog eens spelen"
+  "quizPlayAgain": "Nog eens spelen",
+  "dreamDiary": "Droomdagboek",
+  "dreamDiarySubtitle": "Vertel de droom van vannacht en zie zijn kleuren",
+  "dreamDiaryDescription": "Vertel 's ochtends wat je gedroomd hebt: schrijf het op of zeg het in de microfoon. De woorden kiezen de kleuren en de kamer laat de droom zien. Opnames blijven op de telefoon.",
+  "dreamNew": "Een droom vertellen",
+  "dreamWords": "Wat heb je gedroomd?",
+  "dreamWordsHint": "Ik vloog 's nachts over de zee…",
+  "dreamRecord": "Mijn stem opnemen",
+  "dreamListen": "Luisteren",
+  "dreamShow": "Laat het in de kamer zien",
+  "dreamNone": "Nog geen dromen. Vertel morgenochtend de eerste!",
+  "dreamDeleteQuestion": "Deze droom verwijderen?"
 }

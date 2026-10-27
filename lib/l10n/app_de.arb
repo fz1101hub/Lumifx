@@ -1449,5 +1449,16 @@
   "quizMix": "Welche Farbe ergeben {a} und {b} zusammen?",
   "quizWinner": "Team {team} gewinnt!",
   "quizDraw": "Unentschieden!",
-  "quizPlayAgain": "Nochmal spielen"
+  "quizPlayAgain": "Nochmal spielen",
+  "dreamDiary": "Traumtagebuch",
+  "dreamDiarySubtitle": "Erzähl den Traum der Nacht und sieh seine Farben",
+  "dreamDiaryDescription": "Erzähl morgens, was du geträumt hast: schreib es auf oder sprich es ins Mikrofon. Die Wörter wählen die Farben, und der Raum zeigt den Traum. Aufnahmen bleiben auf dem Handy.",
+  "dreamNew": "Einen Traum erzählen",
+  "dreamWords": "Was hast du geträumt?",
+  "dreamWordsHint": "Ich bin nachts über das Meer geflogen…",
+  "dreamRecord": "Meine Stimme aufnehmen",
+  "dreamListen": "Anhören",
+  "dreamShow": "Im Raum zeigen",
+  "dreamNone": "Noch keine Träume. Erzähl morgen früh den ersten!",
+  "dreamDeleteQuestion": "Diesen Traum löschen?"
 }

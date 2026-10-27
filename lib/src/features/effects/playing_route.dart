@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../core/effects/effect.dart';
 import '../../core/sound/melody.dart';
 import '../../core/sound/soundscape.dart';
+import '../bedtime/dream_diary.dart';
+import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/monster_spray.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon.dart';
@@ -128,6 +130,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const BoardGameScreen();
   } else if (HideAndSeek.countOf(effect) != null) {
     screen = const HideAndSeekScreen();
+  } else if (Dream.isDream(effect)) {
+    screen = const DreamDiaryScreen();
   } else if (FamilyQuiz.isQuiz(effect)) {
     screen = const FamilyQuizScreen();
   } else if (effect.id == TreasureHunt.treasure('').id) {
