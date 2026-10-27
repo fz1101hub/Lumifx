@@ -1487,5 +1487,16 @@
   "soundAlertsHeard": "{sound} à {time}",
   "soundAlertsStopLights": "Arrêter les lampes",
   "soundAlertsTry": "Essayer les lampes",
-  "soundAlertsMicDenied": "LumiFX a besoin du micro pour entendre ces sons. Autorisez-le dans les réglages du téléphone."
+  "soundAlertsMicDenied": "LumiFX a besoin du micro pour entendre ces sons. Autorisez-le dans les réglages du téléphone.",
+  "guestRemote": "Télécommande pour les invités",
+  "guestRemoteSubtitle": "Les invités choisissent une couleur depuis leur téléphone",
+  "guestRemoteDescription": "Les invités connectés au Wi-Fi de la maison scannent le code avec leur appareil photo et choisissent une couleur ou un effet calme. La page ne fonctionne que tant que cet écran est ouvert et avec le code affiché ici ; rien ne passe par internet.",
+  "guestRemoteNoWifi": "Connectez ce téléphone au Wi-Fi de la maison pour partager la télécommande.",
+  "guestRemoteCode": "Code {code}",
+  "guestRemotePicked": "Un invité a choisi {name}",
+  "guestPageTitle": "Choisissez la lumière",
+  "guestPageColours": "Couleurs",
+  "guestPageEffects": "Ambiances",
+  "guestPageDone": "C'est fait !",
+  "guestPageWrongCode": "Ce lien ne fonctionne plus. Scannez à nouveau le code sur le téléphone de votre hôte."
 }

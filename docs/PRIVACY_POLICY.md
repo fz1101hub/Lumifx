@@ -213,6 +213,11 @@ scenes and stories you make are stored on your phone only.
 - **geocoding-api.open-meteo.com** and **api.open-meteo.com**, only when
   you use Weather lights: the city name you search for and the
   coordinates of the place you choose, as described above.
+- **Guests' phones on your Wi-Fi**, only while the remote for guests is
+  open: the app serves a small page at the phone's own address on the
+  local network, which works only with the code shown on your screen
+  and offers only colours and calm effects. Nothing it receives is kept
+  beyond the pick, and it stops when you leave that screen.
 
 The app makes no other network connections. It contains no analytics, no
 advertising, no crash reporting and no tracking of any kind.
@@ -450,6 +455,12 @@ nanna e le scene e storie che crei sono salvati solo sul telefono.
 - **geocoding-api.open-meteo.com** e **api.open-meteo.com**, solo quando
   usi Meteo in luce: il nome della città cercata e le coordinate del luogo
   scelto, come descritto sopra.
+- **I telefoni degli ospiti sul tuo Wi-Fi**, solo mentre il telecomando
+  per gli ospiti è aperto: l'app serve una piccola pagina all'indirizzo del
+  telefono sulla rete locale, che funziona solo con il codice mostrato
+  sullo schermo e offre solo colori ed effetti tranquilli. Di ciò che
+  riceve non tiene nulla oltre alla scelta, e si ferma quando lasci quella
+  schermata.
 
 L'app non effettua altre connessioni. Non contiene analytics, pubblicità,
 segnalazione di crash né alcuna forma di tracciamento.

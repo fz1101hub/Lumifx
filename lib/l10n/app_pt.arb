@@ -1487,5 +1487,16 @@
   "soundAlertsHeard": "{sound} às {time}",
   "soundAlertsStopLights": "Parar as luzes",
   "soundAlertsTry": "Testar as luzes",
-  "soundAlertsMicDenied": "O LumiFX precisa do microfone para ouvir esses sons. Permita nas configurações do celular."
+  "soundAlertsMicDenied": "O LumiFX precisa do microfone para ouvir esses sons. Permita nas configurações do celular.",
+  "guestRemote": "Controle para convidados",
+  "guestRemoteSubtitle": "Convidados escolhem uma cor pelo celular",
+  "guestRemoteDescription": "Convidados no Wi-Fi de casa escaneiam o código com a câmera e escolhem uma cor ou um efeito calmo. A página só funciona enquanto esta tela está aberta e com o código mostrado aqui; nada passa pela internet.",
+  "guestRemoteNoWifi": "Conecte este celular ao Wi-Fi de casa para compartilhar o controle.",
+  "guestRemoteCode": "Código {code}",
+  "guestRemotePicked": "Um convidado escolheu {name}",
+  "guestPageTitle": "Escolha as luzes",
+  "guestPageColours": "Cores",
+  "guestPageEffects": "Climas",
+  "guestPageDone": "Pronto!",
+  "guestPageWrongCode": "Este link não funciona mais. Escaneie de novo o código no celular do anfitrião."
 }

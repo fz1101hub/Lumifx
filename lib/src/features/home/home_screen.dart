@@ -27,6 +27,7 @@ import '../effects/player_route.dart';
 import '../playlists/playlists_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
+import '../guests/guest_remote_screen.dart';
 import '../house/automations_calendar_screen.dart';
 import '../house/calendar_lights_screen.dart';
 import '../house/house_screen.dart';
@@ -203,6 +204,8 @@ class HomeScreen extends StatelessWidget {
               entries: [
                 _HomeEntry(Icons.queue_music, l10n.playlists,
                     l10n.playlistsSubtitle, () => const PlaylistsScreen()),
+                _HomeEntry(Icons.qr_code_2, l10n.guestRemote,
+                    l10n.guestRemoteSubtitle, () => const GuestRemoteScreen()),
                 _HomeEntry(Icons.hearing_outlined, l10n.soundAlerts,
                     l10n.soundAlertsSubtitle, () => const SoundAlertsScreen()),
                 _HomeEntry(Icons.wb_sunny_outlined, l10n.weather,

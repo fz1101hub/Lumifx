@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -11,6 +12,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/app.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:lumifx/src/features/guests/guest_remote_screen.dart';
 import 'package:lumifx/src/features/alerts/sound_alerts_screen.dart';
 import 'package:lumifx/src/features/alerts/sound_alerts.dart';
 import 'package:lumifx/src/app_scope.dart';
@@ -2055,6 +2058,27 @@ void main() {
     await tester.tap(find.text('Stop'));
     await tester.pump(const Duration(seconds: 2));
     expect(microphone.stopped, isTrue);
+  });
+
+  testWidgets('the guest remote shows its code and QR on the home network',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) =>
+                GuestRemoteScreen(address: InternetAddress.loopbackIPv4))));
+    await tester.pump();
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 200)));
+    await tester.pump();
+    expect(find.byType(QrImageView), findsOneWidget);
+    expect(find.textContaining(RegExp(r'^Code \d{6}$')), findsOneWidget);
+    expect(find.textContaining('127.0.0.1:'), findsOneWidget);
+    await tester.runAsync(() async {
+      await tester.pageBack();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pumpAndSettle();
   });
 
   testWidgets('the noise light turns red when it gets too loud',

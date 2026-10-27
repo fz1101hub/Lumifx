@@ -1487,5 +1487,16 @@
   "soundAlertsHeard": "{sound} um {time}",
   "soundAlertsStopLights": "Lampen stoppen",
   "soundAlertsTry": "Lampen testen",
-  "soundAlertsMicDenied": "LumiFX braucht das Mikrofon, um diese Geräusche zu hören. Erlaube es in den Einstellungen des Handys."
+  "soundAlertsMicDenied": "LumiFX braucht das Mikrofon, um diese Geräusche zu hören. Erlaube es in den Einstellungen des Handys.",
+  "guestRemote": "Fernbedienung für Gäste",
+  "guestRemoteSubtitle": "Gäste wählen eine Farbe auf ihrem Handy",
+  "guestRemoteDescription": "Gäste in deinem WLAN scannen den Code mit der Kamera und wählen eine Farbe oder einen ruhigen Effekt. Die Seite funktioniert nur, solange dieser Bildschirm offen ist, und mit dem hier gezeigten Code; nichts geht über das Internet.",
+  "guestRemoteNoWifi": "Verbinde dieses Handy mit dem WLAN zu Hause, um die Fernbedienung zu teilen.",
+  "guestRemoteCode": "Code {code}",
+  "guestRemotePicked": "Ein Gast hat {name} gewählt",
+  "guestPageTitle": "Wähle das Licht",
+  "guestPageColours": "Farben",
+  "guestPageEffects": "Stimmungen",
+  "guestPageDone": "Erledigt!",
+  "guestPageWrongCode": "Dieser Link funktioniert nicht mehr. Scanne den Code auf dem Handy des Gastgebers erneut."
 }

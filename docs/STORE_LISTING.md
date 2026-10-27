@@ -425,6 +425,9 @@ Paste this in "Notes for review":
 > (Home › Your home) is switched on: the start times of the next day's
 > appointments become schedules on the user's own Hue Bridge so a room
 > glows a few minutes before; titles never leave the phone.
+> The remote for guests (Home › More) serves a small page on the local
+> network only while that screen is open, protected by a code shown on
+> the screen; it offers colours and calm effects.
 > Light alerts for sounds (Home › More) listen with the microphone only
 > while that screen is open, for a smoke alarm, a doorbell or a baby
 > crying, recognised on the device; the lights flash, nothing is recorded.

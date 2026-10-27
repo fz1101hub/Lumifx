@@ -1487,5 +1487,16 @@
   "soundAlertsHeard": "{sound} om {time}",
   "soundAlertsStopLights": "Lampen stoppen",
   "soundAlertsTry": "Lampen testen",
-  "soundAlertsMicDenied": "LumiFX heeft de microfoon nodig om deze geluiden te horen. Sta het toe in de instellingen van je telefoon."
+  "soundAlertsMicDenied": "LumiFX heeft de microfoon nodig om deze geluiden te horen. Sta het toe in de instellingen van je telefoon.",
+  "guestRemote": "Afstandsbediening voor gasten",
+  "guestRemoteSubtitle": "Gasten kiezen een kleur op hun telefoon",
+  "guestRemoteDescription": "Gasten op je wifi thuis scannen de code met hun camera en kiezen een kleur of een rustig effect. De pagina werkt alleen zolang dit scherm open is en met de code die hier staat; niets gaat over internet.",
+  "guestRemoteNoWifi": "Verbind deze telefoon met de wifi thuis om de afstandsbediening te delen.",
+  "guestRemoteCode": "Code {code}",
+  "guestRemotePicked": "Een gast koos {name}",
+  "guestPageTitle": "Kies het licht",
+  "guestPageColours": "Kleuren",
+  "guestPageEffects": "Sferen",
+  "guestPageDone": "Klaar!",
+  "guestPageWrongCode": "Deze link werkt niet meer. Scan de code opnieuw op de telefoon van de gastheer."
 }

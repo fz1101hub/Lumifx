@@ -1487,5 +1487,16 @@
   "soundAlertsHeard": "{sound} a las {time}",
   "soundAlertsStopLights": "Detener las luces",
   "soundAlertsTry": "Probar las luces",
-  "soundAlertsMicDenied": "LumiFX necesita el micrófono para oír estos sonidos. Permítelo en los ajustes del teléfono."
+  "soundAlertsMicDenied": "LumiFX necesita el micrófono para oír estos sonidos. Permítelo en los ajustes del teléfono.",
+  "guestRemote": "Mando para invitados",
+  "guestRemoteSubtitle": "Los invitados eligen un color desde su teléfono",
+  "guestRemoteDescription": "Los invitados conectados al Wi-Fi de casa escanean el código con la cámara y eligen un color o un efecto tranquilo. La página solo funciona mientras esta pantalla está abierta y con el código que se muestra aquí; nada pasa por internet.",
+  "guestRemoteNoWifi": "Conecta este teléfono al Wi-Fi de casa para compartir el mando.",
+  "guestRemoteCode": "Código {code}",
+  "guestRemotePicked": "Un invitado eligió {name}",
+  "guestPageTitle": "Elige las luces",
+  "guestPageColours": "Colores",
+  "guestPageEffects": "Ambientes",
+  "guestPageDone": "¡Hecho!",
+  "guestPageWrongCode": "Este enlace ya no funciona. Escanea otra vez el código en el teléfono del anfitrión."
 }

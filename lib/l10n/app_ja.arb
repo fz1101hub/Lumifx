@@ -1487,5 +1487,16 @@
   "soundAlertsHeard": "{time} {sound}",
   "soundAlertsStopLights": "ライトを止める",
   "soundAlertsTry": "ライトをためす",
-  "soundAlertsMicDenied": "これらの音を聞き取るにはマイクが必要です。スマホの設定で許可してください。"
+  "soundAlertsMicDenied": "これらの音を聞き取るにはマイクが必要です。スマホの設定で許可してください。",
+  "guestRemote": "ゲスト用リモコン",
+  "guestRemoteSubtitle": "ゲストが自分のスマホで色をえらべる",
+  "guestRemoteDescription": "家のWi-Fiにつないだゲストがカメラでコードを読み取り、色やおだやかなエフェクトをえらべます。このページはこの画面を開いている間だけ、ここに表示されたコードで使えます。インターネットは通りません。",
+  "guestRemoteNoWifi": "リモコンを共有するには、このスマホを家のWi-Fiにつないでください。",
+  "guestRemoteCode": "コード {code}",
+  "guestRemotePicked": "ゲストが「{name}」をえらびました",
+  "guestPageTitle": "ライトをえらんでね",
+  "guestPageColours": "色",
+  "guestPageEffects": "ムード",
+  "guestPageDone": "できた！",
+  "guestPageWrongCode": "このリンクはもう使えません。ホストのスマホのコードをもう一度読み取ってください。"
 }

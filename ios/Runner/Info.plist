@@ -5,7 +5,7 @@
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
 		<key>NSLocalNetworkUsageDescription</key>
-		<string>LumiFX finds and controls your Philips Hue Bridge on your local network.</string>
+		<string>LumiFX finds and controls your Philips Hue Bridge on your local network, and can show your guests a remote on the same Wi-Fi.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>TV Sync looks at your TV so your lights can take its colours, and a photo you take can become a scene. Pictures are analysed on your phone and never sent.</string>
 		<key>NSPhotoLibraryUsageDescription</key>

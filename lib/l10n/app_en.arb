@@ -6268,5 +6268,59 @@
   "soundAlertsMicDenied": "LumiFX needs the microphone to hear these sounds. Allow it in the phone's settings.",
   "@soundAlertsMicDenied": {
     "description": "Light alerts: no microphone"
+  },
+  "guestRemote": "Remote for guests",
+  "@guestRemote": {
+    "description": "Home: a remote for guests on their own phones"
+  },
+  "guestRemoteSubtitle": "Guests pick a colour from their phone",
+  "@guestRemoteSubtitle": {
+    "description": "Home: what the guest remote is"
+  },
+  "guestRemoteDescription": "Guests on your home Wi-Fi scan the code with their camera and pick a colour or a calm effect. The page works only while this screen is open and with the code shown here; nothing goes over the internet.",
+  "@guestRemoteDescription": {
+    "description": "Guest remote: how it works and what is safe"
+  },
+  "guestRemoteNoWifi": "Connect this phone to the home Wi-Fi to share the remote.",
+  "@guestRemoteNoWifi": {
+    "description": "Guest remote: the phone is not on a home network"
+  },
+  "guestRemoteCode": "Code {code}",
+  "@guestRemoteCode": {
+    "description": "Guest remote: the code guests need",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "guestRemotePicked": "A guest chose {name}",
+  "@guestRemotePicked": {
+    "description": "Guest remote: what a guest chose",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "guestPageTitle": "Pick the lights",
+  "@guestPageTitle": {
+    "description": "Guest page: title"
+  },
+  "guestPageColours": "Colours",
+  "@guestPageColours": {
+    "description": "Guest page: heading of the colours"
+  },
+  "guestPageEffects": "Moods",
+  "@guestPageEffects": {
+    "description": "Guest page: heading of the effects"
+  },
+  "guestPageDone": "Done!",
+  "@guestPageDone": {
+    "description": "Guest page: the pick was sent"
+  },
+  "guestPageWrongCode": "This link no longer works. Scan the code on the host's phone again.",
+  "@guestPageWrongCode": {
+    "description": "Guest page: an old or wrong link"
   }
 }

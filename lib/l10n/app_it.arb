@@ -1487,5 +1487,16 @@
   "soundAlertsHeard": "{sound} alle {time}",
   "soundAlertsStopLights": "Ferma le luci",
   "soundAlertsTry": "Prova le luci",
-  "soundAlertsMicDenied": "LumiFX ha bisogno del microfono per sentire questi suoni. Consentilo nelle impostazioni del telefono."
+  "soundAlertsMicDenied": "LumiFX ha bisogno del microfono per sentire questi suoni. Consentilo nelle impostazioni del telefono.",
+  "guestRemote": "Telecomando per gli ospiti",
+  "guestRemoteSubtitle": "Gli ospiti scelgono un colore dal loro telefono",
+  "guestRemoteDescription": "Gli ospiti connessi al Wi-Fi di casa inquadrano il codice con la fotocamera e scelgono un colore o un effetto tranquillo. La pagina funziona solo finché questa schermata è aperta e con il codice mostrato qui; niente passa da internet.",
+  "guestRemoteNoWifi": "Collega questo telefono al Wi-Fi di casa per condividere il telecomando.",
+  "guestRemoteCode": "Codice {code}",
+  "guestRemotePicked": "Un ospite ha scelto {name}",
+  "guestPageTitle": "Scegli le luci",
+  "guestPageColours": "Colori",
+  "guestPageEffects": "Atmosfere",
+  "guestPageDone": "Fatto!",
+  "guestPageWrongCode": "Questo link non funziona più. Inquadra di nuovo il codice sul telefono di chi ti ospita."
 }
