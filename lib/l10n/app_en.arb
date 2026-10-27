@@ -4655,5 +4655,127 @@
   "storytellerVoiceNone": "This phone has no voice for this language yet.",
   "@storytellerVoiceNone": {
     "description": "Voice list when the phone has no voice for the language"
+  },
+  "lightClock": "Light clock",
+  "@lightClock": {
+    "description": "Home entry: the light clock"
+  },
+  "lightClockSubtitle": "Green, yellow, red as a time nears",
+  "@lightClockSubtitle": {
+    "description": "Under the light clock entry"
+  },
+  "lightClockDescription": "For children who cannot read the time yet: the lamps stay green, turn yellow a few minutes before, red for the last two minutes, and glow red when it is time.",
+  "@lightClockDescription": {
+    "description": "Top of the light clock screen"
+  },
+  "lightClockWhat": "What for?",
+  "@lightClockWhat": {
+    "description": "Light clock: heading over the occasions"
+  },
+  "clockLeave": "Time to leave",
+  "@clockLeave": {
+    "description": "Light clock occasion"
+  },
+  "clockMeal": "Mealtime",
+  "@clockMeal": {
+    "description": "Light clock occasion"
+  },
+  "clockBed": "Bedtime",
+  "@clockBed": {
+    "description": "Light clock occasion"
+  },
+  "clockOther": "Something else",
+  "@clockOther": {
+    "description": "Light clock occasion"
+  },
+  "lightClockAt": "At {time}",
+  "@lightClockAt": {
+    "description": "Light clock: the time to count down to; tapping it changes it",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lightClockWarn": "Yellow from",
+  "@lightClockWarn": {
+    "description": "Light clock: heading over the minutes of warning"
+  },
+  "lightClockStart": "Start the light clock",
+  "@lightClockStart": {
+    "description": "Light clock: start button"
+  },
+  "clockPhaseGreen": "Plenty of time",
+  "@clockPhaseGreen": {
+    "description": "Light clock running: plenty of time"
+  },
+  "clockPhaseYellow": "Nearly time: get ready!",
+  "@clockPhaseYellow": {
+    "description": "Light clock running: nearly time"
+  },
+  "clockPhaseRed": "Last minutes!",
+  "@clockPhaseRed": {
+    "description": "Light clock running: last minutes"
+  },
+  "clockPhaseNow": "It's time!",
+  "@clockPhaseNow": {
+    "description": "Light clock running: it is time"
+  },
+  "clockMinutesLeft": "{minutes, plural, =1{1 minute to go} other{{minutes} minutes to go}}",
+  "@clockMinutesLeft": {
+    "description": "Light clock running: minutes to go",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "clockSayLeaveSoon": "We leave in {minutes} minutes: shoes and coat!",
+  "@clockSayLeaveSoon": {
+    "description": "Said aloud when the light clock turns yellow before leaving",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "clockSayLeaveNow": "Time to go!",
+  "@clockSayLeaveNow": {
+    "description": "Said aloud when it is time to leave"
+  },
+  "clockSayMealSoon": "We eat in {minutes} minutes: time to wash your hands!",
+  "@clockSayMealSoon": {
+    "description": "Said aloud when the light clock turns yellow before a meal",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "clockSayMealNow": "Time to eat!",
+  "@clockSayMealNow": {
+    "description": "Said aloud when it is time to eat"
+  },
+  "clockSayBedSoon": "Bedtime in {minutes} minutes: pyjamas on!",
+  "@clockSayBedSoon": {
+    "description": "Said aloud when the light clock turns yellow before bed",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "clockSayBedNow": "Time for bed!",
+  "@clockSayBedNow": {
+    "description": "Said aloud when it is bedtime"
+  },
+  "clockSayOtherSoon": "{minutes} minutes to go!",
+  "@clockSayOtherSoon": {
+    "description": "Said aloud when the light clock turns yellow",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

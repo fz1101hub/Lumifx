@@ -611,9 +611,12 @@ class PlaybackController extends ChangeNotifier {
 
   /// The controls the lights run with: an effect with a tune keeps the
   /// tune's own pace whatever the speed set, so the lights stay with the
-  /// music (and the music is not cut off when the lights end early).
+  /// music (and the music is not cut off when the lights end early); one
+  /// tied to the clock keeps to the clock.
   EffectControls _playerControls(EffectControls controls) =>
-      controls.speed != 1 && soundscapeOf(effectToPlay).melody != null
+      controls.speed != 1 &&
+              (effectToPlay.keepsRealTime ||
+                  soundscapeOf(effectToPlay).melody != null)
           ? controls.copyWith(speed: 1)
           : controls;
 

@@ -25,6 +25,8 @@ import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/effects/effect_player_screen.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
+import 'package:lumifx/src/features/timers/light_clock.dart';
+import 'package:lumifx/src/features/timers/light_clock_screen.dart';
 import 'package:lumifx/src/features/home/home_screen.dart';
 import 'package:lumifx/src/features/fun/advent_screen.dart';
 import 'package:lumifx/src/features/fun/birthday_screen.dart';
@@ -1505,6 +1507,46 @@ void main() {
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light clock counts down in colour and says when to go',
+      (tester) async {
+    var now = DateTime(2026, 6, 15, 12);
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, clock: () => now, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('Light clock'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('Light clock'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light clock'));
+    await tester.pumpAndSettle();
+    // Half an hour from now by default.
+    expect(find.text('At 12:30 PM'), findsOneWidget);
+    await tester.tap(find.text('Mealtime'));
+    await tester.pump();
+    await tester.tap(find.text('Start the light clock'));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 2));
+    final playback =
+        AppScope.of(tester.element(find.byType(LightClockScreen))).playback;
+    expect(LightClock.of(playback.effect)!.at, DateTime(2026, 6, 15, 12, 30));
+    expect(find.text('Plenty of time'), findsOneWidget);
+    expect(find.text('30 minutes to go'), findsOneWidget);
+
+    now = DateTime(2026, 6, 15, 12, 22);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Nearly time: get ready!'), findsOneWidget);
+    expect(speaker.spoken.last.$1,
+        'We eat in 8 minutes: time to wash your hands!');
+
+    // The mini-player leads back here.
+    expect(
+        (routeForPlaying(playback.effect) as MaterialPageRoute<void>)
+            .builder(tester.element(find.byType(LightClockScreen))),
+        isA<LightClockScreen>());
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Start the light clock'), findsOneWidget);
   });
 
   testWidgets('the nap light glows amber, then green when the rest is over',
