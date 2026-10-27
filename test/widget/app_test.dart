@@ -56,6 +56,8 @@ import 'package:lumifx/src/features/fun/noise_light_screen.dart';
 import 'package:lumifx/src/features/kids/kids_mode.dart';
 import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
+import 'package:lumifx/src/features/fun/family_quiz_screen.dart';
+import 'package:lumifx/src/features/fun/family_quiz.dart';
 import 'package:lumifx/src/features/fun/treasure_hunt_screen.dart';
 import 'package:lumifx/src/features/fun/treasure_hunt.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
@@ -1527,6 +1529,52 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the family quiz: teams buzz, the grown-up judges, a winner',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const FamilyQuizScreen(seed: 3))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start the quiz'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Question 1 of 10'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(FamilyQuizScreen))).playback;
+    expect(playback.status, PlaybackStatus.playing);
+
+    await tester.tap(find.bySemanticsLabel('Team red!'));
+    await tester.pump();
+    expect(speaker.spoken.last.$1, 'Team red!');
+    expect(find.textContaining('Answer: '), findsOneWidget);
+    await tester.tap(find.text('Wrong'));
+    await tester.pump();
+    final said = speaker.spoken.length;
+    await tester.tap(find.bySemanticsLabel('Team red!'));
+    await tester.pump();
+    expect(speaker.spoken, hasLength(said),
+        reason: 'red is out for this question');
+    await tester.tap(find.bySemanticsLabel('Team blue!'));
+    await tester.pump();
+    await tester.tap(find.text('Right'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1600));
+    expect(find.text('Question 2 of 10'), findsOneWidget);
+
+    for (var i = 2; i <= 10; i++) {
+      await tester.tap(find.text('Next question'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(find.text('Team blue wins!'), findsOneWidget);
+    expect(speaker.spoken.last.$1, 'Team blue wins!');
+    expect(playback.effect.id, FamilyQuiz.winner('', LearnColour.blue).id);
+    await playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 

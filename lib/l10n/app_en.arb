@@ -5946,5 +5946,152 @@
         "type": "String"
       }
     }
+  },
+  "familyQuiz": "Family quiz",
+  "@familyQuiz": {
+    "description": "Fun: the family quiz"
+  },
+  "familyQuizSubtitle": "Questions read aloud, teams buzz in their colour",
+  "@familyQuizSubtitle": {
+    "description": "Fun: what the family quiz is"
+  },
+  "familyQuizDescription": "Put the phone in the middle. Each question is read aloud; the first team to tap its colour lights the room and answers. The grown-up sees the answer and taps Right or Wrong.",
+  "@familyQuizDescription": {
+    "description": "Family quiz: how it works"
+  },
+  "quizPack": "Questions for",
+  "@quizPack": {
+    "description": "Family quiz: heading of the question packs"
+  },
+  "quizPackLittle": "Little ones (4–6)",
+  "@quizPackLittle": {
+    "description": "Family quiz pack: small children"
+  },
+  "quizPackKids": "Children (7–10)",
+  "@quizPackKids": {
+    "description": "Family quiz pack: school children"
+  },
+  "quizPackFamily": "Everyone",
+  "@quizPackFamily": {
+    "description": "Family quiz pack: everyone"
+  },
+  "quizTeams": "Teams",
+  "@quizTeams": {
+    "description": "Family quiz: how many teams"
+  },
+  "quizStart": "Start the quiz",
+  "@quizStart": {
+    "description": "Family quiz: start button"
+  },
+  "quizQuestionNumber": "Question {number} of {total}",
+  "@quizQuestionNumber": {
+    "description": "Family quiz: which question this is",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizTeamTurn": "Team {team}!",
+  "@quizTeamTurn": {
+    "description": "Family quiz: said when a team buzzes; team is a colour word",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
+  },
+  "quizAnswer": "Answer: {answer}",
+  "@quizAnswer": {
+    "description": "Family quiz: the answer, for the grown-up",
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "quizRight": "Right",
+  "@quizRight": {
+    "description": "Family quiz: the answer was right"
+  },
+  "quizWrong": "Wrong",
+  "@quizWrong": {
+    "description": "Family quiz: the answer was wrong"
+  },
+  "quizSkip": "Next question",
+  "@quizSkip": {
+    "description": "Family quiz: nobody knows, next question"
+  },
+  "quizWhatColour": "What colour is the light now?",
+  "@quizWhatColour": {
+    "description": "Family quiz question: the room shows a colour"
+  },
+  "quizPlus": "How much is {a} plus {b}?",
+  "@quizPlus": {
+    "description": "Family quiz question: an addition",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "quizMinus": "How much is {a} minus {b}?",
+  "@quizMinus": {
+    "description": "Family quiz question: a subtraction",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "quizTimes": "How much is {a} times {b}?",
+  "@quizTimes": {
+    "description": "Family quiz question: a multiplication",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "quizMix": "What colour do {a} and {b} make together?",
+  "@quizMix": {
+    "description": "Family quiz question: two paints mixed; a and b are colour words",
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  },
+  "quizWinner": "Team {team} wins!",
+  "@quizWinner": {
+    "description": "Family quiz: the winning team; team is a colour word",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
+  },
+  "quizDraw": "It's a draw!",
+  "@quizDraw": {
+    "description": "Family quiz: nobody won"
+  },
+  "quizPlayAgain": "Play again",
+  "@quizPlayAgain": {
+    "description": "Family quiz: play again"
   }
 }

@@ -148,7 +148,8 @@ enum AppScreen {
   farm('farm'),
   sing('sing'),
   weeklyReport('weekly-report'),
-  treasureHunt('treasure-hunt');
+  treasureHunt('treasure-hunt'),
+  familyQuiz('family-quiz');
 
   const AppScreen(this.slug);
 
