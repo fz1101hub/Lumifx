@@ -5,6 +5,7 @@ import '../common/layout.dart';
 import '../learn/colour_mixing_screen.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting_screen.dart';
+import '../learn/farm_screen.dart';
 import '../learn/morse_screen.dart';
 import 'advent_screen.dart';
 import '../music_box/light_piano_screen.dart';
@@ -93,6 +94,8 @@ class FunScreen extends StatelessWidget {
               l10n.countLightsSubtitle, () => const CountingScreen()),
           entry(Icons.translate, l10n.colourWords, l10n.colourWordsSubtitle,
               () => const ColourWordsScreen()),
+          entry(Icons.pets, l10n.farm, l10n.farmSubtitle,
+              () => const FarmScreen()),
           entry(Icons.palette_outlined, l10n.colourMixing,
               l10n.colourMixingSubtitle, () => const ColourMixingScreen()),
           entry(Icons.more_horiz, l10n.morse, l10n.morseSubtitle,

@@ -130,7 +130,8 @@ enum AppScreen {
   goal('goal-party'),
   toothFairy('tooth-fairy'),
   boardGame('board-game'),
-  hideSeek('hide-and-seek');
+  hideSeek('hide-and-seek'),
+  farm('farm');
 
   const AppScreen(this.slug);
 

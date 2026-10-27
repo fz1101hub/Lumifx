@@ -5362,5 +5362,110 @@
   "hideSeekWellDone": "Found you all! Well hidden, everyone!",
   "@hideSeekWellDone": {
     "description": "Hide and seek: said when everyone is found"
+  },
+  "farm": "Light farm",
+  "@farm": {
+    "description": "Title: the light farm"
+  },
+  "farmSubtitle": "Each animal its sound and its colour",
+  "@farmSubtitle": {
+    "description": "Under the light farm entry"
+  },
+  "farmDescription": "Tap an animal: the room takes its colour and the voice makes its sound. Then guess: who says this?",
+  "@farmDescription": {
+    "description": "Top of the light farm screen"
+  },
+  "farmListen": "Listen",
+  "@farmListen": {
+    "description": "Light farm mode: listen to the animals"
+  },
+  "farmGuess": "Who says this?",
+  "@farmGuess": {
+    "description": "Light farm mode: guess the animal"
+  },
+  "farmSays": "The {animal} says {sound}",
+  "@farmSays": {
+    "description": "Said aloud: the animal and its sound",
+    "placeholders": {
+      "animal": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "farmWhoSays": "Who says {sound}",
+  "@farmWhoSays": {
+    "description": "Said aloud in the quiz",
+    "placeholders": {
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "farmAnimalCow": "cow",
+  "@farmAnimalCow": {
+    "description": "Animal (with the article where the language needs one at the start of a sentence)"
+  },
+  "farmAnimalPig": "pig",
+  "@farmAnimalPig": {
+    "description": "Animal"
+  },
+  "farmAnimalDuck": "duck",
+  "@farmAnimalDuck": {
+    "description": "Animal"
+  },
+  "farmAnimalFrog": "frog",
+  "@farmAnimalFrog": {
+    "description": "Animal"
+  },
+  "farmAnimalCat": "cat",
+  "@farmAnimalCat": {
+    "description": "Animal"
+  },
+  "farmAnimalDog": "dog",
+  "@farmAnimalDog": {
+    "description": "Animal"
+  },
+  "farmAnimalHorse": "horse",
+  "@farmAnimalHorse": {
+    "description": "Animal"
+  },
+  "farmAnimalRooster": "rooster",
+  "@farmAnimalRooster": {
+    "description": "Animal"
+  },
+  "farmSoundCow": "moo!",
+  "@farmSoundCow": {
+    "description": "Animal sound, written to be read aloud"
+  },
+  "farmSoundPig": "oink oink!",
+  "@farmSoundPig": {
+    "description": "Animal sound"
+  },
+  "farmSoundDuck": "quack quack!",
+  "@farmSoundDuck": {
+    "description": "Animal sound"
+  },
+  "farmSoundFrog": "ribbit!",
+  "@farmSoundFrog": {
+    "description": "Animal sound"
+  },
+  "farmSoundCat": "meow!",
+  "@farmSoundCat": {
+    "description": "Animal sound"
+  },
+  "farmSoundDog": "woof woof!",
+  "@farmSoundDog": {
+    "description": "Animal sound"
+  },
+  "farmSoundHorse": "neigh!",
+  "@farmSoundHorse": {
+    "description": "Animal sound"
+  },
+  "farmSoundRooster": "cock-a-doodle-doo!",
+  "@farmSoundRooster": {
+    "description": "Animal sound"
   }
 }

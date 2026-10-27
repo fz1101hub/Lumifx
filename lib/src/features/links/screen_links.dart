@@ -19,6 +19,7 @@ import '../fun/hot_cold_screen.dart';
 import '../fun/noise_light_screen.dart';
 import '../fun/simon_screen.dart';
 import '../learn/colour_mixing_screen.dart';
+import '../learn/farm_screen.dart';
 import '../learn/colour_words_screen.dart';
 import '../learn/counting_screen.dart';
 import '../learn/morse_screen.dart';
@@ -59,6 +60,7 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.toothFairy => const ToothFairyScreen(),
       AppScreen.boardGame => const BoardGameScreen(),
       AppScreen.hideSeek => const HideAndSeekScreen(),
+      AppScreen.farm => const FarmScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

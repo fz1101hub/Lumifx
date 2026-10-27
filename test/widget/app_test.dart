@@ -33,6 +33,8 @@ import 'package:lumifx/src/features/fun/board_game.dart';
 import 'package:lumifx/src/features/fun/board_game_screen.dart';
 import 'package:lumifx/src/features/fun/goal.dart';
 import 'package:lumifx/src/features/fun/hide_and_seek.dart';
+import 'package:lumifx/src/features/learn/farm.dart';
+import 'package:lumifx/src/features/learn/farm_screen.dart';
 import 'package:lumifx/src/features/fun/hide_and_seek_screen.dart';
 import 'package:lumifx/src/features/fun/goal_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon.dart';
@@ -1553,6 +1555,28 @@ void main() {
     expect(scope.preferences.toothFairy, isNull);
     expect(scope.playback.effect.id, ToothFairy.id);
     await scope.playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the light farm says each animal and asks who says it',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const FarmScreen(seed: 2))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Cow'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(FarmScreen))).playback;
+    expect(FarmAnimal.of(playback.effect), FarmAnimal.cow);
+    expect(speaker.spoken.last.$1, 'The cow says moo!');
+
+    await tester.tap(find.text('Quiz'));
+    await tester.pump();
+    expect(speaker.spoken.last.$1, startsWith('Who says'));
+    await playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 
