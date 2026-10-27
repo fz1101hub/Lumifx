@@ -255,6 +255,18 @@ Also done ahead of schedule:
 - **Words and lights in sync**: a flash, lightning or a key lands at
   once, read-aloud lines start a moment early to meet their light, and
   sounds are made ahead.
+- **Goal!**: a big button (or lumifx://app/goal on an NFC sticker or a
+  shortcut) bursts the room into a team's colours; eight teams or your
+  own from up to three colours.
+- **Tooth fairy**: a soft pink and violet glow at dawn in the child's
+  room (kept on the bridge), her letter read aloud in the morning and a
+  magic star.
+- **Occasions**: candlelit dinner, game night, reading light, aperitivo
+  and "guests in 10 minutes", which brightens slowly to a welcome.
+- **Board game referee**: whose turn it is in their colour, a light die
+  that blinks the number, and a turn timer that turns red.
+- **Hide and seek**: the voice counts aloud as the lamps dim, then
+  "Ready or not, here I come!" and a searchlight sweeps the room.
 
 ## Development
 
