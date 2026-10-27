@@ -1475,5 +1475,17 @@
   "otherBridges": "Otros puentes",
   "switchToBridge": "Cambiar a {name}",
   "addAnotherBridge": "Añadir otro puente",
-  "addAnotherBridgeSubtitle": "Una segunda casa o un piso grande: cambia entre ellos como entre habitaciones"
+  "addAnotherBridgeSubtitle": "Una segunda casa o un piso grande: cambia entre ellos como entre habitaciones",
+  "soundAlerts": "Avisos de luz para sonidos",
+  "soundAlertsSubtitle": "Alarma de humo, timbre, llanto del bebé",
+  "soundAlertsDescription": "Mientras esta pantalla está abierta, el teléfono escucha los sonidos elegidos y las luces parpadean en su color: rojo para la alarma de humo, azul para el timbre, rosa para el llanto del bebé. Deja el teléfono cerca y cargando. El sonido se reconoce en el teléfono y nunca se graba ni se envía. Es una ayuda, no una alarma certificada.",
+  "alertSmokeAlarm": "Alarma de humo",
+  "alertDoorbell": "Timbre",
+  "alertBabyCrying": "Llanto del bebé",
+  "soundAlertsStart": "Empezar a escuchar",
+  "soundAlertsListening": "Escuchando… las luces te avisarán.",
+  "soundAlertsHeard": "{sound} a las {time}",
+  "soundAlertsStopLights": "Detener las luces",
+  "soundAlertsTry": "Probar las luces",
+  "soundAlertsMicDenied": "LumiFX necesita el micrófono para oír estos sonidos. Permítelo en los ajustes del teléfono."
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../alerts/sound_alerts_screen.dart';
 import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
@@ -71,6 +72,7 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.treasureHunt => const TreasureHuntScreen(),
       AppScreen.familyQuiz => const FamilyQuizScreen(),
       AppScreen.dreamDiary => const DreamDiaryScreen(),
+      AppScreen.soundAlerts => const SoundAlertsScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

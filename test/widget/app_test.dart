@@ -11,11 +11,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lumifx/src/app.dart';
+import 'package:lumifx/src/features/alerts/sound_alerts_screen.dart';
+import 'package:lumifx/src/features/alerts/sound_alerts.dart';
 import 'package:lumifx/src/app_scope.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/calendar/calendar_source.dart';
+import 'package:lumifx/src/core/screen_wake.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/core/weather/weather.dart';
@@ -2013,6 +2016,47 @@ void main() {
     expect(find.text('Start singing'), findsOneWidget);
   });
 
+  testWidgets('a smoke alarm heard flashes the lights red', (tester) async {
+    // Three beeps of a smoke alarm, then quiet.
+    const rate = 44100;
+    final beeps = ByteData(rate * 9);
+    for (var i = 0; i < rate * 3; i++) {
+      final beeping = (i ~/ (rate ~/ 2)).isEven;
+      beeps.setInt16(
+          i * 2,
+          beeping
+              ? (0.5 * 32767 * math.sin(2 * math.pi * 3150 * i / rate)).round()
+              : 0,
+          Endian.little);
+    }
+    final microphone = FakeAudioInput(pcm: beeps.buffer.asUint8List());
+    await _pumpApp(tester, audioInput: microphone);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const SoundAlertsScreen(screenWake: _NoWake()))));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(SoundAlertsScreen))).playback;
+    await tester.tap(find.text('Start listening'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(microphone.started, isTrue);
+    expect(SoundAlert.of(playback.effect), SoundAlert.smokeAlarm);
+    expect(find.textContaining('Smoke alarm at'), findsOneWidget);
+    await tester.ensureVisible(find.text('Stop the lights'));
+    await tester.pump();
+    await tester.tap(find.text('Stop the lights'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(playback.status, PlaybackStatus.idle);
+
+    await tester.scrollUntilVisible(find.text('Stop'), 200,
+        scrollable: find.byType(Scrollable).last);
+    expect(find.text('Listening… the lights will tell you.'), findsOneWidget);
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(microphone.stopped, isTrue);
+  });
+
   testWidgets('the noise light turns red when it gets too loud',
       (tester) async {
     // Two seconds of shouting next to the phone.
@@ -3906,6 +3950,13 @@ void main() {
   });
 
   streamingTests();
+}
+
+class _NoWake implements ScreenWake {
+  const _NoWake();
+
+  @override
+  Future<void> keepOn(bool on) async {}
 }
 
 class _FakeCalendar implements CalendarSource {

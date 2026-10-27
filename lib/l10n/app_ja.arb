@@ -1475,5 +1475,17 @@
   "otherBridges": "ほかのブリッジ",
   "switchToBridge": "{name}に切り替え",
   "addAnotherBridge": "ブリッジを追加",
-  "addAnotherBridgeSubtitle": "別荘や広い家に：部屋を切り替えるように使えます"
+  "addAnotherBridgeSubtitle": "別荘や広い家に：部屋を切り替えるように使えます",
+  "soundAlerts": "音をライトでお知らせ",
+  "soundAlertsSubtitle": "火災報知器・チャイム・赤ちゃんの泣き声",
+  "soundAlertsDescription": "この画面を開いている間、スマホがえらんだ音を聞き取り、ライトがその色で点滅します（火災報知器は赤、チャイムは青、赤ちゃんの泣き声はピンク）。スマホは近くに置いて充電しておいてください。音はスマホの中で認識され、録音も送信もされません。補助であり、認定された警報装置ではありません。",
+  "alertSmokeAlarm": "火災報知器",
+  "alertDoorbell": "チャイム",
+  "alertBabyCrying": "赤ちゃんの泣き声",
+  "soundAlertsStart": "聞き取りをはじめる",
+  "soundAlertsListening": "聞き取り中…ライトでお知らせします。",
+  "soundAlertsHeard": "{time} {sound}",
+  "soundAlertsStopLights": "ライトを止める",
+  "soundAlertsTry": "ライトをためす",
+  "soundAlertsMicDenied": "これらの音を聞き取るにはマイクが必要です。スマホの設定で許可してください。"
 }

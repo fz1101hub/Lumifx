@@ -425,6 +425,9 @@ Paste this in "Notes for review":
 > (Home › Your home) is switched on: the start times of the next day's
 > appointments become schedules on the user's own Hue Bridge so a room
 > glows a few minutes before; titles never leave the phone.
+> Light alerts for sounds (Home › More) listen with the microphone only
+> while that screen is open, for a smoke alarm, a doorbell or a baby
+> crying, recognised on the device; the lights flash, nothing is recorded.
 > Siri phrases (iOS) and Google Assistant App Actions only open LumiFX's
 > own links; no speech is handled by the app itself.
 > Photo library access is used only when the user taps "From a photo" in

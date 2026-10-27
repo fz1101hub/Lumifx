@@ -1475,5 +1475,17 @@
   "otherBridges": "Autres ponts",
   "switchToBridge": "Passer à {name}",
   "addAnotherBridge": "Ajouter un autre pont",
-  "addAnotherBridgeSubtitle": "Une maison secondaire ou un grand appartement : passez de l'un à l'autre comme d'une pièce à l'autre"
+  "addAnotherBridgeSubtitle": "Une maison secondaire ou un grand appartement : passez de l'un à l'autre comme d'une pièce à l'autre",
+  "soundAlerts": "Alertes lumineuses pour les sons",
+  "soundAlertsSubtitle": "Détecteur de fumée, sonnette, pleurs de bébé",
+  "soundAlertsDescription": "Tant que cet écran est ouvert, le téléphone écoute les sons choisis et les lampes clignotent dans leur couleur : rouge pour un détecteur de fumée, bleu pour la sonnette, rose pour les pleurs d'un bébé. Laissez le téléphone à proximité et en charge. Le son est reconnu sur le téléphone, jamais enregistré ni envoyé. C'est une aide, pas une alarme certifiée.",
+  "alertSmokeAlarm": "Détecteur de fumée",
+  "alertDoorbell": "Sonnette",
+  "alertBabyCrying": "Pleurs de bébé",
+  "soundAlertsStart": "Commencer l'écoute",
+  "soundAlertsListening": "À l'écoute… les lampes vous préviendront.",
+  "soundAlertsHeard": "{sound} à {time}",
+  "soundAlertsStopLights": "Arrêter les lampes",
+  "soundAlertsTry": "Essayer les lampes",
+  "soundAlertsMicDenied": "LumiFX a besoin du micro pour entendre ces sons. Autorisez-le dans les réglages du téléphone."
 }

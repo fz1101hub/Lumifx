@@ -1475,5 +1475,17 @@
   "otherBridges": "Altri bridge",
   "switchToBridge": "Passa a {name}",
   "addAnotherBridge": "Aggiungi un altro bridge",
-  "addAnotherBridgeSubtitle": "Una seconda casa o un appartamento grande: passa dall'uno all'altro come tra le stanze"
+  "addAnotherBridgeSubtitle": "Una seconda casa o un appartamento grande: passa dall'uno all'altro come tra le stanze",
+  "soundAlerts": "Avvisi luminosi per i suoni",
+  "soundAlertsSubtitle": "Allarme fumo, campanello, pianto del bimbo",
+  "soundAlertsDescription": "Finché questa schermata è aperta, il telefono ascolta i suoni scelti e le luci lampeggiano nel loro colore: rosso per l'allarme fumo, blu per il campanello, rosa per il pianto del bimbo. Lascia il telefono vicino e in carica. Il suono viene riconosciuto sul telefono e non viene mai registrato né inviato. È un aiuto, ma non è un allarme certificato.",
+  "alertSmokeAlarm": "Allarme fumo",
+  "alertDoorbell": "Campanello",
+  "alertBabyCrying": "Pianto del bimbo",
+  "soundAlertsStart": "Inizia ad ascoltare",
+  "soundAlertsListening": "In ascolto… te lo diranno le luci.",
+  "soundAlertsHeard": "{sound} alle {time}",
+  "soundAlertsStopLights": "Ferma le luci",
+  "soundAlertsTry": "Prova le luci",
+  "soundAlertsMicDenied": "LumiFX ha bisogno del microfono per sentire questi suoni. Consentilo nelle impostazioni del telefono."
 }

@@ -47,6 +47,13 @@ voice is, moment by moment, on your phone; nothing is recorded, stored or
 transmitted, and the microphone is switched off when you tap Stop or
 leave the screen.
 
+**Microphone (light alerts for sounds).** While the light alerts screen
+is open and listening, the app looks at the sound in the room moment by
+moment, on your phone, for the pattern of a smoke alarm, a doorbell or a
+baby crying, and flashes the lights when it finds one. Nothing is
+recorded, stored or transmitted, and the microphone is switched off when
+you tap Stop, leave the screen or the app goes to the background.
+
 **Your voice (stories of your own).** In the story editor you can record
 yourself reading the lines of a story you made. The recordings are saved
 as sound files on your phone only, play when that story plays, are never
@@ -274,6 +281,13 @@ microfono si spegne quando tocchi Stop o lasci la luce del rumore.
 della nota cantata. L'app calcola solo quanto è alta e forte la voce,
 istante per istante, sul telefono; nulla viene registrato, salvato o
 trasmesso, e il microfono si spegne quando tocchi Stop o lasci la schermata.
+
+**Microfono (avvisi luminosi per i suoni).** Finché la schermata degli
+avvisi luminosi è aperta e in ascolto, l'app esamina il suono della stanza
+istante per istante, sul telefono, cercando l'andamento di un allarme fumo,
+di un campanello o del pianto di un bimbo, e fa lampeggiare le luci quando
+lo trova. Nulla viene registrato, salvato o trasmesso, e il microfono si
+spegne quando tocchi Stop, lasci la schermata o l'app va in background.
 
 **La tua voce (storie create da te).** Nell'editor delle storie puoi
 registrarti mentre leggi le frasi di una storia che hai creato. Le

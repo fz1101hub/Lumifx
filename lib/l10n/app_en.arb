@@ -6212,5 +6212,61 @@
   "addAnotherBridgeSubtitle": "A second home or a large flat: switch between them like rooms",
   "@addAnotherBridgeSubtitle": {
     "description": "Settings: what adding another bridge is for"
+  },
+  "soundAlerts": "Light alerts for sounds",
+  "@soundAlerts": {
+    "description": "Home: lights that tell about sounds"
+  },
+  "soundAlertsSubtitle": "Smoke alarm, doorbell, baby crying",
+  "@soundAlertsSubtitle": {
+    "description": "Home: which sounds"
+  },
+  "soundAlertsDescription": "While this screen is open, the phone listens for the sounds chosen and the lights flash in their colour: red for a smoke alarm, blue for the doorbell, pink for a baby crying. Leave the phone nearby and plugged in. The sound is recognised on the phone and never recorded or sent. It helps, but it is not a certified alarm.",
+  "@soundAlertsDescription": {
+    "description": "Light alerts for sounds: how it works and its limits"
+  },
+  "alertSmokeAlarm": "Smoke alarm",
+  "@alertSmokeAlarm": {
+    "description": "Light alerts: a smoke alarm"
+  },
+  "alertDoorbell": "Doorbell",
+  "@alertDoorbell": {
+    "description": "Light alerts: the doorbell"
+  },
+  "alertBabyCrying": "Baby crying",
+  "@alertBabyCrying": {
+    "description": "Light alerts: a baby crying"
+  },
+  "soundAlertsStart": "Start listening",
+  "@soundAlertsStart": {
+    "description": "Light alerts: start listening"
+  },
+  "soundAlertsListening": "Listening… the lights will tell you.",
+  "@soundAlertsListening": {
+    "description": "Light alerts: listening now"
+  },
+  "soundAlertsHeard": "{sound} at {time}",
+  "@soundAlertsHeard": {
+    "description": "Light alerts: what was heard and when",
+    "placeholders": {
+      "sound": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "soundAlertsStopLights": "Stop the lights",
+  "@soundAlertsStopLights": {
+    "description": "Light alerts: stop the flashing"
+  },
+  "soundAlertsTry": "Try the lights",
+  "@soundAlertsTry": {
+    "description": "Light alerts: preview each alert on the lights"
+  },
+  "soundAlertsMicDenied": "LumiFX needs the microphone to hear these sounds. Allow it in the phone's settings.",
+  "@soundAlertsMicDenied": {
+    "description": "Light alerts: no microphone"
   }
 }

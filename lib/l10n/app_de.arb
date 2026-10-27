@@ -1475,5 +1475,17 @@
   "otherBridges": "Weitere Bridges",
   "switchToBridge": "Zu {name} wechseln",
   "addAnotherBridge": "Weitere Bridge hinzufügen",
-  "addAnotherBridgeSubtitle": "Ein zweites Zuhause oder eine große Wohnung: wechsle wie zwischen Räumen"
+  "addAnotherBridgeSubtitle": "Ein zweites Zuhause oder eine große Wohnung: wechsle wie zwischen Räumen",
+  "soundAlerts": "Lichtsignale für Geräusche",
+  "soundAlertsSubtitle": "Rauchmelder, Türklingel, Babyweinen",
+  "soundAlertsDescription": "Solange dieser Bildschirm offen ist, horcht das Handy auf die gewählten Geräusche und die Lampen blinken in ihrer Farbe: Rot für den Rauchmelder, Blau für die Türklingel, Rosa für ein weinendes Baby. Lass das Handy in der Nähe und am Ladegerät. Der Klang wird auf dem Handy erkannt, nie aufgenommen oder gesendet. Es hilft, ist aber kein zertifizierter Alarm.",
+  "alertSmokeAlarm": "Rauchmelder",
+  "alertDoorbell": "Türklingel",
+  "alertBabyCrying": "Baby weint",
+  "soundAlertsStart": "Zuhören starten",
+  "soundAlertsListening": "Ich höre zu… die Lampen sagen es dir.",
+  "soundAlertsHeard": "{sound} um {time}",
+  "soundAlertsStopLights": "Lampen stoppen",
+  "soundAlertsTry": "Lampen testen",
+  "soundAlertsMicDenied": "LumiFX braucht das Mikrofon, um diese Geräusche zu hören. Erlaube es in den Einstellungen des Handys."
 }

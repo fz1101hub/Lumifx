@@ -4,6 +4,7 @@ import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
 import '../board/light_board_screen.dart';
+import '../alerts/sound_alerts_screen.dart';
 import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
@@ -202,6 +203,8 @@ class HomeScreen extends StatelessWidget {
               entries: [
                 _HomeEntry(Icons.queue_music, l10n.playlists,
                     l10n.playlistsSubtitle, () => const PlaylistsScreen()),
+                _HomeEntry(Icons.hearing_outlined, l10n.soundAlerts,
+                    l10n.soundAlertsSubtitle, () => const SoundAlertsScreen()),
                 _HomeEntry(Icons.wb_sunny_outlined, l10n.weather,
                     l10n.weatherSubtitle, () => const WeatherScreen()),
                 _HomeEntry(

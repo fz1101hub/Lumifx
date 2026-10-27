@@ -1475,5 +1475,17 @@
   "otherBridges": "Andere bridges",
   "switchToBridge": "Overschakelen naar {name}",
   "addAnotherBridge": "Nog een bridge toevoegen",
-  "addAnotherBridgeSubtitle": "Een tweede huis of een groot appartement: wissel ertussen zoals tussen kamers"
+  "addAnotherBridgeSubtitle": "Een tweede huis of een groot appartement: wissel ertussen zoals tussen kamers",
+  "soundAlerts": "Lichtsignalen voor geluiden",
+  "soundAlertsSubtitle": "Rookmelder, deurbel, huilende baby",
+  "soundAlertsDescription": "Zolang dit scherm open is, luistert de telefoon naar de gekozen geluiden en knipperen de lampen in hun kleur: rood voor een rookmelder, blauw voor de deurbel, roze voor een huilende baby. Laat de telefoon dichtbij en aan de lader. Het geluid wordt op de telefoon herkend en nooit opgenomen of verstuurd. Het helpt, maar het is geen gecertificeerd alarm.",
+  "alertSmokeAlarm": "Rookmelder",
+  "alertDoorbell": "Deurbel",
+  "alertBabyCrying": "Huilende baby",
+  "soundAlertsStart": "Start met luisteren",
+  "soundAlertsListening": "Aan het luisteren… de lampen laten het je weten.",
+  "soundAlertsHeard": "{sound} om {time}",
+  "soundAlertsStopLights": "Lampen stoppen",
+  "soundAlertsTry": "Lampen testen",
+  "soundAlertsMicDenied": "LumiFX heeft de microfoon nodig om deze geluiden te horen. Sta het toe in de instellingen van je telefoon."
 }

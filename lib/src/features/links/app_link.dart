@@ -150,7 +150,8 @@ enum AppScreen {
   weeklyReport('weekly-report'),
   treasureHunt('treasure-hunt'),
   familyQuiz('family-quiz'),
-  dreamDiary('dream-diary');
+  dreamDiary('dream-diary'),
+  soundAlerts('sound-alerts');
 
   const AppScreen(this.slug);
 

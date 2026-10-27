@@ -1475,5 +1475,17 @@
   "otherBridges": "Outras bridges",
   "switchToBridge": "Mudar para {name}",
   "addAnotherBridge": "Adicionar outra bridge",
-  "addAnotherBridgeSubtitle": "Uma segunda casa ou um apartamento grande: alterne entre elas como entre cômodos"
+  "addAnotherBridgeSubtitle": "Uma segunda casa ou um apartamento grande: alterne entre elas como entre cômodos",
+  "soundAlerts": "Alertas de luz para sons",
+  "soundAlertsSubtitle": "Alarme de fumaça, campainha, choro de bebê",
+  "soundAlertsDescription": "Enquanto esta tela está aberta, o celular escuta os sons escolhidos e as luzes piscam na cor deles: vermelho para alarme de fumaça, azul para a campainha, rosa para o choro de bebê. Deixe o celular por perto e carregando. O som é reconhecido no celular e nunca é gravado nem enviado. Ajuda, mas não é um alarme certificado.",
+  "alertSmokeAlarm": "Alarme de fumaça",
+  "alertDoorbell": "Campainha",
+  "alertBabyCrying": "Choro de bebê",
+  "soundAlertsStart": "Começar a ouvir",
+  "soundAlertsListening": "Ouvindo… as luzes vão avisar.",
+  "soundAlertsHeard": "{sound} às {time}",
+  "soundAlertsStopLights": "Parar as luzes",
+  "soundAlertsTry": "Testar as luzes",
+  "soundAlertsMicDenied": "O LumiFX precisa do microfone para ouvir esses sons. Permita nas configurações do celular."
 }
