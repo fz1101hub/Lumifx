@@ -267,6 +267,17 @@ Also done ahead of schedule:
   that blinks the number, and a turn timer that turns red.
 - **Hide and seek**: the voice counts aloud as the lamps dim, then
   "Ready or not, here I come!" and a searchlight sweeps the room.
+- **Light farm**: tap an animal and the room takes its colour as the
+  voice makes its sound, or hear a sound and find who makes it.
+- **Around the world in light**: four short stories of places (northern
+  lights, cherry blossom, Sahara, Amazon), each with a fact read aloud.
+- **My tune**: keep what was played on the light piano (up to ten tunes),
+  play it back and share it with a link or QR code.
+- **Sing and colour**: the pitch of the voice picks the colour of the
+  lamps, holding a note makes it brighter; it listens only while the
+  screen is open.
+- **Weekly report**: for each child, the stars of the week day by day
+  against last week, the routines finished and when bedtime started.
 
 ## Development
 
