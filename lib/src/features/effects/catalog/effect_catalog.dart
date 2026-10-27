@@ -5,11 +5,13 @@ import 'builtin_interactive.dart';
 import 'builtin_scenes.dart';
 import 'builtin_seasonal.dart';
 import 'builtin_stories.dart';
+import 'builtin_world.dart';
 
 /// Every effect shipped with the app.
 final List<LightingEffect> effectCatalog = [
   ...builtinScenes,
   ...builtinStories,
+  ...builtinWorld,
   ...builtinAdventures,
   ...builtinSeasonal,
   ...builtinHolidays,

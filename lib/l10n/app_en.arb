@@ -5467,5 +5467,105 @@
   "farmSoundRooster": "cock-a-doodle-doo!",
   "@farmSoundRooster": {
     "description": "Animal sound"
+  },
+  "collectionAroundTheWorld": "Around the world",
+  "@collectionAroundTheWorld": {
+    "description": "Collection of stories"
+  },
+  "effectNameWorldAurora": "Northern lights in Norway",
+  "@effectNameWorldAurora": {
+    "description": "Story name"
+  },
+  "effectDescriptionWorldAurora": "Green and purple ribbons dance across a long winter night.",
+  "@effectDescriptionWorldAurora": {
+    "description": "Story description"
+  },
+  "narrationWorldAurora1": "Far in the north of Norway, the winter night is long and dark.",
+  "@narrationWorldAurora1": {
+    "description": "Story narration"
+  },
+  "narrationWorldAurora2": "Look! A green ribbon of light dances across the sky.",
+  "@narrationWorldAurora2": {
+    "description": "Story narration"
+  },
+  "narrationWorldAurora3": "It's the northern lights, waving green and purple.",
+  "@narrationWorldAurora3": {
+    "description": "Story narration"
+  },
+  "narrationWorldAurora4": "Did you know? The northern lights glow when tiny bits from the Sun meet the air high above the Earth.",
+  "@narrationWorldAurora4": {
+    "description": "Story narration: a fact"
+  },
+  "effectNameWorldCherry": "Cherry blossom in Japan",
+  "@effectNameWorldCherry": {
+    "description": "Story name"
+  },
+  "effectDescriptionWorldCherry": "Pink petals float down on a spring morning.",
+  "@effectDescriptionWorldCherry": {
+    "description": "Story description"
+  },
+  "narrationWorldCherry1": "In Japan, spring arrives with a cloud of pink.",
+  "@narrationWorldCherry1": {
+    "description": "Story narration"
+  },
+  "narrationWorldCherry2": "The cherry trees are in bloom, and petals float down like snow.",
+  "@narrationWorldCherry2": {
+    "description": "Story narration"
+  },
+  "narrationWorldCherry3": "A gentle breeze carries them across the garden.",
+  "@narrationWorldCherry3": {
+    "description": "Story narration"
+  },
+  "narrationWorldCherry4": "Did you know? In Japan, families picnic under the blossoms. It's called hanami.",
+  "@narrationWorldCherry4": {
+    "description": "Story narration: a fact"
+  },
+  "effectNameWorldSahara": "The Sahara desert",
+  "@effectNameWorldSahara": {
+    "description": "Story name"
+  },
+  "effectDescriptionWorldSahara": "Golden sand, a warm wind and a red sunset over the dunes.",
+  "@effectDescriptionWorldSahara": {
+    "description": "Story description"
+  },
+  "narrationWorldSahara1": "In the Sahara, the sand glows gold under a hot sun.",
+  "@narrationWorldSahara1": {
+    "description": "Story narration"
+  },
+  "narrationWorldSahara2": "A warm wind lifts the sand and sends it swirling.",
+  "@narrationWorldSahara2": {
+    "description": "Story narration"
+  },
+  "narrationWorldSahara3": "Evening comes, and the dunes turn orange and red.",
+  "@narrationWorldSahara3": {
+    "description": "Story narration"
+  },
+  "narrationWorldSahara4": "Did you know? The Sahara is almost as big as the United States, and at night it can get very cold.",
+  "@narrationWorldSahara4": {
+    "description": "Story narration: a fact"
+  },
+  "effectNameWorldAmazon": "The Amazon rainforest",
+  "@effectNameWorldAmazon": {
+    "description": "Story name"
+  },
+  "effectDescriptionWorldAmazon": "Deep greens, warm rain, a red macaw and fireflies at dusk.",
+  "@effectDescriptionWorldAmazon": {
+    "description": "Story description"
+  },
+  "narrationWorldAmazon1": "Deep in the Amazon rainforest, everything is green and alive.",
+  "@narrationWorldAmazon1": {
+    "description": "Story narration"
+  },
+  "narrationWorldAmazon2": "Drip, drop! A warm rain falls on the leaves.",
+  "@narrationWorldAmazon2": {
+    "description": "Story narration"
+  },
+  "narrationWorldAmazon3": "A bright red macaw flies from tree to tree.",
+  "@narrationWorldAmazon3": {
+    "description": "Story narration"
+  },
+  "narrationWorldAmazon4": "Did you know? About one in ten of all the kinds of animals on Earth live in the Amazon.",
+  "@narrationWorldAmazon4": {
+    "description": "Story narration: a fact"
   }
 }
