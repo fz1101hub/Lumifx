@@ -51,11 +51,11 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 21 | Treasure hunt across rooms: riddles read aloud, the right room lights up, confirmed by a motion sensor or NFC sticker | done (PR pending) |
-| 22 | Family quiz: questions read aloud, teams buzz in their colour, packs by age | done (PR pending) |
-| 23 | Dream diary: the dream told in the morning, recorded, its colours shown in the room | done (PR pending) |
-| 24 | Lights and calendar: a soft colour a few minutes before an appointment (calendar permission) | done (PR pending) |
-| 25 | Several bridges: a second home or a large flat, chosen like a room | done (PR pending) |
+| 21 | Treasure hunt across rooms: riddles read aloud, the right room lights up, confirmed by a motion sensor or NFC sticker | done (#27) |
+| 22 | Family quiz: questions read aloud, teams buzz in their colour, packs by age | done (#27) |
+| 23 | Dream diary: the dream told in the morning, recorded, its colours shown in the room | done (#27) |
+| 24 | Lights and calendar: a soft colour a few minutes before an appointment (calendar permission) | done (#27) |
+| 25 | Several bridges: a second home or a large flat, chosen like a room | done (#27) |
 
 ## Round 14: the big ones
 
