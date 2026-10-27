@@ -1558,6 +1558,48 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('a tune played on the piano is kept, played back and shared',
+      (tester) async {
+    final sound = FakeSoundPlayer();
+    await _pumpApp(tester, sound: sound);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const LightPianoScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Record'));
+    await tester.pump();
+    for (final key in ['C', 'E', 'G']) {
+      await tester.tap(find.bySemanticsLabel(key).first);
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    await tester.tap(find.text('Stop recording'));
+    await tester.pump();
+    await tester.tap(find.text('Keep'));
+    await tester.pumpAndSettle();
+    expect(find.text('Name of your tune'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Keep'));
+    await tester.pumpAndSettle();
+    final scope = AppScope.of(tester.element(find.byType(LightPianoScreen)));
+    expect(scope.preferences.myTunes.single.name, 'My tune 1');
+    expect(scope.preferences.myTunes.single.notes, hasLength(3));
+    expect(find.text('My tunes'), findsOneWidget);
+
+    sound.calls.clear();
+    await tester.tap(find.text('My tune 1'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(sound.calls.where((c) => c.startsWith('note')), hasLength(3));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('My tune 1'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Share'));
+    await tester.pumpAndSettle();
+    expect(find.text('Copy link'), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    await scope.playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('the light farm says each animal and asks who says it',
       (tester) async {
     final speaker = _RecordingSpeaker();

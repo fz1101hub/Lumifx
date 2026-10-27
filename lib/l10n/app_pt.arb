@@ -1349,5 +1349,12 @@
   "narrationWorldAmazon1": "No fundo da Floresta Amazônica, tudo é verde e cheio de vida.",
   "narrationWorldAmazon2": "Pinga, pinga! Uma chuva quente cai sobre as folhas.",
   "narrationWorldAmazon3": "Uma arara-vermelha brilhante voa de árvore em árvore.",
-  "narrationWorldAmazon4": "Sabia? Cerca de uma em cada dez espécies de animais da Terra vive na Amazônia."
+  "narrationWorldAmazon4": "Sabia? Cerca de uma em cada dez espécies de animais da Terra vive na Amazônia.",
+  "pianoSaveTune": "Guardar",
+  "pianoTuneName": "Nome da sua música",
+  "pianoTuneDefaultName": "Minha música {number}",
+  "pianoMyTunes": "Minhas músicas",
+  "pianoShareTune": "Compartilhar",
+  "pianoDeleteTune": "Excluir",
+  "tuneAdded": "“{name}” adicionada às suas músicas"
 }

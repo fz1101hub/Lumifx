@@ -1349,5 +1349,12 @@
   "narrationWorldAmazon1": "Diep in het Amazoneregenwoud is alles groen en levend.",
   "narrationWorldAmazon2": "Drup, drup! Een warme regen valt op de bladeren.",
   "narrationWorldAmazon3": "Een felrode ara vliegt van boom naar boom.",
-  "narrationWorldAmazon4": "Wist je dat? Ongeveer één op de tien diersoorten op aarde leeft in de Amazone."
+  "narrationWorldAmazon4": "Wist je dat? Ongeveer één op de tien diersoorten op aarde leeft in de Amazone.",
+  "pianoSaveTune": "Bewaren",
+  "pianoTuneName": "Naam van je melodie",
+  "pianoTuneDefaultName": "Mijn melodie {number}",
+  "pianoMyTunes": "Mijn melodieën",
+  "pianoShareTune": "Delen",
+  "pianoDeleteTune": "Verwijderen",
+  "tuneAdded": "‘{name}’ toegevoegd aan je melodieën"
 }

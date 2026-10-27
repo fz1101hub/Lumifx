@@ -1349,5 +1349,12 @@
   "narrationWorldAmazon1": "アマゾンのジャングルのおくでは、なにもかもがみどりで、いきいきしています。",
   "narrationWorldAmazon2": "ポツ、ポツ！あたたかい雨が葉っぱにふってきました。",
   "narrationWorldAmazon3": "まっかなコンゴウインコが、木から木へとびうつります。",
-  "narrationWorldAmazon4": "知ってた？地球のどうぶつのしゅるいの、およそ10分の1がアマゾンにすんでいるんだよ。"
+  "narrationWorldAmazon4": "知ってた？地球のどうぶつのしゅるいの、およそ10分の1がアマゾンにすんでいるんだよ。",
+  "pianoSaveTune": "のこす",
+  "pianoTuneName": "曲の名前",
+  "pianoTuneDefaultName": "わたしの曲{number}",
+  "pianoMyTunes": "わたしの曲",
+  "pianoShareTune": "シェア",
+  "pianoDeleteTune": "けす",
+  "tuneAdded": "「{name}」をわたしの曲にくわえました"
 }

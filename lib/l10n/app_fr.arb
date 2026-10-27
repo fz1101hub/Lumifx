@@ -1349,5 +1349,12 @@
   "narrationWorldAmazon1": "Au cœur de la forêt amazonienne, tout est vert et plein de vie.",
   "narrationWorldAmazon2": "Plic, ploc ! Une pluie chaude tombe sur les feuilles.",
   "narrationWorldAmazon3": "Un ara rouge vif vole d'arbre en arbre.",
-  "narrationWorldAmazon4": "Le savais-tu ? Environ une espèce d'animal sur dix sur Terre vit en Amazonie."
+  "narrationWorldAmazon4": "Le savais-tu ? Environ une espèce d'animal sur dix sur Terre vit en Amazonie.",
+  "pianoSaveTune": "Garder",
+  "pianoTuneName": "Nom de ta mélodie",
+  "pianoTuneDefaultName": "Ma mélodie {number}",
+  "pianoMyTunes": "Mes mélodies",
+  "pianoShareTune": "Partager",
+  "pianoDeleteTune": "Supprimer",
+  "tuneAdded": "« {name} » ajoutée à tes mélodies"
 }

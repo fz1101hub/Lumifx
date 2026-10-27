@@ -1349,5 +1349,12 @@
   "narrationWorldAmazon1": "Nel cuore della foresta amazzonica tutto è verde e pieno di vita.",
   "narrationWorldAmazon2": "Plic, ploc! Una pioggia calda cade sulle foglie.",
   "narrationWorldAmazon3": "Un ara rosso brillante vola da un albero all'altro.",
-  "narrationWorldAmazon4": "Lo sapevi? Circa un tipo di animale su dieci di tutta la Terra vive in Amazzonia."
+  "narrationWorldAmazon4": "Lo sapevi? Circa un tipo di animale su dieci di tutta la Terra vive in Amazzonia.",
+  "pianoSaveTune": "Salva",
+  "pianoTuneName": "Nome del tuo brano",
+  "pianoTuneDefaultName": "Il mio brano {number}",
+  "pianoMyTunes": "I miei brani",
+  "pianoShareTune": "Condividi",
+  "pianoDeleteTune": "Elimina",
+  "tuneAdded": "“{name}” aggiunto ai tuoi brani"
 }

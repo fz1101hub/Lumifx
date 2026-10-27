@@ -1349,5 +1349,12 @@
   "narrationWorldAmazon1": "Tief im Amazonas-Regenwald ist alles grün und lebendig.",
   "narrationWorldAmazon2": "Plitsch, platsch! Warmer Regen fällt auf die Blätter.",
   "narrationWorldAmazon3": "Ein leuchtend roter Ara fliegt von Baum zu Baum.",
-  "narrationWorldAmazon4": "Wusstest du? Etwa jede zehnte Tierart der Erde lebt im Amazonas."
+  "narrationWorldAmazon4": "Wusstest du? Etwa jede zehnte Tierart der Erde lebt im Amazonas.",
+  "pianoSaveTune": "Behalten",
+  "pianoTuneName": "Name deiner Melodie",
+  "pianoTuneDefaultName": "Meine Melodie {number}",
+  "pianoMyTunes": "Meine Melodien",
+  "pianoShareTune": "Teilen",
+  "pianoDeleteTune": "Löschen",
+  "tuneAdded": "„{name}“ zu deinen Melodien hinzugefügt"
 }

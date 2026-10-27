@@ -7,6 +7,7 @@ import '../bridge/bridge_controller.dart';
 import '../effects/effect_player_screen.dart';
 import '../fun/goal.dart';
 import '../fun/goal_screen.dart';
+import '../music_box/my_tune.dart';
 import '../effects/playback_controller.dart';
 import '../effects/player_route.dart';
 import '../kids/kids_mode.dart';
@@ -52,6 +53,8 @@ class LinkHandler {
         return _bedtime();
       case GoalLink(:final team):
         return _goal(team);
+      case TuneLink(:final name, :final data):
+        return _tune(name, data);
       case VoiceLink(:final words):
         return _voice(words);
       case ScreenLink(:final screen):
@@ -132,6 +135,23 @@ class LinkHandler {
     }
     await playback.playPlaylist(playlist);
     _showPlayer(playback.effect.id, () => playerRoute(playback.effect));
+    return true;
+  }
+
+  /// Adds a shared tune and opens the piano, unless in kids mode.
+  Future<bool> _tune(String name, String data) async {
+    await _ready();
+    final tune = MyTune.decode(name, data);
+    if (tune == null || preferences.kidsLocked) {
+      return false;
+    }
+    await preferences.saveTune(tune);
+    final context = navigatorKey.currentContext;
+    if (context != null && context.mounted) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          SnackBar(content: Text(context.l10n.tuneAdded(tune.name))));
+    }
+    await _screen(AppScreen.piano);
     return true;
   }
 

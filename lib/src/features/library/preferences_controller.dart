@@ -9,6 +9,7 @@ import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/weather/weather.dart';
 import '../bedtime/ritual.dart';
 import '../fun/countdown.dart';
+import '../music_box/my_tune.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
 import '../routines/child.dart';
@@ -517,6 +518,33 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  var _myTunes = <MyTune>[];
+
+  /// The tunes kept from the light piano, newest last.
+  List<MyTune> get myTunes => List.unmodifiable(_myTunes);
+
+  /// Keeps [tune], replacing one of the same name; the oldest goes when
+  /// there are too many.
+  Future<void> saveTune(MyTune tune) {
+    _myTunes = [
+      for (final t in _myTunes)
+        if (t.name != tune.name) t,
+      tune,
+    ];
+    if (_myTunes.length > MyTune.maxTunes) {
+      _myTunes = _myTunes.sublist(_myTunes.length - MyTune.maxTunes);
+    }
+    return _changed();
+  }
+
+  Future<void> deleteTune(String name) {
+    _myTunes = [
+      for (final t in _myTunes)
+        if (t.name != name) t,
+    ];
+    return _changed();
+  }
+
   String? _toothFairy;
 
   /// The tooth fairy's visit planned: the child's id and the time, as
@@ -825,6 +853,14 @@ class PreferencesController extends ChangeNotifier {
       _pianoEchoBest = echo is int && echo > 0 && echo <= 100 ? echo : 0;
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
+      final tunes = json['myTunes'];
+      _myTunes = [
+        if (tunes is Map)
+          for (final MapEntry(:key, :value)
+              in tunes.entries.take(MyTune.maxTunes))
+            if (key is String && value is String)
+              if (MyTune.decode(key, value) case final tune?) tune,
+      ];
       final fairy = json['toothFairy'];
       _toothFairy = fairy is String && fairy.length <= 80 ? fairy : null;
       final goal = json['goalTeam'];
@@ -1121,6 +1157,7 @@ class PreferencesController extends ChangeNotifier {
       'speechVoices': _speechVoices,
       'goalTeam': _goalTeam,
       'toothFairy': _toothFairy,
+      'myTunes': {for (final t in _myTunes) t.name: t.encoded},
       'noiseLimit': _noiseLimit,
       'teethTune': _teethTune,
       'naturalLights': _naturalLights,

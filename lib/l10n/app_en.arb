@@ -5567,5 +5567,43 @@
   "narrationWorldAmazon4": "Did you know? About one in ten of all the kinds of animals on Earth live in the Amazon.",
   "@narrationWorldAmazon4": {
     "description": "Story narration: a fact"
+  },
+  "pianoSaveTune": "Keep",
+  "@pianoSaveTune": {
+    "description": "Light piano: keep the tune just recorded"
+  },
+  "pianoTuneName": "Name of your tune",
+  "@pianoTuneName": {
+    "description": "Light piano: name of the tune to keep"
+  },
+  "pianoTuneDefaultName": "My tune {number}",
+  "@pianoTuneDefaultName": {
+    "description": "Light piano: the name a kept tune gets by default",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "pianoMyTunes": "My tunes",
+  "@pianoMyTunes": {
+    "description": "Light piano: heading over the kept tunes"
+  },
+  "pianoShareTune": "Share",
+  "@pianoShareTune": {
+    "description": "Light piano: share a kept tune"
+  },
+  "pianoDeleteTune": "Delete",
+  "@pianoDeleteTune": {
+    "description": "Light piano: delete a kept tune"
+  },
+  "tuneAdded": "“{name}” added to your tunes",
+  "@tuneAdded": {
+    "description": "A shared tune was added",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -1349,5 +1349,12 @@
   "narrationWorldAmazon1": "En lo profundo de la selva amazónica, todo es verde y está lleno de vida.",
   "narrationWorldAmazon2": "¡Plic, ploc! Una lluvia cálida cae sobre las hojas.",
   "narrationWorldAmazon3": "Un guacamayo rojo brillante vuela de árbol en árbol.",
-  "narrationWorldAmazon4": "¿Sabías que alrededor de una de cada diez especies de animales de la Tierra vive en la Amazonía?"
+  "narrationWorldAmazon4": "¿Sabías que alrededor de una de cada diez especies de animales de la Tierra vive en la Amazonía?",
+  "pianoSaveTune": "Guardar",
+  "pianoTuneName": "Nombre de tu melodía",
+  "pianoTuneDefaultName": "Mi melodía {number}",
+  "pianoMyTunes": "Mis melodías",
+  "pianoShareTune": "Compartir",
+  "pianoDeleteTune": "Eliminar",
+  "tuneAdded": "“{name}” añadida a tus melodías"
 }

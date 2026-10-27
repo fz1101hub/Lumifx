@@ -127,20 +127,23 @@ class _LimitedSink implements Sink<List<int>> {
 Future<void> showShareDialog(BuildContext context, SharedBundle bundle) =>
     showDialog<void>(
       context: context,
-      builder: (_) => _ShareDialog(bundle: bundle),
+      builder: (_) => ShareDialog(link: bundle.link),
     );
 
-class _ShareDialog extends StatelessWidget {
-  const _ShareDialog({required this.bundle});
+/// A link as a QR code and a button to copy it.
+class ShareDialog extends StatelessWidget {
+  const ShareDialog({required this.link, this.title, super.key});
 
-  final SharedBundle bundle;
+  final String link;
+
+  /// The dialog's title; "Share" otherwise.
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final link = bundle.link;
     return AlertDialog(
-      title: Text(l10n.share),
+      title: Text(title ?? l10n.share),
       scrollable: true,
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -154,16 +157,20 @@ class _ShareDialog extends StatelessWidget {
             child: Container(
               color: Colors.white,
               padding: const EdgeInsets.all(12),
-              child: QrImageView(
-                data: link,
-                size: 220,
-                backgroundColor: Colors.white,
-                errorStateBuilder: (context, _) => SizedBox(
-                  width: 220,
-                  child: Text(
-                    l10n.tooLongForQr,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.black),
+              // A fixed size: the dialog measures its content, which the
+              // QR code's layout builder cannot answer by itself.
+              child: SizedBox.square(
+                dimension: 220,
+                child: QrImageView(
+                  data: link,
+                  size: 220,
+                  backgroundColor: Colors.white,
+                  errorStateBuilder: (context, _) => Center(
+                    child: Text(
+                      l10n.tooLongForQr,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.black),
+                    ),
                   ),
                 ),
               ),

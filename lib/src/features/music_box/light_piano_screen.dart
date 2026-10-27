@@ -12,6 +12,9 @@ import '../common/layout.dart';
 import '../effects/light_color_ui.dart';
 import '../effects/playback_controller.dart';
 import 'light_piano.dart';
+import '../library/sharing.dart';
+import '../links/app_link.dart';
+import 'my_tune.dart';
 import 'music_box_screen.dart';
 
 /// The light piano: each key plays a music-box note on the phone and
@@ -81,12 +84,12 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
     });
   }
 
-  /// Plays back what was recorded, with its own timing.
-  Future<void> _playBack() async {
+  /// Plays back what was recorded (or a kept tune), with its own timing.
+  Future<void> _playBack([List<(Duration, int)>? notes]) async {
     final generation = ++_generation;
     setState(() => _playingBack = true);
     var at = Duration.zero;
-    for (final (time, key) in [..._recorded]) {
+    for (final (time, key) in [...notes ?? _recorded]) {
       await Future<void>.delayed(time - at);
       at = time;
       if (!mounted || generation != _generation) {
@@ -97,6 +100,70 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
     await Future<void>.delayed(const Duration(milliseconds: 600));
     if (mounted && generation == _generation) {
       setState(() => _playingBack = false);
+    }
+  }
+
+  /// Keeps what was just recorded, under a name.
+  Future<void> _saveTune() async {
+    final l10n = context.l10n;
+    final preferences = AppScope.of(context).preferences;
+    final name = await showDialog<String>(
+      context: context,
+      builder: (_) => _TuneNameDialog(
+          initial: l10n.pianoTuneDefaultName(preferences.myTunes.length + 1)),
+    );
+    final tune = name == null
+        ? null
+        : MyTune.decode(
+            name, MyTune(name: name, notes: [..._recorded]).encoded);
+    if (tune != null) {
+      await preferences.saveTune(tune);
+      if (mounted) {
+        setState(() {});
+      }
+    }
+  }
+
+  /// Share or delete a kept tune.
+  Future<void> _tuneMenu(MyTune tune) async {
+    final l10n = context.l10n;
+    final preferences = AppScope.of(context).preferences;
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.ios_share),
+              title: Text(l10n.pianoShareTune),
+              onTap: () => Navigator.of(context).pop('share'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline),
+              title: Text(l10n.pianoDeleteTune),
+              onTap: () => Navigator.of(context).pop('delete'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (!mounted) {
+      return;
+    }
+    if (choice == 'delete') {
+      await preferences.deleteTune(tune.name);
+      if (mounted) {
+        setState(() {});
+      }
+    } else if (choice == 'share') {
+      await showDialog<void>(
+        context: context,
+        builder: (_) => ShareDialog(
+          title: tune.name,
+          link: AppLink.tune(tune.name, tune.encoded),
+        ),
+      );
     }
   }
 
@@ -339,8 +406,35 @@ class _LightPianoScreenState extends State<LightPianoScreen> {
                         icon: const Icon(Icons.play_arrow),
                         label: Text(l10n.pianoPlayBack),
                       ),
+                      if (_recorded.isNotEmpty && _recording == null)
+                        TextButton.icon(
+                          onPressed: _playingBack ? null : _saveTune,
+                          icon: const Icon(Icons.bookmark_add_outlined),
+                          label: Text(l10n.pianoSaveTune),
+                        ),
                     ],
                   ),
+                if (_mode == _Mode.free && preferences.myTunes.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(l10n.pianoMyTunes,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleSmall),
+                  const SizedBox(height: 4),
+                  _ChipRow(
+                    children: [
+                      for (final tune in preferences.myTunes.reversed)
+                        InputChip(
+                          avatar: const Icon(Icons.music_note, size: 18),
+                          label: Text(tune.name),
+                          onPressed:
+                              _playingBack ? null : () => _playBack(tune.notes),
+                          onDeleted: () => _tuneMenu(tune),
+                          deleteIcon: const Icon(Icons.more_vert, size: 18),
+                          deleteButtonTooltipMessage: tune.name,
+                        ),
+                    ],
+                  ),
+                ],
                 if (_mode == _Mode.free) const SizedBox(height: 12),
                 if (lesson != null) ...[
                   // One row that scrolls sideways, so the keys keep the
@@ -500,6 +594,49 @@ class _Key extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Asks for the name of a tune to keep.
+class _TuneNameDialog extends StatefulWidget {
+  const _TuneNameDialog({required this.initial});
+
+  final String initial;
+
+  @override
+  State<_TuneNameDialog> createState() => _TuneNameDialogState();
+}
+
+class _TuneNameDialogState extends State<_TuneNameDialog> {
+  late final _name = TextEditingController(text: widget.initial);
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.pianoTuneName),
+      content: TextField(
+        controller: _name,
+        autofocus: true,
+        maxLength: MyTune.maxName,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(_name.text),
+          child: Text(l10n.pianoSaveTune),
+        ),
+      ],
     );
   }
 }
