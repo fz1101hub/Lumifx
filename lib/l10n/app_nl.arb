@@ -1460,5 +1460,16 @@
   "dreamListen": "Luisteren",
   "dreamShow": "Laat het in de kamer zien",
   "dreamNone": "Nog geen dromen. Vertel morgenochtend de eerste!",
-  "dreamDeleteQuestion": "Deze droom verwijderen?"
+  "dreamDeleteQuestion": "Deze droom verwijderen?",
+  "calendarLights": "Licht voor afspraken",
+  "calendarLightsSubtitle": "Een zachte kleur een paar minuten ervoor",
+  "calendarLightsDescription": "Een paar minuten voor elke afspraak in de agenda van je telefoon licht een kamer zacht op, ook met de telefoon uit. Alleen de tijden gaan naar je Hue Bridge, nooit waar de afspraak over gaat. LumiFX kijkt een dag vooruit en werkt bij telkens als je het opent.",
+  "calendarLightsOn": "Oplichten voor afspraken",
+  "calendarLightsBefore": "Hoe lang ervoor",
+  "calendarLightsMinutes": "{minutes} min",
+  "calendarLightsNext": "Binnenkort",
+  "calendarLightsNone": "Geen afspraken de komende dag.",
+  "calendarLightsDenied": "LumiFX heeft de agenda nodig om te zien wanneer je afspraken zijn. Je kunt het toestaan in de instellingen van je telefoon.",
+  "calendarLightsUpdate": "Nu bijwerken",
+  "calendarLightsSynced": "{count, plural, =0{Geen lichten in te stellen de komende dag} =1{1 licht ingesteld op de bridge} other{{count} lichten ingesteld op de bridge}}"
 }

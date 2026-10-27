@@ -1460,5 +1460,16 @@
   "dreamListen": "Écouter",
   "dreamShow": "Le montrer dans la pièce",
   "dreamNone": "Pas encore de rêve. Raconte le premier demain matin !",
-  "dreamDeleteQuestion": "Supprimer ce rêve ?"
+  "dreamDeleteQuestion": "Supprimer ce rêve ?",
+  "calendarLights": "Lumière avant les rendez-vous",
+  "calendarLightsSubtitle": "Une couleur douce quelques minutes avant",
+  "calendarLightsDescription": "Quelques minutes avant chaque rendez-vous du calendrier de votre téléphone, une pièce s'illumine doucement, même téléphone éteint. Seules les heures parviennent à votre pont Hue, jamais l'objet du rendez-vous. LumiFX regarde un jour à l'avance et se met à jour à chaque ouverture.",
+  "calendarLightsOn": "Éclairer avant les rendez-vous",
+  "calendarLightsBefore": "Combien de temps avant",
+  "calendarLightsMinutes": "{minutes} min",
+  "calendarLightsNext": "À venir",
+  "calendarLightsNone": "Aucun rendez-vous dans la journée à venir.",
+  "calendarLightsDenied": "LumiFX a besoin du calendrier pour savoir quand sont vos rendez-vous. Vous pouvez l'autoriser dans les réglages du téléphone.",
+  "calendarLightsUpdate": "Mettre à jour",
+  "calendarLightsSynced": "{count, plural, =0{Aucune lumière à programmer dans la journée} =1{1 lumière programmée sur le pont} other{{count} lumières programmées sur le pont}}"
 }

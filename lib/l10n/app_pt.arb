@@ -1460,5 +1460,16 @@
   "dreamListen": "Ouvir",
   "dreamShow": "Mostrar no cômodo",
   "dreamNone": "Ainda nenhum sonho. Conte o primeiro amanhã de manhã!",
-  "dreamDeleteQuestion": "Apagar este sonho?"
+  "dreamDeleteQuestion": "Apagar este sonho?",
+  "calendarLights": "Luz antes dos compromissos",
+  "calendarLightsSubtitle": "Uma cor suave alguns minutos antes",
+  "calendarLightsDescription": "Alguns minutos antes de cada compromisso da agenda do celular, um cômodo se ilumina suavemente, mesmo com o celular desligado. Só os horários chegam à sua Hue Bridge, nunca do que se trata. O LumiFX olha um dia à frente e se atualiza sempre que é aberto.",
+  "calendarLightsOn": "Iluminar antes dos compromissos",
+  "calendarLightsBefore": "Quanto tempo antes",
+  "calendarLightsMinutes": "{minutes} min",
+  "calendarLightsNext": "Em breve",
+  "calendarLightsNone": "Nenhum compromisso no próximo dia.",
+  "calendarLightsDenied": "O LumiFX precisa da agenda para saber quando são seus compromissos. Você pode permitir nas configurações do celular.",
+  "calendarLightsUpdate": "Atualizar agora",
+  "calendarLightsSynced": "{count, plural, =0{Nenhuma luz para programar no próximo dia} =1{1 luz programada na bridge} other{{count} luzes programadas na bridge}}"
 }

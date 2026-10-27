@@ -1,3 +1,4 @@
+import EventKit
 import Flutter
 import UIKit
 import WidgetKit
@@ -22,6 +23,9 @@ import WidgetKit
     }
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "LumiFXLiveActivity") {
       LiveActivityBridge.register(with: registrar)
+    }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "LumiFXCalendar") {
+      CalendarBridge.register(with: registrar)
     }
   }
 }
@@ -151,4 +155,71 @@ class LiveActivityBridge: NSObject, FlutterPlugin {
       }
     }
   #endif
+}
+
+/// `com.lumifx/calendar`: the phone's appointments, read only, for the
+/// lights before an appointment. `events` lists those starting between
+/// `from` and `to` (milliseconds) with their title, start and whether they
+/// last all day. Only the times reach the bridge.
+class CalendarBridge: NSObject, FlutterPlugin {
+  private let store = EKEventStore()
+
+  static func register(with registrar: FlutterPluginRegistrar) {
+    let channel = FlutterMethodChannel(
+      name: "com.lumifx/calendar", binaryMessenger: registrar.messenger())
+    registrar.addMethodCallDelegate(CalendarBridge(), channel: channel)
+  }
+
+  private var granted: Bool {
+    let status = EKEventStore.authorizationStatus(for: .event)
+    if #available(iOS 17.0, *) {
+      return status == .fullAccess
+    }
+    return status == .authorized
+  }
+
+  func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    switch call.method {
+    case "hasAccess":
+      result(granted)
+    case "requestAccess":
+      if granted {
+        result(true)
+        return
+      }
+      let done: (Bool, Error?) -> Void = { allowed, _ in
+        DispatchQueue.main.async { result(allowed) }
+      }
+      if #available(iOS 17.0, *) {
+        store.requestFullAccessToEvents(completion: done)
+      } else {
+        store.requestAccess(to: .event, completion: done)
+      }
+    case "events":
+      guard granted,
+        let arguments = call.arguments as? [String: Any],
+        let from = (arguments["from"] as? NSNumber)?.doubleValue,
+        let to = (arguments["to"] as? NSNumber)?.doubleValue
+      else {
+        result([])
+        return
+      }
+      let predicate = store.predicateForEvents(
+        withStart: Date(timeIntervalSince1970: from / 1000),
+        end: Date(timeIntervalSince1970: to / 1000), calendars: nil)
+      let events = store.events(matching: predicate)
+        .sorted { $0.startDate < $1.startDate }
+        .prefix(50)
+      result(
+        events.map { event -> [String: Any] in
+          [
+            "title": event.title ?? "",
+            "start": Int64(event.startDate.timeIntervalSince1970 * 1000),
+            "allDay": event.isAllDay,
+          ]
+        })
+    default:
+      result(FlutterMethodNotImplemented)
+    }
+  }
 }

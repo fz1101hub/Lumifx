@@ -310,6 +310,67 @@ extension HueReminderRoutines on HueBridgeClient {
     ]);
   }
 
+  /// The times of the lights before appointments now on the bridge.
+  Future<List<String>> _calendarSchedules() async {
+    final byToken = await _taggedSchedules((role) => role == 'cal');
+    return [
+      for (final parts in byToken.values)
+        for (final (_, id, _) in parts) id,
+    ];
+  }
+
+  /// Replaces the lights before appointments: at each of [times] (within
+  /// the next day) the room [groupId] glows [color] softly and breathes.
+  /// Only the times reach the bridge, never what the appointment is.
+  /// Returns how many were set.
+  Future<int> syncCalendarLights({
+    required List<DateTime> times,
+    required String groupId,
+    required String color,
+    DateTime? now,
+  }) async {
+    final at = now ?? DateTime.now();
+    await deleteSchedules(await _calendarSchedules());
+    final xy = LightColor.fromHex(color).toXy();
+    final action = '/api/$applicationKey/groups/$groupId/action';
+    var made = 0;
+    for (final time in times) {
+      if (!time.isAfter(at) || time.difference(at) > const Duration(days: 1)) {
+        continue;
+      }
+      final token =
+          '${at.microsecondsSinceEpoch.toRadixString(36)}${made.toString()}';
+      await _postSchedule({
+        'name': 'LumiFX calendar',
+        'description': '${HueEffectSchedule.tag}$token:cal',
+        'command': {
+          'address': action,
+          'method': 'PUT',
+          'body': {
+            'on': true,
+            'bri': 140,
+            'xy': [
+              double.parse(xy.x.toStringAsFixed(4)),
+              double.parse(xy.y.toStringAsFixed(4)),
+            ],
+            'alert': 'lselect',
+            'transitiontime': 30,
+          },
+        },
+        'localtime': scheduleLocaltime(
+            hour: time.hour, minute: time.minute, days: const [], now: at),
+        'status': 'enabled',
+        'autodelete': true,
+      });
+      made++;
+    }
+    return made;
+  }
+
+  /// Takes away every light before an appointment.
+  Future<void> clearCalendarLights() async =>
+      deleteSchedules(await _calendarSchedules());
+
   /// Switches a reminder or the night switch-off on or off.
   Future<void> setSchedulesEnabled(List<String> ids, bool enabled) async {
     for (final id in ids) {

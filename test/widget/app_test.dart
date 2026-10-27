@@ -15,6 +15,7 @@ import 'package:lumifx/src/app_scope.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
+import 'package:lumifx/src/core/calendar/calendar_source.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/core/weather/weather.dart';
@@ -3903,6 +3904,28 @@ void main() {
   streamingTests();
 }
 
+class _FakeCalendar implements CalendarSource {
+  _FakeCalendar(this.found);
+
+  final List<CalendarEvent> found;
+  var asked = false;
+
+  @override
+  bool get isSupported => true;
+
+  @override
+  Future<bool> hasAccess() async => asked;
+
+  @override
+  Future<bool> requestAccess() async => asked = true;
+
+  @override
+  Future<List<CalendarEvent>> events(DateTime from, DateTime to) async => [
+        for (final event in found)
+          if (!event.start.isBefore(from) && event.start.isBefore(to)) event,
+      ];
+}
+
 Future<BridgeController> _connectedBridge(
   WidgetTester tester, {
   String? clientKey,
@@ -4322,6 +4345,55 @@ void streamingTests() {
     expect(playback.effect.id, TreasureHunt.treasure('').id);
     await playback.stop(restore: false);
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('lights before appointments are set on the bridge',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final calendar = _FakeCalendar([
+      CalendarEvent(title: 'Dentist', start: DateTime(2026, 6, 15, 15, 30)),
+      CalendarEvent(title: 'Piano lesson', start: DateTime(2026, 6, 15, 17)),
+      CalendarEvent(
+          title: 'Holiday', start: DateTime(2026, 6, 15), allDay: true),
+    ]);
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      calendar: calendar,
+    ));
+    await tester.scrollUntilVisible(
+        find.text('Lights before appointments'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Lights before appointments'));
+    await tester.pumpAndSettle();
+    expect(puts, isNot(contains('POST /api/key/schedules')),
+        reason: 'nothing on the bridge until switched on');
+
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Light up before appointments'));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+    });
+    // The settings are saved, then the appointments read.
+    for (var i = 0; i < 4; i++) {
+      await tester.pump();
+    }
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 200)));
+    await tester.pump();
+    expect(calendar.asked, isTrue);
+    expect(preferences.calendarLights?.groupId, '1');
+    expect(puts.where((p) => p == 'POST /api/key/schedules'), hasLength(2),
+        reason: 'one per timed appointment');
+    await tester.scrollUntilVisible(find.text('Dentist'), 200,
+        scrollable: find.byType(Scrollable).last);
+    expect(find.text('Piano lesson'), findsOneWidget);
+    expect(find.text('Holiday'), findsNothing);
   });
 
   testWidgets('rooms list the Hue scenes of each group and recall them',

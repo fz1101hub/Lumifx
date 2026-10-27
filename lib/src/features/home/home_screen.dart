@@ -27,6 +27,7 @@ import '../playlists/playlists_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
 import '../house/automations_calendar_screen.dart';
+import '../house/calendar_lights_screen.dart';
 import '../house/house_screen.dart';
 import '../house/light_health_screen.dart';
 import '../kids/kids_mode.dart';
@@ -222,6 +223,11 @@ class HomeScreen extends StatelessWidget {
                       l10n.roomsAndZonesSubtitle, () => const RoomsScreen()),
                   _HomeEntry(Icons.alarm, l10n.routines, l10n.routinesSubtitle,
                       () => const AutomationsScreen()),
+                  _HomeEntry(
+                      Icons.event_available_outlined,
+                      l10n.calendarLights,
+                      l10n.calendarLightsSubtitle,
+                      () => const CalendarLightsScreen()),
                   _HomeEntry(
                       Icons.calendar_view_week,
                       l10n.automationsCalendar,

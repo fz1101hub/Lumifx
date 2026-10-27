@@ -11,6 +11,7 @@ class MainActivity : FlutterActivity() {
     private var background: BackgroundPlaybackChannel? = null
     private var nfc: NfcChannel? = null
     private var notificationLights: NotificationLightsChannel? = null
+    private var calendar: CalendarChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -19,6 +20,7 @@ class MainActivity : FlutterActivity() {
         nfc = NfcChannel(this, flutterEngine.dartExecutor.binaryMessenger)
         notificationLights =
             NotificationLightsChannel(this, flutterEngine.dartExecutor.binaryMessenger)
+        calendar = CalendarChannel(this, flutterEngine.dartExecutor.binaryMessenger)
         // The home-screen widget's content: stored, then every widget redrawn.
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.lumifx/widgets")
             .setMethodCallHandler { call, result ->
@@ -41,6 +43,16 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        if (calendar?.onRequestPermissionsResult(requestCode, grantResults) != true) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+    }
+
     override fun onDestroy() {
         phoneAudio?.dispose()
         phoneAudio = null
@@ -50,6 +62,8 @@ class MainActivity : FlutterActivity() {
         nfc = null
         notificationLights?.dispose()
         notificationLights = null
+        calendar?.dispose()
+        calendar = null
         super.onDestroy()
     }
 }

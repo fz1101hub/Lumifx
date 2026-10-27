@@ -10,6 +10,7 @@ import '../../core/weather/weather.dart';
 import '../bedtime/dream_diary.dart';
 import '../bedtime/ritual.dart';
 import '../fun/countdown.dart';
+import '../house/calendar_lights.dart';
 import '../music_box/my_tune.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
@@ -581,6 +582,17 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  String? _calendarLights;
+
+  /// The lights before appointments, or null when off.
+  CalendarLightsSettings? get calendarLights =>
+      CalendarLightsSettings.decode(_calendarLights);
+
+  Future<void> setCalendarLights(CalendarLightsSettings? settings) {
+    _calendarLights = settings?.encode();
+    return _changed();
+  }
+
   var _dreams = <Dream>[];
 
   /// The dreams [child] told, newest first.
@@ -942,6 +954,9 @@ class PreferencesController extends ChangeNotifier {
             if (key is String && value is String)
               if (MyTune.decode(key, value) case final tune?) tune,
       ];
+      final calendar = json['calendarLights'];
+      _calendarLights =
+          calendar is String && calendar.length <= 80 ? calendar : null;
       final dreams = json['dreams'];
       _dreams = [
         if (dreams is List)
@@ -1252,6 +1267,7 @@ class PreferencesController extends ChangeNotifier {
       'toothFairy': _toothFairy,
       'bedtimes': _bedtimes,
       'dreams': [for (final d in _dreams) d.toJson()],
+      'calendarLights': _calendarLights,
       'myTunes': {for (final t in _myTunes) t.name: t.encoded},
       'noiseLimit': _noiseLimit,
       'teethTune': _teethTune,

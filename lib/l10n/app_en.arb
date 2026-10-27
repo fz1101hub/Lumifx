@@ -6137,5 +6137,59 @@
   "dreamDeleteQuestion": "Delete this dream?",
   "@dreamDeleteQuestion": {
     "description": "Dream diary: confirm deleting a dream"
+  },
+  "calendarLights": "Lights before appointments",
+  "@calendarLights": {
+    "description": "Home: lights before calendar appointments"
+  },
+  "calendarLightsSubtitle": "A soft colour a few minutes before",
+  "@calendarLightsSubtitle": {
+    "description": "Home: what the calendar lights do"
+  },
+  "calendarLightsDescription": "A few minutes before each appointment in your phone's calendar, a room glows softly, even with the phone off. Only the times reach your Hue Bridge, never what the appointment is. LumiFX looks a day ahead and updates whenever it is opened.",
+  "@calendarLightsDescription": {
+    "description": "Calendar lights: how they work and what is shared"
+  },
+  "calendarLightsOn": "Light up before appointments",
+  "@calendarLightsOn": {
+    "description": "Calendar lights: the main switch"
+  },
+  "calendarLightsBefore": "How long before",
+  "@calendarLightsBefore": {
+    "description": "Calendar lights: how long before the appointment"
+  },
+  "calendarLightsMinutes": "{minutes} min",
+  "@calendarLightsMinutes": {
+    "description": "Calendar lights: minutes before",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarLightsNext": "Coming up",
+  "@calendarLightsNext": {
+    "description": "Calendar lights: heading of the coming appointments"
+  },
+  "calendarLightsNone": "No appointments in the next day.",
+  "@calendarLightsNone": {
+    "description": "Calendar lights: no appointment in the next day"
+  },
+  "calendarLightsDenied": "LumiFX needs the calendar to see when your appointments are. You can allow it in your phone settings.",
+  "@calendarLightsDenied": {
+    "description": "Calendar lights: no calendar access"
+  },
+  "calendarLightsUpdate": "Update now",
+  "@calendarLightsUpdate": {
+    "description": "Calendar lights: update the bridge now"
+  },
+  "calendarLightsSynced": "{count, plural, =0{No lights to set in the next day} =1{1 light set on the bridge} other{{count} lights set on the bridge}}",
+  "@calendarLightsSynced": {
+    "description": "Calendar lights: how many lights were set on the bridge",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

@@ -1460,5 +1460,16 @@
   "dreamListen": "Ascolta",
   "dreamShow": "Mostralo nella stanza",
   "dreamNone": "Ancora nessun sogno. Racconta il primo domattina!",
-  "dreamDeleteQuestion": "Eliminare questo sogno?"
+  "dreamDeleteQuestion": "Eliminare questo sogno?",
+  "calendarLights": "Luci prima degli appuntamenti",
+  "calendarLightsSubtitle": "Un colore tenue qualche minuto prima",
+  "calendarLightsDescription": "Qualche minuto prima di ogni appuntamento del calendario del telefono, una stanza si illumina dolcemente, anche a telefono spento. Al bridge Hue arrivano solo gli orari, mai di cosa si tratta. LumiFX guarda avanti di un giorno e si aggiorna ogni volta che lo apri.",
+  "calendarLightsOn": "Illumina prima degli appuntamenti",
+  "calendarLightsBefore": "Quanto prima",
+  "calendarLightsMinutes": "{minutes} min",
+  "calendarLightsNext": "In arrivo",
+  "calendarLightsNone": "Nessun appuntamento nel prossimo giorno.",
+  "calendarLightsDenied": "LumiFX ha bisogno del calendario per sapere quando sono i tuoi appuntamenti. Puoi consentirlo nelle impostazioni del telefono.",
+  "calendarLightsUpdate": "Aggiorna ora",
+  "calendarLightsSynced": "{count, plural, =0{Nessuna luce da impostare nel prossimo giorno} =1{1 luce impostata sul bridge} other{{count} luci impostate sul bridge}}"
 }

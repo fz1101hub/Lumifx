@@ -36,6 +36,8 @@
     <!-- NFC stickers: writing a lumifx:// link on one, only when the user
          asks; phones without NFC can install the app too. -->
     <uses-permission android:name="android.permission.NFC" />
+    <!-- The lights before an appointment: the times only reach the bridge. -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="false" />

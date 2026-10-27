@@ -568,4 +568,38 @@ void main() {
     await bridge.client.cancelFairyVisits();
     expect(bridge.schedules, isEmpty);
   });
+
+  test('lights before appointments: one per time, replaced on each sync',
+      () async {
+    final bridge = _Bridge();
+    final made = await bridge.client.syncCalendarLights(
+      times: [
+        evening.add(const Duration(hours: 1)),
+        DateTime(2026, 10, 17, 9, 20),
+        evening.subtract(const Duration(minutes: 1)),
+        evening.add(const Duration(days: 2)),
+      ],
+      groupId: '3',
+      color: '#FF8C1A',
+      now: evening,
+    );
+    expect(made, 2, reason: 'past and far-off times are left out');
+    final [first, second] = bridge.posted('/api/key/schedules');
+    expect(second['localtime'], '2026-10-17T09:20:00');
+    expect(first['autodelete'], isTrue);
+    expect(first['name'], 'LumiFX calendar',
+        reason: 'what the appointment is never reaches the bridge');
+    expect((first['command'] as Map)['address'], '/api/key/groups/3/action');
+    expect(bridge.schedules, hasLength(2));
+
+    await bridge.client.syncCalendarLights(
+      times: [DateTime(2026, 10, 17, 8)],
+      groupId: '3',
+      color: '#FF8C1A',
+      now: evening,
+    );
+    expect(bridge.schedules, hasLength(1));
+    await bridge.client.clearCalendarLights();
+    expect(bridge.schedules, isEmpty);
+  });
 }

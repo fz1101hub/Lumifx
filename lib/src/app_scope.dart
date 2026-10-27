@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import 'core/calendar/calendar_source.dart';
 import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
@@ -10,6 +11,7 @@ import 'core/photos/photo_picker.dart';
 import 'core/speech/speaker.dart';
 import 'core/speech/voice_recordings.dart';
 import 'core/weather/weather.dart';
+import 'features/house/calendar_lights.dart';
 import 'features/bridge/bridge_controller.dart';
 import 'features/effects/playback_controller.dart';
 import 'features/library/effect_library.dart';
@@ -36,6 +38,8 @@ class AppScope extends InheritedWidget {
     this.nfc = const NoNfcWriter(),
     this.notificationLights = const NoNotificationLights(),
     this.liveActivity = const NoLiveActivity(),
+    this.calendar = const NoCalendar(),
+    this.calendarLights,
     required super.child,
     super.key,
   });
@@ -87,6 +91,10 @@ class AppScope extends InheritedWidget {
   /// The effect playing on the iPhone's lock screen.
   final LiveActivity liveActivity;
 
+  /// The phone's appointments, and the lights before them.
+  final CalendarSource calendar;
+  final CalendarLightsSync? calendarLights;
+
   static AppScope of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<AppScope>();
     assert(scope != null, 'No AppScope found in context');
@@ -111,5 +119,7 @@ class AppScope extends InheritedWidget {
       speaker != oldWidget.speaker ||
       nfc != oldWidget.nfc ||
       notificationLights != oldWidget.notificationLights ||
-      liveActivity != oldWidget.liveActivity;
+      liveActivity != oldWidget.liveActivity ||
+      calendar != oldWidget.calendar ||
+      calendarLights != oldWidget.calendarLights;
 }

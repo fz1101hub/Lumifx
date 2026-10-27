@@ -273,9 +273,16 @@ artifact, see RELEASE.md § 1b).
   recordings"; audio is processed ephemerally on device and never stored
   or sent (Play's definition of "collected" excludes ephemeral processing).
 - Voice recordings: users can record their own voice for stories they
-  made; the files stay on the device (Android backup is off) and are
-  never transmitted. Not "collected" in Play's sense: do not declare
-  "Voice or sound recordings".
+  made, and a child can tell a dream aloud in the dream diary; the files
+  stay on the device (Android backup is off) and are never transmitted.
+  Not "collected" in Play's sense: do not declare "Voice or sound
+  recordings".
+- Calendar (lights before appointments): READ_CALENDAR, requested only
+  when the user switches the feature on. The start times of the next
+  day's appointments are read on the device and handed to the user's own
+  Hue Bridge on the local network as schedules; titles and other details
+  are never read out of the phone. Processed on device, not collected: do
+  **not** declare "Calendar events".
 - Photos: "From a photo" (scene editor) uses the system photo picker or
   camera; the picture is read once on the device to take its colours and
   is never stored or sent (the picker's temporary copy is deleted). Do **not** declare "Photos". Android needs no
@@ -355,8 +362,9 @@ answer that it is designed for adults who play with their families.
 - Data collection: **Coarse Location** only, because of Weather lights:
   not linked to the user's identity, not used for tracking, purpose **App
   Functionality**. (The place the user types is sent to Open-Meteo.
-  Microphone audio, photos and camera frames are processed on device and
-  not stored; bridge credentials never leave the device.) This matches
+  Microphone audio, photos, camera frames and calendar times are processed
+  on device and not stored on any server; bridge credentials never leave
+  the device.) This matches
   `NSPrivacyCollectedDataTypes` in `ios/Runner/PrivacyInfo.xcprivacy`.
 - Tracking: **No.**
 - Privacy manifest: `ios/Runner/PrivacyInfo.xcprivacy` (no tracking, no
@@ -413,6 +421,10 @@ Paste this in "Notes for review":
 > requested only when TV Sync (Interactive › TV Sync) is started: the
 > camera looks at the TV and a few pixels of each frame are averaged on the
 > device to colour the lights; nothing is recorded or transmitted.
+> Calendar access is requested only when "Lights before appointments"
+> (Home › Your home) is switched on: the start times of the next day's
+> appointments become schedules on the user's own Hue Bridge so a room
+> glows a few minutes before; titles never leave the phone.
 > Siri phrases (iOS) and Google Assistant App Actions only open LumiFX's
 > own links; no speech is handled by the app itself.
 > Photo library access is used only when the user taps "From a photo" in

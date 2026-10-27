@@ -1460,5 +1460,16 @@
   "dreamListen": "Anhören",
   "dreamShow": "Im Raum zeigen",
   "dreamNone": "Noch keine Träume. Erzähl morgen früh den ersten!",
-  "dreamDeleteQuestion": "Diesen Traum löschen?"
+  "dreamDeleteQuestion": "Diesen Traum löschen?",
+  "calendarLights": "Licht vor Terminen",
+  "calendarLightsSubtitle": "Eine sanfte Farbe ein paar Minuten vorher",
+  "calendarLightsDescription": "Ein paar Minuten vor jedem Termin im Kalender deines Handys leuchtet ein Raum sanft auf, auch bei ausgeschaltetem Handy. Deine Hue Bridge erfährt nur die Uhrzeiten, nie worum es geht. LumiFX schaut einen Tag voraus und aktualisiert sich bei jedem Öffnen.",
+  "calendarLightsOn": "Vor Terminen aufleuchten",
+  "calendarLightsBefore": "Wie lange vorher",
+  "calendarLightsMinutes": "{minutes} Min.",
+  "calendarLightsNext": "Demnächst",
+  "calendarLightsNone": "Keine Termine am nächsten Tag.",
+  "calendarLightsDenied": "LumiFX braucht den Kalender, um zu sehen, wann deine Termine sind. Du kannst es in den Einstellungen des Handys erlauben.",
+  "calendarLightsUpdate": "Jetzt aktualisieren",
+  "calendarLightsSynced": "{count, plural, =0{Am nächsten Tag kein Licht zu setzen} =1{1 Licht auf der Bridge gesetzt} other{{count} Lichter auf der Bridge gesetzt}}"
 }

@@ -1460,5 +1460,16 @@
   "dreamListen": "きく",
   "dreamShow": "部屋で見る",
   "dreamNone": "まだゆめはありません。あしたの朝、さいしょのゆめを話してね！",
-  "dreamDeleteQuestion": "このゆめを消しますか？"
+  "dreamDeleteQuestion": "このゆめを消しますか？",
+  "calendarLights": "予定の前にライト",
+  "calendarLightsSubtitle": "数分前にやさしい色で",
+  "calendarLightsDescription": "スマホのカレンダーの予定の数分前に、部屋がやさしく光ります（スマホの電源が切れていても）。Hueブリッジに伝わるのは時刻だけで、予定の内容は伝わりません。LumiFXは1日先まで見て、開くたびに更新します。",
+  "calendarLightsOn": "予定の前に光らせる",
+  "calendarLightsBefore": "何分前",
+  "calendarLightsMinutes": "{minutes}分",
+  "calendarLightsNext": "これからの予定",
+  "calendarLightsNone": "これから1日の予定はありません。",
+  "calendarLightsDenied": "予定の時刻を知るためにカレンダーへのアクセスが必要です。スマホの設定で許可できます。",
+  "calendarLightsUpdate": "いま更新",
+  "calendarLightsSynced": "{count, plural, =0{これから1日に設定するライトはありません} other{ブリッジに{count}件設定しました}}"
 }
