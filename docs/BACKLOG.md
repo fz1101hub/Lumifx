@@ -22,11 +22,11 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 7 | Goal! A button (also a link, widget, NFC) bursts the room into a team's colours; ready-made teams and your own | done (PR pending) |
-| 8 | The tooth fairy's visit: a soft magic glow near dawn, a message in the morning, a special star | done (PR pending) |
-| 9 | Moods for occasions: candlelit dinner, game night, reading, aperitivo, "guests in 10 minutes" | done (PR pending) |
-| 10 | Board game referee: whose turn it is in their colour, a light die, a turn timer | done (PR pending) |
-| 11 | Hide and seek: the lights dim while the seeker counts, then "Ready or not, here I come!" | done (PR pending) |
+| 7 | Goal! A button (also a link, widget, NFC) bursts the room into a team's colours; ready-made teams and your own | done (#24) |
+| 8 | The tooth fairy's visit: a soft magic glow near dawn, a message in the morning, a special star | done (#24) |
+| 9 | Moods for occasions: candlelit dinner, game night, reading, aperitivo, "guests in 10 minutes" | done (#24) |
+| 10 | Board game referee: whose turn it is in their colour, a light die, a turn timer | done (#24) |
+| 11 | Hide and seek: the lights dim while the seeker counts, then "Ready or not, here I come!" | done (#24) |
 
 ## Round 11: playing and learning
 
