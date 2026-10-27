@@ -1240,5 +1240,20 @@
   "intervalRest": "Repos",
   "intervalDone": "Bravo !",
   "intervalLastRound": "Dernière série !",
-  "intervalRound": "Série {round} sur {rounds}"
+  "intervalRound": "Série {round} sur {rounds}",
+  "goal": "But !",
+  "goalSubtitle": "La pièce explose aux couleurs de ton équipe",
+  "goalDescription": "Choisis ton équipe, puis touche le gros bouton quand elle marque : un éclair, des couleurs qui éclatent sur les lampes, puis les couleurs de l'équipe pendant une demi-minute.",
+  "goalButton": "BUT !",
+  "goalTeamItaly": "Italie",
+  "goalTeamGermany": "Allemagne",
+  "goalTeamFrance": "France",
+  "goalTeamSpain": "Espagne",
+  "goalTeamNetherlands": "Pays-Bas",
+  "goalTeamBrazil": "Brésil",
+  "goalTeamJapan": "Japon",
+  "goalTeamEngland": "Angleterre",
+  "goalOwnTeam": "Ton équipe",
+  "goalOwnColours": "Les couleurs de ton équipe (jusqu'à trois)",
+  "goalLinkHint": "Astuce : mets le lien lumifx://app/goal sur un autocollant NFC ou un raccourci pour fêter le but d'un seul geste."
 }

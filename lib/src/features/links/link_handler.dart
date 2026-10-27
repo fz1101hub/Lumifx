@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../../core/effects/effect.dart';
 import '../bridge/bridge_controller.dart';
 import '../effects/effect_player_screen.dart';
+import '../fun/goal.dart';
+import '../fun/goal_screen.dart';
 import '../effects/playback_controller.dart';
 import '../effects/player_route.dart';
 import '../kids/kids_mode.dart';
@@ -48,6 +50,8 @@ class LinkHandler {
         return _playlist(nameOrId);
       case BedtimeLink():
         return _bedtime();
+      case GoalLink(:final team):
+        return _goal(team);
       case VoiceLink(:final words):
         return _voice(words);
       case ScreenLink(:final screen):
@@ -128,6 +132,23 @@ class LinkHandler {
     }
     await playback.playPlaylist(playlist);
     _showPlayer(playback.effect.id, () => playerRoute(playback.effect));
+    return true;
+  }
+
+  Future<bool> _goal(String? team) async {
+    await _ready();
+    // A party: not in kids mode.
+    if (preferences.kidsLocked) {
+      return false;
+    }
+    final known = GoalTeam.values.asNameMap()[team]?.name;
+    if (known != null) {
+      await preferences.setGoalTeam(known);
+    }
+    final context = navigatorKey.currentContext;
+    final name =
+        context != null && context.mounted ? context.l10n.goal : 'Goal!';
+    await GoalScreen.celebrate(playback, name, preferences.goalTeam);
     return true;
   }
 

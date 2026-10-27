@@ -5098,5 +5098,65 @@
         "type": "int"
       }
     }
+  },
+  "goal": "Goal!",
+  "@goal": {
+    "description": "Fun entry and title: the goal celebration"
+  },
+  "goalSubtitle": "The room bursts into your team's colours",
+  "@goalSubtitle": {
+    "description": "Under the goal entry"
+  },
+  "goalDescription": "Choose your team, then tap the big button when they score: a flash, colours popping across the lamps, then the team's colours for half a minute.",
+  "@goalDescription": {
+    "description": "Top of the goal screen"
+  },
+  "goalButton": "GOAL!",
+  "@goalButton": {
+    "description": "The big goal button"
+  },
+  "goalTeamItaly": "Italy",
+  "@goalTeamItaly": {
+    "description": "Team colours"
+  },
+  "goalTeamGermany": "Germany",
+  "@goalTeamGermany": {
+    "description": "Team colours"
+  },
+  "goalTeamFrance": "France",
+  "@goalTeamFrance": {
+    "description": "Team colours"
+  },
+  "goalTeamSpain": "Spain",
+  "@goalTeamSpain": {
+    "description": "Team colours"
+  },
+  "goalTeamNetherlands": "Netherlands",
+  "@goalTeamNetherlands": {
+    "description": "Team colours"
+  },
+  "goalTeamBrazil": "Brazil",
+  "@goalTeamBrazil": {
+    "description": "Team colours"
+  },
+  "goalTeamJapan": "Japan",
+  "@goalTeamJapan": {
+    "description": "Team colours"
+  },
+  "goalTeamEngland": "England",
+  "@goalTeamEngland": {
+    "description": "Team colours"
+  },
+  "goalOwnTeam": "Your team",
+  "@goalOwnTeam": {
+    "description": "Goal: a team of your own"
+  },
+  "goalOwnColours": "Your team's colours (up to three)",
+  "@goalOwnColours": {
+    "description": "Goal: heading over the colours of your own team"
+  },
+  "goalLinkHint": "Tip: put the link lumifx://app/goal on an NFC sticker or a shortcut to celebrate with one tap.",
+  "@goalLinkHint": {
+    "description": "Goal: tip about the link"
   }
 }

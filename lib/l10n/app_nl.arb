@@ -1240,5 +1240,20 @@
   "intervalRest": "Rust",
   "intervalDone": "Goed gedaan!",
   "intervalLastRound": "Laatste ronde!",
-  "intervalRound": "Ronde {round} van {rounds}"
+  "intervalRound": "Ronde {round} van {rounds}",
+  "goal": "Doelpunt!",
+  "goalSubtitle": "De kamer barst los in de kleuren van je team",
+  "goalDescription": "Kies je team en tik op de grote knop als ze scoren: een flits, kleuren die over de lampen springen en dan een halve minuut de teamkleuren.",
+  "goalButton": "GOAL!",
+  "goalTeamItaly": "Italië",
+  "goalTeamGermany": "Duitsland",
+  "goalTeamFrance": "Frankrijk",
+  "goalTeamSpain": "Spanje",
+  "goalTeamNetherlands": "Nederland",
+  "goalTeamBrazil": "Brazilië",
+  "goalTeamJapan": "Japan",
+  "goalTeamEngland": "Engeland",
+  "goalOwnTeam": "Je eigen team",
+  "goalOwnColours": "De kleuren van je team (maximaal drie)",
+  "goalLinkHint": "Tip: zet de link lumifx://app/goal op een NFC-sticker of een snelkoppeling om met één tik te juichen."
 }

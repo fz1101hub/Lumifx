@@ -16,6 +16,8 @@ import '../timers/light_clock_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
 import '../calm/feelings.dart';
+import '../fun/goal.dart';
+import '../fun/goal_screen.dart';
 import '../calm/feelings_screen.dart';
 import '../cinema/cinema.dart';
 import '../cinema/cinema_screen.dart';
@@ -104,6 +106,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const MoonScreen();
   } else if (IntervalWorkout.of(effect) != null) {
     screen = const IntervalTrainingScreen();
+  } else if (Goal.colorsOf(effect) != null) {
+    screen = const GoalScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

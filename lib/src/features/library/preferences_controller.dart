@@ -517,6 +517,17 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  String? _goalTeam;
+
+  /// The team the goal celebration is for: a `GoalTeam` name, or the
+  /// colours of a team of your own (`#RRGGBB,#RRGGBB`).
+  String? get goalTeam => _goalTeam;
+
+  Future<void> setGoalTeam(String team) {
+    _goalTeam = team;
+    return _changed();
+  }
+
   int? _napMinutes;
 
   /// The rest chosen last for the nap light.
@@ -789,6 +800,8 @@ class PreferencesController extends ChangeNotifier {
       _pianoEchoBest = echo is int && echo > 0 && echo <= 100 ? echo : 0;
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
+      final goal = json['goalTeam'];
+      _goalTeam = goal is String && goal.length <= 40 ? goal : null;
       final speechVoices = json['speechVoices'];
       _speechVoices = {
         if (speechVoices is Map)
@@ -1079,6 +1092,7 @@ class PreferencesController extends ChangeNotifier {
       'learnLanguage': _learnLanguage,
       'napMinutes': _napMinutes,
       'speechVoices': _speechVoices,
+      'goalTeam': _goalTeam,
       'noiseLimit': _noiseLimit,
       'teethTune': _teethTune,
       'naturalLights': _naturalLights,

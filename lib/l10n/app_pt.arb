@@ -1240,5 +1240,20 @@
   "intervalRest": "Descanso",
   "intervalDone": "Muito bem!",
   "intervalLastRound": "Última rodada!",
-  "intervalRound": "Rodada {round} de {rounds}"
+  "intervalRound": "Rodada {round} de {rounds}",
+  "goal": "Gol!",
+  "goalSubtitle": "O cômodo explode nas cores do seu time",
+  "goalDescription": "Escolha seu time e toque no botão grande quando ele marcar: um clarão, cores pipocando pelas luzes e depois as cores do time por meio minuto.",
+  "goalButton": "GOL!",
+  "goalTeamItaly": "Itália",
+  "goalTeamGermany": "Alemanha",
+  "goalTeamFrance": "França",
+  "goalTeamSpain": "Espanha",
+  "goalTeamNetherlands": "Holanda",
+  "goalTeamBrazil": "Brasil",
+  "goalTeamJapan": "Japão",
+  "goalTeamEngland": "Inglaterra",
+  "goalOwnTeam": "Seu time",
+  "goalOwnColours": "As cores do seu time (até três)",
+  "goalLinkHint": "Dica: coloque o link lumifx://app/goal num adesivo NFC ou num atalho para comemorar com um toque."
 }

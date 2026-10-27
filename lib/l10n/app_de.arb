@@ -1240,5 +1240,20 @@
   "intervalRest": "Pause",
   "intervalDone": "Gut gemacht!",
   "intervalLastRound": "Letzte Runde!",
-  "intervalRound": "Runde {round} von {rounds}"
+  "intervalRound": "Runde {round} von {rounds}",
+  "goal": "Tor!",
+  "goalSubtitle": "Der Raum explodiert in den Farben deines Teams",
+  "goalDescription": "Wähle dein Team und tippe auf den großen Knopf, wenn es ein Tor schießt: ein Blitz, Farben, die über die Lampen springen, dann eine halbe Minute die Teamfarben.",
+  "goalButton": "TOR!",
+  "goalTeamItaly": "Italien",
+  "goalTeamGermany": "Deutschland",
+  "goalTeamFrance": "Frankreich",
+  "goalTeamSpain": "Spanien",
+  "goalTeamNetherlands": "Niederlande",
+  "goalTeamBrazil": "Brasilien",
+  "goalTeamJapan": "Japan",
+  "goalTeamEngland": "England",
+  "goalOwnTeam": "Dein Team",
+  "goalOwnColours": "Die Farben deines Teams (bis zu drei)",
+  "goalLinkHint": "Tipp: Leg den Link lumifx://app/goal auf einen NFC-Sticker oder eine Verknüpfung, um mit einem Tippen zu jubeln."
 }

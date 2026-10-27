@@ -1240,5 +1240,20 @@
   "intervalRest": "休憩",
   "intervalDone": "よくがんばったね！",
   "intervalLastRound": "ラストセット！",
-  "intervalRound": "{rounds}セット中{round}セット目"
+  "intervalRound": "{rounds}セット中{round}セット目",
+  "goal": "ゴール！",
+  "goalSubtitle": "へやがチームカラーでいっぱいに",
+  "goalDescription": "チームをえらんで、点が入ったら大きなボタンをタップ。ひかりがはじけて、ライトにチームカラーが30秒ひろがります。",
+  "goalButton": "ゴール！",
+  "goalTeamItaly": "イタリア",
+  "goalTeamGermany": "ドイツ",
+  "goalTeamFrance": "フランス",
+  "goalTeamSpain": "スペイン",
+  "goalTeamNetherlands": "オランダ",
+  "goalTeamBrazil": "ブラジル",
+  "goalTeamJapan": "日本",
+  "goalTeamEngland": "イングランド",
+  "goalOwnTeam": "じぶんのチーム",
+  "goalOwnColours": "チームの色（3つまで）",
+  "goalLinkHint": "ヒント：lumifx://app/goal のリンクをNFCシールやショートカットに入れると、ワンタップでお祝いできます。"
 }

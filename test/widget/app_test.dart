@@ -29,6 +29,8 @@ import 'package:lumifx/src/features/timers/interval_training.dart';
 import 'package:lumifx/src/features/timers/interval_training_screen.dart';
 import 'package:lumifx/src/features/timers/light_clock.dart';
 import 'package:lumifx/src/features/calm/feelings.dart';
+import 'package:lumifx/src/features/fun/goal.dart';
+import 'package:lumifx/src/features/fun/goal_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon.dart';
 import 'package:lumifx/src/features/bedtime/moon_screen.dart';
 import 'package:lumifx/src/features/calm/feelings_screen.dart';
@@ -1512,6 +1514,39 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a goal bursts in the team chosen, also from a link',
+      (tester) async {
+    await _pumpApp(tester);
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(builder: (_) => const GoalScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Brazil'));
+    await tester.pump();
+    await tester.tap(find.text('GOAL!'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final scope = AppScope.of(tester.element(find.byType(GoalScreen)));
+    expect(Goal.colorsOf(scope.playback.effect), GoalTeam.brazil.colors);
+    expect(scope.preferences.goalTeam, 'brazil');
+    await scope.playback.stop(restore: false);
+    await tester.pump(const Duration(seconds: 1));
+
+    // From a link, as from an NFC sticker: the team chosen last.
+    final message = const JSONMethodCodec().encodeMethodCall(
+      const MethodCall(
+          'pushRouteInformation', {'location': 'lumifx://app/goal'}),
+    );
+    await tester.binding.defaultBinaryMessenger
+        .handlePlatformMessage(SystemChannels.navigation.name, message, (_) {});
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(Goal.colorsOf(scope.playback.effect), GoalTeam.brazil.colors);
+    expect(scope.playback.status, PlaybackStatus.playing);
+    await scope.playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 

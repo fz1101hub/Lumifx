@@ -8,6 +8,7 @@ import '../timers/light_clock_screen.dart';
 import '../bedtime/ritual_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../calm/feelings_screen.dart';
+import '../fun/goal_screen.dart';
 import '../cinema/cinema_screen.dart';
 import '../fun/fun_screen.dart';
 import '../fun/haunted_party_screen.dart';
@@ -51,6 +52,7 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.feelings => const FeelingsScreen(),
       AppScreen.moon => const MoonScreen(),
       AppScreen.intervals => const IntervalTrainingScreen(),
+      AppScreen.goal => const GoalScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 
