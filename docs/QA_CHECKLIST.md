@@ -705,6 +705,29 @@ build before every store release.
 - [ ] Scene from a photo, take a photo: nothing is left in the app's
       cache folder afterwards.
 
+## This round: the big ones (round 14)
+
+- [ ] Light alerts: start listening, play a smoke alarm test beep, a
+      doorbell and a recording of a baby crying near the phone: the lamps
+      flash red, blue, pink; "Stop the lights" stops them; a TV talking
+      does not set them off. Leave the screen: the microphone stops.
+- [ ] Remote for guests: another phone on the Wi-Fi scans the QR code;
+      the page lists colours and calm effects; a pick plays at once and
+      is listed on the host; an old link (screen closed and opened again)
+      says it no longer works.
+- [ ] Family in sync: phone A shares, phone B scans the code with its
+      camera and confirms: both have each other's scenes, stories,
+      playlists, favourites and children's profiles; syncing again says
+      already in sync.
+- [ ] Leaving and coming home: set home, allow "Always": walk out of the
+      circle with nobody else home: the lights go off (phone locked);
+      with another phone home they stay. Come back after dark: the chosen
+      room lights up. After restarting the phone it still works. Stop
+      watching: the "LumiFX phone" sensor is gone from the bridge.
+- [ ] Watch: with an effect playing (screen off setting on), a Wear OS
+      watch shows Stop, Next favourite and Bedtime, and each works. An
+      Apple Watch on watchOS 11 shows the effect in the Smart Stack.
+
 ## This round: bigger games and the family (round 13)
 
 - [ ] Treasure hunt with the kitchen and a bedroom: the riddle fits the

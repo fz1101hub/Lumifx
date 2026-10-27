@@ -920,3 +920,38 @@ iOS lists the languages in `CFBundleLocalizations`.
   old, forgetting falls back to another. Rooms, scenes and routines
   belong to the bridge in use.
 
+### Round 14 notes
+
+- Light alerts for sounds (`lib/src/features/alerts/`): `SoundWatch` looks
+  at 2048-sample windows (FFT, Hann window): a loud tonal peak at
+  2.7–3.7 kHz is an alarm tone, a pure tone at 0.4–2.2 kHz a chime, a
+  voiced sound with a 250–750 Hz fundamental and two harmonics a cry. Runs
+  of the same kind become segments: three beeps in 5 s (or 2 s of tone)
+  are a smoke alarm, two notes a third to a fifth apart a doorbell, three
+  bursts in 12 s a baby crying; each sound rests 30 s after it is told.
+  The alert effect flashes at most twice a second.
+- Remote for guests (`lib/src/features/guests/`): `GuestRemote` is a
+  `dart:io` HttpServer bound to the phone's private IPv4 address while the
+  screen is open; every request carries the six-digit code, picks are
+  checked against the safe list (scenes without rapid flashes, the colour
+  words' colours) and spaced 1.5 s apart.
+- Family in sync (`lib/src/features/family/`): the bridge has no room for
+  an app's data (its free text fields hold 16 to 64 characters), so phones
+  swap over a plain TCP socket on the home Wi-Fi (`LUMIFX-SYNC/1 <code>
+  <length>`, then `OK <length>`), after a `lumifx://app/sync?h=&p=&c=` link
+  or the address and code typed. `FamilyBundle.merge` settles an item
+  both phones have the same way on both (the one whose JSON sorts last).
+- Leaving and coming home (`lib/src/features/house/home_away*.dart`,
+  `lib/src/core/home_away_platform.dart`, HomeAway.kt, `HomeAwayBridge` in
+  AppDelegate.swift): a proximity alert (Android, re-set after a restart)
+  or region monitoring (iOS) around home; crossing it, the native code
+  sets the phone's own `CLIPPresence` sensor (model `LumiFXPresence`) and,
+  leaving, switches group 0 off unless another LumiFX sensor or a Hue app
+  `Geofence` sensor says home; coming home with the Daylight sensor dark,
+  it lights the chosen room. `leftHome`/`cameHome` in Dart describe the
+  same steps (and are what the tests check). The bridge key is kept with
+  the Android keystore / iOS keychain, the certificate pinned.
+- On the watch: the playback notification's Next favourite and Bedtime
+  actions (shown on Wear OS) come back as `action` on
+  `com.lumifx/background`; see `docs/WATCH.md`.
+
