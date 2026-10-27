@@ -1498,5 +1498,16 @@
   "guestPageColours": "Cores",
   "guestPageEffects": "Climas",
   "guestPageDone": "Pronto!",
-  "guestPageWrongCode": "Este link não funciona mais. Escaneie de novo o código no celular do anfitrião."
+  "guestPageWrongCode": "Este link não funciona mais. Escaneie de novo o código no celular do anfitrião.",
+  "familySync": "Família sincronizada",
+  "familySyncSubtitle": "Cenas, histórias, favoritos e perfis em cada celular",
+  "familySyncDescription": "Com os dois celulares no Wi-Fi de casa, escaneie este código com a câmera do outro celular: eles trocam cenas, histórias, playlists, favoritos e perfis das crianças e ficam com o mesmo. Nada passa pela internet.",
+  "familySyncNoWifi": "Conecte este celular ao Wi-Fi de casa para sincronizar.",
+  "familySyncJoinTitle": "Ou digite o que o outro celular mostra",
+  "familySyncAddress": "Endereço",
+  "familySyncCodeField": "Código",
+  "familySyncJoin": "Sincronizar",
+  "familySyncQuestion": "Sincronizar com o outro celular?",
+  "familySyncDone": "{count, plural, =0{Já sincronizados} =1{Sincronizados: 1 item atualizado} other{Sincronizados: {count} itens atualizados}}",
+  "familySyncFailed": "Não foi possível falar com o outro celular. Os dois estão no Wi-Fi de casa, com a tela de sincronização aberta?"
 }

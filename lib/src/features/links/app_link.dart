@@ -76,6 +76,13 @@ sealed class AppLink {
       case ['import']:
         final data = param('d');
         return data == null ? null : ImportLink(data);
+      case ['sync']:
+        final host = param('h');
+        final port = int.tryParse(param('p') ?? '');
+        final code = param('c');
+        return host == null || port == null || code == null
+            ? null
+            : SyncLink(host, port, code);
       case ['tune']:
         final name = param('n');
         final data = param('d');
@@ -109,6 +116,14 @@ sealed class AppLink {
         host: 'app',
         path: '/tune',
         queryParameters: {'n': name, 'd': data},
+      ).toString();
+
+  /// The link another phone opens to sync with this one.
+  static String sync(String host, int port, String code) => Uri(
+        scheme: scheme,
+        host: 'app',
+        path: '/sync',
+        queryParameters: {'h': host, 'p': '$port', 'c': code},
       ).toString();
 
   /// The link that opens [screen].
@@ -151,7 +166,8 @@ enum AppScreen {
   treasureHunt('treasure-hunt'),
   familyQuiz('family-quiz'),
   dreamDiary('dream-diary'),
-  soundAlerts('sound-alerts');
+  soundAlerts('sound-alerts'),
+  familySync('family-sync');
 
   const AppScreen(this.slug);
 
@@ -219,6 +235,15 @@ class GoalLink extends AppLink {
   const GoalLink([this.team]);
 
   final String? team;
+}
+
+/// Syncs with the family phone sharing at [host]:[port].
+class SyncLink extends AppLink {
+  const SyncLink(this.host, this.port, this.code);
+
+  final String host;
+  final int port;
+  final String code;
 }
 
 /// A tune played on the light piano, shared by someone.

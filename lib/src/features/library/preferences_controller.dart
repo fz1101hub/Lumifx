@@ -1134,6 +1134,26 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  /// Takes the family's things as merged with another phone's: the
+  /// scenes, stories, playlists, favourites and children's profiles.
+  Future<void> replaceFamily({
+    required List<UserScene> scenes,
+    required List<UserStory> stories,
+    required List<Playlist> playlists,
+    required List<String> favorites,
+    required List<Child> children,
+  }) {
+    _userScenes = [...scenes];
+    _userStories = [...stories];
+    _playlists = [...playlists];
+    _favorites = [...favorites];
+    _children = [...children];
+    if (!_children.any((c) => c.id == _activeChild)) {
+      _activeChild = _children.firstOrNull?.id ?? '';
+    }
+    return _changed();
+  }
+
   /// Adds [story], or replaces the one with the same id.
   Future<void> saveUserStory(UserStory story) {
     final exists = _userStories.any((s) => s.id == story.id);

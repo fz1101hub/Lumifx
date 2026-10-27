@@ -1498,5 +1498,16 @@
   "guestPageColours": "Farben",
   "guestPageEffects": "Stimmungen",
   "guestPageDone": "Erledigt!",
-  "guestPageWrongCode": "Dieser Link funktioniert nicht mehr. Scanne den Code auf dem Handy des Gastgebers erneut."
+  "guestPageWrongCode": "Dieser Link funktioniert nicht mehr. Scanne den Code auf dem Handy des Gastgebers erneut.",
+  "familySync": "Familie im Gleichklang",
+  "familySyncSubtitle": "Szenen, Geschichten, Favoriten und Profile auf jedem Handy",
+  "familySyncDescription": "Sind beide Handys im WLAN zu Hause, scanne diesen Code mit der Kamera des anderen Handys: Die beiden tauschen Szenen, Geschichten, Playlists, Favoriten und Kinderprofile aus und haben danach dasselbe. Nichts geht über das Internet.",
+  "familySyncNoWifi": "Verbinde dieses Handy mit dem WLAN zu Hause, um abzugleichen.",
+  "familySyncJoinTitle": "Oder gib ein, was das andere Handy zeigt",
+  "familySyncAddress": "Adresse",
+  "familySyncCodeField": "Code",
+  "familySyncJoin": "Abgleichen",
+  "familySyncQuestion": "Mit dem anderen Handy abgleichen?",
+  "familySyncDone": "{count, plural, =0{Schon abgeglichen} =1{Abgeglichen: 1 Eintrag aktualisiert} other{Abgeglichen: {count} Einträge aktualisiert}}",
+  "familySyncFailed": "Das andere Handy war nicht erreichbar. Sind beide im WLAN zu Hause und ist dort der Abgleich geöffnet?"
 }

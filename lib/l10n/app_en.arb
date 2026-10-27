@@ -6322,5 +6322,54 @@
   "guestPageWrongCode": "This link no longer works. Scan the code on the host's phone again.",
   "@guestPageWrongCode": {
     "description": "Guest page: an old or wrong link"
+  },
+  "familySync": "Family in sync",
+  "@familySync": {
+    "description": "Home: keep the family's phones in sync"
+  },
+  "familySyncSubtitle": "Scenes, stories, favourites and profiles on every phone",
+  "@familySyncSubtitle": {
+    "description": "Home: what family sync keeps the same"
+  },
+  "familySyncDescription": "With both phones on the home Wi-Fi, scan this code with the other phone's camera: the two swap their scenes, stories, playlists, favourites and children's profiles and end up with the same. Nothing goes over the internet.",
+  "@familySyncDescription": {
+    "description": "Family sync: how it works"
+  },
+  "familySyncNoWifi": "Connect this phone to the home Wi-Fi to sync.",
+  "@familySyncNoWifi": {
+    "description": "Family sync: not on a home network"
+  },
+  "familySyncJoinTitle": "Or type what the other phone shows",
+  "@familySyncJoinTitle": {
+    "description": "Family sync: join by typing what the other phone shows"
+  },
+  "familySyncAddress": "Address",
+  "@familySyncAddress": {
+    "description": "Family sync: the other phone's address field"
+  },
+  "familySyncCodeField": "Code",
+  "@familySyncCodeField": {
+    "description": "Family sync: the code field"
+  },
+  "familySyncJoin": "Sync",
+  "@familySyncJoin": {
+    "description": "Family sync: sync now button"
+  },
+  "familySyncQuestion": "Sync with the other phone?",
+  "@familySyncQuestion": {
+    "description": "Family sync: confirm syncing with the phone that shared"
+  },
+  "familySyncDone": "{count, plural, =0{Already in sync} =1{In sync: 1 thing updated} other{In sync: {count} things updated}}",
+  "@familySyncDone": {
+    "description": "Family sync: how many things changed on this phone",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "familySyncFailed": "Couldn't reach the other phone. Are both on the home Wi-Fi, with its sync screen open?",
+  "@familySyncFailed": {
+    "description": "Family sync: the other phone could not be reached"
   }
 }

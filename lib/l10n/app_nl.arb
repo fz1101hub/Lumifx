@@ -1498,5 +1498,16 @@
   "guestPageColours": "Kleuren",
   "guestPageEffects": "Sferen",
   "guestPageDone": "Klaar!",
-  "guestPageWrongCode": "Deze link werkt niet meer. Scan de code opnieuw op de telefoon van de gastheer."
+  "guestPageWrongCode": "Deze link werkt niet meer. Scan de code opnieuw op de telefoon van de gastheer.",
+  "familySync": "Gezin in sync",
+  "familySyncSubtitle": "Scènes, verhalen, favorieten en profielen op elke telefoon",
+  "familySyncDescription": "Met beide telefoons op de wifi thuis scan je deze code met de camera van de andere telefoon: ze wisselen scènes, verhalen, afspeellijsten, favorieten en kinderprofielen uit en hebben daarna hetzelfde. Niets gaat over internet.",
+  "familySyncNoWifi": "Verbind deze telefoon met de wifi thuis om te synchroniseren.",
+  "familySyncJoinTitle": "Of typ wat de andere telefoon laat zien",
+  "familySyncAddress": "Adres",
+  "familySyncCodeField": "Code",
+  "familySyncJoin": "Synchroniseren",
+  "familySyncQuestion": "Synchroniseren met de andere telefoon?",
+  "familySyncDone": "{count, plural, =0{Al in sync} =1{In sync: 1 item bijgewerkt} other{In sync: {count} items bijgewerkt}}",
+  "familySyncFailed": "De andere telefoon was niet bereikbaar. Zitten beide op de wifi thuis, met het synchronisatiescherm open?"
 }

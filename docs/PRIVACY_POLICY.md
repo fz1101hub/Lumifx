@@ -218,6 +218,10 @@ scenes and stories you make are stored on your phone only.
   local network, which works only with the code shown on your screen
   and offers only colours and calm effects. Nothing it receives is kept
   beyond the pick, and it stops when you leave that screen.
+- **Your family's other phone on your Wi-Fi**, only when you sync them:
+  the two phones swap your own scenes, stories, playlists, favourites and
+  the children's names directly over the local network, after the code
+  shown on the sharing phone; nothing goes over the internet.
 
 The app makes no other network connections. It contains no analytics, no
 advertising, no crash reporting and no tracking of any kind.
@@ -461,6 +465,10 @@ nanna e le scene e storie che crei sono salvati solo sul telefono.
   sullo schermo e offre solo colori ed effetti tranquilli. Di ciò che
   riceve non tiene nulla oltre alla scelta, e si ferma quando lasci quella
   schermata.
+- **L'altro telefono della famiglia sul tuo Wi-Fi**, solo quando li
+  sincronizzi: i due telefoni si scambiano direttamente sulla rete locale
+  le tue scene, storie, playlist, preferiti e i nomi dei bambini, dopo il
+  codice mostrato dal telefono che condivide; niente passa da internet.
 
 L'app non effettua altre connessioni. Non contiene analytics, pubblicità,
 segnalazione di crash né alcuna forma di tracciamento.

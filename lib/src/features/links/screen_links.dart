@@ -11,6 +11,7 @@ import '../timers/light_clock_screen.dart';
 import '../bedtime/ritual_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../calm/feelings_screen.dart';
+import '../family/family_sync_screen.dart';
 import '../fun/board_game_screen.dart';
 import '../fun/goal_screen.dart';
 import '../fun/hide_and_seek_screen.dart';
@@ -73,6 +74,7 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.familyQuiz => const FamilyQuizScreen(),
       AppScreen.dreamDiary => const DreamDiaryScreen(),
       AppScreen.soundAlerts => const SoundAlertsScreen(),
+      AppScreen.familySync => const FamilySyncScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

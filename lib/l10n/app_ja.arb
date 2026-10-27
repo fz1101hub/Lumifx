@@ -1498,5 +1498,16 @@
   "guestPageColours": "色",
   "guestPageEffects": "ムード",
   "guestPageDone": "できた！",
-  "guestPageWrongCode": "このリンクはもう使えません。ホストのスマホのコードをもう一度読み取ってください。"
+  "guestPageWrongCode": "このリンクはもう使えません。ホストのスマホのコードをもう一度読み取ってください。",
+  "familySync": "家族で同期",
+  "familySyncSubtitle": "シーン・お話・お気に入り・プロフィールをどのスマホでも",
+  "familySyncDescription": "2台のスマホを家のWi-Fiにつないで、もう1台のカメラでこのコードを読み取ってください。シーン・お話・プレイリスト・お気に入り・子どものプロフィールを交換し、同じ内容になります。インターネットは通りません。",
+  "familySyncNoWifi": "同期するには、このスマホを家のWi-Fiにつないでください。",
+  "familySyncJoinTitle": "または、もう1台に表示された内容を入力",
+  "familySyncAddress": "アドレス",
+  "familySyncCodeField": "コード",
+  "familySyncJoin": "同期する",
+  "familySyncQuestion": "もう1台のスマホと同期しますか？",
+  "familySyncDone": "{count, plural, =0{すでに同期済み} other{同期しました：{count}件更新}}",
+  "familySyncFailed": "もう1台に接続できませんでした。2台とも家のWi-Fiにつながっていて、相手の同期画面が開いていますか？"
 }

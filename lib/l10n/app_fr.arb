@@ -1498,5 +1498,16 @@
   "guestPageColours": "Couleurs",
   "guestPageEffects": "Ambiances",
   "guestPageDone": "C'est fait !",
-  "guestPageWrongCode": "Ce lien ne fonctionne plus. Scannez à nouveau le code sur le téléphone de votre hôte."
+  "guestPageWrongCode": "Ce lien ne fonctionne plus. Scannez à nouveau le code sur le téléphone de votre hôte.",
+  "familySync": "Famille synchronisée",
+  "familySyncSubtitle": "Scènes, histoires, favoris et profils sur chaque téléphone",
+  "familySyncDescription": "Avec les deux téléphones sur le Wi-Fi de la maison, scannez ce code avec l'appareil photo de l'autre téléphone : ils échangent scènes, histoires, playlists, favoris et profils des enfants, et finissent avec les mêmes. Rien ne passe par internet.",
+  "familySyncNoWifi": "Connectez ce téléphone au Wi-Fi de la maison pour synchroniser.",
+  "familySyncJoinTitle": "Ou saisissez ce qu'affiche l'autre téléphone",
+  "familySyncAddress": "Adresse",
+  "familySyncCodeField": "Code",
+  "familySyncJoin": "Synchroniser",
+  "familySyncQuestion": "Synchroniser avec l'autre téléphone ?",
+  "familySyncDone": "{count, plural, =0{Déjà synchronisés} =1{Synchronisés : 1 élément mis à jour} other{Synchronisés : {count} éléments mis à jour}}",
+  "familySyncFailed": "Impossible de joindre l'autre téléphone. Sont-ils tous deux sur le Wi-Fi de la maison, avec son écran de synchronisation ouvert ?"
 }
