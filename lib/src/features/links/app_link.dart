@@ -147,7 +147,10 @@ enum AppScreen {
   hideSeek('hide-and-seek'),
   farm('farm'),
   sing('sing'),
-  weeklyReport('weekly-report');
+  weeklyReport('weekly-report'),
+  treasureHunt('treasure-hunt'),
+  familyQuiz('family-quiz'),
+  dreamDiary('dream-diary');
 
   const AppScreen(this.slug);
 

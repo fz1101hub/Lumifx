@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'src/app.dart';
+import 'src/core/calendar/calendar_source.dart';
 import 'src/core/audio/audio_input.dart';
 import 'src/core/audio/phone_audio_input.dart';
 import 'src/core/background_playback.dart';
@@ -61,6 +62,7 @@ Future<void> main() async {
       nfc: ChannelNfcWriter(),
       notificationLights: ChannelNotificationLights(),
       liveActivity: ChannelLiveActivity(),
+      calendar: ChannelCalendar(),
     ),
   );
 }

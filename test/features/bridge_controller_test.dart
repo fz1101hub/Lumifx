@@ -71,8 +71,10 @@ void main() {
     test('forgets keys an earlier install left in the keychain', () async {
       final store = InMemoryKeyValueStore();
       final keys = InMemoryCredentialStore(credentials);
+      await keys.saveOthers([credentials]);
       await forgetEarlierInstall(store, keys);
       expect(await keys.load(), isNull, reason: 'paired again, by the button');
+      expect(await keys.loadOthers(), isEmpty);
 
       // Paired now: the next launches keep it.
       await keys.save(credentials);
@@ -144,6 +146,44 @@ void main() {
     fake.reachable = true;
     await controller.refresh();
     expect(controller.status, BridgeStatus.connected);
+  });
+
+  test('a second bridge keeps the first one to switch back to', () async {
+    const second = HueBridgeInfo(id: '001788fffe000002', host: '10.0.0.3');
+    final fake = _FakeBridge();
+    final store = InMemoryCredentialStore();
+    final controller = _controller(fake, store);
+    await controller.initialize();
+    expect(await controller.pair(_bridge, interval: Duration.zero), isTrue);
+    expect(controller.otherBridges, isEmpty);
+    expect(await controller.pair(second, interval: Duration.zero), isTrue);
+    expect(controller.credentials?.bridge.id, second.id);
+    expect(
+        [for (final c in controller.otherBridges) c.bridge.id], [_bridge.id]);
+
+    // Pairing the same bridge again does not list it twice.
+    expect(await controller.pair(second, interval: Duration.zero), isTrue);
+    expect(controller.otherBridges, hasLength(1));
+
+    await controller.switchTo(_bridge.id);
+    expect(controller.credentials?.bridge.id, _bridge.id);
+    expect(controller.status, BridgeStatus.connected);
+    expect([for (final c in controller.otherBridges) c.bridge.id], [second.id]);
+    expect((await store.load())?.bridge.id, _bridge.id);
+
+    // After a restart both are still there.
+    final again = _controller(fake, store);
+    await again.initialize();
+    expect(again.credentials?.bridge.id, _bridge.id);
+    expect([for (final c in again.otherBridges) c.bridge.id], [second.id]);
+
+    // Forgetting one leaves the other in use; forgetting both unpairs.
+    await again.forget();
+    expect(again.credentials?.bridge.id, second.id);
+    expect(again.otherBridges, isEmpty);
+    await again.forget();
+    expect(again.status, BridgeStatus.unpaired);
+    expect(await store.loadOthers(), isEmpty);
   });
 
   test('forget clears credentials', () async {
@@ -317,4 +357,10 @@ class _FlakyStore implements CredentialStore {
 
   @override
   Future<void> clear() async => _credentials = null;
+
+  @override
+  Future<List<HueCredentials>> loadOthers() async => const [];
+
+  @override
+  Future<void> saveOthers(List<HueCredentials> others) async {}
 }

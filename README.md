@@ -286,6 +286,19 @@ Also done ahead of schedule:
   motion in the scene editor, offline, in the eight languages.
 - **Light board**: paint a room's lamps with a finger on a map of the
   room.
+- **Treasure hunt**: a riddle read aloud for each room in turn, the room
+  glowing as a hint; found with a tap, the room's motion sensor or an NFC
+  sticker, then a golden treasure and a star.
+- **Family quiz**: questions read aloud for little ones, children or
+  everyone; teams buzz on the phone in their colour and the room lights
+  up in it.
+- **Dream diary**: last night's dream told in words or aloud, its colours
+  shown in the room.
+- **Lights before appointments**: a room glows softly a few minutes
+  before each appointment in the phone's calendar, even with the phone
+  off; only the times reach the bridge.
+- **Several bridges**: a second home or a large flat, switched to from
+  home like a room.
 
 ## Development
 

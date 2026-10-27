@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light_screen.dart';
@@ -17,7 +18,9 @@ import '../fun/fun_screen.dart';
 import '../fun/haunted_party_screen.dart';
 import '../fun/hot_cold_screen.dart';
 import '../fun/noise_light_screen.dart';
+import '../fun/family_quiz_screen.dart';
 import '../fun/simon_screen.dart';
+import '../fun/treasure_hunt_screen.dart';
 import '../learn/colour_mixing_screen.dart';
 import '../learn/farm_screen.dart';
 import '../music/sing_colour_screen.dart';
@@ -65,6 +68,9 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.farm => const FarmScreen(),
       AppScreen.sing => const SingColourScreen(),
       AppScreen.weeklyReport => const WeeklyReportScreen(),
+      AppScreen.treasureHunt => const TreasureHuntScreen(),
+      AppScreen.familyQuiz => const FamilyQuizScreen(),
+      AppScreen.dreamDiary => const DreamDiaryScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

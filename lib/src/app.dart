@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'app_scope.dart';
+import 'core/calendar/calendar_source.dart';
 import 'core/audio/audio_input.dart';
 import 'core/background_playback.dart';
 import 'core/hue/hue_discovery.dart';
@@ -29,6 +30,7 @@ import 'features/effects/player_route.dart';
 import 'features/effects/playing_route.dart';
 import 'features/home/home_screen.dart';
 import 'features/kids/kids_mode.dart';
+import 'features/house/calendar_lights.dart';
 import 'features/library/effect_library.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/links/app_link.dart';
@@ -62,6 +64,7 @@ class LumiFxApp extends StatefulWidget {
     this.nfc = const NoNfcWriter(),
     this.notificationLights = const NoNotificationLights(),
     this.liveActivity = const NoLiveActivity(),
+    this.calendar = const NoCalendar(),
     this.locale,
     @visibleForTesting this.fontFallback,
     super.key,
@@ -116,6 +119,9 @@ class LumiFxApp extends StatefulWidget {
 
   /// The effect playing on the iPhone's lock screen.
   final LiveActivity liveActivity;
+
+  /// The phone's appointments, for the lights before them.
+  final CalendarSource calendar;
   final VoiceRecorder voiceRecorder;
   final VoicePlayer voicePlayer;
 
@@ -142,6 +148,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
   late final HueButtonListener _buttons;
   late final ReadAloud _readAloud;
   late final NotificationLightsSync _notificationLights;
+  late final CalendarLightsSync _calendarLights;
   StreamSubscription<PlaybackNotice>? _notices;
 
   @override
@@ -203,6 +210,12 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       platform: widget.notificationLights,
       preferences: widget.preferences,
       bridge: widget.bridge,
+    );
+    _calendarLights = CalendarLightsSync(
+      calendar: widget.calendar,
+      preferences: widget.preferences,
+      bridge: widget.bridge,
+      clock: widget.clock,
     );
     // Opened from a link: the platform hands it over as the first route.
     final initial = AppLink.parse(
@@ -397,6 +410,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       }
     } else if (state == AppLifecycleState.resumed) {
       _buttons.resume();
+      _calendarLights.resumed();
     }
   }
 
@@ -419,6 +433,7 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
     _buttons.dispose();
     _readAloud.dispose();
     _notificationLights.dispose();
+    _calendarLights.dispose();
     _playback.dispose();
     _routes.dispose();
     super.dispose();
@@ -457,6 +472,8 @@ class _LumiFxAppState extends State<LumiFxApp> with WidgetsBindingObserver {
       nfc: widget.nfc,
       notificationLights: widget.notificationLights,
       liveActivity: widget.liveActivity,
+      calendar: widget.calendar,
+      calendarLights: _calendarLights,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         scaffoldMessengerKey: _messengerKey,

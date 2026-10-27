@@ -15,6 +15,7 @@ import 'package:lumifx/src/app_scope.dart';
 import 'package:lumifx/src/core/audio/audio_input.dart';
 import 'package:lumifx/src/core/hue/hue_bridge_client.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
+import 'package:lumifx/src/core/calendar/calendar_source.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/photos/photo_picker.dart';
 import 'package:lumifx/src/core/weather/weather.dart';
@@ -56,6 +57,10 @@ import 'package:lumifx/src/features/fun/noise_light_screen.dart';
 import 'package:lumifx/src/features/kids/kids_mode.dart';
 import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
+import 'package:lumifx/src/features/fun/family_quiz_screen.dart';
+import 'package:lumifx/src/features/fun/family_quiz.dart';
+import 'package:lumifx/src/features/fun/treasure_hunt_screen.dart';
+import 'package:lumifx/src/features/fun/treasure_hunt.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/core/hue/hue_buttons.dart';
@@ -854,6 +859,8 @@ void main() {
       (tester) async {
     await _pumpApp(tester, clock: () => DateTime(2026, 12, 5, 18));
     await openFun(tester);
+    await tester.scrollUntilVisible(find.text('Advent calendar'), 200,
+        scrollable: find.byType(Scrollable).last);
     await tester.tap(find.text('Advent calendar'));
     await tester.pumpAndSettle();
     await tester.tap(find.bySemanticsLabel('Day 6'));
@@ -880,6 +887,8 @@ void main() {
       (tester) async {
     await _pumpApp(tester, clock: () => DateTime(2026, 10, 16, 9));
     await openFun(tester);
+    await tester.scrollUntilVisible(find.text('How many sleeps?'), 200,
+        scrollable: find.byType(Scrollable).last);
     await tester.tap(find.text('How many sleeps?'));
     await tester.pumpAndSettle();
     expect(find.textContaining('No countdowns yet'), findsOneWidget);
@@ -1525,6 +1534,52 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the family quiz: teams buzz, the grown-up judges, a winner',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(
+            builder: (_) => const FamilyQuizScreen(seed: 3))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Start the quiz'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Question 1 of 10'), findsOneWidget);
+    final playback =
+        AppScope.of(tester.element(find.byType(FamilyQuizScreen))).playback;
+    expect(playback.status, PlaybackStatus.playing);
+
+    await tester.tap(find.bySemanticsLabel('Team red!'));
+    await tester.pump();
+    expect(speaker.spoken.last.$1, 'Team red!');
+    expect(find.textContaining('Answer: '), findsOneWidget);
+    await tester.tap(find.text('Wrong'));
+    await tester.pump();
+    final said = speaker.spoken.length;
+    await tester.tap(find.bySemanticsLabel('Team red!'));
+    await tester.pump();
+    expect(speaker.spoken, hasLength(said),
+        reason: 'red is out for this question');
+    await tester.tap(find.bySemanticsLabel('Team blue!'));
+    await tester.pump();
+    await tester.tap(find.text('Right'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1600));
+    expect(find.text('Question 2 of 10'), findsOneWidget);
+
+    for (var i = 2; i <= 10; i++) {
+      await tester.tap(find.text('Next question'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(find.text('Team blue wins!'), findsOneWidget);
+    expect(speaker.spoken.last.$1, 'Team blue wins!');
+    expect(playback.effect.id, FamilyQuiz.winner('', LearnColour.blue).id);
+    await playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 
@@ -3853,20 +3908,45 @@ void main() {
   streamingTests();
 }
 
+class _FakeCalendar implements CalendarSource {
+  _FakeCalendar(this.found);
+
+  final List<CalendarEvent> found;
+  var asked = false;
+
+  @override
+  bool get isSupported => true;
+
+  @override
+  Future<bool> hasAccess() async => asked;
+
+  @override
+  Future<bool> requestAccess() async => asked = true;
+
+  @override
+  Future<List<CalendarEvent>> events(DateTime from, DateTime to) async => [
+        for (final event in found)
+          if (!event.start.isBefore(from) && event.start.isBefore(to)) event,
+      ];
+}
+
 Future<BridgeController> _connectedBridge(
   WidgetTester tester, {
   String? clientKey,
   List<String>? puts,
+  List<HueCredentials> others = const [],
 }) async {
   http.Response json(Object body) => http.Response(jsonEncode(body), 200);
-  final bridge = BridgeController(
-    store: InMemoryCredentialStore(
-      HueCredentials(
-        bridge: const HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
-        applicationKey: 'key',
-        clientKey: clientKey,
-      ),
+  final store = InMemoryCredentialStore(
+    HueCredentials(
+      bridge: const HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
+      applicationKey: 'key',
+      clientKey: clientKey,
     ),
+  );
+  await store.saveOthers(others);
+  final bridge = BridgeController(
+    store: store,
     clientFactory: (pin, key) => HueBridgeClient(
       host: pin.host,
       applicationKey: key,
@@ -4182,6 +4262,173 @@ void streamingTests() {
       await Future<void>.delayed(const Duration(milliseconds: 50));
     });
     expect(puts.where((p) => p == '/clip/v2/resource/light/l1'), hasLength(2));
+  });
+
+  testWidgets('the treasure hunt reads riddles, lights rooms and ends in gold',
+      (tester) async {
+    final puts = <String>[];
+    final speaker = _RecordingSpeaker();
+    final motion = StreamController<HueMotionEvent>.broadcast();
+    addTearDown(motion.close);
+    final bridge = await _connectedBridge(tester, puts: puts);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      speaker: speaker,
+    ));
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(
+            builder: (_) => TreasureHuntScreen(
+                  motion: () => motion.stream,
+                  sensors: const [
+                    HueMotionSensor(id: '5', name: 'Kitchen sensor'),
+                  ],
+                  rooms: const [
+                    HueGroup(
+                        id: 'k',
+                        name: 'Kitchen',
+                        kind: HueGroupKind.room,
+                        lightIds: [],
+                        groupedLightId: 'gk',
+                        archetype: 'kitchen'),
+                    HueGroup(
+                        id: 'a',
+                        name: 'Attic',
+                        kind: HueGroupKind.room,
+                        lightIds: [],
+                        groupedLightId: 'ga'),
+                  ],
+                ))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Attic'));
+    await tester.pump();
+    expect(
+        tester
+            .widget<FilledButton>(find.ancestor(
+                of: find.text('Start the hunt'),
+                matching: find.byType(FilledButton)))
+            .onPressed,
+        isNull,
+        reason: 'two rooms at least');
+    await tester.tap(find.text('Kitchen'));
+    await tester.pump();
+    await tester.tap(find.text('Start the hunt'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Clue 1 of 2'), findsOneWidget);
+    expect(find.text('Look in the room called Attic!'), findsOneWidget,
+        reason: 'the attic was chosen first');
+    expect(speaker.spoken.last.$1, 'Look in the room called Attic!');
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Light the way'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    expect(puts, contains('/clip/v2/resource/grouped_light/ga'));
+
+    await tester.tap(find.text('Found it!'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Clue 2 of 2'), findsOneWidget);
+    expect(speaker.spoken.last.$1, startsWith('Well done!'));
+    expect(speaker.spoken.last.$1, contains('fridge hums'));
+
+    // Walking into the kitchen past its sensor finds it.
+    await tester.runAsync(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 2100));
+      motion.add(const HueMotionEvent(sensorId: '5', motion: true));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('You found the treasure!'), findsOneWidget);
+    expect(preferences.stars, contains('2026-06-15:treasure'));
+    final playback =
+        AppScope.of(tester.element(find.byType(TreasureHuntScreen))).playback;
+    expect(playback.effect.id, TreasureHunt.treasure('').id);
+    await playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('lights before appointments are set on the bridge',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    final calendar = _FakeCalendar([
+      CalendarEvent(title: 'Dentist', start: DateTime(2026, 6, 15, 15, 30)),
+      CalendarEvent(title: 'Piano lesson', start: DateTime(2026, 6, 15, 17)),
+      CalendarEvent(
+          title: 'Holiday', start: DateTime(2026, 6, 15), allDay: true),
+    ]);
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      calendar: calendar,
+    ));
+    await tester.scrollUntilVisible(
+        find.text('Lights before appointments'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Lights before appointments'));
+    await tester.pumpAndSettle();
+    expect(puts, isNot(contains('POST /api/key/schedules')),
+        reason: 'nothing on the bridge until switched on');
+
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Light up before appointments'));
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+    });
+    // The settings are saved, then the appointments read.
+    for (var i = 0; i < 4; i++) {
+      await tester.pump();
+    }
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 200)));
+    await tester.pump();
+    expect(calendar.asked, isTrue);
+    expect(preferences.calendarLights?.groupId, '1');
+    expect(puts.where((p) => p == 'POST /api/key/schedules'), hasLength(2),
+        reason: 'one per timed appointment');
+    await tester.scrollUntilVisible(find.text('Dentist'), 200,
+        scrollable: find.byType(Scrollable).last);
+    expect(find.text('Piano lesson'), findsOneWidget);
+    expect(find.text('Holiday'), findsNothing);
+  });
+
+  testWidgets('another bridge is chosen from home like a room', (tester) async {
+    final bridge = await _connectedBridge(tester, others: const [
+      HueCredentials(
+        bridge: HueBridgeInfo(
+            id: '001788fffe654321', host: '127.0.0.2', name: 'Beach house'),
+        applicationKey: 'key',
+      ),
+    ]);
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(PopupMenuButton<String>).first);
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Switch to Beach house'));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pumpAndSettle();
+    expect(bridge.credentials?.bridge.name, 'Beach house');
+    expect(find.text('Beach house'), findsOneWidget);
+    expect(bridge.otherBridges.single.bridge.id, '001788fffe123456');
   });
 
   testWidgets('rooms list the Hue scenes of each group and recall them',

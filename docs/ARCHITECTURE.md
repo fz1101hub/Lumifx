@@ -890,3 +890,33 @@ iOS lists the languages in `CFBundleLocalizations`.
   `HueLightCommand.forLight` when its paint changes, so dragging stays
   within the bridge's rate.
 
+### Round 13 notes
+
+- Treasure hunt (`lib/src/features/fun/treasure_hunt*.dart`): riddles by
+  Hue room type (`RoomKind`), or by the room's name; the hint and the
+  found colour go to the room's `grouped_light`. A motion sensor counts
+  when its name contains the room's name; a sticker with
+  `lumifx://app/go/treasure-hunt` tapped while the hunt is open reaches it
+  through `TreasureHunt.stickerTaps` (`LinkHandler._screen`).
+- Family quiz (`lib/src/features/fun/family_quiz*.dart`): questions are
+  made on the phone from the app's own words (farm sounds, colour words,
+  paint mixes, numbers), so they are right in every language; a dim
+  studio effect plays between questions so `playback.flash` can show the
+  team that buzzed.
+- Dream diary (`lib/src/features/bedtime/dream_diary*.dart`): colours
+  from `sceneFromSentence`, a dreamy palette when no word is known; the
+  voice is a `VoiceRecordings` file under `dream-<id>`, dropped when the
+  dream is not kept or is deleted; dreams are kept per child (60 each).
+- Lights before appointments (`lib/src/core/calendar/`,
+  `lib/src/features/house/calendar_lights*.dart`): a small channel,
+  `com.lumifx/calendar` (CalendarChannel.kt, `CalendarBridge` in
+  AppDelegate.swift), reads the next day's appointments; `CalendarLightsSync`
+  replaces the bridge's one-time `cal` schedules (at most eight, named
+  "LumiFX calendar", no titles) when the bridge connects, the settings
+  change or the app comes back, at most every five minutes.
+- Several bridges (`BridgeController.otherBridges`, `switchTo`): the
+  others are kept in the keychain next to the bridge in use
+  (`CredentialStore.loadOthers`/`saveOthers`); pairing a new one keeps the
+  old, forgetting falls back to another. Rooms, scenes and routines
+  belong to the bridge in use.
+

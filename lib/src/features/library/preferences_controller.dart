@@ -7,8 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
 import '../../core/weather/weather.dart';
+import '../bedtime/dream_diary.dart';
 import '../bedtime/ritual.dart';
 import '../fun/countdown.dart';
+import '../house/calendar_lights.dart';
 import '../music_box/my_tune.dart';
 import '../notifications/notification_lights.dart';
 import '../playlists/playlist.dart';
@@ -238,8 +240,8 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
-  /// Removes a child with their stars, routine steps, bedtimes and spent
-  /// stars.
+  /// Removes a child with their stars, routine steps, bedtimes, dreams
+  /// and spent stars.
   Future<void> removeChild(String id) {
     _children = [
       for (final c in _children)
@@ -256,6 +258,10 @@ class PreferencesController extends ChangeNotifier {
     _bedtimes = [
       for (final key in _bedtimes)
         if (!_belongsTo(key, id)) key
+    ];
+    _dreams = [
+      for (final d in _dreams)
+        if (d.child != id) d
     ];
     _starsSpent = {..._starsSpent}..remove(id);
     if (_activeChild == id) {
@@ -573,6 +579,47 @@ class PreferencesController extends ChangeNotifier {
         ? null
         : '${visit.child}|'
             '${visit.at.millisecondsSinceEpoch ~/ Duration.millisecondsPerMinute}';
+    return _changed();
+  }
+
+  String? _calendarLights;
+
+  /// The lights before appointments, or null when off.
+  CalendarLightsSettings? get calendarLights =>
+      CalendarLightsSettings.decode(_calendarLights);
+
+  Future<void> setCalendarLights(CalendarLightsSettings? settings) {
+    _calendarLights = settings?.encode();
+    return _changed();
+  }
+
+  var _dreams = <Dream>[];
+
+  /// The dreams [child] told, newest first.
+  List<Dream> dreamsOf(String child) => [
+        for (final dream in _dreams.reversed)
+          if (dream.child == child) dream,
+      ];
+
+  /// Keeps [dream], in place of one with the same id.
+  Future<void> saveDream(Dream dream) {
+    _dreams = [
+      for (final d in _dreams)
+        if (d.id != dream.id) d,
+      dream,
+    ];
+    if (_dreams.length > Dream.maxDreams * Child.maxChildren) {
+      _dreams =
+          _dreams.sublist(_dreams.length - Dream.maxDreams * Child.maxChildren);
+    }
+    return _changed();
+  }
+
+  Future<void> deleteDream(String id) {
+    _dreams = [
+      for (final d in _dreams)
+        if (d.id != id) d,
+    ];
     return _changed();
   }
 
@@ -907,6 +954,15 @@ class PreferencesController extends ChangeNotifier {
             if (key is String && value is String)
               if (MyTune.decode(key, value) case final tune?) tune,
       ];
+      final calendar = json['calendarLights'];
+      _calendarLights =
+          calendar is String && calendar.length <= 80 ? calendar : null;
+      final dreams = json['dreams'];
+      _dreams = [
+        if (dreams is List)
+          for (final d in dreams.take(Dream.maxDreams * Child.maxChildren))
+            if (Dream.fromJson(d) case final dream?) dream,
+      ];
       final bedtimes = json['bedtimes'];
       _bedtimes = [
         if (bedtimes is List)
@@ -1210,6 +1266,8 @@ class PreferencesController extends ChangeNotifier {
       'goalTeam': _goalTeam,
       'toothFairy': _toothFairy,
       'bedtimes': _bedtimes,
+      'dreams': [for (final d in _dreams) d.toJson()],
+      'calendarLights': _calendarLights,
       'myTunes': {for (final t in _myTunes) t.name: t.encoded},
       'noiseLimit': _noiseLimit,
       'teethTune': _teethTune,

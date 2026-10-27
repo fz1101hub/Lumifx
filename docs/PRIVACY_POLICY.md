@@ -55,6 +55,19 @@ with the story or one by one. On iPhone they may be part of your own
 iCloud device backup, like other app data; Android backups are off for
 LumiFX.
 
+**Your voice (dream diary).** In the dream diary a child can tell last
+night's dream aloud. The recording is saved as a sound file on your phone
+only, is never uploaded or shared, and is deleted with the dream. The
+words written are kept on the phone too; only the colours they choose are
+shown on the lights.
+
+**Calendar (lights before appointments).** If you switch on the lights
+before appointments, the app asks for access to your phone's calendar and
+reads the start times of the appointments in the next day, on your phone.
+It hands your Hue Bridge only those times (as its own schedules named
+"LumiFX calendar"), never titles, places or people. Switching the feature
+off removes those schedules from the bridge.
+
 **Photos (scene from a photo).** In the scene editor, "From a photo" lets
 you choose a photo or take one. The app reads its main colours on your
 phone; the photo is not kept or sent anywhere. The small copy the system
@@ -270,6 +283,19 @@ condivise (neanche quando condividi la storia) e si eliminano con la storia
 o una per una. Su iPhone possono far parte del tuo backup iCloud del
 dispositivo, come gli altri dati delle app; per LumiFX i backup Android sono
 disattivati.
+
+**La tua voce (diario dei sogni).** Nel diario dei sogni un bambino può
+raccontare a voce il sogno della notte. La registrazione è salvata come file
+audio solo sul telefono, non viene mai caricata né condivisa e si elimina
+insieme al sogno. Anche le parole scritte restano sul telefono; sulle luci
+si vedono solo i colori che scelgono.
+
+**Calendario (luci prima degli appuntamenti).** Se attivi le luci prima
+degli appuntamenti, l'app chiede l'accesso al calendario del telefono e
+legge, sul telefono, gli orari di inizio degli appuntamenti del giorno
+successivo. Al bridge Hue passa solo quegli orari (come sue programmazioni
+chiamate "LumiFX calendar"), mai titoli, luoghi o persone. Disattivando la
+funzione quelle programmazioni vengono tolte dal bridge.
 
 **Foto (scena da una foto).** Nell'editor delle scene, "Da una foto" ti fa
 scegliere o scattare una foto. L'app ne legge i colori principali sul

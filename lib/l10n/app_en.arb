@@ -5849,5 +5849,368 @@
   "lightBoardNoLights": "This room has no lamps.",
   "@lightBoardNoLights": {
     "description": "Light board: the room has no lamps"
+  },
+  "treasureHunt": "Treasure hunt",
+  "@treasureHunt": {
+    "description": "Fun: the treasure hunt across rooms"
+  },
+  "treasureHuntSubtitle": "Riddles from room to room",
+  "@treasureHuntSubtitle": {
+    "description": "Fun: what the treasure hunt is"
+  },
+  "treasureHuntDescription": "Pick the rooms in the order of the hunt. For each one a riddle is read aloud, and Light the way makes the room glow. Tap Found it!, walk past a motion sensor named after the room, or tap a treasure hunt NFC sticker.",
+  "@treasureHuntDescription": {
+    "description": "Treasure hunt: how it works"
+  },
+  "treasureRooms": "Rooms, in order",
+  "@treasureRooms": {
+    "description": "Treasure hunt: heading of the rooms to choose"
+  },
+  "treasureStart": "Start the hunt",
+  "@treasureStart": {
+    "description": "Treasure hunt: start button"
+  },
+  "treasureStep": "Clue {step} of {total}",
+  "@treasureStep": {
+    "description": "Treasure hunt: which clue this is",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "treasureHint": "Light the way",
+  "@treasureHint": {
+    "description": "Treasure hunt: light the room as a hint"
+  },
+  "treasureFound": "Found it!",
+  "@treasureFound": {
+    "description": "Treasure hunt: the room was found"
+  },
+  "treasureReadAgain": "Read again",
+  "@treasureReadAgain": {
+    "description": "Treasure hunt: read the riddle again"
+  },
+  "treasureWellDone": "Well done! Here is the next clue.",
+  "@treasureWellDone": {
+    "description": "Treasure hunt: said when a room is found"
+  },
+  "treasureTreasure": "You found the treasure!",
+  "@treasureTreasure": {
+    "description": "Treasure hunt: the end"
+  },
+  "riddleLiving": "Where the sofa waits and the family sits together in the evening: go there!",
+  "@riddleLiving": {
+    "description": "Treasure hunt riddle: the living room"
+  },
+  "riddleKitchen": "Where pots bubble and the fridge hums: go and look!",
+  "@riddleKitchen": {
+    "description": "Treasure hunt riddle: the kitchen"
+  },
+  "riddleDining": "Where plates and forks meet at dinner time: that's the place!",
+  "@riddleDining": {
+    "description": "Treasure hunt riddle: the dining room"
+  },
+  "riddleBedroom": "Where the big bed waits for tired grown-ups: tiptoe there!",
+  "@riddleBedroom": {
+    "description": "Treasure hunt riddle: the bedroom"
+  },
+  "riddleKids": "Where toys sleep and dreams begin: run and look!",
+  "@riddleKids": {
+    "description": "Treasure hunt riddle: the children's room"
+  },
+  "riddleBathroom": "Where the toothbrush lives and bubbles fly: splash over there!",
+  "@riddleBathroom": {
+    "description": "Treasure hunt riddle: the bathroom"
+  },
+  "riddleOffice": "Where the desk and the books are: look there!",
+  "@riddleOffice": {
+    "description": "Treasure hunt riddle: the study"
+  },
+  "riddleHallway": "Where everyone passes in and out, with shoes and coats: search there!",
+  "@riddleHallway": {
+    "description": "Treasure hunt riddle: the hallway"
+  },
+  "riddleGarden": "Where the sky is above you and the plants grow: go outside!",
+  "@riddleGarden": {
+    "description": "Treasure hunt riddle: outside"
+  },
+  "riddleOther": "Look in the room called {room}!",
+  "@riddleOther": {
+    "description": "Treasure hunt riddle: any other room, by name",
+    "placeholders": {
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "familyQuiz": "Family quiz",
+  "@familyQuiz": {
+    "description": "Fun: the family quiz"
+  },
+  "familyQuizSubtitle": "Questions read aloud, teams buzz in their colour",
+  "@familyQuizSubtitle": {
+    "description": "Fun: what the family quiz is"
+  },
+  "familyQuizDescription": "Put the phone in the middle. Each question is read aloud; the first team to tap its colour lights the room and answers. The grown-up sees the answer and taps Right or Wrong.",
+  "@familyQuizDescription": {
+    "description": "Family quiz: how it works"
+  },
+  "quizPack": "Questions for",
+  "@quizPack": {
+    "description": "Family quiz: heading of the question packs"
+  },
+  "quizPackLittle": "Little ones (4–6)",
+  "@quizPackLittle": {
+    "description": "Family quiz pack: small children"
+  },
+  "quizPackKids": "Children (7–10)",
+  "@quizPackKids": {
+    "description": "Family quiz pack: school children"
+  },
+  "quizPackFamily": "Everyone",
+  "@quizPackFamily": {
+    "description": "Family quiz pack: everyone"
+  },
+  "quizTeams": "Teams",
+  "@quizTeams": {
+    "description": "Family quiz: how many teams"
+  },
+  "quizStart": "Start the quiz",
+  "@quizStart": {
+    "description": "Family quiz: start button"
+  },
+  "quizQuestionNumber": "Question {number} of {total}",
+  "@quizQuestionNumber": {
+    "description": "Family quiz: which question this is",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizTeamTurn": "Team {team}!",
+  "@quizTeamTurn": {
+    "description": "Family quiz: said when a team buzzes; team is a colour word",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
+  },
+  "quizAnswer": "Answer: {answer}",
+  "@quizAnswer": {
+    "description": "Family quiz: the answer, for the grown-up",
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "quizRight": "Right",
+  "@quizRight": {
+    "description": "Family quiz: the answer was right"
+  },
+  "quizWrong": "Wrong",
+  "@quizWrong": {
+    "description": "Family quiz: the answer was wrong"
+  },
+  "quizSkip": "Next question",
+  "@quizSkip": {
+    "description": "Family quiz: nobody knows, next question"
+  },
+  "quizWhatColour": "What colour is the light now?",
+  "@quizWhatColour": {
+    "description": "Family quiz question: the room shows a colour"
+  },
+  "quizPlus": "How much is {a} plus {b}?",
+  "@quizPlus": {
+    "description": "Family quiz question: an addition",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "quizMinus": "How much is {a} minus {b}?",
+  "@quizMinus": {
+    "description": "Family quiz question: a subtraction",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "quizTimes": "How much is {a} times {b}?",
+  "@quizTimes": {
+    "description": "Family quiz question: a multiplication",
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "quizMix": "What colour do {a} and {b} make together?",
+  "@quizMix": {
+    "description": "Family quiz question: two paints mixed; a and b are colour words",
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  },
+  "quizWinner": "Team {team} wins!",
+  "@quizWinner": {
+    "description": "Family quiz: the winning team; team is a colour word",
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
+  },
+  "quizDraw": "It's a draw!",
+  "@quizDraw": {
+    "description": "Family quiz: nobody won"
+  },
+  "quizPlayAgain": "Play again",
+  "@quizPlayAgain": {
+    "description": "Family quiz: play again"
+  },
+  "dreamDiary": "Dream diary",
+  "@dreamDiary": {
+    "description": "Home: the dream diary"
+  },
+  "dreamDiarySubtitle": "Tell last night's dream and see its colours",
+  "@dreamDiarySubtitle": {
+    "description": "Home: what the dream diary is"
+  },
+  "dreamDiaryDescription": "In the morning, tell what you dreamed: write it or say it into the microphone. The words choose the colours, and the room shows the dream. Recordings stay on the phone.",
+  "@dreamDiaryDescription": {
+    "description": "Dream diary: how it works"
+  },
+  "dreamNew": "Tell a dream",
+  "@dreamNew": {
+    "description": "Dream diary: tell a new dream"
+  },
+  "dreamWords": "What did you dream?",
+  "@dreamWords": {
+    "description": "Dream diary: the text field"
+  },
+  "dreamWordsHint": "I was flying over the sea at night…",
+  "@dreamWordsHint": {
+    "description": "Dream diary: example dream"
+  },
+  "dreamRecord": "Record my voice",
+  "@dreamRecord": {
+    "description": "Dream diary: record the child telling the dream"
+  },
+  "dreamListen": "Listen",
+  "@dreamListen": {
+    "description": "Dream diary: play the recorded voice"
+  },
+  "dreamShow": "Show it in the room",
+  "@dreamShow": {
+    "description": "Dream diary: show the dream in the room"
+  },
+  "dreamNone": "No dreams yet. Tell the first one tomorrow morning!",
+  "@dreamNone": {
+    "description": "Dream diary: no dream yet"
+  },
+  "dreamDeleteQuestion": "Delete this dream?",
+  "@dreamDeleteQuestion": {
+    "description": "Dream diary: confirm deleting a dream"
+  },
+  "calendarLights": "Lights before appointments",
+  "@calendarLights": {
+    "description": "Home: lights before calendar appointments"
+  },
+  "calendarLightsSubtitle": "A soft colour a few minutes before",
+  "@calendarLightsSubtitle": {
+    "description": "Home: what the calendar lights do"
+  },
+  "calendarLightsDescription": "A few minutes before each appointment in your phone's calendar, a room glows softly, even with the phone off. Only the times reach your Hue Bridge, never what the appointment is. LumiFX looks a day ahead and updates whenever it is opened.",
+  "@calendarLightsDescription": {
+    "description": "Calendar lights: how they work and what is shared"
+  },
+  "calendarLightsOn": "Light up before appointments",
+  "@calendarLightsOn": {
+    "description": "Calendar lights: the main switch"
+  },
+  "calendarLightsBefore": "How long before",
+  "@calendarLightsBefore": {
+    "description": "Calendar lights: how long before the appointment"
+  },
+  "calendarLightsMinutes": "{minutes} min",
+  "@calendarLightsMinutes": {
+    "description": "Calendar lights: minutes before",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarLightsNext": "Coming up",
+  "@calendarLightsNext": {
+    "description": "Calendar lights: heading of the coming appointments"
+  },
+  "calendarLightsNone": "No appointments in the next day.",
+  "@calendarLightsNone": {
+    "description": "Calendar lights: no appointment in the next day"
+  },
+  "calendarLightsDenied": "LumiFX needs the calendar to see when your appointments are. You can allow it in your phone settings.",
+  "@calendarLightsDenied": {
+    "description": "Calendar lights: no calendar access"
+  },
+  "calendarLightsUpdate": "Update now",
+  "@calendarLightsUpdate": {
+    "description": "Calendar lights: update the bridge now"
+  },
+  "calendarLightsSynced": "{count, plural, =0{No lights to set in the next day} =1{1 light set on the bridge} other{{count} lights set on the bridge}}",
+  "@calendarLightsSynced": {
+    "description": "Calendar lights: how many lights were set on the bridge",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "otherBridges": "Other bridges",
+  "@otherBridges": {
+    "description": "Settings: heading of the other bridges paired"
+  },
+  "switchToBridge": "Switch to {name}",
+  "@switchToBridge": {
+    "description": "Switch to another paired bridge",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "addAnotherBridge": "Add another bridge",
+  "@addAnotherBridge": {
+    "description": "Settings: pair a second bridge (a second home)"
+  },
+  "addAnotherBridgeSubtitle": "A second home or a large flat: switch between them like rooms",
+  "@addAnotherBridgeSubtitle": {
+    "description": "Settings: what adding another bridge is for"
   }
 }

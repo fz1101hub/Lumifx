@@ -705,6 +705,26 @@ build before every store release.
 - [ ] Scene from a photo, take a photo: nothing is left in the app's
       cache folder afterwards.
 
+## This round: bigger games and the family (round 13)
+
+- [ ] Treasure hunt with the kitchen and a bedroom: the riddle fits the
+      room; Light the way makes it glow gold; walking past a motion
+      sensor named after the room finds it; a treasure hunt NFC sticker
+      also counts; at the end the room sparkles gold and a star is given.
+- [ ] Family quiz, 3 teams, children: each question is read aloud; the
+      first colour tapped lights the room in it and says the team; Wrong
+      keeps that team out of the question; the winners' colour bursts.
+- [ ] Dream diary: tell "flying over the sea at night", record the voice,
+      save: the room shows blues; the dream is listed with Listen; delete
+      it: the recording goes too. Each child sees their own.
+- [ ] Lights before appointments: switch on, allow the calendar, an
+      appointment in 20 minutes with 10 min chosen: in 10 minutes the
+      room glows softly (phone locked). The Hue app shows a "LumiFX
+      calendar" schedule without the title. Switch off: it is gone.
+- [ ] Several bridges: Settings › Add another bridge, pair it: the first
+      one is under Other bridges; home's bridge menu switches between
+      them; rooms are each home's own.
+
 ## This round: the house (round 12)
 
 - [ ] Light health check: switch a lamp off at the wall, pull to refresh:

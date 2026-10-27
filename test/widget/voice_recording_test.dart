@@ -4,6 +4,9 @@ import 'package:lumifx/src/app.dart';
 import 'package:lumifx/src/core/hue/hue_discovery.dart';
 import 'package:lumifx/src/core/hue/hue_models.dart';
 import 'package:lumifx/src/core/speech/voice_recordings.dart';
+import 'package:lumifx/src/app_scope.dart';
+import 'package:lumifx/src/features/bedtime/dream_diary.dart';
+import 'package:lumifx/src/features/bedtime/dream_diary_screen.dart';
 import 'package:lumifx/src/features/bridge/bridge_controller.dart';
 import 'package:lumifx/src/features/bridge/credential_store.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
@@ -130,6 +133,7 @@ Future<void> _open(
 
 void main() {
   usePhoneWindow();
+  dreamTests();
 
   testWidgets('each line with words can be recorded, heard and removed',
       (tester) async {
@@ -178,5 +182,108 @@ void main() {
     await tester.pump();
     expect(find.textContaining('needs the microphone'), findsOneWidget);
     expect(recorder.started, isEmpty);
+  });
+}
+
+void dreamTests() {
+  testWidgets('a dream is told, recorded, shown in the room and deleted',
+      (tester) async {
+    final voices = _MemoryVoices();
+    final recorder = _FakeRecorder();
+    final player = _FakePlayer();
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setOnboardingDone();
+    await preferences.load();
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 16, 7, 30),
+      bridge: bridge,
+      discovery: _NoDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      voices: voices,
+      voiceRecorder: recorder,
+      voicePlayer: player,
+    ));
+    await tester.pumpAndSettle();
+    // ignore: unawaited_futures
+    tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const DreamDiaryScreen()));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('No dreams yet'), findsOneWidget);
+
+    await tester.tap(find.text('Tell a dream'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+        find.byType(TextField), 'I was flying over the sea at night');
+    await tester.pump();
+    await tester.tap(find.text('Record my voice'));
+    await tester.pump();
+    expect(recorder.started, hasLength(1));
+    await tester.tap(find.text('Stop'));
+    await tester.pump();
+    expect(find.text('Listen'), findsOneWidget);
+    await tester.tap(find.text('Save'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
+
+    final dream = preferences.dreamsOf('').single;
+    expect(dream.words, 'I was flying over the sea at night');
+    expect(dream.colors, contains('#00B3FF'), reason: 'the sea');
+    expect(dream.date, DateTime(2026, 6, 16, 7, 30));
+    expect(voices.recorded, {(dream.recordingKey, 0)});
+    final playback =
+        AppScope.of(tester.element(find.byType(DreamDiaryScreen))).playback;
+    expect(Dream.isDream(playback.effect), isTrue);
+    await playback.stop(restore: false);
+    await tester.pumpAndSettle();
+
+    expect(find.text('I was flying over the sea at night'), findsOneWidget);
+    await tester.tap(find.text('Listen'));
+    await tester.pump();
+    expect(player.played, ['/voices/${dream.recordingKey}/0.m4a']);
+
+    await tester.tap(find.byTooltip('Delete'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+    await tester.pumpAndSettle();
+    expect(preferences.dreamsOf(''), isEmpty);
+    expect(voices.recorded, isEmpty);
+  });
+
+  testWidgets('a dream told but not kept leaves no recording behind',
+      (tester) async {
+    final voices = _MemoryVoices();
+    final recorder = _FakeRecorder();
+    final bridge = BridgeController(store: InMemoryCredentialStore());
+    await tester.runAsync(bridge.initialize);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await preferences.setOnboardingDone();
+    await preferences.load();
+    await tester.pumpWidget(LumiFxApp(
+      bridge: bridge,
+      discovery: _NoDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      voices: voices,
+      voiceRecorder: recorder,
+      voicePlayer: _FakePlayer(),
+    ));
+    await tester.pumpAndSettle();
+    // ignore: unawaited_futures
+    tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const DreamEditorScreen()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Record my voice'));
+    await tester.pump();
+    await tester.tap(find.text('Stop'));
+    await tester.pump();
+    expect(voices.recorded, hasLength(1));
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(voices.recorded, isEmpty);
+    expect(preferences.dreamsOf(''), isEmpty);
   });
 }

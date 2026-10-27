@@ -4,6 +4,7 @@ import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
 import '../board/light_board_screen.dart';
+import '../bedtime/dream_diary_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
@@ -26,6 +27,7 @@ import '../playlists/playlists_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
 import '../house/automations_calendar_screen.dart';
+import '../house/calendar_lights_screen.dart';
 import '../house/house_screen.dart';
 import '../house/light_health_screen.dart';
 import '../kids/kids_mode.dart';
@@ -158,6 +160,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.napLightSubtitle, () => const NapLightScreen()),
                 _HomeEntry(Icons.nightlight_round, l10n.moon, l10n.moonSubtitle,
                     () => const MoonScreen()),
+                _HomeEntry(Icons.cloud_outlined, l10n.dreamDiary,
+                    l10n.dreamDiarySubtitle, () => const DreamDiaryScreen()),
                 _HomeEntry(Icons.auto_awesome, l10n.toothFairy,
                     l10n.toothFairySubtitle, () => const ToothFairyScreen()),
                 _HomeEntry(
@@ -219,6 +223,11 @@ class HomeScreen extends StatelessWidget {
                       l10n.roomsAndZonesSubtitle, () => const RoomsScreen()),
                   _HomeEntry(Icons.alarm, l10n.routines, l10n.routinesSubtitle,
                       () => const AutomationsScreen()),
+                  _HomeEntry(
+                      Icons.event_available_outlined,
+                      l10n.calendarLights,
+                      l10n.calendarLightsSubtitle,
+                      () => const CalendarLightsScreen()),
                   _HomeEntry(
                       Icons.calendar_view_week,
                       l10n.automationsCalendar,
@@ -554,9 +563,17 @@ class _BridgeBanner extends StatelessWidget {
                   controller.refresh();
                 } else if (value == 'forget') {
                   confirmForgetBridge(context, controller);
+                } else if (value.startsWith('bridge:')) {
+                  switchBridge(
+                      context, controller, value.substring('bridge:'.length));
                 }
               },
               itemBuilder: (_) => [
+                for (final other in controller.otherBridges)
+                  PopupMenuItem(
+                    value: 'bridge:${other.bridge.id}',
+                    child: Text(l10n.switchToBridge(other.bridge.displayName)),
+                  ),
                 PopupMenuItem(value: 'refresh', child: Text(l10n.refresh)),
                 PopupMenuItem(value: 'forget', child: Text(l10n.forgetBridge)),
               ],

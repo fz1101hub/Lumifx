@@ -42,20 +42,20 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 17 | Light health check: unreachable lamps, weak signal, old firmware, with advice | done (PR pending) |
-| 18 | Automations calendar: everything the bridge does by itself in one week view, switched on and off from there | done (PR pending) |
-| 19 | Scene from a sentence: "forest at sunset" becomes colours and motion, offline, in the eight languages | done (PR pending) |
-| 20 | Light board: paint on the room map with a finger, each lamp takes the colour passed over it | done (PR pending) |
+| 17 | Light health check: unreachable lamps, weak signal, old firmware, with advice | done (#26) |
+| 18 | Automations calendar: everything the bridge does by itself in one week view, switched on and off from there | done (#26) |
+| 19 | Scene from a sentence: "forest at sunset" becomes colours and motion, offline, in the eight languages | done (#26) |
+| 20 | Light board: paint on the room map with a finger, each lamp takes the colour passed over it | done (#26) |
 
 ## Round 13: bigger games and the family
 
 | # | Feature | Status |
 |---|---------|--------|
-| 21 | Treasure hunt across rooms: riddles read aloud, the right room lights up, confirmed by a motion sensor or NFC sticker | todo |
-| 22 | Family quiz: questions read aloud, teams buzz in their colour, packs by age | todo |
-| 23 | Dream diary: the dream told in the morning, recorded, its colours shown in the room | todo |
-| 24 | Lights and calendar: a soft colour a few minutes before an appointment (calendar permission) | todo |
-| 25 | Several bridges: a second home or a large flat, chosen like a room | todo |
+| 21 | Treasure hunt across rooms: riddles read aloud, the right room lights up, confirmed by a motion sensor or NFC sticker | done (PR pending) |
+| 22 | Family quiz: questions read aloud, teams buzz in their colour, packs by age | done (PR pending) |
+| 23 | Dream diary: the dream told in the morning, recorded, its colours shown in the room | done (PR pending) |
+| 24 | Lights and calendar: a soft colour a few minutes before an appointment (calendar permission) | done (PR pending) |
+| 25 | Several bridges: a second home or a large flat, chosen like a room | done (PR pending) |
 
 ## Round 14: the big ones
 
