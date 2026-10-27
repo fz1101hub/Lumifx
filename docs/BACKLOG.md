@@ -42,10 +42,10 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 17 | Light health check: unreachable lamps, weak signal, old firmware, with advice | todo |
-| 18 | Automations calendar: everything the bridge does by itself in one week view, switched on and off from there | todo |
-| 19 | Scene from a sentence: "forest at sunset" becomes colours and motion, offline, in the eight languages | todo |
-| 20 | Light board: paint on the room map with a finger, each lamp takes the colour passed over it | todo |
+| 17 | Light health check: unreachable lamps, weak signal, old firmware, with advice | done (PR pending) |
+| 18 | Automations calendar: everything the bridge does by itself in one week view, switched on and off from there | done (PR pending) |
+| 19 | Scene from a sentence: "forest at sunset" becomes colours and motion, offline, in the eight languages | done (PR pending) |
+| 20 | Light board: paint on the room map with a finger, each lamp takes the colour passed over it | done (PR pending) |
 
 ## Round 13: bigger games and the family
 

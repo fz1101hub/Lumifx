@@ -278,6 +278,14 @@ Also done ahead of schedule:
   screen is open.
 - **Weekly report**: for each child, the stars of the week day by day
   against last week, the routines finished and when bedtime started.
+- **Light health check**: lamps the bridge cannot reach, weak radio
+  links and firmware ready to install, each with what to do.
+- **Automations calendar**: everything the bridge does by itself in one
+  week, a day at a time, each switched off or on from there.
+- **Scene from a sentence**: "forest at sunset" becomes colours and
+  motion in the scene editor, offline, in the eight languages.
+- **Light board**: paint a room's lamps with a finger on a map of the
+  room.
 
 ## Development
 

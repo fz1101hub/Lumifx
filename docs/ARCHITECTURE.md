@@ -866,3 +866,27 @@ iOS lists the languages in `CFBundleLocalizations`.
   sixty per child; an evening runs from noon to noon). The report reads
   the stars' `yyyy-mm-dd:` keys for the week from Monday.
 
+### Round 12 notes
+
+- Light health check (`lib/src/core/hue/hue_health*.dart`): the older
+  API's `/lights` gives `state.reachable`, `swupdate.state` and the
+  firmware, `/config`'s `swupdate2.state` the bridge's update; the newer
+  API's `zigbee_connectivity` (matched by MAC address to the light's
+  `uniqueid`) gives a poor link. A bridge without it still reports the
+  rest.
+- Automations calendar (`lib/src/features/house/automations_calendar*.dart`):
+  `loadCalendar` reads every kind of routine the app knows (each part
+  that fails is left out) into `CalendarEntry`s with the client call that
+  pauses or resumes them; entries without days run once.
+- Scene from a sentence (`lib/src/features/library/sentence_scene.dart`):
+  about twenty-five things, each a palette, an optional motion and its
+  word beginnings in the eight languages (Japanese found anywhere in the
+  sentence). Each word takes the thing with the longest matching
+  beginning; stems of three letters or less count only as whole words.
+  Colours are taken in turns from the things named, in order.
+- Light board (`lib/src/features/board/light_board*.dart`): positions
+  come from the entertainment areas' service locations (seen from
+  above), other lamps sit on a ring; each lamp gets one
+  `HueLightCommand.forLight` when its paint changes, so dragging stays
+  within the bridge's rate.
+

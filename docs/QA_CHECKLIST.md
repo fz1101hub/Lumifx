@@ -705,6 +705,21 @@ build before every store release.
 - [ ] Scene from a photo, take a photo: nothing is left in the app's
       cache folder afterwards.
 
+## This round: the house (round 12)
+
+- [ ] Light health check: switch a lamp off at the wall, pull to refresh:
+      it is first, "Can't be reached" with the advice; switch it back on:
+      all fine. A lamp with an update in the Hue app shows "Update ready".
+- [ ] Automations calendar: today is chosen; the wake-up routine, an
+      ok-to-wake light and a scheduled effect show on their days only;
+      switching one off pauses it in the Hue app too.
+- [ ] New scene › From words: "bosco al tramonto" (in Italian) gives
+      greens and oranges and names the scene; "campfire" flickers;
+      nonsense words say so.
+- [ ] Light board on a room with an entertainment area: the lamps sit as
+      placed there; dragging a finger over them paints them at once;
+      Off switches one off; Paint them all paints the room.
+
 ## This round: playing and learning (round 11)
 
 - [ ] Light farm: tap the cow: "The cow says moo" is heard as the room
