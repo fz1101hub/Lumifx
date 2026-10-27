@@ -7,6 +7,7 @@ import '../bridge/bridge_controller.dart';
 import '../effects/effect_player_screen.dart';
 import '../fun/goal.dart';
 import '../fun/goal_screen.dart';
+import '../fun/treasure_hunt.dart';
 import '../music_box/my_tune.dart';
 import '../effects/playback_controller.dart';
 import '../effects/player_route.dart';
@@ -267,7 +268,10 @@ class LinkHandler {
       onTop = r.settings.name == screenRouteName(screen);
       return true;
     });
-    if (!onTop) {
+    if (onTop && screen == AppScreen.treasureHunt) {
+      // A treasure hunt sticker tapped during the hunt: found.
+      TreasureHunt.stickerTapped();
+    } else if (!onTop) {
       unawaited(navigator.push(MaterialPageRoute<void>(
         settings: RouteSettings(name: screenRouteName(screen)),
         builder: (_) => screenOf(screen),

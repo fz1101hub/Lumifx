@@ -5849,5 +5849,102 @@
   "lightBoardNoLights": "This room has no lamps.",
   "@lightBoardNoLights": {
     "description": "Light board: the room has no lamps"
+  },
+  "treasureHunt": "Treasure hunt",
+  "@treasureHunt": {
+    "description": "Fun: the treasure hunt across rooms"
+  },
+  "treasureHuntSubtitle": "Riddles from room to room",
+  "@treasureHuntSubtitle": {
+    "description": "Fun: what the treasure hunt is"
+  },
+  "treasureHuntDescription": "Pick the rooms in the order of the hunt. For each one a riddle is read aloud, and Light the way makes the room glow. Tap Found it!, walk past a motion sensor named after the room, or tap a treasure hunt NFC sticker.",
+  "@treasureHuntDescription": {
+    "description": "Treasure hunt: how it works"
+  },
+  "treasureRooms": "Rooms, in order",
+  "@treasureRooms": {
+    "description": "Treasure hunt: heading of the rooms to choose"
+  },
+  "treasureStart": "Start the hunt",
+  "@treasureStart": {
+    "description": "Treasure hunt: start button"
+  },
+  "treasureStep": "Clue {step} of {total}",
+  "@treasureStep": {
+    "description": "Treasure hunt: which clue this is",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "treasureHint": "Light the way",
+  "@treasureHint": {
+    "description": "Treasure hunt: light the room as a hint"
+  },
+  "treasureFound": "Found it!",
+  "@treasureFound": {
+    "description": "Treasure hunt: the room was found"
+  },
+  "treasureReadAgain": "Read again",
+  "@treasureReadAgain": {
+    "description": "Treasure hunt: read the riddle again"
+  },
+  "treasureWellDone": "Well done! Here is the next clue.",
+  "@treasureWellDone": {
+    "description": "Treasure hunt: said when a room is found"
+  },
+  "treasureTreasure": "You found the treasure!",
+  "@treasureTreasure": {
+    "description": "Treasure hunt: the end"
+  },
+  "riddleLiving": "Where the sofa waits and the family sits together in the evening: go there!",
+  "@riddleLiving": {
+    "description": "Treasure hunt riddle: the living room"
+  },
+  "riddleKitchen": "Where pots bubble and the fridge hums: go and look!",
+  "@riddleKitchen": {
+    "description": "Treasure hunt riddle: the kitchen"
+  },
+  "riddleDining": "Where plates and forks meet at dinner time: that's the place!",
+  "@riddleDining": {
+    "description": "Treasure hunt riddle: the dining room"
+  },
+  "riddleBedroom": "Where the big bed waits for tired grown-ups: tiptoe there!",
+  "@riddleBedroom": {
+    "description": "Treasure hunt riddle: the bedroom"
+  },
+  "riddleKids": "Where toys sleep and dreams begin: run and look!",
+  "@riddleKids": {
+    "description": "Treasure hunt riddle: the children's room"
+  },
+  "riddleBathroom": "Where the toothbrush lives and bubbles fly: splash over there!",
+  "@riddleBathroom": {
+    "description": "Treasure hunt riddle: the bathroom"
+  },
+  "riddleOffice": "Where the desk and the books are: look there!",
+  "@riddleOffice": {
+    "description": "Treasure hunt riddle: the study"
+  },
+  "riddleHallway": "Where everyone passes in and out, with shoes and coats: search there!",
+  "@riddleHallway": {
+    "description": "Treasure hunt riddle: the hallway"
+  },
+  "riddleGarden": "Where the sky is above you and the plants grow: go outside!",
+  "@riddleGarden": {
+    "description": "Treasure hunt riddle: outside"
+  },
+  "riddleOther": "Look in the room called {room}!",
+  "@riddleOther": {
+    "description": "Treasure hunt riddle: any other room, by name",
+    "placeholders": {
+      "room": {
+        "type": "String"
+      }
+    }
   }
 }

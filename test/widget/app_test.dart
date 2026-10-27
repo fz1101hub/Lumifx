@@ -56,6 +56,8 @@ import 'package:lumifx/src/features/fun/noise_light_screen.dart';
 import 'package:lumifx/src/features/kids/kids_mode.dart';
 import 'package:lumifx/src/features/fun/simon.dart';
 import 'package:lumifx/src/features/fun/simon_screen.dart';
+import 'package:lumifx/src/features/fun/treasure_hunt_screen.dart';
+import 'package:lumifx/src/features/fun/treasure_hunt.dart';
 import 'package:lumifx/src/features/library/preferences_controller.dart';
 import 'package:lumifx/src/features/library/scene_editor.dart';
 import 'package:lumifx/src/core/hue/hue_buttons.dart';
@@ -4182,6 +4184,96 @@ void streamingTests() {
       await Future<void>.delayed(const Duration(milliseconds: 50));
     });
     expect(puts.where((p) => p == '/clip/v2/resource/light/l1'), hasLength(2));
+  });
+
+  testWidgets('the treasure hunt reads riddles, lights rooms and ends in gold',
+      (tester) async {
+    final puts = <String>[];
+    final speaker = _RecordingSpeaker();
+    final motion = StreamController<HueMotionEvent>.broadcast();
+    addTearDown(motion.close);
+    final bridge = await _connectedBridge(tester, puts: puts);
+    final preferences = PreferencesController(store: InMemoryKeyValueStore());
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: preferences,
+      audioInput: FakeAudioInput(),
+      speaker: speaker,
+    ));
+    unawaited(tester
+        .state<NavigatorState>(find.byType(Navigator).first)
+        .push(MaterialPageRoute<void>(
+            builder: (_) => TreasureHuntScreen(
+                  motion: () => motion.stream,
+                  sensors: const [
+                    HueMotionSensor(id: '5', name: 'Kitchen sensor'),
+                  ],
+                  rooms: const [
+                    HueGroup(
+                        id: 'k',
+                        name: 'Kitchen',
+                        kind: HueGroupKind.room,
+                        lightIds: [],
+                        groupedLightId: 'gk',
+                        archetype: 'kitchen'),
+                    HueGroup(
+                        id: 'a',
+                        name: 'Attic',
+                        kind: HueGroupKind.room,
+                        lightIds: [],
+                        groupedLightId: 'ga'),
+                  ],
+                ))));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Attic'));
+    await tester.pump();
+    expect(
+        tester
+            .widget<FilledButton>(find.ancestor(
+                of: find.text('Start the hunt'),
+                matching: find.byType(FilledButton)))
+            .onPressed,
+        isNull,
+        reason: 'two rooms at least');
+    await tester.tap(find.text('Kitchen'));
+    await tester.pump();
+    await tester.tap(find.text('Start the hunt'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Clue 1 of 2'), findsOneWidget);
+    expect(find.text('Look in the room called Attic!'), findsOneWidget,
+        reason: 'the attic was chosen first');
+    expect(speaker.spoken.last.$1, 'Look in the room called Attic!');
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Light the way'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    expect(puts, contains('/clip/v2/resource/grouped_light/ga'));
+
+    await tester.tap(find.text('Found it!'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Clue 2 of 2'), findsOneWidget);
+    expect(speaker.spoken.last.$1, startsWith('Well done!'));
+    expect(speaker.spoken.last.$1, contains('fridge hums'));
+
+    // Walking into the kitchen past its sensor finds it.
+    await tester.runAsync(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 2100));
+      motion.add(const HueMotionEvent(sensorId: '5', motion: true));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('You found the treasure!'), findsOneWidget);
+    expect(preferences.stars, contains('2026-06-15:treasure'));
+    final playback =
+        AppScope.of(tester.element(find.byType(TreasureHuntScreen))).playback;
+    expect(playback.effect.id, TreasureHunt.treasure('').id);
+    await playback.stop(restore: false);
+    await tester.pumpAndSettle();
   });
 
   testWidgets('rooms list the Hue scenes of each group and recall them',

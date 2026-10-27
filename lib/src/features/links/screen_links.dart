@@ -18,6 +18,7 @@ import '../fun/haunted_party_screen.dart';
 import '../fun/hot_cold_screen.dart';
 import '../fun/noise_light_screen.dart';
 import '../fun/simon_screen.dart';
+import '../fun/treasure_hunt_screen.dart';
 import '../learn/colour_mixing_screen.dart';
 import '../learn/farm_screen.dart';
 import '../music/sing_colour_screen.dart';
@@ -65,6 +66,7 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.farm => const FarmScreen(),
       AppScreen.sing => const SingColourScreen(),
       AppScreen.weeklyReport => const WeeklyReportScreen(),
+      AppScreen.treasureHunt => const TreasureHuntScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

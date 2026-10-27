@@ -28,6 +28,7 @@ List<(String, String)> readyLinks(AppScope scope, AppLocalizations l10n) {
     (l10n.linkBedtime, AppLink.bedtime),
     (l10n.linkRitual, AppLink.go(AppScreen.ritual)),
     (l10n.linkRoutines, AppLink.go(AppScreen.routines)),
+    (l10n.treasureHunt, AppLink.go(AppScreen.treasureHunt)),
     (l10n.linkStop, AppLink.stop),
   ];
 }
