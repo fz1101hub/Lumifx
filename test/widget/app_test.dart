@@ -859,6 +859,8 @@ void main() {
       (tester) async {
     await _pumpApp(tester, clock: () => DateTime(2026, 12, 5, 18));
     await openFun(tester);
+    await tester.scrollUntilVisible(find.text('Advent calendar'), 200,
+        scrollable: find.byType(Scrollable).last);
     await tester.tap(find.text('Advent calendar'));
     await tester.pumpAndSettle();
     await tester.tap(find.bySemanticsLabel('Day 6'));
@@ -885,6 +887,8 @@ void main() {
       (tester) async {
     await _pumpApp(tester, clock: () => DateTime(2026, 10, 16, 9));
     await openFun(tester);
+    await tester.scrollUntilVisible(find.text('How many sleeps?'), 200,
+        scrollable: find.byType(Scrollable).last);
     await tester.tap(find.text('How many sleeps?'));
     await tester.pumpAndSettle();
     expect(find.textContaining('No countdowns yet'), findsOneWidget);
