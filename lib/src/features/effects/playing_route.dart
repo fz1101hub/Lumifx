@@ -11,6 +11,8 @@ import '../timers/light_clock.dart';
 import '../timers/light_clock_screen.dart';
 import '../calm/breathing.dart';
 import '../calm/breathing_screen.dart';
+import '../calm/feelings.dart';
+import '../calm/feelings_screen.dart';
 import '../cinema/cinema.dart';
 import '../cinema/cinema_screen.dart';
 import '../fun/advent.dart';
@@ -92,6 +94,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const NapLightScreen();
   } else if (LightClock.of(effect) != null) {
     screen = const LightClockScreen();
+  } else if (Feeling.of(effect) != null) {
+    screen = const FeelingsScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

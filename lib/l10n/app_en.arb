@@ -4875,5 +4875,77 @@
   "nightOffRooms": "Rooms",
   "@nightOffRooms": {
     "description": "Night switch-off editor: heading over the rooms"
+  },
+  "feelings": "How do you feel?",
+  "@feelings": {
+    "description": "Home entry and title: the feelings thermometer"
+  },
+  "feelingsSubtitle": "Name a feeling, the room takes its colour",
+  "@feelingsSubtitle": {
+    "description": "Under the feelings entry"
+  },
+  "feelingsDescription": "Tap how you feel. Every feeling is okay: the room takes its colour, and when a feeling is big, the light helps it calm down.",
+  "@feelingsDescription": {
+    "description": "Top of the feelings screen"
+  },
+  "feelingHappy": "Happy",
+  "@feelingHappy": {
+    "description": "Feeling"
+  },
+  "feelingCalm": "Calm",
+  "@feelingCalm": {
+    "description": "Feeling"
+  },
+  "feelingSad": "Sad",
+  "@feelingSad": {
+    "description": "Feeling"
+  },
+  "feelingAngry": "Angry",
+  "@feelingAngry": {
+    "description": "Feeling"
+  },
+  "feelingWorried": "Worried",
+  "@feelingWorried": {
+    "description": "Feeling"
+  },
+  "feelingTired": "Tired",
+  "@feelingTired": {
+    "description": "Feeling"
+  },
+  "feelingSayHappy": "You feel happy! Let's keep this sunny light.",
+  "@feelingSayHappy": {
+    "description": "Said and shown after tapping Happy"
+  },
+  "feelingSayCalm": "You feel calm. A soft green light, nice and quiet.",
+  "@feelingSayCalm": {
+    "description": "Said and shown after tapping Calm"
+  },
+  "feelingSaySad": "You feel sad. That's okay. A gentle blue light, and maybe a cosy story?",
+  "@feelingSaySad": {
+    "description": "Said and shown after tapping Sad"
+  },
+  "feelingSayAngry": "You feel angry. That's okay. Let's breathe together while the light cools down.",
+  "@feelingSayAngry": {
+    "description": "Said and shown after tapping Angry"
+  },
+  "feelingSayWorried": "You feel worried. Let's take slow breaths together.",
+  "@feelingSayWorried": {
+    "description": "Said and shown after tapping Worried"
+  },
+  "feelingSayTired": "You feel tired. A dim, cosy light to rest.",
+  "@feelingSayTired": {
+    "description": "Said and shown after tapping Tired"
+  },
+  "feelingBreathe": "Breathe together",
+  "@feelingBreathe": {
+    "description": "Feelings: open calm breathing"
+  },
+  "feelingStory": "A cosy story",
+  "@feelingStory": {
+    "description": "Feelings: play a gentle story"
+  },
+  "feelingRest": "Rest a while",
+  "@feelingRest": {
+    "description": "Feelings: open the nap light"
   }
 }

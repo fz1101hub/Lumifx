@@ -7,6 +7,7 @@ import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/nap_light_screen.dart';
 import '../timers/light_clock_screen.dart';
+import '../calm/feelings_screen.dart';
 import '../bedtime/ritual_screen.dart';
 import '../cinema/cinema_screen.dart';
 import '../bridge/bridge_controller.dart';
@@ -162,6 +163,8 @@ class HomeScreen extends StatelessWidget {
                     l10n.storyMakerSubtitle, () => const TaleMakerScreen()),
                 _HomeEntry(Icons.spa_outlined, l10n.breathe,
                     l10n.breatheSubtitle, () => const BreathingScreen()),
+                _HomeEntry(Icons.mood, l10n.feelings, l10n.feelingsSubtitle,
+                    () => const FeelingsScreen()),
                 _HomeEntry(Icons.timer_outlined, l10n.timers,
                     l10n.timersSubtitle, () => const TimersScreen()),
                 _HomeEntry(Icons.traffic_outlined, l10n.lightClock,

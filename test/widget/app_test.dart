@@ -26,6 +26,8 @@ import 'package:lumifx/src/features/effects/effect_player_screen.dart';
 import 'package:lumifx/src/features/effects/mini_player.dart';
 import 'package:lumifx/src/features/effects/playback_controller.dart';
 import 'package:lumifx/src/features/timers/light_clock.dart';
+import 'package:lumifx/src/features/calm/feelings.dart';
+import 'package:lumifx/src/features/calm/feelings_screen.dart';
 import 'package:lumifx/src/features/timers/light_clock_screen.dart';
 import 'package:lumifx/src/features/home/home_screen.dart';
 import 'package:lumifx/src/features/fun/advent_screen.dart';
@@ -1506,6 +1508,32 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('a feeling colours the room, is said aloud and offers help',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    await tester.scrollUntilVisible(find.text('How do you feel?'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.ensureVisible(find.text('How do you feel?'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('How do you feel?'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Angry'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    final playback =
+        AppScope.of(tester.element(find.byType(FeelingsScreen))).playback;
+    expect(Feeling.of(playback.effect), Feeling.angry);
+    expect(playback.status, PlaybackStatus.playing);
+    expect(speaker.spoken.last.$1, startsWith('You feel angry'));
+    expect(find.text('Breathe together'), findsOneWidget);
+    await tester.tap(find.text('Breathe together'));
+    await tester.pumpAndSettle();
+    expect(find.byType(BreathingScreen), findsOneWidget);
+    await playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 

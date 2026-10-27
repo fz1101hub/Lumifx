@@ -16,6 +16,7 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 | 4 | Feelings thermometer: a child taps how they feel, the room takes that colour and the voice suggests what helps | todo |
 | 5 | Tonight's moon: the real moon phase, worked out on the phone, shown by the lamps with a sentence before bed | todo |
 | 6 | Interval training: work, rest and the last seconds in light (HIIT, tabata, stretching) | todo |
+| 6b | Words and lights in sync: narration, read-aloud and cause-and-effect games (piano, games) answer with as little delay as possible | todo |
 
 ## Round 10: fun and occasions
 
