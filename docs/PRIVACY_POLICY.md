@@ -41,6 +41,12 @@ or red by how loud the room is. The app only measures the loudness, on
 your phone; nothing is recorded, stored or transmitted, and the
 microphone is switched off when you tap Stop or leave the noise light.
 
+**Microphone (sing and colour).** Sing and colour lights the lamps in the
+colour of the note sung. The app only works out how high and how loud the
+voice is, moment by moment, on your phone; nothing is recorded, stored or
+transmitted, and the microphone is switched off when you tap Stop or
+leave the screen.
+
 **Your voice (stories of your own).** In the story editor you can record
 yourself reading the lines of a story you made. The recordings are saved
 as sound files on your phone only, play when that story plays, are never
@@ -245,6 +251,16 @@ Music Sync è in riproduzione e viene spento in pausa o allo stop.
 sul microfono. L'app misura solo quanto è forte il suono, sul telefono;
 nulla viene registrato, salvato o trasmesso, e il microfono si spegne appena
 le candeline sono spente o lasci la festa.
+
+**Microfono (luce del rumore).** La luce del rumore rende le luci verdi,
+ambra o rosse in base a quanto è rumorosa la stanza. L'app misura solo il
+volume, sul telefono; nulla viene registrato, salvato o trasmesso, e il
+microfono si spegne quando tocchi Stop o lasci la luce del rumore.
+
+**Microfono (canta e colora).** "Canta e colora" accende le luci del colore
+della nota cantata. L'app calcola solo quanto è alta e forte la voce,
+istante per istante, sul telefono; nulla viene registrato, salvato o
+trasmesso, e il microfono si spegne quando tocchi Stop o lasci la schermata.
 
 **La tua voce (storie create da te).** Nell'editor delle storie puoi
 registrarti mentre leggi le frasi di una storia che hai creato. Le

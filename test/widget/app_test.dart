@@ -34,6 +34,8 @@ import 'package:lumifx/src/features/fun/board_game_screen.dart';
 import 'package:lumifx/src/features/fun/goal.dart';
 import 'package:lumifx/src/features/fun/hide_and_seek.dart';
 import 'package:lumifx/src/features/learn/farm.dart';
+import 'package:lumifx/src/features/music/sing_colour.dart';
+import 'package:lumifx/src/features/music/sing_colour_screen.dart';
 import 'package:lumifx/src/features/learn/farm_screen.dart';
 import 'package:lumifx/src/features/fun/hide_and_seek_screen.dart';
 import 'package:lumifx/src/features/fun/goal_screen.dart';
@@ -1896,6 +1898,40 @@ void main() {
             .widget<ChoiceChip>(find.widgetWithText(ChoiceChip, '20 min'))
             .selected,
         isTrue);
+  });
+
+  testWidgets('a sung note lights the room in its colour', (tester) async {
+    // One second of a middle C.
+    const rate = 44100;
+    final sung = ByteData(rate * 2);
+    for (var i = 0; i < rate; i++) {
+      sung.setInt16(
+          i * 2,
+          (0.5 * 32767 * math.sin(2 * math.pi * 261.6 * i / rate)).round(),
+          Endian.little);
+    }
+    final microphone = FakeAudioInput(pcm: sung.buffer.asUint8List());
+    await _pumpApp(tester, audioInput: microphone);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const SingColourScreen())));
+    await tester.pumpAndSettle();
+    final playback =
+        AppScope.of(tester.element(find.byType(SingColourScreen))).playback;
+    await tester.tap(find.text('Start singing'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(microphone.started, isTrue);
+    expect(PitchWatch.isSinging(playback.effect), isTrue);
+    expect(find.text('C'), findsOneWidget, reason: 'the note sung');
+    expect(find.text('Hold it to make it brighter!'), findsOneWidget);
+    // Middle C is halfway up: green, over the night blue.
+    final frame = playback.player!.currentFrames.first;
+    expect(frame.color.g, greaterThan(frame.color.r));
+
+    await tester.tap(find.text('Stop'));
+    await tester.pump(const Duration(seconds: 2));
+    expect(microphone.stopped, isTrue);
+    expect(find.text('Start singing'), findsOneWidget);
   });
 
   testWidgets('the noise light turns red when it gets too loud',

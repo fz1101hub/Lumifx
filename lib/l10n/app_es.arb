@@ -1356,5 +1356,12 @@
   "pianoMyTunes": "Mis melodías",
   "pianoShareTune": "Compartir",
   "pianoDeleteTune": "Eliminar",
-  "tuneAdded": "“{name}” añadida a tus melodías"
+  "tuneAdded": "“{name}” añadida a tus melodías",
+  "sing": "Canta y colorea",
+  "singSubtitle": "Las notas graves son rojas; las agudas, azules y violetas",
+  "singDescription": "Canta una nota: las luces toman su color, del rojo para la más grave al violeta para la más aguda. Mantenla y brillará más. El micrófono solo oye lo alto y fuerte que cantas, mientras esta pantalla está abierta; no se graba nada.",
+  "singStart": "Empezar a cantar",
+  "singListening": "Canta una nota…",
+  "singHold": "¡Mantenla para que brille más!",
+  "singMicDenied": "LumiFX necesita el micrófono para oír tu voz. Permítelo en los ajustes del teléfono."
 }

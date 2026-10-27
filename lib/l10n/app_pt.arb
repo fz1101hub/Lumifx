@@ -1356,5 +1356,12 @@
   "pianoMyTunes": "Minhas músicas",
   "pianoShareTune": "Compartilhar",
   "pianoDeleteTune": "Excluir",
-  "tuneAdded": "“{name}” adicionada às suas músicas"
+  "tuneAdded": "“{name}” adicionada às suas músicas",
+  "sing": "Cante e pinte",
+  "singSubtitle": "Notas graves são vermelhas; as agudas, azuis e violetas",
+  "singDescription": "Cante uma nota: as luzes ganham a cor dela, do vermelho para a mais grave ao violeta para a mais aguda. Segure e ela brilha mais. O microfone só ouve o quão alto e forte você canta, enquanto esta tela está aberta; nada é gravado.",
+  "singStart": "Começar a cantar",
+  "singListening": "Cante uma nota…",
+  "singHold": "Segure para ela brilhar mais!",
+  "singMicDenied": "O LumiFX precisa do microfone para ouvir sua voz. Permita nas configurações do celular."
 }

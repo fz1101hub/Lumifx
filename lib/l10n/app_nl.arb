@@ -1356,5 +1356,12 @@
   "pianoMyTunes": "Mijn melodieën",
   "pianoShareTune": "Delen",
   "pianoDeleteTune": "Verwijderen",
-  "tuneAdded": "‘{name}’ toegevoegd aan je melodieën"
+  "tuneAdded": "‘{name}’ toegevoegd aan je melodieën",
+  "sing": "Zing en kleur",
+  "singSubtitle": "Lage noten zijn rood, hoge blauw en paars",
+  "singDescription": "Zing een noot: de lampen krijgen zijn kleur, van rood voor de laagste tot paars voor de hoogste. Houd hem vast en hij schijnt feller. De microfoon hoort alleen hoe hoog en hard je zingt, zolang dit scherm open is; er wordt niets opgenomen.",
+  "singStart": "Begin met zingen",
+  "singListening": "Zing een noot…",
+  "singHold": "Houd hem vast, dan wordt hij feller!",
+  "singMicDenied": "LumiFX heeft de microfoon nodig om je stem te horen. Sta het toe in de instellingen van je telefoon."
 }

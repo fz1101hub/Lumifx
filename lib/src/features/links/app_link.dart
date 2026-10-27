@@ -145,7 +145,8 @@ enum AppScreen {
   toothFairy('tooth-fairy'),
   boardGame('board-game'),
   hideSeek('hide-and-seek'),
-  farm('farm');
+  farm('farm'),
+  sing('sing');
 
   const AppScreen(this.slug);
 

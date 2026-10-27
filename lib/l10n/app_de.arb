@@ -1356,5 +1356,12 @@
   "pianoMyTunes": "Meine Melodien",
   "pianoShareTune": "Teilen",
   "pianoDeleteTune": "Löschen",
-  "tuneAdded": "„{name}“ zu deinen Melodien hinzugefügt"
+  "tuneAdded": "„{name}“ zu deinen Melodien hinzugefügt",
+  "sing": "Sing und mal",
+  "singSubtitle": "Tiefe Töne sind rot, hohe blau und lila",
+  "singDescription": "Sing einen Ton: Die Lampen nehmen seine Farbe an, von Rot für den tiefsten bis Lila für den höchsten. Halte ihn, und er leuchtet heller. Das Mikrofon hört nur, wie hoch und laut du singst, solange dieser Bildschirm offen ist; nichts wird aufgenommen.",
+  "singStart": "Singen starten",
+  "singListening": "Sing einen Ton…",
+  "singHold": "Halte ihn, damit er heller wird!",
+  "singMicDenied": "LumiFX braucht das Mikrofon, um deine Stimme zu hören. Erlaube es in den Telefoneinstellungen."
 }

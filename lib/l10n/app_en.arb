@@ -5605,5 +5605,33 @@
         "type": "String"
       }
     }
+  },
+  "sing": "Sing and colour",
+  "@sing": {
+    "description": "Fun entry and title: sing and colour"
+  },
+  "singSubtitle": "Low notes are red, high ones blue and violet",
+  "@singSubtitle": {
+    "description": "Under the sing and colour entry"
+  },
+  "singDescription": "Sing a note: the lamps take its colour, from red for the lowest to violet for the highest. Hold it and it shines brighter. The microphone only hears how high and loud you sing, while this screen is open; nothing is recorded.",
+  "@singDescription": {
+    "description": "Top of the sing and colour screen"
+  },
+  "singStart": "Start singing",
+  "@singStart": {
+    "description": "Sing and colour: start listening"
+  },
+  "singListening": "Sing a note…",
+  "@singListening": {
+    "description": "Sing and colour: while listening with no note"
+  },
+  "singHold": "Hold it to make it brighter!",
+  "@singHold": {
+    "description": "Sing and colour: hint while a note is sung"
+  },
+  "singMicDenied": "LumiFX needs the microphone to hear your voice. Allow it in the phone's settings.",
+  "@singMicDenied": {
+    "description": "Sing and colour: microphone refused"
   }
 }

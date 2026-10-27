@@ -1356,5 +1356,12 @@
   "pianoMyTunes": "I miei brani",
   "pianoShareTune": "Condividi",
   "pianoDeleteTune": "Elimina",
-  "tuneAdded": "“{name}” aggiunto ai tuoi brani"
+  "tuneAdded": "“{name}” aggiunto ai tuoi brani",
+  "sing": "Canta e colora",
+  "singSubtitle": "Le note basse sono rosse, quelle alte blu e viola",
+  "singDescription": "Canta una nota: le luci prendono il suo colore, dal rosso per la più bassa al viola per la più alta. Tienila e brilla di più. Il microfono sente solo quanto canti in alto e forte, mentre questa schermata è aperta; non viene registrato niente.",
+  "singStart": "Inizia a cantare",
+  "singListening": "Canta una nota…",
+  "singHold": "Tienila per farla brillare di più!",
+  "singMicDenied": "LumiFX ha bisogno del microfono per sentire la tua voce. Consentilo nelle impostazioni del telefono."
 }
