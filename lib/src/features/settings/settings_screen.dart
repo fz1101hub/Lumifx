@@ -262,6 +262,30 @@ class SettingsScreen extends StatelessWidget {
         title: Text(l10n.forgetThisBridge),
         onTap: () => confirmForgetBridge(context, bridge),
       ),
+      if (bridge.otherBridges.isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+          child: Text(l10n.otherBridges,
+              style: Theme.of(context).textTheme.titleSmall),
+        ),
+      for (final other in bridge.otherBridges)
+        ListTile(
+          leading: const Icon(Icons.home_work_outlined),
+          title: Text(other.bridge.displayName),
+          subtitle: Text(other.bridge.host),
+          trailing: TextButton(
+            onPressed: () => switchBridge(context, bridge, other.bridge.id),
+            child: Text(l10n.switchToBridge(other.bridge.displayName)),
+          ),
+        ),
+      ListTile(
+        leading: const Icon(Icons.add_home_work_outlined),
+        title: Text(l10n.addAnotherBridge),
+        subtitle: Text(l10n.addAnotherBridgeSubtitle),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const BridgeSetupScreen()),
+        ),
+      ),
     ];
   }
 }

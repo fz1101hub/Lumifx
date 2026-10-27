@@ -1471,5 +1471,9 @@
   "calendarLightsNone": "これから1日の予定はありません。",
   "calendarLightsDenied": "予定の時刻を知るためにカレンダーへのアクセスが必要です。スマホの設定で許可できます。",
   "calendarLightsUpdate": "いま更新",
-  "calendarLightsSynced": "{count, plural, =0{これから1日に設定するライトはありません} other{ブリッジに{count}件設定しました}}"
+  "calendarLightsSynced": "{count, plural, =0{これから1日に設定するライトはありません} other{ブリッジに{count}件設定しました}}",
+  "otherBridges": "ほかのブリッジ",
+  "switchToBridge": "{name}に切り替え",
+  "addAnotherBridge": "ブリッジを追加",
+  "addAnotherBridgeSubtitle": "別荘や広い家に：部屋を切り替えるように使えます"
 }

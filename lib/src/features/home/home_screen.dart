@@ -563,9 +563,17 @@ class _BridgeBanner extends StatelessWidget {
                   controller.refresh();
                 } else if (value == 'forget') {
                   confirmForgetBridge(context, controller);
+                } else if (value.startsWith('bridge:')) {
+                  switchBridge(
+                      context, controller, value.substring('bridge:'.length));
                 }
               },
               itemBuilder: (_) => [
+                for (final other in controller.otherBridges)
+                  PopupMenuItem(
+                    value: 'bridge:${other.bridge.id}',
+                    child: Text(l10n.switchToBridge(other.bridge.displayName)),
+                  ),
                 PopupMenuItem(value: 'refresh', child: Text(l10n.refresh)),
                 PopupMenuItem(value: 'forget', child: Text(l10n.forgetBridge)),
               ],

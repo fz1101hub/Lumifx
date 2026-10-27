@@ -16,12 +16,17 @@ class CredentialStoreException implements Exception {
   String toString() => 'CredentialStoreException: $cause';
 }
 
-/// Persists the paired bridge. The application key grants full control of
-/// the user's lights, so it lives in the platform keychain/keystore.
+/// Persists the paired bridge, and any others paired before (a second
+/// home). The application key grants full control of the user's lights,
+/// so it lives in the platform keychain/keystore.
 abstract interface class CredentialStore {
   Future<HueCredentials?> load();
   Future<void> save(HueCredentials credentials);
   Future<void> clear();
+
+  /// The other bridges paired, not in use now.
+  Future<List<HueCredentials>> loadOthers();
+  Future<void> saveOthers(List<HueCredentials> others);
 }
 
 class SecureCredentialStore implements CredentialStore {
@@ -29,6 +34,7 @@ class SecureCredentialStore implements CredentialStore {
       : _storage = storage ?? const FlutterSecureStorage();
 
   static const _key = 'hue_credentials';
+  static const _othersKey = 'hue_credentials_others';
 
   final FlutterSecureStorage _storage;
 
@@ -64,6 +70,35 @@ class SecureCredentialStore implements CredentialStore {
 
   @override
   Future<void> clear() => _storage.delete(key: _key);
+
+  @override
+  Future<List<HueCredentials>> loadOthers() async {
+    final String? raw;
+    try {
+      raw = await _storage.read(key: _othersKey);
+    } on Object catch (error) {
+      throw CredentialStoreException(error);
+    }
+    if (raw == null) {
+      return const [];
+    }
+    try {
+      return [
+        for (final item in jsonDecode(raw) as List)
+          HueCredentials.fromJson((item as Map).cast<String, Object?>()),
+      ];
+    } on Object {
+      // Corrupt: those bridges pair again.
+      return const [];
+    }
+  }
+
+  @override
+  Future<void> saveOthers(List<HueCredentials> others) => others.isEmpty
+      ? _storage.delete(key: _othersKey)
+      : _storage.write(
+          key: _othersKey,
+          value: jsonEncode([for (final c in others) c.toJson()]));
 }
 
 class InMemoryCredentialStore implements CredentialStore {
@@ -80,6 +115,15 @@ class InMemoryCredentialStore implements CredentialStore {
 
   @override
   Future<void> clear() async => _credentials = null;
+
+  var _others = <HueCredentials>[];
+
+  @override
+  Future<List<HueCredentials>> loadOthers() async => _others;
+
+  @override
+  Future<void> saveOthers(List<HueCredentials> others) async =>
+      _others = [...others];
 }
 
 /// Marks that this install of the app has been seen.
@@ -100,6 +144,7 @@ Future<void> forgetEarlierInstall(
     }
     if (await store.read(PreferencesController.storageKey) == null) {
       await credentials.clear();
+      await credentials.saveOthers(const []);
     }
     await store.write(installedKey, '1');
   } on Object {

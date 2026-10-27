@@ -3930,16 +3930,19 @@ Future<BridgeController> _connectedBridge(
   WidgetTester tester, {
   String? clientKey,
   List<String>? puts,
+  List<HueCredentials> others = const [],
 }) async {
   http.Response json(Object body) => http.Response(jsonEncode(body), 200);
-  final bridge = BridgeController(
-    store: InMemoryCredentialStore(
-      HueCredentials(
-        bridge: const HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
-        applicationKey: 'key',
-        clientKey: clientKey,
-      ),
+  final store = InMemoryCredentialStore(
+    HueCredentials(
+      bridge: const HueBridgeInfo(id: '001788fffe123456', host: '127.0.0.1'),
+      applicationKey: 'key',
+      clientKey: clientKey,
     ),
+  );
+  await store.saveOthers(others);
+  final bridge = BridgeController(
+    store: store,
     clientFactory: (pin, key) => HueBridgeClient(
       host: pin.host,
       applicationKey: key,
@@ -4394,6 +4397,34 @@ void streamingTests() {
         scrollable: find.byType(Scrollable).last);
     expect(find.text('Piano lesson'), findsOneWidget);
     expect(find.text('Holiday'), findsNothing);
+  });
+
+  testWidgets('another bridge is chosen from home like a room', (tester) async {
+    final bridge = await _connectedBridge(tester, others: const [
+      HueCredentials(
+        bridge: HueBridgeInfo(
+            id: '001788fffe654321', host: '127.0.0.2', name: 'Beach house'),
+        applicationKey: 'key',
+      ),
+    ]);
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(PopupMenuButton<String>).first);
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Switch to Beach house'));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pumpAndSettle();
+    expect(bridge.credentials?.bridge.name, 'Beach house');
+    expect(find.text('Beach house'), findsOneWidget);
+    expect(bridge.otherBridges.single.bridge.id, '001788fffe123456');
   });
 
   testWidgets('rooms list the Hue scenes of each group and recall them',

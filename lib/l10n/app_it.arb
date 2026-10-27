@@ -1471,5 +1471,9 @@
   "calendarLightsNone": "Nessun appuntamento nel prossimo giorno.",
   "calendarLightsDenied": "LumiFX ha bisogno del calendario per sapere quando sono i tuoi appuntamenti. Puoi consentirlo nelle impostazioni del telefono.",
   "calendarLightsUpdate": "Aggiorna ora",
-  "calendarLightsSynced": "{count, plural, =0{Nessuna luce da impostare nel prossimo giorno} =1{1 luce impostata sul bridge} other{{count} luci impostate sul bridge}}"
+  "calendarLightsSynced": "{count, plural, =0{Nessuna luce da impostare nel prossimo giorno} =1{1 luce impostata sul bridge} other{{count} luci impostate sul bridge}}",
+  "otherBridges": "Altri bridge",
+  "switchToBridge": "Passa a {name}",
+  "addAnotherBridge": "Aggiungi un altro bridge",
+  "addAnotherBridgeSubtitle": "Una seconda casa o un appartamento grande: passa dall'uno all'altro come tra le stanze"
 }

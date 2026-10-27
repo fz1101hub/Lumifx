@@ -102,6 +102,7 @@ class BridgeController extends ChangeNotifier {
   HueHome? _home;
   BridgeProblem? _problem;
   bool _pairingCancelled = false;
+  var _others = <HueCredentials>[];
 
   BridgeStatus get status => _status;
   HueCredentials? get credentials => _credentials;
@@ -111,10 +112,18 @@ class BridgeController extends ChangeNotifier {
   /// Client for the paired bridge, or null when not paired.
   HueBridgeClient? get client => _client;
 
+  /// The other bridges paired (a second home), to switch to.
+  List<HueCredentials> get otherBridges => List.unmodifiable(_others);
+
   bool get isConnected => _status == BridgeStatus.connected;
 
   Future<void> initialize() async {
     HueCredentials? saved;
+    try {
+      _others = [...await _store.loadOthers()];
+    } on Object {
+      // The others can wait for the next launch.
+    }
     try {
       saved = await _store.load();
     } on CredentialStoreException {
@@ -183,6 +192,11 @@ class BridgeController extends ChangeNotifier {
           break;
         }
         client.close();
+        // A second bridge: the first one is kept, to switch back to.
+        await _keepOthers([
+          if (_credentials case final previous?) previous,
+          ..._others,
+        ], without: credentials.bridge.id);
         _useCredentials(credentials);
         // Leave the pairing state so refresh() (which ignores refreshes
         // while pairing) can report connected/unreachable.
@@ -354,7 +368,52 @@ class BridgeController extends ChangeNotifier {
     return client;
   }
 
+  /// Uses the other bridge [bridgeId] (paired before) instead of this one,
+  /// which is kept to switch back to.
+  Future<void> switchTo(String bridgeId) async {
+    final chosen = _others.where((c) => c.bridge.id == bridgeId).firstOrNull;
+    if (chosen == null || _status == BridgeStatus.pairing) {
+      return;
+    }
+    await _store.save(chosen);
+    await _keepOthers([
+      if (_credentials case final current?) current,
+      ..._others,
+    ], without: bridgeId);
+    _useCredentials(chosen);
+    _home = null;
+    _problem = null;
+    _setStatus(BridgeStatus.initializing);
+    await refresh();
+  }
+
+  Future<void> _keepOthers(List<HueCredentials> others,
+      {required String without}) async {
+    final seen = <String>{without};
+    _others = [
+      for (final c in others)
+        if (seen.add(c.bridge.id)) c,
+    ];
+    try {
+      await _store.saveOthers(_others);
+    } on Object {
+      // Kept for this session; paired again after a restart at worst.
+    }
+  }
+
+  /// Forgets the bridge in use; another one paired before takes its place.
   Future<void> forget() async {
+    final next = _others.firstOrNull;
+    if (next != null) {
+      await _store.save(next);
+      await _keepOthers(_others, without: next.bridge.id);
+      _useCredentials(next);
+      _home = null;
+      _problem = null;
+      _setStatus(BridgeStatus.initializing);
+      await refresh();
+      return;
+    }
     await _store.clear();
     _credentials = null;
     _client?.close();

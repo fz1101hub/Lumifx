@@ -1471,5 +1471,9 @@
   "calendarLightsNone": "Aucun rendez-vous dans la journée à venir.",
   "calendarLightsDenied": "LumiFX a besoin du calendrier pour savoir quand sont vos rendez-vous. Vous pouvez l'autoriser dans les réglages du téléphone.",
   "calendarLightsUpdate": "Mettre à jour",
-  "calendarLightsSynced": "{count, plural, =0{Aucune lumière à programmer dans la journée} =1{1 lumière programmée sur le pont} other{{count} lumières programmées sur le pont}}"
+  "calendarLightsSynced": "{count, plural, =0{Aucune lumière à programmer dans la journée} =1{1 lumière programmée sur le pont} other{{count} lumières programmées sur le pont}}",
+  "otherBridges": "Autres ponts",
+  "switchToBridge": "Passer à {name}",
+  "addAnotherBridge": "Ajouter un autre pont",
+  "addAnotherBridgeSubtitle": "Une maison secondaire ou un grand appartement : passez de l'un à l'autre comme d'une pièce à l'autre"
 }

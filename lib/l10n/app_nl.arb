@@ -1471,5 +1471,9 @@
   "calendarLightsNone": "Geen afspraken de komende dag.",
   "calendarLightsDenied": "LumiFX heeft de agenda nodig om te zien wanneer je afspraken zijn. Je kunt het toestaan in de instellingen van je telefoon.",
   "calendarLightsUpdate": "Nu bijwerken",
-  "calendarLightsSynced": "{count, plural, =0{Geen lichten in te stellen de komende dag} =1{1 licht ingesteld op de bridge} other{{count} lichten ingesteld op de bridge}}"
+  "calendarLightsSynced": "{count, plural, =0{Geen lichten in te stellen de komende dag} =1{1 licht ingesteld op de bridge} other{{count} lichten ingesteld op de bridge}}",
+  "otherBridges": "Andere bridges",
+  "switchToBridge": "Overschakelen naar {name}",
+  "addAnotherBridge": "Nog een bridge toevoegen",
+  "addAnotherBridgeSubtitle": "Een tweede huis of een groot appartement: wissel ertussen zoals tussen kamers"
 }

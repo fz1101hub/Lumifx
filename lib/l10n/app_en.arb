@@ -6191,5 +6191,26 @@
         "type": "int"
       }
     }
+  },
+  "otherBridges": "Other bridges",
+  "@otherBridges": {
+    "description": "Settings: heading of the other bridges paired"
+  },
+  "switchToBridge": "Switch to {name}",
+  "@switchToBridge": {
+    "description": "Switch to another paired bridge",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "addAnotherBridge": "Add another bridge",
+  "@addAnotherBridge": {
+    "description": "Settings: pair a second bridge (a second home)"
+  },
+  "addAnotherBridgeSubtitle": "A second home or a large flat: switch between them like rooms",
+  "@addAnotherBridgeSubtitle": {
+    "description": "Settings: what adding another bridge is for"
   }
 }
