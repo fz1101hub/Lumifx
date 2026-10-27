@@ -127,7 +127,8 @@ enum AppScreen {
   feelings('feelings'),
   moon('moon'),
   intervals('intervals'),
-  goal('goal-party');
+  goal('goal-party'),
+  toothFairy('tooth-fairy');
 
   const AppScreen(this.slug);
 

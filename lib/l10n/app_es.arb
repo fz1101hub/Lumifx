@@ -1255,5 +1255,19 @@
   "goalTeamEngland": "Inglaterra",
   "goalOwnTeam": "Tu equipo",
   "goalOwnColours": "Los colores de tu equipo (hasta tres)",
-  "goalLinkHint": "Consejo: pon el enlace lumifx://app/goal en una pegatina NFC o un atajo para celebrar con un toque."
+  "goalLinkHint": "Consejo: pon el enlace lumifx://app/goal en una pegatina NFC o un atajo para celebrar con un toque.",
+  "toothFairy": "Ratoncito Pérez",
+  "toothFairySubtitle": "Una luz mágica al amanecer, un mensaje y una estrella",
+  "toothFairyDescription": "La noche después de que se caiga un diente: hacia el amanecer la habitación brilla suavemente en rosa y violeta un rato, nunca tanto como para despertar a nadie. Por la mañana, leed juntos el mensaje del Ratoncito Pérez: deja una estrella mágica.",
+  "toothFairyFor": "Para",
+  "toothFairyRoom": "En la habitación",
+  "toothFairyTime": "Llega a las",
+  "toothFairyPlan": "Esta noche vendrá el Ratoncito Pérez",
+  "toothFairyComing": "El Ratoncito Pérez llega a las {time}",
+  "toothFairyCancel": "Cancelar la visita",
+  "toothFairyCame": "¡Ha venido el Ratoncito Pérez!",
+  "toothFairyRead": "Leer su mensaje",
+  "toothFairyMessage": "Querido {name}, ¡gracias por tu dientecito! Te he dejado una estrella mágica. Sigue lavándote los dientes cada día. El Ratoncito Pérez",
+  "toothFairyFriend": "amigo",
+  "toothFairyMagic": "La magia ahora"
 }

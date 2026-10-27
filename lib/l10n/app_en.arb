@@ -5158,5 +5158,71 @@
   "goalLinkHint": "Tip: put the link lumifx://app/goal on an NFC sticker or a shortcut to celebrate with one tap.",
   "@goalLinkHint": {
     "description": "Goal: tip about the link"
+  },
+  "toothFairy": "Tooth fairy",
+  "@toothFairy": {
+    "description": "Home entry and title: the tooth fairy's visit"
+  },
+  "toothFairySubtitle": "A magic glow at dawn, a message and a star",
+  "@toothFairySubtitle": {
+    "description": "Under the tooth fairy entry"
+  },
+  "toothFairyDescription": "The night after a tooth falls out: near dawn the room glows softly pink and violet for a while, never enough to wake anyone. In the morning, read the fairy's message together: she leaves a magic star.",
+  "@toothFairyDescription": {
+    "description": "Top of the tooth fairy screen"
+  },
+  "toothFairyFor": "For",
+  "@toothFairyFor": {
+    "description": "Tooth fairy: heading over the children"
+  },
+  "toothFairyRoom": "In the room",
+  "@toothFairyRoom": {
+    "description": "Tooth fairy: heading over the rooms"
+  },
+  "toothFairyTime": "She comes at",
+  "@toothFairyTime": {
+    "description": "Tooth fairy: when she comes"
+  },
+  "toothFairyPlan": "The fairy will come tonight",
+  "@toothFairyPlan": {
+    "description": "Tooth fairy: plan the visit"
+  },
+  "toothFairyComing": "The fairy is coming at {time}",
+  "@toothFairyComing": {
+    "description": "Tooth fairy: visit planned",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "toothFairyCancel": "Cancel the visit",
+  "@toothFairyCancel": {
+    "description": "Tooth fairy: cancel the visit"
+  },
+  "toothFairyCame": "The tooth fairy came!",
+  "@toothFairyCame": {
+    "description": "Tooth fairy: in the morning"
+  },
+  "toothFairyRead": "Read her message",
+  "@toothFairyRead": {
+    "description": "Tooth fairy: read her message"
+  },
+  "toothFairyMessage": "Dear {name}, thank you for your little tooth! I left you a magic star. Keep brushing every day. The Tooth Fairy",
+  "@toothFairyMessage": {
+    "description": "The fairy's message, read aloud and shown",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "toothFairyFriend": "friend",
+  "@toothFairyFriend": {
+    "description": "Used as the name in the fairy's message when there is no child profile"
+  },
+  "toothFairyMagic": "Fairy magic now",
+  "@toothFairyMagic": {
+    "description": "Tooth fairy: play the magic now"
   }
 }

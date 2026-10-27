@@ -1255,5 +1255,19 @@
   "goalTeamEngland": "Engeland",
   "goalOwnTeam": "Je eigen team",
   "goalOwnColours": "De kleuren van je team (maximaal drie)",
-  "goalLinkHint": "Tip: zet de link lumifx://app/goal op een NFC-sticker of een snelkoppeling om met één tik te juichen."
+  "goalLinkHint": "Tip: zet de link lumifx://app/goal op een NFC-sticker of een snelkoppeling om met één tik te juichen.",
+  "toothFairy": "Tandenfee",
+  "toothFairySubtitle": "Een magische gloed bij zonsopgang, een bericht en een ster",
+  "toothFairyDescription": "De nacht nadat er een tand is uitgevallen: tegen de ochtend gloeit de kamer een poosje zacht roze en paars, nooit fel genoeg om iemand wakker te maken. Lees 's ochtends samen het bericht van de tandenfee: ze laat een toverster achter.",
+  "toothFairyFor": "Voor",
+  "toothFairyRoom": "In de kamer",
+  "toothFairyTime": "Ze komt om",
+  "toothFairyPlan": "Vannacht komt de tandenfee",
+  "toothFairyComing": "De tandenfee komt om {time}",
+  "toothFairyCancel": "Bezoek afzeggen",
+  "toothFairyCame": "De tandenfee is geweest!",
+  "toothFairyRead": "Lees haar bericht",
+  "toothFairyMessage": "Lieve {name}, bedankt voor je tandje! Ik heb een toverster voor je achtergelaten. Blijf elke dag goed poetsen. De Tandenfee",
+  "toothFairyFriend": "vriendje",
+  "toothFairyMagic": "Feeënmagie nu"
 }

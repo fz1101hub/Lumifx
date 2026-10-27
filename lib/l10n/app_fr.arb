@@ -1255,5 +1255,19 @@
   "goalTeamEngland": "Angleterre",
   "goalOwnTeam": "Ton équipe",
   "goalOwnColours": "Les couleurs de ton équipe (jusqu'à trois)",
-  "goalLinkHint": "Astuce : mets le lien lumifx://app/goal sur un autocollant NFC ou un raccourci pour fêter le but d'un seul geste."
+  "goalLinkHint": "Astuce : mets le lien lumifx://app/goal sur un autocollant NFC ou un raccourci pour fêter le but d'un seul geste.",
+  "toothFairy": "Petite souris",
+  "toothFairySubtitle": "Une lueur magique à l'aube, un message et une étoile",
+  "toothFairyDescription": "La nuit après la chute d'une dent : vers l'aube, la pièce brille doucement de rose et de violet un moment, jamais assez pour réveiller quelqu'un. Le matin, lisez ensemble le message de la petite souris : elle laisse une étoile magique.",
+  "toothFairyFor": "Pour",
+  "toothFairyRoom": "Dans la pièce",
+  "toothFairyTime": "Elle passe à",
+  "toothFairyPlan": "La petite souris passera cette nuit",
+  "toothFairyComing": "La petite souris passe à {time}",
+  "toothFairyCancel": "Annuler la visite",
+  "toothFairyCame": "La petite souris est passée !",
+  "toothFairyRead": "Lire son message",
+  "toothFairyMessage": "Cher {name}, merci pour ta petite dent ! Je t'ai laissé une étoile magique. Continue à te brosser les dents tous les jours. La Petite Souris",
+  "toothFairyFriend": "ami",
+  "toothFairyMagic": "La magie maintenant"
 }

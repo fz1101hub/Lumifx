@@ -32,6 +32,8 @@ import 'package:lumifx/src/features/calm/feelings.dart';
 import 'package:lumifx/src/features/fun/goal.dart';
 import 'package:lumifx/src/features/fun/goal_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon.dart';
+import 'package:lumifx/src/features/bedtime/tooth_fairy.dart';
+import 'package:lumifx/src/features/bedtime/tooth_fairy_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon_screen.dart';
 import 'package:lumifx/src/features/calm/feelings_screen.dart';
 import 'package:lumifx/src/features/timers/light_clock_screen.dart';
@@ -1514,6 +1516,39 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     expect(find.text('Well done!'), findsNothing, reason: 'then the next pair');
     await playback.stop();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('the tooth fairy comes at dawn and leaves a magic star',
+      (tester) async {
+    var now = DateTime(2026, 6, 15, 20);
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, clock: () => now, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const ToothFairyScreen())));
+    await tester.pumpAndSettle();
+    final scope = AppScope.of(tester.element(find.byType(ToothFairyScreen)));
+    await tester.tap(find.text('The fairy will come tonight'));
+    await tester.pumpAndSettle();
+    expect(scope.preferences.toothFairy?.at, DateTime(2026, 6, 16, 6));
+    expect(find.text('The fairy is coming at 6:00 AM'), findsOneWidget);
+
+    // The next morning.
+    now = DateTime(2026, 6, 16, 7, 30);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const ToothFairyScreen())));
+    await tester.pumpAndSettle();
+    expect(find.text('The tooth fairy came!'), findsOneWidget);
+    await tester.tap(find.text('Read her message'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(speaker.spoken.last.$1, startsWith('Dear friend, thank you'));
+    expect(scope.preferences.stars, contains('2026-06-16:toothfairy'));
+    expect(scope.preferences.toothFairy, isNull);
+    expect(scope.playback.effect.id, ToothFairy.id);
+    await scope.playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 

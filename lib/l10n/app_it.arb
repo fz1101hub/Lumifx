@@ -1255,5 +1255,19 @@
   "goalTeamEngland": "Inghilterra",
   "goalOwnTeam": "La tua squadra",
   "goalOwnColours": "I colori della tua squadra (fino a tre)",
-  "goalLinkHint": "Suggerimento: metti il link lumifx://app/goal su un adesivo NFC o in una scorciatoia per esultare con un tocco."
+  "goalLinkHint": "Suggerimento: metti il link lumifx://app/goal su un adesivo NFC o in una scorciatoia per esultare con un tocco.",
+  "toothFairy": "Fatina dei denti",
+  "toothFairySubtitle": "Una luce magica all'alba, un messaggio e una stellina",
+  "toothFairyDescription": "La notte dopo che è caduto un dentino: verso l'alba la stanza brilla piano di rosa e viola per un po', mai abbastanza da svegliare qualcuno. Al mattino leggete insieme il messaggio della fatina: lascia una stellina magica.",
+  "toothFairyFor": "Per",
+  "toothFairyRoom": "Nella stanza",
+  "toothFairyTime": "Arriva alle",
+  "toothFairyPlan": "Stanotte arriva la fatina",
+  "toothFairyComing": "La fatina arriva alle {time}",
+  "toothFairyCancel": "Annulla la visita",
+  "toothFairyCame": "È passata la fatina dei denti!",
+  "toothFairyRead": "Leggi il suo messaggio",
+  "toothFairyMessage": "Caro {name}, grazie per il tuo dentino! Ti ho lasciato una stellina magica. Continua a lavarti i denti ogni giorno. La Fatina dei denti",
+  "toothFairyFriend": "amico",
+  "toothFairyMagic": "Magia della fatina adesso"
 }

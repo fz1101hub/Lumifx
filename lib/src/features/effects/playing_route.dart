@@ -8,6 +8,8 @@ import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon.dart';
 import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light.dart';
+import '../bedtime/tooth_fairy.dart';
+import '../bedtime/tooth_fairy_screen.dart';
 import '../bedtime/nap_light_screen.dart';
 import '../timers/interval_training.dart';
 import '../timers/interval_training_screen.dart';
@@ -108,6 +110,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const IntervalTrainingScreen();
   } else if (Goal.colorsOf(effect) != null) {
     screen = const GoalScreen();
+  } else if (effect.id == ToothFairy.id) {
+    screen = const ToothFairyScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

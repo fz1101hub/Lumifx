@@ -1255,5 +1255,19 @@
   "goalTeamEngland": "England",
   "goalOwnTeam": "Dein Team",
   "goalOwnColours": "Die Farben deines Teams (bis zu drei)",
-  "goalLinkHint": "Tipp: Leg den Link lumifx://app/goal auf einen NFC-Sticker oder eine Verknüpfung, um mit einem Tippen zu jubeln."
+  "goalLinkHint": "Tipp: Leg den Link lumifx://app/goal auf einen NFC-Sticker oder eine Verknüpfung, um mit einem Tippen zu jubeln.",
+  "toothFairy": "Zahnfee",
+  "toothFairySubtitle": "Ein magisches Leuchten im Morgengrauen, eine Nachricht und ein Stern",
+  "toothFairyDescription": "In der Nacht, nachdem ein Zahn ausgefallen ist: Gegen Morgen leuchtet das Zimmer eine Weile sanft rosa und violett, nie so hell, dass jemand aufwacht. Am Morgen lest ihr zusammen die Nachricht der Zahnfee: Sie lässt einen Zauberstern da.",
+  "toothFairyFor": "Für",
+  "toothFairyRoom": "Im Raum",
+  "toothFairyTime": "Sie kommt um",
+  "toothFairyPlan": "Heute Nacht kommt die Zahnfee",
+  "toothFairyComing": "Die Zahnfee kommt um {time}",
+  "toothFairyCancel": "Besuch absagen",
+  "toothFairyCame": "Die Zahnfee war da!",
+  "toothFairyRead": "Ihre Nachricht lesen",
+  "toothFairyMessage": "Liebe(r) {name}, danke für deinen kleinen Zahn! Ich habe dir einen Zauberstern dagelassen. Putz weiter jeden Tag deine Zähne. Deine Zahnfee",
+  "toothFairyFriend": "Freund",
+  "toothFairyMagic": "Zahnfeen-Zauber jetzt"
 }

@@ -1255,5 +1255,19 @@
   "goalTeamEngland": "Inglaterra",
   "goalOwnTeam": "Seu time",
   "goalOwnColours": "As cores do seu time (até três)",
-  "goalLinkHint": "Dica: coloque o link lumifx://app/goal num adesivo NFC ou num atalho para comemorar com um toque."
+  "goalLinkHint": "Dica: coloque o link lumifx://app/goal num adesivo NFC ou num atalho para comemorar com um toque.",
+  "toothFairy": "Fada do dente",
+  "toothFairySubtitle": "Um brilho mágico ao amanhecer, uma mensagem e uma estrela",
+  "toothFairyDescription": "Na noite em que um dente cai: perto do amanhecer o quarto brilha suavemente em rosa e violeta por um tempo, nunca a ponto de acordar alguém. De manhã, leiam juntos a mensagem da fada: ela deixa uma estrela mágica.",
+  "toothFairyFor": "Para",
+  "toothFairyRoom": "No quarto",
+  "toothFairyTime": "Ela chega às",
+  "toothFairyPlan": "A fada vem esta noite",
+  "toothFairyComing": "A fada chega às {time}",
+  "toothFairyCancel": "Cancelar a visita",
+  "toothFairyCame": "A fada do dente veio!",
+  "toothFairyRead": "Ler a mensagem",
+  "toothFairyMessage": "Querido {name}, obrigado pelo seu dentinho! Deixei uma estrela mágica para você. Continue escovando os dentes todo dia. A Fada do Dente",
+  "toothFairyFriend": "amigo",
+  "toothFairyMagic": "Magia da fada agora"
 }

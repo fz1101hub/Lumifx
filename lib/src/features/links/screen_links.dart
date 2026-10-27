@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
 import '../bedtime/nap_light_screen.dart';
+import '../bedtime/tooth_fairy_screen.dart';
 import '../timers/interval_training_screen.dart';
 import '../timers/light_clock_screen.dart';
 import '../bedtime/ritual_screen.dart';
@@ -53,6 +54,7 @@ Widget screenOf(AppScreen screen) => switch (screen) {
       AppScreen.moon => const MoonScreen(),
       AppScreen.intervals => const IntervalTrainingScreen(),
       AppScreen.goal => const GoalScreen(),
+      AppScreen.toothFairy => const ToothFairyScreen(),
       AppScreen.noise => const NoiseLightScreen(),
     };
 

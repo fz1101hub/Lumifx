@@ -1255,5 +1255,19 @@
   "goalTeamEngland": "イングランド",
   "goalOwnTeam": "じぶんのチーム",
   "goalOwnColours": "チームの色（3つまで）",
-  "goalLinkHint": "ヒント：lumifx://app/goal のリンクをNFCシールやショートカットに入れると、ワンタップでお祝いできます。"
+  "goalLinkHint": "ヒント：lumifx://app/goal のリンクをNFCシールやショートカットに入れると、ワンタップでお祝いできます。",
+  "toothFairy": "歯のようせい",
+  "toothFairySubtitle": "夜明けのまほうの光と、メッセージと、おほしさま",
+  "toothFairyDescription": "歯がぬけた夜、夜明けごろにへやがしばらくやさしいピンクとむらさきに光ります（だれも起こさないくらいに）。朝になったら、いっしょにようせいのメッセージを読もう。まほうのおほしさまがもらえます。",
+  "toothFairyFor": "だれのため",
+  "toothFairyRoom": "へや",
+  "toothFairyTime": "来る時間",
+  "toothFairyPlan": "今夜ようせいが来るよ",
+  "toothFairyComing": "ようせいは{time}に来るよ",
+  "toothFairyCancel": "とりけす",
+  "toothFairyCame": "歯のようせいが来たよ！",
+  "toothFairyRead": "メッセージを読む",
+  "toothFairyMessage": "{name}へ。ちいさな歯をありがとう！まほうのおほしさまをおいていくね。まいにち歯みがきをがんばってね。歯のようせいより",
+  "toothFairyFriend": "おともだち",
+  "toothFairyMagic": "いますぐまほう"
 }
