@@ -118,6 +118,7 @@ class ReadAloud {
       unawaited(speaker.speak(
         text,
         speechLanguage(_supported(locale()).languageCode),
+        style: SpeechStyle.story,
       ));
     }
   }

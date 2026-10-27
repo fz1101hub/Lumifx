@@ -1136,5 +1136,19 @@
   "pianoListenFirst": "Eerst luisteren",
   "routineTidyTimer": "Opruimtimer van tien minuten",
   "nowMorning": "Goedemorgen! Klaar voor de ochtendroutine?",
-  "nowEvening": "Bijna bedtijd: zullen we het ritueel beginnen?"
+  "nowEvening": "Bijna bedtijd: zullen we het ritueel beginnen?",
+  "storytellerVoice": "Stem van de verteller",
+  "storytellerVoiceAutomatic": "Automatisch",
+  "storytellerVoiceAutomaticNamed": "Automatisch: {name}",
+  "storytellerVoiceAutomaticDescription": "De natuurlijkste stem op deze telefoon",
+  "storytellerVoiceHint": "Tik op een stem om hem te horen. Verhalen en spelletjes worden voorgelezen met de stem die voor de taal van de app is gekozen.",
+  "storytellerVoiceSample": "Er was eens, in een huis vol licht, een klein lampje dat een verhaal begon te vertellen.",
+  "voiceQualityPremium": "Zeer natuurlijk",
+  "voiceQualityEnhanced": "Natuurlijk",
+  "voiceQualityBasic": "Eenvoudig",
+  "voiceQualityNovelty": "Robotachtig",
+  "voiceNeedsInternet": "Internet nodig",
+  "storytellerVoiceBetterIos": "Voor een natuurlijkere stem download je een stem met ‘Verbeterd’ of ‘Premium’ in de iPhone-instellingen: Toegankelijkheid › Gesproken materiaal › Stemmen. Hij verschijnt hier als je terugkomt.",
+  "storytellerVoiceBetterAndroid": "Voor een natuurlijkere stem installeer je meer stemmen in de instellingen van je telefoon: zoek op ‘Tekst-naar-spraakuitvoer’, open de instellingen van de engine en installeer de spraakgegevens. Hij verschijnt hier als je terugkomt.",
+  "storytellerVoiceNone": "Deze telefoon heeft nog geen stem voor deze taal."
 }
