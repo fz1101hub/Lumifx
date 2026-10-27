@@ -4594,5 +4594,66 @@
   "nowEvening": "It's nearly bedtime: start the ritual?",
   "@nowEvening": {
     "description": "Home, in the evening: suggests the bedtime ritual"
+  },
+  "storytellerVoice": "Storyteller voice",
+  "@storytellerVoice": {
+    "description": "Settings: the voice that reads stories and game calls aloud"
+  },
+  "storytellerVoiceAutomatic": "Automatic",
+  "@storytellerVoiceAutomatic": {
+    "description": "Voice choice: let the app pick the best voice"
+  },
+  "storytellerVoiceAutomaticNamed": "Automatic: {name}",
+  "@storytellerVoiceAutomaticNamed": {
+    "description": "Settings subtitle: the voice picked automatically, by name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storytellerVoiceAutomaticDescription": "The most natural voice on this phone",
+  "@storytellerVoiceAutomaticDescription": {
+    "description": "Under Automatic in the voice list"
+  },
+  "storytellerVoiceHint": "Tap a voice to hear it. Stories and game calls are read with the voice chosen for the app's language.",
+  "@storytellerVoiceHint": {
+    "description": "Top of the voice list"
+  },
+  "storytellerVoiceSample": "Once upon a time, in a house full of light, a little lamp began to tell a story.",
+  "@storytellerVoiceSample": {
+    "description": "Read aloud when a voice is tried in the list"
+  },
+  "voiceQualityPremium": "Most natural",
+  "@voiceQualityPremium": {
+    "description": "Voice quality label: the best voices"
+  },
+  "voiceQualityEnhanced": "Natural",
+  "@voiceQualityEnhanced": {
+    "description": "Voice quality label: downloaded, natural voices"
+  },
+  "voiceQualityBasic": "Basic",
+  "@voiceQualityBasic": {
+    "description": "Voice quality label: the small built-in voices"
+  },
+  "voiceQualityNovelty": "Robotic",
+  "@voiceQualityNovelty": {
+    "description": "Voice quality label: robotic voices"
+  },
+  "voiceNeedsInternet": "Needs internet",
+  "@voiceNeedsInternet": {
+    "description": "Voice label: works only online"
+  },
+  "storytellerVoiceBetterIos": "For a more natural voice, download one marked Enhanced or Premium in the iPhone Settings: Accessibility › Spoken Content › Voices. It shows up here when you come back.",
+  "@storytellerVoiceBetterIos": {
+    "description": "Tip on iPhone when only basic voices are installed"
+  },
+  "storytellerVoiceBetterAndroid": "For a more natural voice, install more voices in the phone's settings: search for \"Text-to-speech output\", open the engine's settings and install the voice data. It shows up here when you come back.",
+  "@storytellerVoiceBetterAndroid": {
+    "description": "Tip on Android when only basic voices are installed"
+  },
+  "storytellerVoiceNone": "This phone has no voice for this language yet.",
+  "@storytellerVoiceNone": {
+    "description": "Voice list when the phone has no voice for the language"
   }
 }

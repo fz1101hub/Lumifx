@@ -18,14 +18,21 @@ import '../support/fake_sound_player.dart';
 
 class _FakeSpeaker implements Speaker {
   final said = <(String, String)>[];
+  final styles = <SpeechStyle>[];
   int stops = 0;
 
   @override
-  Future<void> speak(String text, String language) async =>
-      said.add((text, language));
+  Future<void> speak(String text, String language,
+      {SpeechStyle style = SpeechStyle.call}) async {
+    said.add((text, language));
+    styles.add(style);
+  }
 
   @override
   Future<void> stop() async => stops++;
+
+  @override
+  Future<List<SpeechVoice>> voices(String language) async => const [];
 }
 
 Future<void> _wait([int ms = 50]) =>
@@ -76,6 +83,7 @@ void main() {
     await playback.start();
     await _wait();
     expect(speaker.said, [(italian.narrationEmeraldTrickster1, 'it-IT')]);
+    expect(speaker.styles, [SpeechStyle.story], reason: 'told, not called');
 
     // The golden spark at 8 s comes with the second line.
     playback.player!.advance(const Duration(seconds: 8));

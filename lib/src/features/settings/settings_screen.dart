@@ -4,6 +4,7 @@ import '../buttons/hue_buttons_screen.dart';
 import '../../app_scope.dart';
 import '../../core/audio/audio_input.dart';
 import '../../core/effects/engine/effect_renderer.dart';
+import '../../core/speech/speaker.dart';
 import '../bridge/bridge_controller.dart';
 import '../bridge/bridge_setup_screen.dart';
 import '../bridge/forget_bridge_dialog.dart';
@@ -13,6 +14,7 @@ import '../entertainment/entertainment_areas_screen.dart';
 import '../library/sharing.dart';
 import '../home/wall_panel_screen.dart';
 import '../links/links_screen.dart';
+import 'voice_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -97,6 +99,9 @@ class SettingsScreen extends StatelessWidget {
                   value: preferences.keepPlayingScreenOff,
                   onChanged: preferences.setKeepPlayingScreenOff,
                 ),
+              const Divider(height: 32),
+              _Header(l10n.readAloud),
+              const _VoiceTile(),
               if (scope.phoneAudioInput != null) ...[
                 const Divider(height: 32),
                 _Header(l10n.musicSource),
@@ -258,6 +263,71 @@ class SettingsScreen extends StatelessWidget {
         onTap: () => confirmForgetBridge(context, bridge),
       ),
     ];
+  }
+}
+
+/// The storyteller's voice: automatic (and which one that is) or the
+/// voice chosen; opens [VoiceScreen].
+class _VoiceTile extends StatefulWidget {
+  const _VoiceTile();
+
+  @override
+  State<_VoiceTile> createState() => _VoiceTileState();
+}
+
+class _VoiceTileState extends State<_VoiceTile> {
+  Future<List<SpeechVoice>>? _voices;
+  String? _language;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final language =
+        speechLanguage(Localizations.localeOf(context).languageCode);
+    if (language != _language) {
+      _language = language;
+      _voices = AppScope.of(context).speaker.voices(language);
+    }
+  }
+
+  Future<void> _open() async {
+    final speaker = AppScope.of(context).speaker;
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const VoiceScreen()),
+    );
+    if (mounted) {
+      // A voice may have been downloaded meanwhile.
+      setState(() {
+        _voices = speaker.voices(_language!);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final chosenId =
+        AppScope.of(context).preferences.speechVoiceFor(_language!);
+    return FutureBuilder<List<SpeechVoice>>(
+      future: _voices,
+      builder: (context, snapshot) {
+        final voices = snapshot.data ?? const <SpeechVoice>[];
+        final chosen = voices.where((v) => v.id == chosenId).firstOrNull;
+        final best = bestVoice(voices);
+        return ListTile(
+          leading: const Icon(Icons.record_voice_over_outlined),
+          title: Text(l10n.storytellerVoice),
+          subtitle: Text(switch ((chosen, best)) {
+            (final chosen?, _) => chosen.name,
+            (null, final best?) =>
+              l10n.storytellerVoiceAutomaticNamed(best.name),
+            (null, null) => l10n.storytellerVoiceAutomatic,
+          }),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: _open,
+        );
+      },
+    );
   }
 }
 

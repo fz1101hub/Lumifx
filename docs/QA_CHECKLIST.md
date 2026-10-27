@@ -705,6 +705,21 @@ build before every store release.
 - [ ] Scene from a photo, take a photo: nothing is left in the app's
       cache folder afterwards.
 
+## This round: storyteller voice
+
+- [ ] iPhone with only the default Italian voice: Settings › Storyteller
+      voice shows the tip to download an Enhanced/Premium voice. Download
+      one in the iPhone Settings, come back: it is listed first and
+      "Automatic" reads with it.
+- [ ] Android with Google's engine: voices marked "Needs internet" are
+      listed but Automatic picks an offline one; with Wi-Fi off a story is
+      still read.
+- [ ] Tap a voice: it reads "Once upon a time…" with it and is chosen; a
+      story read aloud then uses it, slower than the game calls, with a
+      short pause between sentences. Stop mid-story: it stops at once.
+- [ ] Switch the app to another language: the voice list is that
+      language's; each language keeps its own choice.
+
 ## Links and widget
 
 - [ ] Settings › Shortcuts and automations: copy "Play Fireplace", paste it

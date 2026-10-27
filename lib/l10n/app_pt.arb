@@ -1136,5 +1136,19 @@
   "pianoListenFirst": "Ouvir primeiro",
   "routineTidyTimer": "Timer de arrumação de dez minutos",
   "nowMorning": "Bom dia! Prontos para a rotina da manhã?",
-  "nowEvening": "Já está quase na hora de dormir: começamos o ritual?"
+  "nowEvening": "Já está quase na hora de dormir: começamos o ritual?",
+  "storytellerVoice": "Voz do narrador",
+  "storytellerVoiceAutomatic": "Automática",
+  "storytellerVoiceAutomaticNamed": "Automática: {name}",
+  "storytellerVoiceAutomaticDescription": "A voz mais natural deste celular",
+  "storytellerVoiceHint": "Toque em uma voz para ouvi-la. Histórias e jogos são lidos com a voz escolhida para o idioma do app.",
+  "storytellerVoiceSample": "Era uma vez, em uma casa cheia de luz, uma pequena lâmpada que começou a contar uma história.",
+  "voiceQualityPremium": "Muito natural",
+  "voiceQualityEnhanced": "Natural",
+  "voiceQualityBasic": "Básica",
+  "voiceQualityNovelty": "Robótica",
+  "voiceNeedsInternet": "Precisa de internet",
+  "storytellerVoiceBetterIos": "Para uma voz mais natural, baixe uma «Aprimorada» ou «Premium» nos Ajustes do iPhone: Acessibilidade › Conteúdo Falado › Vozes. Ela aparece aqui quando você voltar.",
+  "storytellerVoiceBetterAndroid": "Para uma voz mais natural, instale mais vozes nas configurações do celular: procure «Saída de conversão de texto em voz», abra as configurações do mecanismo e instale os dados de voz. Ela aparece aqui quando você voltar.",
+  "storytellerVoiceNone": "Este celular ainda não tem uma voz para este idioma."
 }

@@ -497,6 +497,26 @@ class PreferencesController extends ChangeNotifier {
     return _changed();
   }
 
+  Map<String, String> _speechVoices = const {};
+
+  /// The voice chosen to read aloud, by speech language (`it-IT`); a
+  /// language without one reads with the most natural voice the phone
+  /// has.
+  Map<String, String> get speechVoices => _speechVoices;
+
+  String? speechVoiceFor(String language) => _speechVoices[language];
+
+  /// Chooses [voiceId] for [language]; null goes back to the automatic
+  /// choice.
+  Future<void> setSpeechVoice(String language, String? voiceId) {
+    _speechVoices = {
+      for (final MapEntry(:key, :value) in _speechVoices.entries)
+        if (key != language) key: value,
+      if (voiceId != null) language: voiceId,
+    };
+    return _changed();
+  }
+
   int? _napMinutes;
 
   /// The rest chosen last for the nap light.
@@ -769,6 +789,16 @@ class PreferencesController extends ChangeNotifier {
       _pianoEchoBest = echo is int && echo > 0 && echo <= 100 ? echo : 0;
       final simon = json['simonBest'];
       _simonBest = simon is int && simon > 0 && simon < 1000 ? simon : 0;
+      final speechVoices = json['speechVoices'];
+      _speechVoices = {
+        if (speechVoices is Map)
+          for (final MapEntry(:key, :value) in speechVoices.entries.take(16))
+            if (key is String &&
+                value is String &&
+                key.length <= 16 &&
+                value.length <= 200)
+              key: value,
+      };
       final buttons = json['buttonActions'];
       _buttonActions = {
         if (buttons is Map)
@@ -1048,6 +1078,7 @@ class PreferencesController extends ChangeNotifier {
       'countingBest': _countingBest,
       'learnLanguage': _learnLanguage,
       'napMinutes': _napMinutes,
+      'speechVoices': _speechVoices,
       'noiseLimit': _noiseLimit,
       'teethTune': _teethTune,
       'naturalLights': _naturalLights,

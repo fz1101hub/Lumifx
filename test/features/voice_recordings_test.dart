@@ -21,10 +21,15 @@ class _FakeSpeaker implements Speaker {
   final said = <String>[];
 
   @override
-  Future<void> speak(String text, String language) async => said.add(text);
+  Future<void> speak(String text, String language,
+          {SpeechStyle style = SpeechStyle.call}) async =>
+      said.add(text);
 
   @override
   Future<void> stop() async {}
+
+  @override
+  Future<List<SpeechVoice>> voices(String language) async => const [];
 }
 
 class _FakeVoicePlayer implements VoicePlayer {

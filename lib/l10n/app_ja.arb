@@ -1136,5 +1136,19 @@
   "pianoListenFirst": "まずきく",
   "routineTidyTimer": "10分のおかたづけタイマー",
   "nowMorning": "おはよう！朝のしたくをはじめよう",
-  "nowEvening": "もうすぐねる時間。おやすみの儀式をはじめる？"
+  "nowEvening": "もうすぐねる時間。おやすみの儀式をはじめる？",
+  "storytellerVoice": "読み聞かせの声",
+  "storytellerVoiceAutomatic": "自動",
+  "storytellerVoiceAutomaticNamed": "自動：{name}",
+  "storytellerVoiceAutomaticDescription": "この端末でいちばん自然な声",
+  "storytellerVoiceHint": "声をタップすると試聴できます。お話やゲームは、アプリの言語に選んだ声で読み上げます。",
+  "storytellerVoiceSample": "むかしむかし、ひかりにあふれたいえで、ちいさなランプがおはなしをはじめました。",
+  "voiceQualityPremium": "とても自然",
+  "voiceQualityEnhanced": "自然",
+  "voiceQualityBasic": "標準",
+  "voiceQualityNovelty": "ロボット風",
+  "voiceNeedsInternet": "ネット接続が必要",
+  "storytellerVoiceBetterIos": "より自然な声にするには、iPhoneの「設定」›「アクセシビリティ」›「読み上げコンテンツ」›「声」で「拡張」または「プレミアム」の声をダウンロードしてください。戻るとここに表示されます。",
+  "storytellerVoiceBetterAndroid": "より自然な声にするには、端末の設定で「テキスト読み上げの出力」を検索し、エンジンの設定から音声データをインストールしてください。戻るとここに表示されます。",
+  "storytellerVoiceNone": "この端末には、まだこの言語の声がありません。"
 }

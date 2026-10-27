@@ -93,14 +93,27 @@ import '../support/fake_shortcuts.dart';
 import '../support/phone_window.dart';
 
 class _RecordingSpeaker implements Speaker {
+  _RecordingSpeaker([this.available = const []]);
+
   final spoken = <(String, String)>[];
+  final styles = <SpeechStyle>[];
+
+  /// The phone's voices, for every language.
+  final List<SpeechVoice> available;
 
   @override
-  Future<void> speak(String text, String language) async =>
-      spoken.add((text, language));
+  Future<void> speak(String text, String language,
+      {SpeechStyle style = SpeechStyle.call}) async {
+    spoken.add((text, language));
+    styles.add(style);
+  }
 
   @override
   Future<void> stop() async {}
+
+  @override
+  Future<List<SpeechVoice>> voices(String language) async =>
+      voicesFor(available, language);
 }
 
 class _FakeNfc implements NfcWriter {
@@ -3002,6 +3015,66 @@ void main() {
     await tester.tap(find.text('Ocean'));
     await tester.pumpAndSettle();
     expect(find.text('Play'), findsOneWidget);
+  });
+
+  testWidgets('the storyteller voice is chosen, heard and kept',
+      (tester) async {
+    final speaker = _RecordingSpeaker(const [
+      SpeechVoice(id: 'en-basic', name: 'Sam', locale: 'en-US'),
+      SpeechVoice(
+        id: 'en-premium',
+        name: 'Ava',
+        locale: 'en-US',
+        quality: VoiceQuality.premium,
+      ),
+      SpeechVoice(
+        id: 'en-online',
+        name: 'Nova',
+        locale: 'en-US',
+        quality: VoiceQuality.premium,
+        needsNetwork: true,
+      ),
+    ]);
+    await _pumpApp(tester, speaker: speaker);
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Storyteller voice'), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('Automatic: Ava'), findsOneWidget,
+        reason: 'the most natural offline voice');
+    await tester.tap(find.text('Storyteller voice'));
+    await tester.pumpAndSettle();
+
+    // Best first; a better voice is already there, so no tip.
+    expect(find.text('Most natural'), findsOneWidget);
+    expect(find.text('Most natural · Needs internet'), findsOneWidget);
+    expect(find.text('Basic'), findsOneWidget);
+    expect(find.textContaining('install more voices'), findsNothing);
+    await tester.tap(find.text('Sam'));
+    await tester.pumpAndSettle();
+    expect(speaker.spoken.last.$1, startsWith('Once upon a time'));
+    expect(speaker.styles.last, SpeechStyle.story);
+    final scope = AppScope.of(tester.element(find.byType(Scaffold).last));
+    expect(scope.preferences.speechVoiceFor('en-US'), 'en-basic');
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('Sam'), findsOneWidget, reason: 'the voice chosen');
+  });
+
+  testWidgets('with only basic voices, the voice list says how to get better',
+      (tester) async {
+    await _pumpApp(tester,
+        speaker: _RecordingSpeaker(const [
+          SpeechVoice(id: 'en-basic', name: 'Sam', locale: 'en-US'),
+        ]));
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Storyteller voice'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Storyteller voice'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('install more voices'), findsOneWidget);
   });
 
   testWidgets('settings change the controls a new playback starts with',

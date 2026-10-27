@@ -52,7 +52,7 @@ Future<void> main() async {
       background: ChannelBackgroundPlayback(),
       sound: AudioplayersSoundPlayer(),
       camera: PluginCameraInput(),
-      speaker: TtsSpeaker(),
+      speaker: TtsSpeaker(voiceFor: preferences.speechVoiceFor),
       photos: PluginPhotoPicker(),
       weather: OpenMeteoWeather(),
       voices: FileVoiceRecordings(),

@@ -283,8 +283,26 @@ and plays recordings even with Read aloud off.
 - `ReadAloud` (`lib/src/features/effects/read_aloud.dart`) follows the
   app-wide `PlaybackController`: while an effect with words plays and the
   preference is on, it speaks each new line of `narrationOf` through a
-  `Speaker` (`TtsSpeaker` wraps `flutter_tts`), and stops on pause or
-  stop.
+  `Speaker` (`TtsSpeaker` wraps `flutter_tts`) in the `story` style, and
+  stops on pause or stop.
+- Voices (`lib/src/core/speech/speaker.dart`): `SpeechVoice.fromPlatform`
+  reads the plugin's voice maps into a `VoiceQuality` (iPhone
+  premium/enhanced/default, Android very high/high/normal; Eloquence and
+  the old novelty voices count as `novelty`) and leaves out voices that
+  are not downloaded and the user's Personal Voice. `voicesFor` keeps a
+  language's voices (another country's only when there is none), best
+  first, offline before online at the same quality, novelty only when
+  nothing else exists; `bestVoice` is the first that works offline.
+  `TtsSpeaker` reads with the voice chosen in Settings
+  (`PreferencesController.speechVoices`, by speech language) while the
+  phone has it, else `bestVoice`; the voice is set after the language,
+  which clears it on iOS. A story is slower (rate 0.42, pitch 1.05) and
+  queued a sentence at a time (`sentencesOf`), so the voice pauses
+  between sentences; game calls stay at 0.45. Settings › Storyteller voice
+  (`VoiceScreen`) lists the voices for the app's language, plays a line
+  with the one tapped, and says where to download a better voice when
+  only basic ones are installed; tested in
+  `test/core/speech/speaker_test.dart` and the app tests.
 - `paletteFromImage` (`lib/src/core/color/photo_palette.dart`) decodes a
   photo at 64 px wide and groups its pixels into 24 hue bins plus whites;
   vivid pixels weigh more, dark and grey ones are ignored, close hues are

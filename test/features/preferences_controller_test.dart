@@ -102,6 +102,10 @@ void main() {
     expect(first.napMinutes, isNull);
     expect(first.teethTune, isTrue);
     await first.setNapMinutes(90);
+    expect(first.speechVoiceFor('it-IT'), isNull);
+    await first.setSpeechVoice('it-IT', 'com.apple.voice.enhanced.it-IT.Luca');
+    await first.setSpeechVoice('de-DE', 'de-de-x-deb-local');
+    await first.setSpeechVoice('de-DE', null);
     await first.setNoiseLimit('quiet');
     await first.setTeethTune(false);
 
@@ -111,6 +115,9 @@ void main() {
     expect(second.learnLanguage, 'fr');
     expect(second.kidsActivities, ['piano']);
     expect(second.napMinutes, 90);
+    expect(
+        second.speechVoices, {'it-IT': 'com.apple.voice.enhanced.it-IT.Luca'},
+        reason: 'German went back to the automatic voice');
     expect(second.noiseLimit, 'quiet');
     expect(second.teethTune, isFalse);
     expect(second.pianoEchoBest, 5);

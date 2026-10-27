@@ -172,7 +172,8 @@ class _BedtimeRitualScreenState extends State<BedtimeRitualScreen> {
     }
     final text = _goodnight(context.l10n);
     final language = Localizations.localeOf(context).languageCode;
-    unawaited(scope.speaker.speak(text, speechLanguage(language)));
+    unawaited(scope.speaker
+        .speak(text, speechLanguage(language), style: SpeechStyle.story));
   }
 
   @override

@@ -1,6 +1,6 @@
 # LumiFX Privacy Policy
 
-_Last updated: 18 October 2026_
+_Last updated: 27 October 2026_
 
 LumiFX is an app that plays lighting effects on Philips Hue lights. It is
 designed to work on your phone and your home network. We do not run
@@ -56,8 +56,10 @@ picker hands to the app is deleted as soon as its colours are read.
 
 **Reading stories aloud.** If you switch on "Read aloud", the words of the
 stories and game calls are read by your phone's own text-to-speech voice.
-LumiFX sends them nowhere (depending on your phone's settings, its speech
-engine may use an online voice).
+LumiFX sends them nowhere. It picks a voice that works offline unless you
+choose one marked "Needs internet" in Settings › Storyteller voice: then
+your phone's speech engine (for example Google's) turns the words into
+speech online, under its own privacy terms.
 
 **Story maker, learning games and party games.** The story maker puts
 each story together on your phone from sentences written into the app;
@@ -209,7 +211,7 @@ Questions about privacy: fz1101hub@gmail.com
 
 # Informativa sulla privacy di LumiFX
 
-_Ultimo aggiornamento: 18 ottobre 2026_
+_Ultimo aggiornamento: 27 ottobre 2026_
 
 LumiFX è un'app che riproduce effetti luminosi sulle luci Philips Hue.
 Funziona sul telefono e sulla rete di casa. Non abbiamo server, non
@@ -260,8 +262,11 @@ selettore di sistema passa all'app viene eliminata appena letti i colori.
 
 **Lettura ad alta voce.** Se attivi "Leggi ad alta voce", le parole delle
 storie e i comandi dei giochi sono letti dalla voce di sintesi del telefono.
-LumiFX non le invia da nessuna parte (a seconda delle impostazioni del
-telefono, il motore vocale potrebbe usare una voce online).
+LumiFX non le invia da nessuna parte. Sceglie una voce che funziona offline,
+a meno che tu non scelga in Impostazioni › Voce del narratore una voce
+indicata con "Serve internet": in quel caso il motore vocale del telefono
+(per esempio quello di Google) trasforma le parole in voce online, secondo
+le proprie condizioni sulla privacy.
 
 **Inventa una storia, giochi per imparare e giochi di festa.** "Inventa
 una storia" compone ogni storia sul telefono con frasi scritte nell'app;

@@ -1136,5 +1136,19 @@
   "pianoListenFirst": "Erst anhören",
   "routineTidyTimer": "Zehn-Minuten-Aufräum-Timer",
   "nowMorning": "Guten Morgen! Bereit für die Morgenroutine?",
-  "nowEvening": "Bald ist Schlafenszeit: Ritual starten?"
+  "nowEvening": "Bald ist Schlafenszeit: Ritual starten?",
+  "storytellerVoice": "Erzählstimme",
+  "storytellerVoiceAutomatic": "Automatisch",
+  "storytellerVoiceAutomaticNamed": "Automatisch: {name}",
+  "storytellerVoiceAutomaticDescription": "Die natürlichste Stimme auf diesem Telefon",
+  "storytellerVoiceHint": "Tippe auf eine Stimme, um sie zu hören. Geschichten und Spiele werden mit der Stimme gelesen, die für die Sprache der App gewählt ist.",
+  "storytellerVoiceSample": "Es war einmal in einem Haus voller Licht eine kleine Lampe, die anfing, eine Geschichte zu erzählen.",
+  "voiceQualityPremium": "Sehr natürlich",
+  "voiceQualityEnhanced": "Natürlich",
+  "voiceQualityBasic": "Einfach",
+  "voiceQualityNovelty": "Roboterhaft",
+  "voiceNeedsInternet": "Braucht Internet",
+  "storytellerVoiceBetterIos": "Für eine natürlichere Stimme lade in den iPhone-Einstellungen eine „Erweitert“- oder „Premium“-Stimme: Bedienungshilfen › Gesprochene Inhalte › Stimmen. Sie erscheint hier, wenn du zurückkommst.",
+  "storytellerVoiceBetterAndroid": "Für eine natürlichere Stimme installiere weitere Stimmen in den Telefoneinstellungen: Suche nach „Sprachausgabe“, öffne die Einstellungen des Moduls und installiere die Sprachdaten. Sie erscheint hier, wenn du zurückkommst.",
+  "storytellerVoiceNone": "Dieses Telefon hat noch keine Stimme für diese Sprache."
 }
