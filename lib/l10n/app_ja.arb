@@ -1394,5 +1394,10 @@
   "automationsCalendarDescription": "予定したエフェクト、起きていいよライト、起床とおやすみのルーティン、留守モード、ライトのリマインダー、夜の消灯を曜日ごとに表示します。オフにすると、実行されるすべての曜日で一時停止します。",
   "calendarNothing": "この日の予定はありません。",
   "calendarOnce": "1回だけ",
-  "calendarEffect": "予定したエフェクト"
+  "calendarEffect": "予定したエフェクト",
+  "sceneFromWords": "ことばから",
+  "sceneFromWordsTitle": "シーンをことばで",
+  "sceneFromWordsHint": "夕焼けの森",
+  "sceneFromWordsMake": "つくる",
+  "sceneFromWordsUnknown": "そのことばはまだわかりません。場所や時間、天気をためしてください（例：「夜の海」）。"
 }

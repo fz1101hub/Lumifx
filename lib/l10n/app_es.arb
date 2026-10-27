@@ -1394,5 +1394,10 @@
   "automationsCalendarDescription": "Efectos programados, luces de ya-puedes-levantarte, rutinas de despertar y de dormir, modo ausente, recordatorios de luz y apagado nocturno, por día. Desactivar uno lo pausa todos los días en que se repite.",
   "calendarNothing": "Nada previsto este día.",
   "calendarOnce": "Una sola vez",
-  "calendarEffect": "Efecto programado"
+  "calendarEffect": "Efecto programado",
+  "sceneFromWords": "Con palabras",
+  "sceneFromWordsTitle": "Describe una escena",
+  "sceneFromWordsHint": "Bosque al atardecer",
+  "sceneFromWordsMake": "Crear",
+  "sceneFromWordsUnknown": "Aún no conozco esas palabras: prueba con un lugar, un momento del día o el tiempo, como «mar de noche»."
 }

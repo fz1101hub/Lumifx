@@ -3199,6 +3199,43 @@ void main() {
     expect(first.b, greaterThan(first.r), reason: 'blue, the most present');
   });
 
+  testWidgets('a scene is made from a sentence', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New scene'));
+    await step();
+    await tester.tap(find.text('From words'));
+    await step();
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog), matching: find.byType(TextField)),
+        'qwerty');
+    await tester.tap(find.text('Make it'));
+    await step();
+    expect(find.textContaining("I don't know those words"), findsOneWidget);
+
+    await tester.tap(find.text('From words'));
+    await step();
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog), matching: find.byType(TextField)),
+        'campfire under the stars');
+    await tester.tap(find.text('Make it'));
+    await step();
+    expect(find.text('Campfire under the stars'), findsOneWidget,
+        reason: 'the sentence names the scene');
+    expect(find.bySemanticsLabel('Colour 5'), findsOneWidget);
+    final slots = tester.widgetList<ColorSlot>(find.byType(ColorSlot));
+    final first = slots.first.color;
+    expect(first.r, greaterThan(first.b), reason: 'the fire first');
+  });
+
   testWidgets('a photo that cannot be opened says so', (tester) async {
     await _pumpApp(tester, photos: _FakePhotoPicker(null));
     await tester.tap(find.text('Scenes'));

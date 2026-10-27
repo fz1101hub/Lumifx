@@ -1394,5 +1394,10 @@
   "automationsCalendarDescription": "Effetti programmati, luci ok-sveglia, routine di risveglio e della buonanotte, modalità vacanza, promemoria luminosi e spegnimento notturno, giorno per giorno. Spegnerne uno lo mette in pausa in tutti i giorni in cui si ripete.",
   "calendarNothing": "Niente in programma in questo giorno.",
   "calendarOnce": "Una volta sola",
-  "calendarEffect": "Effetto programmato"
+  "calendarEffect": "Effetto programmato",
+  "sceneFromWords": "Da parole",
+  "sceneFromWordsTitle": "Descrivi una scena",
+  "sceneFromWordsHint": "Bosco al tramonto",
+  "sceneFromWordsMake": "Crea",
+  "sceneFromWordsUnknown": "Non conosco ancora queste parole: prova con un luogo, un momento del giorno o il tempo, come \"mare di notte\"."
 }

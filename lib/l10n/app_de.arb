@@ -1394,5 +1394,10 @@
   "automationsCalendarDescription": "Geplante Effekte, Aufwachlichter, Aufwach- und Einschlafroutinen, Abwesenheitsmodus, Lichterinnerungen und die nächtliche Abschaltung, nach Tagen. Wird eines ausgeschaltet, pausiert es an allen seinen Tagen.",
   "calendarNothing": "An diesem Tag ist nichts geplant.",
   "calendarOnce": "Einmalig",
-  "calendarEffect": "Geplanter Effekt"
+  "calendarEffect": "Geplanter Effekt",
+  "sceneFromWords": "Aus Worten",
+  "sceneFromWordsTitle": "Beschreibe eine Szene",
+  "sceneFromWordsHint": "Wald bei Sonnenuntergang",
+  "sceneFromWordsMake": "Erstellen",
+  "sceneFromWordsUnknown": "Diese Wörter kenne ich noch nicht: Versuch es mit einem Ort, einer Tageszeit oder dem Wetter, etwa „Meer bei Nacht“."
 }

@@ -1394,5 +1394,10 @@
   "automationsCalendarDescription": "Effets programmés, lumières de réveil, routines de réveil et de coucher, mode absence, rappels lumineux et extinction de nuit, jour par jour. En désactiver un le met en pause tous les jours où il s'exécute.",
   "calendarNothing": "Rien de prévu ce jour-là.",
   "calendarOnce": "Une seule fois",
-  "calendarEffect": "Effet programmé"
+  "calendarEffect": "Effet programmé",
+  "sceneFromWords": "À partir de mots",
+  "sceneFromWordsTitle": "Décrivez une scène",
+  "sceneFromWordsHint": "Forêt au coucher du soleil",
+  "sceneFromWordsMake": "Créer",
+  "sceneFromWordsUnknown": "Je ne connais pas encore ces mots : essayez un lieu, un moment de la journée ou la météo, comme « la mer la nuit »."
 }

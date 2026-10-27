@@ -5805,5 +5805,25 @@
   "calendarEffect": "Scheduled effect",
   "@calendarEffect": {
     "description": "Automations calendar: a scheduled effect"
+  },
+  "sceneFromWords": "From words",
+  "@sceneFromWords": {
+    "description": "Scene editor: make the colours from a sentence"
+  },
+  "sceneFromWordsTitle": "Describe a scene",
+  "@sceneFromWordsTitle": {
+    "description": "Scene from words: dialog title"
+  },
+  "sceneFromWordsHint": "Forest at sunset",
+  "@sceneFromWordsHint": {
+    "description": "Scene from words: example sentence"
+  },
+  "sceneFromWordsMake": "Make it",
+  "@sceneFromWordsMake": {
+    "description": "Scene from words: button that makes the colours"
+  },
+  "sceneFromWordsUnknown": "I don't know those words yet: try a place, a time of day or the weather, like \"sea at night\".",
+  "@sceneFromWordsUnknown": {
+    "description": "Scene from words: no word was recognised"
   }
 }
