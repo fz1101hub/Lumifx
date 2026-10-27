@@ -15,6 +15,7 @@ import '../common/app_text.dart';
 import '../common/layout.dart';
 import '../effects/light_color_ui.dart';
 import '../effects/player_route.dart';
+import 'sentence_scene.dart';
 import 'user_scene.dart';
 
 /// Creates a scene of the user's own, or edits [scene]: a name, two to
@@ -137,6 +138,33 @@ class _SceneEditorState extends State<SceneEditor> {
     });
   }
 
+  /// Takes the colours and motion of a sentence ("forest at sunset"),
+  /// and the sentence as the name when there is none yet.
+  Future<void> _fromWords() async {
+    final sentence = await showDialog<String>(
+        context: context, builder: (_) => const _SentenceDialog());
+    if (sentence == null || sentence.trim().isEmpty || !mounted) {
+      return;
+    }
+    final scene = sceneFromSentence(sentence);
+    if (scene == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.sceneFromWordsUnknown)));
+      return;
+    }
+    setState(() {
+      _colors = scene.colors;
+      _motion = scene.motion;
+    });
+    if (_name.text.trim().isEmpty) {
+      final name = sentence.trim();
+      _name.text = (name[0].toUpperCase() + name.substring(1))
+          .characters
+          .take(UserScene.maxName)
+          .toString();
+    }
+  }
+
   /// Takes the colours of a photo the user chooses or takes.
   Future<void> _fromPhoto() async {
     final l10n = context.l10n;
@@ -222,16 +250,19 @@ class _SceneEditorState extends State<SceneEditor> {
             ),
           ),
           const SizedBox(height: 20),
-          Row(
+          Text(l10n.sceneColors, style: theme.textTheme.titleSmall),
+          Wrap(
+            spacing: 4,
             children: [
-              Expanded(
-                child:
-                    Text(l10n.sceneColors, style: theme.textTheme.titleSmall),
-              ),
               TextButton.icon(
                 onPressed: _fromPhoto,
                 icon: const Icon(Icons.add_photo_alternate_outlined),
                 label: Text(l10n.sceneFromPhoto),
+              ),
+              TextButton.icon(
+                onPressed: _fromWords,
+                icon: const Icon(Icons.short_text),
+                label: Text(l10n.sceneFromWords),
               ),
             ],
           ),
@@ -574,4 +605,47 @@ class EffectPreviewState extends State<EffectPreview>
 String formatClock(Duration time) {
   final seconds = time.inSeconds;
   return '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}';
+}
+
+class _SentenceDialog extends StatefulWidget {
+  const _SentenceDialog();
+
+  @override
+  State<_SentenceDialog> createState() => _SentenceDialogState();
+}
+
+class _SentenceDialogState extends State<_SentenceDialog> {
+  final _text = TextEditingController();
+
+  @override
+  void dispose() {
+    _text.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.sceneFromWordsTitle),
+      content: TextField(
+        controller: _text,
+        autofocus: true,
+        maxLength: 80,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(hintText: l10n.sceneFromWordsHint),
+        onSubmitted: (text) => Navigator.of(context).pop(text),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(_text.text),
+          child: Text(l10n.sceneFromWordsMake),
+        ),
+      ],
+    );
+  }
 }

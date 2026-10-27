@@ -5710,5 +5710,144 @@
   "reportNoBedtimes": "No bedtime noted this week yet.",
   "@reportNoBedtimes": {
     "description": "Weekly report: no bedtime noted this week"
+  },
+  "lightHealth": "Light health check",
+  "@lightHealth": {
+    "description": "Home: the light health check"
+  },
+  "lightHealthSubtitle": "Lamps out of reach, weak signal, updates",
+  "@lightHealthSubtitle": {
+    "description": "Home: what the light health check finds"
+  },
+  "lightHealthDescription": "What the bridge knows about each lamp, and what to do when something is wrong. Pull down to check again.",
+  "@lightHealthDescription": {
+    "description": "Light health check: what it shows"
+  },
+  "lightHealthAllFine": "{count, plural, =1{The lamp is fine} other{All {count} lamps are fine}}",
+  "@lightHealthAllFine": {
+    "description": "Light health check: no problem found",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lightHealthProblems": "{count, plural, =1{1 lamp needs a look} other{{count} lamps need a look}}",
+  "@lightHealthProblems": {
+    "description": "Light health check: how many lamps have a problem",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lightHealthFine": "All good",
+  "@lightHealthFine": {
+    "description": "Light health check: a lamp with no problem"
+  },
+  "lightIssueUnreachable": "Can't be reached",
+  "@lightIssueUnreachable": {
+    "description": "Light health check: the bridge cannot reach the lamp"
+  },
+  "lightIssueUnreachableAdvice": "Check it is switched on at the wall: a lamp switched off there can't hear the bridge. If it is on, switch it off and on again.",
+  "@lightIssueUnreachableAdvice": {
+    "description": "Light health check: what to do when a lamp cannot be reached"
+  },
+  "lightIssueWeakSignal": "Weak signal",
+  "@lightIssueWeakSignal": {
+    "description": "Light health check: the lamp's radio link is poor"
+  },
+  "lightIssueWeakSignalAdvice": "It is far from the bridge and the other lamps: move the bridge closer, or add a Hue lamp or smart plug in between.",
+  "@lightIssueWeakSignalAdvice": {
+    "description": "Light health check: what to do about a weak signal"
+  },
+  "lightIssueUpdate": "Update ready",
+  "@lightIssueUpdate": {
+    "description": "Light health check: newer firmware is ready"
+  },
+  "lightIssueUpdateAdvice": "Newer firmware is ready: install it from the Hue app, in Settings › Software update.",
+  "@lightIssueUpdateAdvice": {
+    "description": "Light health check: what to do about an update"
+  },
+  "lightHealthBridgeUpdate": "The bridge has an update ready: install it from the Hue app, in Settings › Software update.",
+  "@lightHealthBridgeUpdate": {
+    "description": "Light health check: the bridge itself has an update"
+  },
+  "lightHealthFailed": "Couldn't check the lamps: {error}",
+  "@lightHealthFailed": {
+    "description": "Light health check: the check could not be done",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "automationsCalendar": "Automations calendar",
+  "@automationsCalendar": {
+    "description": "Home: the week of everything the bridge does by itself"
+  },
+  "automationsCalendarSubtitle": "Everything the bridge does by itself, day by day",
+  "@automationsCalendarSubtitle": {
+    "description": "Home: what the automations calendar shows"
+  },
+  "automationsCalendarDescription": "Scheduled effects, ok-to-wake lights, wake-up and go-to-sleep routines, away mode, light reminders and the night switch-off, by day. Switching one off pauses it on every day it runs.",
+  "@automationsCalendarDescription": {
+    "description": "Automations calendar: what it shows and what the switches do"
+  },
+  "calendarNothing": "Nothing planned on this day.",
+  "@calendarNothing": {
+    "description": "Automations calendar: nothing on the chosen day"
+  },
+  "calendarOnce": "Once",
+  "@calendarOnce": {
+    "description": "Automations calendar: heading of the things that run only once"
+  },
+  "calendarEffect": "Scheduled effect",
+  "@calendarEffect": {
+    "description": "Automations calendar: a scheduled effect"
+  },
+  "sceneFromWords": "From words",
+  "@sceneFromWords": {
+    "description": "Scene editor: make the colours from a sentence"
+  },
+  "sceneFromWordsTitle": "Describe a scene",
+  "@sceneFromWordsTitle": {
+    "description": "Scene from words: dialog title"
+  },
+  "sceneFromWordsHint": "Forest at sunset",
+  "@sceneFromWordsHint": {
+    "description": "Scene from words: example sentence"
+  },
+  "sceneFromWordsMake": "Make it",
+  "@sceneFromWordsMake": {
+    "description": "Scene from words: button that makes the colours"
+  },
+  "sceneFromWordsUnknown": "I don't know those words yet: try a place, a time of day or the weather, like \"sea at night\".",
+  "@sceneFromWordsUnknown": {
+    "description": "Scene from words: no word was recognised"
+  },
+  "lightBoard": "Light board",
+  "@lightBoard": {
+    "description": "Home: paint the lamps of a room with a finger"
+  },
+  "lightBoardSubtitle": "Paint the room's lamps with a finger",
+  "@lightBoardSubtitle": {
+    "description": "Home: what the light board does"
+  },
+  "lightBoardDescription": "Pick a colour and run your finger over the lamps: each one takes the colour it is painted with. Lamps sit where your entertainment area put them, the others in a ring.",
+  "@lightBoardDescription": {
+    "description": "Light board: how it works"
+  },
+  "lightBoardFill": "Paint them all",
+  "@lightBoardFill": {
+    "description": "Light board: paint every lamp at once"
+  },
+  "lightBoardOff": "Off",
+  "@lightBoardOff": {
+    "description": "Light board: the colour that switches a lamp off"
+  },
+  "lightBoardNoLights": "This room has no lamps.",
+  "@lightBoardNoLights": {
+    "description": "Light board: the room has no lamps"
   }
 }

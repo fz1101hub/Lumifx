@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app_scope.dart';
 import '../../core/effects/effect.dart';
 import '../automations/automations_screen.dart';
+import '../board/light_board_screen.dart';
 import '../bedtime/bedtime_screen.dart';
 import '../bedtime/monster_spray_screen.dart';
 import '../bedtime/moon_screen.dart';
@@ -24,7 +25,9 @@ import '../effects/player_route.dart';
 import '../playlists/playlists_screen.dart';
 import '../calm/breathing_screen.dart';
 import '../fun/fun_screen.dart';
+import '../house/automations_calendar_screen.dart';
 import '../house/house_screen.dart';
+import '../house/light_health_screen.dart';
 import '../kids/kids_mode.dart';
 import '../links/nfc_stickers_screen.dart';
 import '../notifications/notification_lights_screen.dart';
@@ -216,8 +219,20 @@ class HomeScreen extends StatelessWidget {
                       l10n.roomsAndZonesSubtitle, () => const RoomsScreen()),
                   _HomeEntry(Icons.alarm, l10n.routines, l10n.routinesSubtitle,
                       () => const AutomationsScreen()),
+                  _HomeEntry(
+                      Icons.calendar_view_week,
+                      l10n.automationsCalendar,
+                      l10n.automationsCalendarSubtitle,
+                      () => const AutomationsCalendarScreen()),
                   _HomeEntry(Icons.house_outlined, l10n.house,
                       l10n.houseSubtitle, () => const HouseScreen()),
+                  _HomeEntry(Icons.brush_outlined, l10n.lightBoard,
+                      l10n.lightBoardSubtitle, () => const LightBoardScreen()),
+                  _HomeEntry(
+                      Icons.health_and_safety_outlined,
+                      l10n.lightHealth,
+                      l10n.lightHealthSubtitle,
+                      () => const LightHealthScreen()),
                   if (AppScope.of(context).notificationLights.isSupported)
                     _HomeEntry(
                         Icons.notifications_active_outlined,

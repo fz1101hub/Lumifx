@@ -32,20 +32,20 @@ Status: `todo`, `doing`, `done` (merged on `main`, with the PR number).
 
 | # | Feature | Status |
 |---|---------|--------|
-| 12 | Light farm: each animal its sound and colour, and "who makes this sound?" | done (PR pending) |
-| 13 | Around the world in light: short stories of places (aurora, cherry blossom, desert, rainforest) with a fact read aloud | done (PR pending) |
-| 14 | My tune: compose on the light piano, save it, play it back as an effect, share it | done (PR pending) |
-| 15 | Sing and colour: the pitch of the voice picks the colour, holding a note makes it brighter | done (PR pending) |
-| 16 | Weekly report for parents: routines, stars and bedtimes per child | done (PR pending) |
+| 12 | Light farm: each animal its sound and colour, and "who makes this sound?" | done (#25) |
+| 13 | Around the world in light: short stories of places (aurora, cherry blossom, desert, rainforest) with a fact read aloud | done (#25) |
+| 14 | My tune: compose on the light piano, save it, play it back as an effect, share it | done (#25) |
+| 15 | Sing and colour: the pitch of the voice picks the colour, holding a note makes it brighter | done (#25) |
+| 16 | Weekly report for parents: routines, stars and bedtimes per child | done (#25) |
 
 ## Round 12: the house
 
 | # | Feature | Status |
 |---|---------|--------|
-| 17 | Light health check: unreachable lamps, weak signal, old firmware, with advice | todo |
-| 18 | Automations calendar: everything the bridge does by itself in one week view, switched on and off from there | todo |
-| 19 | Scene from a sentence: "forest at sunset" becomes colours and motion, offline, in the eight languages | todo |
-| 20 | Light board: paint on the room map with a finger, each lamp takes the colour passed over it | todo |
+| 17 | Light health check: unreachable lamps, weak signal, old firmware, with advice | done (PR pending) |
+| 18 | Automations calendar: everything the bridge does by itself in one week view, switched on and off from there | done (PR pending) |
+| 19 | Scene from a sentence: "forest at sunset" becomes colours and motion, offline, in the eight languages | done (PR pending) |
+| 20 | Light board: paint on the room map with a finger, each lamp takes the colour passed over it | done (PR pending) |
 
 ## Round 13: bigger games and the family
 

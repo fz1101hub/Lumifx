@@ -3199,6 +3199,43 @@ void main() {
     expect(first.b, greaterThan(first.r), reason: 'blue, the most present');
   });
 
+  testWidgets('a scene is made from a sentence', (tester) async {
+    await _pumpApp(tester);
+    await tester.tap(find.text('Scenes'));
+    await tester.pumpAndSettle();
+    Future<void> step() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    await tester.tap(find.text('New scene'));
+    await step();
+    await tester.tap(find.text('From words'));
+    await step();
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog), matching: find.byType(TextField)),
+        'qwerty');
+    await tester.tap(find.text('Make it'));
+    await step();
+    expect(find.textContaining("I don't know those words"), findsOneWidget);
+
+    await tester.tap(find.text('From words'));
+    await step();
+    await tester.enterText(
+        find.descendant(
+            of: find.byType(AlertDialog), matching: find.byType(TextField)),
+        'campfire under the stars');
+    await tester.tap(find.text('Make it'));
+    await step();
+    expect(find.text('Campfire under the stars'), findsOneWidget,
+        reason: 'the sentence names the scene');
+    expect(find.bySemanticsLabel('Colour 5'), findsOneWidget);
+    final slots = tester.widgetList<ColorSlot>(find.byType(ColorSlot));
+    final first = slots.first.color;
+    expect(first.r, greaterThan(first.b), reason: 'the fire first');
+  });
+
   testWidgets('a photo that cannot be opened says so', (tester) async {
     await _pumpApp(tester, photos: _FakePhotoPicker(null));
     await tester.tap(find.text('Scenes'));
@@ -3907,6 +3944,27 @@ Future<BridgeController> _connectedBridge(
                 'status': 'enabled',
               },
             });
+          case '/api/key/lights':
+            return json({
+              '1': {
+                'name': 'Sofa',
+                'productname': 'Hue color lamp',
+                'swversion': '1.104.2',
+                'uniqueid': '00:17:88:01:00:00:00:01-0b',
+                'state': {'on': true, 'reachable': true},
+                'swupdate': {'state': 'noupdates'},
+              },
+              '2': {
+                'name': 'Porch',
+                'uniqueid': '00:17:88:01:00:00:00:02-0b',
+                'state': {'on': false, 'reachable': false},
+                'swupdate': {'state': 'noupdates'},
+              },
+            });
+          case '/api/key/config':
+            return json({
+              'swupdate2': {'state': 'anyreadytoinstall'},
+            });
           case '/clip/v2/resource/behavior_script':
             return json({
               'data': [
@@ -4012,6 +4070,120 @@ Future<BridgeController> _connectedBridge(
 }
 
 void streamingTests() {
+  testWidgets('the light health check shows the lamps and what to do',
+      (tester) async {
+    final bridge = await _connectedBridge(tester);
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Light health check'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light health check'));
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)));
+    await tester.pumpAndSettle();
+    expect(find.text('1 lamp needs a look'), findsOneWidget);
+    expect(
+        find.textContaining('The bridge has an update ready'), findsOneWidget);
+    expect(find.text("Can't be reached"), findsOneWidget);
+    expect(find.textContaining('switched on at the wall'), findsOneWidget);
+    expect(find.text('Hue color lamp · 1.104.2'), findsOneWidget);
+    expect(tester.getTopLeft(find.text('Porch')).dy,
+        lessThan(tester.getTopLeft(find.text('Sofa')).dy),
+        reason: 'lamps with a problem first');
+  });
+
+  testWidgets('the automations calendar shows each day and switches off',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    await tester.pumpWidget(LumiFxApp(
+      // A Monday.
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Automations calendar'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Automations calendar'));
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)));
+    await tester.pumpAndSettle();
+    expect(find.text('School days'), findsOneWidget);
+    expect(find.text('Wake up · Living room'), findsOneWidget);
+    expect(find.text('Mia'), findsOneWidget);
+    expect(find.text('Evening fire'), findsNothing);
+
+    await tester.tap(find.text('Sat'));
+    await tester.pumpAndSettle();
+    expect(find.text('Evening fire'), findsOneWidget);
+    expect(find.text('Scheduled effect · Living room'), findsOneWidget);
+    expect(find.text('School days'), findsNothing);
+
+    await tester.tap(find.text('Mon'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.descendant(
+          of: find.widgetWithText(Card, 'School days'),
+          matching: find.byType(Switch)));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pumpAndSettle();
+    expect(puts, contains('/clip/v2/resource/behavior_instance/w1'));
+  });
+
+  testWidgets('the light board paints a lamp with a finger', (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    await tester.pumpWidget(LumiFxApp(
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Light board'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Light board'));
+    await tester.pumpAndSettle();
+    expect(find.text('Living room'), findsOneWidget);
+    await tester.ensureVisible(find.bySemanticsLabel('Sofa'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.bySemanticsLabel('Sofa'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    await tester.pump();
+    expect(puts.where((p) => p == '/clip/v2/resource/light/l1'), hasLength(1));
+
+    // The same paint again sends nothing; off does.
+    await tester.runAsync(() async {
+      await tester.tap(find.bySemanticsLabel('Sofa'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    expect(puts.where((p) => p == '/clip/v2/resource/light/l1'), hasLength(1));
+    await tester.ensureVisible(find.bySemanticsLabel('Off'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Off'));
+    await tester.pump();
+    await tester.ensureVisible(find.text('Paint them all'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Paint them all'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+    expect(puts.where((p) => p == '/clip/v2/resource/light/l1'), hasLength(2));
+  });
+
   testWidgets('rooms list the Hue scenes of each group and recall them',
       (tester) async {
     final puts = <String>[];
