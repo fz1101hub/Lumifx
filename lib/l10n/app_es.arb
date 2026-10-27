@@ -1292,5 +1292,14 @@
   "boardTurn": "¡Le toca al {player}!",
   "boardNext": "Siguiente turno",
   "boardRoll": "Tirar el dado",
-  "boardTimeUp": "¡Se acabó el tiempo!"
+  "boardTimeUp": "¡Se acabó el tiempo!",
+  "hideSeek": "Escondite",
+  "hideSeekSubtitle": "Las luces bajan mientras quien busca cuenta",
+  "hideSeekDescription": "La voz cuenta en voz alta mientras las luces bajan hasta casi apagarse: ¡a esconderse! Luego un destello, \"¡Listos o no, allá voy!\", y un foco recorre la habitación en penumbra.",
+  "hideSeekCount": "Contar hasta",
+  "hideSeekStart": "Empezar a contar",
+  "hideSeekCounting": "¡Escondeos! Quien busca está contando…",
+  "hideSeekReady": "¡Listos o no, allá voy!",
+  "hideSeekFoundAll": "¡Encontrados todos!",
+  "hideSeekWellDone": "¡Os encontré a todos! ¡Muy bien escondidos!"
 }

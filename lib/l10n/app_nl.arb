@@ -1292,5 +1292,14 @@
   "boardTurn": "{player} is aan de beurt!",
   "boardNext": "Volgende beurt",
   "boardRoll": "Gooi de dobbelsteen",
-  "boardTimeUp": "De tijd is om!"
+  "boardTimeUp": "De tijd is om!",
+  "hideSeek": "Verstoppertje",
+  "hideSeekSubtitle": "De lampen dimmen terwijl de zoeker telt",
+  "hideSeekDescription": "De stem telt hardop terwijl de lampen bijna donker worden: verstoppen! Dan een flits, \"Wie niet weg is, is gezien!\", en een zoeklicht zwaait door de schemerige kamer.",
+  "hideSeekCount": "Tellen tot",
+  "hideSeekStart": "Begin met tellen",
+  "hideSeekCounting": "Verstop je! De zoeker telt…",
+  "hideSeekReady": "Wie niet weg is, is gezien!",
+  "hideSeekFoundAll": "Iedereen gevonden!",
+  "hideSeekWellDone": "Allemaal gevonden! Goed verstopt, allemaal!"
 }

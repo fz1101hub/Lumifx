@@ -32,6 +32,8 @@ import 'package:lumifx/src/features/calm/feelings.dart';
 import 'package:lumifx/src/features/fun/board_game.dart';
 import 'package:lumifx/src/features/fun/board_game_screen.dart';
 import 'package:lumifx/src/features/fun/goal.dart';
+import 'package:lumifx/src/features/fun/hide_and_seek.dart';
+import 'package:lumifx/src/features/fun/hide_and_seek_screen.dart';
 import 'package:lumifx/src/features/fun/goal_screen.dart';
 import 'package:lumifx/src/features/bedtime/moon.dart';
 import 'package:lumifx/src/features/bedtime/tooth_fairy.dart';
@@ -1551,6 +1553,38 @@ void main() {
     expect(scope.preferences.toothFairy, isNull);
     expect(scope.playback.effect.id, ToothFairy.id);
     await scope.playback.stop(restore: false);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('hide and seek counts aloud as the lamps dim, then searches',
+      (tester) async {
+    final speaker = _RecordingSpeaker();
+    await _pumpApp(tester, speaker: speaker);
+    unawaited(tester.state<NavigatorState>(find.byType(Navigator).first).push(
+        MaterialPageRoute<void>(builder: (_) => const HideAndSeekScreen())));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ChoiceChip, '10'));
+    await tester.pump();
+    await tester.tap(find.text('Start counting'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    final playback =
+        AppScope.of(tester.element(find.byType(HideAndSeekScreen))).playback;
+    expect(HideAndSeek.countOf(playback.effect), 10);
+    expect(speaker.spoken.last.$1, '1');
+    playback.player!.advance(const Duration(seconds: 4));
+    await tester.pump();
+    await tester.pump();
+    expect(speaker.spoken.last.$1, '5');
+    playback.player!.advance(const Duration(seconds: 6));
+    await tester.pump();
+    await tester.pump();
+    expect(speaker.spoken.last.$1, 'Ready or not, here I come!');
+    await tester.tap(find.text('Found everyone!'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(speaker.spoken.last.$1, startsWith('Found you all'));
+    await playback.stop(restore: false);
     await tester.pumpAndSettle();
   });
 

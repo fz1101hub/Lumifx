@@ -15,6 +15,7 @@ import 'countdowns_screen.dart';
 import 'game_screen.dart';
 import 'goal_screen.dart';
 import 'haunted_party_screen.dart';
+import 'hide_and_seek_screen.dart';
 import 'hot_cold_screen.dart';
 import 'light_games.dart';
 import 'noise_light_screen.dart';
@@ -56,6 +57,8 @@ class FunScreen extends StatelessWidget {
               () => const GoalScreen()),
           entry(Icons.casino_outlined, l10n.boardGame, l10n.boardGameSubtitle,
               () => const BoardGameScreen()),
+          entry(Icons.visibility_off_outlined, l10n.hideSeek,
+              l10n.hideSeekSubtitle, () => const HideAndSeekScreen()),
           entry(Icons.hourglass_bottom, l10n.countdowns,
               l10n.countdownsSubtitle, () => const CountdownsScreen()),
           entry(Icons.calendar_month_outlined, l10n.advent, l10n.adventSubtitle,

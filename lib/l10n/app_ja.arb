@@ -1292,5 +1292,14 @@
   "boardTurn": "{player}の番！",
   "boardNext": "次の番",
   "boardRoll": "サイコロをふる",
-  "boardTimeUp": "時間切れ！"
+  "boardTimeUp": "時間切れ！",
+  "hideSeek": "かくれんぼ",
+  "hideSeekSubtitle": "おにが数えるあいだ、ライトが暗く",
+  "hideSeekDescription": "声が数をかぞえるあいだに、ライトがほとんど真っ暗に。かくれて！そのあと光がはじけて「もういいかい、さがしにいくよ！」、うす暗いへやをサーチライトが動きます。",
+  "hideSeekCount": "数える数",
+  "hideSeekStart": "数えはじめる",
+  "hideSeekCounting": "かくれて！おにが数えてるよ…",
+  "hideSeekReady": "もういいかい、さがしにいくよ！",
+  "hideSeekFoundAll": "みんな見つけた！",
+  "hideSeekWellDone": "みんな見つけた！じょうずにかくれてたね！"
 }

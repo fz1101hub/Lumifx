@@ -1292,5 +1292,14 @@
   "boardTurn": "Au tour du {player} !",
   "boardNext": "Tour suivant",
   "boardRoll": "Lancer le dé",
-  "boardTimeUp": "Temps écoulé !"
+  "boardTimeUp": "Temps écoulé !",
+  "hideSeek": "Cache-cache",
+  "hideSeekSubtitle": "Les lumières baissent pendant que le chercheur compte",
+  "hideSeekDescription": "La voix compte à voix haute pendant que les lampes baissent jusqu'à presque le noir : vite, on se cache ! Puis un éclair, « Prêts ou pas, j'arrive ! », et un projecteur balaie la pièce sombre.",
+  "hideSeekCount": "Compter jusqu'à",
+  "hideSeekStart": "Commencer à compter",
+  "hideSeekCounting": "Cachez-vous ! Le chercheur compte…",
+  "hideSeekReady": "Prêts ou pas, j'arrive !",
+  "hideSeekFoundAll": "Tout le monde est trouvé !",
+  "hideSeekWellDone": "Je vous ai tous trouvés ! Bien cachés, bravo !"
 }

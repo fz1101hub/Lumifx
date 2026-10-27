@@ -21,6 +21,8 @@ import '../calm/feelings.dart';
 import '../fun/board_game.dart';
 import '../fun/board_game_screen.dart';
 import '../fun/goal.dart';
+import '../fun/hide_and_seek.dart';
+import '../fun/hide_and_seek_screen.dart';
 import '../fun/goal_screen.dart';
 import '../calm/feelings_screen.dart';
 import '../cinema/cinema.dart';
@@ -116,6 +118,8 @@ Route<void> routeForPlaying(LightingEffect effect) {
     screen = const ToothFairyScreen();
   } else if (BoardGame.of(effect) != null) {
     screen = const BoardGameScreen();
+  } else if (HideAndSeek.countOf(effect) != null) {
+    screen = const HideAndSeekScreen();
   } else if (Cinema.phaseOf(effect) != null) {
     screen = const CinemaScreen();
   } else if (isPianoEffect(effect)) {

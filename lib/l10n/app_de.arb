@@ -1292,5 +1292,14 @@
   "boardTurn": "{player} ist dran!",
   "boardNext": "Nächster Zug",
   "boardRoll": "Würfeln",
-  "boardTimeUp": "Die Zeit ist um!"
+  "boardTimeUp": "Die Zeit ist um!",
+  "hideSeek": "Verstecken",
+  "hideSeekSubtitle": "Die Lampen werden dunkler, während der Sucher zählt",
+  "hideSeekDescription": "Die Stimme zählt laut, während die Lampen fast dunkel werden: Zeit, sich zu verstecken! Dann ein Blitz, „Ich komme, ob ihr bereit seid oder nicht!“, und ein Suchscheinwerfer streift durch den dunklen Raum.",
+  "hideSeekCount": "Zählen bis",
+  "hideSeekStart": "Losszählen",
+  "hideSeekCounting": "Versteckt euch! Der Sucher zählt…",
+  "hideSeekReady": "Ich komme, ob ihr bereit seid oder nicht!",
+  "hideSeekFoundAll": "Alle gefunden!",
+  "hideSeekWellDone": "Alle gefunden! Gut versteckt, ihr alle!"
 }

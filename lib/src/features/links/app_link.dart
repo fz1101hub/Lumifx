@@ -129,7 +129,8 @@ enum AppScreen {
   intervals('intervals'),
   goal('goal-party'),
   toothFairy('tooth-fairy'),
-  boardGame('board-game');
+  boardGame('board-game'),
+  hideSeek('hide-and-seek');
 
   const AppScreen(this.slug);
 
