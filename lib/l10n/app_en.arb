@@ -5781,5 +5781,29 @@
         "type": "String"
       }
     }
+  },
+  "automationsCalendar": "Automations calendar",
+  "@automationsCalendar": {
+    "description": "Home: the week of everything the bridge does by itself"
+  },
+  "automationsCalendarSubtitle": "Everything the bridge does by itself, day by day",
+  "@automationsCalendarSubtitle": {
+    "description": "Home: what the automations calendar shows"
+  },
+  "automationsCalendarDescription": "Scheduled effects, ok-to-wake lights, wake-up and go-to-sleep routines, away mode, light reminders and the night switch-off, by day. Switching one off pauses it on every day it runs.",
+  "@automationsCalendarDescription": {
+    "description": "Automations calendar: what it shows and what the switches do"
+  },
+  "calendarNothing": "Nothing planned on this day.",
+  "@calendarNothing": {
+    "description": "Automations calendar: nothing on the chosen day"
+  },
+  "calendarOnce": "Once",
+  "@calendarOnce": {
+    "description": "Automations calendar: heading of the things that run only once"
+  },
+  "calendarEffect": "Scheduled effect",
+  "@calendarEffect": {
+    "description": "Automations calendar: a scheduled effect"
   }
 }

@@ -1388,5 +1388,11 @@
   "lightIssueUpdate": "Update bereit",
   "lightIssueUpdateAdvice": "Neuere Firmware ist bereit: Installiere sie in der Hue App unter Einstellungen › Software-Update.",
   "lightHealthBridgeUpdate": "Für die Bridge ist ein Update bereit: Installiere es in der Hue App unter Einstellungen › Software-Update.",
-  "lightHealthFailed": "Die Lampen konnten nicht geprüft werden: {error}"
+  "lightHealthFailed": "Die Lampen konnten nicht geprüft werden: {error}",
+  "automationsCalendar": "Automationskalender",
+  "automationsCalendarSubtitle": "Alles, was die Bridge von selbst macht, Tag für Tag",
+  "automationsCalendarDescription": "Geplante Effekte, Aufwachlichter, Aufwach- und Einschlafroutinen, Abwesenheitsmodus, Lichterinnerungen und die nächtliche Abschaltung, nach Tagen. Wird eines ausgeschaltet, pausiert es an allen seinen Tagen.",
+  "calendarNothing": "An diesem Tag ist nichts geplant.",
+  "calendarOnce": "Einmalig",
+  "calendarEffect": "Geplanter Effekt"
 }

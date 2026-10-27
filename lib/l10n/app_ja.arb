@@ -1388,5 +1388,11 @@
   "lightIssueUpdate": "アップデートあり",
   "lightIssueUpdateAdvice": "新しいファームウェアがあります。Hueアプリの「設定 › ソフトウェアアップデート」からインストールしてください。",
   "lightHealthBridgeUpdate": "ブリッジのアップデートがあります。Hueアプリの「設定 › ソフトウェアアップデート」からインストールしてください。",
-  "lightHealthFailed": "ライトを確認できませんでした：{error}"
+  "lightHealthFailed": "ライトを確認できませんでした：{error}",
+  "automationsCalendar": "オートメーションのカレンダー",
+  "automationsCalendarSubtitle": "ブリッジが自動で行うことを曜日ごとに",
+  "automationsCalendarDescription": "予定したエフェクト、起きていいよライト、起床とおやすみのルーティン、留守モード、ライトのリマインダー、夜の消灯を曜日ごとに表示します。オフにすると、実行されるすべての曜日で一時停止します。",
+  "calendarNothing": "この日の予定はありません。",
+  "calendarOnce": "1回だけ",
+  "calendarEffect": "予定したエフェクト"
 }

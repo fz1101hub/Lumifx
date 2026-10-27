@@ -1388,5 +1388,11 @@
   "lightIssueUpdate": "Aggiornamento pronto",
   "lightIssueUpdateAdvice": "C'è un firmware più recente: installalo dall'app Hue, in Impostazioni › Aggiornamento software.",
   "lightHealthBridgeUpdate": "Il bridge ha un aggiornamento pronto: installalo dall'app Hue, in Impostazioni › Aggiornamento software.",
-  "lightHealthFailed": "Impossibile controllare le lampade: {error}"
+  "lightHealthFailed": "Impossibile controllare le lampade: {error}",
+  "automationsCalendar": "Calendario automazioni",
+  "automationsCalendarSubtitle": "Tutto quello che il bridge fa da solo, giorno per giorno",
+  "automationsCalendarDescription": "Effetti programmati, luci ok-sveglia, routine di risveglio e della buonanotte, modalità vacanza, promemoria luminosi e spegnimento notturno, giorno per giorno. Spegnerne uno lo mette in pausa in tutti i giorni in cui si ripete.",
+  "calendarNothing": "Niente in programma in questo giorno.",
+  "calendarOnce": "Una volta sola",
+  "calendarEffect": "Effetto programmato"
 }

@@ -1388,5 +1388,11 @@
   "lightIssueUpdate": "Actualización lista",
   "lightIssueUpdateAdvice": "Hay un firmware más reciente: instálalo desde la app Hue, en Ajustes › Actualización de software.",
   "lightHealthBridgeUpdate": "El puente tiene una actualización lista: instálala desde la app Hue, en Ajustes › Actualización de software.",
-  "lightHealthFailed": "No se pudieron revisar las luces: {error}"
+  "lightHealthFailed": "No se pudieron revisar las luces: {error}",
+  "automationsCalendar": "Calendario de automatizaciones",
+  "automationsCalendarSubtitle": "Todo lo que el puente hace solo, día a día",
+  "automationsCalendarDescription": "Efectos programados, luces de ya-puedes-levantarte, rutinas de despertar y de dormir, modo ausente, recordatorios de luz y apagado nocturno, por día. Desactivar uno lo pausa todos los días en que se repite.",
+  "calendarNothing": "Nada previsto este día.",
+  "calendarOnce": "Una sola vez",
+  "calendarEffect": "Efecto programado"
 }

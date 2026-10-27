@@ -1388,5 +1388,11 @@
   "lightIssueUpdate": "Mise à jour prête",
   "lightIssueUpdateAdvice": "Un micrologiciel plus récent est prêt : installez-le depuis l'app Hue, dans Réglages › Mise à jour du logiciel.",
   "lightHealthBridgeUpdate": "Une mise à jour du pont est prête : installez-la depuis l'app Hue, dans Réglages › Mise à jour du logiciel.",
-  "lightHealthFailed": "Impossible de vérifier les lampes : {error}"
+  "lightHealthFailed": "Impossible de vérifier les lampes : {error}",
+  "automationsCalendar": "Calendrier des automatismes",
+  "automationsCalendarSubtitle": "Tout ce que le pont fait seul, jour par jour",
+  "automationsCalendarDescription": "Effets programmés, lumières de réveil, routines de réveil et de coucher, mode absence, rappels lumineux et extinction de nuit, jour par jour. En désactiver un le met en pause tous les jours où il s'exécute.",
+  "calendarNothing": "Rien de prévu ce jour-là.",
+  "calendarOnce": "Une seule fois",
+  "calendarEffect": "Effet programmé"
 }

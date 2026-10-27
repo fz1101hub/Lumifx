@@ -1388,5 +1388,11 @@
   "lightIssueUpdate": "Atualização pronta",
   "lightIssueUpdateAdvice": "Há um firmware mais recente: instale pelo app Hue, em Configurações › Atualização de software.",
   "lightHealthBridgeUpdate": "A bridge tem uma atualização pronta: instale pelo app Hue, em Configurações › Atualização de software.",
-  "lightHealthFailed": "Não foi possível verificar as luzes: {error}"
+  "lightHealthFailed": "Não foi possível verificar as luzes: {error}",
+  "automationsCalendar": "Calendário de automações",
+  "automationsCalendarSubtitle": "Tudo o que a bridge faz sozinha, dia a dia",
+  "automationsCalendarDescription": "Efeitos programados, luzes de pode-acordar, rotinas de despertar e de dormir, modo ausente, lembretes de luz e desligamento noturno, por dia. Desligar um pausa-o em todos os dias em que se repete.",
+  "calendarNothing": "Nada programado neste dia.",
+  "calendarOnce": "Uma vez só",
+  "calendarEffect": "Efeito programado"
 }

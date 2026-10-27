@@ -1388,5 +1388,11 @@
   "lightIssueUpdate": "Update klaar",
   "lightIssueUpdateAdvice": "Nieuwere firmware staat klaar: installeer die in de Hue-app, bij Instellingen › Software-update.",
   "lightHealthBridgeUpdate": "Er staat een update klaar voor de bridge: installeer die in de Hue-app, bij Instellingen › Software-update.",
-  "lightHealthFailed": "De lampen konden niet worden gecontroleerd: {error}"
+  "lightHealthFailed": "De lampen konden niet worden gecontroleerd: {error}",
+  "automationsCalendar": "Automatiseringskalender",
+  "automationsCalendarSubtitle": "Alles wat de bridge zelf doet, dag voor dag",
+  "automationsCalendarDescription": "Geplande effecten, wakkerlichten, wek- en slaaproutines, afwezigheidsmodus, lichtherinneringen en de nachtelijke uitschakeling, per dag. Eén uitzetten pauzeert hem op alle dagen dat hij loopt.",
+  "calendarNothing": "Niets gepland op deze dag.",
+  "calendarOnce": "Eenmalig",
+  "calendarEffect": "Gepland effect"
 }

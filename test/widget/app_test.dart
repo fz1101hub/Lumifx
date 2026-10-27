@@ -4061,6 +4061,48 @@ void streamingTests() {
         reason: 'lamps with a problem first');
   });
 
+  testWidgets('the automations calendar shows each day and switches off',
+      (tester) async {
+    final puts = <String>[];
+    final bridge = await _connectedBridge(tester, puts: puts);
+    await tester.pumpWidget(LumiFxApp(
+      // A Monday.
+      clock: () => DateTime(2026, 6, 15, 12),
+      bridge: bridge,
+      discovery: _FakeDiscovery(),
+      preferences: PreferencesController(store: InMemoryKeyValueStore()),
+      audioInput: FakeAudioInput(),
+    ));
+    await tester.scrollUntilVisible(find.text('Automations calendar'), 200,
+        scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Automations calendar'));
+    await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)));
+    await tester.pumpAndSettle();
+    expect(find.text('School days'), findsOneWidget);
+    expect(find.text('Wake up · Living room'), findsOneWidget);
+    expect(find.text('Mia'), findsOneWidget);
+    expect(find.text('Evening fire'), findsNothing);
+
+    await tester.tap(find.text('Sat'));
+    await tester.pumpAndSettle();
+    expect(find.text('Evening fire'), findsOneWidget);
+    expect(find.text('Scheduled effect · Living room'), findsOneWidget);
+    expect(find.text('School days'), findsNothing);
+
+    await tester.tap(find.text('Mon'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await tester.tap(find.descendant(
+          of: find.widgetWithText(Card, 'School days'),
+          matching: find.byType(Switch)));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    await tester.pumpAndSettle();
+    expect(puts, contains('/clip/v2/resource/behavior_instance/w1'));
+  });
+
   testWidgets('rooms list the Hue scenes of each group and recall them',
       (tester) async {
     final puts = <String>[];
