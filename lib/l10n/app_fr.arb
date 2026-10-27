@@ -1269,5 +1269,16 @@
   "toothFairyRead": "Lire son message",
   "toothFairyMessage": "Cher {name}, merci pour ta petite dent ! Je t'ai laissé une étoile magique. Continue à te brosser les dents tous les jours. La Petite Souris",
   "toothFairyFriend": "ami",
-  "toothFairyMagic": "La magie maintenant"
+  "toothFairyMagic": "La magie maintenant",
+  "collectionOccasions": "Occasions",
+  "effectNameCandlelitDinner": "Dîner aux chandelles",
+  "effectDescriptionCandlelitDinner": "Une lumière de bougie douce et chaude qui vacille un peu.",
+  "effectNameGameNight": "Soirée jeux",
+  "effectDescriptionGameNight": "Des couleurs vives et gaies autour de la table.",
+  "effectNameReadingLight": "Lumière de lecture",
+  "effectDescriptionReadingLight": "Un blanc chaud et stable pour lire.",
+  "effectNameAperitivo": "Apéritif",
+  "effectDescriptionAperitivo": "Un coucher de soleil orange et rose pour un verre entre amis.",
+  "effectNameGuestsArriving": "Invités dans 10 minutes",
+  "effectDescriptionGuestsArriving": "La pièce s'éclaire doucement pour un accueil chaleureux."
 }

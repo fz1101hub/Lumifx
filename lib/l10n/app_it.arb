@@ -1269,5 +1269,16 @@
   "toothFairyRead": "Leggi il suo messaggio",
   "toothFairyMessage": "Caro {name}, grazie per il tuo dentino! Ti ho lasciato una stellina magica. Continua a lavarti i denti ogni giorno. La Fatina dei denti",
   "toothFairyFriend": "amico",
-  "toothFairyMagic": "Magia della fatina adesso"
+  "toothFairyMagic": "Magia della fatina adesso",
+  "collectionOccasions": "Occasioni",
+  "effectNameCandlelitDinner": "Cena a lume di candela",
+  "effectDescriptionCandlelitDinner": "Luce di candela bassa e calda, che tremola appena.",
+  "effectNameGameNight": "Serata giochi",
+  "effectDescriptionGameNight": "Colori vivaci e allegri intorno al tavolo.",
+  "effectNameReadingLight": "Luce per leggere",
+  "effectDescriptionReadingLight": "Un bianco caldo e costante per leggere.",
+  "effectNameAperitivo": "Aperitivo",
+  "effectDescriptionAperitivo": "Un tramonto arancio e rosa per un drink con gli amici.",
+  "effectNameGuestsArriving": "Ospiti tra 10 minuti",
+  "effectDescriptionGuestsArriving": "La stanza si illumina piano fino a un caldo benvenuto."
 }

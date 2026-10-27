@@ -1269,5 +1269,16 @@
   "toothFairyRead": "Ler a mensagem",
   "toothFairyMessage": "Querido {name}, obrigado pelo seu dentinho! Deixei uma estrela mágica para você. Continue escovando os dentes todo dia. A Fada do Dente",
   "toothFairyFriend": "amigo",
-  "toothFairyMagic": "Magia da fada agora"
+  "toothFairyMagic": "Magia da fada agora",
+  "collectionOccasions": "Ocasiões",
+  "effectNameCandlelitDinner": "Jantar à luz de velas",
+  "effectDescriptionCandlelitDinner": "Luz de vela baixa e quente que tremula um pouco.",
+  "effectNameGameNight": "Noite de jogos",
+  "effectDescriptionGameNight": "Cores vivas e alegres ao redor da mesa.",
+  "effectNameReadingLight": "Luz de leitura",
+  "effectDescriptionReadingLight": "Um branco quente e estável para ler.",
+  "effectNameAperitivo": "Happy hour",
+  "effectDescriptionAperitivo": "Um pôr do sol laranja e rosa para um drinque com amigos.",
+  "effectNameGuestsArriving": "Visitas em 10 minutos",
+  "effectDescriptionGuestsArriving": "O cômodo clareia aos poucos até uma recepção calorosa."
 }

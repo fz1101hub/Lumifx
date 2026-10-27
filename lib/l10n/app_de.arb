@@ -1269,5 +1269,16 @@
   "toothFairyRead": "Ihre Nachricht lesen",
   "toothFairyMessage": "Liebe(r) {name}, danke für deinen kleinen Zahn! Ich habe dir einen Zauberstern dagelassen. Putz weiter jeden Tag deine Zähne. Deine Zahnfee",
   "toothFairyFriend": "Freund",
-  "toothFairyMagic": "Zahnfeen-Zauber jetzt"
+  "toothFairyMagic": "Zahnfeen-Zauber jetzt",
+  "collectionOccasions": "Anlässe",
+  "effectNameCandlelitDinner": "Candle-Light-Dinner",
+  "effectDescriptionCandlelitDinner": "Gedämpftes, warmes Kerzenlicht, das leicht flackert.",
+  "effectNameGameNight": "Spieleabend",
+  "effectDescriptionGameNight": "Helle, fröhliche Farben rund um den Tisch.",
+  "effectNameReadingLight": "Leselicht",
+  "effectDescriptionReadingLight": "Ein ruhiges, warmes Weiß zum Lesen.",
+  "effectNameAperitivo": "Aperitivo",
+  "effectDescriptionAperitivo": "Ein orange-rosa Sonnenuntergang für einen Drink mit Freunden.",
+  "effectNameGuestsArriving": "Gäste in 10 Minuten",
+  "effectDescriptionGuestsArriving": "Der Raum wird langsam heller, für einen warmen Empfang."
 }

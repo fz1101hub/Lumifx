@@ -1269,5 +1269,16 @@
   "toothFairyRead": "Lees haar bericht",
   "toothFairyMessage": "Lieve {name}, bedankt voor je tandje! Ik heb een toverster voor je achtergelaten. Blijf elke dag goed poetsen. De Tandenfee",
   "toothFairyFriend": "vriendje",
-  "toothFairyMagic": "Feeënmagie nu"
+  "toothFairyMagic": "Feeënmagie nu",
+  "collectionOccasions": "Gelegenheden",
+  "effectNameCandlelitDinner": "Diner bij kaarslicht",
+  "effectDescriptionCandlelitDinner": "Zacht, warm kaarslicht dat een beetje flakkert.",
+  "effectNameGameNight": "Spelletjesavond",
+  "effectDescriptionGameNight": "Heldere, vrolijke kleuren rond de tafel.",
+  "effectNameReadingLight": "Leeslicht",
+  "effectDescriptionReadingLight": "Een rustig, warm wit om bij te lezen.",
+  "effectNameAperitivo": "Borrel",
+  "effectDescriptionAperitivo": "Een oranje-roze zonsondergang voor een drankje met vrienden.",
+  "effectNameGuestsArriving": "Gasten over 10 minuten",
+  "effectDescriptionGuestsArriving": "De kamer wordt langzaam lichter voor een warm welkom."
 }

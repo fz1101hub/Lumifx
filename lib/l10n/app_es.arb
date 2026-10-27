@@ -1269,5 +1269,16 @@
   "toothFairyRead": "Leer su mensaje",
   "toothFairyMessage": "Querido {name}, ¡gracias por tu dientecito! Te he dejado una estrella mágica. Sigue lavándote los dientes cada día. El Ratoncito Pérez",
   "toothFairyFriend": "amigo",
-  "toothFairyMagic": "La magia ahora"
+  "toothFairyMagic": "La magia ahora",
+  "collectionOccasions": "Ocasiones",
+  "effectNameCandlelitDinner": "Cena a la luz de las velas",
+  "effectDescriptionCandlelitDinner": "Luz de vela tenue y cálida que parpadea un poco.",
+  "effectNameGameNight": "Noche de juegos",
+  "effectDescriptionGameNight": "Colores vivos y alegres alrededor de la mesa.",
+  "effectNameReadingLight": "Luz de lectura",
+  "effectDescriptionReadingLight": "Un blanco cálido y estable para leer.",
+  "effectNameAperitivo": "Aperitivo",
+  "effectDescriptionAperitivo": "Un atardecer naranja y rosa para tomar algo con amigos.",
+  "effectNameGuestsArriving": "Invitados en 10 minutos",
+  "effectDescriptionGuestsArriving": "La habitación se ilumina poco a poco hasta una cálida bienvenida."
 }

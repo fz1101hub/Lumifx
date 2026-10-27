@@ -1269,5 +1269,16 @@
   "toothFairyRead": "メッセージを読む",
   "toothFairyMessage": "{name}へ。ちいさな歯をありがとう！まほうのおほしさまをおいていくね。まいにち歯みがきをがんばってね。歯のようせいより",
   "toothFairyFriend": "おともだち",
-  "toothFairyMagic": "いますぐまほう"
+  "toothFairyMagic": "いますぐまほう",
+  "collectionOccasions": "シーン別",
+  "effectNameCandlelitDinner": "キャンドルディナー",
+  "effectDescriptionCandlelitDinner": "すこしゆらめく、ひくくて温かなキャンドルの光。",
+  "effectNameGameNight": "ゲームナイト",
+  "effectDescriptionGameNight": "テーブルを明るく楽しい色でかこみます。",
+  "effectNameReadingLight": "読書の光",
+  "effectDescriptionReadingLight": "読書にぴったりの、おちついた温かい白。",
+  "effectNameAperitivo": "アペリティーボ",
+  "effectDescriptionAperitivo": "友だちと一杯たのしむ、オレンジとピンクの夕焼け。",
+  "effectNameGuestsArriving": "10分後にお客さま",
+  "effectDescriptionGuestsArriving": "へやがゆっくり明るくなり、温かくおむかえします。"
 }

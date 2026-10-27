@@ -48,7 +48,7 @@ void main() {
       colors: ['#FFAA00', '#FFFFFF'],
     ));
     final mine = EffectLibrary(preferences);
-    expect(searchEffects(en, mine, 'reading').single.id, 'user:1');
+    expect(searchEffects(en, mine, 'corner').single.id, 'user:1');
     expect(searchEffects(en, mine, '', collection: 'My scenes').single.id,
         'user:1');
   });

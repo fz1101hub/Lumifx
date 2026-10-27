@@ -5224,5 +5224,49 @@
   "toothFairyMagic": "Fairy magic now",
   "@toothFairyMagic": {
     "description": "Tooth fairy: play the magic now"
+  },
+  "collectionOccasions": "Occasions",
+  "@collectionOccasions": {
+    "description": "Collection of scenes"
+  },
+  "effectNameCandlelitDinner": "Candlelit dinner",
+  "@effectNameCandlelitDinner": {
+    "description": "Scene name"
+  },
+  "effectDescriptionCandlelitDinner": "Low, warm candlelight that flickers a little.",
+  "@effectDescriptionCandlelitDinner": {
+    "description": "Scene description"
+  },
+  "effectNameGameNight": "Game night",
+  "@effectNameGameNight": {
+    "description": "Scene name"
+  },
+  "effectDescriptionGameNight": "Bright, cheerful colours around the table.",
+  "@effectDescriptionGameNight": {
+    "description": "Scene description"
+  },
+  "effectNameReadingLight": "Reading light",
+  "@effectNameReadingLight": {
+    "description": "Scene name"
+  },
+  "effectDescriptionReadingLight": "A steady, warm white to read by.",
+  "@effectDescriptionReadingLight": {
+    "description": "Scene description"
+  },
+  "effectNameAperitivo": "Aperitivo",
+  "@effectNameAperitivo": {
+    "description": "Scene name"
+  },
+  "effectDescriptionAperitivo": "An orange and pink sunset for a drink with friends.",
+  "@effectDescriptionAperitivo": {
+    "description": "Scene description"
+  },
+  "effectNameGuestsArriving": "Guests in 10 minutes",
+  "@effectNameGuestsArriving": {
+    "description": "Scene name"
+  },
+  "effectDescriptionGuestsArriving": "The room brightens slowly to a warm welcome.",
+  "@effectDescriptionGuestsArriving": {
+    "description": "Scene description"
   }
 }
